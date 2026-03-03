@@ -67,12 +67,13 @@ document.querySelectorAll('.skill-category').forEach(category => {
 // Form submission feedback
 document.querySelector('.contact-form').addEventListener('submit', function(e) {
     const btn = this.querySelector('button[type="submit"]');
-    btn.textContent = 'Sending...';
+    btn.textContent = 'Yuborilmoqda...';
     btn.disabled = true;
     
     setTimeout(() => {
-        btn.textContent = 'Message Sent! 🎉';
+        btn.textContent = 'Rahmat! Xabaringiz muvaffaqiyatli yuborildi! 🎉';
         btn.style.background = '#10b981';
         this.reset();
     }, 2000);
 });
+
