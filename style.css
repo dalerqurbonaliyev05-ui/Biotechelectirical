@@ -84,6 +84,7 @@ body {
     justify-content: center;
     text-align: center;
     background-image:url('site4/rasm7.jpg');
+	background-size: cover;
     color: white;
     padding: 0 20px;
 }
