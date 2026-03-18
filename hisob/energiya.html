@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elektr Energiya Kalkulyatori</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; padding: 20px; }
+        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        h2 { color: #2c3e50; text-align: center; margin-bottom: 20px; }
+        .input-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: #34495e; }
+        input { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
+        input:focus { border-color: #3498db; outline: none; }
+        .results { background: #ecf0f1; padding: 15px; border-radius: 8px; margin-top: 20px; }
+        .res-item { display: flex; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px dashed #bdc3c7; padding-bottom: 5px; }
+        .res-item:last-child { border: none; }
+        .val { font-weight: bold; color: #27ae60; }
+        .info { font-size: 12px; color: #7f8c8d; text-align: center; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>⚡ Elektr Kalkulyator</h2>
+    
+    <div class="input-group">
+        <label for="kwhInput">Oylik iste'mol (kVt·sh):</label>
+        <input type="number" id="kwhInput" placeholder="Masalan: 250" oninput="hisobla()">
+    </div>
+
+    <div class="results">
+        <div class="res-item">
+            <span>Oylik to'lov:</span>
+            <span class="val" id="oylikSumma">0 so'm</span>
+        </div>
+        <div class="res-item">
+            <span>Yillik iste'mol:</span>
+            <span class="val" id="yillikKwh">0 kVt·sh</span>
+        </div>
+        <div class="res-item">
+            <span>Yillik xarajat:</span>
+            <span class="val" id="yillikSumma">0 so'm</span>
+        </div>
+    </div>
+
+    <p class="info">* Hisoblashda tabaqalashtirilgan (pog'onali) tariflar hisobga olingan.</p>
+</div>
+
+<script>
+    function hisobla() {
+        const oylikKwh = parseFloat(document.getElementById('kwhInput').value) || 0;
+        
+        // Tariflar (O'zbekiston joriy stavkalari)
+        const tariflar = [
+            { limit: 200, narx: 450 },
+            { limit: 1000, narx: 900 },
+            { limit: 5000, narx: 1350 },
+            { limit: Infinity, narx: 1800 }
+        ];
+
+        let oylikSumma = 0;
+        let qolganKwh = oylikKwh;
+        let avvalgiLimit = 0;
+
+        for (let t of tariflar) {
+            if (qolganKwh <= 0) break;
+            let diapazon = t.limit - avvalgiLimit;
+            let joriyIstemol = Math.min(qolganKwh, diapazon);
+            oylikSumma += joriyIstemol * t.narx;
+            qolganKwh -= joriyIstemol;
+            avvalgiLimit = t.limit;
+        }
+
+        const yillikKwh = oylikKwh * 12;
+        const yillikSumma = oylikSumma * 12;
+
+        // Natijalarni ekranga chiqarish
+        document.getElementById('oylikSumma').innerText = oylikSumma.toLocaleString() + " so'm";
+        document.getElementById('yillikKwh').innerText = yillikKwh.toLocaleString() + " kVt·sh";
+        document.getElementById('yillikSumma').innerText = yillikSumma.toLocaleString() + " so'm";
+    }
+</script>
+
+</body>
+</html>
