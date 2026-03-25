@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ulug'bek RES | Integrallashgan Tizim</title>
+    <style>
+        :root {
+            --sidebar-bg: #1a5276;
+            --header-bg: #ffffff;
+            --accent: #f39c12;
+            --text-main: #2c3e50;
+            --bg-body: #f0f2f5;
+            --success: #27ae60;
+            --danger: #e74c3c;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            height: 100vh;
+            background-color: var(--bg-body);
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background-color: var(--sidebar-bg);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            color: var(--accent);
+        }
+
+        .menu-list { list-style: none; padding: 0; margin: 10px 0; }
+
+        .menu-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            border-left: 4px solid transparent;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background-color: rgba(255,255,255,0.1);
+            border-left: 4px solid var(--accent);
+        }
+
+        /* Main Wrapper */
+        .main-wrapper { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+        header {
+            height: 60px;
+            background: var(--header-bg);
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .top-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            padding: 5px 10px;
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+        .top-profile:hover { background: #f0f2f5; }
+
+        .top-profile img { width: 35px; height: 35px; border-radius: 50%; border: 2px solid var(--accent); object-fit: cover; }
+
+        /* Content Area */
+        .content { flex: 1; padding: 25px; overflow-y: auto; }
+        .container-box { max-width: 900px; margin: 0 auto; }
+
+        /* Kartochkalar */
+        .data-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        /* Profil kartochkasi dizayni */
+        .profile-full-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .profile-header {
+            background: var(--sidebar-bg);
+            color: white;
+            padding: 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .profile-header img {
+            width: 120px;
+            height: 120px;
+            border-radius: 15px;
+            border: 4px solid var(--accent);
+            object-fit: cover;
+        }
+        .profile-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            padding: 25px;
+            gap: 20px;
+        }
+        .info-block { border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .info-block label { font-size: 12px; color: #7f8c8d; font-weight: bold; text-transform: uppercase; }
+        .info-block p { margin: 5px 0 0; font-size: 16px; color: var(--text-main); font-weight: 500; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; font-size: 14px; }
+        th { background: #f8f9fa; color: var(--sidebar-bg); }
+
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; color: white; }
+        .bg-success { background: var(--success); }
+        .bg-warning { background: var(--accent); }
+
+        button.btn-submit {
+            background: var(--sidebar-bg);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-header">ULUG'BEK RES TIZIMI</div>
+        <ul class="menu-list">
+            <li class="menu-item" onclick="renderNews()">🏠 Bosh sahifa</li>
+            <li class="menu-item" onclick="showSection('testlar')">📚 Manbalar / Testlar</li>
+            <li class="menu-item" onclick="showSection('natijalar')">📊 Xavfsizlik guruhi & Razryad</li>
+            <li class="menu-item" onclick="showSection('tibbiy')">🏥 Tibbiy ko'rik</li>
+            <li class="menu-item" onclick="showSection('brigadalar')">👷 Ish vaqtidagi brigadalar</li>
+            <li class="menu-item" onclick="showSection('maosh')">💰 Oylik maosh ma'lumoti</li>
+            <li class="menu-item" onclick="showSection('arizalar')">📝 Arizalar yozish</li>
+            <li class="menu-item" onclick="showSection('takliflar')">📩 Taklif va shikoyatlar</li>
+            <li class="menu-item" onclick="showSection('vakansiya')">🔍 Bo'sh ish o'rinlari</li>
+        </ul>
+    </div>
+
+    <div class="main-wrapper">
+        <header>
+            <div class="top-profile" onclick="showProfile()">
+                <span>D.Qurbonaliyev</span>
+                <img src="https://img.freepik.com/free-photo/portrait-of-electrician-worker_1303-24125.jpg" alt="Avatar">
+            </div>
+        </header>
+
+        <div class="content" id="mainContent"></div>
+    </div>
+
+    <script>
+        const mainContent = document.getElementById('mainContent');
+
+        // Xodim haqida ma'lumotlar bazasi
+        const employeeData = {
+            fullName: "Qurbonaliyev Daler Xurshid o'gli",
+            id: "RES-2026-0045",
+            position: "Tezkor chiqish guruhi ustasi (Master)",
+            department: "Ekspluatatsiya bo'limi",
+            group: "III-xavfsizlik guruhi (1000V gacha elektr qurilmalari)",
+            experience: "2 yil",
+            phone: "+998 91 232 85 80",
+            address: "Toshkent shahar, Studentlar ko`chasi-53",
+            birthDate: "02.09.2005"
+        };
+
+        function renderNews() {
+            mainContent.innerHTML = `
+                <div class="container-box">
+                    <h2>📢 Soha yangiliklari</h2>
+                    <div class="data-card">
+                        <small>25.03.2026</small>
+                        <h3>Yangi podstansiya ishga tushirildi</h3>
+                        <p>Ulug'bek tumani elektr ta'minotini yaxshilash maqsadida yangi quvvatlar ulandi.</p>
+                    </div>
+                    <div class="data-card">
+                        <small>26.03.2026</small>
+                        <h3>Ob-havo ogohlantirishi</h3>
+                        <p>Kuchli shamol kutilmoqda. Barcha navbatchi brigadalar tayyorgarlik holatiga keltirilsin.</p>
+                    </div>
+                    <div class="data-card">
+                        <small>27.03.2026</small>
+                        <h3>Xavfsizlik texnikasi bo'yicha yo'riqnoma</h3>
+                        <p>Barcha tezkor guruh xodimlari dushanba kuni soat 08:00 da navbatdan tashqari attestatsiyadan o'tishlari shart.</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Shaxsiy profilni ko'rsatish funksiyasi (TO'G'RILANDI)
+        function showProfile() {
+            mainContent.innerHTML = `
+                <div class="container-box">
+                    <h2 style="color: var(--sidebar-bg)">👤 Shaxsiy ma'lumotlar</h2>
+                    <div class="profile-full-card">
+                        <div class="profile-header">
+                            <img src="https://img.freepik.com/free-photo/portrait-of-electrician-worker_1303-24125.jpg" alt="Avatar">
+                            <div>
+                                <h2 style="margin:0;">${employeeData.fullName}</h2>
+                                <p style="margin:5px 0 0; opacity:0.9; font-size:16px;">${employeeData.position}</p>
+                                <span class="badge bg-success" style="margin-top:10px; display:inline-block;">FAOL ISHCHI</span>
+                            </div>
+                        </div>
+                        <div class="profile-info-grid">
+                            <div class="info-block"><label>Xodim ID</label><p>${employeeData.id}</p></div>
+                            <div class="info-block"><label>Bo'lim</label><p>${employeeData.department}</p></div>
+                            <div class="info-block"><label>Xavfsizlik guruhi</label><p>${employeeData.group}</p></div>
+                            <div class="info-block"><label>Ish tajribasi</label><p>${employeeData.experience}</p></div>
+                            <div class="info-block"><label>Telefon</label><p>${employeeData.phone}</p></div>
+                            <div class="info-block"><label>Tug'ilgan sana</label><p>${employeeData.birthDate}</p></div>
+                            <div class="info-block" style="grid-column: span 2;"><label>Yashash manzili</label><p>${employeeData.address}</p></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showSection(type) {
+            let html = `<div class="container-box">`;
+            switch(type) {
+                case 'testlar':
+                    html += `<h2>📚 O'quv manbalari va Testlar</h2>
+                             <div class="data-card">
+                                <h4>Elektr xavfsizligi bo'yicha test (V guruh)</h4>
+                                <p>Savollar soni: 30 ta. Vaqt: 45 daqiqa.</p>
+                                <button class="btn-submit">Testni boshlash</button>
+                             </div>`;
+                    break;
+                case 'natijalar':
+                    html += `<h2>📊 Imtihon va Razryad natijalari</h2>
+                             <table>
+                                <tr><th>Sana</th><th>Imtihon turi</th><th>Natija</th><th>Guruh/Razryad</th></tr>
+                                <tr><td>10.02.2026</td><td>Xavfsizlik texnikasi</td><td>95%</td><td>III guruh</td></tr>
+                                <tr><td>15.12.2025</td><td>Malaka oshirish</td><td>O'tdi</td><td>4-razryad</td></tr>
+                             </table>`;
+                    break;
+                case 'tibbiy':
+                    html += `<h2>🏥 Tibbiy ko'rik ma'lumotlari</h2>
+                             <div class="data-card" style="border-left: 5px solid var(--success);">
+                                <h3 style="color:var(--success)">Sog'lom</h3>
+                                <p>Oxirgi ko'rik sanasi: 12.01.2026</p>
+                                <p>Keyingi ko'rik muddati: 12.01.2027</p>
+                                <span class="badge bg-success">Ruxsat berilgan</span>
+                             </div>`;
+                    break;
+                case 'brigadalar':
+                    html += `<h2>👷 Navbatchi brigadalar tarkibi</h2>
+                             <table>
+                                <tr><th>Brigada №</th><th>Usta (F.I.SH)</th><th>Hudud</th><th>Holati</th></tr>
+                                <tr><td>B-12</td><td>Qurbonaliyev D.</td><td>Ulug'bek massivi</td><td><span class="badge bg-warning">Chiqishda</span></td></tr>
+                                <tr><td>B-09</td><td>Shonazarov A.</td><td>Yunusobod-4</td><td><span class="badge bg-success">Bazada</span></td></tr>
+                             </table>`;
+                    break;
+                case 'maosh':
+                    html += `<h2>💰 Oylik maosh ma'lumotnomasi (2026 Mart)</h2>
+                             <div class="data-card">
+                                <p>Hisoblangan: 5,500,000 UZS</p>
+                                <p>Daromad solig'i (12%): 660,000 UZS</p>
+                                <p>Mukofot puli(KPI): 1,000,000 UZS</p>
+                                <hr>
+                                <h3>Qo'lga tegadigan: 5,840,000 UZS</h3>
+                             </div>`;
+                    break;
+                case 'arizalar':
+                    html += `<h2>📝 Arizalar yozish</h2>
+                             <div class="data-card">
+                                <label>Ariza turi</label>
+                                <select><option>Ishdan boshash togrisida </option><option>Mehnat ta'tili uchun </option><option>Sog'ligi sababli</option><option>Moddiy yordam</option></select>
+                                <textarea placeholder="Ariza matnini shu yerga yozing..." rows="5"></textarea>
+                                <button class="btn-submit">Arizani jo'natish</button>
+                             </div>`;
+                    break;
+                case 'takliflar':
+                    html += `<h2>📩 Taklif va shikoyatlar</h2>
+                             <div class="data-card">
+                                <p>Ulugbek RES dagi ish faoliyatingiz boyicha muammolar bolsa shu yerga yozing  </p>
+                                <textarea placeholder="Xabaringizni..." rows="4"></textarea>
+                                <button class="btn-submit">Yuborish</button>
+                             </div>`;
+                    break;
+                case 'vakansiya':
+                    html += `<h2>🔍 Bo'sh ish o'rinlari</h2>
+                             <div class="data-card">
+                                <h4>Elektr montyor (5-razryad)</h4>
+                                <p>Oylik: 6-8 mln. Talab: Kamida 3 yil staj.</p>
+                                <button class="btn-submit" style="background:var(--success)">Topshirish</button>
+                             </div>`;
+                    break;
+            }
+            html += `</div>`;
+            mainContent.innerHTML = html;
+        }
+
+        window.onload = renderNews;
+    </script>
+</body>
+</html>
