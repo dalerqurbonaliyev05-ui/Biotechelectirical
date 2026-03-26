@@ -150,7 +150,13 @@
                     <p>Siz kiritgan kunlik hisobotlar asosida tayyor kundalik shakllantirildi. Uni PDF shaklida yuklab olishingiz mumkin.</p>
                     <button class="btn-action" style="background:var(--success)" onclick="downloadPDF()">📥 PDF Kundalikni yuklab olish</button>
                 </div>`;
-        } else {
+        }else if (type === 'brigade') {
+            content += `<h2>👷 Brigada ma'lumotlari</h2>
+                        <div class="data-card">
+                            <p><b>Joriy guruh:</b> ${userData.brigade || "B-12 (Tezkor guruh)"}</p>
+                            <p><b>Yo'nalish:</b> ${userData.faculty}</p>
+                        </div>`;
+        else {
             html += `<h2>${type.toUpperCase()}</h2><div class="data-card"><p>Ushbu bo'lim hozirda ishlab chiqilmoqda...</p></div>`;
         }
         document.getElementById('mainContent').innerHTML = html + `</div>`;
