@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ulug'bek RES | Talabalar Amaliyot Portali</title>
+    <style>
+        :root {
+            --sidebar-bg: #2c3e50;
+            --header-bg: #ffffff;
+            --accent: #3498db;
+            --text-main: #2c3e50;
+            --bg-body: #f4f7f6;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --hemis: #6f42c1; /* HEMIS binafsha rangi */
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            height: 100vh;
+            background-color: var(--bg-body);
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background-color: var(--sidebar-bg);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header {
+            padding: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            background: rgba(0,0,0,0.2);
+            color: #ecf0f1;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .menu-list { list-style: none; padding: 0; margin: 10px 0; flex: 1; }
+
+        .menu-item {
+            padding: 15px 25px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            border-left: 4px solid transparent;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background-color: rgba(255,255,255,0.1);
+            border-left: 4px solid var(--accent);
+        }
+
+        .hemis-status {
+            padding: 15px;
+            background: var(--hemis);
+            font-size: 12px;
+            text-align: center;
+        }
+
+        /* Main Wrapper */
+        .main-wrapper { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+        header {
+            height: 70px;
+            background: var(--header-bg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .top-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .top-profile img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--accent); }
+
+        /* Content Area */
+        .content { flex: 1; padding: 30px; overflow-y: auto; }
+        .container-box { max-width: 1000px; margin: 0 auto; }
+
+        .data-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; background: white; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; font-size: 14px; }
+        th { background: #f8f9fa; color: var(--sidebar-bg); }
+
+        /* Status Badges */
+        .badge { padding: 5px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; color: white; }
+        .bg-success { background: var(--success); }
+        .bg-warning { background: #f39c12; }
+        .bg-info { background: var(--accent); }
+
+        /* Form Elements */
+        textarea, select, input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        .btn-submit {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-submit:disabled { background: #bdc3c7; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-header">ULUG'BEK RES <br> <span style="font-weight: normal; font-size: 12px;">Amaliyotchi Portali</span></div>
+        <ul class="menu-list">
+            <li class="menu-item" onclick="renderHome()">🏠 Bosh sahifa</li>
+            <li class="menu-item" onclick="showSection('davomat')">📅 Davomat (QR-Check)</li>
+            <li class="menu-item" onclick="showSection('brigada')">👷 Brigada tarkibida </li>
+            <li class="menu-item" onclick="showSection('kundalik')">📓 Elektron Kundalik</li>
+            <li class="menu-item" onclick="showSection('resurslar')">📚 O'quv materiallari</li>
+            <li class="menu-item" onclick="showSection('yakun')">🎓 Amaliyot yakuni</li>
+        </ul>
+        <div class="hemis-status">
+            🔗 HEMIS Integratsiya: Faol
+        </div>
+    </div>
+
+    <div class="main-wrapper">
+        <header>
+            <div id="dateDisplay" style="font-weight: 500; color: #7f8c8d;"></div>
+            <div class="top-profile" onclick="showProfile()">
+                <div style="text-align: right; margin-right: 10px;">
+                    <div style="font-size: 14px;">D.Qurbonaliyev</div>
+                    <div style="font-size: 11px; color: var(--success);">Toshkent Davlat Texnika Universiteti</div>
+                </div>
+                <img src="https://via.placeholder.com/40" alt="Student">
+            </div>
+        </header>
+
+        <div class="content" id="mainContent"></div>
+    </div>
+
+    <script>
+        const mainContent = document.getElementById('mainContent');
+        
+        // Talaba ma'lumotlari
+        const studentData = {
+            name: "Qurbonaliyev Daler Xurshid o'g'li",
+            uni: "Toshkent Davlat Texnika Universiteti",
+            faculty: "Energetika",
+            course: 3,
+            internPeriod: "01.03.2026 - 01.04.2026",
+            mentor: "Eshmatov J. (Bosh muhandis)",
+            currentBrigade: "B-12 (Tezkor guruh)",
+            status: "Amaliyotda"
+        };
+
+        // Dashboard (Bosh sahifa)
+        function renderHome() {
+            mainContent.innerHTML = `
+                <div class="container-box">
+                    <h2>Xush kelibsiz, Daler!</h2>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;">
+                        <div class="data-card" style="border-top: 4px solid var(--success)">
+                            <h4>Amaliyot kuni</h4>
+                            <h2 style="margin: 0;">18 / 30</h2>
+                        </div>
+                        <div class="data-card" style="border-top: 4px solid var(--accent)">
+                            <h4>Joriy Joylashuv</h4>
+                            <p><b>Podstansiya:</b> "Ulug'bek-220kV"</p>
+                        </div>
+                        <div class="data-card" style="border-top: 4px solid var(--hemis)">
+                            <h4>HEMIS Holati</h4>
+                            <span class="badge bg-success">Faol</span>
+                        </div>
+                    </div>
+                    
+                    <h3>📢 Bugungi topshiriqlar</h3>
+                    <div class="data-card">
+                        <p>1. 110/35/10 kVli podstansiyada transformator moyini almashtirish jarayonida ishtirok etish.</p>
+                        <p>2. Xavfsizlik texnikasi bo'yicha jurnallarni to'ldirishni o'rganish.</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showSection(type) {
+            let html = `<div class="container-box">`;
+            switch(type) {
+                case 'davomat':
+                    html += `<h2>📅 Davomatni tasdiqlash</h2>
+                             <div class="data-card" style="text-align: center;">
+                                <div style="padding: 40px; border: 2px dashed #ccc; margin-bottom: 20px;">
+                                    [QR-Kod Skanerlash Maydoni]
+                                </div>
+                                <p>RESga kelganingizda va ketayotganingizda QR-kodni skanerlang.</p>
+                                <button class="btn-submit" onclick="alert('Kelish qayd etildi: 08:00')">Keldim</button>
+                                <button class="btn-submit" style="background:var(--danger)">Ketdim</button>
+                             </div>
+                             <h3>Oxirgi 3 kunlik tarix</h3>
+                             <table>
+                                <tr><th>Sana</th><th>Kelish</th><th>Ketish</th><th>Holat</th></tr>
+                                <tr><td>25.03.2026</td><td>08:02</td><td>17:05</td><td><span class="badge bg-success">To'liq</span></td></tr>
+                                <tr><td>24.03.2026</td><td>07:55</td><td>17:10</td><td><span class="badge bg-success">To'liq</span></td></tr>
+                             </table>`;
+                    break;
+
+                case 'brigada':
+                    html += `<h2>👷 Real-vaqtda Brigada tarkibi</h2>
+                             <div class="data-card">
+                                <h3 style="color:var(--accent)">Siz biriktirilgan brigada: ${studentData.currentBrigade}</h3>
+                                <p><b>Brigada ustasi:</b> Rahimov Alisher (Tel: +998 90 123 45 67)</p>
+                                <p><b>Hudud:</b> Ulug'bek massivi, 12-loyiha</p>
+                                <p><b>Ish turi:</b> Havo liniyalarini ta'mirlash</p>
+                                <hr>
+                                <button class="btn-submit" style="background:var(--success)">📍 Geolokatsiyani yuborish</button>
+                             </div>`;
+                    break;
+
+                case 'kundalik':
+                    html += `<h2>📓 Elektron Amaliyot Kundaligi</h2>
+                             <div class="data-card">
+                                <label>Bugun o'rgangan bilimingiz va bajargan ishingiz:</label>
+                                <textarea rows="6" placeholder="Masalan: Bugun TP-456 da o'chirgichlarni ko'rikdan o'tkazdik..."></textarea>
+                                <label>Rasmlar/Hujjatlar (Optional):</label>
+                                <input type="file" multiple>
+                                <button class="btn-submit">Kundalikni saqlash</button>
+                             </div>`;
+                    break;
+                case 'resurslar':
+                    html += `<h2>📚 O'quv materiallari</h2>
+                             <div class="data-card">
+                                <h4>Elektr xavfsizligi bo'yicha qo'llanma</h4>
+                                <p> Kitob: 300 ta bet. O'qish Vaqt: 3 oy .</p>
+                                <button class="btn-submit">Kitobni ko'rish</button>
+                             </div>
+                             <div class="data-card">
+                                <h4>Elektr xavfsizligi bo'yicha bilimingizni tekshiring </h4>
+                                <p> Testlar soni: 30 ta .  Vaqt: 25 min .</p>
+                                <button class="btn-submit">Testlarni boshlash </button>
+                             </div>`;
+                            
+                    break;
+                    break;
+
+                case 'yakun':
+                    html += `<h2>🎓 Amaliyotni yakunlash va Sertifikat</h2>
+                             <div class="data-card" style="background: #fffbe6; border: 1px solid #ffe58f;">
+                                <h3>Amaliyot yakuniga: 12 kun qoldi</h3>
+                                <p>Barcha kundaliklar to'ldirilganidan so'ng, tizim avtomatik ravishda "Amaliyot varaqasi"ni shakllantiradi.</p>
+                             </div>
+                             <div class="data-card">
+                                <h4>HEMIS integratsiyasi haqida:</h4>
+                                <p>Amaliyot tugagan kuni (01.04.2026), sizning barcha baholaringiz va davomatingiz <b>HEMIS</b> bazasiga  yuboriladi.</p>
+                                <button class="btn-submit" >Yakuniy hisobotni yuklab olish</button>
+                             </div>`;
+                    break;
+            }
+            html += `</div>`;
+            mainContent.innerHTML = html;
+        }
+
+        // Shaxsiy profil
+        function showProfile() {
+            mainContent.innerHTML = `
+                <div class="container-box">
+                    <h2>👤 Talaba profili</h2>
+                    <div class="data-card">
+                        <p><b>F.I.SH:</b> ${studentData.name}</p>
+                        <p><b>OTM:</b> ${studentData.uni}</p>
+                        <p><b>Yo'nalish:</b> ${studentData.faculty}</p>
+                        <p><b>Amaliyot rahbari (RES):</b> ${studentData.mentor}</p>
+                        <p><b>Amaliyot davri:</b> ${studentData.internPeriod}</p>
+                    </div>
+                </div>`;
+        }
+
+        // Sana ko'rsatish
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('dateDisplay').innerText = now.toLocaleString('uz-UZ');
+        }, 1000);
+
+        window.onload = renderHome;
+    </script>
+</body>
+</html>
