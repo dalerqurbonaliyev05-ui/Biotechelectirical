@@ -12,15 +12,16 @@
             --bg-body: #f4f7f6; --success: #2ecc71; --danger: #e74c3c; --hemis: #6f42c1;
         }
         body { margin: 0; font-family: 'Segoe UI', sans-serif; display: flex; height: 100vh; background: var(--bg-body); overflow: hidden; }
-        .sidebar { width: 280px; background: var(--sidebar-bg); color: white; display: flex; flex-direction: column; }
+        .sidebar { width: 280px; background: var(--sidebar-bg); color: white; display: flex; flex-direction: column; flex-shrink: 0; }
         .sidebar-header { padding: 25px; text-align: center; background: rgba(0,0,0,0.2); border-bottom: 1px solid rgba(255,255,255,0.1); }
         .menu-list { list-style: none; padding: 0; margin: 10px 0; flex: 1; }
         .menu-item { padding: 15px 25px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 12px; font-size: 14px; border-left: 4px solid transparent; }
         .menu-item:hover, .menu-item.active { background: rgba(255,255,255,0.1); border-left: 4px solid var(--accent); }
         .main-wrapper { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
         header { height: 70px; background: var(--header-bg); display: flex; justify-content: space-between; align-items: center; padding: 0 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .top-profile { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-        .top-profile img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--accent); }
+        .top-profile { display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 5px 10px; border-radius: 8px; transition: 0.2s; }
+        .top-profile:hover { background: #f8f9fa; }
+        .top-profile img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--accent); object-fit: cover; }
         .content { flex: 1; padding: 30px; overflow-y: auto; }
         .container-box { max-width: 900px; margin: 0 auto; }
         .data-card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
@@ -35,11 +36,11 @@
 <div class="sidebar">
     <div class="sidebar-header"><b>ULUG'BEK RES</b><br><small>Tashkent City Electric Grid</small></div>
     <ul class="menu-list">
-        <li class="menu-item active" onclick="renderHome()">🏠 Dashboard</li>
+        <li class="menu-item active" id="m-home" onclick="renderHome()">🏠 Dashboard</li>
         <li class="menu-item" onclick="showSection('attendance')">📅 Attendance</li>
         <li class="menu-item" onclick="showSection('brigade')">👷 Brigade info</li>
-        <li class="menu-item" onclick="showSection('diary')">📓 Daily Diary</li>
-        <li class="menu-item" onclick="showSection('finish')">🎓 Graduation</li>
+        <li class="menu-item" id="m-diary" onclick="showSection('diary')">📓 Daily Diary</li>
+        <li class="menu-item" id="m-finish" onclick="showSection('finish')">🎓 Graduation</li>
     </ul>
 </div>
 
@@ -49,7 +50,7 @@
         <div style="display: flex; align-items: center; gap: 20px;">
             <div class="top-profile" onclick="showProfile()">
                 <div style="text-align: right;">
-                    <div id="uName" style="font-size: 14px; font-weight: bold;">...</div>
+                    <div id="uName" style="font-size: 14px; font-weight: bold;">Loading...</div>
                     <div id="uUni" style="font-size: 11px; color: var(--success);">...</div>
                 </div>
                 <img src="rasm12.png" alt="Profile">
@@ -84,9 +85,8 @@
             const docSnap = await getDoc(doc(db, "users", user.uid));
             if (docSnap.exists()) {
                 userData = docSnap.data();
-                // Map the data to English UI
-                document.getElementById('uName').innerText = userData.fullName || "User Name";
-                document.getElementById('uUni').innerText = userData.university || "TDTU";
+                document.getElementById('uName').innerText = userData.fullName || "User";
+                document.getElementById('uUni').innerText = userData.university || "University";
                 renderHome();
                 document.getElementById('loader').style.display = 'none';
             }
@@ -103,9 +103,32 @@
                     <div class="data-card"><h4>HEMIS ID</h4><h3>${userData.hemisId || "N/A"}</h3></div>
                 </div>
                 <div class="data-card">
-                    <h4>📍 Internship Site</h4>
-                    <p><b>Branch:</b> Ulug'bek RES (Power Grid)</p>
-                    <p><b>Supervisor:</b> ${userData.mentor || "Not Assigned"}</p>
+                    <h4>📍 Internship Details</h4>
+                    <p><b>Site:</b> Ulug'bek RES</p>
+                    <p><b>Supervisor:</b> ${userData.mentor || "Technical Manager"}</p>
+                </div>
+            </div>`;
+    };
+
+    window.showProfile = () => {
+        document.getElementById('mainContent').innerHTML = `
+            <div class="container-box">
+                <div class="data-card" style="border-left: 6px solid var(--accent);">
+                    <h2 style="margin-top:0">👤 Student Profile</h2>
+                    <hr style="border:0; border-top:1px solid #eee; margin:20px 0">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div>
+                            <p><b>Full Name:</b><br>${userData.fullName}</p>
+                            <p><b>HEMIS ID:</b><br>${userData.hemisId}</p>
+                            <p><b>University:</b><br>${userData.university}</p>
+                        </div>
+                        <div>
+                            <p><b>Faculty:</b><br>${userData.faculty}</p>
+                            <p><b>Course:</b><br>${userData.course}-year</p>
+                            <p><b>Brigade:</b><br>${userData.brigade || "Not assigned"}</p>
+                        </div>
+                    </div>
+                    <button class="btn-action" style="margin-top:20px" onclick="renderHome()">Back to Dashboard</button>
                 </div>
             </div>`;
     };
@@ -113,20 +136,20 @@
     window.showSection = (type) => {
         let html = `<div class="container-box">`;
         if (type === 'diary') {
-            html += `<h2>📓 Daily Internship Report</h2>
+            html += `<h2>📓 Daily Logbook</h2>
                 <div class="data-card">
                     <input type="date" id="reportDate" style="padding:10px; margin-bottom:10px; width:100%">
-                    <textarea id="workDone" rows="5" style="width:100%; padding:10px;" placeholder="Describe your tasks today..."></textarea>
-                    <button class="btn-action" style="margin-top:10px" onclick="saveReport()">Save to Cloud</button>
+                    <textarea id="workDone" rows="5" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;" placeholder="What did you do today?"></textarea>
+                    <button class="btn-action" style="margin-top:10px" onclick="saveReport()">Save Report</button>
                 </div>`;
         } else if (type === 'finish') {
-            html += `<h2>🎓 Finalize Internship</h2>
+            html += `<h2>🎓 Internship Completion</h2>
                 <div class="data-card">
-                    <p>Duration: ${userData.startDate || "2026-03-01"} to ${userData.endDate || "2026-04-01"}</p>
+                    <p>Logbook is ready for download based on your daily entries.</p>
                     <button class="btn-action" style="background:var(--success)" onclick="downloadPDF()">📥 Download PDF Logbook</button>
                 </div>`;
         } else {
-            html += `<h2>Section: ${type}</h2><div class="data-card"><p>Developing features...</p></div>`;
+            html += `<h2>${type.toUpperCase()}</h2><div class="data-card"><p>Feature coming soon...</p></div>`;
         }
         document.getElementById('mainContent').innerHTML = html + `</div>`;
     };
@@ -134,43 +157,31 @@
     window.saveReport = async () => {
         const date = document.getElementById('reportDate').value;
         const text = document.getElementById('workDone').value;
-        if(!date || !text) return alert("Please fill date and description!");
-        
+        if(!date || !text) return alert("Fill all fields!");
         await setDoc(doc(db, "reports", `${auth.currentUser.uid}_${date}`), {
             userId: auth.currentUser.uid,
             reportDate: date,
             taskDescription: text
         });
-        alert("Report saved successfully!");
+        alert("Saved!");
     };
 
     window.downloadPDF = async () => {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
-        
         doc.text("INTERNSHIP LOGBOOK", 105, 20, { align: "center" });
         doc.setFontSize(10);
         doc.text(`Student: ${userData.fullName}`, 20, 40);
-        doc.text(`University: ${userData.university} (${userData.faculty})`, 20, 46);
-        doc.text(`Supervisor: ${userData.mentor}`, 20, 52);
-
-        // Fetch reports from Firestore
+        doc.text(`University: ${userData.university}`, 20, 46);
         const q = query(collection(db, "reports"), where("userId", "==", auth.currentUser.uid));
         const querySnapshot = await getDocs(q);
         let rows = [];
         querySnapshot.forEach((d) => rows.push([d.data().reportDate, d.data().taskDescription]));
-
-        doc.autoTable({
-            startY: 60,
-            head: [['Date', 'Task Description']],
-            body: rows.length > 0 ? rows : [["-", "No reports found"]],
-            theme: 'grid'
-        });
-
-        doc.save(`Intern_Log_${userData.hemisId}.pdf`);
+        doc.autoTable({ startY: 60, head: [['Date', 'Description']], body: rows, theme: 'grid' });
+        doc.save(`Logbook_${userData.hemisId}.pdf`);
     };
 
-    window.logout = () => signOut(auth);
+    window.logout = () => signOut(auth).then(() => window.location.href = "login.html");
     setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleString(); }, 1000);
 </script>
 </body>
