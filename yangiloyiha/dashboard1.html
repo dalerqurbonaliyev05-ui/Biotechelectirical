@@ -199,7 +199,7 @@
         doc.save(`Kundalik_${userData.hemisId}.pdf`);
     };
 
-    window.logout = () => signOut(auth).then(() => window.location.href = "login.html");
+    window.logout = () => signOut(auth).then(() => window.location.href = "loginres.html");
     setInterval(() => { 
         document.getElementById('clock').innerText = new Date().toLocaleString('uz-UZ'); 
     }, 1000);
