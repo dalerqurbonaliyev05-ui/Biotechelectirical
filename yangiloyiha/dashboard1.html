@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ulug'bek RES | Talabalar Amaliyot Portali</title>
+    <style>
+        :root {
+            --sidebar-bg: #2c3e50;
+            --header-bg: #ffffff;
+            --accent: #3498db;
+            --text-main: #2c3e50;
+            --bg-body: #f4f7f6;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --hemis: #6f42c1;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            height: 100vh;
+            background-color: var(--bg-body);
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background-color: var(--sidebar-bg);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header {
+            padding: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            background: rgba(0,0,0,0.2);
+            color: #ecf0f1;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .menu-list { list-style: none; padding: 0; margin: 10px 0; flex: 1; }
+
+        .menu-item {
+            padding: 15px 25px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            border-left: 4px solid transparent;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background-color: rgba(255,255,255,0.1);
+            border-left: 4px solid var(--accent);
+        }
+
+        .hemis-status {
+            padding: 15px;
+            background: var(--hemis);
+            font-size: 12px;
+            text-align: center;
+        }
+
+        /* Main Wrapper */
+        .main-wrapper { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+        header {
+            height: 70px;
+            background: var(--header-bg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .top-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+
+        .top-profile:hover { background: #f8f9fa; }
+
+        .top-profile img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--accent); object-fit: cover; }
+
+        /* Content Area */
+        .content { flex: 1; padding: 30px; overflow-y: auto; }
+        .container-box { max-width: 1000px; margin: 0 auto; }
+
+        .data-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .badge { padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: bold; color: white; }
+        .bg-success { background: var(--success); }
+        
+        .btn-logout {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-left: 15px;
+        }
+
+        .btn-back {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        #loader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: white; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <div style="font-size: 24px; margin-bottom: 10px;">⚡</div>
+        <div>Ma'lumotlar yuklanmoqda...</div>
+    </div>
+
+    <div class="sidebar">
+        <div class="sidebar-header">ULUG'BEK RES <br> <span style="font-weight: normal; font-size: 12px;">Amaliyotchi Portali</span></div>
+        <ul class="menu-list">
+            <li class="menu-item active" id="menu-home" onclick="renderHome()">🏠 Bosh sahifa</li>
+            <li class="menu-item" onclick="showSection('davomat')">📅 Davomat (QR-Check)</li>
+            <li class="menu-item" onclick="showSection('brigada')">👷 Brigada tarkibida</li>
+            <li class="menu-item" onclick="showSection('kundalik')">📓 Elektron Kundalik</li>
+            <li class="menu-item" onclick="showSection('yakun')">🎓 Amaliyot yakuni</li>
+        </ul>
+        <div class="hemis-status">🔗 HEMIS Integratsiya: Faol</div>
+    </div>
+
+    <div class="main-wrapper">
+        <header>
+            <div id="dateDisplay" style="font-weight: 500; color: #7f8c8d;"></div>
+            <div style="display: flex; align-items: center;">
+                <div class="top-profile" onclick="showProfile()">
+                    <div style="text-align: right; margin-right: 10px;">
+                        <div id="headerName" style="font-size: 14px; font-weight: bold;">Talaba Ismi</div>
+                        <div id="headerUni" style="font-size: 11px; color: var(--success);">Universitet nomi</div>
+                    </div>
+                    <img src="rasm12.png" alt="Student">
+                </div>
+                <button class="btn-logout" onclick="handleLogout()">Chiqish</button>
+            </div>
+        </header>
+
+        <div class="content" id="mainContent"></div>
+    </div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    // Firebase sozlamalari
+    const firebaseConfig = {
+        apiKey: "AIzaSyD7DcRJycK5v5MnaU1mKfyZo5Wvv0dofVo",
+        authDomain: "myhemis-7cdf1.firebaseapp.com",
+        projectId: "myhemis-7cdf1",
+        storageBucket: "myhemis-7cdf1.firebasestorage.app",
+        messagingSenderId: "364780333759",
+        appId: "1:364780333759:web:c8c1bf075d0685b4ec740a"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let userData = null;
+
+    // 1. Foydalanuvchini tekshirish
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            try {
+                const docSnap = await getDoc(doc(db, "users", user.uid));
+                if (docSnap.exists()) {
+                    userData = docSnap.data();
+                    setupHeader();
+                    renderHome();
+                    document.getElementById('loader').style.display = 'none';
+                }
+            } catch (error) {
+                console.error("Ma'lumot olishda xato:", error);
+            }
+        } else {
+            window.location.href = "loginres.html";
+        }
+    });
+
+    // 2. Header ma'lumotlarini o'rnatish
+    function setupHeader() {
+        document.getElementById('headerName').innerText = userData.fullName || "Ism kiritilmagan";
+        document.getElementById('headerUni').innerText = userData.university || "TDTU";
+    }
+
+    // 3. Bosh sahifa (Dashboard)
+    window.renderHome = function() {
+        setActiveMenu('menu-home');
+        document.getElementById('mainContent').innerHTML = `
+            <div class="container-box">
+                <h2>Xush kelibsiz, ${userData.fullName.split(' ')[0]}!</h2>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                    <div class="data-card" style="border-top: 4px solid var(--success)">
+                        <h4 style="color: #7f8c8d; margin-bottom: 10px;">Guruh / Brigada</h4>
+                        <h3 style="margin: 0;">${userData.brigade || "B-12"}</h3>
+                    </div>
+                    <div class="data-card" style="border-top: 4px solid var(--accent)">
+                        <h4 style="color: #7f8c8d; margin-bottom: 10px;">O'quv kursi</h4>
+                        <h3 style="margin: 0;">${userData.course}-bosqich</h3>
+                    </div>
+                    <div class="data-card" style="border-top: 4px solid var(--hemis)">
+                        <h4 style="color: #7f8c8d; margin-bottom: 10px;">HEMIS ID</h4>
+                        <h3 style="margin: 0;">${userData.hemisId}</h3>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 30px;">📢 Amaliyot tafsilotlari</h3>
+                <div class="data-card">
+                    <p><b>Fakultet:</b> ${userData.faculty}</p>
+                    <p><b>Yo'nalish:</b> Elektr ta'minoti</p>
+                    <p><b>Amaliyot rahbari:</b> ${userData.mentor || "Eshmatov J. (Bosh muhandis)"}</p>
+                    <p><b>Holati:</b> <span class="badge bg-success">Faol</span></p>
+                </div>
+            </div>`;
+    };
+
+    // 4. Profil ma'lumotlarini ko'rsatish (Siz so'ragan funksiya)
+    window.showProfile = function() {
+        document.getElementById('mainContent').innerHTML = `
+            <div class="container-box">
+                <div class="data-card" style="border-left: 6px solid var(--accent);">
+                    <h2 style="margin-top: 0;">👤 Talaba profili</h2>
+                    <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                        <div>
+                            <p style="color: #7f8c8d; margin-bottom: 5px;">To'liq ism-sharif:</p>
+                            <p style="font-weight: 600; font-size: 16px;">${userData.fullName}</p>
+                            
+                            <p style="color: #7f8c8d; margin-bottom: 5px; margin-top: 20px;">HEMIS ID raqami:</p>
+                            <p style="font-weight: 600;">${userData.hemisId}</p>
+                            
+                            <p style="color: #7f8c8d; margin-bottom: 5px; margin-top: 20px;">Universitet:</p>
+                            <p style="font-weight: 600;">${userData.university}</p>
+                        </div>
+                        <div>
+                            <p style="color: #7f8c8d; margin-bottom: 5px;">Fakultet:</p>
+                            <p style="font-weight: 600;">${userData.faculty}</p>
+                            
+                            <p style="color: #7f8c8d; margin-bottom: 5px; margin-top: 20px;">Bosqich:</p>
+                            <p style="font-weight: 600;">${userData.course}-kurs talabasi</p>
+                            
+                            <p style="color: #7f8c8d; margin-bottom: 5px; margin-top: 20px;">Brigada:</p>
+                            <p style="font-weight: 600;">${userData.brigade || "Biriktirilmagan"}</p>
+                        </div>
+                    </div>
+                    
+                    <button class="btn-back" onclick="renderHome()">🏠 Dashboardga qaytish</button>
+                </div>
+            </div>`;
+    };
+
+    // 5. Boshqa bo'limlar (Namuna)
+    window.showSection = function(type) {
+        let title = type.charAt(0).toUpperCase() + type.slice(1);
+        document.getElementById('mainContent').innerHTML = `
+            <div class="container-box">
+                <h2>${title} bo'limi</h2>
+                <div class="data-card">
+                    <p>Bu bo'lim hozirda ishlab chiqilmoqda. Tez kunda ${userData.fullName.split(' ')[0]} uchun barcha imkoniyatlar ochiladi.</p>
+                </div>
+            </div>`;
+    };
+
+    // 6. Sidebar aktivligini boshqarish
+    function setActiveMenu(id) {
+        document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+        const el = document.getElementById(id);
+        if(el) el.classList.add('active');
+    }
+
+    // 7. Chiqish
+    window.handleLogout = () => {
+        if(confirm("Tizimdan chiqmoqchimisiz?")) {
+            signOut(auth).then(() => window.location.href = "loginres.html");
+        }
+    };
+
+    // Vaqtni yangilab turish
+    setInterval(() => {
+        const el = document.getElementById('dateDisplay');
+        if(el) el.innerText = new Date().toLocaleString('uz-UZ');
+    }, 1000);
+
+</script>
+</body>
+</html>
