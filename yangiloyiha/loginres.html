@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RES-Tizimga kirish</title>
+    <title>RES - Tizimga kirish</title>
     <style>
-        /* CSS: Sahifa dizayni */
+        /* Sahifa dizayni */
         body {
             font-family: 'Arial', sans-serif;
             background-color: #e9ecef;
@@ -42,7 +42,7 @@
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
-            box-sizing: border-box; /* Padding ichkarida qolishi uchun */
+            box-sizing: border-box;
         }
         .btn-login {
             width: 100%;
@@ -61,20 +61,22 @@
         #message {
             margin-top: 15px;
             font-size: 14px;
+            min-height: 20px;
         }
         .error { color: #e74c3c; }
         .success { color: #27ae60; }
+        .loading { color: #f39c12; }
     </style>
 </head>
 <body>
 
 <div class="login-card">
-    <img src="rasm14.jfif" alt="Logo" style="margin-bottom: 10px; border-radius: 50%;">
+    <img src="rasm14.jfif" alt="Logo" style="margin-bottom: 10px; border-radius: 50%; width: 80px; height: 80px; object-fit: cover;">
     <h2>RES Tizimi</h2>
     
     <div class="input-group">
-        <label for="username">Login (ID)</label>
-        <input type="text" id="username" placeholder="Ishchi Xodim(ID)">
+        <label for="username">Login(ID)</label>
+        <input type="email" id="username" placeholder="Ishchi Xodim(ID)">
     </div>
     
     <div class="input-group">
@@ -87,41 +89,12 @@
     <div id="message"></div>
 </div>
 
-<script>
-    // JavaScript: Login va parolni tekshirish mantiqi
-    function validateLogin() {
-        const userField = document.getElementById('username').value;
-        const passField = document.getElementById('password').value;
-        const message = document.getElementById('message');
-
-        // Oddiy tekshirish mantiqi (Buni keyinchalik baza bilan bog'laysiz)
-        const validUser = "student123";
-        const validPass = "pass2026";
-
-        if (userField === "" || passField === "") {
-            message.innerHTML = "<span class='error'>Iltimos, barcha maydonlarni to'ldiring!</span>";
-        } 
-        else if (userField === validUser && passField === validPass) {
-            message.innerHTML = "<span class='success'>Muvaffaqiyatli kirildi! Yo'naltirilmoqda...</span>";
-            
-            // 1.5 soniyadan keyin asosiy sahifaga o'tish (masalan dashboard.html)
-            setTimeout(() => {
-                alert("Xush kelibsiz! Endi siz asosiy tizimga o'tasiz.");
-                // window.location.href = "dashboard.html"; 
-            }, 1500);
-        } 
-        else {
-            message.innerHTML = "<span class='error'>Login yoki parol noto'g'ri!</span>";
-        }
-    }
-  
-</script>
 <script type="module">
-  // 1. Kerakli modullarni import qilamiz
+  // 1. Firebase modullarini import qilish
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-  // 2. Sizning shaxsiy Firebase konfiguratsiyangiz
+  // 2. Firebase konfiguratsiyasi
   const firebaseConfig = {
     apiKey: "AIzaSyD7DcRJycK5v5MnaU1mKfyZo5Wvv0dofVo",
     authDomain: "myhemis-7cdf1.firebaseapp.com",
@@ -135,35 +108,65 @@
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
 
-  // 4. Login tugmasi bosilganda ishlaydigan funksiya
-  // "window." orqali yozsak, HTML dagi onclick="validateLogin()" uni ko'ra oladi
+  // 4. Login funksiyasi (window orqali HTMLga bog'laymiz)
   window.validateLogin = function() {
     const email = document.getElementById('username').value; 
     const pass = document.getElementById('password').value;
     const message = document.getElementById('message');
 
-    // Tozalash
-    message.innerHTML = "Tekshirilmoqda...";
+    if (!email || !pass) {
+        message.innerHTML = "<span class='error'>Iltimos, barcha maydonlarni to'ldiring!</span>";
+        return;
+    }
 
-    // Firebase orqali tekshirish
+    message.innerHTML = "<span class='loading'>Tekshirilmoqda...</span>";
+
+    // Firebase orqali kirish
     signInWithEmailAndPassword(auth, email, pass)
       .then((userCredential) => {
         const user = userCredential.user;
-        message.innerHTML = `<span style="color: green;">Muvaffaqiyatli! Kirildi: ${user.email}</span>`;
+        message.innerHTML = `<span class='success'>Muvaffaqiyatli! Yo'naltirilmoqda...</span>`;
         
-        // Biroz kutib, dashboard sahifasiga o'tkazish
+        // --- YO'NALTIRISH MANTIQI ---
         setTimeout(() => {
-            window.location.href = "dashboard.html"; 
+            let targetPage = "dashboard.html"; // Standart foydalanuvchilar uchun
+
+            // Emailga qarab sahifani tanlash
+            if (user.email === "daler_res@gmail.com") {
+                targetPage = "student.html";
+            } else if (user.email === "muhandis@res.uz") {
+                targetPage = "technical.html";
+            } else if (user.email === "boshliq@res.uz") {
+                targetPage = "reports.html";
+            }
+
+            // Sahifaga o'tish
+            window.location.href = targetPage;
         }, 1500);
+
       })
       .catch((error) => {
-        // Xatolik kodlarini o'zbekchaga o'giramiz
         let errorMsg = "Xatolik yuz berdi";
-        if (error.code === 'auth/user-not-found') errorMsg = "Bunday foydalanuvchi topilmadi";
-        if (error.code === 'auth/wrong-password') errorMsg = "Parol noto'g'ri";
-        if (error.code === 'auth/invalid-email') errorMsg = "Email formati noto'g'ri (masalan: user@mail.com)";
         
-        message.innerHTML = `<span style="color: red;">${errorMsg}</span>`;
+        // Firebase xatoliklarini tahlil qilish
+        switch (error.code) {
+            case 'auth/user-not-found':
+                errorMsg = "Bunday foydalanuvchi mavjud emas";
+                break;
+            case 'auth/wrong-password':
+                errorMsg = "Parol noto'g'ri";
+                break;
+            case 'auth/invalid-email':
+                errorMsg = "Email manzili noto'g'ri yozilgan";
+                break;
+            case 'auth/invalid-credential':
+                errorMsg = "Login yoki parol noto'g'ri";
+                break;
+            default:
+                errorMsg = "Kirishda xatolik: " + error.message;
+        }
+        
+        message.innerHTML = `<span class='error'>${errorMsg}</span>`;
       });
   }
 </script>
