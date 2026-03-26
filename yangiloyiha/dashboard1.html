@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ulug'bek RES | Talabalar Portali</title>
+    <title>Ulug'bek RES | Intern Portal</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
     <style>
@@ -30,16 +30,16 @@
 </head>
 <body>
 
-<div id="loader">🚀 Yuklanmoqda...</div>
+<div id="loader">🚀 Loading Data...</div>
 
 <div class="sidebar">
-    <div class="sidebar-header"><b>ULUG'BEK RES</b><br><small>Toshkent shahar ETK</small></div>
+    <div class="sidebar-header"><b>ULUG'BEK RES</b><br><small>Tashkent City Electric Grid</small></div>
     <ul class="menu-list">
-        <li class="menu-item active" onclick="renderHome()">🏠 Bosh sahifa</li>
-        <li class="menu-item" onclick="showSection('davomat')">📅 Davomat</li>
-        <li class="menu-item" onclick="showSection('brigada')">👷 Brigada</li>
-        <li class="menu-item" onclick="showSection('kundalik')">📓 Kundalik</li>
-        <li class="menu-item" onclick="showSection('yakun')">🎓 Yakunlash</li>
+        <li class="menu-item active" onclick="renderHome()">🏠 Dashboard</li>
+        <li class="menu-item" onclick="showSection('attendance')">📅 Attendance</li>
+        <li class="menu-item" onclick="showSection('brigade')">👷 Brigade info</li>
+        <li class="menu-item" onclick="showSection('diary')">📓 Daily Diary</li>
+        <li class="menu-item" onclick="showSection('finish')">🎓 Graduation</li>
     </ul>
 </div>
 
@@ -52,9 +52,9 @@
                     <div id="uName" style="font-size: 14px; font-weight: bold;">...</div>
                     <div id="uUni" style="font-size: 11px; color: var(--success);">...</div>
                 </div>
-                <img src="rasm12.png" alt="Profil">
+                <img src="rasm12.png" alt="Profile">
             </div>
-            <button onclick="logout()" style="background: var(--danger); color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Chiqish</button>
+            <button onclick="logout()" style="background: var(--danger); color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Logout</button>
         </div>
     </header>
     <div class="content" id="mainContent"></div>
@@ -84,8 +84,9 @@
             const docSnap = await getDoc(doc(db, "users", user.uid));
             if (docSnap.exists()) {
                 userData = docSnap.data();
-                document.getElementById('uName').innerText = userData["To'liq ismi"];
-                document.getElementById('uUni').innerText = userData.universiteti;
+                // Map the data to English UI
+                document.getElementById('uName').innerText = userData.fullName || "User Name";
+                document.getElementById('uUni').innerText = userData.university || "TDTU";
                 renderHome();
                 document.getElementById('loader').style.display = 'none';
             }
@@ -95,37 +96,37 @@
     window.renderHome = () => {
         document.getElementById('mainContent').innerHTML = `
             <div class="container-box">
-                <h2>Xush kelibsiz, ${userData["To'liq ismi"].split(' ')[0]}!</h2>
+                <h2>Welcome, ${userData.fullName ? userData.fullName.split(' ')[0] : 'Student'}!</h2>
                 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
-                    <div class="data-card"><h4>Kurs</h4><h3>${userData.Kurs}-bosqich</h3></div>
-                    <div class="data-card"><h4>Guruh</h4><h3>${userData.Brigada || "B-12"}</h3></div>
-                    <div class="data-card"><h4>HEMIS ID</h4><h3>${userData["hemis id"]}</h3></div>
+                    <div class="data-card"><h4>Course</h4><h3>${userData.course || '3'}-year</h3></div>
+                    <div class="data-card"><h4>Brigade</h4><h3>${userData.brigade || "B-12"}</h3></div>
+                    <div class="data-card"><h4>HEMIS ID</h4><h3>${userData.hemisId || "N/A"}</h3></div>
                 </div>
                 <div class="data-card">
-                    <h4>📍 Amaliyot ob'ekti</h4>
-                    <p><b>Filial:</b> Ulug'bek RES (Toshkent shahar ETK)</p>
-                    <p><b>Rahbar:</b> ${userData["Amaliyot rahbari"]}</p>
+                    <h4>📍 Internship Site</h4>
+                    <p><b>Branch:</b> Ulug'bek RES (Power Grid)</p>
+                    <p><b>Supervisor:</b> ${userData.mentor || "Not Assigned"}</p>
                 </div>
             </div>`;
     };
 
     window.showSection = (type) => {
         let html = `<div class="container-box">`;
-        if (type === 'kundalik') {
-            html += `<h2>📓 Kunlik hisobot</h2>
+        if (type === 'diary') {
+            html += `<h2>📓 Daily Internship Report</h2>
                 <div class="data-card">
                     <input type="date" id="reportDate" style="padding:10px; margin-bottom:10px; width:100%">
-                    <textarea id="workDone" rows="5" style="width:100%; padding:10px;" placeholder="Bugun nima ish qildingiz?"></textarea>
-                    <button class="btn-action" style="margin-top:10px" onclick="saveReport()">Saqlash</button>
+                    <textarea id="workDone" rows="5" style="width:100%; padding:10px;" placeholder="Describe your tasks today..."></textarea>
+                    <button class="btn-action" style="margin-top:10px" onclick="saveReport()">Save to Cloud</button>
                 </div>`;
-        } else if (type === 'yakun') {
-            html += `<h2>🎓 Amaliyot yakuni</h2>
+        } else if (type === 'finish') {
+            html += `<h2>🎓 Finalize Internship</h2>
                 <div class="data-card">
-                    <p>Amaliyot davri: ${userData["Amaliyot boshlangan sana"]} - ${userData["Amaliyot tugagan sana"]}</p>
-                    <button class="btn-action" style="background:var(--success)" onclick="downloadPDF()">📥 PDF Kundalikni yuklab olish</button>
+                    <p>Duration: ${userData.startDate || "2026-03-01"} to ${userData.endDate || "2026-04-01"}</p>
+                    <button class="btn-action" style="background:var(--success)" onclick="downloadPDF()">📥 Download PDF Logbook</button>
                 </div>`;
         } else {
-            html += `<h2>${type}</h2><div class="data-card"><p>Ma'lumotlar yuklanmoqda...</p></div>`;
+            html += `<h2>Section: ${type}</h2><div class="data-card"><p>Developing features...</p></div>`;
         }
         document.getElementById('mainContent').innerHTML = html + `</div>`;
     };
@@ -133,44 +134,44 @@
     window.saveReport = async () => {
         const date = document.getElementById('reportDate').value;
         const text = document.getElementById('workDone').value;
-        if(!date || !text) return alert("Sana va matnni kiriting!");
+        if(!date || !text) return alert("Please fill date and description!");
         
         await setDoc(doc(db, "reports", `${auth.currentUser.uid}_${date}`), {
             userId: auth.currentUser.uid,
-            sana: date,
-            ish: text
+            reportDate: date,
+            taskDescription: text
         });
-        alert("Saqlandi!");
+        alert("Report saved successfully!");
     };
 
     window.downloadPDF = async () => {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         
-        doc.text("AMALIYOT KUNDALIGI", 105, 20, { align: "center" });
+        doc.text("INTERNSHIP LOGBOOK", 105, 20, { align: "center" });
         doc.setFontSize(10);
-        doc.text(`Talaba: ${userData["To'liq ismi"]}`, 20, 40);
-        doc.text(`OTM: ${userData.universiteti} (${userData.Fakultiteti})`, 20, 46);
-        doc.text(`Amaliyot rahbari: ${userData["Amaliyot rahbari"]}`, 20, 52);
+        doc.text(`Student: ${userData.fullName}`, 20, 40);
+        doc.text(`University: ${userData.university} (${userData.faculty})`, 20, 46);
+        doc.text(`Supervisor: ${userData.mentor}`, 20, 52);
 
-        // Firestore'dan hisobotlarni olish
+        // Fetch reports from Firestore
         const q = query(collection(db, "reports"), where("userId", "==", auth.currentUser.uid));
         const querySnapshot = await getDocs(q);
         let rows = [];
-        querySnapshot.forEach((d) => rows.push([d.data().sana, d.data().ish]));
+        querySnapshot.forEach((d) => rows.push([d.data().reportDate, d.data().taskDescription]));
 
         doc.autoTable({
             startY: 60,
-            head: [['Sana', 'Bajarilgan ishlar mazmuni']],
-            body: rows.length > 0 ? rows : [["-", "Hisobotlar topilmadi"]],
+            head: [['Date', 'Task Description']],
+            body: rows.length > 0 ? rows : [["-", "No reports found"]],
             theme: 'grid'
         });
 
-        doc.save(`Kundalik_${userData["hemis id"]}.pdf`);
+        doc.save(`Intern_Log_${userData.hemisId}.pdf`);
     };
 
     window.logout = () => signOut(auth);
-    setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleString('uz-UZ'); }, 1000);
+    setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleString(); }, 1000);
 </script>
 </body>
 </html>
