@@ -156,7 +156,22 @@
                             <p><b>Joriy guruh:</b> ${userData.brigade || "B-12 (Tezkor guruh)"}</p>
                             <p><b>Yo'nalish:</b> ${userData.faculty}</p>
                         </div>`;
-        } else {
+        }else if (type === 'attendance') {
+           html += `
+                <h2>📅 Davomatni tasdiqlash</h2>
+                <div class="data-card" style="text-align: center;">
+                    <div style="padding: 40px; border: 2px dashed var(--accent); margin-bottom: 20px; border-radius: 10px; background: #f8faff;">
+                        <span style="font-size: 50px;">📷</span><br>
+                        <p>QR-kodni skanerlash uchun kamerani oching</p>
+                    </div>
+                    <p><b>HEMIS ID:</b> ${userData["hemis id"]}</p>
+                    <div style="display: flex; gap: 10px; justify-content: center;">
+                        <button class="btn-back" style="background: var(--success);" onclick="alert('Kelish qayd etildi!')">Keldim</button>
+                        <button class="btn-back" style="background: var(--danger);" onclick="alert('Ketish qayd etildi!')">Ketdim</button>
+                    </div>
+                </div>`;
+        } 
+        else {
             html += `<h2>${type.toUpperCase()}</h2><div class="data-card"><p>Ushbu bo'lim hozirda ishlab chiqilmoqda...</p></div>`;
         }
         document.getElementById('mainContent').innerHTML = html + `</div>`;
