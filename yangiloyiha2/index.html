@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TDTU Ilmiy Videolar Platformasi</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        /* ASOSIY USLUBLAR */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background-color: #f9f9f9; }
+        .hidden { display: none !important; }
+
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background-color: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 24px; font-weight: bold; color: #0056b3; cursor: pointer; }
+        
+        .search-bar { display: flex; }
+        .search-bar input { padding: 10px; width: 350px; border: 1px solid #ccc; border-radius: 4px 0 0 4px; outline: none; }
+        .search-bar input:focus { border-color: #0056b3; }
+        .search-bar button { padding: 10px 20px; border: 1px solid #ccc; background-color: #f0f0f0; border-left: none; border-radius: 0 4px 4px 0; cursor: pointer; }
+        
+        /* O'ng tomon foydalanuvchi qismi (Profil) */
+        .user-actions { display: flex; align-items: center; gap: 15px; }
+        .upload-btn { padding: 10px 20px; background-color: #0056b3; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .upload-btn:hover { background-color: #004494; }
+        .profile-icon { width: 40px; height: 40px; border-radius: 50%; background-color: #e2e8f0; color: #0f172a; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; font-size: 18px; border: 2px solid #0056b3; transition: 0.2s; }
+        .profile-icon:hover { transform: scale(1.1); box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+
+        /* Bo'limlar */
+        .categories-container { background-color: #ffffff; padding: 12px 30px; border-bottom: 1px solid #e5e5e5; display: flex; gap: 15px; overflow-x: auto; white-space: nowrap; position: sticky; top: 70px; z-index: 99; }
+        .categories-container::-webkit-scrollbar { display: none; }
+        .category-btn { padding: 8px 16px; background-color: #f0f0f0; border: none; border-radius: 20px; font-size: 14px; cursor: pointer; transition: 0.2s; }
+        .category-btn.active { background-color: #0056b3; color: white; }
+
+        /* Videolar tarmog'i */
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; padding: 30px; }
+        .video-card { background-color: #fff; border-radius: 8px; overflow: hidden; cursor: pointer; transition: transform 0.2s; border: 1px solid #eee; }
+        .video-card:hover { transform: scale(1.02); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .thumbnail { width: 100%; height: 180px; background-color: #cbd5e1; position: relative; }
+        .thumbnail video { width: 100%; height: 100%; object-fit: cover; }
+        .video-info { padding: 15px; }
+        .video-title { font-size: 16px; margin-bottom: 8px; color: #0f172a; line-height: 1.4; }
+        .author, .stats { font-size: 14px; color: #64748b; margin-bottom: 4px; display: flex; align-items: center; gap: 5px; }
+
+        /* VIDEO KO'RISH SAHIFASI USLUBLARI */
+        .video-player-container { padding: 30px; max-width: 1000px; margin: 0 auto; }
+        .back-btn { background: none; border: none; color: #0056b3; font-size: 16px; cursor: pointer; margin-bottom: 20px; font-weight: bold; }
+        .real-player-container { width: 100%; background-color: #000; border-radius: 10px; overflow: hidden; margin-bottom: 20px; }
+        .real-player-container video { width: 100%; max-height: 500px; outline: none; }
+        
+        .video-header-info { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #ccc; padding-bottom: 15px; margin-bottom: 15px; }
+        .video-details h2 { margin-bottom: 10px; }
+        .like-btn { padding: 8px 20px; font-size: 16px; background-color: #f0f0f0; border: 1px solid #ccc; border-radius: 20px; cursor: pointer; font-weight: bold; transition: 0.2s; display: flex; align-items: center; gap: 8px; }
+        .like-btn:hover { background-color: #e2e8f0; }
+        .like-btn.liked { background-color: #0056b3; color: white; border-color: #0056b3; }
+        .video-desc { background-color: #f0f0f0; padding: 15px; border-radius: 8px; margin-top: 15px; line-height: 1.5; }
+
+        /* IZOHLAR QISMI */
+        .comments-section { margin-top: 30px; }
+        .comments-section h3 { margin-bottom: 15px; }
+        .add-comment { display: flex; gap: 10px; margin-bottom: 20px; }
+        .add-comment input { flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 5px; outline: none; }
+        .add-comment input:focus { border-color: #0056b3; border-width: 2px; }
+        .add-comment button { padding: 10px 20px; background-color: #0056b3; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .comment-item { background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #eee; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .comment-item strong { color: #0056b3; display: block; margin-bottom: 5px; font-size: 14px; }
+        .comment-item p { color: #333; font-size: 15px; }
+
+        /* MODAL OYNALAR (Yuklash va Profil) */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+        .modal-content { background: white; padding: 30px; border-radius: 10px; width: 400px; max-width: 90%; position: relative; }
+        .close-btn { position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 20px; cursor: pointer; color: #666; }
+        .modal-content h3 { margin-bottom: 20px; }
+        
+        /* Profil oynasi uchun uslublar */
+        .profile-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+        .profile-avatar-large { width: 60px; height: 60px; border-radius: 50%; background-color: #0056b3; color: white; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; }
+        .profile-info p { margin-bottom: 10px; font-size: 15px; color: #333; }
+        .profile-info strong { color: #555; display: inline-block; width: 100px; }
+        .logout-btn { width: 100%; padding: 10px; background-color: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 15px; }
+
+        /* Form uslublari */
+        .form-group { margin-bottom: 15px; display: flex; flex-direction: column; }
+        .form-group label { margin-bottom: 5px; font-weight: bold; }
+        .form-group input, .form-group textarea, .form-group select { padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; }
+        .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+        .cancel-btn { padding: 10px 15px; background: #ccc; border: none; border-radius: 5px; cursor: pointer; }
+        .submit-btn { padding: 10px 15px; background: #0056b3; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        
+        .loading-text { text-align: center; padding: 40px; font-size: 18px; color: #666; width: 100%; grid-column: 1 / -1; }
+        #uploadingStatus { color: #0056b3; font-weight: bold; margin-top: 10px; display: none; }
+    </style>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo" onclick="goHome()">Ilm-fan TDTU</div>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Ilmiy videolarni qidirish..." onkeyup="searchVideos()">
+            <button onclick="searchVideos()">Qidirish</button>
+        </div>
+        
+        <div class="user-actions">
+            <button class="upload-btn" onclick="openUploadModal()">+ Video yuklash</button>
+            <div class="profile-icon" id="navbarProfileIcon" onclick="openProfileModal()">--</div>
+        </div>
+    </header>
+
+    <nav class="categories-container" id="categoriesNav">
+        <button class="category-btn active" onclick="filterCategory('Barchasi', this)">Barchasi</button>
+        <button class="category-btn" onclick="filterCategory('Ixtirolar', this)">Ixtirolar</button>
+        <button class="category-btn" onclick="filterCategory('Elektr ta\'minoti', this)">Elektr ta'minoti</button>
+        <button class="category-btn" onclick="filterCategory('Laboratoriya ishlari', this)">Laboratoriya ishlari</button>
+        <button class="category-btn" onclick="filterCategory('Arduino va IoT', this)">Arduino va IoT</button>
+    </nav>
+
+    <main class="video-grid" id="videoGrid">
+        <div class="loading-text">Videolar bazadan yuklanmoqda... ⏳</div>
+    </main>
+
+    <section class="video-player-container hidden" id="videoPlayerSection">
+        <button class="back-btn" onclick="goHome()">← Orqaga qaytish</button>
+        
+        <div class="real-player-container">
+            <video id="mainVideoPlayer" controls controlsList="nodownload">
+                <source src="" type="video/mp4">
+                Brauzeringiz videoni qo'llab-quvvatlamaydi.
+            </video>
+        </div>
+        
+        <div class="video-header-info">
+            <div class="video-details">
+                <h2 id="playTitle">Video nomi</h2>
+                <p class="stats" id="playStats">Muallif: Alisher</p>
+            </div>
+            <button class="like-btn" id="likeBtn" onclick="toggleLike()">
+                👍 <span id="likeCount">0</span>
+            </button>
+        </div>
+
+        <div class="video-desc" id="playDesc"></div>
+
+        <div class="comments-section">
+            <h3 id="commentsCountText">Izohlar (0)</h3>
+            <div class="add-comment">
+                <input type="text" id="commentInput" placeholder="Fikringizni yozing..." onkeypress="handleCommentEnter(event)">
+                <button onclick="addComment()">Yozish</button>
+            </div>
+            <div id="commentsList"></div>
+        </div>
+    </section>
+
+    <div class="modal-overlay hidden" id="profileModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeProfileModal()">✖</button>
+            <h3>Shaxsiy Profil (Hemis)</h3>
+            
+            <div class="profile-header">
+                <div class="profile-avatar-large" id="modalProfAvatar">A</div>
+                <h2 id="modalProfName" style="font-size: 18px; color: #0056b3;">Ism Sharifi</h2>
+            </div>
+            
+            <div class="profile-info">
+                <p><strong>Talaba ID:</strong> <span id="modalHemisId">...</span></p>
+                <p><strong>Fakultet:</strong> <span id="modalFaculty">...</span></p>
+                <p><strong>Yo'nalish:</strong> <span id="modalMajor">...</span></p>
+                <p><strong>Bosqich:</strong> <span id="modalCourse">...</span></p>
+            </div>
+            
+            <button class="logout-btn" onclick="logout()">Tizimdan chiqish</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay hidden" id="uploadModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeUploadModal()">✖</button>
+            <h3>Yangi ilmiy video yuklash</h3>
+            <form id="uploadForm" onsubmit="handleUpload(event)">
+                <div class="form-group">
+                    <label>Video faylni tanlang (Faqat .mp4):</label>
+                    <input type="file" id="videoFile" accept="video/mp4,video/x-m4v,video/*" required>
+                </div>
+                <div class="form-group">
+                    <label>Sarlavha:</label>
+                    <input type="text" id="upTitle" placeholder="Masalan: Transformatorni sinash..." required>
+                </div>
+                <div class="form-group">
+                    <label>Bo'limni tanlang:</label>
+                    <select id="upCategory">
+                        <option value="Ixtirolar">Ixtirolar</option>
+                        <option value="Elektr ta'minoti">Elektr ta'minoti</option>
+                        <option value="Laboratoriya ishlari">Laboratoriya ishlari</option>
+                        <option value="Arduino va IoT">Arduino va IoT</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Video haqida izoh (Tavsif):</label>
+                    <textarea id="upDesc" rows="4" placeholder="Bu videoda nima yoritilgan?..." required></textarea>
+                </div>
+                
+                <div id="uploadingStatus">Fayl serverga yuklanmoqda, kuting... ⏳</div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="cancel-btn" onclick="closeUploadModal()">Bekor qilish</button>
+                    <button type="submit" class="submit-btn" id="submitBtn">Yuklash</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // 1. LOGIN HIMOYA VA MA'LUMOTLARNI TEKSHIRISH
+        // ==========================================
+        const savedUserData = localStorage.getItem('loggedInUser');
+
+        // Agar foydalanuvchi login qilmagan bo'lsa, avtomatik login sahifasiga o'tkazib yuboramiz
+        if (!savedUserData) {
+            window.location.href = "login.html";
+        }
+
+        // Agar login qilgan bo'lsa, xotiradan uning ma'lumotlarini ajratib olamiz
+        const currentUser = JSON.parse(savedUserData);
+        
+        // Ikonkaga ism va familiyaning bosh harflarini yozamiz
+        const userInitials = currentUser.name.charAt(0) + currentUser.lastName.charAt(0);
+        document.getElementById('navbarProfileIcon').innerText = userInitials;
+
+        // ==========================================
+        // 2. SUPABASE BAZASIGA ULANISH
+        // ==========================================
+        const { createClient } = supabase;
+        const supabaseUrl = 'https://rrpdicclbxxruzezfuld.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJycGRpY2NsYnh4cnV6ZXpmdWxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ3MTg2NDEsImV4cCI6MjA5MDI5NDY0MX0.Te-dx80rGGO_soG0mEqFPoMGe9Dd83mESsVXfF-4CJQ';
+        const supabaseClient = createClient(supabaseUrl, supabaseKey);
+
+        let currentOpenVideoId = null;
+        let allVideosFromDB = []; 
+
+        // ==========================================
+        // 3. VIDEOLARNI BAZADAN TORTIB OLISH
+        // ==========================================
+        async function fetchVideos() {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('videos_data')
+                    .select('*')
+                    .order('id', { ascending: false });
+
+                if (error) throw error;
+
+                allVideosFromDB = data || [];
+                
+                allVideosFromDB.forEach(v => {
+                    if (!v.comments) v.comments = []; 
+                });
+
+                renderVideos(allVideosFromDB);
+            } catch (error) {
+                console.error("Xatolik:", error);
+                document.getElementById('videoGrid').innerHTML = '<h3 style="color:red; padding:30px; grid-column: 1 / -1;">Bazaga ulanishda xatolik yuz berdi. Konsolni tekshiring.</h3>';
+            }
+        }
+
+        function renderVideos(videosList) {
+            const grid = document.getElementById('videoGrid');
+            grid.innerHTML = ''; 
+            
+            if(videosList.length === 0) {
+                grid.innerHTML = '<h3 style="padding: 30px; grid-column: 1 / -1;">Bu bo\'limda hozircha videolar yo\'q. Birinchi videoni yuklang!</h3>';
+                return;
+            }
+            
+            videosList.forEach(video => {
+                const card = document.createElement('div');
+                card.className = 'video-card';
+                card.onclick = () => openVideo(video.id); 
+                
+                card.innerHTML = `
+                    <div class="thumbnail">
+                        <video src="${video.video_url}#t=2" muted playsinline></video>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">${video.title}</h3>
+                        <p class="author">👤 ${video.author}</p>
+                        <p class="stats">👍 <span id="gridLike_${video.id}">${video.likes || 0}</span> layk • ${video.category}</p>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // ==========================================
+        // 4. YANGI VIDEO YUKLASH
+        // ==========================================
+        async function handleUpload(event) {
+            event.preventDefault();
+            
+            const fileInput = document.getElementById('videoFile');
+            const file = fileInput.files[0];
+            if (!file) return alert("Iltimos, video faylni tanlang!");
+
+            const newTitle = document.getElementById('upTitle').value;
+            const newCategory = document.getElementById('upCategory').value;
+            const newDesc = document.getElementById('upDesc').value;
+            
+            // Avtor nomi logindan o'tgan foydalanuvchidan olinadi
+            const authorNameStr = `${currentUser.name} ${currentUser.lastName} (${currentUser.faculty}, ${currentUser.course})`;
+
+            document.getElementById('uploadingStatus').style.display = 'block';
+            document.getElementById('submitBtn').disabled = true;
+
+            try {
+                const fileExt = file.name.split('.').pop();
+                const fileName = `${Date.now()}.${fileExt}`;
+
+                const { data: uploadData, error: uploadError } = await supabaseClient
+                    .storage
+                    .from('videos')
+                    .upload(fileName, file);
+
+                if (uploadError) throw uploadError;
+
+                const { data: urlData } = supabaseClient
+                    .storage
+                    .from('videos')
+                    .getPublicUrl(fileName);
+                
+                const publicVideoUrl = urlData.publicUrl;
+
+                const { error: insertError } = await supabaseClient
+                    .from('videos_data')
+                    .insert([
+                        { 
+                            title: newTitle, 
+                            description: newDesc, 
+                            category: newCategory, 
+                            author: authorNameStr, 
+                            video_url: publicVideoUrl,
+                            likes: 0
+                        }
+                    ]);
+
+                if (insertError) throw insertError;
+
+                alert("Video muvaffaqiyatli yuklandi!");
+                closeUploadModal();
+                fetchVideos(); 
+
+            } catch (error) {
+                console.error("Yuklashda xato:", error);
+                alert("Xatolik yuz berdi: " + error.message);
+            } finally {
+                document.getElementById('uploadingStatus').style.display = 'none';
+                document.getElementById('submitBtn').disabled = false;
+            }
+        }
+
+        // ==========================================
+        // 5. VIDEONI OCHISH, LAYK VA IZOHLAR
+        // ==========================================
+        function searchVideos() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = allVideosFromDB.filter(v => v.title.toLowerCase().includes(query));
+            renderVideos(filtered);
+        }
+
+        function filterCategory(category, btnElement) {
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+            if (category === 'Barchasi') renderVideos(allVideosFromDB);
+            else renderVideos(allVideosFromDB.filter(v => v.category === category));
+        }
+
+        function openVideo(id) {
+            currentOpenVideoId = id;
+            const video = allVideosFromDB.find(v => v.id === id);
+            
+            document.getElementById('playTitle').innerText = video.title;
+            document.getElementById('playStats').innerHTML = `👤 <strong>Muallif: ${video.author}</strong> | ${video.category}`;
+            document.getElementById('playDesc').innerText = video.description;
+            
+            document.getElementById('likeCount').innerText = video.likes || 0;
+            document.getElementById('likeBtn').classList.remove('liked');
+            
+            const player = document.getElementById('mainVideoPlayer');
+            player.src = video.video_url;
+            player.load(); 
+            player.play(); 
+
+            renderComments(); 
+
+            document.getElementById('videoGrid').classList.add('hidden');
+            document.getElementById('categoriesNav').classList.add('hidden');
+            document.getElementById('videoPlayerSection').classList.remove('hidden');
+            window.scrollTo(0, 0); 
+        }
+
+        function goHome() {
+            const player = document.getElementById('mainVideoPlayer');
+            player.pause(); 
+            
+            document.getElementById('videoPlayerSection').classList.add('hidden');
+            document.getElementById('videoGrid').classList.remove('hidden');
+            document.getElementById('categoriesNav').classList.remove('hidden');
+            fetchVideos(); 
+        }
+
+        async function toggleLike() {
+            const video = allVideosFromDB.find(v => v.id === currentOpenVideoId);
+            const likeBtn = document.getElementById('likeBtn');
+            const likeCountSpan = document.getElementById('likeCount');
+
+            if (likeBtn.classList.contains('liked')) {
+                video.likes -= 1;
+                likeBtn.classList.remove('liked');
+            } else {
+                video.likes += 1;
+                likeBtn.classList.add('liked');
+            }
+            likeCountSpan.innerText = video.likes;
+
+            try {
+                await supabaseClient.from('videos_data').update({ likes: video.likes }).eq('id', video.id);
+            } catch (err) { console.log(err); }
+        }
+
+        function renderComments() {
+            const video = allVideosFromDB.find(v => v.id === currentOpenVideoId);
+            const commentsList = document.getElementById('commentsList');
+            const commentsCountText = document.getElementById('commentsCountText');
+            
+            commentsList.innerHTML = '';
+            commentsCountText.innerText = `Izohlar (${video.comments.length})`;
+
+            if (video.comments.length === 0) {
+                commentsList.innerHTML = '<p style="color: #666; font-style: italic;">Hozircha izohlar yo\'q. Birinchi bo\'lib izoh qoldiring!</p>';
+                return;
+            }
+
+            video.comments.forEach(comment => {
+                const div = document.createElement('div');
+                div.className = 'comment-item';
+                div.innerHTML = `<strong>👤 ${comment.user}</strong><p>${comment.text}</p>`;
+                commentsList.appendChild(div);
+            });
+        }
+
+        function addComment() {
+            const input = document.getElementById('commentInput');
+            const text = input.value.trim();
+            if(text !== "") {
+                const video = allVideosFromDB.find(v => v.id === currentOpenVideoId);
+                const fullName = `${currentUser.name} ${currentUser.lastName}`;
+                
+                video.comments.unshift({ user: fullName, text: text });
+                
+                input.value = ''; 
+                renderComments(); 
+            }
+        }
+
+        function handleCommentEnter(event) {
+            if (event.key === 'Enter') addComment();
+        }
+
+        // ==========================================
+        // 6. MODAL OYNALAR (YUKLASH VA PROFIL)
+        // ==========================================
+        function openUploadModal() { document.getElementById('uploadModal').classList.remove('hidden'); }
+        function closeUploadModal() { document.getElementById('uploadModal').classList.add('hidden'); document.getElementById('uploadForm').reset(); }
+
+        function openProfileModal() {
+            document.getElementById('modalProfAvatar').innerText = userInitials;
+            document.getElementById('modalProfName').innerText = `${currentUser.name} ${currentUser.lastName}`;
+            document.getElementById('modalHemisId').innerText = currentUser.hemisId;
+            document.getElementById('modalFaculty').innerText = currentUser.faculty;
+            document.getElementById('modalMajor').innerText = currentUser.major;
+            document.getElementById('modalCourse').innerText = currentUser.course;
+
+            document.getElementById('profileModal').classList.remove('hidden');
+        }
+
+        function closeProfileModal() {
+            document.getElementById('profileModal').classList.add('hidden');
+        }
+
+        function logout() {
+            // Tizimdan chiqayotganda brauzer xotirasini tozalaymiz
+            localStorage.removeItem('loggedInUser');
+            window.location.href = "login.html";
+        }
+
+        // Sayt ishga tushganda ma'lumotlarni tortish
+        fetchVideos();
+
+    </script>
+</body>
+</html>

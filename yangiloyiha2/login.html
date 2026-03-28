@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tizimga kirish - TDTU Ilm-fan</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background-color: #f0f2f5; display: flex; align-items: center; justify-content: center; height: 100vh; }
+        .login-container { background-color: #ffffff; width: 400px; padding: 40px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); text-align: center; }
+        .logo { font-size: 28px; font-weight: bold; color: #0056b3; margin-bottom: 10px; }
+        .subtitle { color: #666; font-size: 14px; margin-bottom: 30px; }
+        .form-group { text-align: left; margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: bold; color: #333; font-size: 14px; }
+        .form-group input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; outline: none; transition: 0.3s; }
+        .form-group input:focus { border-color: #0056b3; box-shadow: 0 0 5px rgba(0, 86, 179, 0.2); }
+        .error-msg { color: #dc3545; font-size: 13px; margin-bottom: 15px; display: none; }
+        .login-btn { width: 100%; padding: 12px; background-color: #0056b3; color: white; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .login-btn:hover { background-color: #004494; }
+        .help-text { margin-top: 20px; font-size: 13px; color: #777; }
+        #loadingText { color: #0056b3; font-weight: bold; margin-bottom: 15px; display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <div class="logo">Ilm-fan TDTU</div>
+        <p class="subtitle">Universitet ilmiy videolar platformasi</p>
+
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label for="hemisId">Hemis ID</label>
+                <input type="text" id="hemisId" placeholder="Talaba ID raqamini kiriting" required autocomplete="off">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Parol</label>
+                <input type="password" id="password" placeholder="Parolingizni kiriting" required>
+            </div>
+
+            <div id="loadingText">Ma'lumotlar tekshirilmoqda... ⏳</div>
+            <div class="error-msg" id="errorText">Hemis ID yoki parol xato!</div>
+
+            <button type="submit" class="login-btn" id="loginBtn">Tizimga kirish</button>
+        </form>
+
+        <p class="help-text">Faqat ro'yxatdan o'tgan talabalar kira oladi.</p>
+    </div>
+
+    <script>
+        // Supabase ulanish (Sizning haqiqiy kalitlaringiz)
+        const { createClient } = supabase;
+        const supabaseUrl = 'https://rrpdicclbxxruzezfuld.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJycGRpY2NsYnh4cnV6ZXpmdWxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ3MTg2NDEsImV4cCI6MjA5MDI5NDY0MX0.Te-dx80rGGO_soG0mEqFPoMGe9Dd83mESsVXfF-4CJQ';
+        const supabaseClient = createClient(supabaseUrl, supabaseKey);
+
+        async function handleLogin(event) {
+            event.preventDefault(); 
+            
+            const hemisInput = document.getElementById('hemisId').value.trim();
+            const passInput = document.getElementById('password').value.trim();
+            const errorBox = document.getElementById('errorText');
+            const loadingText = document.getElementById('loadingText');
+            const loginBtn = document.getElementById('loginBtn');
+
+            // Yuklanmoqda dizaynini yoqish
+            errorBox.style.display = "none";
+            loadingText.style.display = "block";
+            loginBtn.disabled = true;
+
+            try {
+                // Supabase'dagi "students" jadvalidan kiritilgan ID va Parolni qidiramiz
+                const { data, error } = await supabaseClient
+                    .from('students')
+                    .select('*')
+                    .eq('hemis_id', hemisInput)
+                    .eq('password', passInput)
+                    .single(); // Faqat bitta mos tushganini oladi
+
+                if (data) {
+                    // Agar ma'lumot topilsa (ID va parol to'g'ri bo'lsa)
+                    const userObj = {
+                        name: data.name,
+                        lastName: data.last_name,
+                        hemisId: data.hemis_id,
+                        faculty: data.faculty,
+                        major: data.major,
+                        course: data.course
+                    };
+                    
+                    // Topilgan ma'lumotlarni brauzer xotirasiga saqlaymiz
+                    localStorage.setItem('loggedInUser', JSON.stringify(userObj));
+                    
+                    // Asosiy sahifaga o'tkazib yuboramiz
+                    window.location.href = "index.html";
+                } else {
+                    // Agar topilmasa (Parol yoki ID xato)
+                    throw new Error("Topilmadi");
+                }
+            } catch (error) {
+                // Xatolik yuz bersa (yoki topilmasa) xabar chiqaramiz
+                loadingText.style.display = "none";
+                errorBox.style.display = "block";
+                loginBtn.disabled = false;
+            }
+        }
+    </script>
+
+</body>
+</html>
