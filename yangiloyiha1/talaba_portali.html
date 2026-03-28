@@ -170,7 +170,7 @@
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { getFirestore, doc, getDoc, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, collection, addDoc, serverTimestamp, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyD7DcRJycK5v5MnaU1mKfyZo5Wvv0dofVo",
@@ -184,38 +184,50 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
+    
     let userData = null;
-
-    // UMUMIY BAZA (Rasmlar arrayi bilan boyitildi)
-    const amaliyotTarixi = [
-        { date: "28.03.2026", time: "09:00 - 18:00", attStatus: "faol", brigadeName: "1-Ustaxona (Tezkor brigada)", leader: "Sobirov J. (Usta)", task: "10 kV lik 45-sonli TP da moy almashtirish va profilaktika", members: "Azizov A., Tursunov F., Aliyev S.", photos: [] },
-        { date: "25.03.2026", time: "10:00 - 16:00", attStatus: "yakunlangan", brigadeName: "Avariya-tiklash brigadasi", leader: "Narzullayev Q.", task: "Avariya: Qibray tarmog'ida uzilgan simlarni ulash", members: "Azizov A., Ibragimov V.", photos: [] },
-        { date: "24.03.2026", time: "08:00 - 17:00", attStatus: "kelmadi", brigadeName: "Kabel liniyalari xizmati", leader: "Xolmatov B.", task: "Yer osti kabelini tekshirish", members: "Azizov A. (Kelmagan), Karimova D.", photos: [] }
-    ];
+    let amaliyotTarixi = []; // Firebase'dan tortib olinadi
 
     onAuthStateChanged(auth, async (user) => {
         if (user) {
             const docSnap = await getDoc(doc(db, "users", user.uid));
             if (docSnap.exists()) {
                 userData = docSnap.data();
-                initApp();
+                await fetchAttendanceData(); // Davomatlarni tortib olish
             }
         } else { 
-            userData = { 
-                uid: "test_user_id_123",
-                fullName: "Azizov Akmal", 
-                university: "TDTU (Toshkent Davlat Texnika Universiteti)", 
-                faculty: "Energetika", 
-                kafedra: "Elektr stansiyalari, tarmoqlari va tizimlari",
-                course: "3", 
-                brigade: "Tezkor brigada", 
-                hemisId: "3450012",
-                address: "Toshkent sh., Olmazor t., Talabalar shaharchasi 74-uy",
-                internshipEndDate: "2026-05-25T18:00:00" 
-            };
-            initApp();
+            window.location.href = "login.html"; // Kirmagan bo'lsa qaytarish
         }
     });
+
+    // 🚀 FIREBASE'DAN DAVOMATLARNI TORTIB OLISH
+    async function fetchAttendanceData() {
+        document.getElementById('loader').style.display = 'flex';
+        try {
+            amaliyotTarixi = []; 
+            const q = query(collection(db, "attendance"), where("hemisId", "==", userData.hemisId));
+            const querySnapshot = await getDocs(q);
+            
+            querySnapshot.forEach((doc) => {
+                let data = doc.data();
+                data.photos = []; // Rasm yuklash uchun bo'sh massiv qo'shamiz
+                data.members = data.members || "Mavjud emas";
+                amaliyotTarixi.push(data);
+            });
+
+            // Sanasiga qarab saralash (Yangi kun birinchi)
+            amaliyotTarixi.sort((a, b) => {
+                let dateA = a.date.split('.').reverse().join('');
+                let dateB = b.date.split('.').reverse().join('');
+                return dateB.localeCompare(dateA); 
+            });
+
+            initApp();
+        } catch (error) {
+            console.error("Davomatlarni olishda xatolik:", error);
+            initApp(); // Interfeys baribir ishlashi uchun
+        }
+    }
 
     function initApp() {
         document.getElementById('loader').style.display = 'none';
@@ -239,7 +251,7 @@
 
     document.addEventListener('click', () => {
         const dropdown = document.getElementById('profileDropdown');
-        if (dropdown.classList.contains('show')) dropdown.classList.remove('show');
+        if (dropdown && dropdown.classList.contains('show')) dropdown.classList.remove('show');
     });
 
     window.showSection = (type) => {
@@ -247,27 +259,36 @@
         
         if (type === 'home') {
             setActiveMenu('m-home');
-            const activeTask = amaliyotTarixi.find(item => item.attStatus === 'faol');
-            let faolTaskHtml = activeTask ? `
-                <h3 style="margin-top: 30px; color: #2c3e50;"><span class="material-icons-round" style="vertical-align: middle; color: var(--accent);">assignment_turned_in</span> Bugungi vazifa</h3>
-                <div class="att-card att-faol" style="margin-bottom: 0;">
+            const activeTask = amaliyotTarixi.find(item => item.attStatus === 'faol') || amaliyotTarixi[0];
+            
+            let faolTaskHtml = '';
+            if (activeTask) {
+                let badgeClass = activeTask.attStatus === 'faol' ? 'bg-faol' : (activeTask.attStatus === 'yakunlangan' ? 'bg-yakunlangan' : 'bg-kelmadi');
+                let statusText = activeTask.attStatus === 'faol' ? 'Faol (Bugun)' : (activeTask.attStatus === 'yakunlangan' ? 'Yakunlangan' : 'Kelmadi');
+                
+                faolTaskHtml = `
+                <h3 style="margin-top: 30px; color: #2c3e50;"><span class="material-icons-round" style="vertical-align: middle; color: var(--accent);">assignment_turned_in</span> So'nggi vazifa</h3>
+                <div class="att-card ${activeTask.attStatus === 'faol' ? 'att-faol' : 'att-yakunlangan'}" style="margin-bottom: 0;">
                     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
                         <span style="font-size: 16px; font-weight: bold; color: #2c3e50; display: flex; align-items: center; gap: 5px;">
                             <span class="material-icons-round" style="color: #7f8c8d;">event</span> ${activeTask.date} | ${activeTask.time}
                         </span>
-                        <span class="att-badge bg-faol"><span class="material-icons-round" style="font-size: 14px;">update</span> Faol (Bugun)</span>
+                        <span class="att-badge ${badgeClass}"><span class="material-icons-round" style="font-size: 14px;">update</span> ${statusText}</span>
                     </div>
                     <div class="att-details" style="margin-top: 10px;">
                         <p><strong>Brigada nomi:</strong> ${activeTask.brigadeName}</p>
                         <p><strong>Brigada rahbari:</strong> ${activeTask.leader}</p>
                         <p><strong>Bajariladigan ish (Naryad):</strong> ${activeTask.task}</p>
                     </div>
-                </div>` : 
-                `<h3 style="margin-top: 30px; color: #2c3e50;"><span class="material-icons-round" style="vertical-align: middle; color: var(--accent);">assignment_turned_in</span> Bugungi vazifa</h3>
+                </div>`;
+            } else {
+                faolTaskHtml = `
+                 <h3 style="margin-top: 30px; color: #2c3e50;"><span class="material-icons-round" style="vertical-align: middle; color: var(--accent);">assignment_turned_in</span> Bugungi vazifa</h3>
                  <div class="data-card" style="text-align: center; color: #7f8c8d; padding: 30px;">
                     <span class="material-icons-round" style="font-size: 40px; opacity: 0.5;">coffee</span>
-                    <p>Bugun uchun biriktirilgan faol vazifalar yo'q.</p>
+                    <p>Hozircha biriktirilgan vazifalar yo'q.</p>
                  </div>`;
+            }
 
             html += `
                 <h2 style="margin-bottom: 25px;">Xush kelibsiz, ${userData.fullName.split(' ')[0]}!</h2>
@@ -276,7 +297,7 @@
                         <h4 style="margin: 0 0 10px 0; color: #7f8c8d; font-size: 13px; text-transform: uppercase;">Talaba ma'lumoti</h4>
                         <div class="info-row"><span class="material-icons-round">school</span> <div><strong>Kurs:</strong> ${userData.course || '3'}-kurs</div></div>
                         <div class="info-row"><span class="material-icons-round">badge</span> <div><strong>HEMIS ID:</strong> ${userData.hemisId}</div></div>
-                        <div class="info-row"><span class="material-icons-round">groups</span> <div><strong>Asosiy Brigada:</strong> ${userData.brigade}</div></div>
+                        <div class="info-row"><span class="material-icons-round">groups</span> <div><strong>Asosiy Brigada:</strong> ${userData.brigade || 'Kiritilmagan'}</div></div>
                     </div>
                     <div class="data-card" style="border-top: 4px solid var(--brigade); margin: 0;">
                         <h4 style="margin: 0 0 10px 0; color: #7f8c8d; font-size: 13px; text-transform: uppercase;">Tashkilot ma'lumotlari</h4>
@@ -292,6 +313,8 @@
             html += `<h2><span class="material-icons-round" style="vertical-align: middle;">notifications_active</span> Davomat Bildirishnomalari</h2>
                      <p style="color: #7f8c8d; margin-bottom: 25px;">Ushbu ma'lumotlar RES ustasi tomonidan tasdiqlangan.</p>`;
             
+            if (amaliyotTarixi.length === 0) html += `<div class="data-card">Hech qanday ma'lumot yo'q.</div>`;
+
             amaliyotTarixi.forEach(item => {
                 let badgeClass = item.attStatus === 'faol' ? 'bg-faol' : (item.attStatus === 'yakunlangan' ? 'bg-yakunlangan' : 'bg-kelmadi');
                 let borderClass = item.attStatus === 'faol' ? 'att-faol' : (item.attStatus === 'yakunlangan' ? 'att-yakunlangan' : 'att-kelmadi');
@@ -319,6 +342,8 @@
                      <p style="color: #7f8c8d; margin-bottom: 25px;">Qaysi kuni qaysi brigada tarkibida ishlaganingiz haqida ma'lumotnoma.</p>
                      <div class="brigade-timeline">`;
             
+            if (amaliyotTarixi.length === 0) html += `<div class="data-card">Hozircha ma'lumot yo'q.</div>`;
+
             amaliyotTarixi.forEach(item => {
                 let iconColor = item.attStatus === 'kelmadi' ? 'color: var(--danger);' : 'color: var(--brigade);';
                 let taskStyle = item.attStatus === 'kelmadi' ? 'text-decoration: line-through; color: #94a3b8;' : '';
@@ -341,6 +366,8 @@
             html += `<h2><span class="material-icons-round" style="vertical-align: middle; color: var(--accent);">photo_camera</span> Jarayon Rasmlari</h2>
                      <p style="color: #7f8c8d; margin-bottom: 25px;">Amaliyot kunlarida bajargan ishlaringizni rasmga olib, tegishli sanaga yuklang. Ular Hisobot PDF da ko'rinadi.</p>`;
             
+            if (amaliyotTarixi.length === 0) html += `<div class="data-card">Hozircha amaliyot kunlari mavjud emas.</div>`;
+
             amaliyotTarixi.forEach((item, index) => {
                 if (item.attStatus !== 'kelmadi') {
                     html += `
@@ -358,11 +385,10 @@
                         </label>
                         
                         <div class="gallery-grid" id="gallery_${index}">
-                            </div>
+                        </div>
                     </div>`;
                 }
             });
-            // Ekran yuklangach bor rasmlarni chizib qo'yish uchun timeout (chunki HTML DOM endi yasaldi)
             setTimeout(() => {
                 amaliyotTarixi.forEach((item, idx) => { if(item.attStatus !== 'kelmadi') renderGallery(idx); });
             }, 100);
@@ -392,10 +418,10 @@
                         <span class="material-icons-round">cloud_sync</span> HEMIS Rasmiy Hujjatlari
                     </h3>
                     <p style="color: #7f8c8d; margin-bottom: 20px;">HEMIS tizimidagi qolgan amaliyot andozalarini (shablonlarini) yuklab oling:</p>
-                    <details class="hemis-section"><summary>1-kurs: O'quv amaliyoti</summary><div class="download-links"><a href="#" class="btn-download">Hisobot shabloni</a> <a href="#" class="btn-download">Korxona xarakteristikasi</a></div></details>
-                    <details class="hemis-section"><summary>2-kurs: Ishlab chiqarish amaliyoti</summary><div class="download-links"><a href="#" class="btn-download">Hisobot shabloni</a> <a href="#" class="btn-download">Korxona xarakteristikasi</a></div></details>
-                    <details class="hemis-section"><summary>3-kurs: Texnologik amaliyot</summary><div class="download-links"><a href="#" class="btn-download">Hisobot shabloni</a> <a href="#" class="btn-download">Korxona xarakteristikasi</a></div></details>
-                    <details class="hemis-section"><summary>4-kurs: Bitiruv oldi amaliyoti</summary><div class="download-links"><a href="#" class="btn-download">Hisobot shabloni</a> <a href="#" class="btn-download">Korxona xarakteristikasi</a></div></details>
+                    <details class="hemis-section"><summary>1-kurs: O'quv amaliyoti</summary><div class="download-links"><a href="https://drive.google.com/drive/folders/1gMKElKxc8Y_dYBrxkzR2DS4p4SHwdmkS?usp=sharing" target="_blank" class="btn-download">Hisobot shabloni</a> <a href="https://drive.google.com/drive/folders/1gMKElKxc8Y_dYBrxkzR2DS4p4SHwdmkS?usp=sharing" target="_blank" class="btn-download">Korxona xarakteristikasi</a></div></details>
+                    <details class="hemis-section"><summary>2-kurs: Ishlab chiqarish amaliyoti</summary><div class="download-links"><a href="https://drive.google.com/drive/folders/1gMKElKxc8Y_dYBrxkzR2DS4p4SHwdmkS?usp=sharing" target="_blank" class="btn-download">Hisobot shabloni</a> <a href="https://drive.google.com/drive/folders/1gMKElKxc8Y_dYBrxkzR2DS4p4SHwdmkS?usp=sharing" target="_blank" class="btn-download">Korxona xarakteristikasi</a></div></details>
+                    <details class="hemis-section"><summary>3-kurs: Texnologik amaliyot</summary><div class="download-links"><a href="https://drive.google.com/drive/folders/1gMKElKxc8Y_dYBrxkzR2DS4p4SHwdmkS?usp=sharing" target="_blank" class="btn-download">Hisobot shabloni</a> <a href="https://drive.google.com/drive/folders/1gMKElKxc8Y_dYBrxkzR2DS4p4SHwdmkS?usp=sharing" target="_blank" class="btn-download">Korxona xarakteristikasi</a></div></details>
+                    <details class="hemis-section"><summary>4-kurs: Bitiruv oldi amaliyoti</summary><div class="download-links"><a href="https://drive.google.com/drive/folders/1gMKElKxc8Y_dYBrxkzR2DS4p4SHwdmkS?usp=sharing" target="_blank" class="btn-download">Hisobot shabloni</a> <a href="https://drive.google.com/drive/folders/1gMKElKxc8Y_dYBrxkzR2DS4p4SHwdmkS?usp=sharing" target="_blank" class="btn-download">Korxona xarakteristikasi</a></div></details>
                 </div>`;
         }
         else if (type === 'feedback') {
@@ -425,22 +451,20 @@
         const files = event.target.files;
         if (!files || files.length === 0) return;
 
-        // Har bir faylni Base64 ga o'girish (PDF ga chizish uchun kerak bo'ladi)
         Array.from(files).forEach(file => {
             const reader = new FileReader();
             reader.onload = (e) => {
                 amaliyotTarixi[index].photos.push(e.target.result);
-                renderGallery(index); // Rasmni ekranga chizish
+                renderGallery(index); 
             };
             reader.readAsDataURL(file);
         });
     };
 
-    // Rasmlarni galereyaga chizish
     window.renderGallery = (index) => {
         const gallery = document.getElementById(`gallery_${index}`);
         if(!gallery) return;
-        gallery.innerHTML = ''; // Tozalash
+        gallery.innerHTML = ''; 
 
         amaliyotTarixi[index].photos.forEach((photoData, photoIndex) => {
             gallery.innerHTML += `
@@ -452,12 +476,10 @@
         });
     };
 
-    // Rasmni o'chirish
     window.deletePhoto = (dayIndex, photoIndex) => {
         amaliyotTarixi[dayIndex].photos.splice(photoIndex, 1);
         renderGallery(dayIndex);
     };
-
 
     // Feedbackni yuborish
     window.submitFeedback = async () => {
@@ -480,11 +502,12 @@
         }
     };
 
-    // Pechat uchun Base64 namunasi
     const resPechatBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=="; 
 
     // 1. KUNDALIK PDF (Qisqa jadval)
     window.downloadKundalikPDF = () => {
+        if(amaliyotTarixi.length === 0) return alert("Hozircha davomat ma'lumoti yo'q!");
+        
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF({ orientation: "portrait" }); 
 
@@ -502,7 +525,6 @@
         amaliyotTarixi.forEach(item => {
             if(item.attStatus !== 'kelmadi') tableData.push([item.date, item.time, item.brigadeName, item.leader, item.task]);
         });
-        tableData.sort((a, b) => new Date(a[0].split('.').reverse().join('-')) - new Date(b[0].split('.').reverse().join('-')));
 
         doc.autoTable({ 
             startY: 75, head: [['Sana', 'Vaqt', 'Brigada', 'Usta (Rahbar)', 'Bajarilgan ish mazmuni']], body: tableData, 
@@ -520,11 +542,12 @@
 
     // 2. HISOBOT PDF (Kengaytirilgan, Rasmlari bilan)
     window.downloadHisobotPDF = () => {
+        if(amaliyotTarixi.length === 0) return alert("Hozircha davomat ma'lumoti yo'q!");
+        
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF({ orientation: "portrait" }); 
         let yPos = 20;
 
-        // Shablon shapkasi
         doc.setFont("helvetica", "bold"); doc.setFontSize(16);
         doc.text("AMALIYOT HISOBOTI", 105, yPos, { align: "center" }); yPos += 15;
         
@@ -532,53 +555,43 @@
         doc.text(`Talaba: ${userData.fullName} (${userData.hemisId})`, 15, yPos); yPos += 7;
         doc.text(`Korxona: Ulug'bek tuman ETK (RES)`, 15, yPos); yPos += 15;
 
-        // Har bir kunni aylanib chiqamiz
         amaliyotTarixi.forEach(item => {
             if (item.attStatus !== 'kelmadi') {
-                // Agar varaqning pastiga kelib qolsak, yangi bet ochamiz
                 if (yPos > 260) { doc.addPage(); yPos = 20; }
 
-                // Matnli ma'lumotlar
                 doc.setFont("helvetica", "bold");
                 doc.text(`Sana: ${item.date} (${item.time})`, 15, yPos); yPos += 7;
                 doc.setFont("helvetica", "normal");
                 doc.text(`Brigada: ${item.brigadeName} | Rahbar: ${item.leader}`, 15, yPos); yPos += 7;
                 
-                // Vazifa matni uzun bo'lsa qatorga bo'lish
                 const splitTask = doc.splitTextToSize(`Vazifa (Naryad): ${item.task}`, 180);
                 doc.text(splitTask, 15, yPos); 
                 yPos += (splitTask.length * 6) + 5;
 
-                // Rasmlarni joylash
                 if (item.photos && item.photos.length > 0) {
                     let startX = 15;
-                    const imgWidth = 85; const imgHeight = 60; // Rasmlar hajmi
+                    const imgWidth = 85; const imgHeight = 60; 
 
                     item.photos.forEach(photo => {
-                        // Agar yonma-yon 2 ta sig'masa pastga tushadi
                         if (startX + imgWidth > 200) { startX = 15; yPos += imgHeight + 5; }
-                        
-                        // Agar rasmni chizishdan oldin varaq tugasa, yangi varaq ochamiz
                         if (yPos + imgHeight > 280) { doc.addPage(); yPos = 20; startX = 15; }
                         
                         doc.addImage(photo, 'JPEG', startX, yPos, imgWidth, imgHeight);
-                        startX += imgWidth + 5; // Keyingi rasm uchun o'ngga surish
+                        startX += imgWidth + 5; 
                     });
-                    yPos += imgHeight + 10; // Oxirgi rasmlar qatoridan keyin pastga surish
+                    yPos += imgHeight + 10; 
                 } else {
                     doc.setFont("helvetica", "italic");
                     doc.text("(Bu kun uchun rasmlar biriktirilmagan)", 15, yPos);
                     yPos += 10;
                 }
 
-                // Chiziq tortish
                 doc.setDrawColor(200);
                 doc.line(15, yPos, 195, yPos);
                 yPos += 10;
             }
         });
 
-        // Hujjat oxiriga imzo
         if (yPos > 240) { doc.addPage(); yPos = 20; }
         doc.setFont("helvetica", "bold"); doc.setFontSize(11);
         doc.text("Korxona rahbari:", 15, yPos + 10);
@@ -588,11 +601,15 @@
         doc.save(`Amaliyot_Hisoboti_${userData.hemisId}.pdf`);
     };
 
-    setInterval(() => { 
-        document.getElementById('clock').innerText = new Date().toLocaleString('uz-UZ'); 
-    }, 1000);
+    setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleString('uz-UZ'); }, 1000);
 
-    window.logout = () => alert("Tizimdan chiqildi.");
+    window.logout = () => {
+        signOut(auth).then(() => {
+            window.location.href = "login.html";
+        }).catch((error) => {
+            console.error("Chiqishda xatolik", error);
+        });
+    };
 </script>
 </body>
 </html>
