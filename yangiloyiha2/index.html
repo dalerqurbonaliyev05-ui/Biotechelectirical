@@ -448,18 +448,36 @@
             });
         }
 
-        function addComment() {
-            const input = document.getElementById('commentInput');
-            const text = input.value.trim();
-            if(text !== "") {
-                const video = allVideosFromDB.find(v => v.id === currentOpenVideoId);
-                const fullName = `${currentUser.name} ${currentUser.lastName}`;
-                
-                video.comments.unshift({ user: fullName, text: text });
-                
-                input.value = ''; 
-                renderComments(); 
-            }
+        async function addComment() {
+    const input = document.getElementById('commentInput');
+    const text = input.value.trim();
+    if(text !== "") {
+        const video = allVideosFromDB.find(v => v.id === currentOpenVideoId);
+        const fullName = `${currentUser.name} ${currentUser.lastName}`;
+        
+        // Yangi izoh obyekti
+        const newComment = { user: fullName, text: text };
+        
+        // Local massivga qo'shish
+        video.comments.unshift(newComment);
+        
+        try {
+            // Supabase-ga saqlash (comments ustunini yangilash)
+            const { error } = await supabaseClient
+                .from('videos_data')
+                .update({ comments: video.comments })
+                .eq('id', video.id);
+            
+            if (error) throw error;
+            
+            input.value = ''; 
+            renderComments(); 
+        } catch (err) {
+            console.error("Izoh qoldirishda xato:", err);
+            alert("Izoh saqlanmadi!");
+        }
+    }
+}
         }
 
         function handleCommentEnter(event) {
