@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEMIS Prototip - Talaba Sahifasi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        /* CSS O'zgaruvchilari - Ranglar va o'lchamlar */
+        :root {
+            --primary: #4F46E5; --primary-hover: #4338CA; --bg-body: #F3F4F6;
+            --bg-sidebar: #111827; --bg-card: #FFFFFF; --text-main: #1F2937;
+            --text-muted: #6B7280; --border: #E5E7EB; --success: #10B981;
+            --danger: #EF4444; --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            --transition: all 0.3s ease;
+        }
+
+        /* Umumiy sozlamalar */
+        * { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-body); color: var(--text-main); margin: 0; display: flex; }
+        
+        .sidebar { width: 280px; height: 100vh; background: var(--bg-sidebar); color: #fff; padding: 24px 16px; position: fixed; display: flex; flex-direction: column; gap: 8px; }
+        .sidebar h3 { text-align: center; border-bottom: 1px solid #374151; padding-bottom: 20px; margin-top: 0; font-weight: 600; letter-spacing: 0.5px; }
+        .menu-item { padding: 12px 16px; cursor: pointer; border-radius: 8px; transition: var(--transition); display: flex; align-items: center; gap: 12px; font-weight: 500; color: #D1D5DB; }
+        .menu-item:hover { background-color: #374151; color: #fff; }
+        .menu-item.active { background-color: var(--primary); color: #fff; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); }
+        .menu-item .material-icons-round { font-size: 20px; }
+
+        /* RES Portaliga o'tish tugmasi uchun maxsus rang */
+        .menu-res-link { background-color: #0f766e; color: white; margin-top: auto; border: 1px solid #14b8a6;}
+        .menu-res-link:hover { background-color: #0d9488; color: white; }
+
+        .main-content { margin-left: 280px; padding: 40px; width: 100%; min-height: 100vh; }
+        .content-section { display: none; opacity: 0; transform: translateY(10px); transition: opacity 0.4s ease, transform 0.4s ease; }
+        .content-section.fade-in { opacity: 1; transform: translateY(0); }
+        
+        .card { background: var(--bg-card); padding: 32px; border-radius: 16px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+        h2 { color: var(--text-main); font-size: 24px; font-weight: 600; margin-top: 0; margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+        h3 { color: var(--text-main); font-size: 18px; font-weight: 600; margin-top: 32px; }
+        .info-text { font-size: 16px; color: var(--text-muted); margin-bottom: 8px; }
+        .info-text strong { color: var(--text-main); }
+        hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+
+        .table-container { overflow-x: auto; border-radius: 8px; border: 1px solid var(--border); }
+        table { width: 100%; border-collapse: collapse; background: white; }
+        th, td { padding: 16px; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background-color: #F9FAFB; color: var(--text-muted); font-weight: 600; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background-color: #F9FAFB; }
+        
+        .status-badge { padding: 6px 12px; border-radius: 20px; font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; }
+        .status-pass { background: #D1FAE5; color: #065F46; }
+        .status-fail { background: #FEE2E2; color: #991B1B; }
+
+        .btn { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 500; transition: var(--transition); display: inline-flex; align-items: center; gap: 8px; margin-top: 20px; font-family: inherit; }
+        .btn:hover { background: var(--primary-hover); transform: translateY(-1px); }
+        .btn-danger { background: var(--danger); margin-left: 10px; }
+
+        .course-section { margin-top: 16px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: var(--transition); }
+        .course-section summary { font-size: 16px; font-weight: 600; cursor: pointer; padding: 16px 20px; color: var(--text-main); outline: none; display: flex; align-items: center; justify-content: space-between; background: #F9FAFB; list-style: none; }
+        .course-section summary::-webkit-details-marker { display: none; }
+        .course-section summary::after { content: "expand_more"; font-family: 'Material Icons Round'; color: var(--text-muted); transition: transform 0.3s ease; }
+        .course-section[open] summary::after { transform: rotate(180deg); }
+        .course-section[open] { border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary); }
+        .download-links { padding: 20px; display: flex; flex-wrap: wrap; gap: 12px; background: white; }
+        .btn-download { background: white; color: var(--text-main); text-decoration: none; padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: 500; transition: var(--transition); display: flex; align-items: center; gap: 8px; border: 1px solid var(--border); box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .btn-download:hover { border-color: var(--primary); color: var(--primary); background: #F5F3FF; }
+        .btn-download .material-icons-round { font-size: 18px; color: var(--primary); }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <h3>HEMIS Talaba</h3>
+    <div class="menu-item active" onclick="switchTab('boshSahifa', this)"><span class="material-icons-round">dashboard</span> Bosh sahifa</div>
+    <div class="menu-item" onclick="switchTab('amaliyotSahifa', this)"><span class="material-icons-round">engineering</span> Amaliyot</div>
+    <div class="menu-item" onclick="switchTab('fanlarSahifa', this)"><span class="material-icons-round">library_books</span> Fanlar resursi</div>
+    <div class="menu-item" onclick="switchTab('imtihonlarSahifa', this)"><span class="material-icons-round">quiz</span> Imtihonlar</div>
+    <div class="menu-item" onclick="switchTab('reytingSahifa', this)"><span class="material-icons-round">analytics</span> Reyting daftarchasi</div>
+    
+    <div class="menu-item menu-res-link" onclick="window.location.href='talaba_portali.html'">
+        <span class="material-icons-round">corporate_fare</span> RES Amaliyot Portali
+    </div>
+</div>
+
+<div class="main-content">
+    <div id="boshSahifa" class="content-section card fade-in" style="display: block;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <h2><span class="material-icons-round" style="color: var(--primary);">account_circle</span> Talaba Ma'lumotlari</h2>
+            <button class="btn btn-danger" style="margin-top: 0;" onclick="logout()"><span class="material-icons-round">logout</span> Chiqish</button>
+        </div>
+        
+        <div class="info-text"><strong>F.I.SH:</strong> <span id="studentName">Yuklanmoqda...</span></div>
+        <div class="info-text"><strong>HEMIS ID:</strong> <span id="studentHemis">Yuklanmoqda...</span></div>
+        <div class="info-text"><strong>Fakultet:</strong> <span id="studentFaculty">Yuklanmoqda...</span></div>
+        
+        <hr>
+        
+        <h3>Joriy Baholar</h3>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr><th>Fan nomi</th><th>Ball (0-100)</th><th>Holati</th></tr>
+                </thead>
+                <tbody id="gradeTable"></tbody>
+            </table>
+        </div>
+        <button class="btn" onclick="addSubject()"><span class="material-icons-round">add_circle</span> Yangi fan qo'shish</button>
+    </div>
+
+    <div id="amaliyotSahifa" class="content-section card">
+        <h2><span class="material-icons-round" style="color: var(--primary);">work_history</span> Amaliyot Hujjatlari</h2>
+        <p class="info-text">O'zingiz o'tagan kursingizni tanlang va kerakli hujjatlarni yuklab oling:</p>
+
+        <details class="course-section">
+            <summary>1-kurs: O'quv amaliyoti</summary>
+            <div class="download-links">
+                <a href="https://drive.google.com/drive/folders/1gMKElKxc8Y_dYBrxkzR2DS4p4SHwdmkS?usp=sharing" target="_blank" class="btn-download"><span class="material-icons-round">description</span> Kundalik andozasi</a>
+                <a href="https://drive.google.com/drive/folders/1gMKElKxc8Y_dYBrxkzR2DS4p4SHwdmkS?usp=sharing" target="_blank" class="btn-download"><span class="material-icons-round">summarize</span> Hisobot shabloni</a>
+                <a href="https://drive.google.com/drive/folders/1gMKElKxc8Y_dYBrxkzR2DS4p4SHwdmkS?usp=sharing" target="_blank" class="btn-download"><span class="material-icons-round">apartment</span> Korxona haqida hisobot</a>
+            </div>
+        </details>
+        
+        <details class="course-section">
+            <summary>2-kurs: Ishlab chiqarish amaliyoti</summary>
+            <div class="download-links">
+                <a href="https://drive.google.com/drive/folders/1gMKElKxc8Y_dYBrxkzR2DS4p4SHwdmkS?usp=sharing" target="_blank" class="btn-download"><span class="material-icons-round">description</span> Kundalik andozasi</a>
+                <a href="https://drive.google.com/drive/folders/1gMKElKxc8Y_dYBrxkzR2DS4p4SHwdmkS?usp=sharing" target="_blank" class="btn-download"><span class="material-icons-round">summarize</span> Hisobot shabloni</a>
+                <a href="https://drive.google.com/drive/folders/1gMKElKxc8Y_dYBrxkzR2DS4p4SHwdmkS?usp=sharing" target="_blank" class="btn-download"><span class="material-icons-round">apartment</span> Korxona haqida hisobot</a>
+            </div>
+        </details>
+        
+        <details class="course-section">
+            <summary>3-kurs: Texnologik amaliyot</summary>
+            <div class="download-links">
+                <a href="https://drive.google.com/drive/folders/1gMKElKxc8Y_dYBrxkzR2DS4p4SHwdmkS?usp=sharing" target="_blank" class="btn-download"><span class="material-icons-round">description</span> Kundalik andozasi</a>
+                <a href="https://drive.google.com/drive/folders/1gMKElKxc8Y_dYBrxkzR2DS4p4SHwdmkS?usp=sharing" target="_blank" class="btn-download"><span class="material-icons-round">summarize</span> Hisobot shabloni</a>
+                <a href="https://drive.google.com/drive/folders/1gMKElKxc8Y_dYBrxkzR2DS4p4SHwdmkS?usp=sharing" target="_blank" class="btn-download"><span class="material-icons-round">apartment</span> Korxona haqida hisobot</a>
+            </div>
+        </details>
+        
+        <details class="course-section">
+            <summary>4-kurs: Bitiruv oldi amaliyoti</summary>
+            <div class="download-links">
+                <a href="https://drive.google.com/drive/folders/1gMKElKxc8Y_dYBrxkzR2DS4p4SHwdmkS?usp=sharing" target="_blank" class="btn-download"><span class="material-icons-round">description</span> Kundalik andozasi</a>
+                <a href="https://drive.google.com/drive/folders/1gMKElKxc8Y_dYBrxkzR2DS4p4SHwdmkS?usp=sharing" target="_blank" class="btn-download"><span class="material-icons-round">summarize</span> Hisobot shabloni</a>
+                <a href="https://drive.google.com/drive/folders/1gMKElKxc8Y_dYBrxkzR2DS4p4SHwdmkS?usp=sharing" target="_blank" class="btn-download"><span class="material-icons-round">apartment</span> Korxona haqida hisobot</a>
+            </div>
+        </details>
+    </div>
+
+    <div id="fanlarSahifa" class="content-section card"><h2><span class="material-icons-round" style="color: var(--primary);">library_books</span> Fanlar resursi</h2><p class="info-text">Bu sahifa tez orada ishga tushadi...</p></div>
+    <div id="imtihonlarSahifa" class="content-section card"><h2><span class="material-icons-round" style="color: var(--primary);">quiz</span> Imtihonlar</h2><p class="info-text">Bu sahifa tez orada ishga tushadi...</p></div>
+    <div id="reytingSahifa" class="content-section card"><h2><span class="material-icons-round" style="color: var(--primary);">analytics</span> Reyting daftarchasi</h2><p class="info-text">Bu sahifa tez orada ishga tushadi...</p></div>
+</div>
+
+<script type="module">
+    // FIREBASE ULANISHI (HEMIS UCHUN)
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyD7DcRJycK5v5MnaU1mKfyZo5Wvv0dofVo",
+        authDomain: "myhemis-7cdf1.firebaseapp.com",
+        projectId: "myhemis-7cdf1",
+        storageBucket: "myhemis-7cdf1.firebasestorage.app",
+        messagingSenderId: "364780333759",
+        appId: "1:364780333759:web:c8c1bf075d0685b4ec740a"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Tizimga kirilganligini tekshirish
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            const docSnap = await getDoc(doc(db, "users", user.uid));
+            if (docSnap.exists()) {
+                let userData = docSnap.data();
+                // Ekranga chiqarish
+                document.getElementById('studentName').innerText = userData.fullName || "Ism kiritilmagan";
+                document.getElementById('studentHemis').innerText = userData.hemisId || "Mavjud emas";
+                document.getElementById('studentFaculty').innerText = userData.faculty || "Kiritilmagan";
+            }
+        } else {
+            // Agar kirmagan bo'lsa login.html ga yo'naltirish
+            window.location.href = "login.html";
+        }
+    });
+
+    window.logout = () => {
+        signOut(auth).then(() => {
+            window.location.href = "login.html";
+        });
+    };
+
+    // --- BOSH SAHIFA BAHOLAR FUNKSIYALARI (Lokal ishlaydi) ---
+    const subjects = [
+        { name: "Elektr zanjirlari nazariyasi", score: 85 },
+        { name: "Dasturlash (Python)", score: 92 },
+        { name: "Oliy matematika", score: 55 }
+    ];
+
+    window.renderGrades = () => {
+        const tableBody = document.getElementById('gradeTable');
+        tableBody.innerHTML = ''; 
+        subjects.forEach(item => {
+            let isPassed = item.score >= 60;
+            let statusIcon = isPassed ? 'check_circle' : 'cancel';
+            let statusClass = isPassed ? 'status-pass' : 'status-fail';
+            let statusText = isPassed ? "O'tdi" : "Qayta topshirish";
+
+            let statusHTML = `<span class="status-badge ${statusClass}">
+                                <span class="material-icons-round" style="font-size: 16px;">${statusIcon}</span> ${statusText}
+                              </span>`;
+
+            tableBody.innerHTML += `
+                <tr><td style="font-weight: 500;">${item.name}</td><td>${item.score}</td><td>${statusHTML}</td></tr>
+            `;
+        });
+    }
+
+    window.addSubject = () => {
+        const name = prompt("Fan nomini kiriting:");
+        const score = parseInt(prompt("Ballni kiriting (0-100):"));
+        if (name && !isNaN(score) && score >= 0 && score <= 100) {
+            subjects.push({ name, score });
+            window.renderGrades();
+        } else if (name) {
+            alert("Iltimos, ballni to'g'ri kiriting!");
+        }
+    }
+
+    // --- TAB ALMASHTIRISH FUNKSIYASI ---
+    window.switchTab = (tabId, element) => {
+        const sections = document.querySelectorAll('.content-section');
+        sections.forEach(sec => {
+            sec.style.display = 'none';
+            sec.classList.remove('fade-in');
+        });
+        const activeSection = document.getElementById(tabId);
+        if (activeSection) {
+            activeSection.style.display = 'block';
+            setTimeout(() => activeSection.classList.add('fade-in'), 10);
+        }
+        let menuItems = document.querySelectorAll('.menu-item');
+        menuItems.forEach(item => item.classList.remove('active'));
+        element.classList.add('active');
+    }
+
+    window.onload = window.renderGrades;
+</script>
+</body>
+</html>
