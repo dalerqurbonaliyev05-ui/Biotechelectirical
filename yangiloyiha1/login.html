@@ -29,7 +29,7 @@
         .btn-primary { background: var(--primary); color: white; }
         .btn-primary:hover { background: var(--primary-hover); }
         
-        .toggle-link { text-align: center; margin-top: 20px; font-size: 14px; color: var(--text-muted); }
+        .toggle-link { text-align: center; margin-top: 20px; font-size: 14px; color: var(--text-muted); line-height: 1.8; }
         .toggle-link span { color: var(--primary); font-weight: 600; cursor: pointer; text-decoration: underline; }
         
         /* Bildirishnomalar */
@@ -42,7 +42,6 @@
         .spinner { border: 4px solid #f3f3f3; border-top: 4px solid var(--primary); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        /* Qismlarni yashirish uchun */
         .hidden { display: none; }
     </style>
 </head>
@@ -72,8 +71,10 @@
             <input type="password" id="login-pass" class="form-input" placeholder="••••••••">
         </div>
         <button class="btn btn-primary" onclick="login()"><span class="material-icons-round" style="font-size: 18px;">login</span> Kirish</button>
+        
         <div class="toggle-link">
-            Hisobingiz yo'qmi? <span onclick="toggleForms('register')">Ro'yxatdan o'tish</span>
+            Hisobingiz yo'qmi? <span onclick="toggleForms('register')">Ro'yxatdan o'tish</span><br>
+            <span onclick="toggleForms('hemis')" style="color: #6f42c1;"><span class="material-icons-round" style="font-size:16px; vertical-align: middle;">school</span> Faqat HEMIS ID bilan kirish</span>
         </div>
     </div>
 
@@ -104,9 +105,22 @@
         </div>
 
         <div class="toggle-link">
-            Hisobingiz bormi? <span onclick="toggleForms('login')">Tizimga kirish</span>
+            Orqaga qaytish: <span onclick="toggleForms('login')">Tizimga kirish</span>
         </div>
     </div>
+
+    <div id="hemis-login-form" class="hidden">
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px; line-height: 1.5;">HEMIS portaliga kirish uchun universitet tomonidan tasdiqlangan ID raqamingizni kiriting. Parol talab etilmaydi.</p>
+        <div class="form-group">
+            <label>Sizning HEMIS ID raqamingiz</label>
+            <input type="text" id="login-hemis-id" class="form-input" placeholder="Masalan: 312211100543" style="border-color: #6f42c1;">
+        </div>
+        <button class="btn btn-primary" style="background: #6f42c1;" onclick="loginWithHemis()"><span class="material-icons-round" style="font-size: 18px;">school</span> HEMIS'ga kirish</button>
+        <div class="toggle-link">
+            Email orqali kirish: <span onclick="toggleForms('login')">Asosiy sahifa</span>
+        </div>
+    </div>
+
 </div>
 
 <script type="module">
@@ -114,7 +128,6 @@
     import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
     import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    // O'zingizning Firebase konfiguratsiyangiz
     const firebaseConfig = {
         apiKey: "AIzaSyD7DcRJycK5v5MnaU1mKfyZo5Wvv0dofVo",
         authDomain: "myhemis-7cdf1.firebaseapp.com",
@@ -128,144 +141,121 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // Vaqtinchalik talaba ma'lumotlarini saqlash uchun
     let tempStudentData = null;
-
-    // UI Elementlari
     const alertBox = document.getElementById('alert-box');
     const loader = document.getElementById('loader');
     const loaderText = document.getElementById('loader-text');
 
-    // Xabar chiqarish funksiyasi
     function showAlert(msg, type) {
         alertBox.innerHTML = `<span class="material-icons-round">${type === 'error' ? 'error_outline' : 'check_circle'}</span> ${msg}`;
         alertBox.className = `alert ${type}`;
         alertBox.style.display = 'flex';
         setTimeout(() => { alertBox.style.display = 'none'; }, 5000);
     }
-
     function showLoader(text) { loaderText.innerText = text; loader.style.display = 'flex'; }
     function hideLoader() { loader.style.display = 'none'; }
 
-    // Formalarni almashtirish (Login <-> Register)
+    // Oynalarni almashtirish
     window.toggleForms = (type) => {
         alertBox.style.display = 'none';
+        document.getElementById('login-form').classList.add('hidden');
+        document.getElementById('register-form').classList.add('hidden');
+        document.getElementById('hemis-login-form').classList.add('hidden');
+
         if (type === 'register') {
-            document.getElementById('login-form').classList.add('hidden');
             document.getElementById('register-form').classList.remove('hidden');
             document.getElementById('form-subtitle').innerText = "Amaliyotga ro'yxatdan o'tish";
-            // Registratsiyani boshidan boshlash
             document.getElementById('reg-step-1').classList.remove('hidden');
             document.getElementById('reg-step-2').classList.add('hidden');
-            document.getElementById('reg-hemis').value = '';
+        } else if (type === 'hemis') {
+            document.getElementById('hemis-login-form').classList.remove('hidden');
+            document.getElementById('form-subtitle').innerText = "HEMIS Portaliga kirish";
         } else {
-            document.getElementById('register-form').classList.add('hidden');
             document.getElementById('login-form').classList.remove('hidden');
             document.getElementById('form-subtitle').innerText = "Tizimga kirish";
         }
     };
 
-    // 1-QADAM: HEMIS ID orqali bazani tekshirish
+    // 1-QADAM: ID orqali bazani tekshirish (Ro'yxatdan o'tish uchun)
     window.checkHemisID = async () => {
         const hemisId = document.getElementById('reg-hemis').value.trim();
         if (!hemisId) return showAlert("HEMIS ID ni kiriting!", "error");
-
         showLoader("Tekshirilmoqda...");
         try {
-            // Rasmda ko'rsatilganidek allowed_students bazasini qidiradi
-            const docRef = doc(db, "allowed_students", hemisId);
-            const docSnap = await getDoc(docRef);
-
+            const docSnap = await getDoc(doc(db, "allowed_students", hemisId));
             if (docSnap.exists()) {
                 tempStudentData = docSnap.data();
-                // Tekshiruvdan o'tdi, keyingi bosqichni ochish
                 document.getElementById('reg-step-1').classList.add('hidden');
                 document.getElementById('reg-step-2').classList.remove('hidden');
-                
-                // Talabaning ismini olib ekranga chiqarish (Rasmda fullName deb yozilgan)
                 const name = tempStudentData.fullName || tempStudentData.full_name || "Talaba";
                 document.getElementById('found-student-name').innerHTML = `Topildi: <b>${name}</b>.<br>Endi hisob yarating.`;
             } else {
-                showAlert("Sizning HEMIS ID raqamingiz RES bazasida topilmadi. O'quv bo'limiga murojaat qiling.", "error");
+                showAlert("Sizning HEMIS ID raqamingiz topilmadi.", "error");
             }
         } catch (error) {
-            console.error(error);
-            showAlert("Xatolik yuz berdi. Internet aloqasini tekshiring.", "error");
+            showAlert("Xatolik yuz berdi. Internetni tekshiring.", "error");
         }
         hideLoader();
     };
 
-    // 2-QADAM: Email va Parol bilan ro'yxatdan o'tish va ma'lumotlarni nusxalash
+    // 2-QADAM: Ro'yxatdan o'tish
     window.register = async () => {
         const email = document.getElementById('reg-email').value.trim();
         const password = document.getElementById('reg-pass').value.trim();
-
-        if (!email || !password || password.length < 6) {
-            return showAlert("Email va eng kamida 6 belgili parol kiriting!", "error");
-        }
+        if (!email || password.length < 6) return showAlert("Email va kamida 6 belgili parol kiriting!", "error");
 
         showLoader("Hisob yaratilmoqda...");
         try {
-            // Firebase Auth da hisob yaratish
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const uid = userCredential.user.uid;
-
-            // allowed_students dagi tayyor ma'lumotlarni olib, yangi talabaning UID bilan asosiy 'users' bazasiga yozib qo'yamiz
             await setDoc(doc(db, "users", uid), {
-                ...tempStudentData, // O'quv bo'limi kiritgan hamma malumotlarni nusxalaydi
-                uid: uid,
-                email: email,
-                role: "student",
-                registeredAt: new Date().toISOString()
+                ...tempStudentData, uid: uid, email: email, role: "student", registeredAt: new Date().toISOString()
             });
-
-            showAlert("Muvaffaqiyatli ro'yxatdan o'tdingiz! Endi tizimga kiring.", "success");
-            // Muvaffaqiyatli o'tgach, login oynasiga qaytarish va emailni joylab qo'yish
-            setTimeout(() => {
-                toggleForms('login');
-                document.getElementById('login-email').value = email;
-            }, 2000);
-
+            showAlert("Muvaffaqiyatli ro'yxatdan o'tdingiz!", "success");
+            setTimeout(() => { toggleForms('login'); document.getElementById('login-email').value = email; }, 2000);
         } catch (error) {
-            console.error(error);
-            if (error.code === 'auth/email-already-in-use') {
-                showAlert("Bu email band. Boshqa email ishlating yoki tizimga kiring.", "error");
-            } else {
-                showAlert("Ro'yxatdan o'tishda xatolik yuz berdi.", "error");
-            }
+            showAlert("Ro'yxatdan o'tishda xatolik yuz berdi.", "error");
         }
         hideLoader();
     };
 
-    // 3-QADAM: Tizimga kirish (Login) - YAngilangan Qism (Admin va Talaba ajratilgan)
+    // 3-QADAM: Asosiy Login (Email va Parol bilan -> Talaba / Admin portali)
     window.login = async () => {
         const email = document.getElementById('login-email').value.trim();
         const password = document.getElementById('login-pass').value.trim();
-
         if (!email || !password) return showAlert("Email va parolni kiriting!", "error");
 
         showLoader("Tizimga kirilmoqda...");
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            const uid = userCredential.user.uid;
-
-            // ADMIN TIZIMGA KIRSA:
-            // O'zingiz Firebase'da yaratgan admin elektron pochtasini yozing
             if (email === "admin@res.uz") {
-                window.location.href = "admin_panel.html"; // Admin panelga yo'naltirish
-                return; // Shu yerda funksiyani to'xtatamiz
+                window.location.href = "admin_panel.html"; return;
             }
+            window.location.href = "talaba_portali.html"; 
+        } catch (error) {
+            showAlert("Email yoki parol noto'g'ri!", "error");
+        }
+        hideLoader();
+    };
 
-            // TALABA TIZIMGA KIRSA:
-            const userDoc = await getDoc(doc(db, "users", uid));
-            if (userDoc.exists()) {
-                window.location.href = "talaba_portali.html"; // Talaba portaliga yo'naltirish
+    // 4-QADAM: Yangi Qo'shilgan - FAQAT HEMIS ID BILAN KIRISH (Parolsiz)
+    window.loginWithHemis = async () => {
+        const hemisId = document.getElementById('login-hemis-id').value.trim();
+        if (!hemisId) return showAlert("HEMIS ID ni kiriting!", "error");
+
+        showLoader("HEMIS bazasidan tekshirilmoqda...");
+        try {
+            const docSnap = await getDoc(doc(db, "allowed_students", hemisId));
+            if (docSnap.exists()) {
+                // Parolsiz kirganda kompyuter xotirasiga ID ni saqlab qo'yamiz
+                localStorage.setItem("hemis_login_id", hemisId);
+                window.location.href = "hemis.html";
             } else {
-                showAlert("Foydalanuvchi ma'lumotlari topilmadi.", "error");
+                showAlert("Bu HEMIS ID bazada tasdiqlanmagan!", "error");
             }
         } catch (error) {
             console.error(error);
-            showAlert("Email yoki parol noto'g'ri!", "error");
+            showAlert("Xatolik yuz berdi. Internetni tekshiring.", "error");
         }
         hideLoader();
     };
