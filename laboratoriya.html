@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elektr yuklamalarining sutkalik o'zgarishi</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            height: 85vh;
+        }
+        .charts-container {
+            flex: 3;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 15px;
+            overflow-y: auto;
+        }
+        .chart-card {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        canvas {
+            width: 100% !important;
+            height: 250px !important;
+        }
+        .controls-sidebar {
+            flex: 1;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+        }
+        .season-toggle {
+            display: flex;
+            margin-bottom: 15px;
+            border: 1px solid #0056b3;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .season-toggle button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: #fff;
+            color: #0056b3;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .season-toggle button.active {
+            background: #0056b3;
+            color: #fff;
+        }
+        .sliders-wrapper {
+            overflow-y: auto;
+            flex: 1;
+            padding-right: 10px;
+        }
+        .slider-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .slider-group label {
+            width: 60px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .slider-group input[type="range"] {
+            flex: 1;
+            margin: 0 10px;
+        }
+        .slider-group span {
+            width: 40px;
+            text-align: right;
+            font-size: 14px;
+            font-family: monospace;
+            color: #555;
+        }
+        h2 { margin: 0 0 5px 0; }
+        p.subtitle { color: #666; margin-top: 0; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h2>Elektr yuklamalarining sutkalik o'zgarishi</h2>
+        <p class="subtitle">Aktiv (P) va Reaktiv (Q) quvvatlarning qish va yoz fasllari uchun grafigi (cosφ = 0.85)</p>
+    </div>
+
+    <div class="container">
+        <!-- Grafika qismi -->
+        <div class="charts-container">
+            <div class="chart-card">
+                <canvas id="winPChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <canvas id="winQChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <canvas id="sumPChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <canvas id="sumQChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Boshqaruv paneli qismi -->
+        <div class="controls-sidebar">
+            <h3 style="margin-top:0; text-align:center;">Yuklamalarni sozlash</h3>
+            
+            <div class="season-toggle">
+                <button id="btnWinter" class="active" onclick="setSeason('winter')">Qish</button>
+                <button id="btnSummer" onclick="setSeason('summer')">Yoz</button>
+            </div>
+
+            <div class="sliders-wrapper" id="slidersContainer">
+                <!-- JS orqali 24 ta slider generatsiya qilinadi -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // cos(phi) = 0.85 standarti asosida tg(phi) ni hisoblash (Reaktiv quvvat uchun)
+        const cosPhi = 0.85;
+        const tanPhi = Math.tan(Math.acos(cosPhi)); 
+
+        // Boshlang'ich yuklama ma'lumotlari
+        let loadData = {
+            winter: {
+                P: [1.4, 1.4, 1.4, 1.4, 1.1, 1.1, 1.1, 1.4, 1.4, 1.4, 1.4, 1.4, 1.2, 1.2, 1.2, 1.1, 1.1, 1.1, 1.1, 1.2, 1.4, 1.4, 1.4, 1.4]
+            },
+            summer: {
+                P: [0.8, 0.8, 0.8, 1.1, 1.1, 0.8, 1.2, 1.2, 1.2, 1.4, 1.4, 1.4, 0.8, 0.8, 1.1, 0.8, 1.1, 1.1, 1.1, 0.8, 1.1, 1.4, 1.2, 1.2]
+            }
+        };
+
+        let currentSeason = 'winter';
+        const labels = Array.from({length: 24}, (_, i) => i + 1);
+
+        // Chartlarni yaratish uchun umumiy funksiya
+        function createChart(ctxId, title, color, dataLabel) {
+            const ctx = document.getElementById(ctxId).getContext('2d');
+            return new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: dataLabel,
+                        data: [],
+                        borderColor: color,
+                        backgroundColor: color,
+                        borderWidth: 2,
+                        pointRadius: 4,
+                        stepped: 'middle', // Zinasimon ko'rinish uchun
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: { display: true, text: title, font: { size: 14 } },
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { title: { display: true, text: 't, soat' } },
+                        y: { 
+                            title: { display: true, text: dataLabel },
+                            min: 0,
+                            max: 10
+                        }
+                    }
+                }
+            });
+        }
+
+        // 4 ta grafikni initsializatsiya qilish
+        const charts = {
+            winP: createChart('winPChart', 'Qish fasli - Aktiv quvvat (P)', '#1f2937', 'P, kVt'),
+            winQ: createChart('winQChart', 'Qish fasli - Reaktiv quvvat (Q)', '#3b82f6', 'Q, kvar'),
+            sumP: createChart('sumPChart', 'Yoz fasli - Aktiv quvvat (P)', '#1f2937', 'P, kVt'),
+            sumQ: createChart('sumQChart', 'Yoz fasli - Reaktiv quvvat (Q)', '#3b82f6', 'Q, kvar')
+        };
+
+        // Grafiklarni yangilash funksiyasi
+        function updateCharts() {
+            // Reaktiv quvvatni hisoblash: Q = P * tg(phi)
+            let winQ = loadData.winter.P.map(p => (p * tanPhi).toFixed(2));
+            let sumQ = loadData.summer.P.map(p => (p * tanPhi).toFixed(2));
+
+            charts.winP.data.datasets[0].data = loadData.winter.P;
+            charts.winQ.data.datasets[0].data = winQ;
+            charts.sumP.data.datasets[0].data = loadData.summer.P;
+            charts.sumQ.data.datasets[0].data = sumQ;
+
+            Object.values(charts).forEach(chart => chart.update());
+        }
+
+        // Boshqaruv buragichlarini (slider) chizish
+        function renderSliders() {
+            const container = document.getElementById('slidersContainer');
+            container.innerHTML = '';
+
+            for(let i = 0; i < 24; i++) {
+                let currentVal = loadData[currentSeason].P[i];
+                
+                let group = document.createElement('div');
+                group.className = 'slider-group';
+                
+                let label = document.createElement('label');
+                label.innerText = (i + 1) + '-soat';
+                
+                let input = document.createElement('input');
+                input.type = 'range';
+                input.min = '0';
+                input.max = '10';
+                input.step = '0.1';
+                input.value = currentVal;
+                
+                let valSpan = document.createElement('span');
+                valSpan.innerText = currentVal;
+
+                input.addEventListener('input', (e) => {
+                    let val = parseFloat(e.target.value);
+                    valSpan.innerText = val.toFixed(1);
+                    loadData[currentSeason].P[i] = val;
+                    updateCharts(); // Qiymat o'zgarganda grafik darhol yangilanadi
+                });
+
+                group.appendChild(label);
+                group.appendChild(input);
+                group.appendChild(valSpan);
+                container.appendChild(group);
+            }
+        }
+
+        // Faslni o'zgartirish (Qish/Yoz tugmalari uchun)
+        function setSeason(season) {
+            currentSeason = season;
+            document.getElementById('btnWinter').classList.toggle('active', season === 'winter');
+            document.getElementById('btnSummer').classList.toggle('active', season === 'summer');
+            renderSliders();
+        }
+
+        // Dastlabki ishga tushirish
+        updateCharts();
+        renderSliders();
+    </script>
+</body>
+</html>
