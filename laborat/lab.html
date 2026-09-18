@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elektr ta'minoti: Yuklama va quvvat grafiklari</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Chart.js kutubxonasini ulash -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Elektr yuklamalarining sutkalik o'zgarishi</h1>
+        <p>Aktiv (P) va Reaktiv (Q) quvvatlarning qish va yoz fasllari uchun grafiklari.</p>
+
+        <div class="charts-grid">
+            <!-- Qish fasli grafiklari -->
+            <div class="chart-card">
+                <h2>Qish fasli - Aktiv quvvat (P)</h2>
+                <canvas id="qishAktivChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h2>Qish fasli - Reaktiv quvvat (Q)</h2>
+                <canvas id="qishReaktivChart"></canvas>
+            </div>
+
+            <!-- Yoz fasli grafiklari -->
+            <div class="chart-card">
+                <h2>Yoz fasli - Aktiv quvvat (P)</h2>
+                <canvas id="yozAktivChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h2>Yoz fasli - Reaktiv quvvat (Q)</h2>
+                <canvas id="yozReaktivChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
