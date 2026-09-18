@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elektr Ta'minoti - Quvvat Grafiklari</title>
+    <!-- Chart.js kutubxonasini ulash -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        .controls {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .controls select, .controls input, .controls button {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .controls button {
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+            border: none;
+            transition: background 0.3s;
+        }
+        .controls button:hover {
+            background-color: #2980b9;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .chart-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Yuklamalar O'zgarishi Natijasida Quvvat Grafiklari</h1>
+    
+    <!-- Ma'lumotlarni jonli o'zgartirish paneli -->
+    <div class="controls">
+        <label for="hourSelect">Soatni tanlang:</label>
+        <select id="hourSelect">
+            <!-- JS orqali 1 dan 24 gacha to'ldiriladi -->
+        </select>
+
+        <label for="qishInput">Qishki yuklama (3-10):</label>
+        <input type="number" id="qishInput" min="3" max="10">
+
+        <label for="yozInput">Yozgi yuklama (3-10):</label>
+        <input type="number" id="yozInput" min="3" max="10">
+
+        <button onclick="updateData()">Grafikni Yangilash</button>
+    </div>
+
+    <!-- Grafiklar joylashadigan qismlar -->
+    <div class="grid">
+        <div class="chart-container"><canvas id="qishAktivChart"></canvas></div>
+        <div class="chart-container"><canvas id="qishReaktivChart"></canvas></div>
+        <div class="chart-container"><canvas id="yozAktivChart"></canvas></div>
+        <div class="chart-container"><canvas id="yozReaktivChart"></canvas></div>
+    </div>
+</div>
+
+<script>
+    // Jadvaldan olingan o'zgarmas ma'lumotlar va formulalar
+    const U = 220; // Kuchlanish
+    const lookUpTable = {
+        10: { n: 38, I: 20 },
+        9:  { n: 37, I: 19 },
+        8:  { n: 32, I: 17 },
+        7:  { n: 30, I: 15 },
+        6:  { n: 23, I: 13 },
+        5:  { n: 30, I: 12 },
+        4:  { n: 19, I: 11 },
+        3:  { n: 6,  I: 3  }
+    };
+
+    // Boshlang'ich yuklama o'zgarishi (24 soat uchun)
+    let qishYuklama = [9, 9, 9, 9, 7, 7, 7, 10, 10, 10, 10, 10, 10, 8, 8, 8, 7, 7, 7, 7, 8, 10, 9, 9];
+    let yozYuklama  = [6, 6, 7, 7, 6, 8, 8, 8, 9, 10, 10, 6, 6, 7, 6, 5, 5, 5, 6, 6, 7, 9, 8, 8];
+    const labels = Array.from({length: 24}, (_, i) => i + 1);
+
+    // Hisob-kitob funksiyasi
+    function calculatePowers(yuklamaArray) {
+        let P_arr = [];
+        let Q_arr = [];
+        
+        yuklamaArray.forEach(val => {
+            let n = lookUpTable[val].n;
+            let I = lookUpTable[val].I;
+            
+            let P = (60 * n) / 1600;
+            let S = (U * I) / 1000;
+            let Q = Math.sqrt(Math.pow(S, 2) - Math.pow(P, 2));
+            
+            P_arr.push(P.toFixed(2));
+            Q_arr.push(Q.toFixed(2));
+        });
+        
+        return { P: P_arr, Q: Q_arr };
+    }
+
+    // Grafik yaratish uchun universal funksiya (Stepped line)
+    function createChart(ctxId, label, data, color) {
+        const ctx = document.getElementById(ctxId).getContext('2d');
+        return new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: label,
+                    data: data,
+                    borderColor: color,
+                    borderWidth: 2,
+                    stepped: 'middle', // Pog'onali chiziq (rasmdagidek)
+                    fill: false,
+                    pointBackgroundColor: color,
+                    pointRadius: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: { title: { display: true, text: 't, soat' } },
+                    y: { 
+                        beginAtZero: true,
+                        title: { display: true, text: label.includes('Aktiv') ? 'P, kVt' : 'Q, kvar' }
+                    }
+                }
+            }
+        });
+    }
+
+    // Dastlabki hisob-kitoblar
+    let qishData = calculatePowers(qishYuklama);
+    let yozData = calculatePowers(yozYuklama);
+
+    // Barcha 4 ta grafikni chizish
+    let qishAktivChart = createChart('qishAktivChart', 'Qish fasli – aktiv quvvat P', qishData.P, '#000000');
+    let qishReaktivChart = createChart('qishReaktivChart', 'Qish fasli – reaktiv quvvat Q', qishData.Q, '#1f497d');
+    let yozAktivChart = createChart('yozAktivChart', 'Yoz fasli – aktiv quvvat P', yozData.P, '#000000');
+    let yozReaktivChart = createChart('yozReaktivChart', 'Yoz fasli – reaktiv quvvat Q', yozData.Q, '#1f497d');
+
+    // UI (Soat tanlash qismini to'ldirish)
+    const hourSelect = document.getElementById('hourSelect');
+    labels.forEach(hour => {
+        let option = document.createElement('option');
+        option.value = hour - 1; // Array index 0 dan boshlanadi
+        option.text = hour + " - soat";
+        hourSelect.appendChild(option);
+    });
+
+    // Tanlangan soatdagi yuklamani inputlarga chiqarish
+    hourSelect.addEventListener('change', (e) => {
+        let idx = e.target.value;
+        document.getElementById('qishInput').value = qishYuklama[idx];
+        document.getElementById('yozInput').value = yozYuklama[idx];
+    });
+    
+    // Boshlang'ich holat uchun inputlarni to'ldirish
+    hourSelect.dispatchEvent(new Event('change'));
+
+    // Yangilash tugmasi bosilganda ishlari
+    window.updateData = function() {
+        let idx = document.getElementById('hourSelect').value;
+        let yangiQish = parseInt(document.getElementById('qishInput').value);
+        let yangiYoz = parseInt(document.getElementById('yozInput').value);
+
+        if(lookUpTable[yangiQish] && lookUpTable[yangiYoz]) {
+            qishYuklama[idx] = yangiQish;
+            yozYuklama[idx] = yangiYoz;
+
+            // Qayta hisoblash
+            let newQishData = calculatePowers(qishYuklama);
+            let newYozData = calculatePowers(yozYuklama);
+
+            // Chartlarni yangilash
+            qishAktivChart.data.datasets[0].data = newQishData.P;
+            qishAktivChart.update();
+
+            qishReaktivChart.data.datasets[0].data = newQishData.Q;
+            qishReaktivChart.update();
+
+            yozAktivChart.data.datasets[0].data = newYozData.P;
+            yozAktivChart.update();
+
+            yozReaktivChart.data.datasets[0].data = newYozData.Q;
+            yozReaktivChart.update();
+        } else {
+            alert("Iltimos, yuklama qiymatini 3 dan 10 gacha kiriting!");
+        }
+    }
+</script>
+
+</body>
+</html>
