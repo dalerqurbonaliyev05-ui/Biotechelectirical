@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Energy Grid Simulator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div>
+    <h1>⚡ ENERGY GRID SIMULATOR</h1>
+    <p>IES + AES + Quyosh elektr stansiyasi → iste’molchilar</p>
+  </div>
+  <div class="status"><span id="systemDot"></span><span id="systemStatus">Tizim normal</span></div>
+</header>
+
+<main>
+  <section class="control-panel">
+    <h2>1. Elektr stansiyalarini boshqarish</h2>
+    <div id="plantControls" class="cards"></div>
+  </section>
+
+  <section class="control-panel">
+    <h2>2. Iste’molchilar yuklamasi</h2>
+    <div id="loadControls" class="cards"></div>
+  </section>
+
+  <section class="control-panel">
+    <h2>3. Qaysi stansiyadan qaysi iste’molchiga?</h2>
+    <p class="hint">Har bir katakdagi qiymat MW. Bir iste’molchiga berilayotgan jami quvvat uning talabiga teng bo‘lishi kerak.</p>
+    <div class="auto-row">
+      <button id="autoBtn" class="off" aria-pressed="false">⚙ AVTOMATIK: O‘CHIRILGAN</button>
+      <span id="autoHint" class="hint"></span>
+    </div>
+    <div class="table-wrap">
+      <table id="dispatchTable"></table>
+    </div>
+  </section>
+
+  <section class="dashboard">
+    <div class="metric"><span>Jami ishlab chiqarish</span><b id="totalGeneration">0 MW</b></div>
+    <div class="metric"><span>Jami talab</span><b id="totalDemand">0 MW</b></div>
+    <div class="metric"><span>Zaxira</span><b id="reserve">0 MW</b></div>
+    <div class="metric"><span>Qoplanmagan yuklama</span><b id="deficit">0 MW</b></div>
+  </section>
+
+  <section class="network">
+    <h2>4. Energiya oqimi animatsiyasi</h2>
+    <div class="grid" id="grid">
+      <div class="column sources" id="sourceColumn"></div>
+      <svg id="flowSvg" aria-hidden="true"></svg>
+      <div class="column consumers" id="consumerColumn"></div>
+    </div>
+    <div class="legend" id="legend"></div>
+  </section>
+
+  <section class="control-panel">
+    <h2>5. Vaqt bo‘yicha simulyatsiya</h2>
+    <div class="time-row">
+      <button id="playBtn">▶ Ishga tushirish</button>
+      <button id="pauseBtn">⏸ Pauza</button>
+      <button id="resetBtn">↺ Reset</button>
+      <label>Soat: <b id="hourLabel">12:00</b></label>
+      <input id="hourSlider" type="range" min="0" max="23.75" step="0.25" value="12">
+    </div>
+    <p id="timeExplanation" class="hint"></p>
+  </section>
+
+  <section class="log-panel">
+    <h2>6. Muhandislik nazorati</h2>
+    <ul id="log"></ul>
+  </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
