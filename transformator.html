@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>10 kV → Transformator → Aholi taqsimoti</title>
+<style>
+:root{
+  --bg1:#0a0f1c; --bg2:#121b2e; --panel:#141d31; --line:#26324d; --text:#e8eefb; --muted:#8fa0c2;
+  --a:#f4d13f; --b:#3fd17a; --c:#f4553f; --n:#9aa6bd; --ok:#3fd17a; --warn:#f4a93f; --bad:#ff5252;
+}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at top,var(--bg2),var(--bg1));color:var(--text);
+  font-family:'Segoe UI',Tahoma,sans-serif;padding:18px}
+h1{font-size:19px;margin:0 0 4px;letter-spacing:.3px}
+p.sub{color:var(--muted);font-size:13px;margin:0 0 14px}
+.wrap{display:grid;gap:16px;max-width:1120px;margin:0 auto}
+.panel{background:linear-gradient(180deg,var(--panel),#0f1729);border:1px solid var(--line);border-radius:14px;
+  padding:16px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+svg{width:100%;height:auto;display:block}
+.controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:12px}
+button{background:linear-gradient(180deg,#26324d,#1a2439);color:var(--text);border:1px solid var(--line);
+  padding:9px 16px;border-radius:9px;cursor:pointer;font-size:14px;transition:.15s}
+button:hover{filter:brightness(1.25)}
+.houses{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.house{background:#0e1626;border:1px solid var(--line);border-radius:10px;padding:12px}
+.house h3{margin:0 0 8px;font-size:14px}
+select,input[type=range]{width:100%;margin-top:4px}
+.row{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:8px}
+.badge{display:inline-block;padding:2px 9px;border-radius:12px;font-size:11px;font-weight:700}
+.badge.ok{background:#0f3320;color:var(--ok)}
+.badge.bad{background:#3a1410;color:var(--bad)}
+.gauges{display:flex;gap:18px;flex-wrap:wrap;margin-top:14px}
+.gauge{flex:1;min-width:170px}
+.gauge .lbl{font-size:12px;color:var(--muted);margin-bottom:5px}
+.bar{height:14px;background:#080d18;border-radius:7px;overflow:hidden;border:1px solid var(--line)}
+.bar>i{display:block;height:100%;width:0%;transition:width .35s,background .35s}
+#alarms{min-height:22px;font-size:13px;font-weight:600}
+.alarm{color:var(--bad);animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.2}}
+.dash{stroke-dasharray:7 7;animation:flow 1.1s linear infinite}
+.dash.n{stroke-dasharray:3 5;animation-duration:1.6s}
+@keyframes flow{to{stroke-dashoffset:-28}}
+.glow{filter:drop-shadow(0 0 6px currentColor)}
+text{fill:var(--text);font-size:11px}
+text.small{fill:var(--muted);font-size:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>10 kV liniya → Transformator → 0,4 kV → Aholi</h1>
+<p class="sub">Har bir xonadon bitta faza (A/B/C) + nol simi orqali quvvat oladi</p>
+
+<div class="panel">
+  <svg id="scheme" viewBox="0 0 1000 460" xmlns="http://www.w3.org/2000/svg"></svg>
+  <div class="controls">
+    <button id="brk">Transformatorni uzish</button>
+    <span>Holat: <b id="brkState">ULANGAN</b></span>
+    <span id="alarms"></span>
+  </div>
+  <div class="gauges">
+    <div class="gauge"><div class="lbl">Transformator yuklamasi: <span id="loadTxt">0%</span></div><div class="bar"><i id="loadBar"></i></div></div>
+    <div class="gauge"><div class="lbl">Moy harorati: <span id="tempTxt">40°C</span></div><div class="bar"><i id="tempBar"></i></div></div>
+  </div>
+</div>
+
+<div class="panel">
+  <h3 style="margin-top:0">Xonadonlar</h3>
+  <div class="houses" id="houses"></div>
+</div>
+</div>
+
+<script>
+const PHASES = {A:{col:'var(--a)',cap:30},B:{col:'var(--b)',cap:30},C:{col:'var(--c)',cap:30}};
+const TRAFO_CAP = 80;
+const houseCount = 4;
+let houses = [];
+for(let i=0;i<houseCount;i++) houses.push({id:i, phase:['A','B','C','A'][i%3], load: 10+i*3, on:true});
+
+let breakerOn = true;
+let phaseTrip = {A:false,B:false,C:false};
+let phaseTimers = {A:null,B:null,C:null};
+let phaseCountdown = {A:null,B:null,C:null};
+
+const OUT = {A:{y:150},B:{y:225},C:{y:300},N:{y:365}};
+
+function buildScheme(){
+  const svg = document.getElementById('scheme');
+  let html = `
+  <defs>
+    <radialGradient id="trafoGrad" cx="35%" cy="30%" r="80%">
+      <stop offset="0%" stop-color="#3a4a72"/>
+      <stop offset="100%" stop-color="#1a2438"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Kirish: 10 kV, 3 ta liniya -->
+  <text x="8" y="40">10 kV liniya</text>
+  <polygon points="10,60 40,10 70,60" fill="none" stroke="#8fa2c9" stroke-width="2"/>
+  <line x1="40" y1="10" x2="40" y2="0" stroke="#8fa2c9" stroke-width="2"/>
+  <line x1="70" y1="70" x2="330" y2="70" stroke="#cfd8ea" stroke-width="3" class="dash" id="hv1"/>
+  <line x1="70" y1="85" x2="330" y2="85" stroke="#cfd8ea" stroke-width="3" class="dash" id="hv2"/>
+  <line x1="70" y1="100" x2="330" y2="100" stroke="#cfd8ea" stroke-width="3" class="dash" id="hv3"/>
+
+  <!-- Transformator -->
+  <g id="trafoGroup">
+    <rect x="330" y="45" width="110" height="90" rx="10" fill="url(#trafoGrad)" stroke="#8fa2c9" stroke-width="2" id="trafoBox"/>
+    <circle cx="368" cy="90" r="20" fill="none" stroke="#cfd8ea" stroke-width="2"/>
+    <circle cx="400" cy="90" r="20" fill="none" stroke="#cfd8ea" stroke-width="2"/>
+    <circle cx="440" cy="55" r="8" fill="var(--ok)" id="trafoLamp" class="glow"/>
+    <text x="336" y="150">TRANSFORMATOR</text>
+    <text x="336" y="163" class="small">10/0,4 kV</text>
+  </g>
+
+  <!-- Chiqish: transformatordan to'g'ridan-to'g'ri 4 liniya (shinasiz) -->
+  `;
+  ['A','B','C','N'].forEach(p=>{
+    const y = OUT[p].y;
+    const col = p==='N' ? 'var(--n)' : PHASES[p].col;
+    html += `<path d="M440,90 C 480,90 460,${y} 500,${y}" fill="none" stroke="${col}" stroke-width="${p==='N'?2.5:4}" class="dash ${p==='N'?'n':''}" id="phase${p}"/>`;
+    html += `<line x1="500" y1="${y}" x2="900" y2="${y}" stroke="${col}" stroke-width="${p==='N'?2.5:4}" class="dash ${p==='N'?'n':''}" id="phaseLine${p}"/>`;
+    html += `<text x="505" y="${y-8}">${p==='N'?'Nol simi':'Faza '+p}</text>`;
+    if(p!=='N') html += `<text x="820" y="${y-8}" id="phaseTxt${p}" class="small"></text>`;
+  });
+
+  svg.innerHTML = html;
+  houses.forEach(h=>{
+    svg.insertAdjacentHTML('beforeend', `<g id="houseIcon${h.id}"></g>`);
+  });
+  positionHouses();
+}
+
+function positionHouses(){
+  houses.forEach(h=>{
+    const y = OUT[h.phase].y;
+    const idxSameP = houses.filter(x=>x.phase===h.phase).indexOf(h);
+    const nSameP = houses.filter(x=>x.phase===h.phase).length;
+    const spread = 46;
+    const x = 900 + (idxSameP - (nSameP-1)/2) * spread;
+    let g = document.getElementById('houseIcon'+h.id);
+    g.innerHTML = `
+      <line x1="${x}" y1="${OUT.N.y}" x2="${x}" y2="${y}" stroke="var(--n)" stroke-width="1.5" stroke-dasharray="2 4"/>
+      <g transform="translate(${x-20},${y-40})">
+        <polygon points="0,20 20,0 40,20" fill="#3a4a72" stroke="#8fa2c9"/>
+        <rect x="4" y="20" width="32" height="22" fill="#101827" stroke="#8fa2c9"/>
+        <rect x="14" y="27" width="12" height="12" fill="#555" id="bulb${h.id}"/>
+      </g>`;
+  });
+}
+
+function renderHouses(){
+  const wrap = document.getElementById('houses');
+  wrap.innerHTML='';
+  houses.forEach(h=>{
+    const div = document.createElement('div');
+    div.className='house';
+    div.innerHTML = `
+      <h3>Xonadon #${h.id+1} <span class="badge ${h.on?'ok':'bad'}" id="hbadge${h.id}">${h.on?'YONMOQDA':"O'CHIRILGAN"}</span></h3>
+      <label>Faza (+ nol avtomatik):
+        <select data-id="${h.id}" class="phaseSel">
+          <option value="A" ${h.phase==='A'?'selected':''}>A faza</option>
+          <option value="B" ${h.phase==='B'?'selected':''}>B faza</option>
+          <option value="C" ${h.phase==='C'?'selected':''}>C faza</option>
+        </select>
+      </label>
+      <label>Yuklama: <span id="hload${h.id}">${h.load} kVt</span>
+        <input type="range" min="0" max="35" value="${h.load}" data-id="${h.id}" class="loadRange">
+      </label>
+      <div class="row"><span>Liniya: ${h.phase} + N</span><span id="hstate${h.id}"></span></div>
+    `;
+    wrap.appendChild(div);
+  });
+  document.querySelectorAll('.phaseSel').forEach(sel=>{
+    sel.addEventListener('change', e=>{
+      houses[+e.target.dataset.id].phase = e.target.value;
+      positionHouses(); renderHouses(); recalc();
+    });
+  });
+  document.querySelectorAll('.loadRange').forEach(rg=>{
+    rg.addEventListener('input', e=>{
+      const id = +e.target.dataset.id;
+      houses[id].load = +e.target.value;
+      document.getElementById('hload'+id).textContent = houses[id].load+' kVt';
+      recalc();
+    });
+  });
+}
+
+function setAlarm(msg, level){
+  const el = document.getElementById('alarms');
+  el.innerHTML = msg ? `<span class="${level==='bad'?'alarm':''}">${msg}</span>` : '';
+}
+
+function tripPhase(p){
+  phaseTrip[p]=true;
+  houses.filter(h=>h.phase===p).forEach(h=>h.on=false);
+  renderHouses(); positionHouses(); recalc();
+}
+
+function checkPhase(p){
+  if(!breakerOn){ clearTimeout(phaseTimers[p]); phaseTimers[p]=null; return; }
+  const cap = PHASES[p].cap;
+  const total = houses.filter(h=>h.phase===p && h.on && !phaseTrip[p]).reduce((s,h)=>s+h.load,0);
+  const wire = document.getElementById('phaseLine'+p);
+  const wire2 = document.getElementById('phase'+p);
+  const txt = document.getElementById('phaseTxt'+p);
+  if(txt) txt.textContent = total+'/'+cap+' kVt';
+  if(phaseTrip[p]){
+    [wire,wire2].forEach(w=>w && w.setAttribute('stroke','#33405e'));
+    return;
+  }
+  if(total > cap){
+    [wire,wire2].forEach(w=>w && (w.style.filter='drop-shadow(0 0 6px red)'));
+    if(!phaseTimers[p]){
+      let secs = 10;
+      phaseCountdown[p]=secs;
+      setAlarm(`Faza ${p} ORTIQCHA YUKLANGAN! ${secs}s ichida uzilmasa, avtomatik uziladi.`, 'bad');
+      phaseTimers[p]=setInterval(()=>{
+        phaseCountdown[p]--;
+        if(phaseCountdown[p]>0){
+          setAlarm(`Faza ${p} ORTIQCHA YUKLANGAN! ${phaseCountdown[p]}s ichida uzilmasa, avtomatik uziladi.`, 'bad');
+        } else {
+          clearInterval(phaseTimers[p]); phaseTimers[p]=null;
+          tripPhase(p);
+          setAlarm(`Faza ${p} avtomatik uzildi (ortiqcha yuklama).`, 'bad');
+        }
+      },1000);
+    }
+  } else {
+    [wire,wire2].forEach(w=>w && (w.style.filter='none'));
+    if(phaseTimers[p]){ clearInterval(phaseTimers[p]); phaseTimers[p]=null; setAlarm('',''); }
+  }
+}
+
+function recalc(){
+  const totalLoad = houses.filter(h=>h.on).reduce((s,h)=>s+h.load,0);
+  const loadPct = Math.min(180, Math.round(totalLoad/TRAFO_CAP*100));
+  const temp = 40 + loadPct*0.55;
+
+  document.getElementById('loadTxt').textContent = loadPct+'%';
+  const lb = document.getElementById('loadBar');
+  lb.style.width = Math.min(100,loadPct)+'%';
+  lb.style.background = loadPct>100?'var(--bad)': loadPct>75?'var(--warn)':'var(--ok)';
+
+  document.getElementById('tempTxt').textContent = Math.round(temp)+'°C';
+  const tb = document.getElementById('tempBar');
+  tb.style.width = Math.min(100,(temp-30))+'%';
+  tb.style.background = temp>90?'var(--bad)': temp>70?'var(--warn)':'#3f8bf4';
+
+  const lamp = document.getElementById('trafoLamp');
+  const box = document.getElementById('trafoBox');
+  ['hv1','hv2','hv3'].forEach(id=>document.getElementById(id).style.opacity = breakerOn?1:0.25);
+  if(!breakerOn){
+    lamp.setAttribute('fill','#555'); box.setAttribute('stroke','#555');
+  } else if(loadPct>100){
+    lamp.setAttribute('fill','var(--bad)'); box.setAttribute('stroke','var(--bad)');
+  } else {
+    lamp.setAttribute('fill','var(--ok)'); box.setAttribute('stroke','#8fa2c9');
+  }
+
+  ['A','B','C'].forEach(checkPhase);
+
+  houses.forEach(h=>{
+    const bulb = document.getElementById('bulb'+h.id);
+    const badge = document.getElementById('hbadge'+h.id);
+    const supplyOn = breakerOn && h.on && !phaseTrip[h.phase];
+    if(bulb) bulb.setAttribute('fill', supplyOn? getComputedStyle(document.documentElement).getPropertyValue('--'+h.phase.toLowerCase()).trim() : '#555');
+    if(badge){ badge.textContent = supplyOn?'YONMOQDA':"O'CHIRILGAN"; badge.className='badge '+(supplyOn?'ok':'bad'); }
+  });
+
+  if(breakerOn && loadPct<=100){
+    const anyPhaseAlarm = Object.values(phaseTimers).some(t=>t);
+    if(!anyPhaseAlarm) setAlarm('','');
+  }
+}
+
+document.getElementById('brk').addEventListener('click', ()=>{
+  breakerOn = !breakerOn;
+  document.getElementById('brkState').textContent = breakerOn?'ULANGAN':'UZILGAN';
+  document.getElementById('brk').textContent = breakerOn? 'Transformatorni uzish':'Transformatorni ulash';
+  if(!breakerOn){
+    Object.keys(phaseTimers).forEach(p=>{ if(phaseTimers[p]){clearInterval(phaseTimers[p]); phaseTimers[p]=null;} });
+    setAlarm('','');
+  } else {
+    Object.keys(phaseTrip).forEach(p=>phaseTrip[p]=false);
+    houses.forEach(h=>h.on=true);
+  }
+  renderHouses(); positionHouses(); recalc();
+});
+
+buildScheme();
+renderHouses();
+recalc();
+setInterval(recalc, 1000);
+</script>
+</body>
+</html>
