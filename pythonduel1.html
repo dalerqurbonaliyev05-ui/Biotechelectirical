@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Python Duel</title>
+<style>
+:root{
+  --bg:#f7f7f8; --panel:#ffffff; --text:#1a1a1a; --muted:#6b6b70; --border:#e2e2e6;
+  --accentA:#2563eb; --accentB:#dc2626; --accentA-bg:#eff4ff; --accentB-bg:#fef2f2;
+  --ok:#16a34a; --btn:#111827; --btn-text:#fff;
+  box-sizing:border-box;
+  padding-top: env(safe-area-inset-top,0px);
+  padding-bottom: env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141416; --panel:#1e1e21; --text:#f2f2f3; --muted:#9a9aa0; --border:#2e2e33;
+    --accentA-bg:#152238; --accentB-bg:#2a1518; --btn:#f2f2f3; --btn-text:#141416;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141416; --panel:#1e1e21; --text:#f2f2f3; --muted:#9a9aa0; --border:#2e2e33;
+  --accentA-bg:#152238; --accentB-bg:#2a1518; --btn:#f2f2f3; --btn-text:#141416;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,Segoe UI,Roboto,sans-serif;}
+body{padding:16px;}
+h1{font-size:20px;margin:0 0 4px;}
+h2{font-size:16px;margin:0 0 10px;}
+.muted{color:var(--muted);font-size:13px;}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px;}
+.btn{background:var(--btn);color:var(--btn-text);border:none;border-radius:10px;padding:10px 16px;font-size:14px;font-weight:600;cursor:pointer;margin:4px 4px 4px 0;}
+.btn:disabled{opacity:.4;cursor:not-allowed;}
+.btn.outline{background:transparent;color:var(--text);border:1px solid var(--border);}
+.btn.A{background:var(--accentA);color:#fff;}
+.btn.B{background:var(--accentB);color:#fff;}
+input[type=text],textarea{width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:10px;padding:10px;font-size:14px;font-family:inherit;}
+textarea.code{font-family:ui-monospace,Menlo,Consolas,monospace;min-height:260px;resize:vertical;white-space:pre;overflow-x:auto;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media (max-width:700px){.grid2{grid-template-columns:1fr;}}
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:520px;margin:24px auto;}
+.role-btn{padding:22px 10px;font-size:15px;}
+.center{text-align:center;}
+.pill{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600;}
+.pill.active{background:var(--ok);color:#fff;}
+.pill.wait{background:var(--border);color:var(--muted);}
+.timer{font-size:28px;font-weight:700;font-variant-numeric:tabular-nums;}
+.winner-banner{font-size:22px;font-weight:800;text-align:center;padding:20px;border-radius:14px;}
+.problem-box{white-space:pre-wrap;font-size:15px;line-height:1.5;}
+#app{max-width:1100px;margin:0 auto;}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.small{font-size:12px;}
+</style>
+</head>
+<body>
+<div id="app"><div class="center muted" style="margin-top:40px;">Yuklanmoqda...</div></div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-database-compat.js"></script>
+
+<script>
+/* =========================================================
+   1) BU YERGA O'ZINGIZNING firebaseConfig OBYEKTINGIZNI QO'YING
+   Firebase Console -> Project settings -> Your apps -> Web app
+   ========================================================= */
+const firebaseConfig = {
+  apiKey: "AIzaSyBuY-ActQrkKbLLTHsh5ik_xaukC4H2tA4",
+  authDomain: "pythonduel-eb4bc.firebaseapp.com",
+  databaseURL: "https://pythonduel-eb4bc-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "pythonduel-eb4bc",
+  storageBucket: "pythonduel-eb4bc.firebasestorage.app",
+  messagingSenderId: "522841263840",
+  appId: "1:522841263840:web:2ec5a454e9e96072928a85",
+  measurementId: "G-ZE0D0BE2TE"
+};
+/* ========================================================= */
+
+firebase.initializeApp(firebaseConfig);
+const rtdb = firebase.database();
+
+let role = null; // 'teacher' | 'A' | 'B' | 'board'
+let listeners = []; // active firebase .on() refs to detach
+const $app = document.getElementById('app');
+
+function clearListeners(){
+  listeners.forEach(({ref,fn})=>{ try{ ref.off('value', fn); }catch(e){} });
+  listeners = [];
+}
+function watch(path, cb){
+  const ref = rtdb.ref(path);
+  const fn = (snap)=> cb(snap.val());
+  ref.on('value', fn);
+  listeners.push({ref, fn});
+}
+
+function fmtTime(ms){
+  const s = Math.max(0, Math.floor(ms/1000));
+  const m = Math.floor(s/60), r = s%60;
+  return String(m).padStart(2,'0')+':'+String(r).padStart(2,'0');
+}
+
+// ---------- ROLE SELECTION ----------
+function renderRoleSelect(){
+  clearListeners();
+  $app.innerHTML = `
+    <div class="center" style="margin-top:10px;">
+      <h1>🐍 Python Duel</h1>
+      <p class="muted">Rolingizni tanlang</p>
+    </div>
+    <div class="role-grid">
+      <button class="btn role-btn" data-role="teacher">👩‍🏫 O'qituvchi<br><span class="small muted">(boshqaruv)</span></button>
+      <button class="btn A role-btn" data-role="A">1-o'quvchi</button>
+      <button class="btn B role-btn" data-role="B">2-o'quvchi</button>
+      <button class="btn outline role-btn" data-role="board">🖥️ Katta ekran<br><span class="small muted">(tomoshabinlar)</span></button>
+    </div>
+    <p class="center muted small">Havolani o'quvchilaringizga yuboring — har biri shu yerdan o'z rolini tanlaydi.</p>
+  `;
+  $app.querySelectorAll('[data-role]').forEach(b=>{
+    b.onclick = ()=>{ role = b.dataset.role; route(); };
+  });
+}
+
+async function getSession(){
+  try{ const s = await rtdb.ref('session/current').once('value'); return s.val(); }catch(e){ return null; }
+}
+async function setSession(data){ try{ await rtdb.ref('session/current').set(data); }catch(e){} }
+async function getCode(slot){
+  try{ const s = await rtdb.ref('code/'+slot).once('value'); return s.val() || {text:'',updatedAt:0}; }catch(e){ return {text:'',updatedAt:0}; }
+}
+async function setCode(slot, text){ try{ await rtdb.ref('code/'+slot).set({text, updatedAt: Date.now()}); }catch(e){} }
+
+// ---------- TEACHER ----------
+async function renderTeacher(){
+  clearListeners();
+  let session = (await getSession()) || {status:'waiting', problemText:'', studentA:"1-o'quvchi", studentB:"2-o'quvchi", winner:null, startedAt:0};
+  let bank = [];
+  try{
+    const snap = await rtdb.ref('problems').once('value');
+    const val = snap.val() || {};
+    bank = Object.keys(val).map(k=>({id:k, ...val[k]}));
+  }catch(e){ bank = []; }
+
+  function draw(){
+    $app.innerHTML = `
+      <div class="topbar"><h1>👩‍🏫 Boshqaruv paneli</h1><button class="btn outline" id="back">← Orqaga</button></div>
+
+      <div class="card">
+        <h2>Ism-familiyalar</h2>
+        <div class="grid2">
+          <div><label class="small muted">1-o'quvchi</label><input type="text" id="nameA" value="${(session.studentA||'').replace(/"/g,'&quot;')}"></div>
+          <div><label class="small muted">2-o'quvchi</label><input type="text" id="nameB" value="${(session.studentB||'').replace(/"/g,'&quot;')}"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Masala</h2>
+        <textarea id="problemText" rows="4" placeholder="Masala matnini kiriting...">${session.status==='waiting' ? (session.problemText||'') : ''}</textarea>
+        <div style="margin-top:8px;">
+          <button class="btn" id="addBank">Bazaga qo'shish</button>
+          <button class="btn outline" id="randomPick">🎲 Bazadan tasodifiy tanlash</button>
+        </div>
+        ${bank.length ? `<p class="muted small">Bazada ${bank.length} ta masala bor.</p>` : `<p class="muted small">Baza bo'sh — masala yozib "Bazaga qo'shish" tugmasini bosing.</p>`}
+      </div>
+
+      <div class="card center">
+        <button class="btn" id="startBtn" style="font-size:16px;padding:12px 24px;">🚀 Musobaqani boshlash</button>
+        <span class="pill ${session.status==='active'?'active':'wait'}" style="margin-left:10px;">${session.status==='active'?'FAOL':(session.status==='finished'?'YAKUNLANDI':'KUTILMOQDA')}</span>
+      </div>
+
+      ${session.status!=='waiting' ? `
+      <div class="card">
+        <div class="topbar"><h2>Masala</h2><div class="timer" id="teacherTimer">00:00</div></div>
+        <div class="problem-box muted">${(session.problemText||'').replace(/</g,'&lt;')}</div>
+      </div>
+      <div class="grid2">
+        <div class="card" style="background:var(--accentA-bg);">
+          <h2 style="color:var(--accentA);">${session.studentA||"1-o'quvchi"}</h2>
+          <textarea class="code" id="codeA" readonly></textarea>
+        </div>
+        <div class="card" style="background:var(--accentB-bg);">
+          <h2 style="color:var(--accentB);">${session.studentB||"2-o'quvchi"}</h2>
+          <textarea class="code" id="codeB" readonly></textarea>
+        </div>
+      </div>
+      <div class="card center">
+        <button class="btn A" id="winA">🏆 ${session.studentA||"1-o'quvchi"} g'olib</button>
+        <button class="btn B" id="winB">🏆 ${session.studentB||"2-o'quvchi"} g'olib</button>
+        <button class="btn outline" id="resetBtn">Qayta boshlash</button>
+      </div>
+      ${session.status==='finished' ? `<div class="card winner-banner" style="background:var(--ok);color:#fff;">🏆 G'olib: ${session.winner==='A'?(session.studentA||"1-o'quvchi"):session.winner==='B'?(session.studentB||"2-o'quvchi"):'—'}</div>` : ''}
+      ` : ''}
+    `;
+
+    document.getElementById('back').onclick = ()=>{ role=null; route(); };
+    document.getElementById('addBank').onclick = async ()=>{
+      const t = document.getElementById('problemText').value.trim();
+      if(!t) return;
+      try{ await rtdb.ref('problems').push({text:t, createdAt:Date.now()}); }catch(e){}
+      const snap = await rtdb.ref('problems').once('value');
+      const val = snap.val() || {};
+      bank = Object.keys(val).map(k=>({id:k, ...val[k]}));
+      draw();
+    };
+    document.getElementById('randomPick').onclick = ()=>{
+      if(!bank.length) return;
+      const p = bank[Math.floor(Math.random()*bank.length)];
+      document.getElementById('problemText').value = p.text || '';
+    };
+    document.getElementById('startBtn').onclick = async ()=>{
+      const nameA = document.getElementById('nameA').value.trim() || "1-o'quvchi";
+      const nameB = document.getElementById('nameB').value.trim() || "2-o'quvchi";
+      const problemText = document.getElementById('problemText').value.trim();
+      if(!problemText){ alert("Masala matnini kiriting."); return; }
+      await setCode('A',''); await setCode('B','');
+      session = {status:'active', problemText, studentA:nameA, studentB:nameB, winner:null, startedAt:Date.now()};
+      await setSession(session);
+      draw();
+    };
+    const winBtn = (slot)=>async ()=>{
+      session = {...session, status:'finished', winner:slot};
+      await setSession(session);
+      draw();
+    };
+    const wa = document.getElementById('winA'); if(wa) wa.onclick = winBtn('A');
+    const wb = document.getElementById('winB'); if(wb) wb.onclick = winBtn('B');
+    const rb = document.getElementById('resetBtn'); if(rb) rb.onclick = async ()=>{
+      session = {status:'waiting', problemText:'', studentA:session.studentA, studentB:session.studentB, winner:null, startedAt:0};
+      await setSession(session);
+      draw();
+    };
+
+    if(session.status!=='waiting'){
+      const ca = document.getElementById('codeA'), cb = document.getElementById('codeB');
+      getCode('A').then(c=>{ if(ca) ca.value = c.text||''; });
+      getCode('B').then(c=>{ if(cb) cb.value = c.text||''; });
+      watch('code/A', c=>{ if(ca && document.body.contains(ca)) ca.value = (c&&c.text)||''; });
+      watch('code/B', c=>{ if(cb && document.body.contains(cb)) cb.value = (c&&c.text)||''; });
+      const tEl = document.getElementById('teacherTimer');
+      if(tEl && session.startedAt){
+        const iv = setInterval(()=>{
+          if(!document.body.contains(tEl)){ clearInterval(iv); return; }
+          tEl.textContent = fmtTime(Date.now()-session.startedAt);
+        },1000);
+        listeners.push({ref:{off:()=>clearInterval(iv)}, fn:null});
+      }
+    }
+  }
+  draw();
+  watch('session/current', s=>{ if(s){ session=s; draw(); } });
+}
+
+// ---------- STUDENT ----------
+async function renderStudent(slot){
+  clearListeners();
+  let session = await getSession();
+  let myCode = (await getCode(slot)).text || '';
+  let saveTimer = null;
+
+  function draw(){
+    const accent = slot==='A' ? 'var(--accentA)' : 'var(--accentB)';
+    const accentBg = slot==='A' ? 'var(--accentA-bg)' : 'var(--accentB-bg)';
+    const myName = slot==='A' ? (session?.studentA||"1-o'quvchi") : (session?.studentB||"2-o'quvchi");
+
+    if(!session || session.status==='waiting'){
+      $app.innerHTML = `
+        <div class="topbar"><h1 style="color:${accent};">${myName}</h1><button class="btn outline" id="back">← Orqaga</button></div>
+        <div class="card center"><p class="muted">O'qituvchi musobaqani boshlashini kuting...</p></div>
+      `;
+      document.getElementById('back').onclick = ()=>{ role=null; route(); };
+      return;
+    }
+
+    if(session.status==='finished'){
+      const won = session.winner===slot;
+      $app.innerHTML = `
+        <div class="topbar"><h1 style="color:${accent};">${myName}</h1><button class="btn outline" id="back">← Orqaga</button></div>
+        <div class="card winner-banner" style="background:${won?'var(--ok)':'var(--border)'};color:${won?'#fff':'var(--text)'};">
+          ${won ? "🏆 Tabriklaymiz, siz g'olibsiz!" : "Musobaqa tugadi."}
+        </div>
+        <div class="card" style="background:${accentBg};">
+          <h2>Sizning kodingiz</h2>
+          <textarea class="code" readonly>${myCode.replace(/</g,'&lt;')}</textarea>
+        </div>
+      `;
+      document.getElementById('back').onclick = ()=>{ role=null; route(); };
+      return;
+    }
+
+    $app.innerHTML = `
+      <div class="topbar"><h1 style="color:${accent};">${myName}</h1><span class="timer" id="stTimer">00:00</span></div>
+      <div class="card"><h2>Masala</h2><div class="problem-box">${(session.problemText||'').replace(/</g,'&lt;')}</div></div>
+      <div class="card" style="background:${accentBg};">
+        <h2>Python kodingiz</h2>
+        <textarea class="code" id="myCode" placeholder="# kodni shu yerga yozing...">${myCode.replace(/</g,'&lt;')}</textarea>
+        <p class="small muted" id="saveStatus">avtomatik saqlanadi</p>
+      </div>
+    `;
+    const ta = document.getElementById('myCode');
+    ta.oninput = ()=>{
+      myCode = ta.value;
+      clearTimeout(saveTimer);
+      document.getElementById('saveStatus').textContent = 'saqlanmoqda...';
+      saveTimer = setTimeout(async ()=>{
+        await setCode(slot, myCode);
+        const st = document.getElementById('saveStatus');
+        if(st) st.textContent = 'saqlandi ✓';
+      }, 500);
+    };
+    const tEl = document.getElementById('stTimer');
+    if(session.startedAt){
+      const iv = setInterval(()=>{
+        if(!document.body.contains(tEl)){ clearInterval(iv); return; }
+        tEl.textContent = fmtTime(Date.now()-session.startedAt);
+      },1000);
+      listeners.push({ref:{off:()=>clearInterval(iv)}, fn:null});
+    }
+  }
+  draw();
+  watch('session/current', s=>{ session=s; draw(); });
+}
+
+// ---------- BOARD (spectator) ----------
+async function renderBoard(){
+  clearListeners();
+  let session = await getSession();
+
+  function draw(){
+    if(!session || session.status==='waiting'){
+      $app.innerHTML = `
+        <div class="topbar"><h1>🖥️ Musobaqa taxtasi</h1><button class="btn outline" id="back">← Orqaga</button></div>
+        <div class="card center" style="padding:60px 0;"><p class="muted" style="font-size:18px;">Musobaqa hali boshlanmagan...</p></div>
+      `;
+      document.getElementById('back').onclick = ()=>{ role=null; route(); };
+      return;
+    }
+    $app.innerHTML = `
+      <div class="topbar"><h1>🖥️ Musobaqa taxtasi</h1><span class="timer" id="bdTimer">00:00</span></div>
+      <div class="card"><div class="problem-box">${(session.problemText||'').replace(/</g,'&lt;')}</div></div>
+      ${session.status==='finished' ? `<div class="card winner-banner" style="background:var(--ok);color:#fff;">🏆 G'olib: ${session.winner==='A'?session.studentA:session.winner==='B'?session.studentB:'—'}</div>` : ''}
+      <div class="grid2">
+        <div class="card" style="background:var(--accentA-bg);">
+          <h2 style="color:var(--accentA);">${session.studentA||"1-o'quvchi"}</h2>
+          <textarea class="code" id="bCodeA" readonly></textarea>
+        </div>
+        <div class="card" style="background:var(--accentB-bg);">
+          <h2 style="color:var(--accentB);">${session.studentB||"2-o'quvchi"}</h2>
+          <textarea class="code" id="bCodeB" readonly></textarea>
+        </div>
+      </div>
+    `;
+    const ca = document.getElementById('bCodeA'), cb = document.getElementById('bCodeB');
+    getCode('A').then(c=>{ if(ca) ca.value = c.text||''; });
+    getCode('B').then(c=>{ if(cb) cb.value = c.text||''; });
+    watch('code/A', c=>{ if(ca && document.body.contains(ca)) ca.value = (c&&c.text)||''; });
+    watch('code/B', c=>{ if(cb && document.body.contains(cb)) cb.value = (c&&c.text)||''; });
+    const tEl = document.getElementById('bdTimer');
+    if(tEl && session.startedAt){
+      const iv = setInterval(()=>{
+        if(!document.body.contains(tEl)){ clearInterval(iv); return; }
+        tEl.textContent = fmtTime(Date.now()-session.startedAt);
+      },1000);
+      listeners.push({ref:{off:()=>clearInterval(iv)}, fn:null});
+    }
+  }
+  draw();
+  watch('session/current', s=>{ session=s; draw(); });
+}
+
+function route(){
+  if(role==='teacher') renderTeacher();
+  else if(role==='A') renderStudent('A');
+  else if(role==='B') renderStudent('B');
+  else if(role==='board') renderBoard();
+  else renderRoleSelect();
+}
+
+route();
+</script>
+</body>
+</html>
