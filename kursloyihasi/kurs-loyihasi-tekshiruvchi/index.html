@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kurs loyihasi tekshiruvchi</title>
+  <meta name="description" content="«Elektr ta'minoti tizimida elektr tarmoqlari» kurs loyihasini avtomatik hisoblash va DOCX hisobot yaratish">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="container">
+      <div class="d-flex align-items-center gap-3">
+        <svg class="app-logo" viewBox="0 0 32 32" aria-hidden="true"><path d="M18 2 6 18h8l-2 12 12-16h-8z" fill="currentColor"/></svg>
+        <div>
+          <h1 class="app-title">Elektr tarmoqlari kurs loyihasi</h1>
+          <p class="app-subtitle">«Elektr ta'minoti tizimida elektr tarmoqlari» — avtomatik hisob va DOCX hisobot</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container py-4">
+    <ol class="steps no-print" id="steps">
+      <li class="step active" data-step="1"><span>1</span> Kirish ma'lumotlari</li>
+      <li class="step" data-step="2"><span>2</span> Natijalar</li>
+      <li class="step" data-step="3"><span>3</span> Yuklab olish</li>
+    </ol>
+
+    <!-- ============================ 1. KIRISH ============================ -->
+    <section class="card app-card no-print" id="card-input">
+      <div class="card-body">
+        <h2 class="card-heading"><span class="badge-num">1</span> Kirish ma'lumotlari</h2>
+
+        <div id="load-error" class="alert alert-danger d-none"></div>
+
+        <form id="input-form" novalidate>
+          <div class="row g-3">
+            <div class="col-md-7">
+              <label for="sel-schema" class="form-label">Sxema</label>
+              <select id="sel-schema" class="form-select"></select>
+            </div>
+            <div class="col-md-5">
+              <label for="sel-variant" class="form-label">Variant</label>
+              <select id="sel-variant" class="form-select"></select>
+            </div>
+          </div>
+
+          <div id="variant-warning" class="alert alert-warning mt-3 d-none small mb-0"></div>
+
+          <fieldset class="sub-block">
+            <legend>Manba</legend>
+            <div class="row g-3">
+              <div class="col-6 col-md-3">
+                <label for="inp-manba" class="form-label">Turi</label>
+                <select id="inp-manba" class="form-select">
+                  <option value="GES">GES</option>
+                  <option value="DIES">DIES</option>
+                  <option value="IES">IES</option>
+                </select>
+              </div>
+              <div class="col-6 col-md-3">
+                <label for="inp-cosm" class="form-label">cosφ<sub>manba</sub></label>
+                <input id="inp-cosm" type="number" step="0.01" min="0.5" max="1" class="form-control">
+              </div>
+              <div class="col-md-6">
+                <label for="inp-gens" class="form-label">Generatorlar (MVt)</label>
+                <input id="inp-gens" type="text" class="form-control" placeholder="3x100+2x50">
+                <div class="form-text" id="gens-hint"></div>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="sub-block">
+            <legend>Podstansiyalar yuklamasi</legend>
+            <p class="form-text mt-0">Variant tanlanganda avtomatik to'ldiriladi — kerak bo'lsa qiymatlarni tuzatishingiz mumkin.</p>
+            <div class="table-responsive">
+              <table class="table table-sm align-middle pst-table">
+                <thead>
+                  <tr><th>p/st</th><th>P, MVt</th><th>Kategoriya</th><th>cosφ</th><th>W, 10<sup>6</sup> kVt·soat</th><th class="text-muted">T<sub>m</sub>, soat</th></tr>
+                </thead>
+                <tbody id="pst-body"></tbody>
+              </table>
+            </div>
+          </fieldset>
+
+          <fieldset class="sub-block">
+            <legend>Liniya masofalari, km</legend>
+            <div class="row g-3" id="lengths-row"></div>
+          </fieldset>
+
+          <fieldset class="sub-block">
+            <legend>Nominal kuchlanish</legend>
+            <div class="row g-3 align-items-end">
+              <div class="col-md-4">
+                <label for="sel-unom" class="form-label">U<sub>nom</sub>, kV</label>
+                <select id="sel-unom" class="form-select">
+                  <option value="220" selected>220 kV</option>
+                  <option value="110">110 kV</option>
+                  <option value="35">35 kV</option>
+                  <option value="auto">Avtomatik (formula bo'yicha)</option>
+                </select>
+              </div>
+              <div class="col-md-8">
+                <div class="form-text" id="unom-hint">U = 4.34·√(l + 0.016·P·10³) formulasi bo'yicha tavsiya hisoblashdan keyin ko'rsatiladi.</div>
+              </div>
+            </div>
+          </fieldset>
+
+          <details class="sub-block settings">
+            <summary>Qo'shimcha sozlamalar</summary>
+            <div class="row g-3 mt-1">
+              <div class="col-12 form-text mt-0">Standart qiymatlar ToshDTU uslubiy qo'llanmasi (2014) bo'yicha.</div>
+              <div class="col-6 col-md-3">
+                <label for="opt-kxus" class="form-label">P<sub>xus</sub>, % ΣP<sub>gen</sub></label>
+                <input id="opt-kxus" type="number" step="0.5" min="0" class="form-control" placeholder="avto">
+                <div class="form-text">Bo'sh: GES 1%, DIES 4%, IES 8%</div>
+              </div>
+              <div class="col-6 col-md-3">
+                <label for="opt-dptar" class="form-label">ΔP<sub>tar</sub>, % ΣP<sub>yuk</sub></label>
+                <input id="opt-dptar" type="number" step="0.5" min="0" class="form-control" value="8">
+                <div class="form-text">Qo'llanma: 6–10%</div>
+              </div>
+              <div class="col-6 col-md-3">
+                <label for="opt-line2" class="form-label">II kat. liniyasi</label>
+                <select id="opt-line2" class="form-select">
+                  <option value="1" selected>1 zanjir</option>
+                  <option value="2">2 zanjir</option>
+                </select>
+              </div>
+              <div class="col-6 col-md-3">
+                <label for="opt-tr2" class="form-label">II kat. transformatorlari</label>
+                <select id="opt-tr2" class="form-select">
+                  <option value="2" selected>2 ta</option>
+                  <option value="1">1 ta</option>
+                </select>
+              </div>
+              <div class="col-6 col-md-3">
+                <label for="opt-kI" class="form-label">I kat.: S<sub>n</sub> ≥ k·S</label>
+                <input id="opt-kI" type="number" step="0.05" min="0.5" max="1.6" class="form-control" value="1.0">
+                <div class="form-text">Qo'llanma: 100% zaxira</div>
+              </div>
+              <div class="col-6 col-md-3">
+                <label for="opt-k2" class="form-label">II/III, 2 ta: S<sub>n</sub> ≥ k·S</label>
+                <input id="opt-k2" type="number" step="0.05" min="0.5" max="1.4" class="form-control" value="0.7">
+              </div>
+              <div class="col-6 col-md-3">
+                <label for="opt-k1" class="form-label">1 ta transf.: S<sub>n</sub> ≥ k·S</label>
+                <input id="opt-k1" type="number" step="0.05" min="0.8" max="1.6" class="form-control" value="1.0">
+              </div>
+              <div class="col-md-6">
+                <label for="opt-down" class="form-label">p/st transformator turlari</label>
+                <select id="opt-down" class="form-select">
+                  <option value="1" selected>Faqat pasaytiruvchi (RPN li, 230/115 kV)</option>
+                  <option value="0">Ko'taruvchi turdagi (242/121 kV) ham</option>
+                </select>
+              </div>
+              <div class="col-6 col-md-3">
+                <label for="opt-costie" class="form-label">HL-6 cosφ<sub>min</sub></label>
+                <input id="opt-costie" type="number" step="0.01" min="0.8" max="1" class="form-control" value="0.97">
+              </div>
+              <div class="col-6 col-md-3">
+                <label for="opt-ubus" class="form-label">Manba shinasi, ×U<sub>nom</sub></label>
+                <input id="opt-ubus" type="number" step="0.01" min="1" max="1.15" class="form-control" value="1.1">
+              </div>
+              <div class="col-12">
+                <button type="button" class="btn btn-sm btn-outline-secondary" id="btn-reset-opts">Qo'llanma bo'yicha standart sozlamalar</button>
+              </div>
+            </div>
+          </details>
+
+          <div id="calc-error" class="alert alert-danger mt-3 d-none" role="alert"></div>
+
+          <div class="d-flex flex-wrap gap-2 mt-4">
+            <button type="submit" class="btn btn-primary btn-lg px-4" id="btn-calc">Hisoblash</button>
+            <button type="button" class="btn btn-outline-secondary" id="btn-sample" title="SPEC.md dagi daler_2.docx test qiymatlari">Namuna qiymatlar</button>
+          </div>
+          <div id="sample-note" class="alert alert-info small mt-3 mb-0 d-none"></div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ============================ 2. NATIJALAR ============================ -->
+    <section class="card app-card d-none" id="card-results">
+      <div class="card-body">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
+          <h2 class="card-heading mb-0"><span class="badge-num">2</span> Natijalar</h2>
+          <div class="no-print d-flex gap-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary" id="btn-edit">↑ Ma'lumotlarni o'zgartirish</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" id="btn-print">Chop etish</button>
+          </div>
+        </div>
+        <div id="summary" class="summary-grid"></div>
+        <div id="results"></div>
+      </div>
+    </section>
+
+    <!-- ============================ SXEMALAR ============================ -->
+    <section class="card app-card schema-card d-none" id="card-principal">
+      <div class="card-body">
+        <h2 class="card-heading"><span class="badge-num">1</span> 1-rasm: Prinsipial sxema</h2>
+        <p class="form-text mt-0 mb-2 no-print">Sichqoncha g'ildiragi bilan kattalashtiring, sudrab suring; elementga olib boring (telefonda bosing) — parametrlari chiqadi.</p>
+        <div class="schema-host" id="schema-principal" aria-label="Radial variantning prinsipial sxemasi"></div>
+        <div class="schema-toolbar no-print" data-target="schema-principal" data-file="prinsipial-sxema">
+          <button type="button" class="btn btn-sm btn-outline-secondary" data-act="in" title="Kattalashtirish">＋ Zoom</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary" data-act="out" title="Kichiklashtirish">− Zoom</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary" data-act="fit" title="Butun sxemani ko'rsatish">↔ Moslash</button>
+          <button type="button" class="btn btn-sm btn-outline-primary" data-act="svg">SVG yuklab olish</button>
+          <button type="button" class="btn btn-sm btn-outline-primary" data-act="png">PNG yuklab olish</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="card app-card schema-card d-none" id="card-equivalent">
+      <div class="card-body">
+        <h2 class="card-heading"><span class="badge-num">2</span> 2-rasm: Ekvivalent almashtiruv sxemasi</h2>
+        <p class="form-text mt-0 mb-2 no-print">Liniyalar Π-simon, transformatorlar Γ-simon; S raqamlari yuklamadan manbaga qarab. Maksimal rejim.</p>
+        <div class="schema-host schema-host-tall" id="schema-equivalent" aria-label="Radial variantning ekvivalent almashtiruv sxemasi"></div>
+        <div class="schema-toolbar no-print" data-target="schema-equivalent" data-file="ekvivalent-sxema">
+          <button type="button" class="btn btn-sm btn-outline-secondary" data-act="in" title="Kattalashtirish">＋ Zoom</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary" data-act="out" title="Kichiklashtirish">− Zoom</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary" data-act="fit" title="Butun sxemani ko'rsatish">↔ Moslash</button>
+          <button type="button" class="btn btn-sm btn-outline-primary" data-act="svg">SVG yuklab olish</button>
+          <button type="button" class="btn btn-sm btn-outline-primary" data-act="png">PNG yuklab olish</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ 3. YUKLAB OLISH ============================ -->
+    <section class="card app-card d-none no-print" id="card-download">
+      <div class="card-body">
+        <h2 class="card-heading"><span class="badge-num">3</span> Hisobotni yuklab olish</h2>
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label for="inp-student" class="form-label">Talaba F.I.Sh.</label>
+            <input id="inp-student" type="text" class="form-control" placeholder="talaba">
+          </div>
+          <div class="col-md-4">
+            <label for="inp-group" class="form-label">Guruh</label>
+            <input id="inp-group" type="text" class="form-control" placeholder="masalan: 12-21 EE">
+          </div>
+          <div class="col-md-4">
+            <label for="inp-teacher" class="form-label">Qabul qiluvchi o'qituvchi</label>
+            <input id="inp-teacher" type="text" class="form-control" placeholder="ixtiyoriy">
+          </div>
+        </div>
+        <div class="d-grid d-md-flex gap-2 mt-4">
+          <button type="button" class="btn btn-primary btn-lg btn-download" id="btn-docx">DOCX hisobotni yuklab olish</button>
+          <button type="button" class="btn btn-outline-secondary btn-lg" id="btn-print2">Chop etish</button>
+        </div>
+        <div id="docx-status" class="form-text mt-2"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer no-print">
+    <div class="container small">Barcha hisoblar brauzerda bajariladi — ma'lumotlar hech qayerga yuborilmaydi.</div>
+  </footer>
+
+  <script src="data/data-bundle.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
+  <script src="calculations.js"></script>
+  <script src="schema-components.js"></script>
+  <script src="schema-layout.js"></script>
+  <script src="schema-drawer.js"></script>
+  <script src="docx-builder.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

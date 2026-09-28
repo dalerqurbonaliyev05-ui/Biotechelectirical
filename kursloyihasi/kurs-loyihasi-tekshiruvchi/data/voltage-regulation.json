@@ -1,0 +1,102 @@
+{
+  "_manba": "PDF 4-ilova (betlar 65-66)",
+
+  "sinxron_kompensatorlar": [
+    { "marka": "КС-5000-6",   "Q_MVAr": 5,   "Un_kV": 6.3,   "dP_kVt": 150,  "narx_ming_rub": null },
+    { "marka": "КС-7500-6",   "Q_MVAr": 7.5, "Un_kV": 6.6,   "dP_kVt": 200,  "narx_ming_rub": null },
+    { "marka": "КС-10000-6",  "Q_MVAr": 10,  "Un_kV": 6.6,   "dP_kVt": 288,  "narx_ming_rub": 120 },
+    { "marka": "КС-15000-6",  "Q_MVAr": 15,  "Un_kV": 6.6,   "dP_kVt": 355,  "narx_ming_rub": 140 },
+    { "marka": "КС-16000",    "Q_MVAr": 16,  "Un_kV": "6.6;11", "dP_kVt": 390,  "narx_ming_rub": 150 },
+    { "marka": "КС-25000-11", "Q_MVAr": 25,  "Un_kV": 11,    "dP_kVt": 450,  "narx_ming_rub": 240 },
+    { "marka": "КС-30000-11", "Q_MVAr": 30,  "Un_kV": 10.5,  "dP_kVt": 532,  "narx_ming_rub": 300 },
+    { "marka": "КСВ-37500-11","Q_MVAr": 37.5,"Un_kV": 10.5,  "dP_kVt": 570,  "narx_ming_rub": 340 },
+    { "marka": "КСВ-50000-11","Q_MVAr": 50,  "Un_kV": 11,    "dP_kVt": 800,  "narx_ming_rub": 420 },
+    { "marka": "КСВ-75000-11","Q_MVAr": 75,  "Un_kV": 11,    "dP_kVt": 915,  "narx_ming_rub": 620 },
+    { "marka": "КСВ-100000-11","Q_MVAr":100, "Un_kV": 11,    "dP_kVt": 1350, "narx_ming_rub": 815 }
+  ],
+
+  "kondensator_batareyalari": [
+    { "marka": "КСА-0.66-20",  "Q_MVAr": 3.4,  "Un_kV": 6,  "narx_ming_rub": 30 },
+    { "marka": "КСА-0.66-20",  "Q_MVAr": 5.3,  "Un_kV": 10, "narx_ming_rub": 40 },
+    { "marka": "КС2А-0.66-10", "Q_MVAr": 6.7,  "Un_kV": 6,  "narx_ming_rub": 52 },
+    { "marka": "КС2А-0.66-10", "Q_MVAr": 10.6, "Un_kV": 10, "narx_ming_rub": 76 }
+  ],
+
+  "RPN_shahobchalari": {
+    "_izoh": "RPN va PBV shahobchalarining foizi va nominal kuchlanishga mos qiymati",
+    "35_kV": [
+      { "pogona_%": 12,   "kuch_kV": 41.15 },
+      { "pogona_%": 10.5, "kuch_kV": 40.6 },
+      { "pogona_%": 9,    "kuch_kV": 40.05 },
+      { "pogona_%": 7.5,  "kuch_kV": 39.5 },
+      { "pogona_%": 6,    "kuch_kV": 38.95 },
+      { "pogona_%": 4.5,  "kuch_kV": 38.4 },
+      { "pogona_%": 3,    "kuch_kV": 37.85 },
+      { "pogona_%": 1.5,  "kuch_kV": 37.3 },
+      { "pogona_%": 0,    "kuch_kV": 36.75 },
+      { "pogona_%": -1.5, "kuch_kV": 36.2 },
+      { "pogona_%": -3,   "kuch_kV": 35.65 },
+      { "pogona_%": -4.5, "kuch_kV": 35.10 },
+      { "pogona_%": -6,   "kuch_kV": 34.55 },
+      { "pogona_%": -7.5, "kuch_kV": 34.0 },
+      { "pogona_%": -9,   "kuch_kV": 33.45 },
+      { "pogona_%": -10.5,"kuch_kV": 32.9 },
+      { "pogona_%": -12,  "kuch_kV": 32.35 }
+    ],
+    "110_kV": [
+      { "pogona_%": 16.02, "kuch_kV": 133.45 },
+      { "pogona_%": 14.24, "kuch_kV": 131.4 },
+      { "pogona_%": 12.46, "kuch_kV": 129.35 },
+      { "pogona_%": 10.68, "kuch_kV": 127.3 },
+      { "pogona_%": 8.9,   "kuch_kV": 125.25 },
+      { "pogona_%": 7.12,  "kuch_kV": 123.2 },
+      { "pogona_%": 5.34,  "kuch_kV": 121.15 },
+      { "pogona_%": 3.56,  "kuch_kV": 119.1 },
+      { "pogona_%": 1.78,  "kuch_kV": 117.05 },
+      { "pogona_%": 0,     "kuch_kV": 115 },
+      { "pogona_%": -1.78, "kuch_kV": 112.95 },
+      { "pogona_%": -3.56, "kuch_kV": 110.9 },
+      { "pogona_%": -5.34, "kuch_kV": 108.85 },
+      { "pogona_%": -7.12, "kuch_kV": 106.8 },
+      { "pogona_%": -8.9,  "kuch_kV": 104.75 },
+      { "pogona_%": -10.68,"kuch_kV": 102.7 },
+      { "pogona_%": -12.46,"kuch_kV": 100.65 },
+      { "pogona_%": -14.24,"kuch_kV": 98.6 },
+      { "pogona_%": -16.02,"kuch_kV": 96.55 }
+    ],
+    "220_kV": [
+      { "pogona_%": 12,   "kuch_kV": 257.6 },
+      { "pogona_%": 10.5, "kuch_kV": 254.15 },
+      { "pogona_%": 9,    "kuch_kV": 250.7 },
+      { "pogona_%": 7.5,  "kuch_kV": 247.25 },
+      { "pogona_%": 6,    "kuch_kV": 243.8 },
+      { "pogona_%": 4.5,  "kuch_kV": 240.35 },
+      { "pogona_%": 3,    "kuch_kV": 236.9 },
+      { "pogona_%": 1.5,  "kuch_kV": 233.45 },
+      { "pogona_%": 0,    "kuch_kV": 230 },
+      { "pogona_%": -1.5, "kuch_kV": 226.55 },
+      { "pogona_%": -3,   "kuch_kV": 223.1 },
+      { "pogona_%": -4.5, "kuch_kV": 219.65 },
+      { "pogona_%": -6,   "kuch_kV": 216.2 },
+      { "pogona_%": -7.5, "kuch_kV": 212.75 },
+      { "pogona_%": -9,   "kuch_kV": 209.3 },
+      { "pogona_%": -10.5,"kuch_kV": 205.85 },
+      { "pogona_%": -12,  "kuch_kV": 202.4 }
+    ],
+    "avto_YuK_220_kV": [
+      { "pogona_%": 12,   "kuch_kV": 135.45 },
+      { "pogona_%": 10,   "kuch_kV": 133.05 },
+      { "pogona_%": 8,    "kuch_kV": 130.64 },
+      { "pogona_%": 6,    "kuch_kV": 128.23 },
+      { "pogona_%": 4,    "kuch_kV": 125.82 },
+      { "pogona_%": 2,    "kuch_kV": 123.41 },
+      { "pogona_%": 0,    "kuch_kV": 121 },
+      { "pogona_%": -2,   "kuch_kV": 118.59 },
+      { "pogona_%": -4,   "kuch_kV": 116.18 },
+      { "pogona_%": -6,   "kuch_kV": 113.77 },
+      { "pogona_%": -8,   "kuch_kV": 111.36 },
+      { "pogona_%": -10,  "kuch_kV": 108.95 },
+      { "pogona_%": -12,  "kuch_kV": 106.5 }
+    ]
+  }
+}
