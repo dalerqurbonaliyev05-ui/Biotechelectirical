@@ -226,7 +226,7 @@ document.querySelectorAll('.skill-category').forEach(c => barObserver.observe(c)
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     const W = canvas.width, H = canvas.height;
-    const colors = ['#f5d90a', '#34d399', '#f43f5e'];   // A, B, C
+    const colors = ['#e6a700', '#16a34a', '#e11d48'];   // A, B, C
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let phase = 0;
 
@@ -234,11 +234,11 @@ document.querySelectorAll('.skill-category').forEach(c => barObserver.observe(c)
         ctx.clearRect(0, 0, W, H);
 
         // grid
-        ctx.strokeStyle = 'rgba(56,189,248,.10)';
+        ctx.strokeStyle = 'rgba(37,99,235,.10)';
         ctx.lineWidth = 1;
         for (let x = 0; x <= W; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
         for (let y = 0; y <= H; y += 40) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
-        ctx.strokeStyle = 'rgba(147,163,191,.35)';
+        ctx.strokeStyle = 'rgba(20,33,61,.30)';
         ctx.beginPath(); ctx.moveTo(0, H / 2); ctx.lineTo(W, H / 2); ctx.stroke();
 
         // waves
@@ -246,8 +246,6 @@ document.querySelectorAll('.skill-category').forEach(c => barObserver.observe(c)
             ctx.beginPath();
             ctx.strokeStyle = colors[k];
             ctx.lineWidth = 2.2;
-            ctx.shadowColor = colors[k];
-            ctx.shadowBlur = 8;
             for (let x = 0; x <= W; x += 2) {
                 const a = (x / W) * Math.PI * 4 - phase - k * (2 * Math.PI / 3);
                 const y = H / 2 - Math.sin(a) * (H * 0.36);
@@ -255,7 +253,6 @@ document.querySelectorAll('.skill-category').forEach(c => barObserver.observe(c)
             }
             ctx.stroke();
         }
-        ctx.shadowBlur = 0;
     }
 
     function loop() {
