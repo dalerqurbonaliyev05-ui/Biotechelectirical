@@ -1,7 +1,8 @@
 /* =========================================================
    EnergyVibe — script.js
-   1. i18n (UZ / RU / EN)   2. navigation   3. skill bars
-   4. hero phase animation  5. contact form
+   1. i18n (UZ / RU / EN)   2. navigation, progress, voltage rail
+   3. reveal on scroll      4. skill gauges
+   5. hero (waves, glow, parallax)   6. contact form
    ========================================================= */
 
 /* ---------- 1. Translations ---------- */
@@ -15,8 +16,6 @@ const I18N = {
         'hero.hello': 'Salom, men', 'hero.name': 'Daler',
         'hero.lead': 'Texnika va texnologiyada biz bilan yangi loyihalar yarating.',
         'hero.cta1': 'Loyihalarimiz', 'hero.cta2': 'Bog‘lanish', 'hero.cta3': 'Vositalarni ochish',
-        'tele.title': 'Uch fazali tizim', 'tele.demo': 'DEMO', 'tele.shift': '120° siljish',
-        'tele.u': 'Kuchlanish', 'tele.f': 'Chastota', 'tele.p': 'Faol quvvat',
         'about.title': 'Men haqimda',
         'about.text': 'Elektr ta’minoti yo‘nalishidagi mutaxassis. Muhandislik hisob-kitoblari va loyihalash dasturlari (AutoCAD, Compass-3D, MATLAB, Mathcad) bilan ishlash tajribasiga ega. Energetika ob’ektlarini loyihalash bo‘yicha tugallangan amaliy loyihaga ega bo‘lib, texnik hujjatlar bilan ishlash va tizimlarni optimallashtirish bo‘yicha ko‘nikmalarimni rivojlantirib boryapman.',
         'about.s1': 'Loyihalar', 'about.s2': 'Yil tajriba', 'about.s3': 'Buyurtmachilar',
@@ -59,8 +58,6 @@ const I18N = {
         'hero.hello': 'Привет, я', 'hero.name': 'Далер',
         'hero.lead': 'Создавайте новые проекты в технике и технологиях вместе с нами.',
         'hero.cta1': 'Наши проекты', 'hero.cta2': 'Связаться', 'hero.cta3': 'Открыть инструменты',
-        'tele.title': 'Трёхфазная система', 'tele.demo': 'ДЕМО', 'tele.shift': 'сдвиг 120°',
-        'tele.u': 'Напряжение', 'tele.f': 'Частота', 'tele.p': 'Активная мощность',
         'about.title': 'Обо мне',
         'about.text': 'Специалист в области электроснабжения. Имею опыт работы с инженерными расчётами и программами проектирования (AutoCAD, Compass-3D, MATLAB, Mathcad). Выполнил завершённый практический проект по проектированию энергетических объектов и продолжаю развивать навыки работы с технической документацией и оптимизации систем.',
         'about.s1': 'Проекты', 'about.s2': 'Лет опыта', 'about.s3': 'Заказчики',
@@ -103,8 +100,6 @@ const I18N = {
         'hero.hello': 'Hi, I’m', 'hero.name': 'Daler',
         'hero.lead': 'Create new projects in engineering and technology with us.',
         'hero.cta1': 'Our projects', 'hero.cta2': 'Get in touch', 'hero.cta3': 'Open the tools',
-        'tele.title': 'Three-phase system', 'tele.demo': 'DEMO', 'tele.shift': '120° shift',
-        'tele.u': 'Voltage', 'tele.f': 'Frequency', 'tele.p': 'Active power',
         'about.title': 'About me',
         'about.text': 'A specialist in electrical power supply. I have hands-on experience with engineering calculations and design software (AutoCAD, Compass-3D, MATLAB, Mathcad). I have completed a practical project on designing energy facilities and keep developing my skills in technical documentation and system optimisation.',
         'about.s1': 'Projects', 'about.s2': 'Years of experience', 'about.s3': 'Clients',
@@ -172,121 +167,196 @@ let saved = null;
 try { saved = localStorage.getItem(LANG_KEY); } catch (e) { /* ignore */ }
 setLang(saved && I18N[saved] ? saved : 'uz');
 
-/* ---------- 2. Navigation ---------- */
+/* ---------- 2. Navigation, progress bar, voltage rail ---------- */
 const navbar = document.getElementById('navbar');
 const navMenu = document.getElementById('nav-menu');
 const hamburger = document.getElementById('hamburger');
+const progressTop = document.getElementById('progress-top');
+const heroPhoto = document.getElementById('hero-photo');
+const rail = document.getElementById('rail');
+const railItems = [...rail.querySelectorAll('li')];
+const navLinks = [...navMenu.querySelectorAll('a')];
+const hero = document.getElementById('home');
+const stationIds = railItems.map(li => li.dataset.target);
+const stationEls = stationIds.map(id => document.getElementById(id));
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function closeMenu() {
     navMenu.classList.remove('open');
     hamburger.setAttribute('aria-expanded', 'false');
 }
-
 hamburger.addEventListener('click', () => {
     const open = navMenu.classList.toggle('open');
     hamburger.setAttribute('aria-expanded', String(open));
 });
 navMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
-
-window.addEventListener('scroll', () => {
-    navbar.classList.toggle('scrolled', window.scrollY > 30);
-}, { passive: true });
-
-// highlight current section in the menu
-const navLinks = [...navMenu.querySelectorAll('a')];
-const sectionObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id));
-        }
-    });
-}, { rootMargin: '-45% 0px -50% 0px' });
-navLinks.forEach(a => {
-    const sec = document.querySelector(a.getAttribute('href'));
-    if (sec) sectionObserver.observe(sec);
+document.addEventListener('click', e => {
+    if (!navbar.contains(e.target)) closeMenu();
 });
+railItems.forEach(li => li.addEventListener('click', () => {
+    const el = document.getElementById(li.dataset.target);
+    if (el) el.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
+}));
 
-/* ---------- 3. Skill bars ---------- */
-const barObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.querySelectorAll('.progress').forEach(bar => {
-                bar.style.width = bar.dataset.width + '%';
-            });
-            barObserver.unobserve(entry.target);
-        }
+let ticking = false;
+function onScroll() {
+    ticking = false;
+    const y = window.scrollY;
+    const vh = window.innerHeight;
+    const doc = document.documentElement;
+
+    navbar.classList.toggle('scrolled', y > 30);
+
+    const max = doc.scrollHeight - vh;
+    progressTop.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, y / max) : 0) + ')';
+
+    if (!reducedMotion && heroPhoto && y < vh * 1.3) {
+        heroPhoto.style.transform = 'translate3d(0,' + (y * 0.18).toFixed(1) + 'px,0)';
+    }
+
+    // active station
+    let active = -1;
+    stationEls.forEach((el, i) => {
+        if (el && el.getBoundingClientRect().top <= vh * 0.4) active = i;
     });
-}, { threshold: 0.35 });
-document.querySelectorAll('.skill-category').forEach(c => barObserver.observe(c));
+    navLinks.forEach(a => {
+        const idx = stationIds.indexOf(a.getAttribute('href').slice(1));
+        a.classList.toggle('active', idx === active);
+    });
+    railItems.forEach((li, i) => {
+        li.classList.toggle('on', i === active);
+        li.classList.toggle('done', i < active);
+    });
 
-/* ---------- 4. Hero: three-phase waves + demo readouts ---------- */
-(function phaseWaves() {
+    // rail progress: from the first station to the last one
+    const start = stationEls[0].offsetTop;
+    const end = stationEls[stationEls.length - 1].offsetTop;
+    const p = Math.max(0, Math.min(1, (y + vh * 0.4 - start) / (end - start)));
+    rail.style.setProperty('--p', p.toFixed(3));
+    rail.classList.toggle('show', y > hero.offsetHeight * 0.55);
+}
+window.addEventListener('scroll', () => {
+    if (!ticking) { ticking = true; requestAnimationFrame(onScroll); }
+}, { passive: true });
+window.addEventListener('resize', onScroll);
+onScroll();
+
+/* ---------- 3. Reveal on scroll ---------- */
+const revealEls = [...document.querySelectorAll('.reveal')];
+if ('IntersectionObserver' in window && !reducedMotion) {
+    const revealObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('in');
+                revealObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(el => {
+        const siblings = [...el.parentElement.children].filter(c => c.classList.contains('reveal'));
+        el.style.transitionDelay = (siblings.indexOf(el) % 4) * 90 + 'ms';
+        revealObserver.observe(el);
+    });
+} else {
+    revealEls.forEach(el => el.classList.add('in'));
+}
+
+/* ---------- 4. Skill gauges ---------- */
+function setGauge(g) {
+    const v = Math.max(0, Math.min(100, Number(g.dataset.value) || 0));
+    const fill = g.querySelector('.g-fill');
+    const needle = g.querySelector('.g-needle');
+    fill.style.strokeDasharray = v + ' 100';
+    needle.style.transform = 'rotate(' + (-90 + v * 1.8) + 'deg)';
+}
+const gaugeEls = [...document.querySelectorAll('.gauge')];
+if ('IntersectionObserver' in window && !reducedMotion) {
+    const gaugeObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.querySelectorAll('.gauge').forEach((g, i) => setTimeout(() => setGauge(g), 250 + i * 200));
+                gaugeObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.4 });
+    document.querySelectorAll('.skill-category').forEach(c => gaugeObserver.observe(c));
+} else {
+    gaugeEls.forEach(setGauge);
+}
+
+/* ---------- 5. Hero: three-phase waves + cursor glow ---------- */
+(function heroFx() {
     const canvas = document.getElementById('phase-canvas');
+    const glow = document.getElementById('hero-glow');
+
+    if (glow) {
+        hero.addEventListener('pointermove', e => {
+            const r = hero.getBoundingClientRect();
+            glow.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%');
+            glow.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%');
+        }, { passive: true });
+    }
     if (!canvas) return;
+
     const ctx = canvas.getContext('2d');
-    const W = canvas.width, H = canvas.height;
-    const colors = ['#e6a700', '#16a34a', '#e11d48'];   // A, B, C
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    let phase = 0;
+    const colors = ['#ffd23f', '#2fd6a3', '#ff4d79'];   // A yellow, B green, C red
+    let W = 0, H = 0, dpr = 1, phase = 0, visible = true;
+
+    function resize() {
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        W = canvas.clientWidth; H = canvas.clientHeight;
+        canvas.width = Math.round(W * dpr);
+        canvas.height = Math.round(H * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        draw();
+    }
 
     function draw() {
         ctx.clearRect(0, 0, W, H);
-
-        // grid
-        ctx.strokeStyle = 'rgba(37,99,235,.10)';
-        ctx.lineWidth = 1;
-        for (let x = 0; x <= W; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
-        for (let y = 0; y <= H; y += 40) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
-        ctx.strokeStyle = 'rgba(20,33,61,.30)';
-        ctx.beginPath(); ctx.moveTo(0, H / 2); ctx.lineTo(W, H / 2); ctx.stroke();
-
-        // waves
+        const period = W < 640 ? 300 : 520;
+        ctx.lineWidth = 3;
+        ctx.lineCap = 'round';
         for (let k = 0; k < 3; k++) {
             ctx.beginPath();
             ctx.strokeStyle = colors[k];
-            ctx.lineWidth = 2.2;
-            for (let x = 0; x <= W; x += 2) {
-                const a = (x / W) * Math.PI * 4 - phase - k * (2 * Math.PI / 3);
+            ctx.shadowColor = colors[k];
+            ctx.shadowBlur = 12;
+            ctx.globalAlpha = 0.92;
+            for (let x = -4; x <= W + 4; x += 3) {
+                const a = (x / period) * Math.PI * 2 - phase - k * (2 * Math.PI / 3);
                 const y = H / 2 - Math.sin(a) * (H * 0.36);
-                x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+                x === -4 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
             }
             ctx.stroke();
         }
+        ctx.globalAlpha = 1;
+        ctx.shadowBlur = 0;
     }
 
     function loop() {
-        phase += 0.045;
-        draw();
+        if (visible) { phase += 0.035; draw(); }
         requestAnimationFrame(loop);
     }
-    draw();
-    if (!reduce) requestAnimationFrame(loop);
 
-    // small jitter so the demo panel feels alive (values are illustrative)
-    if (!reduce) {
-        const u = document.getElementById('t-u');
-        const f = document.getElementById('t-f');
-        const p = document.getElementById('t-p');
-        const c = document.getElementById('t-cos');
-        setInterval(() => {
-            u.textContent = (10 + (Math.random() - 0.5) * 0.16).toFixed(2);
-            f.textContent = (50 + (Math.random() - 0.5) * 0.06).toFixed(2);
-            p.textContent = (4.26 + (Math.random() - 0.5) * 0.14).toFixed(2);
-            c.textContent = (0.98 + (Math.random() - 0.5) * 0.01).toFixed(3);
-        }, 1200);
+    resize();
+    window.addEventListener('resize', resize);
+    if ('IntersectionObserver' in window) {
+        new IntersectionObserver(es => { visible = es[0].isIntersecting; }).observe(hero);
     }
+    if (!reducedMotion) requestAnimationFrame(loop);
 })();
 
-/* ---------- 5. Contact form (real result, not a fake success) ---------- */
+/* ---------- 6. Contact form (real result, not a fake success) ---------- */
 const form = document.getElementById('contact-form');
 const statusEl = document.getElementById('form-status');
+const sendLabel = form.querySelector('.send-label');
 
 form.addEventListener('submit', async e => {
     e.preventDefault();
     const btn = form.querySelector('button[type="submit"]');
     btn.disabled = true;
-    btn.textContent = t('form.sending');
+    sendLabel.textContent = t('form.sending');
     statusEl.className = 'form-status';
     statusEl.textContent = '';
 
@@ -305,6 +375,6 @@ form.addEventListener('submit', async e => {
         statusEl.textContent = t('form.err');
     } finally {
         btn.disabled = false;
-        btn.textContent = t('form.send');
+        sendLabel.textContent = t('form.send');
     }
 });
