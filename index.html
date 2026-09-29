@@ -1,248 +1,350 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uz">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Biotechelectirical.com</title>
+    <title>EnergyVibe — Daler Qurbonaliyev | Elektr ta’minoti muhandisi</title>
+    <meta name="description" content="Elektr ta’minoti muhandisi Daler Qurbonaliyevning shaxsiy sayti: energetika loyihalari, hisob-kitob vositalari va simulyatorlar.">
+    <meta name="theme-color" content="#0a0f1a">
     <link rel="icon" type="image/png" href="rasmlar1/rasm5/rasm4.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <a class="skip-link" href="#main" data-i18n="skip">Asosiy mazmunga o‘tish</a>
+
     <!-- Navigation -->
-    <nav class="navbar">
+    <header class="navbar" id="navbar">
         <div class="nav-container">
-            <div class="nav-logo">BIOTECH</div>
-            <ul class="nav-menu">
-                
-               
-                <li><a href="energygrid/energy_grid_simulator/index.html">Energetika sistemasi </a></li>
-                <li><a href="yangiloyiha1/login.html">RES tizimi loyihasi prototip</a></li>
-                <li><a href="transformator.html">Aholi Iste'moli</a></li>
-               <li><a href="3kurs/index.html">EET kurs loyihasi </a></li>
-                <li><a href="hisob/energiya.html"> Iqtisodiy kalkulyatori </a></li>
-               <li><a href="elektr_yuklamalari_grafik.html">Yuklama grafigi</a></li>
-            </ul>
-            <div class="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
+            <a class="nav-logo" href="#home" aria-label="EnergyVibe">
+                <svg class="logo-mark" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M13.5 2 5 13.5h5.5L9.5 22 19 9.8h-5.6L13.5 2Z" fill="currentColor"/></svg>
+                <span>ENERGY<b>VIBE</b></span>
+            </a>
+
+            <nav class="nav-menu" id="nav-menu" aria-label="Asosiy menyu">
+                <a href="#about" data-i18n="nav.about">Men haqimda</a>
+                <a href="#tools" data-i18n="nav.tools">Vositalar</a>
+                <a href="#skills" data-i18n="nav.skills">Yo‘nalishlar</a>
+                <a href="#projects" data-i18n="nav.projects">Loyihalar</a>
+                <a href="#contact" data-i18n="nav.contact">Aloqa</a>
+            </nav>
+
+            <div class="nav-right">
+                <div class="lang-switch" role="group" aria-label="Til / Language / Язык">
+                    <button type="button" class="lang-btn" data-lang="uz" aria-pressed="true">UZ</button>
+                    <button type="button" class="lang-btn" data-lang="ru" aria-pressed="false">RU</button>
+                    <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+                </div>
+                <button type="button" class="hamburger" id="hamburger" aria-label="Menyu" aria-expanded="false" aria-controls="nav-menu">
+                    <span></span><span></span><span></span>
+                </button>
             </div>
         </div>
-    </nav>
+    </header>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <h1>Salom  <span class="highlight">Men Daler</span></h1>
-            <p class="hero-subtitle">TEXNIKA VA TEXNALOGIYADA BIZ BILAN YANGI LOYIHALAR YARATING </p>
-            <div class="hero-buttons">
-                <a href="#projects" class="btn btn-primary">Bizning loyihalarimiz</a>
-                <a href="#contact" class="btn btn-secondary">Biz bilan bog`lanish</a>
+    <main id="main">
+        <!-- Hero -->
+        <section id="home" class="hero">
+            <div class="hero-bg" aria-hidden="true"></div>
+            <div class="container hero-grid">
+                <div class="hero-content">
+                    <p class="eyebrow"><span class="dot"></span><span data-i18n="hero.eyebrow">Elektr ta’minoti muhandisi</span></p>
+                    <h1>
+                        <span data-i18n="hero.hello">Salom, men</span>
+                        <span class="accent" data-i18n="hero.name">Daler</span>
+                    </h1>
+                    <p class="hero-lead" data-i18n="hero.lead">Texnika va texnologiyada biz bilan yangi loyihalar yarating.</p>
+                    <div class="hero-buttons">
+                        <a href="#projects" class="btn btn-primary" data-i18n="hero.cta1">Loyihalarimiz</a>
+                        <a href="#tools" class="btn btn-ghost" data-i18n="hero.cta3">Vositalarni ochish</a>
+                        <a href="#contact" class="btn btn-ghost" data-i18n="hero.cta2">Bog‘lanish</a>
+                    </div>
+                    <ul class="chips" aria-label="Software">
+                        <li>AutoCAD</li><li>Compass-3D</li><li>MATLAB</li><li>Mathcad</li>
+                    </ul>
+                </div>
+
+                <aside class="telemetry" aria-label="Demo telemetry">
+                    <div class="tele-head">
+                        <span class="tele-title"><span class="live-dot"></span><span data-i18n="tele.title">Uch fazali tizim</span></span>
+                        <span class="tele-tag" data-i18n="tele.demo">DEMO</span>
+                    </div>
+                    <canvas id="phase-canvas" width="520" height="200" role="img" aria-label="Three-phase sine waves"></canvas>
+                    <div class="phase-legend">
+                        <span class="pa">A</span><span class="pb">B</span><span class="pc">C</span>
+                        <em data-i18n="tele.shift">120° siljish</em>
+                    </div>
+                    <dl class="tele-grid">
+                        <div><dt data-i18n="tele.u">Kuchlanish</dt><dd><span id="t-u">10.0</span> <small>kV</small></dd></div>
+                        <div><dt data-i18n="tele.f">Chastota</dt><dd><span id="t-f">50.00</span> <small>Hz</small></dd></div>
+                        <div><dt data-i18n="tele.p">Faol quvvat</dt><dd><span id="t-p">4.26</span> <small>MW</small></dd></div>
+                        <div><dt>cos φ</dt><dd><span id="t-cos">0.98</span></dd></div>
+                    </dl>
+                </aside>
             </div>
-        </div>
-        <div class="hero-scroll">
-            <a href="#about">↓</a>
-        </div>
-    </section>
+            <a class="hero-scroll" href="#about" aria-label="Scroll">↓</a>
+        </section>
 
-    <!-- About Section -->
-    <section id="about" class="about">
-        <div class="container">
-            <h2 class="section-title">O`ZIM  HAQIMDA </h2>
-            <div class="about-grid">
-                <div class="about-text">
-                    <p>Elektr ta’minoti yo‘nalishidagi mutaxassis. Muhandislik hisob-kitoblari va loyihalash dasturlari (AutoCAD, Compass-3D, MATLAB, Mathcad) bilan ishlash tajribasiga ega. Energetika ob'ektlarini loyihalash bo‘yicha tugallangan amaliy loyihaga ega bo‘lib, texnik hujjatlar bilan ishlash va tizimlarni optimallashtirish bo‘yicha ko‘nikmalarimni rivojlantirib boryapman.</p>
-                    <div class="about-stats">
-                        <div class="stat">
-                            <h3>1+</h3>
-                            <p>Loyihalar</p>
-                        </div>
-                        <div class="stat">
-                            <h3>3+</h3>
-                            <p>Yil tajriba</p>
-                        </div>
-                        <div class="stat">
-                            <h3>10+</h3>
-                            <p>Buyurtmachilar</p>
+        <!-- About -->
+        <section id="about" class="section about">
+            <div class="container">
+                <header class="section-head">
+                    <span class="section-index">01</span>
+                    <h2 class="section-title" data-i18n="about.title">Men haqimda</h2>
+                </header>
+                <div class="about-grid">
+                    <div class="about-text">
+                        <p data-i18n="about.text">Elektr ta’minoti yo‘nalishidagi mutaxassis. Muhandislik hisob-kitoblari va loyihalash dasturlari (AutoCAD, Compass-3D, MATLAB, Mathcad) bilan ishlash tajribasiga ega. Energetika ob’ektlarini loyihalash bo‘yicha tugallangan amaliy loyihaga ega bo‘lib, texnik hujjatlar bilan ishlash va tizimlarni optimallashtirish bo‘yicha ko‘nikmalarimni rivojlantirib boryapman.</p>
+                        <div class="about-stats">
+                            <div class="stat"><strong>1+</strong><span data-i18n="about.s1">Loyihalar</span></div>
+                            <div class="stat"><strong>3+</strong><span data-i18n="about.s2">Yil tajriba</span></div>
+                            <div class="stat"><strong>10+</strong><span data-i18n="about.s3">Buyurtmachilar</span></div>
                         </div>
                     </div>
-                </div>
-                <div class="about-image">
-                    
-                        <img src="https://www.austintec.com/wp-content/uploads/2024/05/what-do-electrical-engineers-do.jpg" alt="Haqida rasm" style="width:100%; height:auto;">
-                  
+
+                    <figure class="sld">
+                        <svg viewBox="0 0 560 290" role="img" aria-label="Single-line diagram: 10 kV, transformer, 0.4 kV, feeders">
+                            <!-- 110 kV line -->
+                            <line class="wire flow" x1="16" y1="145" x2="222" y2="145"/>
+                            <text class="lbl" x="16" y="128">10 kV</text>
+                            <!-- breaker -->
+                            <rect class="sym" x="104" y="135" width="20" height="20" rx="2"/>
+                            <text class="lbl small" x="98" y="178">QF1</text>
+                            <!-- transformer -->
+                            <circle class="sym" cx="240" cy="145" r="26"/>
+                            <circle class="sym" cx="276" cy="145" r="26"/>
+                            <text class="lbl small" x="244" y="200">T1</text>
+                            <line class="wire flow" x1="302" y1="145" x2="398" y2="145"/>
+                            <text class="lbl" x="322" y="128">0,4 kV</text>
+                            <!-- bus -->
+                            <line class="bus" x1="398" y1="60" x2="398" y2="230"/>
+                            <!-- feeders -->
+                            <line class="wire flow" x1="398" y1="60"  x2="500" y2="60"/>
+                            <line class="wire flow" x1="398" y1="145" x2="500" y2="145"/>
+                            <line class="wire flow" x1="398" y1="230" x2="500" y2="230"/>
+                            <path class="load" d="M500 50 l16 10 -16 10 z"/>
+                            <path class="load" d="M500 135 l16 10 -16 10 z"/>
+                            <path class="load" d="M500 220 l16 10 -16 10 z"/>
+                            <text class="lbl small" x="430" y="50">F1</text>
+                            <text class="lbl small" x="430" y="135">F2</text>
+                            <text class="lbl small" x="430" y="220">F3</text>
+                        </svg>
+                        <figcaption data-i18n="about.cap">Bir chiziqli sxema: 10 kV → transformator → 0,4 kV iste’molchilar</figcaption>
+                    </figure>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Skills Section -->
-    <section id="skills" class="skills">
-        <div class="container">
-            <h2 class="section-title">BIZNING YO`NALISHLAR</h2>
-            <div class="skills-grid">
-                <div class="skill-category">
-                    <h3>ELEKTR TARMOQ TIZIMLARI</h3>
-                    <div class="skill-bars">
+        <!-- Tools -->
+        <section id="tools" class="section tools">
+            <div class="container">
+                <header class="section-head">
+                    <span class="section-index">02</span>
+                    <h2 class="section-title" data-i18n="tools.title">Muhandislik vositalari</h2>
+                </header>
+                <p class="section-lead" data-i18n="tools.lead">Sayt ichidagi amaliy dasturlar, simulyatorlar va hisob-kitob vositalari.</p>
+
+                <div class="tools-grid">
+                    <a class="tool-card" href="energygrid/energy_grid_simulator/index.html">
+                        <span class="tool-no">01</span>
+                        <span class="tool-tag" data-i18n="tools.t1.tag">Simulyator</span>
+                        <h3 data-i18n="tools.t1.title">Energetika sistemasi</h3>
+                        <p data-i18n="tools.t1.desc">IES, AES va quyosh EES stansiyalari hamda iste’molchilar demo modeli.</p>
+                        <span class="tool-go" data-i18n="tools.open">Ochish →</span>
+                    </a>
+                    <a class="tool-card" href="yangiloyiha1/login.html">
+                        <span class="tool-no">02</span>
+                        <span class="tool-tag" data-i18n="tools.t2.tag">Prototip</span>
+                        <h3 data-i18n="tools.t2.title">RES tizimi loyihasi</h3>
+                        <p data-i18n="tools.t2.desc">RES amaliyot portali prototipi: talaba kabineti va boshqaruv (admin) paneli.</p>
+                        <span class="tool-go" data-i18n="tools.open">Ochish →</span>
+                    </a>
+                    <a class="tool-card" href="transformator.html">
+                        <span class="tool-no">03</span>
+                        <span class="tool-tag" data-i18n="tools.t3.tag">Animatsiya</span>
+                        <h3 data-i18n="tools.t3.title">Aholi iste’moli</h3>
+                        <p data-i18n="tools.t3.desc">10 kV liniyadan transformator orqali 0,4 kV aholi tarmog‘igacha taqsimot animatsiyasi.</p>
+                        <span class="tool-go" data-i18n="tools.open">Ochish →</span>
+                    </a>
+                    <a class="tool-card" href="3kurs/index.html">
+                        <span class="tool-no">04</span>
+                        <span class="tool-tag" data-i18n="tools.t4.tag">Kurs loyihasi</span>
+                        <h3 data-i18n="tools.t4.title">EET kurs loyihasi</h3>
+                        <p data-i18n="tools.t4.desc">Elektr tarmoqlari kurs loyihasi va uni tekshiruvchi dastur.</p>
+                        <span class="tool-go" data-i18n="tools.open">Ochish →</span>
+                    </a>
+                    <a class="tool-card" href="hisob/energiya.html">
+                        <span class="tool-no">05</span>
+                        <span class="tool-tag" data-i18n="tools.t5.tag">Kalkulyator</span>
+                        <h3 data-i18n="tools.t5.title">Iqtisodiy kalkulyator</h3>
+                        <p data-i18n="tools.t5.desc">Elektr energiyasi sarfi va xarajatini hisoblash kalkulyatori.</p>
+                        <span class="tool-go" data-i18n="tools.open">Ochish →</span>
+                    </a>
+                    <a class="tool-card" href="elektr_yuklamalari_grafik.html">
+                        <span class="tool-no">06</span>
+                        <span class="tool-tag" data-i18n="tools.t6.tag">Grafik</span>
+                        <h3 data-i18n="tools.t6.title">Yuklama grafigi</h3>
+                        <p data-i18n="tools.t6.desc">Sutkalik elektr yuklamalari grafigi va eng katta/eng kichik yuklama vaqtlari.</p>
+                        <span class="tool-go" data-i18n="tools.open">Ochish →</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills -->
+        <section id="skills" class="section skills">
+            <div class="container">
+                <header class="section-head">
+                    <span class="section-index">03</span>
+                    <h2 class="section-title" data-i18n="skills.title">Yo‘nalishlar</h2>
+                </header>
+                <div class="skills-grid">
+                    <article class="skill-category">
+                        <h3 data-i18n="skills.c1">Elektr tarmoq tizimlari</h3>
                         <div class="skill-bar">
-                            <span>AUTOCAD</span>
+                            <div class="skill-row"><span>AutoCAD</span><em>90%</em></div>
                             <div class="bar"><div class="progress" data-width="90"></div></div>
                         </div>
                         <div class="skill-bar">
-                            <span>MATLAB</span>
+                            <div class="skill-row"><span>MATLAB</span><em>85%</em></div>
                             <div class="bar"><div class="progress" data-width="85"></div></div>
                         </div>
-                    </div>
-                </div>
-                <div class="skill-category">
-                    <h3>ELEKTR XAVFSIZLIGI VA ISHONCHLILIGI</h3>
-                    <div class="skill-bars">
+                    </article>
+                    <article class="skill-category">
+                        <h3 data-i18n="skills.c2">Elektr xavfsizligi va ishonchliligi</h3>
                         <div class="skill-bar">
-                            <span>elektr mantaj</span>
+                            <div class="skill-row"><span data-i18n="skills.s1">Elektr montaj</span><em>88%</em></div>
                             <div class="bar"><div class="progress" data-width="88"></div></div>
                         </div>
                         <div class="skill-bar">
-                            <span>himoya vositalari</span>
+                            <div class="skill-row"><span data-i18n="skills.s2">Himoya vositalari</span><em>92%</em></div>
                             <div class="bar"><div class="progress" data-width="92"></div></div>
                         </div>
-                    </div>
-                </div>
-                <div class="skill-category">
-                    <h3>RELE HIMOYASI</h3>
-                    <div class="skill-bars">
+                    </article>
+                    <article class="skill-category">
+                        <h3 data-i18n="skills.c3">Rele himoyasi</h3>
                         <div class="skill-bar">
-                            <span>avtomatlarni o`rnatish</span>
+                            <div class="skill-row"><span data-i18n="skills.s3">Avtomatlarni o‘rnatish</span><em>95%</em></div>
                             <div class="bar"><div class="progress" data-width="95"></div></div>
                         </div>
                         <div class="skill-bar">
-                            <span>avtomatlarni sozlash</span>
+                            <div class="skill-row"><span data-i18n="skills.s4">Avtomatlarni sozlash</span><em>87%</em></div>
                             <div class="bar"><div class="progress" data-width="87"></div></div>
                         </div>
-                    </div>
+                    </article>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Projects Section -->
-    <section id="projects" class="projects">
-        <div class="container">
-            <h2 class="section-title">KELAJAKDAGI LOYIHALAR</h2>
-            <div class="projects-grid">
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="rasmlar1/rasm1.png" alt="Simsiz elektr uzatish" style="width:100%;">
-                    </div>
-                    <div class="project-content">
-                        <h3>Simsiz elektr energiya uzatish</h3>
-                        <p>Bu texnologiya asosan elektromagnit induksiya qonuniyatlariga asoslanadi. Energetika tili bilan aytganda, bu "havo orqali ishlaydigan transformator"ga o'xshaydi</p>
-                        <div class="project-tech">
-                            <span>Iqtidorli talabalar</span>
-                            <span>zamonaviy labaratoriya</span>
-                            <span>Aniq hisob-kitoblar</span>
+        <!-- Projects -->
+        <section id="projects" class="section projects">
+            <div class="container">
+                <header class="section-head">
+                    <span class="section-index">04</span>
+                    <h2 class="section-title" data-i18n="projects.title">Kelajakdagi loyihalar</h2>
+                </header>
+                <div class="projects-grid">
+                    <article class="project-card">
+                        <div class="project-image"><img src="rasmlar1/rasm1.png" alt="Simsiz elektr uzatish" loading="lazy"></div>
+                        <div class="project-content">
+                            <h3 data-i18n="projects.p1.title">Simsiz elektr energiya uzatish</h3>
+                            <p data-i18n="projects.p1.desc">Bu texnologiya asosan elektromagnit induksiya qonuniyatlariga asoslanadi. Energetika tili bilan aytganda, bu “havo orqali ishlaydigan transformator”ga o‘xshaydi.</p>
+                            <ul class="project-tech">
+                                <li data-i18n="projects.tag1">Iqtidorli talabalar</li>
+                                <li data-i18n="projects.tag2">Zamonaviy laboratoriya</li>
+                                <li data-i18n="projects.tag3">Aniq hisob-kitoblar</li>
+                            </ul>
+                            <a href="site2/index3.html" class="link" data-i18n="projects.more">Batafsil →</a>
                         </div>
-                        <div class="project-links">
-                            <a href="site2/index3.html" class="link"> Batafsil . . . </a>
-                            <a href="#" class="link"></a>
+                    </article>
+                    <article class="project-card">
+                        <div class="project-image"><img src="rasmlar1/rasm2.png" alt="Vodorod generatori" loading="lazy"></div>
+                        <div class="project-content">
+                            <h3 data-i18n="projects.p2.title">Vodorod generatori</h3>
+                            <p data-i18n="projects.p2.desc">Quyosh panellari kunduzi ortiqcha tok ishlab chiqarganda, uni akkumulyatorga emas, vodorod generatoriga yo‘naltirish mumkin. Hosil bo‘lgan vodorod tanklarda saqlanadi.</p>
+                            <ul class="project-tech">
+                                <li data-i18n="projects.tag1">Iqtidorli talabalar</li>
+                                <li data-i18n="projects.tag2">Zamonaviy laboratoriya</li>
+                                <li data-i18n="projects.tag3">Aniq hisob-kitoblar</li>
+                            </ul>
+                            <a href="site3/index4.html" class="link" data-i18n="projects.more">Batafsil →</a>
                         </div>
-                    </div>
-                </div>
-                <div class="project-card">
-                    <div class="project-image">
-                         <img src="rasmlar1/rasm2.png" alt="Vadorod generatori" style="width:100%;">
-                    </div>
-                    <div class="project-content">
-                        <h3>Vadorod generatori</h3>
-                        <p>Quyosh panellari kunduzi ortiqcha tok ishlab chiqarganda, u tokni akkumulyatorga emas, vodorod generatoriga yo‘naltirish mumkin. Hosil bo‘lgan vodorod tanklarda saqlanadi.</p>
-                        <div class="project-tech">
-                            <span>Iqtidorli talabalar</span>
-                            <span>zamonaviy labaratoriya</span>
-                            <span>Aniq hisob-kitoblar</span>
+                    </article>
+                    <article class="project-card">
+                        <div class="project-image"><img src="rasmlar1/rasm3.png" alt="Aqlli hisoblagich" loading="lazy"></div>
+                        <div class="project-content">
+                            <h3 data-i18n="projects.p3.title">Aqlli hisoblagich</h3>
+                            <p data-i18n="projects.p3.desc">Bu nafaqat iste’mol qilingan elektr energiyasini hisoblovchi, balki ma’lumotlarni masofadan turib real vaqt rejimida energiya ta’minoti korxonasiga uzatuvchi zamonaviy mikroprotsessorli qurilmadir.</p>
+                            <ul class="project-tech">
+                                <li data-i18n="projects.tag1">Iqtidorli talabalar</li>
+                                <li data-i18n="projects.tag2">Zamonaviy laboratoriya</li>
+                                <li data-i18n="projects.tag3">Aniq hisob-kitoblar</li>
+                            </ul>
+                            <a href="site4/index5.html" class="link" data-i18n="projects.more">Batafsil →</a>
                         </div>
-                        <div class="project-links">
-                            <a href="site3/index4.html" class="link">Batafsil . . .</a>
-                            <a href="#" class="link"></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="rasmlar1/rasm3.png" alt="Aqilli hisoblagich" style="width:100%;">
-                    </div>
-                    <div class="project-content">
-                        <h3>Aqilli hisoblagich </h3>
-                        <p>bu nafaqat iste'mol qilingan elektr energiyasini hisoblovchi, balki ma'lumotlarni masofadan turib real vaqt rejimida energiya ta'minoti korxonasiga uzatuvchi zamonaviy mikroprotsessorli qurilmadir.</p>
-                        <div class="project-tech">
-                            <span>Iqtidorli talabalar</span>
-                            <span>zamonaviy labaratoriya</span>
-                            <span>Aniq hisob-kitoblar</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="site4/index5.html" class="link">Batafsil . . .</a>
-                            <a href="#" class="link"></a>
-                        </div>
-                    </div>
+                    </article>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
-        <div class="container">
-            <h2 class="section-title">Biz bilan bog`lanish</h2>
-            <p class="contact-subtitle">SIZDA YANGI LOYIHALAR BORMI ? BIZ BILAN BOG`LANING</p>
-            <form class="contact-form" action="https://formspree.io/f/xwvndjje" method="POST">
-                <div class="form-group">
-                    <input type="text" name="name" placeholder="Sizning ismingiz" required>
-                    <input type="email" name="email" placeholder="Sizning Email giz" required>
-                </div>
-                <textarea name="message" placeholder="Sizning loyihangiz" rows="6" required></textarea>
-                <button type="submit" class="btn btn-primary">XABARNI YUBORISH</button>
-            </form>
-            <div class="contact-info">
-                <div class="contact-item">
-                    <h3>Email</h3>
-                    <p>dalerqurbonaliyev05@gmail.com</p>
-                </div>
-                <div class="contact-item">
-                    <h3>Instagram</h3>
-                    <a href="#">@qurbon.aliyev_daler</a>
-                </div>
-                <div class="contact-item">
-                    <h3>Telegram</h3>
-                    <a href="#">Qurbonaliyev_Daler</a>
+        <!-- Contact -->
+        <section id="contact" class="section contact">
+            <div class="container">
+                <header class="section-head">
+                    <span class="section-index">05</span>
+                    <h2 class="section-title" data-i18n="contact.title">Bog‘lanish</h2>
+                </header>
+                <p class="section-lead" data-i18n="contact.lead">Sizda yangi loyihalar bormi? Biz bilan bog‘laning.</p>
+
+                <div class="contact-grid">
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <span class="ci-label">Email</span>
+                            <a href="mailto:dalerqurbonaliyev05@gmail.com">dalerqurbonaliyev05@gmail.com</a>
+                        </div>
+                        <div class="contact-item">
+                            <span class="ci-label">Instagram</span>
+                            <a href="https://instagram.com/qurbon.aliyev_daler" target="_blank" rel="noopener">@qurbon.aliyev_daler</a>
+                        </div>
+                        <div class="contact-item">
+                            <span class="ci-label">Telegram</span>
+                            <a href="https://t.me/Qurbonaliyev_Daler" target="_blank" rel="noopener">@Qurbonaliyev_Daler</a>
+                        </div>
+                    </div>
+
+                    <form class="contact-form" id="contact-form" action="https://formspree.io/f/xwvndjje" method="POST">
+                        <div class="form-group">
+                            <label>
+                                <span data-i18n="form.name">Ismingiz</span>
+                                <input type="text" name="name" autocomplete="name" required>
+                            </label>
+                            <label>
+                                <span>Email</span>
+                                <input type="email" name="email" autocomplete="email" required>
+                            </label>
+                        </div>
+                        <label>
+                            <span data-i18n="form.message">Loyihangiz haqida</span>
+                            <textarea name="message" rows="6" required></textarea>
+                        </label>
+                        <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+                        <button type="submit" class="btn btn-primary" data-i18n="form.send">Xabarni yuborish</button>
+                        <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+                    </form>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <p>&copy; 2026 Qurbonaliyev Daler. Biz bilan ❤️ va real loyihalar.</p>
+    <footer class="footer">
+        <div class="container footer-inner">
+            <p>&copy; 2026 Qurbonaliyev Daler · energyvibe.uz</p>
+            <p data-i18n="footer.tag">Real loyihalar, aniq hisob-kitoblar.</p>
         </div>
     </footer>
 
     <script src="script.js"></script>
 </body>
-
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
