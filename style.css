@@ -304,37 +304,60 @@ ul { list-style: none; }
 .link { color: var(--primary); text-decoration: none; font: 600 .9rem var(--mono); }
 .link:hover { text-decoration: underline; text-underline-offset: 4px; }
 
-/* Contact — sunset photo background */
-.section.contact {
-    color: #fff;
-    background:
-        linear-gradient(180deg, rgba(20, 24, 84, .42), rgba(20, 24, 84, .20)),
-        url('site4/rasm7.jpg') center / cover no-repeat;
+/* Contact — split card: photo panel + form */
+.section.contact { background: var(--bg-2); overflow: hidden; }
+.section.contact::before, .section.contact::after {
+    content: ''; position: absolute; border-radius: 50%; filter: blur(70px); opacity: .55; pointer-events: none;
 }
-.contact .section-index { color: #ffd166; }
-.contact .section-index::after { color: rgba(255, 255, 255, .5); }
-.contact .section-title { text-shadow: 0 2px 20px rgba(20, 20, 70, .5); }
-.contact .section-lead { color: rgba(255, 255, 255, .95); text-shadow: 0 2px 14px rgba(20, 20, 70, .5); }
+.section.contact::before { width: 420px; height: 420px; left: -140px; top: 40px; background: #dbe7ff; }
+.section.contact::after { width: 380px; height: 380px; right: -120px; bottom: 20px; background: #ffe4ef; }
+.contact .container { position: relative; z-index: 1; }
 
-.contact-grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: 40px; align-items: start; }
-.contact-info { display: grid; gap: 14px; }
-.contact-item { background: rgba(255, 255, 255, .92); color: var(--text); border: 1px solid rgba(255, 255, 255, .9); border-radius: var(--radius); padding: 20px 22px; box-shadow: 0 16px 40px rgba(30, 20, 80, .25); backdrop-filter: blur(8px); }
-.ci-label { display: block; font: 600 .72rem var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--primary); margin-bottom: 4px; }
-.contact-item a { text-decoration: none; word-break: break-all; font-weight: 500; }
-.contact-item a:hover { color: var(--primary); }
+.contact-card {
+    display: grid; grid-template-columns: 5fr 7fr;
+    background: #fff; border: 1px solid var(--line); border-radius: 28px; overflow: hidden;
+    box-shadow: var(--shadow-lg); margin-top: 36px;
+}
 
-.contact-form { background: rgba(255, 255, 255, .94); color: var(--text); border-radius: 20px; padding: 28px; display: grid; gap: 18px; box-shadow: 0 24px 60px rgba(30, 20, 80, .35); backdrop-filter: blur(8px); }
+.contact-side {
+    position: relative; color: #fff; padding: 44px 36px;
+    display: flex; flex-direction: column; justify-content: space-between; gap: 40px;
+    background:
+        linear-gradient(165deg, rgba(37, 99, 235, .86) 0%, rgba(109, 40, 217, .70) 100%),
+        url('site4/rasm7.jpg') 30% center / cover no-repeat;
+}
+.contact-side-lead { font-size: 1.7rem; font-weight: 700; line-height: 1.25; letter-spacing: -.01em; text-shadow: 0 2px 20px rgba(20, 20, 70, .35); }
+
+.channels { display: grid; gap: 12px; }
+.channel {
+    display: flex; align-items: center; gap: 14px; text-decoration: none; color: #fff;
+    padding: 13px 16px; border-radius: 16px;
+    background: rgba(255, 255, 255, .16); border: 1px solid rgba(255, 255, 255, .35);
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    transition: background .2s, color .2s, transform .2s;
+}
+.channel:hover { background: #fff; color: var(--primary); transform: translateX(4px); }
+.channel-icon {
+    flex: none; width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center;
+    background: rgba(255, 255, 255, .22); transition: background .2s;
+}
+.channel:hover .channel-icon { background: #e8f0ff; }
+.channel-text { display: grid; min-width: 0; }
+.channel-text small { font: 600 .7rem var(--mono); letter-spacing: .12em; text-transform: uppercase; opacity: .85; }
+.channel-text strong { font-weight: 600; font-size: .95rem; overflow-wrap: anywhere; }
+
+.contact-form { background: transparent; box-shadow: none; padding: 44px 40px; display: grid; gap: 18px; align-content: center; color: var(--text); }
 .contact-form label { display: grid; gap: 8px; }
 .contact-form label > span { font-size: .85rem; color: var(--muted); font-weight: 600; }
 .form-group { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .contact-form input, .contact-form textarea {
     width: 100%; font: 400 1rem var(--font); color: var(--text);
-    background: #f4f7fd; border: 1px solid var(--line-2); border-radius: 10px; padding: 13px 14px;
+    background: #f4f7fd; border: 1px solid transparent; border-bottom: 2px solid var(--line-2); border-radius: 12px; padding: 14px 16px;
     transition: border-color .2s, box-shadow .2s, background .2s;
 }
-.contact-form textarea { resize: vertical; min-height: 140px; }
-.contact-form input:focus, .contact-form textarea:focus { outline: none; background: #fff; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,.18); }
-.contact-form .btn { justify-self: start; }
+.contact-form textarea { resize: vertical; min-height: 150px; }
+.contact-form input:focus, .contact-form textarea:focus { outline: none; background: #fff; border-color: var(--line-2); border-bottom-color: var(--primary); box-shadow: 0 8px 24px rgba(37, 99, 235, .14); }
+.btn-send { width: 100%; padding: 15px 26px; font-size: 1rem; }
 .hp { position: absolute !important; left: -9999px; height: 0; width: 0; opacity: 0; }
 .form-status { min-height: 1.4em; font-size: .92rem; font-weight: 500; }
 .form-status.ok { color: #15803d; }
@@ -368,13 +391,17 @@ ul { list-style: none; }
     .nav-menu a, .navbar.scrolled .nav-menu a { color: var(--text); padding: 14px 8px; font-size: 1rem; border-bottom: 1px solid var(--line); border-radius: 0; }
     .nav-menu a:hover, .nav-menu a.active,
     .navbar.scrolled .nav-menu a:hover, .navbar.scrolled .nav-menu a.active { color: var(--primary); background: transparent; }
-    .about-grid, .contact-grid { grid-template-columns: 1fr; }
+    .about-grid { grid-template-columns: 1fr; }
+    .contact-card { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 640px) {
     .section { padding: 80px 0; }
     .tools-grid, .projects-grid, .skills-grid { grid-template-columns: 1fr; }
     .form-group { grid-template-columns: 1fr; }
+    .contact-side { padding: 32px 22px; gap: 28px; }
+    .contact-side-lead { font-size: 1.35rem; }
+    .contact-form { padding: 28px 22px; }
     .hero { padding-bottom: 80px; }
     .hero-scroll { display: none; }
     .about-stats { grid-template-columns: repeat(3, 1fr); gap: 8px; }
