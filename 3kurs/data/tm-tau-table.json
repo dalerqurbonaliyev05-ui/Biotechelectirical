@@ -1,0 +1,16 @@
+{
+  "_manba": "PDF 2-ilova, 4-jadval (bet 60)",
+  "_izoh": "Maksimal yuklamada ishlash vaqti Tm (soat) va quvvat isrofi vaqti τ (soat) orasidagi bog'lanish, cosφ ga qarab",
+  "_qidirish_algoritmi": "Berilgan Tm va cosφ uchun eng yaqin qatordan qiymatni oling yoki chiziqli interpolatsiya qiling",
+
+  "jadval": [
+    { "Tm": 2000, "cos_0.6": null, "cos_0.8": 1000, "cos_1.0": 800 },
+    { "Tm": 3000, "cos_0.6": 2800, "cos_0.8": 2000, "cos_1.0": 1200 },
+    { "Tm": 4000, "cos_0.6": 3300, "cos_0.8": 2700, "cos_1.0": 2000 },
+    { "Tm": 5000, "cos_0.6": 4000, "cos_0.8": 3500, "cos_1.0": 3000 },
+    { "Tm": 6000, "cos_0.6": 5000, "cos_0.8": 4600, "cos_1.0": 4000 },
+    { "Tm": 7000, "cos_0.6": 6000, "cos_0.8": 5900, "cos_1.0": 5500 },
+    { "Tm": 8000, "cos_0.6": 7300, "cos_0.8": 7300, "cos_1.0": 7300 },
+    { "Tm": 8760, "cos_0.6": 8760, "cos_0.8": 8760, "cos_1.0": 8760 }
+  ]
+}

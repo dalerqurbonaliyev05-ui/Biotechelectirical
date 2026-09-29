@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Topologiya testlari</title>
+  <style>
+    body { font-family: system-ui, Arial, sans-serif; margin: 24px; color: #16202c; background: #fff; }
+    h1 { font-size: 20px; }
+    table { border-collapse: collapse; width: 100%; font-size: 14px; }
+    th, td { border: 1px solid #d5dbe3; padding: 6px 8px; text-align: left; vertical-align: top; }
+    th { background: #f4f6f9; }
+    .pass { color: #1a7f37; font-weight: 700; }
+    .fail { color: #c62828; font-weight: 700; }
+    code { font-size: 12px; }
+    #summary { font-size: 16px; margin: 12px 0; }
+  </style>
+</head>
+<body>
+  <h1>Topologiya (magistral ulanish) testlari</h1>
+  <p>Brauzerda oching (index.html bilan bir xil papkadan: <code>tests/topology.test.html</code>). Hech narsa o'rnatish shart emas.</p>
+  <div id="summary">Ishlamoqda…</div>
+  <table>
+    <thead><tr><th>#</th><th>Test</th><th>Natija</th><th>Tafsilotlar</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+
+  <script src="../data/data-bundle.js"></script>
+  <script src="../topology.js"></script>
+  <script src="../calculations.js"></script>
+  <script>
+    (function () {
+      'use strict';
+      const C = window.KursCalc, T = window.KursTopology, D = window.KURS_DATA;
+      const rows = [];
+      const load = (P, kat, cos, Tm) => ({ P, kat, cos, W: P * Tm / 1000 });
+      const baseInput = (pst, dist, extra = {}) => Object.assign({
+        schemaNum: 0, variant: 'test', manba: 'DIES', generators: C.parseGenerators('3x100+2x50'),
+        generatorsText: '3x100+2x50', cosManba: 0.8, pst, dist, U: '220', opts: {}
+      }, extra);
+      const edgeOf = (r, from, to) => r.lines.find((l) => l.from === from && l.to === to);
+      const sig = (parent) => T.signature(parent, C.PST);
+
+      function test(name, fn) {
+        try {
+          const res = fn();
+          rows.push({ name, ok: res.ok, detail: res.detail });
+        } catch (e) {
+          rows.push({ name, ok: false, detail: 'Istisno: ' + (e.messages ? e.messages.join(' ') : e.message) });
+        }
+      }
+
+      // 1. Qo'llanma misoli (5.2, bet 18–20): B — I kat. 100 MVt, C — II kat. 50 MVt; manba–B 90 km, B–C 60 km, manba–C 140 km
+      test("Qo'llanma misoli: C B orqali, manba–B 2 zanjir, B–C 1 zanjir", () => {
+        const pst = {
+          A: load(20, 3, 0.9, 5000), B: load(100, 1, 0.9, 4000), C: load(50, 2, 0.8, 4500),
+          D: load(20, 3, 0.9, 5000), E: load(20, 3, 0.9, 5000)
+        };
+        const dist = { 'M-S': 150, 'M-A': 80, 'M-B': 90, 'M-C': 140, 'B-C': 60, 'M-D': 80, 'M-E': 80 };
+        const r = C.calculate(baseInput(pst, dist), D);
+        const p = r.tree.parent;
+        const eMB = edgeOf(r, 'M', 'B'), eBC = edgeOf(r, 'B', 'C');
+        const ok = p.C === 'B' && eMB && eMB.n === 2 && eBC && eBC.n === 1;
+        return { ok, detail: `Tanlangan: ${sig(p)}; manba–B n=${eMB && eMB.n}, B–C n=${eBC && eBC.n}; L_ekv=${r.topo.best.Lekv}` };
+      });
+
+      // 2. Hamma p/st III kategoriya → barcha uchastkalar 1 zanjir
+      test('Hamma p/st III kat. → barcha uchastkalar 1 zanjirli', () => {
+        const pst = { A: load(30, 3, 0.9, 5000), B: load(25, 3, 0.9, 5000), C: load(35, 3, 0.85, 5000), D: load(20, 3, 0.9, 5000), E: load(30, 3, 0.9, 5000) };
+        const coords = { M: { x: 0, y: 0 }, S: { x: -5, y: 3 }, A: { x: 3, y: 1 }, B: { x: 5, y: 3 }, C: { x: 6, y: -1 }, D: { x: 2, y: -3 }, E: { x: 4, y: -4 } };
+        const r = C.calculate(baseInput(pst, T.distFromCoords(coords)), D);
+        const edges = r.lines.filter((l) => l.pst);
+        const ok = edges.every((l) => l.n === 1);
+        return { ok, detail: `Tanlangan: ${sig(r.tree.parent)}; zanjirlar: ${edges.map((l) => l.name + ' n=' + l.n).join(', ')}` };
+      });
+
+      // 3. Oxirida I kat. turgan uzun zanjir → yuqoridagi barcha uchastkalar 2 zanjir
+      test('Oxirida I kat. turgan zanjir → yuqori uchastkalar 2 zanjirli', () => {
+        const pst = { A: load(15, 3, 0.9, 5000), B: load(15, 3, 0.9, 5000), C: load(15, 3, 0.9, 5000), D: load(15, 3, 0.9, 5000), E: load(20, 1, 0.9, 5000) };
+        const dist = { 'M-S': 120, 'M-A': 30, 'A-B': 30, 'B-C': 30, 'C-D': 30, 'D-E': 30 };
+        const r = C.calculate(baseInput(pst, dist), D);
+        const edges = r.lines.filter((l) => l.pst);
+        const ok = r.tree.maxDepth === 5 && edges.every((l) => l.n === 2);
+        return { ok, detail: `Tanlangan: ${sig(r.tree.parent)}; ${edges.map((l) => l.name + ' n=' + l.n).join(', ')}` };
+      });
+
+      // 4. Masofalar va yuklamalar katta → ΔU (yoki sim) cheklovi tufayli yulduz variant yutadi
+      test('Uzoq masofalar: ΔU/sim cheklovi tufayli yulduz variant yutadi', () => {
+        const pst = { A: load(40, 3, 0.85, 5000), B: load(40, 3, 0.85, 5000), C: load(40, 3, 0.85, 5000), D: load(40, 3, 0.85, 5000), E: load(40, 3, 0.85, 5000) };
+        const dist = { 'M-S': 100, 'M-A': 60, 'M-B': 60, 'M-C': 60, 'M-D': 60, 'M-E': 60, 'A-B': 45, 'B-C': 45, 'C-D': 45, 'D-E': 45 };
+        // 110 kV tarmoq uchun stansiya ham kichikroq (aks holda HL-6 uchun sim topilmaydi)
+        const r = C.calculate(baseInput(pst, dist, { U: '110', generators: C.parseGenerators('3x70'), generatorsText: '3x70' }), D);
+        const chainKey = C.PST.map((p) => ({ A: 'M', B: 'A', C: 'B', D: 'C', E: 'D' })[p]).join('');
+        const chain = r.topo.variants.concat(r.topo.rejected).find((v) => v.key === chainKey);
+        const ok = T.isStar(r.tree.parent) && r.topoCheck.ok;
+        return { ok, detail: `Tanlangan: ${sig(r.tree.parent)}, ΔU_max=${r.topoCheck.dUmax.toFixed(1)}%; to'liq zanjir: ${chain ? (chain.reasons || []).join('; ') || 'yaroqli' : 'skriningda rad etilgan'}` };
+      });
+
+      // 4b. 220 kV: simlar yetarli, lekin ikki pog'onali ulanishda ΔU > 10% → yulduz yutadi
+      test('220 kV, uzoq masofalar: ΔU > 10% cheklovi tufayli yulduz variant yutadi', () => {
+        const pst = { A: load(60, 3, 0.85, 5000), B: load(60, 3, 0.85, 5000), C: load(60, 3, 0.85, 5000), D: load(60, 3, 0.85, 5000), E: load(60, 3, 0.85, 5000) };
+        const dist = { 'M-S': 100, 'M-A': 150, 'M-B': 150, 'M-C': 150, 'M-D': 150, 'M-E': 150, 'A-B': 120, 'B-C': 120, 'C-D': 120, 'D-E': 120 };
+        const r = C.calculate(baseInput(pst, dist), D);
+        const du = r.topo.rejectSummary.find((g) => /ΔU/.test(g.kind));
+        const ok = T.isStar(r.tree.parent) && r.topoCheck.ok && !!du && du.count > 0;
+        return { ok, detail: `Tanlangan: ${sig(r.tree.parent)}, ΔU_max=${r.topoCheck.dUmax.toFixed(1)}%; rad etilganlar: ` +
+          r.topo.rejectSummary.map((g) => `${g.kind} — ${g.count} ta`).join(', ') + (du ? `; masalan ${sig(du.example.parent)}: ${du.example.reason}` : '') };
+      });
+
+      // 5. Regressiya: masofalar faqat manba–p/st bo'yicha → yulduz sxema (eski natija bilan bir xil)
+      test('Faqat manba–p/st masofalari → yulduz sxema, HL-1→A, HL-2→C, HL-3→B, HL-4→D, HL-5→E', () => {
+        const v = D.schemas.variantlar.sxema_6['B-1'];
+        const dist = { 'M-S': 150, 'M-A': 90, 'M-C': 60, 'M-B': 90, 'M-D': 80, 'M-E': 70 };
+        const r = C.calculate(baseInput(v, dist), D);
+        const names = r.lines.filter((l) => l.pst).map((l) => `${l.id}→${l.to}`).join(', ');
+        const ok = T.isStar(r.tree.parent) && names === 'HL-1→A, HL-2→C, HL-3→B, HL-4→D, HL-5→E' && r.topo.stats.withDistances === 1;
+        return { ok, detail: `${names}; mumkin bo'lgan daraxtlar: ${r.topo.stats.withDistances}` };
+      });
+
+      // 6. «Mening variantim»: tsikl → xato xabari
+      test("«Mening variantim»: tsikl bo'lsa xato xabari", () => {
+        const v = D.schemas.variantlar.sxema_6['B-1'];
+        const dist = { 'M-S': 150, 'M-A': 90, 'M-C': 60, 'M-B': 90, 'M-D': 80, 'M-E': 70, 'A-B': 40 };
+        try {
+          C.calculate(baseInput(v, dist, { topologyMode: 'mine', topology: { A: 'B', B: 'A', C: 'M', D: 'M', E: 'M' } }), D);
+          return { ok: false, detail: 'Xato kutilgan edi' };
+        } catch (e) {
+          return { ok: /Tsikl/.test(e.message), detail: e.messages.join(' ') };
+        }
+      });
+
+      // 7. Daraxtlar soni: to'liq graf uchun Keli formulasi 6^4 = 1296
+      test("To'liq graf: daraxtlar soni 6⁴ = 1296", () => {
+        const coords = { M: { x: 0, y: 0 }, S: { x: -5, y: 3 }, A: { x: 3, y: 1 }, B: { x: 5, y: 3 }, C: { x: 6, y: -1 }, D: { x: 2, y: -3 }, E: { x: 4, y: -4 } };
+        const n = T.enumerateTrees(C.PST, T.distFromCoords(coords)).length;
+        return { ok: n === 1296, detail: `Sanalgan: ${n}` };
+      });
+
+      const tb = document.getElementById('rows');
+      tb.innerHTML = rows.map((r, i) => `<tr><td>${i + 1}</td><td>${r.name}</td><td class="${r.ok ? 'pass' : 'fail'}">${r.ok ? 'O\'TDI' : 'O\'TMADI'}</td><td><code>${String(r.detail).replace(/</g, '&lt;')}</code></td></tr>`).join('');
+      const passed = rows.filter((r) => r.ok).length;
+      document.getElementById('summary').innerHTML = `<b class="${passed === rows.length ? 'pass' : 'fail'}">${passed} / ${rows.length} test o'tdi</b>`;
+      window.__testResults = rows;
+    })();
+  </script>
+</body>
+</html>
