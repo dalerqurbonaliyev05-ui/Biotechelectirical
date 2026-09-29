@@ -1,78 +1,221 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Energy Grid Simulator</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energetika tizimi simulyatori — EnergyVibe</title>
+    <meta name="description" content="O‘zbekiston va Yevropa energetika tizimlari simulyatori: quyosh, shamol, GES, AES, gaz, akkumulyatorlar, 24 soatlik dispetcherlik.">
+    <meta name="theme-color" content="#6d4aff">
+    <link rel="icon" type="image/png" href="../../rasmlar1/rasm5/rasm4.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header>
-  <div>
-    <h1>⚡ ENERGY GRID SIMULATOR</h1>
-    <p>IES + AES + Quyosh elektr stansiyasi → iste’molchilar</p>
-  </div>
-  <div class="status"><span id="systemDot"></span><span id="systemStatus">Tizim normal</span></div>
-</header>
+    <header class="topbar">
+        <div class="wrap topbar-inner">
+            <a class="back" href="../../index.html#tools" data-i18n="back">← Bosh sahifa</a>
+            <a class="logo" href="../../index.html" aria-label="EnergyVibe">
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M13.5 2 5 13.5h5.5L9.5 22 19 9.8h-5.6L13.5 2Z" fill="currentColor"/></svg>
+                <span>ENERGY<b>VIBE</b></span>
+            </a>
+            <div class="lang-switch" role="group" aria-label="Til / Language / Язык">
+                <button type="button" class="lang-btn" data-lang="uz" aria-pressed="true">UZ</button>
+                <button type="button" class="lang-btn" data-lang="ru" aria-pressed="false">RU</button>
+                <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+            </div>
+        </div>
+    </header>
 
-<main>
-  <section class="control-panel">
-    <h2>1. Elektr stansiyalarini boshqarish</h2>
-    <div id="plantControls" class="cards"></div>
-  </section>
+    <main class="wrap">
+        <!-- Intro + scenario choice -->
+        <section class="intro">
+            <h1 data-i18n="title">Energetika tizimi simulyatori</h1>
+            <p class="lead" data-i18n="subtitle"></p>
+            <div class="scenarios" role="radiogroup" aria-label="Scenario">
+                <button type="button" class="scen" data-scen="uz" role="radio" aria-checked="true">
+                    <span class="scen-flag">🇺🇿</span>
+                    <span class="scen-text"><b data-i18n="scen.uz">O‘zbekiston</b><small data-i18n="scen.uz.desc"></small></span>
+                </button>
+                <button type="button" class="scen" data-scen="eu" role="radio" aria-checked="false">
+                    <span class="scen-flag">🇪🇺</span>
+                    <span class="scen-text"><b data-i18n="scen.eu">Yevropa</b><small data-i18n="scen.eu.desc"></small></span>
+                </button>
+            </div>
+        </section>
 
-  <section class="control-panel">
-    <h2>2. Iste’molchilar yuklamasi</h2>
-    <div id="loadControls" class="cards"></div>
-  </section>
+        <!-- Controls -->
+        <section class="panel controls">
+            <div class="ctl">
+                <span class="ctl-label" data-i18n="ctl.mode">Rejim</span>
+                <div class="seg" data-group="mode">
+                    <button type="button" data-val="real" data-i18n="mode.real">Real tarmoq</button>
+                    <button type="button" data-val="train" data-i18n="mode.train">O‘quv jadvali</button>
+                </div>
+            </div>
+            <div class="ctl">
+                <span class="ctl-label" data-i18n="ctl.season">Fasl</span>
+                <div class="seg" data-group="season">
+                    <button type="button" data-val="winter"><span aria-hidden="true">❄️</span> <span data-i18n="season.winter">Qish</span></button>
+                    <button type="button" data-val="spring"><span aria-hidden="true">🌱</span> <span data-i18n="season.spring">Bahor</span></button>
+                    <button type="button" data-val="summer"><span aria-hidden="true">☀️</span> <span data-i18n="season.summer">Yoz</span></button>
+                    <button type="button" data-val="autumn"><span aria-hidden="true">🍂</span> <span data-i18n="season.autumn">Kuz</span></button>
+                </div>
+            </div>
+            <div class="ctl">
+                <span class="ctl-label" data-i18n="ctl.weather">Ob-havo</span>
+                <div class="seg" data-group="weather">
+                    <button type="button" data-val="sunny"><span aria-hidden="true">🌞</span> <span data-i18n="weather.sunny">Quyoshli</span></button>
+                    <button type="button" data-val="cloudy"><span aria-hidden="true">☁️</span> <span data-i18n="weather.cloudy">Bulutli</span></button>
+                    <button type="button" data-val="windy"><span aria-hidden="true">🌬️</span> <span data-i18n="weather.windy">Shamolli</span></button>
+                    <button type="button" data-val="calm"><span aria-hidden="true">🌫️</span> <span data-i18n="weather.calm">Shamolsiz</span></button>
+                </div>
+            </div>
+            <div class="ctl">
+                <span class="ctl-label" data-i18n="ctl.day">Kun turi</span>
+                <div class="seg" data-group="dayType">
+                    <button type="button" data-val="work" data-i18n="day.work">Ish kuni</button>
+                    <button type="button" data-val="weekend" data-i18n="day.weekend">Dam olish</button>
+                </div>
+            </div>
+            <div class="ctl ctl-gas">
+                <label class="ctl-label" for="gasSlider"><span data-i18n="ctl.gas">Gaz ta’minoti</span> <b id="gasVal">100%</b></label>
+                <input id="gasSlider" type="range" min="40" max="100" step="5" value="100">
+                <small data-i18n="ctl.gas.hint"></small>
+            </div>
+            <div class="ctl ctl-trip">
+                <span class="ctl-label" data-i18n="ctl.trip">N-1 avariya</span>
+                <button type="button" id="tripBtn" class="toggle" aria-pressed="false"><span data-i18n="ctl.trip.hint">Eng katta blok o‘chadi</span></button>
+            </div>
+            <div class="ctl ctl-reset">
+                <button type="button" id="resetBtn" class="btn-ghost" data-i18n="ctl.reset">↺ Qayta tiklash</button>
+            </div>
+        </section>
 
-  <section class="control-panel">
-    <h2>3. Qaysi stansiyadan qaysi iste’molchiga?</h2>
-    <p class="hint">Har bir katakdagi qiymat MW. Bir iste’molchiga berilayotgan jami quvvat uning talabiga teng bo‘lishi kerak.</p>
-    <div class="auto-row">
-      <button id="autoBtn" class="off" aria-pressed="false">⚙ AVTOMATIK: O‘CHIRILGAN</button>
-      <span id="autoHint" class="hint"></span>
-    </div>
-    <div class="table-wrap">
-      <table id="dispatchTable"></table>
-    </div>
-  </section>
+        <!-- Time -->
+        <section class="panel timebar">
+            <button type="button" id="playBtn" class="btn-primary" data-i18n="ctl.play">▶ Ishga tushirish</button>
+            <div class="seg small" data-group="speed" aria-label="Speed">
+                <button type="button" data-val="1">1×</button>
+                <button type="button" data-val="4">4×</button>
+                <button type="button" data-val="12">12×</button>
+            </div>
+            <div class="clock"><span class="clock-ico" id="clockIco">☀️</span><b id="clock">12:00</b></div>
+            <input id="hourSlider" type="range" min="0" max="95" step="1" value="48" aria-label="Time">
+        </section>
 
-  <section class="dashboard">
-    <div class="metric"><span>Jami ishlab chiqarish</span><b id="totalGeneration">0 MW</b></div>
-    <div class="metric"><span>Jami talab</span><b id="totalDemand">0 MW</b></div>
-    <div class="metric"><span>Zaxira</span><b id="reserve">0 MW</b></div>
-    <div class="metric"><span>Qoplanmagan yuklama</span><b id="deficit">0 MW</b></div>
-  </section>
+        <!-- KPIs -->
+        <section class="kpis" id="kpis">
+            <div class="kpi" id="k-demand"><span class="kpi-l" data-i18n="kpi.demand">Talab</span><b class="kpi-v"></b><small class="kpi-s"></small></div>
+            <div class="kpi" id="k-gen"><span class="kpi-l" data-i18n="kpi.gen">Ishlab chiqarish</span><b class="kpi-v"></b><small class="kpi-s"></small></div>
+            <div class="kpi" id="k-freq"><span class="kpi-l" data-i18n="kpi.freq">Chastota</span><b class="kpi-v"></b><small class="kpi-s"></small><i class="freq-bar"><i id="freqNeedle"></i></i></div>
+            <div class="kpi" id="k-reserve"><span class="kpi-l" data-i18n="kpi.reserve">Aylanma zaxira</span><b class="kpi-v"></b><small class="kpi-s"></small></div>
+            <div class="kpi" id="k-price"><span class="kpi-l" data-i18n="kpi.price">Marjinal narx</span><b class="kpi-v"></b><small class="kpi-s"></small></div>
+            <div class="kpi" id="k-co2"><span class="kpi-l" data-i18n="kpi.co2">CO₂ intensivligi</span><b class="kpi-v"></b><small class="kpi-s"></small></div>
+            <div class="kpi" id="k-re"><span class="kpi-l" data-i18n="kpi.re">Qayta tiklanuvchi</span><b class="kpi-v"></b><small class="kpi-s"></small></div>
+            <div class="kpi" id="k-shed"><span class="kpi-l" data-i18n="kpi.shed">O‘chirilgan yuklama</span><b class="kpi-v"></b><small class="kpi-s"></small></div>
+        </section>
 
-  <section class="network">
-    <h2>4. Energiya oqimi animatsiyasi</h2>
-    <div class="grid" id="grid">
-      <div class="column sources" id="sourceColumn"></div>
-      <svg id="flowSvg" aria-hidden="true"></svg>
-      <div class="column consumers" id="consumerColumn"></div>
-    </div>
-    <div class="legend" id="legend"></div>
-  </section>
+        <!-- Chart -->
+        <section class="panel">
+            <header class="panel-head">
+                <h2 data-i18n="sec.chart">24 soatlik balans</h2>
+                <p data-i18n="sec.chart.desc"></p>
+            </header>
+            <div class="chart-wrap"><canvas id="chart" role="img" aria-label="24-hour generation stack"></canvas></div>
+            <div class="legend" id="legend"></div>
+        </section>
 
-  <section class="control-panel">
-    <h2>5. Vaqt bo‘yicha simulyatsiya</h2>
-    <div class="time-row">
-      <button id="playBtn">▶ Ishga tushirish</button>
-      <button id="pauseBtn">⏸ Pauza</button>
-      <button id="resetBtn">↺ Reset</button>
-      <label>Soat: <b id="hourLabel">12:00</b></label>
-      <input id="hourSlider" type="range" min="0" max="23.75" step="0.25" value="12">
-    </div>
-    <p id="timeExplanation" class="hint"></p>
-  </section>
+        <!-- Flow -->
+        <section class="panel">
+            <header class="panel-head">
+                <h2 data-i18n="sec.flow">Energiya oqimi</h2>
+                <p id="flowDesc"></p>
+            </header>
+            <div class="flow-wrap"><svg id="flow" aria-hidden="true"></svg></div>
+        </section>
 
-  <section class="log-panel">
-    <h2>6. Muhandislik nazorati</h2>
-    <ul id="log"></ul>
-  </section>
-</main>
+        <!-- Plants -->
+        <section class="panel">
+            <header class="panel-head">
+                <h2 data-i18n="sec.plants">Elektr stansiyalari</h2>
+                <p id="plantsDesc"></p>
+            </header>
+            <div class="cards" id="plants"></div>
+        </section>
 
-<script src="app.js"></script>
+        <!-- Training matrix -->
+        <section class="panel" id="matrixPanel" hidden>
+            <header class="panel-head">
+                <h2 data-i18n="sec.matrix">O‘quv jadvali</h2>
+                <p data-i18n="matrix.desc"></p>
+            </header>
+            <div class="matrix-tools">
+                <button type="button" id="autoBtn" class="toggle" aria-pressed="false"></button>
+                <button type="button" id="clearBtn" class="btn-ghost" data-i18n="matrix.clear">Tozalash</button>
+                <small data-i18n="matrix.note"></small>
+            </div>
+            <div class="table-wrap"><table id="matrix"></table></div>
+        </section>
+
+        <!-- Consumers -->
+        <section class="panel">
+            <header class="panel-head">
+                <h2 data-i18n="sec.cons">Iste’molchilar</h2>
+                <p data-i18n="cons.desc"></p>
+            </header>
+            <div class="cards" id="consumers"></div>
+        </section>
+
+        <!-- Summary + log -->
+        <div class="two">
+            <section class="panel">
+                <header class="panel-head"><h2 data-i18n="sec.summary">Kunlik hisobot</h2></header>
+                <dl class="summary" id="summary"></dl>
+                <div class="mixbar" id="mixbar" aria-hidden="true"></div>
+            </section>
+            <section class="panel">
+                <header class="panel-head"><h2 data-i18n="sec.log">Muhandislik nazorati</h2></header>
+                <ul class="log" id="log"></ul>
+            </section>
+        </div>
+
+        <!-- About + sources -->
+        <div class="two">
+            <section class="panel about">
+                <header class="panel-head"><h2 data-i18n="sec.about">Model qanday ishlaydi</h2></header>
+                <ol>
+                    <li data-i18n="about.1"></li>
+                    <li data-i18n="about.2"></li>
+                    <li data-i18n="about.3"></li>
+                    <li data-i18n="about.4"></li>
+                    <li data-i18n="about.5"></li>
+                </ol>
+            </section>
+            <section class="panel sources">
+                <header class="panel-head"><h2 data-i18n="sec.sources">Ma’lumotlar manbalari</h2></header>
+                <p data-i18n="src.note"></p>
+                <ul>
+                    <li><a href="https://www.german-economic-team.com/wp-content/uploads/2025/08/GET_UZB_PS_01_2025_en.pdf" target="_blank" rel="noopener">German Economic Team — Modelling Uzbekistan’s power system (2025)</a></li>
+                    <li><a href="https://kun.uz/en/news/2025/07/23/power-demand-surges-past-winter-highs-as-heat-grips-uzbekistan" target="_blank" rel="noopener">Kun.uz — 13.3 GW peak, July 2025</a></li>
+                    <li><a href="https://www.gazeta.uz/en/2026/07/17/energy/" target="_blank" rel="noopener">Gazeta.uz — 284 GWh/day record, July 2026</a></li>
+                    <li><a href="https://timesca.com/uzbekistans-green-energy-output-hits-9-billion-kwh-in-2025/" target="_blank" rel="noopener">Times of Central Asia — 4,682 MW solar + wind (2025)</a></li>
+                    <li><a href="https://www.trend.az/casia/uzbekistan/4220837.html" target="_blank" rel="noopener">Trend — 1,872 MW wind (Sep 2026)</a></li>
+                    <li><a href="https://solarquarter.com/2026/02/16/acwa-power-commissions-501-mwh-battery-storage-project-in-uzbekistan/" target="_blank" rel="noopener">SolarQuarter — 501 MWh BESS, Tashkent region</a></li>
+                    <li><a href="https://en.wikipedia.org/wiki/Uzbekistan_Nuclear_Power_Plant" target="_blank" rel="noopener">Uzbekistan Nuclear Power Plant — 2,100 MW planned</a></li>
+                    <li><a href="https://ember-energy.org/latest-insights/european-electricity-review-2026/2025-at-a-glance/" target="_blank" rel="noopener">Ember — European Electricity Review 2026</a></li>
+                    <li><a href="https://nista.io/the-eu-ets-carbon-price-in-2026-what-it-actually-costs-operators/" target="_blank" rel="noopener">EU ETS carbon price 2026</a></li>
+                </ul>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer"><div class="wrap" data-i18n="footer">© 2026 Qurbonaliyev Daler · energyvibe.uz</div></footer>
+
+    <script src="i18n.js"></script>
+    <script src="scenarios.js"></script>
+    <script src="engine.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>

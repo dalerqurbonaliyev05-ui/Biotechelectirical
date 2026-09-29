@@ -1,33 +1,35 @@
-# Energy Grid Simulator
+# Energy Grid Simulator v2
 
-O‘quv / simulyatsion model: IES, AES va Quyosh EES quvvatlari iste’molchilarga qanday taqsimlanishini ko‘rsatadi.
+Butun mamlakat miqyosidagi energotizimning o‘quv simulyatori. Ikki sharoit: **O‘zbekiston (2026)** va **Yevropa (EU o‘rtacha tarkibi, O‘zbekistonga teng masshtabda)**. Interfeys: UZ / RU / EN.
 
-## Ishga tushirish
-1. Zipni oching, `index.html` faylini Chrome / Edge / Firefox orqali oching (internet va server kerak emas).
-2. `index.html`, `style.css`, `app.js` bir papkada turishi kerak.
+## Fayllar
+| Fayl | Vazifasi |
+|---|---|
+| `index.html` | sahifa tuzilishi |
+| `style.css` | dizayn (bosh sahifa uslubida) |
+| `scenarios.js` | ikki stsenariy: stansiyalar, iste’molchilar, iqlim, narxlar |
+| `engine.js` | hisoblash dvigateli (DOM’siz, Node’da ham ishlaydi) |
+| `app.js` | interfeys: kartalar, grafik, oqim sxemasi, o‘quv jadvali |
+| `i18n.js` | tarjimalar |
 
-## Nima qila oladi
-- **Stansiyalar:** har birining quvvatini slider bilan sozlash, yoqish / o‘chirish.
-- **Quyosh EES:** quvvati kun bo‘yi o‘zgaradi (06:00–18:00, tunda 0 MW). Slider — sozlangan quvvat, haqiqiy chiqish esa shu soatda mavjud quvvat bilan cheklanadi.
-- **Iste’molchilar:** talabni slider bilan o‘zgartirish (sanoat, shifoxona, uylar, park).
-- **Dispatch jadvali:** qaysi manbadan qaysi iste’molchiga necha MW berilishini qo‘lda kiritish.
-- **AVTOMATIK tugmasi:** bosilsa, vaqt yoki quvvat o‘zgarganda iste’molchilar o‘zi ta’minlanadi: avval eng qimmat manba (IES → AES → Quyosh), iste’molchilar esa prioritet bo‘yicha (shifoxona va uylar birinchi). Jadval qulflanadi. O‘chirilsa — qo‘lda rejim, jadvalni o‘zingiz o‘zgartirasiz.
-- **Haqiqiy yetkazilgan quvvat:** stansiya o‘chirilgan bo‘lsa yoki jadvalda mavjud quvvatdan ko‘p yozilgan bo‘lsa, iste’molchi faqat haqiqatda yetkazilgan quvvatni oladi (hamma stansiya o‘chirilsa — hamma iste’molchida 0 MW).
-- **Simlar:** har bir stansiyadan har bir iste’molchiga alohida sim bor (3 × 4 = 12). Rangli va animatsiyali sim — quvvat oqyapti (qalinligi MW ga bog‘liq); xira yaxlit — ulangan, lekin 0 MW; xira punktir — uzilgan; qizil — jadvalda yozilgan, lekin manbada quvvat yo‘q.
-- **Simlarni qo‘lda ulash / uzish (qo‘l rejimida):** animatsiyadagi sim ustiga yoki jadvaldagi katak yonidagi belgiga bosing. Har bir stansiyaning 4 ta simidan istalgan 1, 2 yoki 3 tasini ulash / uzish mumkin. Uzilgan simdan quvvat o‘tmaydi (jadval katagi qulflanadi). Ulanganda sim boshlang‘ich qiymatni o‘zi oladi: manbaning bo‘sh quvvati va iste’molchining yetishmayotgan quvvatidan kichigi — keyin jadvalda o‘zgartirishingiz mumkin. AVTOMATIK yoqilganda simlar qulflanadi va o‘zi belgilanadi.
-- **Vaqt simulyatsiyasi:** 15 daqiqalik qadam bilan ketadi (12:00, 12:15, 12:30, 12:45, 13:00 …). Tezligini `app.js` boshidagi `STEP_MS` (millisekund) va qadamini `TIME_STEP` (soat) bilan o‘zgartirish mumkin.
-- **Muhandislik nazorati:** yetishmovchilik, ortiqcha yuborish, zaxira haqida ogohlantirishlar.
+Server kerak emas — `index.html` ni brauzerda ochish kifoya.
 
-## Muhim muhandislik izohi
-Bu modelda "virtual dispatch" ishlatiladi. Haqiqiy elektr tarmog‘ida quvvat "falon stansiya falon iste’molchiga" tarzida qat’iy yo‘l bilan emas, tarmoq impedanslari va Kirchhoff qonunlari asosidagi power-flow orqali taqsimlanadi.
+## Manbalar (stansiyalar)
+- **O‘zbekiston:** quyosh 4,5 GW, shamol 1,9 GW, GES 2,2 GW, bug‘-gaz qurilmalari 8 GW, eski gaz bloklari 4,5 GW, IEM 1 GW, ko‘mir 2 GW, gaz-porshenli pikerlar 1,2 GW, akkumulyatorlar 0,5 GW / 1,5 GWh, import 1,5 GW, AES (Jizzax, 2,1 GW — reja, standart holatda o‘chirilgan).
+- **Yevropa:** quyosh 13 GW, quruqlik shamoli 4,6 GW, dengiz shamoli 0,6 GW, GES 3,3 GW, AES 3 GW, biomassa 1,4 GW, ko‘mir 2,9 GW, bug‘-gaz 4,7 GW, gaz turbinali pikerlar 1,5 GW, akkumulyatorlar 1,2 GW, GAES 1,5 GW, qo‘shni tarmoqlar 3 GW.
 
-Keyingi versiyada qo‘shish mumkin:
-- 110 / 220 / 500 kV shinalar va transformatorlar
-- liniya aktiv va reaktiv qarshiligi, yo‘qotishlar
-- chastota 50 Hz, kuchlanish chegaralari
-- N-1 ishonchlilik
-- stansiyalar uchun alohida ishlab chiqarish cheklovlari
-- load shedding, SCADA ko‘rinishi
-- Python backend + SQLite
+## Iste’molchilar (9 guruh)
+Aholi, isitish/konditsioner (Yevropada issiqlik nasoslari), sanoat, savdo va xizmatlar, sug‘orish nasoslari (Yevropada qishloq xo‘jaligi), transport, shifoxona/suv/aloqa, ma’lumot markazlari va mayning, ko‘cha yoritgichlari. Har birining soatlik profili, fasl va dam olish kuni ta’siri, prioriteti bor.
 
-Eslatma: elektr quvvati uchun MW, vaqt davomida sarflangan energiya uchun MWh ishlatiladi.
+## Model
+- 24 soat, 15 daqiqalik qadam; fasl, ob-havo (quyoshli / bulutli / shamolli / shamolsiz), ish kuni / dam olish.
+- **Real tarmoq rejimi:** barcha stansiyalar umumiy tarmoqqa beradi. Dispetcher merit-order bo‘yicha (avval quyosh va shamol, keyin arzon manbalar) ishlaydi; AES, ko‘mir, IEM texnik minimum va ramp cheklovlariga ega; akkumulyator/GAES sof yuklama past bo‘lganda zaryadlanadi, cho‘qqida beradi; ortiqcha energiya eksport qilinadi yoki cheklanadi; taqchillikda chastota tushadi va UFLS yuklamani prioritet bo‘yicha o‘chiradi.
+- **O‘quv jadvali rejimi:** manba → iste’molchi jadvalini qo‘lda to‘ldirish (avtomatik rejim ham bor).
+- Ko‘rsatkichlar: talab, ishlab chiqarish, chastota, aylanma zaxira (N-1), marjinal narx, CO₂ intensivligi, qayta tiklanuvchi ulush, o‘chirilgan yuklama; kunlik hisobot va 24 soatlik stek grafigi.
+- Sinov: gaz ta’minoti slideri (qishki tanqislik), N-1 avariya tugmasi, har bir stansiya quvvatini o‘zgartirish, iste’molchi talabini 0–200%.
+
+## Kalibrlash
+- O‘zbekiston: yozgi cho‘qqi ≈13,6 GW (2025-yil iyul rekordi 13,3 GW), qishki ≈13,5 GW, yiliga ≈86 TWh, qayta tiklanuvchi ulush ≈23%.
+- Yevropa: Ember 2025 ulushlari (quyosh ≈13%, shamol ≈17%, gaz ≈17%, ko‘mir ≈9%, AES ≈24%) ga yaqinlashtirilgan; EU ETS ≈85 €/t.
+
+Qiymatlar taxminiy va o‘quv maqsadida. Haqiqiy tarmoqda quvvat Kirxgof qonunlari bo‘yicha taqsimlanadi, liniya va kuchlanish cheklovlari ham hisobga olinadi.
