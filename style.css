@@ -349,6 +349,19 @@ ul, ol { list-style: none; }
     .fb { display: none; }
 }
 
+/* 6 ta menyu havolasi (Rele Lug'at qo'shilgach) 900–1140 px da sig'ishi uchun.
+   Oraliq sintaksisi ataylab: Windows 125% masshtabida kenglik kasrli bo'ladi
+   (masalan 900.8px) va `min-width: 901px` bilan `max-width: 900px` orasida
+   hech qaysi qoida ishlamaydigan "teshik" qolardi. */
+@media (900px < width <= 1140px) {
+    .nav-pill { padding-left: 16px; gap: 10px; }
+    .nav-menu a { padding: 9px 10px; font-size: .84rem; white-space: nowrap; }
+    .lang-btn { padding: 8px 9px; }
+}
+@media (900px < width <= 980px) {
+    .nav-logo span { display: none; }   /* chaqmoq belgisi qoladi, aria-label bor */
+}
+
 @media (max-width: 900px) {
     .hamburger { display: flex; }
     .nav-menu {
