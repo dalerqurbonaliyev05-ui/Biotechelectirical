@@ -1,0 +1,8 @@
+{
+  "name": "amaliyot-ui-tests",
+  "private": true,
+  "type": "module",
+  "description": "Brauzer sinovlari (haqiqiy Chromium + xotiradagi soxta Supabase mijozi). Ishga tushirish: npm install && npm test",
+  "scripts": { "test": "node --test import.test.mjs ui.test.mjs" },
+  "devDependencies": { "playwright-core": "1.56.1" }
+}

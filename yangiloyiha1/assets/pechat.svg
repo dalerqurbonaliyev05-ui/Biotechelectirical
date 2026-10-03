@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- O'ylab topilgan (namunaviy) pechat: haqiqiy tashkilot pechati emas. Rasmiy pechat kelganda shu faylni almashtiring. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+  <defs>
+    <path id="arcTop" d="M 90,300 A 210,210 0 0 1 510,300"/>
+    <path id="arcBottom" d="M 70,300 A 230,230 0 0 0 530,300"/>
+  </defs>
+  <g fill="none" stroke="#1d3fa6" stroke-width="10">
+    <circle cx="300" cy="300" r="280"/>
+    <circle cx="300" cy="300" r="268" stroke-width="3"/>
+    <circle cx="300" cy="300" r="150" stroke-width="6"/>
+  </g>
+  <g fill="#1d3fa6" font-family="Arial, Helvetica, sans-serif" font-weight="700" text-anchor="middle">
+    <text font-size="34" letter-spacing="2"><textPath href="#arcTop" startOffset="50%">ULUG'BEK TUMAN ELEKTR</textPath></text>
+    <text font-size="34" letter-spacing="2"><textPath href="#arcBottom" startOffset="50%" side="right" dy="30">TARMOQLARI KORXONASI (RES)</textPath></text>
+    <text x="300" y="285" font-size="46">RES</text>
+    <text x="300" y="338" font-size="26">TOSHKENT</text>
+  </g>
+  <g fill="#1d3fa6">
+    <polygon points="300,385 312,415 345,415 318,433 328,465 300,446 272,465 282,433 255,415 288,415"/>
+    <circle cx="68" cy="300" r="7"/><circle cx="532" cy="300" r="7"/>
+  </g>
+</svg>
