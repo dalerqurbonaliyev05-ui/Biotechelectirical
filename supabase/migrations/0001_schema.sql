@@ -207,7 +207,7 @@ grant execute on function public.current_role_name(), public.is_staff(), public.
     public.current_student_id(), public.current_student_course(), public.current_student_group() to authenticated;
 
 -- attendance.updated_at avtomatik yangilanadi.
-create function public.touch_updated_at() returns trigger language plpgsql as $$
+create function public.touch_updated_at() returns trigger language plpgsql set search_path = '' as $$
 begin new.updated_at = now(); return new; end $$;
 create trigger attendance_touch before update on public.attendance
     for each row execute function public.touch_updated_at();
