@@ -68,6 +68,16 @@ export async function hashCode(code: string, hemisId: string, pepper = ""): Prom
   return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
+export interface CodeRow {
+  expires_at: string;
+  used_at: string | null;
+}
+
+// Kod hali ishlatilmagan va muddati o'tmagan bo'lsagina foydalanish mumkin.
+export function codeUsable(row: CodeRow | null | undefined, now = Date.now()): boolean {
+  return !!row && row.used_at === null && new Date(row.expires_at).getTime() > now;
+}
+
 export function timingSafeEqual(a: string, b: string): boolean {
   if (a.length !== b.length) return false;
   let diff = 0;
