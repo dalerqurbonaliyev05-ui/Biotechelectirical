@@ -184,7 +184,6 @@
 .rl-protect-tip { font: 600 .84rem var(--mono); margin-bottom: 0 !important; }
 
 /* ---------- 6. QR ---------- */
-.rl-qr { background: #fff; }
 .rl-qr-grid { display: grid; grid-template-columns: auto 1fr; gap: 64px; align-items: center; }
 .rl-qr-card {
     display: grid; justify-items: center; gap: 12px; background: #fff; border: 2px solid var(--ink); border-radius: 30px; padding: 26px;
@@ -248,4 +247,83 @@ body.rl-lock { overflow: hidden; }
 @media (max-width: 400px) {
     .rl-float.f1 { left: -2%; }
     .rl-float.f4 { right: 0; }
+}
+
+/* ---------- Platformaga qarab tartib (html[data-platform] — index.html <head>) ----------
+   DOM tartibi o'zgarmaydi; faqat ko'rinish tartibi va urg'u:
+     ios     — iPhone bo'limi hero'dan keyin, "ilovani ochish" asosiy tugma;
+     android — APK asosiy tugma;
+     desktop — ikkalasi teng. */
+.rl-page main { display: flex; flex-direction: column; }
+html[data-platform="ios"] .rl-hero { order: -2; }
+html[data-platform="ios"] #ios { order: -1; }
+
+/* ---------- Hero: ikki tugma ---------- */
+.rl-ctas { display: flex; flex-direction: column; gap: 20px; max-width: 480px; }
+.rl-cta { display: grid; gap: 10px; }
+.rl-cta .rl-download { width: 100%; }
+.rl-cta .rl-meta { margin: 0; }
+.rl-chip-link { text-decoration: none; color: var(--ink); background: #fff6db; }
+.rl-chip-link:hover { background: #ffd27a; }
+.rl-ctas + .rl-watch { display: inline-block; margin-top: 24px; }
+html[data-platform="ios"] .rl-cta-web { order: -1; }
+/* Boshqa platformaning tugmasi — ikkinchi darajali, lekin doim ko'rinadi */
+html[data-platform="ios"] .rl-cta-apk .rl-download,
+html[data-platform="android"] .rl-cta-web .rl-download {
+    background: #fff; color: var(--ink); padding: 15px 24px; font-size: .96rem;
+    box-shadow: 4px 4px 0 var(--ink);
+}
+
+/* Bo'lim belgisida raqam o'rniga platforma ikonkasi */
+.station b.rl-st-ico svg { display: block; }
+
+/* ---------- iPhone (iOS) bo'limi ---------- */
+.rl-ios { background: #eef7ff; }
+.rl-ios-steps .rl-step { padding-top: 22px; }
+.rl-ios-steps .rl-step-no { position: absolute; top: 16px; right: 16px; margin: 0; width: 38px; height: 38px; font-size: 1rem; }
+.rl-ill { height: 92px; margin-bottom: 12px; }
+.rl-ill svg { width: 132px; height: 92px; display: block; }
+.rl-warn {
+    display: inline-block; margin: 0 0 6px; font: 700 .74rem var(--mono); letter-spacing: .02em;
+    color: #b0123f; background: #ffe3ea; border: 1.5px solid #b0123f; border-radius: 999px; padding: 2px 10px;
+}
+.rl-ios-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; margin-top: 34px; }
+.rl-ios-actions .rl-download { width: auto; }
+.rl-result {
+    display: grid; grid-template-columns: auto 1fr; gap: 20px; margin-top: 34px;
+    background: #fff; border: 2px solid var(--ink); border-radius: 28px; padding: 26px 28px;
+    box-shadow: 8px 8px 0 var(--sky), 8px 8px 0 2px var(--ink);
+}
+.rl-result-icon { width: 64px; height: 64px; border-radius: 16px; border: 2px solid var(--ink); }
+.rl-result h3 { font: 800 1.15rem / 1.3 var(--display); margin-bottom: 8px; overflow-wrap: anywhere; }
+.rl-result p { color: var(--ink-2); font-weight: 500; margin-bottom: 8px; max-width: 75ch; }
+.rl-result p b { color: var(--ink); }
+.rl-android-web { margin: 12px 0 0 !important; padding-top: 12px; border-top: 1.5px dashed #c9bfe6; }
+
+/* ---------- QR: ikki karta ---------- */
+.rl-qr { background: var(--paper); }
+.rl-qr-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 300px)); gap: 30px; margin-top: 6px; }
+.rl-qr-pair .rl-qr-card { margin: 0; }
+.rl-qr-card-ios { box-shadow: 10px 10px 0 var(--sky), 10px 10px 0 2px var(--ink); }
+.rl-qr-tag {
+    display: inline-flex; align-items: center; gap: 8px; font: 800 .92rem var(--display);
+    background: var(--ink); color: #fff; padding: 6px 15px; border-radius: 999px;
+}
+.rl-qr-what { font-size: .88rem; font-weight: 700; color: var(--ink-2); text-align: center; }
+.rl-qr-btn { border-color: var(--ink); box-shadow: 4px 4px 0 var(--ink); padding: 12px 20px; font-size: .9rem; }
+.rl-qr > .container > .rl-qr-hint { display: block; margin-top: 28px; max-width: 60ch; }
+.rl-qr-full-tag {
+    font: 800 clamp(1rem, 2.6vh, 1.7rem) var(--display); color: #fff; background: var(--ink);
+    border-radius: 999px; padding: 6px 20px;
+}
+
+@media (max-width: 1024px) {
+    .rl-ios-steps .rl-step-no { top: 14px; right: 14px; }
+}
+@media (max-width: 640px) {
+    .rl-ctas { max-width: none; }
+    .rl-ios-actions .rl-download { width: 100%; }
+    .rl-result { grid-template-columns: 1fr; padding: 22px 20px; gap: 14px; }
+    .rl-qr-pair { grid-template-columns: 1fr; justify-items: center; gap: 34px; }
+    .rl-qr-pair .rl-qr-card { width: min(100%, 300px); }
 }

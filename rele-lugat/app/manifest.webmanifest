@@ -1,0 +1,20 @@
+{
+  "id": "./",
+  "name": "Rele Lug'at",
+  "short_name": "Rele Lug'at",
+  "description": "Releli himoya fanidan interaktiv o'quv ilovasi: atamalar, sxema konstruktori, testlar va o'quv yo'li. Internetsiz ishlaydi.",
+  "lang": "uz",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#0b1220",
+  "background_color": "#0b1220",
+  "categories": ["education"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
