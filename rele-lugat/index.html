@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rele Lug‘at — releli himoya o‘quv ilovasi (Android) | EnergyVibe</title>
-    <meta name="description" content="Rele Lug‘at — releli himoya fanini o‘ynab o‘rganish uchun bepul Android ilova: 214 atama, 24 sxema, 170 test savoli, flashcard va o‘quv yo‘li. Internetsiz ishlaydi, 3 tilda.">
+    <title>Rele Lug‘at — releli himoya o‘quv ilovasi: Android (APK) va iPhone | EnergyVibe</title>
+    <meta name="description" content="Rele Lug‘at — releli himoya fanini o‘ynab o‘rganish uchun bepul ilova: Android uchun APK, iPhone va brauzer uchun veb-ilova. 214 atama, 24 sxema, 170 test savoli. Internetsiz ishlaydi, 3 tilda.">
     <link rel="canonical" href="https://energyvibe.uz/rele-lugat/">
     <meta name="theme-color" content="#6d4aff">
     <link rel="icon" type="image/svg+xml" href="/rele-lugat/img/icon.svg">
@@ -13,8 +13,8 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="EnergyVibe">
     <meta property="og:url" content="https://energyvibe.uz/rele-lugat/">
-    <meta property="og:title" content="Rele Lug‘at — releli himoya o‘quv ilovasi">
-    <meta property="og:description" content="Sxemani o‘zing yig‘, xatodan o‘rgan. 214 atama, 24 sxema, 170 savol — internetsiz, 3 tilda. Android uchun bepul.">
+    <meta property="og:title" content="Rele Lug‘at — releli himoya o‘quv ilovasi (Android va iPhone)">
+    <meta property="og:description" content="Sxemani o‘zing yig‘, xatodan o‘rgan. 214 atama, 24 sxema, 170 savol — internetsiz, 3 tilda. Android (APK) va iPhone uchun bepul.">
     <meta property="og:image" content="https://energyvibe.uz/rele-lugat/og.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -23,8 +23,8 @@
     <meta property="og:locale:alternate" content="ru_RU">
     <meta property="og:locale:alternate" content="en_US">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Rele Lug‘at — releli himoya o‘quv ilovasi">
-    <meta name="twitter:description" content="Sxemani o‘zing yig‘, xatodan o‘rgan. Android uchun bepul, internetsiz.">
+    <meta name="twitter:title" content="Rele Lug‘at — releli himoya o‘quv ilovasi (Android va iPhone)">
+    <meta name="twitter:description" content="Sxemani o‘zing yig‘, xatodan o‘rgan. Android va iPhone uchun bepul, internetsiz.">
     <meta name="twitter:image" content="https://energyvibe.uz/rele-lugat/og.jpg">
 
     <script type="application/ld+json">
@@ -32,11 +32,12 @@
         "@context": "https://schema.org",
         "@type": "MobileApplication",
         "name": "Rele Lug‘at",
-        "operatingSystem": "Android",
+        "operatingSystem": "Android, iOS",
         "applicationCategory": "EducationalApplication",
         "inLanguage": ["uz", "ru", "en"],
         "url": "https://energyvibe.uz/rele-lugat/",
         "downloadUrl": "https://energyvibe.uz/rele-lugat/rele-lugat.apk",
+        "installUrl": "https://energyvibe.uz/rele-lugat/app/",
         "image": "https://energyvibe.uz/rele-lugat/og.jpg",
         "author": { "@type": "Person", "name": "Daler Qurbonaliyev", "url": "https://energyvibe.uz/" },
         "offers": { "@type": "Offer", "price": "0", "priceCurrency": "UZS" }
@@ -48,7 +49,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="/rele-lugat/page.css">
-    <script>document.documentElement.classList.add('js');</script>
+    <script>
+        /* Qurilma: chizishdan OLDIN aniqlanadi (sahifa sakramasin).
+           Faqat tartib va urg'u o'zgaradi — ikkala variant doim sahifada qoladi. */
+        (function (d, n) {
+            d.classList.add('js');
+            var u = n.userAgent;
+            var ios = /iPad|iPhone|iPod/.test(u) || (/Macintosh/.test(u) && n.maxTouchPoints > 1);
+            d.setAttribute('data-platform', ios ? 'ios' : /Android/i.test(u) ? 'android' : 'desktop');
+        })(document.documentElement, navigator);
+    </script>
     <script src="/rele-lugat/config.js" defer></script>
     <script src="/rele-lugat/page.js" defer></script>
 </head>
@@ -91,19 +101,35 @@
         <section class="rl-hero" id="top">
             <div class="container rl-hero-grid">
                 <div class="rl-hero-copy">
-                    <p class="rl-eyebrow"><span class="dot"></span><span data-i18n="hero.eyebrow">Android · Releli himoya</span></p>
+                    <p class="rl-eyebrow"><span class="dot"></span><span data-i18n="hero.eyebrow">Android · iPhone · Releli himoya</span></p>
                     <h1 class="rl-title">Rele <span class="rl-grad">Lug‘at</span></h1>
                     <p class="rl-lead" data-i18n="hero.lead">Releli himoyani yodlamang — o‘ynab o‘rganing: sxemani o‘zingiz yig‘ing, har bir xatoga tushuntirish oling.</p>
 
-                    <a class="btn btn-primary rl-download" href="/rele-lugat/rele-lugat.apk" download="rele-lugat.apk" data-apk>
-                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m6.5 10 5.5 5.5 5.5-5.5"/><path d="M4 20h16"/></svg>
-                        <span data-i18n="hero.download">APK yuklab olish (Android)</span>
-                    </a>
-                    <p class="rl-meta">
-                        <span class="rl-chip"><span data-i18n="hero.version">Versiya</span> <b data-cfg="version">2.0.0</b></span>
-                        <span class="rl-chip"><b data-cfg="size">4.8</b> <span data-i18n="unit.mb">MB</span></span>
-                        <span class="rl-chip rl-chip-warn"><svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M17.6 9.48 19.44 6.3a.38.38 0 0 0-.66-.38l-1.86 3.22a11.4 11.4 0 0 0-9.84 0L5.22 5.92a.38.38 0 1 0-.66.38L6.4 9.48A10.8 10.8 0 0 0 1 18h22a10.8 10.8 0 0 0-5.4-8.52ZM7 15.25a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5Zm10 0a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5Z"/></svg><span data-i18n="hero.only">Faqat Android</span></span>
-                    </p>
+                    <!-- Ikkala variant doim bor; tartib va urg'u qurilmaga qarab (page.css → data-platform) -->
+                    <div class="rl-ctas">
+                        <div class="rl-cta rl-cta-apk">
+                            <a class="btn btn-primary rl-download" href="/rele-lugat/rele-lugat.apk" download="rele-lugat.apk" data-apk>
+                                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m6.5 10 5.5 5.5 5.5-5.5"/><path d="M4 20h16"/></svg>
+                                <span data-i18n="hero.download">Android: APK yuklab olish</span>
+                            </a>
+                            <p class="rl-meta">
+                                <span class="rl-chip"><span data-i18n="hero.version">Versiya</span> <b data-cfg="version">2.0.0</b></span>
+                                <span class="rl-chip"><b data-cfg="size">4.8</b> <span data-i18n="unit.mb">MB</span></span>
+                                <span class="rl-chip rl-chip-warn"><svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M17.6 9.48 19.44 6.3a.38.38 0 0 0-.66-.38l-1.86 3.22a11.4 11.4 0 0 0-9.84 0L5.22 5.92a.38.38 0 1 0-.66.38L6.4 9.48A10.8 10.8 0 0 0 1 18h22a10.8 10.8 0 0 0-5.4-8.52ZM7 15.25a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5Zm10 0a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5Z"/></svg><span data-i18n="hero.only">Faqat Android</span></span>
+                            </p>
+                        </div>
+                        <div class="rl-cta rl-cta-web">
+                            <a class="btn btn-primary rl-download rl-open" href="/rele-lugat/app/" data-app>
+                                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10.5 18.5h3"/><path d="m9.5 9.5 2.5-2.5 2.5 2.5"/><path d="M12 7v7"/></svg>
+                                <span data-i18n="hero.open">iPhone / brauzer: ilovani ochish</span>
+                            </a>
+                            <p class="rl-meta">
+                                <span class="rl-chip" data-i18n="hero.webChip1">Safari · Chrome</span>
+                                <span class="rl-chip" data-i18n="hero.webChip2">offline ishlaydi</span>
+                                <a class="rl-chip rl-chip-link" href="#ios" data-i18n="hero.howIos">iPhone’ga o‘rnatish ↓</a>
+                            </p>
+                        </div>
+                    </div>
                     <a class="link rl-watch" href="#video" data-i18n="hero.watch">30 soniyalik videoni ko‘rish ↓</a>
                 </div>
 
@@ -242,8 +268,8 @@
         <section class="section rl-install" id="install">
             <div class="container">
                 <header class="section-head reveal">
-                    <span class="station"><b>04</b><span data-i18n="inst.station">O‘rnatish</span></span>
-                    <h2 class="section-title" data-i18n="inst.title">4 qadamda o‘rnating</h2>
+                    <span class="station"><b class="rl-st-ico"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M17.6 9.48 19.44 6.3a.38.38 0 0 0-.66-.38l-1.86 3.22a11.4 11.4 0 0 0-9.84 0L5.22 5.92a.38.38 0 1 0-.66.38L6.4 9.48A10.8 10.8 0 0 0 1 18h22a10.8 10.8 0 0 0-5.4-8.52ZM7 15.25a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5Zm10 0a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5Z"/></svg></b><span data-i18n="inst.station">Android · APK</span></span>
+                    <h2 class="section-title" data-i18n="inst.title">Android’ga o‘rnatish — 4 qadam</h2>
                 </header>
 
                 <ol class="rl-steps">
@@ -282,36 +308,157 @@
             </div>
         </section>
 
+        <!-- 5. iPhone (iOS) — veb-ilova (PWA). iPhone'dan ochilsa tepaga ko'chadi (page.css) -->
+        <section class="section rl-ios" id="ios">
+            <div class="container">
+                <header class="section-head reveal">
+                    <span class="station"><b class="rl-st-ico"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M10.5 18.5h3"/></svg></b><span data-i18n="ios.station">iPhone · iOS</span></span>
+                    <h2 class="section-title" data-i18n="ios.title">iPhone’ga o‘rnatish — 4 qadam</h2>
+                </header>
+                <p class="section-lead reveal" data-i18n="ios.lead">App Store kerak emas: veb-ilova bosh ekranga ikonka bo‘lib o‘rnatiladi, to‘liq ekranda ochiladi va internetsiz ishlaydi.</p>
+
+                <ol class="rl-steps rl-ios-steps">
+                    <li class="rl-step reveal">
+                        <span class="rl-step-no">1</span>
+                        <div class="rl-ill" aria-hidden="true">
+                            <!-- Safari kompasi -->
+                            <svg viewBox="0 0 120 84">
+                                <circle cx="60" cy="42" r="33" fill="#9be7ff" stroke="#1b1440" stroke-width="3"/>
+                                <circle cx="60" cy="42" r="25" fill="#fff" stroke="#1b1440" stroke-width="2"/>
+                                <g stroke="#1b1440" stroke-width="2" stroke-linecap="round"><path d="M60 19v5M60 60v5M37 42h5M78 42h5"/></g>
+                                <path d="M73 29 63 45 57 39Z" fill="#ff5c8a" stroke="#1b1440" stroke-width="2" stroke-linejoin="round"/>
+                                <path d="M47 55 57 39 63 45Z" fill="#fff" stroke="#1b1440" stroke-width="2" stroke-linejoin="round"/>
+                                <circle cx="60" cy="42" r="2.6" fill="#1b1440"/>
+                            </svg>
+                        </div>
+                        <h3 data-i18n="ios.s1.t">Havolani Safari’da oching</h3>
+                        <p><span class="rl-warn" data-i18n="ios.s1.warn">Chrome emas — aynan Safari!</span> <span data-i18n="ios.s1.d">Boshqa brauzerlarda «Bosh ekranga qo‘shish» bo‘lmasligi mumkin. Pastdagi «Ilovani ochish» tugmasini Safari’da bosing yoki QR-kodni skanerlang.</span></p>
+                    </li>
+                    <li class="rl-step reveal">
+                        <span class="rl-step-no">2</span>
+                        <div class="rl-ill" aria-hidden="true">
+                            <!-- Safari pastki paneli, "Ulashish" belgisi ajratilgan -->
+                            <svg viewBox="0 0 120 84">
+                                <rect x="6" y="40" width="108" height="34" rx="9" fill="#fff" stroke="#1b1440" stroke-width="3"/>
+                                <g fill="none" stroke="#1b1440" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M22 51l-5 6 5 6"/><path d="M36 51l5 6-5 6"/>
+                                    <path d="M83 52h10v10H83z"/><path d="M98 50h-12"/>
+                                </g>
+                                <circle cx="60" cy="57" r="13" fill="#ffd27a" stroke="#1b1440" stroke-width="2.4"/>
+                                <g fill="none" stroke="#1b1440" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M55 56v7h10v-7"/><path d="M60 59V48"/><path d="m56.5 51.5 3.5-3.5 3.5 3.5"/>
+                                </g>
+                                <path d="M60 30v-9" stroke="#ff5c8a" stroke-width="3" stroke-linecap="round"/>
+                                <path d="m54 26 6 6 6-6" fill="none" stroke="#ff5c8a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3 data-i18n="ios.s2.t">«Ulashish» tugmasini bosing</h3>
+                        <p data-i18n="ios.s2.d">Ekran pastidagi kvadrat va yuqoriga strelka belgisi. Yangi iOS’da avval «•••» menyusini oching.</p>
+                    </li>
+                    <li class="rl-step reveal">
+                        <span class="rl-step-no">3</span>
+                        <div class="rl-ill" aria-hidden="true">
+                            <!-- Ulashish menyusi, "Bosh ekranga qo'shish" qatori ajratilgan -->
+                            <svg viewBox="0 0 120 84">
+                                <rect x="14" y="6" width="92" height="72" rx="9" fill="#fff" stroke="#1b1440" stroke-width="3"/>
+                                <g stroke="#d9d0f0" stroke-width="5" stroke-linecap="round"><path d="M26 20h52"/><path d="M26 64h40"/></g>
+                                <rect x="20" y="31" width="80" height="20" rx="6" fill="#a8f0d6" stroke="#1b1440" stroke-width="2.4"/>
+                                <rect x="27" y="35" width="12" height="12" rx="3" fill="#fff" stroke="#1b1440" stroke-width="2"/>
+                                <path d="M33 38v6M30 41h6" stroke="#1b1440" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M46 41h44" stroke="#1b1440" stroke-width="4" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <h3 data-i18n="ios.s3.t">«Bosh ekranga qo‘shish»ni tanlang</h3>
+                        <p data-i18n="ios.s3.d">Menyuni pastga suring. Telefon tili ruscha bo‘lsa — «На экран „Домой“», inglizcha — «Add to Home Screen».</p>
+                    </li>
+                    <li class="rl-step reveal">
+                        <span class="rl-step-no">4</span>
+                        <div class="rl-ill" aria-hidden="true">
+                            <!-- Tasdiqlash oynasi: ilova ikonkasi va o'ng yuqoridagi "Qo'shish" -->
+                            <svg viewBox="0 0 120 84">
+                                <rect x="10" y="6" width="100" height="72" rx="9" fill="#fff" stroke="#1b1440" stroke-width="3"/>
+                                <path d="M10 24h100" stroke="#1b1440" stroke-width="2"/>
+                                <rect x="72" y="10" width="32" height="11" rx="5.5" fill="#ffd27a" stroke="#1b1440" stroke-width="2"/>
+                                <path d="m82 15.5 3 3 6-6" fill="none" stroke="#1b1440" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <rect x="22" y="34" width="30" height="30" rx="8" fill="#2f7ff0" stroke="#1b1440" stroke-width="2"/>
+                                <path d="M41 39 34 50h5l-3 10 9-13h-5l3-8Z" fill="#ffd34d"/>
+                                <g stroke="#d9d0f0" stroke-width="5" stroke-linecap="round"><path d="M62 42h34"/><path d="M62 54h24"/></g>
+                            </svg>
+                        </div>
+                        <h3 data-i18n="ios.s4.t">«Qo‘shish»ni bosing</h3>
+                        <p data-i18n="ios.s4.d">Oynaning o‘ng yuqori burchagida. Bir soniyada Rele Lug‘at ikonkasi bosh ekranda paydo bo‘ladi.</p>
+                    </li>
+                </ol>
+
+                <div class="rl-ios-actions reveal">
+                    <a class="btn btn-primary rl-download rl-open" href="/rele-lugat/app/" data-app>
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10.5 18.5h3"/><path d="m9.5 9.5 2.5-2.5 2.5 2.5"/><path d="M12 7v7"/></svg>
+                        <span data-i18n="ios.open">Ilovani ochish</span>
+                    </a>
+                    <span class="rl-qr-url" data-cfg="app-url-short">energyvibe.uz/rele-lugat/app</span>
+                </div>
+
+                <aside class="rl-result reveal" aria-labelledby="rl-result-title">
+                    <img src="/rele-lugat/app/icons/icon-192.png" width="64" height="64" alt="" loading="lazy" decoding="async" class="rl-result-icon">
+                    <div>
+                        <h3 id="rl-result-title" data-i18n="ios.res.t">Natija: bosh ekranda ilova</h3>
+                        <p data-i18n="ios.res.d">Rele Lug‘at ikonkasi bosh ekranda turadi, ilova to‘liq ekranda ochiladi va internetsiz ishlaydi. Progress telefonda saqlanadi.</p>
+                        <p class="rl-protect-tip" data-i18n="ios.res.vibro">Eslatma: iOS’da vibratsiya yo‘q — Safari bu imkoniyatni bermaydi. Tovushlar ishlaydi.</p>
+                        <p class="rl-android-web"><b data-i18n="ios.android.t">Android’da ham:</b> <span data-i18n="ios.android.d">shu veb-versiyani Chrome’da oching → «⋮» menyu → «Ilovani o‘rnatish» (yoki «Bosh ekranga qo‘shish»). APK va Play Protect ogohlantirishisiz.</span></p>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
         <!-- 6. QR-kod -->
         <section class="section rl-qr" id="qr">
-            <div class="container rl-qr-grid">
-                <div class="rl-qr-card reveal">
-                    <img src="/rele-lugat/qr.svg" width="260" height="260" alt="Ushbu sahifaga olib boradigan QR-kod" data-i18n-alt="qr.alt">
-                    <span class="rl-qr-url" data-cfg="page-url-short">energyvibe.uz/rele-lugat</span>
-                </div>
-                <div class="rl-qr-copy">
-                    <header class="section-head reveal">
-                        <span class="station"><b>05</b>QR</span>
-                        <h2 class="section-title" data-i18n="qr.title">Kompyuterdan ochdingizmi?</h2>
-                    </header>
-                    <p class="section-lead reveal" data-i18n="qr.lead">Telefon kamerasini QR-kodga qarating — shu sahifa telefoningizda ochiladi va APK’ni darhol yuklab olasiz.</p>
-                    <div class="rl-qr-actions reveal">
-                        <button type="button" class="btn btn-primary" id="rl-qr-open">
-                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+            <div class="container">
+                <header class="section-head reveal">
+                    <span class="station"><b>04</b>QR</span>
+                    <h2 class="section-title" data-i18n="qr.title">Kompyuterdan ochdingizmi?</h2>
+                </header>
+                <p class="section-lead reveal" data-i18n="qr.lead">Telefon kamerasini kerakli QR-kodga qarating: Android uchun — APK sahifasi, iPhone uchun — ilovaning o‘zi ochiladi.</p>
+
+                <div class="rl-qr-pair">
+                    <figure class="rl-qr-card reveal" data-qr="android">
+                        <figcaption class="rl-qr-tag">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M17.6 9.48 19.44 6.3a.38.38 0 0 0-.66-.38l-1.86 3.22a11.4 11.4 0 0 0-9.84 0L5.22 5.92a.38.38 0 1 0-.66.38L6.4 9.48A10.8 10.8 0 0 0 1 18h22a10.8 10.8 0 0 0-5.4-8.52ZM7 15.25a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5Zm10 0a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5Z"/></svg>
+                            <span data-i18n="qr.android">Android</span>
+                        </figcaption>
+                        <img src="/rele-lugat/qr.svg" width="240" height="240" alt="Android: APK sahifasiga olib boradigan QR-kod" data-i18n-alt="qr.altAndroid">
+                        <span class="rl-qr-url" data-cfg="page-url-short">energyvibe.uz/rele-lugat</span>
+                        <span class="rl-qr-what" data-i18n="qr.whatAndroid">APK yuklab olish sahifasi</span>
+                        <button type="button" class="btn btn-primary rl-qr-btn" data-qr-open="android">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
                             <span data-i18n="qr.big">Doskada ko‘rsatish</span>
                         </button>
-                        <span class="rl-qr-hint" data-i18n="qr.hint">Darsda: proyektorda katta QR — butun guruh birdan skanerlaydi.</span>
-                    </div>
+                    </figure>
+
+                    <figure class="rl-qr-card rl-qr-card-ios reveal" data-qr="ios">
+                        <figcaption class="rl-qr-tag">
+                            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M10.5 18.5h3"/></svg>
+                            <span data-i18n="qr.ios">iPhone</span>
+                        </figcaption>
+                        <img src="/rele-lugat/qr-app.svg" width="240" height="240" alt="iPhone: ilovani ochadigan QR-kod" data-i18n-alt="qr.altIos">
+                        <span class="rl-qr-url" data-cfg="app-url-short">energyvibe.uz/rele-lugat/app</span>
+                        <span class="rl-qr-what" data-i18n="qr.whatIos">Ilova — Safari’da oching</span>
+                        <button type="button" class="btn btn-primary rl-qr-btn" data-qr-open="ios">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+                            <span data-i18n="qr.big">Doskada ko‘rsatish</span>
+                        </button>
+                    </figure>
                 </div>
+                <p class="rl-qr-hint reveal" data-i18n="qr.hint">Darsda: proyektorda katta QR — butun guruh birdan skanerlaydi.</p>
             </div>
         </section>
     </main>
 
     <!-- QR — katta ko'rinish (doska / proyektor) -->
     <div class="rl-qr-full" id="rl-qr-full" role="dialog" aria-modal="true" aria-labelledby="rl-qr-full-title" hidden>
+        <p class="rl-qr-full-tag" id="rl-qr-full-tag">Android</p>
         <p class="rl-qr-full-title" id="rl-qr-full-title" data-i18n="qr.fullTitle">Telefon kamerasi bilan skanerlang</p>
-        <img src="/rele-lugat/qr.svg" alt="QR-kod" data-i18n-alt="qr.alt">
-        <p class="rl-qr-full-url" data-cfg="page-url-short">energyvibe.uz/rele-lugat</p>
+        <img id="rl-qr-full-img" src="/rele-lugat/qr.svg" alt="QR-kod">
+        <p class="rl-qr-full-url" id="rl-qr-full-url">energyvibe.uz/rele-lugat</p>
         <button type="button" class="btn btn-primary rl-qr-close" id="rl-qr-close"><span data-i18n="qr.close">Yopish</span> <kbd>Esc</kbd></button>
     </div>
 

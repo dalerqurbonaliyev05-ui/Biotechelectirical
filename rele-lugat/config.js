@@ -12,5 +12,12 @@ window.RELE_LUGAT = {
     SIZE_MB: 4.8,          // 5 005 191 bayt
     // Sahifaning to'liq manzili — QR-kod (qr.svg) va ulashish uchun.
     // Domen o'zgarsa qr.svg ni ham qayta yarating.
-    PAGE_URL: 'https://energyvibe.uz/rele-lugat/'
+    PAGE_URL: 'https://energyvibe.uz/rele-lugat/',
+
+    // Veb-ilova (PWA) — iPhone va brauzer uchun. Oxiridagi "/" shart:
+    // service worker faqat shu yo'lni boshqaradi (offline ishlashi uchun).
+    // Yangi build: rele-lugat reposida `npm run build:web` → dist-web/ ni
+    // shu saytning rele-lugat/app/ papkasiga ko'chiring.
+    APP_URL: '/rele-lugat/app/',
+    APP_PAGE_URL: 'https://energyvibe.uz/rele-lugat/app/'   // qr-app.svg shu manzilga
 };
