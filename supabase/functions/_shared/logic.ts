@@ -58,6 +58,25 @@ export function generateCode(length = 8): string {
   return out;
 }
 
+// Vaqtinchalik parol (xodim yaratilganda yoki parol tiklanganda): 12 belgi, o'qish uchun guruhlangan.
+export function generateTempPassword(): string {
+  const c = generateCode(12);
+  return `${c.slice(0, 4)}-${c.slice(4, 8)}-${c.slice(8)}`;
+}
+
+export type ManageAction = "create_staff" | "reset_password" | "set_active";
+export type AnyRole = "student" | "res_head" | "practice_head" | "admin";
+
+// Kim kimni boshqara oladi:
+//  - admin: hammani (xodim yaratish, parol tiklash, faolsizlantirish);
+//  - amaliyot rahbari: faqat TALABALARNING parolini tiklashi mumkin;
+//  - qolganlar: hech narsa.
+export function canManage(caller: string, target: AnyRole | null, action: ManageAction): boolean {
+  if (caller === "admin") return action === "create_staff" ? target !== "student" : target !== null;
+  if (caller === "practice_head") return action === "reset_password" && target === "student";
+  return false;
+}
+
 export function formatCode(code: string): string {
   return code.length === 8 ? `${code.slice(0, 4)}-${code.slice(4)}` : code;
 }

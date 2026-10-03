@@ -2,10 +2,12 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
+  canManage,
   cleanStudentRow,
   codeUsable,
   formatCode,
   generateCode,
+  generateTempPassword,
   hashCode,
   MAX_CODE_ATTEMPTS,
   normalizeCode,
@@ -114,4 +116,32 @@ test("import qatori: to'g'ri va noto'g'ri holatlar", () => {
   assert.match(cleanStudentRow({ hemis_id: "999221110001", full_name: "A", course: "2.5" }, 3).error, /kurs/);
   assert.match(cleanStudentRow(null, 4).error, /noto'g'ri format/);
   assert.equal(cleanStudentRow({ hemis_id: "999221110001", full_name: "x".repeat(500) }, 1).row.full_name.length, 200);
+});
+
+test("vaqtinchalik parol: 12 belgi, guruhlangan, parol talabidan o'tadi", () => {
+  const seen = new Set();
+  for (let i = 0; i < 500; i++) {
+    const p = generateTempPassword();
+    assert.match(p, /^[ABCDEFGHJKMNPQRSTUVWXYZ23456789]{4}-[ABCDEFGHJKMNPQRSTUVWXYZ23456789]{4}-[ABCDEFGHJKMNPQRSTUVWXYZ23456789]{4}$/);
+    assert.equal(passwordError(p), null);
+    seen.add(p);
+  }
+  assert.equal(seen.size, 500);
+});
+
+test("canManage: kim kimni boshqaradi", () => {
+  assert.equal(canManage("admin", "res_head", "create_staff"), true);
+  assert.equal(canManage("admin", "student", "create_staff"), false); // talabalar kod orqali yaratiladi
+  assert.equal(canManage("admin", "student", "reset_password"), true);
+  assert.equal(canManage("admin", "practice_head", "set_active"), true);
+  assert.equal(canManage("admin", null, "reset_password"), false);
+  assert.equal(canManage("practice_head", "student", "reset_password"), true);
+  assert.equal(canManage("practice_head", "student", "set_active"), false);
+  assert.equal(canManage("practice_head", "res_head", "reset_password"), false);
+  assert.equal(canManage("practice_head", "student", "create_staff"), false);
+  for (const a of ["create_staff", "reset_password", "set_active"]) {
+    assert.equal(canManage("res_head", "student", a), false);
+    assert.equal(canManage("student", "student", a), false);
+    assert.equal(canManage("???", "student", a), false);
+  }
 });
