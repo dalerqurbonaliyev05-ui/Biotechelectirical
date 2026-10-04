@@ -41,6 +41,11 @@
       "permanent": true
     },
     {
+      "source": "/fizika/app/",
+      "destination": "/fizika/",
+      "permanent": true
+    },
+    {
       "source": "/fizika/app/:path*",
       "destination": "/fizika/",
       "permanent": true
