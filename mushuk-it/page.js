@@ -23,9 +23,12 @@
         if (!DICT[lang]) lang = 'uz';
         const d = DICT[lang];
         document.documentElement.lang = lang;
-        if (d['meta.title']) document.title = d['meta.title'];
+        const tKey = document.body.dataset.titleKey || 'meta.title', dKey = document.body.dataset.descKey || 'meta.desc';
+        if (d[tKey]) document.title = d[tKey];
         const meta = document.querySelector('meta[name="description"]');
-        if (meta && d['meta.desc']) meta.setAttribute('content', d['meta.desc']);
+        if (meta && d[dKey]) meta.setAttribute('content', d[dKey]);
+        // til bo'yicha alohida bloklar (masalan, maxfiylik siyosati matni)
+        document.querySelectorAll('[data-lang-block]').forEach(el => { el.hidden = el.dataset.langBlock !== lang; });
         document.querySelectorAll('[data-i18n]').forEach(el => { const v = d[el.dataset.i18n]; if (v != null) el.textContent = v; });
         // data-i18n-h: ishonchli statik lug'at (lang.js) dan, <b>, <code>, <span> teglari bilan
         document.querySelectorAll('[data-i18n-h]').forEach(el => { const v = d[el.dataset.i18nH]; if (v != null) el.innerHTML = v; });

@@ -23,6 +23,11 @@ window.MU_I18N = {
   "h.f1": "🐱 mushuk",
   "h.f2": "🐶 it",
   "h.f3": "📍 lokatsiya",
+  "v.station": "Reklama",
+  "v.title": "20 soniyada ilova",
+  "v.lead": "Ko‘chada mushukni ko‘rdingizmi? Suratga oling, joylashuv avtomatik belgilanadi, boshqalar esa uni xaritada topadi.",
+  "v.cta": "Ilovani yuklab olish ↓",
+  "v.fallback": "Videoni yuklab oling",
   "d.station": "Yuklab olish",
   "d.title": "APK faylni yuklab oling",
   "d.lead": "Ilova Google Play’da emas, shuning uchun to‘g‘ridan-to‘g‘ri APK fayl sifatida beriladi. Bepul va reklamasiz.",
@@ -91,6 +96,9 @@ window.MU_I18N = {
   "q8.q": "Ilova xavfsizmi?",
   "q8.a": "Ilova faqat kamera va joylashuv ruxsatini so‘raydi. Ma’lumotlar himoyalangan serverda saqlanadi; boshqalar faqat ismingiz va e’loningizni ko‘radi, email va telefon ko‘rinmaydi.",
   "foot.home": "Bosh sahifa",
+  "foot.privacy": "Maxfiylik siyosati",
+  "pv.title": "Maxfiylik siyosati: Mushuk va Itlarni Top | EnergyVibe",
+  "pv.desc": "Mushuk va Itlarni Top ilovasining maxfiylik siyosati: qanday ma’lumotlar yig‘iladi, kimga ko‘rinadi, qayerda saqlanadi va qanday o‘chiriladi.",
   "foot.right": ""
  },
  "ru": {
@@ -116,6 +124,11 @@ window.MU_I18N = {
   "h.f1": "🐱 кошка",
   "h.f2": "🐶 собака",
   "h.f3": "📍 место",
+  "v.station": "Ролик",
+  "v.title": "Приложение за 20 секунд",
+  "v.lead": "Увидели на улице кота? Сфотографируйте: геопозиция отметится автоматически, а другие найдут его на карте.",
+  "v.cta": "Скачать приложение ↓",
+  "v.fallback": "Скачать видео",
   "d.station": "Скачать",
   "d.title": "Скачайте APK-файл",
   "d.lead": "Приложения нет в Google Play, поэтому оно распространяется напрямую в виде APK-файла. Бесплатно и без рекламы.",
@@ -184,6 +197,9 @@ window.MU_I18N = {
   "q8.q": "Приложение безопасно?",
   "q8.a": "Приложение запрашивает только доступ к камере и местоположению. Данные хранятся на защищённом сервере; другие видят лишь ваше имя и объявления, email и телефон скрыты.",
   "foot.home": "Главная",
+  "foot.privacy": "Политика конфиденциальности",
+  "pv.title": "Политика конфиденциальности: Найди кошек и собак | EnergyVibe",
+  "pv.desc": "Политика конфиденциальности приложения «Найди кошек и собак»: какие данные собираются, кто их видит, где они хранятся и как их удалить.",
   "foot.right": ""
  },
  "en": {
@@ -209,6 +225,11 @@ window.MU_I18N = {
   "h.f1": "🐱 cat",
   "h.f2": "🐶 dog",
   "h.f3": "📍 location",
+  "v.station": "Promo",
+  "v.title": "The app in 20 seconds",
+  "v.lead": "Spotted a cat on the street? Take a photo, the location is tagged automatically and others find it on the map.",
+  "v.cta": "Download the app ↓",
+  "v.fallback": "Download the video",
   "d.station": "Download",
   "d.title": "Download the APK",
   "d.lead": "The app is not on Google Play, so it is distributed directly as an APK file. Free and ad-free.",
@@ -277,6 +298,9 @@ window.MU_I18N = {
   "q8.q": "Is the app safe?",
   "q8.a": "The app only asks for camera and location access. Data lives on a protected server; others see only your name and posts, never your email or phone.",
   "foot.home": "Home",
+  "foot.privacy": "Privacy Policy",
+  "pv.title": "Privacy Policy: Find Cats & Dogs | EnergyVibe",
+  "pv.desc": "Privacy policy of the Find Cats & Dogs app: what data is collected, who sees it, where it is stored and how to delete it.",
   "foot.right": ""
  }
 };
