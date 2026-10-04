@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://*.supabase.co https://*.googleusercontent.com; connect-src 'self' https://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mushuk va It Top | Admin kirish</title>
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<div class="auth-wrap">
+  <div class="card auth-card">
+    <div class="auth-logo"><div class="ico">🐾</div><h2 style="margin:6px 0 0">Mushuk va It Top</h2><div class="muted small">Administrator paneli</div></div>
+    <div id="msg" class="alert hidden" role="alert"></div>
+    <button class="btn block" id="googleBtn" type="button">Google orqali kirish</button>
+    <p class="muted small center mt mb">yoki email va parol bilan</p>
+    <form id="loginForm" autocomplete="on">
+      <label class="field"><span>Email</span><input type="text" id="email" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" required></label>
+      <label class="field"><span>Parol</span>
+        <div class="pw"><input type="password" id="password" name="password" autocomplete="current-password" required><button type="button" class="eye" id="eye" aria-label="Parolni ko'rsatish">👁</button></div></label>
+      <button class="btn secondary block" id="loginBtn" type="submit">Kirish</button>
+    </form>
+    <p class="muted small center mt">Faqat <code>admins</code> jadvalida bor hisoblar kira oladi.</p>
+  </div>
+</div>
+<script src="vendor/supabase-js.umd.js"></script>
+<script type="module" src="js/pages/login.js"></script>
+</body>
+</html>
