@@ -61,6 +61,7 @@ if (!NATIVE) {
   writeFileSync(path.join(out, 'config.js'), readFileSync('public/config.js', 'utf8') + '\nwindow.FIZIKA_CONFIG.noSW = true;\n');
 
   let html = readFileSync('index.html', 'utf8')
+    .replace(/<meta name="viewport"[^>]*>/, '<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover" />')
     .replace(/\s*<link rel="preconnect"[^>]*>/g, '')
     .replace(/\s*<link href="https:\/\/fonts\.googleapis\.com[^>]*>/g, '')
     .replace(/\s*<link rel="manifest"[^>]*>/, '')

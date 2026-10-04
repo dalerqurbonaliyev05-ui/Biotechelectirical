@@ -70,7 +70,7 @@ a { color: var(--pen); }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 
 /* ---------- Ilova karkasi ---------- */
-.app { min-height: 100vh; display: grid; grid-template-columns: 1fr; }
+.app { min-height: 100vh; display: grid; grid-template-columns: minmax(0, 1fr); overflow-x: clip; }
 .page { position: relative; width: 100%; max-width: 760px; margin: 0 auto; padding: 18px var(--gutter) 110px calc(var(--gutter) + 14px); }
 .page::before { /* daftar hoshiyasi */
   content: ''; position: fixed; top: 0; bottom: 0; width: 2px; background: var(--margin); opacity: .8;
@@ -78,7 +78,7 @@ a { color: var(--pen); }
 }
 .page > * { position: relative; z-index: 1; }
 @media (min-width: 960px) {
-  .app { grid-template-columns: 240px 1fr; }
+  .app { grid-template-columns: 240px minmax(0, 1fr); }
   .page { padding: 28px 40px 60px 64px; }
   .page::before { margin-left: -30px; }
 }
@@ -383,3 +383,21 @@ table.t th { font-size: 13px; color: var(--muted); font-weight: 700; }
 @media print { body * { visibility: hidden; } .cert, .cert * { visibility: visible; } .cert { position: fixed; inset: 0; } }
 
 @media (min-width: 960px) { .page > .topbar > .brand { visibility: hidden; } }
+
+/* Tor ekran (360 px va undan kichik) uchun: hech bir blok ekrandan chiqib ketmasin */
+html, body { max-width: 100%; overflow-x: hidden; }
+body { overflow-wrap: break-word; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+main, .page { min-width: 0; max-width: 100%; }
+:where(.page, .sheet, .stats, .podium, .ladder, .topic, .opts, .ansrow, .result-hero, .lbrow, .badges, .choice, .gradepick,
+  .slider, .memory, .hero, .grid2, .grid3, .field, .qgrid) > * { min-width: 0; }
+.stem, .field p, .opt, .lbrow, .topic { overflow-wrap: anywhere; }
+.input, select.input, textarea.input { max-width: 100%; }
+img, svg, video, canvas { max-width: 100%; }
+@media (max-width: 380px) {
+  .badges { grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); gap: 8px; }
+  .badge { padding: 12px 4px; }
+  .badge .bt { font-size: 12px; }
+  .seg button { padding: 9px 9px; font-size: 13px; }
+  .stem { font-size: 18px; }
+}
+.lbrow .nm { display: block; } .lbrow .grow { min-width: 0; }

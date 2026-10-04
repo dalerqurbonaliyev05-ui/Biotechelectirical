@@ -54,7 +54,29 @@ for (const d of readdirSync(RES)) {
   splashes++;
 }
 
-// 4. Ilova nomi
+// 4. WebView: telefonning shrift kattaligi sozlamasi va barmoq bilan kattalashtirish sahifani surib yubormasin
+const ma = path.join(A, 'src/main/java/uz/energyvibe/fizika/MainActivity.java');
+must(existsSync(ma), 'MainActivity.java topilmadi');
+writeFileSync(ma, `package uz.energyvibe.fizika;
+
+import android.os.Bundle;
+import android.webkit.WebSettings;
+import com.getcapacitor.BridgeActivity;
+
+public class MainActivity extends BridgeActivity {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        WebSettings s = getBridge().getWebView().getSettings();
+        s.setTextZoom(100);
+        s.setSupportZoom(false);
+        s.setBuiltInZoomControls(false);
+        s.setDisplayZoomControls(false);
+    }
+}
+`);
+
+// 5. Ilova nomi
 const sx = path.join(valuesDir, 'strings.xml');
 writeFileSync(sx, readFileSync(sx, 'utf8').replace(/(<string name="app_name">)[^<]*(<\/string>)/, '$1Fizika$2').replace(/(<string name="title_activity_main">)[^<]*(<\/string>)/, '$1Fizika$2'));
 
