@@ -61,16 +61,27 @@ export function AuthScreen({ emoji, title, lead, withShop }: { emoji: string; ti
 
 /** Kirmagan bo'lsa AuthScreen, noto'g'ri rol bo'lsa tushuntirish, aks holda ilova. */
 export function AuthGate({ emoji, title, lead, withShop, children }: { emoji: string; title: string; lead: string; withShop?: boolean; children: ReactNode }) {
-  const { loading, session, profile, wrongRole, signOut } = useAuth();
+  const { loading, session, profile, wrongRole, signOut, refreshProfile } = useAuth();
   if (loading) return <div className="u-app"><Spinner /></div>;
   if (!session) return <AuthScreen emoji={emoji} title={title} lead={lead} withShop={withShop} />;
+  if (!profile && wrongRole === null) return <div className="u-app"><Spinner /></div>;   // profil yuklanmoqda
+  if (!profile && wrongRole === 'error') {
+    return (
+      <div className="u-app"><div className="u-auth">
+        <div className="u-auth-logo" aria-hidden="true">📡</div>
+        <h1>Profilni yuklab bo'lmadi</h1>
+        <p className="lead">Internet aloqasini tekshiring va qayta urinib ko'ring.</p>
+        <div className="u-stack"><Button block onClick={() => void refreshProfile()}>Qayta urinish</Button><Button block variant="ghost" onClick={() => void signOut()}>Chiqish</Button></div>
+      </div></div>
+    );
+  }
   if (!profile) {
     return (
       <div className="u-app"><div className="u-auth">
         <div className="u-auth-logo" aria-hidden="true">🚫</div>
         <h1>Bu ilova sizning hisobingiz uchun emas</h1>
         <p className="lead">
-          {wrongRole && wrongRole !== 'none'
+          {wrongRole && wrongRole !== 'none' && wrongRole !== 'error'
             ? `Bu hisob "${ROLE_NAME[wrongRole]}" sifatida ro'yxatdan o'tgan. O'sha rolga mos ilovadan foydalaning yoki boshqa email bilan kiring.`
             : 'Bu hisob "Uy ovqatlari bozori" tizimida ro\'yxatdan o\'tmagan. Boshqa email bilan kiring.'}
         </p>

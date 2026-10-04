@@ -303,3 +303,81 @@ test('admin: ID bilan kirish va bir martalik parolni almashtirish', async () => 
   assert.equal(upd.password, 'yangi-parol-123');
   assert.equal(upd.data.must_change_password, false);
 });
+
+// ---- Ro'yxatdan o'tish: uchala ilova ----
+const SIGNUP = [
+  { app: 'buyer', role: 'buyer', id: D.IDS.buyer, shop: false, home: '.u-food' },
+  { app: 'seller', role: 'seller', id: D.IDS.seller, shop: true, home: 'text=Buyurtmalar' },
+  { app: 'courier', role: 'courier', id: D.IDS.courier, shop: false, home: '.leaflet-container' },
+];
+
+for (const c of SIGNUP) {
+  test(`ro'yxatdan o'tish: ${c.app} (sessiya, tasdiqlash, mavjud email, xato)`, async () => {
+    const db = baseDb();
+    db.couriers = [{ id: D.IDS.courier, availability: 'busy', lat: null, lng: null, location_updated_at: null, vehicle: null }];
+    db.courier_assignments = [];
+    const { srv, url } = await serveDir(`${ROOT}${c.app}/dist`);
+    servers.push(srv);
+    const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, geolocation: { latitude: 41.3, longitude: 69.25 }, permissions: ['geolocation'] });
+    const { log, ctl } = await installMock(ctx, { db, rpc: {}, user: { id: c.id, email: 'yangi@test.uz' }, seed: false });
+    const page = await ctx.newPage();
+    const errors = [];
+    page.on('pageerror', (e) => errors.push(e.message));
+    page.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource|net::ERR|WebSocket/.test(m.text())) errors.push(m.text()); });
+    await page.goto(url);
+
+    const fill = async (email) => {
+      await page.getByRole('button', { name: "Ro'yxatdan o'ting" }).click().catch(() => undefined);
+      await page.getByLabel('Ismingiz').or(page.locator('input[autocomplete=name]')).fill('Yangi Foydalanuvchi');
+      if (c.shop) await page.getByPlaceholder('Masalan: Malika oshxonasi').fill('Yangi oshxona');
+      await page.locator('input[type=tel]').fill('+998901112233');
+      await page.locator('input[type=email]').fill(email);
+      await page.locator('input[type=password]').fill('parol-123456');
+    };
+    const submit = () => page.getByRole('button', { name: /^Ro'yxatdan o'tish$/ }).click();
+
+    // 1) Tasdiqlash talab qilinsa: tushunarli xabar
+    ctl.signup = 'confirm';
+    await page.waitForSelector('.u-auth');
+    await fill('yangi@test.uz');
+    await submit();
+    await page.waitForSelector('text=tasdiqlash xati');
+    const sent = JSON.parse(log.find((l) => l.name === 'auth/signup').body);
+    assert.equal(sent.email, 'yangi@test.uz');
+    assert.equal(sent.data.app, 'uyovqat');
+    assert.equal(sent.data.role, c.role);                       // rol ilovadan keladi, foydalanuvchi tanlamaydi
+    assert.equal(sent.data.full_name, 'Yangi Foydalanuvchi');
+    assert.equal(sent.data.phone, '+998901112233');
+    if (c.shop) assert.equal(sent.data.shop_name, 'Yangi oshxona');
+
+    // 2) Mavjud email
+    ctl.signup = 'exists';
+    await page.locator('input[type=email]').fill('bor@test.uz');
+    await submit();
+    await page.waitForSelector('text=allaqachon ro');
+
+    // 3) Server xatosi (zaif parol)
+    ctl.signup = 'error';
+    await submit();
+    await page.waitForSelector('text=kamida 6 belgi');
+
+    // 4) Muvaffaqiyat: sessiya bilan ilovaga kiradi, "hisob mos emas" ekrani yaltiramaydi
+    ctl.signup = 'session';
+    const flashed = [];
+    page.on('framenavigated', () => undefined);
+    await submit();
+    await page.waitForSelector(c.home, { timeout: 15000 });
+    flashed.push(await page.getByText('hisobingiz uchun emas').count());
+    assert.equal(flashed[0], 0);
+    await page.screenshot({ path: `${SHOTS}signup-${c.app}.png` });
+    assert.deepEqual(errors, []);
+  });
+}
+
+test('kirish: boshqa rol hisobi bilan kirsa tushuntirish chiqadi', async () => {
+  const db = baseDb();
+  // Sotuvchi hisobi xaridor ilovasiga kiradi
+  const { page } = await open('buyer', { id: D.IDS.seller, email: 'malika@test.uz' }, { db });
+  await page.waitForSelector('text=hisobingiz uchun emas');
+  assert.ok(await page.getByText('"sotuvchi" sifatida').isVisible());
+});

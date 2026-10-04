@@ -10,7 +10,7 @@ interface AuthCtx {
   session: Session | null;
   profile: Profile | null;
   /** Hisob mavjud, lekin boshqa rol/ilova uchun. */
-  wrongRole: Role | 'none' | null;
+  wrongRole: Role | 'none' | 'error' | null;
   signIn(email: string, password: string): Promise<string | null>;
   /** null = muvaffaqiyatli, 'confirm' = email tasdiqlash kerak, boshqa satr = xato matni */
   signUp(input: SignUpInput): Promise<string | null>;
@@ -29,7 +29,8 @@ export function AuthProvider({ role, children }: { role: Exclude<Role, 'admin'>;
 
   const loadProfile = useCallback(async (s: Session | null) => {
     if (!s) { setProfile(null); setWrongRole(null); return; }
-    const { data } = await supabase.from('uy_profiles').select('*').eq('id', s.user.id).maybeSingle();
+    const { data, error } = await supabase.from('uy_profiles').select('*').eq('id', s.user.id).maybeSingle();
+    if (error) { setProfile(null); setWrongRole('error'); return; }       // tarmoq/server xatosi: qayta urinish taklif qilinadi
     if (!data) { setProfile(null); setWrongRole('none'); return; }
     if ((data as Profile).role !== role || !(data as Profile).is_active) {
       setProfile(null); setWrongRole((data as Profile).role); return;
@@ -65,6 +66,8 @@ export function AuthProvider({ role, children }: { role: Exclude<Role, 'admin'>;
       options: { data: { app: 'uyovqat', role, full_name: i.fullName.trim(), phone: i.phone.trim(), shop_name: i.shopName?.trim() ?? null } },
     });
     if (error) return errMsg(error);
+    // Supabase mavjud emailga xato bermaydi: identities bo'sh user qaytaradi (email mavjudligini yashirish uchun).
+    if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) return 'Bu email allaqachon ro\'yxatdan o\'tgan. "Kiring" ni bosing.';
     if (!data.session) return 'confirm';
     return null;
   }, [role]);
