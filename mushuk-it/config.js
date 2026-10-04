@@ -7,8 +7,8 @@
         Hajm (bayt): ls -l apk/mushuk-it-top.apk
    ========================================================= */
 window.MUSHUKIT = {
-    VERSION: '1.1',
+    VERSION: '1.2',
     FILE: '/mushuk-it/apk/mushuk-it-top.apk',
-    BYTES: 7088260,
-    SHA256: 'a4bd9c73203448914e09094a725cca5c5831311765ba11f3a43a54a1c3af02c3'
+    BYTES: 7088262,
+    SHA256: '48adfdb59eba6d2dc9383fc5b126b5a6dd476dc61f0b82cfc1bbeb0cdfed47ba'
 };
