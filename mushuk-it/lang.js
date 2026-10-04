@@ -96,6 +96,9 @@ window.MU_I18N = {
   "q8.q": "Ilova xavfsizmi?",
   "q8.a": "Ilova faqat kamera va joylashuv ruxsatini so‘raydi. Ma’lumotlar himoyalangan serverda saqlanadi; boshqalar faqat ismingiz va e’loningizni ko‘radi, email va telefon ko‘rinmaydi.",
   "foot.home": "Bosh sahifa",
+  "foot.privacy": "Maxfiylik siyosati",
+  "pv.title": "Maxfiylik siyosati: Mushuk va Itlarni Top | EnergyVibe",
+  "pv.desc": "Mushuk va Itlarni Top ilovasining maxfiylik siyosati: qanday ma’lumotlar yig‘iladi, kimga ko‘rinadi, qayerda saqlanadi va qanday o‘chiriladi.",
   "foot.right": ""
  },
  "ru": {
@@ -194,6 +197,9 @@ window.MU_I18N = {
   "q8.q": "Приложение безопасно?",
   "q8.a": "Приложение запрашивает только доступ к камере и местоположению. Данные хранятся на защищённом сервере; другие видят лишь ваше имя и объявления, email и телефон скрыты.",
   "foot.home": "Главная",
+  "foot.privacy": "Политика конфиденциальности",
+  "pv.title": "Политика конфиденциальности: Найди кошек и собак | EnergyVibe",
+  "pv.desc": "Политика конфиденциальности приложения «Найди кошек и собак»: какие данные собираются, кто их видит, где они хранятся и как их удалить.",
   "foot.right": ""
  },
  "en": {
@@ -292,6 +298,9 @@ window.MU_I18N = {
   "q8.q": "Is the app safe?",
   "q8.a": "The app only asks for camera and location access. Data lives on a protected server; others see only your name and posts, never your email or phone.",
   "foot.home": "Home",
+  "foot.privacy": "Privacy Policy",
+  "pv.title": "Privacy Policy: Find Cats & Dogs | EnergyVibe",
+  "pv.desc": "Privacy policy of the Find Cats & Dogs app: what data is collected, who sees it, where it is stored and how to delete it.",
   "foot.right": ""
  }
 };

@@ -114,3 +114,18 @@ html[data-platform="ios"] .mu-ios-note { display: block; }
 .mu-video { margin: 0; width: 300px; justify-self: center; }
 .mu-video video { display: block; width: 100%; height: auto; aspect-ratio: 9 / 16; border: 2px solid var(--ink); border-radius: 30px; background: #000; box-shadow: 6px 6px 0 var(--mu), 6px 6px 0 2px var(--ink); }
 @media (max-width: 860px) { .mu-promo-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; } .mu-video { width: min(300px, 100%); } }
+
+/* Maxfiylik siyosati */
+.mu-pv { padding: 140px 0 80px; }
+.mu-policy { max-width: 760px; margin: 0 auto; }
+.mu-policy .mu-title { font-size: clamp(2rem, 5vw, 3rem); margin: 14px 0 6px; }
+.mu-pv-date { color: var(--muted, #5b5470); margin: 0 0 26px; }
+.mu-pv-toc { background: #fff; border: 2px solid var(--ink); border-radius: 18px; padding: 18px 22px; margin: 0 0 30px; box-shadow: 5px 5px 0 var(--mu), 5px 5px 0 2px var(--ink); }
+.mu-pv-toc ol { margin: 8px 0 0; padding-left: 22px; columns: 2; column-gap: 28px; }
+.mu-pv-toc li { margin: 4px 0; break-inside: avoid; }
+.mu-policy section { margin: 0 0 26px; scroll-margin-top: 110px; }
+.mu-policy h2 { font: 800 1.3rem var(--display); letter-spacing: -.01em; margin: 0 0 10px; }
+.mu-policy p, .mu-policy li { line-height: 1.65; overflow-wrap: anywhere; }
+.mu-policy ul { padding-left: 22px; margin: 8px 0; }
+.mu-policy li { margin: 6px 0; }
+@media (max-width: 640px) { .mu-pv { padding: 110px 0 60px; } .mu-pv-toc ol { columns: 1; } }
