@@ -1,0 +1,26 @@
+{
+  "name": "uyovqat-promo-video",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Uy taomlari: 30 soniyalik vertikal (1080x1920) reklama videosi. Remotion (React + TypeScript).",
+  "scripts": {
+    "preview": "remotion studio src/index.ts",
+    "render": "remotion render src/index.ts PromoVideo out/uyovqat-promo.mp4",
+    "still": "remotion still src/index.ts PromoVideo out/poster.png --frame=120",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fontsource-variable/manrope": "5.1.0",
+    "@remotion/cli": "4.0.532",
+    "@remotion/paths": "4.0.532",
+    "@remotion/zod-types": "4.0.532",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remotion": "4.0.532",
+    "zod": "4.5.4"
+  },
+  "devDependencies": {
+    "@types/react": "18.3.12",
+    "typescript": "5.6.3"
+  }
+}
