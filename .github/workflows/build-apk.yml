@@ -1,0 +1,111 @@
+# Uy ovqatlari bozori: main'ga push bo'lganda 3 ta Android ilovasi (xaridor, sotuvchi, kuryer)
+# alohida joblarda yig'iladi va APK fayllar GitHub Release'ga yuklanadi.
+#
+# Ixtiyoriy sozlash (Settings > Secrets and variables > Actions > Variables):
+#   SUPABASE_URL, SUPABASE_ANON_KEY: berilmasa apps/shared/src/config.ts dagi standart qiymatlar ishlatiladi.
+name: Build APK
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/**'
+      - '.github/workflows/build-apk.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: build-apk-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: APK (${{ matrix.app }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        app: [buyer, seller, courier]
+    defaults:
+      run:
+        working-directory: apps/${{ matrix.app }}
+    env:
+      VITE_SUPABASE_URL: ${{ vars.SUPABASE_URL }}
+      VITE_SUPABASE_ANON_KEY: ${{ vars.SUPABASE_ANON_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/package-lock.json
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: android-actions/setup-android@v3
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      # Workspace: ilova papkasida o'rnatish ilova va apps/shared bog'liqliklarini o'rnatadi.
+      - name: npm install
+        run: npm ci
+
+      - name: Vite build (tsc + vite build)
+        run: npm run build
+
+      - name: Capacitor sync (android)
+        run: npx cap sync android
+
+      - name: Gradle assembleDebug
+        working-directory: apps/${{ matrix.app }}/android
+        run: ./gradlew assembleDebug --no-daemon --stacktrace
+
+      - name: APK nomini aniqlash
+        run: |
+          mkdir -p "$GITHUB_WORKSPACE/out"
+          cp android/app/build/outputs/apk/debug/app-debug.apk "$GITHUB_WORKSPACE/out/uyovqat-${{ matrix.app }}.apk"
+          ls -lh "$GITHUB_WORKSPACE/out"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: apk-${{ matrix.app }}
+          path: out/uyovqat-${{ matrix.app }}.apk
+          if-no-files-found: error
+          retention-days: 30
+
+  release:
+    name: GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: apk-*
+          path: apk
+          merge-multiple: true
+
+      - name: Fayllarni tekshirish
+        run: ls -lh apk && test "$(ls apk/*.apk | wc -l)" -eq 3
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: apk-${{ github.run_number }}
+          target_commitish: ${{ github.sha }}
+          name: APK #${{ github.run_number }} (${{ github.sha }})
+          body: |
+            Avtomatik yig'ilgan Android ilovalari (debug APK):
+            - `uyovqat-buyer.apk`: xaridor
+            - `uyovqat-seller.apk`: sotuvchi
+            - `uyovqat-courier.apk`: kuryer
+
+            Commit: ${{ github.sha }}
+          files: apk/*.apk
+          fail_on_unmatched_files: true
