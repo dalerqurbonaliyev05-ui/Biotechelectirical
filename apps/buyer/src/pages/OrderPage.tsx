@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { CourierTracker } from './CourierTracker';
 import { Button, DELIVERY_LABEL, Empty, Header, Icon, OrderTimeline, Page, Spinner, Stars, dayTime, errMsg, isActiveOrder, kmLabel, money, onTableChange,
   supabase, useToast, type CourierAssignment, type Order, type OrderItem, type Profile, type Review, type StatusLogRow } from '@uyovqat/shared';
 
@@ -63,6 +64,10 @@ export default function OrderPage() {
         )}
         {order.status === 'new' && <div style={{ marginTop: 14 }}><Button block variant="danger" onClick={cancel}>Buyurtmani bekor qilish</Button></div>}
       </div>
+
+      {order.status === 'handed_to_courier' && courier && assignment && (assignment.delivery_status === 'picked_up' || assignment.delivery_status === 'on_the_way') && (
+        <CourierTracker order={order} courier={courier} />
+      )}
 
       <div className="u-card">
         <div style={{ fontWeight: 800, marginBottom: 6 }}>Taomlar</div>

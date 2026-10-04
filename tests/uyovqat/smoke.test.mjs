@@ -242,3 +242,64 @@ test('admin panel: statistika, buyurtmalar, promokod yaratish, rol tekshiruvi', 
   await p2.goto(url);
   await p2.waitForSelector('text=administrator emas');
 });
+
+test('xaridor: kuryer xaritasi faqat yo\'lga chiqqach ko\'rinadi', async () => {
+  const db = baseDb();
+  db.orders = [D.order('preparing')];
+  db.order_items = D.order_items; db.order_status_log = D.order_status_log;
+  db.couriers = [{ id: D.IDS.courier, availability: 'busy', lat: 41.29, lng: 69.23, location_updated_at: new Date().toISOString(), vehicle: 'Skuter' }];
+  db.courier_assignments = [{ id: 'a1', order_id: D.IDS.order, courier_id: D.IDS.courier, delivery_status: 'assigned', distance_km: 1.2 }];
+  const { page, errors } = await open('buyer', { id: D.IDS.buyer, email: 'ali@test.uz' }, { db, hash: `/orders/${D.IDS.order}` });
+  await page.waitForSelector('.u-tl');
+  await page.waitForTimeout(500);
+  assert.equal(await page.locator('.leaflet-container').count(), 0, 'olib ketmasdan xarita ko\'rinmasligi kerak');
+
+  db.orders[0].status = 'handed_to_courier';
+  db.courier_assignments[0].delivery_status = 'on_the_way';
+  await page.reload();
+  await page.waitForSelector('.leaflet-container');
+  await page.waitForSelector('text=Jasur Karimov yo');
+  await page.waitForTimeout(1000);
+  assert.equal(await page.locator('.u-pin').count(), 2);               // kuryer va uy
+  assert.ok(await page.getByText(/taxminan/).isVisible());
+  await page.screenshot({ path: `${SHOTS}buyer-courier-map.png`, fullPage: true });
+
+  // Kuryer joylashuvi yangilanadi (zaxira so'rov); aloqa uzilsa ogohlantiradi
+  db.couriers[0].location_updated_at = new Date(Date.now() - 5 * 60000).toISOString();
+  await page.waitForSelector('text=Oxirgi yangilanish', { timeout: 20000 });
+  assert.deepEqual(errors, []);
+});
+
+test('admin: ID bilan kirish va bir martalik parolni almashtirish', async () => {
+  const ADMIN_DIR = new URL('../../admin/', import.meta.url).pathname;
+  const { srv, url } = await serveDir(ADMIN_DIR);
+  servers.push(srv);
+  const db = baseDb();
+  const admin = { id: '00000000-0000-0000-0000-0000000000ad', email: '912328580@admin.uyovqat.invalid', meta: { must_change_password: true } };
+  db.uy_profiles.push({ ...D.uy_profiles[0], id: admin.id, role: 'admin', full_name: 'Administrator' });
+  const ctx = await browser.newContext({ viewport: { width: 1100, height: 800 } });
+  const { log } = await installMock(ctx, { db, rpc: {}, user: admin, seed: false });
+  const page = await ctx.newPage();
+  await page.goto(url);
+  await page.waitForSelector('#lf');
+  await page.locator('input[name=email]').fill('912328580');
+  await page.locator('input[name=password]').fill('bir-martalik');
+  await page.locator('#lf button').click();
+  // Birinchi kirishda majburan "Sozlamalar" ga o'tadi
+  await page.waitForSelector('#pwf');
+  assert.ok(await page.getByText('bir martalik parolni').isVisible());
+  assert.equal(JSON.parse(log.find((l) => l.name === 'auth/token').body).email, '912328580@admin.uyovqat.invalid');
+  await page.screenshot({ path: `${SHOTS}admin-firstlogin.png` });
+
+  await page.locator('#pwf input[name=p1]').fill('yangi-parol-123');
+  await page.locator('#pwf input[name=p2]').fill('boshqa-parol-123');
+  await page.locator('#pwf button').click();
+  await page.waitForSelector('text=Parollar bir xil emas');
+  assert.ok(!log.some((l) => l.name === 'auth/user'));
+  await page.locator('#pwf input[name=p2]').fill('yangi-parol-123');
+  await page.locator('#pwf button').click();
+  await page.waitForTimeout(500);
+  const upd = JSON.parse(log.find((l) => l.name === 'auth/user').body);
+  assert.equal(upd.password, 'yangi-parol-123');
+  assert.equal(upd.data.must_change_password, false);
+});

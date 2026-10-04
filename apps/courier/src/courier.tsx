@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { errMsg, getPosition, haversineKm, onTableChange, supabase, useAuth, useToast, watchPosition,
+import { errMsg, getPosition, haversineKm, onTableChange, openLocationSettings, supabase, useAuth, useToast, watchBackground, watchPosition,
   type Availability, type Courier, type CourierAssignment, type DeliveryStatus, type LatLng, type Order, type Profile } from '@uyovqat/shared';
 
 export interface ActiveJob { assignment: CourierAssignment; order: Order; seller: Profile | null; buyer: Profile | null }
@@ -64,11 +64,25 @@ export function CourierProvider({ children }: { children: ReactNode }) {
     await supabase.from('couriers').update({ lat: p.lat, lng: p.lng }).eq('id', uid);
   }, [uid]);
 
+  // Kuzatuv faqat ishlayotgan paytda ("bo'sh" yoki faol buyurtma bor): fon rejimida (ilova yopiq/ekran o'chiq) ham
+  // Android bildirishnomali xizmat orqali davom etadi. Aks holda faqat xarita uchun oddiy kuzatuv, bazaga yuborilmaydi.
+  const tracking = courier?.availability === 'free' || !!job;
+  const asked = useRef(false);
   useEffect(() => {
     let stop: (() => void) | undefined; let dead = false;
-    watchPosition((p) => { setPos(p); void push(p); }, () => undefined).then((s) => { if (dead) s(); else stop = s; }).catch(() => undefined);
+    const onPos = (p: LatLng) => { setPos(p); if (tracking) void push(p); };
+    const onErr = (e: { code?: string }) => {
+      if (e.code === 'NOT_AUTHORIZED' && !asked.current) {
+        asked.current = true;
+        if (window.confirm('Kuryer ilovasiga joylashuv ruxsati kerak. Sozlamalarni ochamizmi?')) openLocationSettings();
+      }
+    };
+    const start = tracking
+      ? watchBackground(onPos, onErr, { title: 'Kuryer rejimi yoqilgan', message: 'Buyurtmalarni yetkazish uchun joylashuvingiz kuzatilmoqda' })
+      : watchPosition(onPos, onErr);
+    start.then((s) => { if (dead) s(); else stop = s; }).catch(() => undefined);
     return () => { dead = true; stop?.(); };
-  }, [push]);
+  }, [tracking, push]);
 
   const setAvailability = useCallback(async (a: Availability) => {
     try {
@@ -79,12 +93,14 @@ export function CourierProvider({ children }: { children: ReactNode }) {
         if (!p) { toast('Joylashuv aniqlanmadi. Ruxsat bering va qayta urinib ko\'ring.', 'error'); return; }
         setPos(p);
       }
-      const patch = a === 'free' && p ? { availability: a, lat: p.lat, lng: p.lng } : { availability: a };
+      // Ishdan chiqqanda (band va faol buyurtma yo'q) so'nggi joylashuv bazadan o'chiriladi: maxfiylik.
+      const patch = a === 'free' && p ? { availability: a, lat: p.lat, lng: p.lng }
+        : job ? { availability: a } : { availability: a, lat: null, lng: null };
       const { error } = await supabase.from('couriers').update(patch).eq('id', uid);
       if (error) throw error;
       await reload();
     } catch (e) { toast(errMsg(e), 'error'); }
-  }, [pos, uid, reload, toast]);
+  }, [pos, uid, job, reload, toast]);
 
   const advance = useCallback(async (next: DeliveryStatus) => {
     if (!job) return;

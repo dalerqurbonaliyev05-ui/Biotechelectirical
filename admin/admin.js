@@ -21,13 +21,16 @@ function toast(text, kind = 'ok') {
 const fail = (e) => toast(e?.message ?? String(e), 'bad');
 
 /* ---------------- Kirish ---------------- */
+// Administrator faqat ID (masalan 912328580) yozadi: ro'yxatdan o'tkazib bo'lmaydigan domen qo'shiladi
+// (parolni "email orqali tiklash" bilan hisobni egallab bo'lmasligi uchun). Email yozilsa o'zi ishlatiladi.
+const loginToEmail = (v) => { const t = v.trim().toLowerCase(); return t.includes('@') ? t : `${t}@admin.uyovqat.invalid`; };
 function renderLogin(msg = '') {
   $app.innerHTML = `
     <div class="login"><form id="lf">
       <div class="logo">🍲</div><h1>Admin panel</h1><p class="muted">Uy taomlari bozori. Faqat administratorlar uchun.</p>
       ${msg ? `<div class="err" role="alert">${esc(msg)}</div>` : ''}
       <div class="form" style="grid-template-columns:1fr">
-        <label>Email<input name="email" type="email" autocomplete="username" required></label>
+        <label>Login (ID) yoki email<input name="email" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" required></label>
         <label>Parol<input name="password" type="password" autocomplete="current-password" required></label>
         <button class="btn" type="submit">Kirish</button>
       </div></form></div>`;
@@ -35,7 +38,7 @@ function renderLogin(msg = '') {
     e.preventDefault();
     const f = new FormData(e.target);
     const btn = e.target.querySelector('button'); btn.disabled = true;
-    const { error } = await sb.auth.signInWithPassword({ email: String(f.get('email')).trim(), password: String(f.get('password')) });
+    const { error } = await sb.auth.signInWithPassword({ email: loginToEmail(String(f.get('email'))), password: String(f.get('password')) });
     if (error) { renderLogin(/Invalid login/i.test(error.message) ? 'Email yoki parol noto\'g\'ri' : error.message); return; }
     boot();
   });
@@ -43,7 +46,7 @@ function renderLogin(msg = '') {
 
 /* ---------------- Ilova ---------------- */
 const TABS = [['stats', 'Statistika'], ['orders', 'Buyurtmalar'], ['sellers', 'Sotuvchilar'], ['couriers', 'Kuryerlar'], ['promo', 'Promokodlar'], ['settings', 'Sozlamalar']];
-let me = null; let tab = 'stats';
+let me = null; let tab = 'stats'; let mustChange = false;
 
 async function boot() {
   const { data: { session } } = await sb.auth.getSession();
@@ -51,6 +54,7 @@ async function boot() {
   const { data: p } = await sb.from('uy_profiles').select('*').eq('id', session.user.id).maybeSingle();
   if (!p || p.role !== 'admin') { await sb.auth.signOut(); return renderLogin('Bu hisob administrator emas.'); }
   me = p;
+  mustChange = session.user.user_metadata?.must_change_password === true;
   tab = (location.hash || '#stats').slice(1); if (!TABS.some((t) => t[0] === tab)) tab = 'stats';
   renderShell();
 }
@@ -67,6 +71,7 @@ function renderShell() {
   $app.querySelectorAll('[data-tab]').forEach((b) => b.addEventListener('click', () => { tab = b.dataset.tab; location.hash = tab; renderShell(); }));
   document.getElementById('out').addEventListener('click', async () => { await sb.auth.signOut(); renderLogin(); });
   const view = document.getElementById('view');
+  if (mustChange && tab !== 'settings') { tab = 'settings'; location.hash = 'settings'; return renderShell(); }
   view.innerHTML = '<div class="boot"><div class="spin"></div></div>';
   ({ stats: viewStats, orders: viewOrders, sellers: viewSellers, couriers: viewCouriers, promo: viewPromo, settings: viewSettings })[tab](view).catch((e) => { view.innerHTML = `<div class="err">${esc(e.message)}</div>`; });
 }
@@ -212,7 +217,13 @@ async function viewSettings(v) {
   const [r, s] = await Promise.all([sb.from('bonus_rules').select('*').order('created_at'), sb.from('uy_settings').select('*')]);
   if (r.error) throw r.error;
   v.innerHTML = `<h2>Sozlamalar</h2>
-    <h3 style="margin-top:0">Sotuvchi bonus qoidalari</h3>
+    ${mustChange ? '<div class="err" role="alert">Xavfsizlik uchun avval bir martalik parolni o\'zingizniki bilan almashtiring.</div>' : ''}
+    <h3 style="margin-top:0">Parolni o'zgartirish</h3>
+    <form id="pwf" class="panel form" style="margin-top:0">
+      <label>Yangi parol (kamida 10 belgi)<input name="p1" type="password" autocomplete="new-password" minlength="10" required></label>
+      <label>Yangi parolni takrorlang<input name="p2" type="password" autocomplete="new-password" minlength="10" required></label>
+      <button class="btn" type="submit">Parolni almashtirish</button></form>
+    <h3>Sotuvchi bonus qoidalari</h3>
     <p class="muted">Har N ta yetkazilgan buyurtmadan keyin sotuvchiga bonus beriladi. Foiz: oxirgi N ta buyurtma sof daromadidan.</p>
     ${r.data.map((x) => `<form class="panel form" data-rule="${esc(x.id)}">
       <label>Nomi<input name="name" value="${esc(x.name)}" required></label>
@@ -225,6 +236,13 @@ async function viewSettings(v) {
     <h3>Platforma sozlamalari</h3>
     <form id="sf" class="panel form" style="margin-top:0">${(s.data ?? []).filter((x) => SETTING_LABELS[x.key]).map((x) => `<label>${esc(SETTING_LABELS[x.key])}<input name="${esc(x.key)}" type="number" min="0" step="0.01" value="${Number(x.value)}" required></label>`).join('')}
       <button class="btn" type="submit">Saqlash</button></form>`;
+  document.getElementById('pwf').addEventListener('submit', async (e) => {
+    e.preventDefault(); const d = new FormData(e.target);
+    if (d.get('p1') !== d.get('p2')) return toast('Parollar bir xil emas', 'bad');
+    const { error } = await sb.auth.updateUser({ password: String(d.get('p1')), data: { must_change_password: false } });
+    if (error) return fail(error);
+    mustChange = false; e.target.reset(); toast('Parol almashtirildi'); renderShell();
+  });
   v.querySelectorAll('[data-rule]').forEach((f) => f.addEventListener('submit', async (e) => {
     e.preventDefault(); const d = new FormData(f);
     const { error } = await sb.from('bonus_rules').update({ name: d.get('name'), every_n_orders: Number(d.get('n')), bonus_type: d.get('type'), bonus_value: Number(d.get('val')), is_active: d.get('on') === '1' }).eq('id', f.dataset.rule);

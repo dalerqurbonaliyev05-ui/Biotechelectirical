@@ -192,6 +192,7 @@ h1, h2, h3, p { margin: 0; }
 .u-pin { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50% 50% 50% 4px; transform: rotate(-45deg); background: var(--brand); color: #fff; box-shadow: var(--shadow-md); border: 3px solid #fff; }
 .u-pin > span { transform: rotate(45deg); font-size: 16px; line-height: 1; }
 .u-pin.home { background: var(--success); }
+.u-pin.courier { background: var(--info); }
 .u-me { width: 22px; height: 22px; border-radius: 50%; background: var(--info); border: 4px solid #fff; box-shadow: 0 0 0 6px rgba(47, 124, 246, 0.25); animation: u-me 2s ease-in-out infinite; }
 @keyframes u-me { 50% { box-shadow: 0 0 0 12px rgba(47, 124, 246, 0.08); } }
 .leaflet-container { font-family: var(--font); }

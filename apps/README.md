@@ -24,7 +24,7 @@ Supabase ulanishi `shared/src/config.ts` (yoki `VITE_SUPABASE_URL` / `VITE_SUPAB
 ## Supabase'ni tayyorlash (bir marta)
 1. `supabase/migrations/0005`, `0006`, `0007` (`uyovqat`) ni tartib bilan qo'llang. Tafsilot: `../supabase/README.md`.
 2. Authentication → Providers → Email: ilovalar email + parol bilan ishlaydi. Email tasdiqlash yoqilgan bo'lsa, ro'yxatdan o'tgach xatdagi havolani bosish kerak (ilova shuni aytadi).
-3. Birinchi adminni belgilang: ro'yxatdan o'ting (masalan xaridor ilovasida), so'ng SQL Editor'da
+3. Birinchi adminni belgilang (ID bilan kirish: `912328580` → `912328580@admin.uyovqat.invalid`, birinchi kirishda parol majburan almashtiriladi). Boshqa admin uchun: ro'yxatdan o'ting, so'ng SQL Editor'da
    `update public.uy_profiles set role = 'admin' where id = '<auth.users id>';` va `/admin/` ga shu email bilan kiring.
 4. Admin panel → Sozlamalar: yetkazish narxi, platforma ulushi, bonus qoidasi (hozir har 50 buyurtmaga 5%, vaqtinchalik qiymat).
 
@@ -33,6 +33,11 @@ Supabase ulanishi `shared/src/config.ts` (yoki `VITE_SUPABASE_URL` / `VITE_SUPAB
 - Holatlar faqat server RPC'lari orqali o'zgaradi (`uy_seller_set_status`, `uy_courier_set_delivery`, `uy_cancel_order`); mijoz jadvalga to'g'ridan-to'g'ri yoza olmaydi.
 - Yetkazilganda sotuvchiga daromad (`seller_earnings`) yoziladi va bonus qoidalari (`bonus_rules`) tekshiriladi.
 - Karta to'lovi: onlayn to'lov shlyuzi (Payme/Click) ulanmagan; hozircha to'lov usuli buyurtmada belgilanadi, to'lov yetkazishda amalga oshadi.
+
+## Kuryer joylashuvi va maxfiylik
+- Kuryer ilovasi "bo'sh" yoki faol buyurtma bor paytda joylashuvni bazaga yuboradi; ilova yopiq/ekran o'chiq bo'lsa ham Android foreground service (`@capacitor-community/background-geolocation`, "Kuryer rejimi" bildirishnomasi) davom ettiradi. "Band" bo'lib buyurtma yo'q bo'lsa kuzatuv to'xtaydi va joylashuv bazadan o'chiriladi.
+- Xaridor kuryerni faqat o'z buyurtmasini kuryer olib ketgach (`picked_up`/`on_the_way`) va yetkazilgunga qadar ko'radi (RLS: `uy_can_track_courier`, migratsiya `0009`). Sotuvchi kuryer joylashuvini ko'rmaydi.
+- Fon rejimi uchun joylashuv ruxsati "Ilovadan foydalanayotganda", batareya "Cheklovsiz" bo'lishi kerak.
 
 ## Sinov
 `tests/uyovqat/`: haqiqiy Chromium + soxta Supabase (`npm install && npm test`, avval uchala ilovani `npm run build` qiling).

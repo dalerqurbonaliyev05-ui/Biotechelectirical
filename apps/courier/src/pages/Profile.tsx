@@ -29,6 +29,14 @@ export default function Profile() {
       <label className="u-field"><span>Ism</span><input className="u-input" value={name} onChange={(e) => setName(e.target.value)} /></label>
       <label className="u-field"><span>Telefon</span><input className="u-input" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} /></label>
       <label className="u-field"><span>Transport</span><input className="u-input" value={vehicle} onChange={(e) => setVehicle(e.target.value)} placeholder="Masalan: Skuter, velosiped, Damas" /></label>
+      <div className="u-card flat" style={{ marginBottom: 16 }}>
+        <div style={{ fontWeight: 800 }}>📍 Fon rejimi</div>
+        <div className="u-hint">
+          "Bo'sh" holatda yoki buyurtma bor paytda ilova yopilsa/ekran o'chsa ham joylashuvingiz xaridorga yetib turadi (ekranda "Kuryer rejimi" bildirishnomasi ko'rinadi).
+          Joylashuv ruxsatini "Ilovadan foydalanayotganda" qilib bering va batareya tejash rejimini ilova uchun "Cheklovsiz" qiling.
+          Ishni tugatsangiz "band" holatiga o'ting: kuzatuv to'xtaydi va joylashuvingiz o'chiriladi.
+        </div>
+      </div>
       <div className="u-stack">
         <Button block loading={busy} onClick={save}>Saqlash</Button>
         <Button block variant="ghost" onClick={() => void signOut()}>Chiqish</Button>

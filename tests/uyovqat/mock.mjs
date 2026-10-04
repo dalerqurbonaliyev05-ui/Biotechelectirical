@@ -28,15 +28,17 @@ const jwt = (uid) => {
 export function sessionFor(user) {
   return {
     access_token: jwt(user.id), refresh_token: 'r', token_type: 'bearer', expires_in: 3600 * 24 * 365, expires_at: 4102444800,
-    user: { id: user.id, aud: 'authenticated', role: 'authenticated', email: user.email, app_metadata: {}, user_metadata: {}, created_at: '2026-01-01T00:00:00Z' },
+    user: { id: user.id, aud: 'authenticated', role: 'authenticated', email: user.email, app_metadata: {}, user_metadata: user.meta ?? {}, created_at: '2026-01-01T00:00:00Z' },
   };
 }
 
 /** db: { table: rows[] } ; rpc: { name: (args) => result } ; log: so'rovlar yozuvi */
-export async function installMock(context, { db, rpc = {}, user }) {
+export async function installMock(context, { db, rpc = {}, user, seed = true }) {
   const log = [];
-  await context.addInitScript(([key, s]) => { try { localStorage.setItem(key, JSON.stringify(s)); } catch { /* */ } },
-    ['sb-vcbdzfwvavxkedgmbrvf-auth-token', sessionFor(user)]);
+  if (seed) {
+    await context.addInitScript(([key, s]) => { try { localStorage.setItem(key, JSON.stringify(s)); } catch { /* */ } },
+      ['sb-vcbdzfwvavxkedgmbrvf-auth-token', sessionFor(user)]);
+  }
 
   await context.route('https://img.test/**', (route) => {
     const hue = (route.request().url().length * 37) % 360;
@@ -47,8 +49,9 @@ export async function installMock(context, { db, rpc = {}, user }) {
 
   await context.route(`${SB}/auth/v1/**`, (route) => {
     const u = new URL(route.request().url());
-    if (u.pathname.endsWith('/user')) return route.fulfill({ json: sessionFor(user).user });
-    if (u.pathname.endsWith('/token')) return route.fulfill({ json: sessionFor(user) });
+    if (u.pathname.endsWith('/token')) { log.push({ method: 'POST', name: 'auth/token', body: route.request().postData() }); return route.fulfill({ json: sessionFor(user) }); }
+    if (u.pathname.endsWith('/user') && route.request().method() === 'GET') return route.fulfill({ json: sessionFor(user).user });
+    if (route.request().method() === 'PUT' && u.pathname.endsWith('/user')) { log.push({ method: 'PUT', name: 'auth/user', body: route.request().postData() }); return route.fulfill({ json: sessionFor(user).user }); }
     return route.fulfill({ json: {} });
   });
 

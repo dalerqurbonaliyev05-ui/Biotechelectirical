@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-export interface MapMarker { id: string; lat: number; lng: number; kind: 'me' | 'shop' | 'home'; label?: string }
+export interface MapMarker { id: string; lat: number; lng: number; kind: 'me' | 'shop' | 'home' | 'courier'; label?: string }
 
 const icon = (kind: MapMarker['kind']) =>
   L.divIcon({
@@ -10,7 +10,7 @@ const icon = (kind: MapMarker['kind']) =>
     iconSize: kind === 'me' ? [22, 22] : [38, 38],
     iconAnchor: kind === 'me' ? [11, 11] : [19, 38],
     html: kind === 'me' ? '<div class="u-me"></div>'
-      : `<div class="u-pin ${kind === 'home' ? 'home' : ''}"><span>${kind === 'home' ? '🏠' : '🍲'}</span></div>`,
+      : `<div class="u-pin ${kind === 'home' ? 'home' : kind === 'courier' ? 'courier' : ''}"><span>${kind === 'home' ? '🏠' : kind === 'courier' ? '🛵' : '🍲'}</span></div>`,
   });
 
 /** OpenStreetMap ustidagi xarita: kuryer joylashuvi (ko'k nuqta), sotuvchi va manzil belgilari, yo'nalish chizig'i. */

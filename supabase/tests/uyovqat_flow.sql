@@ -112,9 +112,22 @@ end $$;
 
 select set_config('request.jwt.claim.sub', :s, false);
 select uy_seller_set_status((select id from t_order), 'preparing');
+\echo -- xaridor kuryerni olib ketishdan oldin kuzata olmaydi
+select set_config('request.jwt.claim.sub', :b, false);
+do $$ begin assert (select count(*) from couriers) = 0, 'xaridor kuryerni erta ko''rdi'; end $$;
 select set_config('request.jwt.claim.sub', :c1, false);
 select uy_courier_set_delivery((select id from t_order), 'picked_up');
 select uy_courier_set_delivery((select id from t_order), 'on_the_way');
+\echo -- yolda: xaridor faqat o'z kuryerini ko'radi
+select set_config('request.jwt.claim.sub', :b, false);
+do $$ begin
+  assert (select count(*) from couriers) = 1 and (select id from couriers) = 'cccccccc-0000-0000-0000-000000000001', 'yolda kuzatish ishlamadi';
+end $$;
+select set_config('request.jwt.claim.sub', :b2, false);
+do $$ begin assert (select count(*) from couriers) = 0, 'boshqa xaridor kuryerni ko''rdi'; end $$;
+select set_config('request.jwt.claim.sub', :s, false);
+do $$ begin assert (select count(*) from couriers) = 0, 'sotuvchi kuryer joylashuvini ko''rdi'; end $$;
+select set_config('request.jwt.claim.sub', :c1, false);
 select status from orders;
 select uy_courier_set_delivery((select id from t_order), 'delivered');
 
@@ -128,6 +141,7 @@ end $$;
 
 \echo -- sharhlar
 set role authenticated; select set_config('request.jwt.claim.sub', :b, false);
+do $$ begin assert (select count(*) from couriers) = 0, 'yetkazilgach kuryer yana ko''rinyapti'; end $$;
 insert into reviews (order_id, reviewer_id, target_kind, rating, comment)
  select id, :b, 'seller', 5, 'Zo''r' from orders;
 insert into reviews (order_id, reviewer_id, target_kind, rating) select id, :b, 'courier', 4 from orders;
