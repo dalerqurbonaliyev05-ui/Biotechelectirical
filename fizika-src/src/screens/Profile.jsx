@@ -94,7 +94,6 @@ export default function Profile({ me, refresh, onEdit, onSignOut, initialTab, th
 
       <hr className="rule" />
       <div className="stack">
-        {me.is_admin && <a className="btn ghost block" href="admin.html">Admin panelni ochish</a>}
         <button className="btn ghost block" onClick={onSignOut}>Hisobdan chiqish</button>
       </div>
 
