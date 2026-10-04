@@ -1,0 +1,96 @@
+/* =========================================================
+   Uy taomlari: yuklab olish sahifasi.
+   Saytning style.css tokenlari ustiga quriladi (--ink, 2px qora hoshiya,
+   siljigan qattiq soyalar). Barcha klasslar `uy-` prefiksli.
+   Ilova aksenti: to'q sariq (#ff6a13), ilovalardagi bilan bir xil.
+   ========================================================= */
+.uy-page { --uy: #ff6a13; --uy-600: #ee5a00; --uy-50: #fff1e6; background: var(--paper); }
+
+/* ---------- Hero ---------- */
+.uy-hero { position: relative; overflow: hidden; isolation: isolate; padding: 150px 0 90px; }
+.uy-hero::before { content: ''; position: absolute; inset: 0; z-index: -2; background-image: radial-gradient(#ffd9bf 1.4px, transparent 1.4px); background-size: 26px 26px; mask-image: linear-gradient(180deg, #000 55%, transparent); -webkit-mask-image: linear-gradient(180deg, #000 55%, transparent); }
+.uy-hero::after { content: ''; position: absolute; z-index: -1; right: -180px; top: -120px; width: 620px; height: 620px; border-radius: 50%; background: radial-gradient(circle, rgba(255, 106, 19, .30), rgba(255, 176, 32, .14) 45%, transparent 70%); pointer-events: none; }
+.uy-hero-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 56px; align-items: center; }
+.uy-eyebrow { display: inline-flex; align-items: center; gap: 10px; margin: 0 0 24px; font: 700 .76rem var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink); background: #fff; border: 2px solid var(--ink); padding: 7px 15px; border-radius: 999px; box-shadow: 4px 4px 0 var(--ink); }
+.uy-eyebrow .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--mint); box-shadow: 0 0 10px var(--mint); animation: blink 1.6s infinite; }
+.uy-title { margin: 0; font: 800 clamp(2.9rem, 8.4vw, 6.2rem) / 1 var(--display); letter-spacing: -.03em; overflow-wrap: anywhere; }
+.uy-grad { background: linear-gradient(120deg, #ff6a13 0%, #ff3d6e 60%, #ffb020 100%); -webkit-background-clip: text; background-clip: text; color: transparent; padding-bottom: .06em; }
+.uy-lead { margin: 22px 0 32px; max-width: 46ch; font-size: clamp(1.05rem, 2vw, 1.28rem); font-weight: 600; color: var(--ink-2); }
+.uy-ctas { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 26px; }
+.uy-ios-note { margin: 18px 0 0; padding: 12px 16px; border: 2px solid var(--ink); border-radius: 16px; background: #fff3d6; font-weight: 700; max-width: 46ch; }
+
+.uy-page .btn-primary { background: linear-gradient(120deg, #ff8a3d, var(--uy)); box-shadow: 0 12px 30px rgba(255, 106, 19, .42); }
+.uy-page .btn-primary:hover { box-shadow: 0 18px 40px rgba(255, 106, 19, .55); }
+.uy-download { padding: 20px 32px; font-size: 1.08rem; border-color: var(--ink); box-shadow: 6px 6px 0 var(--ink), 0 14px 34px rgba(255, 106, 19, .35); }
+.uy-download:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--ink), 0 18px 40px rgba(255, 106, 19, .45); }
+
+.uy-hero-art { position: relative; display: grid; place-items: center; min-height: 360px; }
+.uy-icon-card { position: relative; z-index: 1; display: grid; justify-items: center; gap: 6px; text-align: center; background: #fff; border: 2px solid var(--ink); border-radius: 36px; padding: 34px 40px 28px; box-shadow: 12px 12px 0 var(--amber), 12px 12px 0 2px var(--ink); transform: rotate(-3deg); }
+.uy-icon-card img { width: 150px; height: 150px; filter: drop-shadow(0 16px 26px rgba(255, 106, 19, .4)); margin-bottom: 10px; }
+.uy-icon-name { font: 800 1.35rem var(--display); letter-spacing: -.01em; }
+.uy-icon-sub { font: 600 .74rem var(--mono); color: var(--ink-2); }
+.uy-float { position: absolute; z-index: 2; font: 700 .85rem var(--mono); color: var(--ink); background: #fff; border: 2px solid var(--ink); border-radius: 999px; padding: 8px 14px; box-shadow: 4px 4px 0 var(--ink); animation: float 6s ease-in-out infinite; white-space: nowrap; }
+.uy-float.f1 { left: 2%; top: 12%; background: #ffd27a; }
+.uy-float.f2 { right: 0; top: 34%; background: #9be7ff; animation-delay: -2s; }
+.uy-float.f3 { left: 8%; bottom: 10%; background: #a8f0d6; animation-delay: -4s; }
+
+/* ---------- Ilovalar kartalari ---------- */
+.uy-apps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 34px; }
+.uy-app { display: flex; flex-direction: column; background: #fff; border: 2px solid var(--ink); border-radius: var(--radius); padding: 28px 26px 24px; box-shadow: 8px 8px 0 var(--accent, var(--uy)), 8px 8px 0 2px var(--ink); }
+.uy-app.c-buyer { --accent: #ff6a13; } .uy-app.c-seller { --accent: #2fd6a3; } .uy-app.c-courier { --accent: #22c7ff; }
+.uy-app-ico { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 20px; border: 2px solid var(--ink); background: var(--accent); font-size: 32px; margin-bottom: 16px; }
+.uy-app h3 { margin: 0 0 8px; font: 800 1.5rem var(--display); letter-spacing: -.02em; }
+.uy-app-d { margin: 0 0 14px; color: var(--ink-2); font-weight: 600; }
+.uy-app-list { margin: 0 0 22px; padding: 0; list-style: none; display: grid; gap: 7px; font-weight: 700; font-size: .93rem; }
+.uy-app-list li::before { content: '✓'; display: inline-grid; place-items: center; width: 20px; height: 20px; margin-right: 9px; border-radius: 50%; background: var(--ink); color: #fff; font-size: .72rem; }
+.uy-btn { margin-top: auto; justify-content: center; width: 100%; padding: 16px 20px; border-color: var(--ink); box-shadow: 4px 4px 0 var(--ink); }
+.uy-btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+.uy-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
+.uy-meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 6px; }
+.uy-chip { display: inline-flex; align-items: center; gap: 4px; font: 600 .78rem var(--mono); color: var(--ink-2); background: #fff; border: 1.5px solid var(--ink); border-radius: 999px; padding: 4px 11px; }
+.uy-chip b { color: var(--ink); font-weight: 700; }
+.uy-hash { margin-top: 6px; font-size: .8rem; }
+.uy-hash summary { cursor: pointer; font: 600 .78rem var(--mono); color: var(--ink-2); width: max-content; }
+.uy-hash code { display: block; margin-top: 8px; padding: 9px 11px; background: #f6f1fb; border: 1.5px dashed var(--ink-2); border-radius: 10px; font: 500 .72rem/1.4 var(--mono); overflow-wrap: anywhere; user-select: all; }
+.uy-fine { margin-top: 26px; color: var(--ink-2); font-size: .92rem; font-weight: 600; max-width: 70ch; }
+
+/* ---------- Qadamlar ---------- */
+.uy-steps { list-style: none; margin: 34px 0 0; padding: 0; display: grid; gap: 18px; }
+.uy-step { display: flex; gap: 20px; align-items: flex-start; background: #fff; border: 2px solid var(--ink); border-radius: 22px; padding: 22px 24px; box-shadow: 6px 6px 0 var(--accent, var(--uy)), 6px 6px 0 2px var(--ink); }
+.uy-step:nth-child(1) { --accent: #ff6a13; } .uy-step:nth-child(2) { --accent: #22c7ff; } .uy-step:nth-child(3) { --accent: #ffb020; } .uy-step:nth-child(4) { --accent: #ff5c8a; } .uy-step:nth-child(5) { --accent: #2fd6a3; }
+.uy-no { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--ink); color: #fff; font: 800 1.1rem var(--display); }
+.uy-step h3 { margin: 2px 0 6px; font: 800 1.15rem var(--display); letter-spacing: -.01em; }
+.uy-step p { margin: 0; color: var(--ink-2); font-weight: 600; }
+.uy-step code, .uy-faq-list code { font: 600 .85em var(--mono); background: #f1ecff; padding: 2px 7px; border-radius: 6px; }
+
+/* ---------- Rollar ---------- */
+.uy-role-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 30px; }
+.uy-role { background: #fff; border: 2px solid var(--ink); border-radius: var(--radius); padding: 24px; box-shadow: 6px 6px 0 var(--ink); }
+.uy-role h3 { margin: 0 0 12px; font: 800 1.25rem var(--display); }
+.uy-role ul { margin: 0; padding-left: 20px; display: grid; gap: 10px; color: var(--ink-2); font-weight: 600; }
+
+/* ---------- FAQ ---------- */
+.uy-faq-list { margin-top: 30px; display: grid; gap: 12px; max-width: 860px; }
+.uy-faq-list details { background: #fff; border: 2px solid var(--ink); border-radius: 18px; padding: 0 20px; }
+.uy-faq-list details[open] { box-shadow: 5px 5px 0 var(--uy), 5px 5px 0 2px var(--ink); }
+.uy-faq-list summary { cursor: pointer; padding: 16px 0; font-weight: 800; list-style: none; display: flex; justify-content: space-between; gap: 14px; }
+.uy-faq-list summary::-webkit-details-marker { display: none; }
+.uy-faq-list summary::after { content: '+'; font: 800 1.3rem/1 var(--mono); }
+.uy-faq-list details[open] summary::after { content: '–'; }
+.uy-faq-list details p { margin: 0 0 16px; color: var(--ink-2); font-weight: 600; }
+
+html[data-platform="ios"] .uy-ios-note { display: block; }
+
+/* ---------- Moslashuvchanlik ---------- */
+@media (max-width: 960px) {
+    .uy-hero-grid { grid-template-columns: 1fr; gap: 30px; }
+    .uy-hero-art { min-height: 300px; order: -1; }
+    .uy-apps, .uy-role-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+    .uy-hero { padding: 120px 0 60px; }
+    .uy-step { padding: 18px; gap: 14px; }
+    .uy-icon-card { padding: 26px 28px 22px; }
+    .uy-float.f3 { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .uy-float, .uy-eyebrow .dot { animation: none; } }
