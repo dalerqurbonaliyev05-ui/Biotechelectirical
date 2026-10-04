@@ -35,6 +35,7 @@ export function sessionFor(user) {
 /** db: { table: rows[] } ; rpc: { name: (args) => result } ; log: so'rovlar yozuvi */
 export async function installMock(context, { db, rpc = {}, user, seed = true }) {
   const log = [];
+  const ctl = { signup: 'session' };   // 'session' | 'confirm' | 'exists' | 'error'
   if (seed) {
     await context.addInitScript(([key, s]) => { try { localStorage.setItem(key, JSON.stringify(s)); } catch { /* */ } },
       ['sb-vcbdzfwvavxkedgmbrvf-auth-token', sessionFor(user)]);
@@ -49,6 +50,15 @@ export async function installMock(context, { db, rpc = {}, user, seed = true }) 
 
   await context.route(`${SB}/auth/v1/**`, (route) => {
     const u = new URL(route.request().url());
+    if (u.pathname.endsWith('/signup')) {
+      log.push({ method: 'POST', name: 'auth/signup', body: route.request().postData() });
+      const sent = JSON.parse(route.request().postData() ?? '{}');
+      if (ctl.signup === 'error') return route.fulfill({ status: 422, json: { code: 422, error_code: 'weak_password', msg: 'Password should be at least 6 characters.' } });
+      const base = { ...sessionFor(user).user, email: sent.email, user_metadata: sent.data ?? {} };
+      if (ctl.signup === 'exists') return route.fulfill({ json: { ...base, identities: [] } });
+      if (ctl.signup === 'confirm') return route.fulfill({ json: { ...base, identities: [{ provider: 'email' }], confirmation_sent_at: new Date().toISOString() } });
+      return route.fulfill({ json: { ...sessionFor(user), user: { ...base, identities: [{ provider: 'email' }] } } });
+    }
     if (u.pathname.endsWith('/token')) { log.push({ method: 'POST', name: 'auth/token', body: route.request().postData() }); return route.fulfill({ json: sessionFor(user) }); }
     if (u.pathname.endsWith('/user') && route.request().method() === 'GET') return route.fulfill({ json: sessionFor(user).user });
     if (route.request().method() === 'PUT' && u.pathname.endsWith('/user')) { log.push({ method: 'PUT', name: 'auth/user', body: route.request().postData() }); return route.fulfill({ json: sessionFor(user).user }); }
@@ -103,5 +113,5 @@ export async function installMock(context, { db, rpc = {}, user, seed = true }) 
     }
     return route.fulfill({ status: 204, body: '' });
   });
-  return { log };
+  return { log, ctl };
 }

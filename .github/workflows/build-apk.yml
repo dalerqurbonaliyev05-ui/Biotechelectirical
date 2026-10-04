@@ -11,6 +11,11 @@ on:
     paths:
       - 'apps/**'
       - '.github/workflows/build-apk.yml'
+  # PR'da ham yig'iladi (APK artifact sifatida yuklab olinadi), lekin Release faqat main'da yaratiladi.
+  pull_request:
+    paths:
+      - 'apps/**'
+      - '.github/workflows/build-apk.yml'
   workflow_dispatch:
 
 concurrency:
@@ -48,7 +53,15 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - uses: android-actions/setup-android@v3
+      # Runner'da Android SDK (ANDROID_HOME) oldindan o'rnatilgan. android-actions/setup-android ishlatilmaydi:
+      # u runner'dagi sdkmanager versiyasi bilan to'qnashib yiqilgan edi. Faqat litsenziyalarni qabul qilamiz;
+      # yetishmayotgan komponentlarni Gradle o'zi yuklaydi.
+      - name: Android SDK litsenziyalari
+        working-directory: ${{ github.workspace }}
+        run: |
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+          ls "$ANDROID_HOME/platforms" "$ANDROID_HOME/build-tools" || true
 
       - uses: gradle/actions/setup-gradle@v4
 
@@ -82,6 +95,7 @@ jobs:
   release:
     name: GitHub Release
     needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       contents: write
