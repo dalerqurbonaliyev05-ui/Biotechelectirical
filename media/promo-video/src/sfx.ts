@@ -10,9 +10,7 @@ export interface SfxEvent { name: string; frame: number; volume?: number }
 
 /** Fayl davomiyligi (soniya): <Sequence> uzunligi uchun. */
 export const SFX_SECONDS: Record<string, number> = {
-  click: 0.08, tap: 0.09, tick: 0.05, tick_hi: 0.05, pop: 0.16, pop_hi: 0.13, pop_low: 0.2, whoosh: 0.5, whoosh_up: 0.45,
-  thud: 0.35, blip: 0.09, chime: 1.0, buzz: 0.55, success: 0.9, coin: 0.8, star1: 0.5, star2: 0.5, star3: 0.5, star4: 0.5, star5: 0.5,
-  lock: 0.25, rolldown: 1.0, sweep_up: 0.95, doorbell: 1.4, confetti: 0.7, engine: 1.6,
+  click: 0.25, tap: 0.08, tick: 0.07, tick_hi: 0.07, pop: 0.11, pop_hi: 0.09, pop_low: 0.35, whoosh: 0.38, whoosh_up: 0.32, thud: 0.6, blip: 0.18, chime: 0.8, buzz: 0.5, success: 0.88, coin: 0.9, star1: 0.5, star2: 0.5, star3: 0.5, star4: 0.5, star5: 0.5, lock: 0.49, rolldown: 0.78, sweep_up: 1.11, doorbell: 1.6, confetti: 0.9, engine: 1.6,
 };
 
 const at = (scene: number, local: number) => SCENES[scene].from + local;
