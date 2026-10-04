@@ -1,0 +1,6 @@
+{
+  "name": "uyovqat-apps",
+  "private": true,
+  "description": "Uy ovqatlari bozori: xaridor, sotuvchi va kuryer ilovalari (npm workspaces). Istalgan ilova papkasida `npm install` hammasini o'rnatadi.",
+  "workspaces": ["shared", "buyer", "seller", "courier"]
+}

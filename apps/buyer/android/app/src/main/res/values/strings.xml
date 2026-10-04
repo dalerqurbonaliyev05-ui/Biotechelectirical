@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Uy Taomlari</string>
+    <string name="title_activity_main">Uy Taomlari</string>
+    <string name="package_name">uz.energyvibe.uyovqat.buyer</string>
+    <string name="custom_url_scheme">uz.energyvibe.uyovqat.buyer</string>
+</resources>

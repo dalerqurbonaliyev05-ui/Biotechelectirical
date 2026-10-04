@@ -1,0 +1,8 @@
+{
+  "name": "uyovqat-ui-tests",
+  "private": true,
+  "type": "module",
+  "description": "Uy ovqatlari bozori ilovalari uchun brauzer sinovlari: haqiqiy Chromium + soxta Supabase (tarmoq so'rovlari ushlanadi). Ishga tushirish: npm install && npm test",
+  "scripts": { "test": "node --test smoke.test.mjs" },
+  "devDependencies": { "playwright-core": "1.56.1" }
+}

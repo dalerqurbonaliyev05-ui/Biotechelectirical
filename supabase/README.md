@@ -19,3 +19,18 @@
 - `service_role` kaliti faqat funksiyalar ichida (avtomatik). Brauzerga hech qachon berilmaydi.
 - Kirish: talaba `HEMIS_ID@students.res.invalid`, xodim `login@staff.res.invalid` (ro'yxatdan o'tkazib bo'lmaydigan domen: parolni "email orqali tiklash" orqali hisob egallab bo'lmaydi). Foydalanuvchi faqat login yozadi.
 - Talabalar HEMIS ro'yxatidan (CSV) import qilinadi, har biriga bir martalik faollashtirish kodi beriladi. HEMIS API ochilganda faqat import manbai almashtiriladi.
+
+## Uy ovqatlari bozori (apps/ + admin/)
+Migratsiyalar: `0005_uyovqat_schema.sql` (jadvallar), `0006_uyovqat_functions.sql` (kuryer biriktirish, buyurtma/holat RPC'lari, daromad va bonus triggerlari),
+`0007_uyovqat_rls.sql` (RLS, Storage, Realtime). Jadvallar mavjud `profiles`/`settings` bilan to'qnashmaydi (`uy_profiles`, `uy_settings`).
+Ilova foydalanuvchisi `user_metadata.app = 'uyovqat'` bilan ro'yxatdan o'tadi; boshqalarga profil yaratilmaydi.
+
+**Admin berish (qo'lda, SQL Editor'da):** `update public.uy_profiles set role = 'admin' where id = '<auth user id>';`
+
+**Lokal sinov** (Postgres 14+; Supabase kerak emas):
+```
+createdb t1 && psql -d t1 -f supabase/tests/uyovqat_stub.sql
+for f in supabase/migrations/000[567]_uyovqat_*.sql; do psql -v ON_ERROR_STOP=1 -d t1 -f $f; done
+psql -d t1 -f supabase/tests/uyovqat_flow.sql
+```
+Sozlamalar (`uy_settings`: yetkazish narxi, platforma ulushi, kuryer radiusi) va bonus qoidasi (`bonus_rules`) admin paneldan o'zgartiriladi.
