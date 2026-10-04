@@ -24,7 +24,7 @@ Birinchi renderda Remotion o'zi Chrome yuklab oladi (internet kerak). Tayyor bra
 | 4 | 13–18 s | `scenes/Scene4.tsx` | Sotuvchiga "Yangi buyurtma!" bildirishnomasi, qabul qilish |
 | 5 | 18–24 s | `scenes/Scene5.tsx` | Eng yaqin kuryer avtomatik biriktiriladi, yo'l chiziladi, taom yetib keladi |
 | 6 | 24–28 s | `scenes/Scene6.tsx` | Yetkazildi, 5 yulduz, qoniqish + konfetti |
-| 7 | 28–30 s | `scenes/Scene7.tsx` | 3 ta ilova belgisi + "Google Play'da yuklab oling" |
+| 7 | 28–30 s | `scenes/Scene7.tsx` | 3 ta ilova belgisi + "energyvibe.uz'dan yuklab oling" |
 
 Sahna chegaralari `src/theme.ts` dagi `SCENES` da. Har sahna oldingisi ustiga doira ("iris") bo'lib ochiladi (`OVERLAP` = 10 kadr).
 

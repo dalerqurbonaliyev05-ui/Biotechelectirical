@@ -108,7 +108,7 @@ export const defaultProps: VideoProps = {
   ratingTitle1: 'Yetkazildi!',
   ratingTitle2: 'Baho bering',
   outroTitle: 'Uy ta\'mi ilovalari',
-  ctaText: "Google Play'da yuklab oling",
+  ctaText: "energyvibe.uz'dan yuklab oling",
   ctaNote: 'Xaridor · Sotuvchi · Kuryer',
 
   dish: 'Mastava',
