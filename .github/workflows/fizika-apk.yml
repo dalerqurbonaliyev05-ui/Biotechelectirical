@@ -1,4 +1,4 @@
-# Fizika ilovasi: energyvibe.uz/fizika/app veb-ilovasidan Android APK (Trusted Web Activity) yig'adi,
+# Fizika ilovasi: energyvibe.uz/fizika/app veb-ilovasidan (www.energyvibe.uz) Android APK (Trusted Web Activity) yig'adi,
 # imzolaydi va fizika/apk/fizika.apk + fizika/apk-info.js + .well-known/assetlinks.json ni main'ga qaytaradi.
 #
 # Imzo kaliti: ixtiyoriy ravishda Settings > Secrets > Actions ga qo'shing (kalit doimiy bo'lishi uchun tavsiya etiladi):
@@ -28,7 +28,7 @@ jobs:
     permissions:
       contents: write
     env:
-      MANIFEST_URL: https://energyvibe.uz/fizika/app/manifest.webmanifest
+      MANIFEST_URL: https://www.energyvibe.uz/fizika/app/manifest.webmanifest
       KS_DIR: /home/runner/fizika-ks
       LOG: /home/runner/fizika-ci.log
     steps:
@@ -55,7 +55,7 @@ jobs:
       - name: Sayt joylanishini kutish (Vercel)
         run: |
           for i in $(seq 1 60); do
-            code=$(curl -s -o /dev/null -w '%{http_code}' "$MANIFEST_URL" || true)
+            code=$(curl -sL -o /dev/null -w '%{http_code}' "$MANIFEST_URL" || true)
             echo "urinish $i: $code" | tee -a "$LOG"
             [ "$code" = "200" ] && exit 0
             sleep 15

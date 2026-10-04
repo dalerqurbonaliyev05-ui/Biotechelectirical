@@ -10,14 +10,14 @@ const { TwaManifest, TwaGenerator, ConsoleLog } = require('@bubblewrap/core');
 
 (async () => {
     const log = new ConsoleLog('fizika-twa');
-    const url = process.env.MANIFEST_URL || 'https://energyvibe.uz/fizika/app/manifest.webmanifest';
+    const url = process.env.MANIFEST_URL || 'https://www.energyvibe.uz/fizika/app/manifest.webmanifest';
     const out = path.resolve(process.env.OUT_DIR || 'twa-build');
     const code = parseInt(process.env.VERSION_CODE || '1', 10);
     const name = process.env.VERSION_NAME || '1.0.' + code;
 
     const m = await TwaManifest.fromWebManifest(url);
     m.packageId = 'uz.energyvibe.fizika';
-    m.host = 'energyvibe.uz';
+    m.host = 'www.energyvibe.uz'; // energyvibe.uz 308 bilan www ga yo'naltiriladi
     m.name = 'Fizika';
     m.launcherName = 'Fizika';
     m.startUrl = '/fizika/app/index.html';
