@@ -1,0 +1,110 @@
+/* =========================================================
+   Mushuk va Itlarni Top: yuklab olish va foydalanish qo'llanmasi sahifasi.
+   Saytning style.css tokenlari ustiga quriladi (--ink, 2px qora hoshiya,
+   siljigan qattiq soyalar), `uyovqat/page.css` bilan bir xil tuzilma.
+   Ilova aksenti: yashil (#16a34a), ilovadagi bilan bir xil. Barcha klasslar `mu-` prefiksli.
+   ========================================================= */
+.mu-page { --mu: #16a34a; --mu-600: #15803d; --mu-50: #dcfce7; --cat: #e8714f; --dog: #2f7de1; background: var(--paper); }
+
+/* ---------- Hero ---------- */
+.mu-hero { position: relative; overflow: hidden; isolation: isolate; padding: 150px 0 90px; }
+.mu-hero::before { content: ''; position: absolute; inset: 0; z-index: -2; background-image: radial-gradient(#c9efd6 1.4px, transparent 1.4px); background-size: 26px 26px; mask-image: linear-gradient(180deg, #000 55%, transparent); -webkit-mask-image: linear-gradient(180deg, #000 55%, transparent); }
+.mu-hero::after { content: ''; position: absolute; z-index: -1; right: -180px; top: -120px; width: 620px; height: 620px; border-radius: 50%; background: radial-gradient(circle, rgba(22, 163, 74, .26), rgba(245, 158, 11, .14) 45%, transparent 70%); pointer-events: none; }
+.mu-hero-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 56px; align-items: center; }
+.mu-eyebrow { display: inline-flex; align-items: center; gap: 10px; margin: 0 0 24px; font: 700 .76rem var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink); background: #fff; border: 2px solid var(--ink); padding: 7px 15px; border-radius: 999px; box-shadow: 4px 4px 0 var(--ink); }
+.mu-eyebrow .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--mint); box-shadow: 0 0 10px var(--mint); animation: blink 1.6s infinite; }
+.mu-title { margin: 0; font: 800 clamp(2.5rem, 7.4vw, 5.4rem) / 1.02 var(--display); letter-spacing: -.03em; overflow-wrap: anywhere; }
+.mu-grad { background: linear-gradient(120deg, #16a34a 0%, #2f7de1 55%, #f59e0b 100%); -webkit-background-clip: text; background-clip: text; color: transparent; padding-bottom: .06em; }
+.mu-lead { margin: 22px 0 32px; max-width: 48ch; font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 600; color: var(--ink-2); }
+.mu-ctas { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 26px; }
+.mu-ios-note { margin: 18px 0 0; padding: 12px 16px; border: 2px solid var(--ink); border-radius: 16px; background: #fff3d6; font-weight: 700; max-width: 46ch; }
+
+.mu-page .btn-primary { background: linear-gradient(120deg, #22c55e, var(--mu)); box-shadow: 0 12px 30px rgba(22, 163, 74, .4); }
+.mu-page .btn-primary:hover { box-shadow: 0 18px 40px rgba(22, 163, 74, .55); }
+.mu-download { padding: 20px 32px; font-size: 1.08rem; border-color: var(--ink); box-shadow: 6px 6px 0 var(--ink), 0 14px 34px rgba(22, 163, 74, .35); }
+.mu-download:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--ink), 0 18px 40px rgba(22, 163, 74, .45); }
+
+.mu-hero-art { position: relative; display: grid; place-items: center; min-height: 360px; }
+.mu-icon-card { position: relative; z-index: 1; display: grid; justify-items: center; gap: 6px; text-align: center; background: #fff; border: 2px solid var(--ink); border-radius: 36px; padding: 34px 40px 28px; box-shadow: 12px 12px 0 #86efac, 12px 12px 0 2px var(--ink); transform: rotate(-3deg); }
+.mu-icon-card img { width: 150px; height: 150px; filter: drop-shadow(0 16px 26px rgba(22, 163, 74, .35)); margin-bottom: 10px; }
+.mu-icon-name { font: 800 1.3rem var(--display); letter-spacing: -.01em; }
+.mu-icon-sub { font: 600 .74rem var(--mono); color: var(--ink-2); }
+.mu-float { position: absolute; z-index: 2; font: 700 .85rem var(--mono); color: var(--ink); background: #fff; border: 2px solid var(--ink); border-radius: 999px; padding: 8px 14px; box-shadow: 4px 4px 0 var(--ink); animation: float 6s ease-in-out infinite; white-space: nowrap; }
+.mu-float.f1 { left: 2%; top: 12%; background: #ffd0bd; }
+.mu-float.f2 { right: 0; top: 34%; background: #bcd9ff; animation-delay: -2s; }
+.mu-float.f3 { left: 4%; bottom: -2%; background: #a8f0c4; animation-delay: -4s; }
+
+/* ---------- Yuklab olish ---------- */
+.mu-appwrap { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 40px; align-items: center; margin-top: 34px; }
+.mu-app { display: flex; flex-direction: column; background: #fff; border: 2px solid var(--ink); border-radius: var(--radius); padding: 30px 28px 26px; box-shadow: 8px 8px 0 var(--mu), 8px 8px 0 2px var(--ink); max-width: 560px; }
+.mu-app-ico { margin-bottom: 14px; }
+.mu-app h3 { margin: 0 0 8px; font: 800 1.6rem var(--display); letter-spacing: -.02em; }
+.mu-app-d { margin: 0 0 14px; color: var(--ink-2); font-weight: 600; }
+.mu-app-list { margin: 0 0 22px; padding: 0; list-style: none; display: grid; gap: 7px; font-weight: 700; font-size: .95rem; }
+.mu-app-list li::before { content: '✓'; display: inline-grid; place-items: center; width: 20px; height: 20px; margin-right: 9px; border-radius: 50%; background: var(--ink); color: #fff; font-size: .72rem; }
+.mu-btn { justify-content: center; width: 100%; padding: 16px 20px; border-color: var(--ink); box-shadow: 4px 4px 0 var(--ink); }
+.mu-btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+.mu-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
+.mu-meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 6px; }
+.mu-chip { display: inline-flex; align-items: center; gap: 4px; font: 600 .78rem var(--mono); color: var(--ink-2); background: #fff; border: 1.5px solid var(--ink); border-radius: 999px; padding: 4px 11px; }
+.mu-chip b { color: var(--ink); font-weight: 700; }
+.mu-hash { margin-top: 6px; font-size: .8rem; }
+.mu-hash summary { cursor: pointer; font: 600 .78rem var(--mono); color: var(--ink-2); width: max-content; }
+.mu-hash code { display: block; margin-top: 8px; padding: 9px 11px; background: #f6f1fb; border: 1.5px dashed var(--ink-2); border-radius: 10px; font: 500 .72rem/1.4 var(--mono); overflow-wrap: anywhere; user-select: all; }
+.mu-fine { margin-top: 26px; color: var(--ink-2); font-size: .92rem; font-weight: 600; max-width: 70ch; }
+.mu-hero-shot { margin: 0; justify-self: center; }
+.mu-hero-shot img, .mu-shot img, .mu-dark img { display: block; width: 100%; height: auto; border: 2px solid var(--ink); border-radius: 30px; background: #fff; box-shadow: 6px 6px 0 var(--mu), 6px 6px 0 2px var(--ink); }
+
+/* ---------- O'rnatish qadamlari ---------- */
+.mu-steps { list-style: none; margin: 34px 0 0; padding: 0; display: grid; gap: 18px; }
+.mu-step { display: flex; gap: 20px; align-items: flex-start; background: #fff; border: 2px solid var(--ink); border-radius: 22px; padding: 22px 24px; box-shadow: 6px 6px 0 var(--accent, var(--mu)), 6px 6px 0 2px var(--ink); }
+.mu-step:nth-child(1) { --accent: #22c55e; } .mu-step:nth-child(2) { --accent: #4b93f0; } .mu-step:nth-child(3) { --accent: #ffb020; } .mu-step:nth-child(4) { --accent: #f0845f; } .mu-step:nth-child(5) { --accent: #2fd6a3; }
+.mu-no { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--ink); color: #fff; font: 800 1.1rem var(--display); }
+.mu-step h3, .mu-gstep h3 { margin: 2px 0 6px; font: 800 1.15rem var(--display); letter-spacing: -.01em; }
+.mu-step p, .mu-gstep p { margin: 0; color: var(--ink-2); font-weight: 600; }
+.mu-step code, .mu-faq-list code, .mu-gstep code { font: 600 .85em var(--mono); background: #f1ecff; padding: 2px 7px; border-radius: 6px; }
+
+/* ---------- Foydalanish qo'llanmasi ---------- */
+.mu-gsteps { display: grid; gap: 34px; margin-top: 34px; }
+.mu-gstep { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 40px; align-items: center; background: #fff; border: 2px solid var(--ink); border-radius: 26px; padding: 30px 32px; box-shadow: 6px 6px 0 var(--ink); }
+.mu-gstep:nth-child(even) { grid-template-columns: auto minmax(0, 1fr); } .mu-gstep:nth-child(even) .mu-gtext { order: 2; }
+.mu-gtext .mu-no { margin-bottom: 12px; }
+.mu-gtext p { font-size: 1.02rem; max-width: 56ch; }
+.mu-gshots { display: flex; gap: 22px; justify-content: center; }
+.mu-shot { margin: 0; width: 220px; }
+.mu-dark { margin: 40px auto 0; width: 220px; text-align: center; } .mu-dark figcaption { margin-top: 14px; font: 700 .85rem var(--mono); color: var(--ink-2); }
+
+/* ---------- Ruxsatlar ---------- */
+.mu-tip-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 30px; }
+.mu-tip { background: #fff; border: 2px solid var(--ink); border-radius: var(--radius); padding: 24px; box-shadow: 6px 6px 0 var(--ink); }
+.mu-tip h3 { margin: 0 0 12px; font: 800 1.25rem var(--display); }
+.mu-tip p { margin: 0; color: var(--ink-2); font-weight: 600; }
+
+/* ---------- FAQ ---------- */
+.mu-faq-list { margin-top: 30px; display: grid; gap: 12px; max-width: 860px; }
+.mu-faq-list details { background: #fff; border: 2px solid var(--ink); border-radius: 18px; padding: 0 20px; }
+.mu-faq-list details[open] { box-shadow: 5px 5px 0 var(--mu), 5px 5px 0 2px var(--ink); }
+.mu-faq-list summary { cursor: pointer; padding: 16px 0; font-weight: 800; list-style: none; display: flex; justify-content: space-between; gap: 14px; }
+.mu-faq-list summary::-webkit-details-marker { display: none; }
+.mu-faq-list summary::after { content: '+'; font: 800 1.3rem/1 var(--mono); }
+.mu-faq-list details[open] summary::after { content: '–'; }
+.mu-faq-list details p { margin: 0 0 16px; color: var(--ink-2); font-weight: 600; }
+
+html[data-platform="ios"] .mu-ios-note { display: block; }
+
+/* ---------- Moslashuvchanlik ---------- */
+@media (max-width: 960px) {
+    .mu-hero-grid { grid-template-columns: 1fr; gap: 30px; }
+    .mu-hero-art { min-height: 300px; order: -1; }
+    .mu-appwrap { grid-template-columns: 1fr; } .mu-hero-shot { display: none; }
+    .mu-tip-grid { grid-template-columns: 1fr; }
+    .mu-gstep, .mu-gstep:nth-child(even) { grid-template-columns: minmax(0, 1fr); gap: 24px; padding: 24px 22px; } .mu-shot { flex: 1 1 0; width: auto; min-width: 0; max-width: 230px; } .mu-gshots { width: 100%; } .mu-gstep:nth-child(even) .mu-gtext { order: 0; }
+}
+@media (max-width: 560px) {
+    .mu-hero { padding: 120px 0 60px; }
+    .mu-step { padding: 18px; gap: 14px; }
+    .mu-icon-card { padding: 26px 28px 22px; }
+    .mu-float.f3 { display: none; }
+    .mu-gshots { gap: 14px; }
+}
+@media (prefers-reduced-motion: reduce) { .mu-float, .mu-eyebrow .dot { animation: none; } }

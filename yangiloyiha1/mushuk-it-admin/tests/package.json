@@ -1,0 +1,8 @@
+{
+  "name": "mushuk-it-admin-tests",
+  "private": true,
+  "type": "module",
+  "description": "Admin panel sinovi: haqiqiy Chromium + tarmoq darajasida soxta Supabase. Ishga tushirish: npm install && npm test",
+  "scripts": { "test": "node --test panel.test.mjs" },
+  "devDependencies": { "playwright-core": "1.56.1" }
+}
