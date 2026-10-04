@@ -468,7 +468,8 @@ sections.map = async (el) => {
   const init = () => {
     if (!box.isConnected) { if (tries++ < 300) requestAnimationFrame(init); return; }   // boshqa bo'limga o'tilgan bo'lsa ham to'xtaydi
     map = L.map(box).setView([41.3111, 69.2797], 11);
-    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap" }).addTo(map);
+    // OSM plitka siyosati Referer talab qiladi: sahifa no-referrer bo'lsa ham plitkalarga origin yuboriladi
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap", referrerPolicy: "origin" }).addTo(map);
     layer = L.layerGroup().addTo(map);
     new ResizeObserver(() => map.invalidateSize()).observe(box);
     draw();
