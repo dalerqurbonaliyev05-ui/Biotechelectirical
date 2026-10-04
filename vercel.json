@@ -2,7 +2,8 @@
   "redirects": [
     { "source": "/rele-lugat/app", "destination": "/rele-lugat/app/", "permanent": true },
     { "source": "/admin", "destination": "/admin/", "permanent": true },
-    { "source": "/uyovqat", "destination": "/uyovqat/", "permanent": true }
+    { "source": "/uyovqat", "destination": "/uyovqat/", "permanent": true },
+    { "source": "/mushuk-it", "destination": "/mushuk-it/", "permanent": true }
   ],
   "headers": [
     {
@@ -14,6 +15,15 @@
     },
     {
       "source": "/uyovqat/apk/(.*)",
+      "headers": [
+        { "key": "Content-Type", "value": "application/vnd.android.package-archive" },
+        { "key": "Content-Disposition", "value": "attachment" },
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/mushuk-it/apk/(.*)",
       "headers": [
         { "key": "Content-Type", "value": "application/vnd.android.package-archive" },
         { "key": "Content-Disposition", "value": "attachment" },

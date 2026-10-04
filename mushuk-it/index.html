@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mushuk va Itlarni Top: Android ilovasini yuklab olish va foydalanish qo‘llanmasi | EnergyVibe</title>
+    <meta name="description" content="Ko‘chada uchragan mushuk va itlarni suratga oling, GPS joylashuvi avtomatik belgilanadi. Android ilovasini (APK) yuklab oling, o‘rnatish va foydalanish bo‘yicha qadamma-qadam qo‘llanma. O‘zbek, rus va ingliz tillari, qorong‘u rejim.">
+    <link rel="canonical" href="https://energyvibe.uz/mushuk-it/">
+    <meta name="theme-color" content="#16a34a">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="EnergyVibe">
+    <meta property="og:url" content="https://energyvibe.uz/mushuk-it/">
+    <meta property="og:title" content="Mushuk va Itlarni Top: Android ilovasi">
+    <meta property="og:description" content="Ko‘rdingmi: belgila. Qidiryapsanmi: top! APK yuklab oling va foydalanish qo‘llanmasini o‘qing.">
+    <link rel="icon" type="image/svg+xml" href="/mushuk-it/icon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/mushuk-it/page.css">
+    <script>
+        (function (d, n) {
+            d.classList.add('js');
+            d.setAttribute('data-platform', /iPad|iPhone|iPod/.test(n.userAgent) ? 'ios' : /Android/i.test(n.userAgent) ? 'android' : 'desktop');
+        })(document.documentElement, navigator);
+    </script>
+    <script src="/mushuk-it/config.js" defer></script>
+    <script src="/mushuk-it/lang.js" defer></script>
+    <script src="/mushuk-it/page.js" defer></script>
+</head>
+<body class="mu-page">
+    <a class="skip-link" href="#main" data-i18n="skip">Asosiy mazmunga o‘tish</a>
+    <div class="progress-top" id="progress-top" aria-hidden="true"></div>
+
+    <header class="navbar" id="navbar">
+        <div class="nav-pill">
+            <a class="nav-logo" href="/" aria-label="EnergyVibe">
+                <svg class="logo-mark" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M13.5 2 5 13.5h5.5L9.5 22 19 9.8h-5.6L13.5 2Z" fill="currentColor"/></svg>
+                <span>ENERGY<b>VIBE</b></span>
+            </a>
+            <nav class="nav-menu" id="nav-menu" aria-label="Menu">
+                <a href="/#about" data-i18n="nav.about">Men haqimda</a>
+                <a href="/#tools" data-i18n="nav.tools">Vositalar</a>
+                <a href="/#skills" data-i18n="nav.skills">Yo‘nalishlar</a>
+                <a href="/#projects" data-i18n="nav.projects">Loyihalar</a>
+                <a href="/rele-lugat/" data-i18n="nav.app">Rele Lug‘at</a>
+                <a href="/uyovqat/" data-i18n="nav.food">Uy taomlari</a>
+                <a href="/mushuk-it/" class="active" aria-current="page" data-i18n="nav.pets">Mushuk va Itlar</a>
+                <a href="/#contact" data-i18n="nav.contact">Aloqa</a>
+            </nav>
+            <div class="nav-right">
+                <div class="lang-switch" role="group" aria-label="Til / Language / Язык">
+                    <button type="button" class="lang-btn" data-lang="uz" aria-pressed="true">UZ</button>
+                    <button type="button" class="lang-btn" data-lang="ru" aria-pressed="false">RU</button>
+                    <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+                </div>
+                <button type="button" class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" aria-controls="nav-menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main id="main">
+        <!-- 1. Hero -->
+        <section class="mu-hero" id="top">
+            <div class="container mu-hero-grid">
+                <div>
+                    <p class="mu-eyebrow"><span class="dot"></span><span data-i18n="h.eyebrow">Android · bepul · APK</span></p>
+                    <h1 class="mu-title" data-i18n-h="h.title">Mushuk va Itlarni <span class="mu-grad">Top</span></h1>
+                    <p class="mu-lead" data-i18n="h.lead">Ko‘chada mushuk yoki it uchradimi? Suratga oling: joylashuv avtomatik belgilanadi. Yo‘qolgan yoki topilgan hayvonni yaqin atrofdagi e’lonlardan va xaritadan toping.</p>
+                    <div class="mu-ctas">
+                        <a class="btn btn-primary mu-download" href="#download">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m6.5 10 5.5 5.5 5.5-5.5"/><path d="M4 20h16"/></svg>
+                            <span data-i18n="h.cta">Ilovani yuklab olish</span>
+                        </a>
+                        <a class="link" href="#guide" data-i18n="h.guide">Foydalanish qo‘llanmasi ↓</a>
+                    </div>
+                    <p class="mu-ios-note" id="ios-note" hidden data-i18n-h="h.ios">⚠️ Ilova hozircha faqat <b>Android</b> uchun. iPhone uchun versiya yo‘q.</p>
+                </div>
+                <div class="mu-hero-art" aria-hidden="true">
+                    <div class="mu-icon-card">
+                        <img src="/mushuk-it/icon.svg" alt="" width="150" height="150">
+                        <span class="mu-icon-name" data-i18n="h.iconName">Mushuk va Itlarni Top</span>
+                        <span class="mu-icon-sub" data-i18n="h.iconSub">Google · GPS · xarita</span>
+                    </div>
+                    <span class="mu-float f1" data-i18n="h.f1">🐱 mushuk</span>
+                    <span class="mu-float f2" data-i18n="h.f2">🐶 it</span>
+                    <span class="mu-float f3" data-i18n="h.f3">📍 lokatsiya</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Yuklab olish -->
+        <section class="section mu-download-sec" id="download">
+            <div class="container">
+                <header class="section-head reveal">
+                    <span class="station"><b>01</b><span data-i18n="d.station">Yuklab olish</span></span>
+                    <h2 class="section-title" data-i18n="d.title">APK faylni yuklab oling</h2>
+                </header>
+                <p class="section-lead reveal" data-i18n="d.lead">Ilova Google Play’da emas, shuning uchun to‘g‘ridan-to‘g‘ri APK fayl sifatida beriladi. Bepul va reklamasiz.</p>
+                <div class="mu-appwrap">
+                    <article class="mu-app reveal">
+                        <img class="mu-app-ico" src="/mushuk-it/icon.svg" alt="" width="84" height="84">
+                        <h3 data-i18n="d.name">Mushuk va Itlarni Top</h3>
+                        <p class="mu-app-d" data-i18n="d.desc">Ko‘rdingmi: belgila. Qidiryapsanmi: top! Rasmga oling, joylashuv avtomatik saqlanadi, boshqalar uni xaritada ko‘radi.</p>
+                        <ul class="mu-app-list"><li data-i18n="d.f1">Google orqali kirish</li><li data-i18n="d.f2">Kamera va avtomatik GPS</li><li data-i18n="d.f3">Yaqin atrofdagi e’lonlar va xarita</li><li data-i18n="d.f4">Layk, izoh, bildirishnomalar</li><li data-i18n="d.f5">3 til · qorong‘u rejim</li></ul>
+                        <a class="btn btn-primary mu-btn" href="/mushuk-it/apk/mushuk-it-top.apk" download="mushuk-it-top.apk" data-dl>
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m6.5 10 5.5 5.5 5.5-5.5"/><path d="M4 20h16"/></svg>
+                            <span data-i18n="d.btn">Yuklab olish (APK)</span>
+                        </a>
+                        <p class="mu-meta"><span class="mu-chip">v<b data-v>1.0</b></span><span class="mu-chip"><b data-size>7.0</b> MB</span><span class="mu-chip" data-i18n="d.android">Android 5.1+</span></p>
+                        <details class="mu-hash"><summary>SHA-256</summary><code data-hash></code></details>
+                    </article>
+                    <figure class="mu-hero-shot reveal"><img src="/mushuk-it/img/uz-home.webp" alt="" width="260" height="535" loading="lazy" data-shot="home"></figure>
+                </div>
+                <p class="mu-fine reveal"><span data-i18n="d.fine">Fayl butunligini SHA-256 bilan tekshirish mumkin (ixtiyoriy). Barcha versiyalar:</span> <a class="link" href="https://github.com/dalerqurbonaliyev05-ui/mushuk-it-top-app/releases" rel="noopener">GitHub Releases</a></p>
+            </div>
+        </section>
+
+        <!-- 3. O'rnatish -->
+        <section class="section mu-install" id="install">
+            <div class="container">
+                <header class="section-head reveal">
+                    <span class="station"><b>02</b><span data-i18n="i.station">O‘rnatish</span></span>
+                    <h2 class="section-title" data-i18n="i.title">Telefoningizga o‘rnatish: 5 qadam</h2>
+                </header>
+                <ol class="mu-steps">
+                    <li class="mu-step reveal"><span class="mu-no">1</span><div>
+                        <h3 data-i18n="i1.t">APK faylni yuklab oling</h3>
+                        <p data-i18n-h="i1.p">Yuqoridagi tugmani bosing. Fayl telefonning <b>Yuklamalar</b> (Downloads) papkasiga tushadi. Telegram yoki Instagram ichidagi brauzerda yuklash ishlamasa, havolani <b>Chrome</b>’da oching.</p>
+                    </div></li>
+                    <li class="mu-step reveal"><span class="mu-no">2</span><div>
+                        <h3 data-i18n="i2.t">Faylni oching</h3>
+                        <p data-i18n-h="i2.p">Brauzer pastida «Ochish» chiqadi yoki <b>Fayllar → Yuklamalar</b> orqali <code>mushuk-it-top.apk</code> ni bosing.</p>
+                    </div></li>
+                    <li class="mu-step reveal"><span class="mu-no">3</span><div>
+                        <h3 data-i18n="i3.t">Noma’lum manbalarga ruxsat bering</h3>
+                        <p data-i18n-h="i3.p">Android so‘rasa: <b>Sozlamalar</b>ni bosing va <b>«Ushbu manbadan o‘rnatishga ruxsat»</b> ni yoqing (Chrome yoki Fayllar uchun). Keyin orqaga qaytib o‘rnatishni davom ettiring. Bu ruxsatni keyin o‘chirib qo‘yish mumkin.</p>
+                    </div></li>
+                    <li class="mu-step reveal"><span class="mu-no">4</span><div>
+                        <h3 data-i18n="i4.t">Play Protect ogohlantirishi</h3>
+                        <p data-i18n-h="i4.p">«Zararli bo‘lishi mumkin» degan oyna chiqsa: ilova Play Store’da emasligi uchun shunday bo‘ladi. <b>«Batafsil»</b> → <b>«Baribir o‘rnatish»</b> ni bosing.</p>
+                    </div></li>
+                    <li class="mu-step reveal"><span class="mu-no">5</span><div>
+                        <h3 data-i18n="i5.t">Oching va Google bilan kiring</h3>
+                        <p data-i18n-h="i5.p">Ilovani oching, <b>«Google bilan kirish»</b> ni bosing, so‘ng ism-sharifingizni kiriting. Kamera va joylashuv ruxsati so‘ralganda <b>«Ilovadan foydalanayotganda»</b> ni tanlang.</p>
+                    </div></li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- 4. Qo'llanma -->
+        <section class="section mu-guide" id="guide">
+            <div class="container">
+                <header class="section-head reveal">
+                    <span class="station"><b>03</b><span data-i18n="g.station">Qo‘llanma</span></span>
+                    <h2 class="section-title" data-i18n="g.title">Foydalanish qo‘llanmasi</h2>
+                </header>
+                <p class="section-lead reveal" data-i18n="g.lead">Ilovada 6 ta asosiy amal bor. Har bir qadam ekran rasmi bilan ko‘rsatilgan.</p>
+                <div class="mu-gsteps">
+                    <article class="mu-gstep reveal">
+                    <div class="mu-gtext"><span class="mu-no">1</span>
+                        <h3 data-i18n="g1.t">Kirish va profil</h3>
+                        <p data-i18n-h="g1.p">Ilovani oching va <b>«Google bilan kirish»</b> ni bosing. Birinchi kirishda ism-sharifingizni kiriting (telefon va shahar ixtiyoriy): boshqa foydalanuvchilar sizni shu ism bilan ko‘radi. Kirish ekranida pastdagi tugmalar orqali tilni almashtirish mumkin.</p></div>
+                    <div class="mu-gshots"><figure class="mu-shot"><img src="/mushuk-it/img/uz-login.webp" alt="" width="240" height="494" loading="lazy" data-shot="login"></figure></div>
+                </article>
+                    <article class="mu-gstep reveal">
+                    <div class="mu-gtext"><span class="mu-no">2</span>
+                        <h3 data-i18n="g2.t">Yaqin atrofdagi e’lonlar</h3>
+                        <p data-i18n-h="g2.p">Bosh sahifada sizga eng yaqin e’lonlar masofa bilan ko‘rinadi (masalan, «620 m»). <b>Mushuk</b> yoki <b>It</b> plitkasi turini tanlaydi, qidiruv sarlavha, izoh yoki manzil bo‘yicha topadi, <b>«Barchasi»</b> to‘liq lentani ochadi.</p></div>
+                    <div class="mu-gshots"><figure class="mu-shot"><img src="/mushuk-it/img/uz-home.webp" alt="" width="240" height="494" loading="lazy" data-shot="home"></figure></div>
+                </article>
+                    <article class="mu-gstep reveal">
+                    <div class="mu-gtext"><span class="mu-no">3</span>
+                        <h3 data-i18n="g3.t">Xarita</h3>
+                        <p data-i18n-h="g3.p">Pastdagi <b>Xarita</b> tabida e’lonlar rasmli pinlar bilan ko‘rinadi (mushuk to‘q sariq, it ko‘k). Filtr va qidiruvdan foydalaning, pinni bosing: pastda e’lon kartasi chiqadi, <b>«Lokatsiyani ko‘rish»</b> tafsilotlarni ochadi. Ko‘k nuqta siz turgan joy, yuqori o‘ngdagi tugma xaritani sizga qaytaradi.</p></div>
+                    <div class="mu-gshots"><figure class="mu-shot"><img src="/mushuk-it/img/uz-map.webp" alt="" width="240" height="494" loading="lazy" data-shot="map"></figure></div>
+                </article>
+                    <article class="mu-gstep reveal">
+                    <div class="mu-gtext"><span class="mu-no">4</span>
+                        <h3 data-i18n="g4.t">E’lon qo‘yish</h3>
+                        <p data-i18n-h="g4.p">Pastdagi yashil <b>«+»</b> tugmasini bosing va <b>Mushuk</b> yoki <b>It</b>ni tanlang: kamera ochiladi. Rasmga olgan zahoti <b>GPS joylashuv avtomatik</b> olinadi va manzil yoziladi. Sarlavha (masalan, «Oq mushuk») va izoh qo‘shib, <b>«E’lon qilish»</b> ni bosing. Joylashuv olinmasa e’lon yuborilmaydi: GPS yoqilganini tekshirib, tugma bilan qayta urinib ko‘ring.</p></div>
+                    <div class="mu-gshots"><figure class="mu-shot"><img src="/mushuk-it/img/uz-new.webp" alt="" width="240" height="494" loading="lazy" data-shot="new"></figure><figure class="mu-shot"><img src="/mushuk-it/img/uz-confirm.webp" alt="" width="240" height="494" loading="lazy" data-shot="confirm"></figure></div>
+                </article>
+                    <article class="mu-gstep reveal">
+                    <div class="mu-gtext"><span class="mu-no">5</span>
+                        <h3 data-i18n="g5.t">Tafsilotlar, layk va izoh</h3>
+                        <p data-i18n-h="g5.p">Istalgan e’longa bosing: joylashuv, masofa va mini xarita ko‘rinadi. <b>«Google Maps’da ochish»</b> yo‘nalish olishga yordam beradi. <b>Layk</b> bosing va pastdagi maydonda <b>izoh</b> yozing. O‘z e’loningizni yuqori o‘ngdagi axlat qutisi belgisi bilan o‘chirasiz.</p></div>
+                    <div class="mu-gshots"><figure class="mu-shot"><img src="/mushuk-it/img/uz-detail.webp" alt="" width="240" height="494" loading="lazy" data-shot="detail"></figure></div>
+                </article>
+                    <article class="mu-gstep reveal">
+                    <div class="mu-gtext"><span class="mu-no">6</span>
+                        <h3 data-i18n="g6.t">Bildirishnomalar va profil</h3>
+                        <p data-i18n-h="g6.p">Kimdir e’loningizga layk bosganda yoki izoh yozganda <b>Xabarlar</b> tabida qizil raqam chiqadi. <b>Profil</b>da statistikangiz, mening e’lonlarim, sevimlilarim va izohlarim; <b>Sozlamalar</b>da <b>til</b> (o‘zbekcha, русский, English) va <b>qorong‘u rejim</b> tanlanadi.</p></div>
+                    <div class="mu-gshots"><figure class="mu-shot"><img src="/mushuk-it/img/uz-notifs.webp" alt="" width="240" height="494" loading="lazy" data-shot="notifs"></figure><figure class="mu-shot"><img src="/mushuk-it/img/uz-profile.webp" alt="" width="240" height="494" loading="lazy" data-shot="profile"></figure></div>
+                </article>
+                </div>
+                <figure class="mu-dark reveal"><img src="/mushuk-it/img/uz-home-dark.webp" alt="" width="240" height="494" loading="lazy"><figcaption data-i18n="g.dark">Qorong‘u rejim</figcaption></figure>
+            </div>
+        </section>
+
+        <!-- 5. Ruxsatlar -->
+        <section class="section mu-tips" id="tips">
+            <div class="container">
+                <header class="section-head reveal">
+                    <span class="station"><b>04</b><span data-i18n="t.station">Muhim</span></span>
+                    <h2 class="section-title" data-i18n="t.title">Ruxsatlar va qoidalar</h2>
+                </header>
+                <div class="mu-tip-grid">
+                    <article class="mu-tip reveal"><h3 data-i18n="t1.t">📷 Kamera</h3><p data-i18n-h="t1.p">Rasmga olish uchun kerak. Ruxsatni rad etgan bo‘lsangiz: <b>Sozlamalar → Ilovalar → Mushuk va Itlarni Top → Ruxsatlar</b>.</p></article>
+                    <article class="mu-tip reveal"><h3 data-i18n="t2.t">📍 Joylashuv</h3><p data-i18n-h="t2.p">Rasm olingan joyni belgilash va yaqin e’lonlarni ko‘rsatish uchun. <b>«Ilovadan foydalanayotganda»</b> yetarli: ilova fonda joylashuv olmaydi. Ruxsatsiz e’lon qo‘yib bo‘lmaydi.</p></article>
+                    <article class="mu-tip reveal"><h3 data-i18n="t3.t">🛡️ Qoidalar</h3><p data-i18n="t3.p">Faqat hayvonga tegishli o‘zingiz olgan rasmni joylang. Spam va haqoratli izohlarni administrator o‘chiradi, qoidabuzarni bloklaydi. Telefon raqamingiz va emailingiz boshqalarga ko‘rinmaydi.</p></article>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. Savol-javob -->
+        <section class="section mu-faq" id="faq">
+            <div class="container">
+                <header class="section-head reveal">
+                    <span class="station"><b>05</b><span data-i18n="f.station">Muammolar</span></span>
+                    <h2 class="section-title" data-i18n="f.title">Ko‘p beriladigan savollar</h2>
+                </header>
+                <div class="mu-faq-list reveal">
+                    <details><summary data-i18n="q1.q">«Ilova o‘rnatilmadi» yoki «Paket buzilgan» deyapti</summary>
+                        <p data-i18n="q1.a">Faylni qayta yuklab oling (yuklash uzilgan bo‘lishi mumkin) va hajmi yuqoridagi bilan bir xil ekanini tekshiring. Boshqa usulda o‘rnatilgan shu nomli eski versiya bo‘lsa, uni o‘chirib qaytadan o‘rnating. Telefonda bo‘sh joy ham kerak.</p></details>
+                    <details><summary data-i18n="q2.q">Fayl yuklanmayapti</summary>
+                        <p data-i18n="q2.a">Telegram/Instagram ichidagi brauzer o‘rniga Chrome’da oching. Internet barqaror bo‘lsin. Havolani uzoq bosib «Yuklab olish»ni tanlash ham yordam beradi.</p></details>
+                    <details><summary data-i18n="q3.q">Google bilan kira olmayapman</summary>
+                        <p data-i18n="q3.a">Internet borligini va brauzer (Chrome) yangilanganini tekshiring. Kirgach ilovaga avtomatik qaytilmasa, ilovani yoping va qayta oching. «Access blocked» chiqsa, administratorga murojaat qiling.</p></details>
+                    <details><summary data-i18n="q4.q">Joylashuv aniqlanmayapti</summary>
+                        <p data-i18n="q4.a">Telefonda GPS (Joylashuv) yoqilgan va ilovaga ruxsat berilgan bo‘lishi kerak. Ochiq joyda qayta urinib ko‘ring. Quvvat tejash rejimi aniqlikni pasaytirishi mumkin.</p></details>
+                    <details><summary data-i18n="q5.q">E’lonim boshqalarga ko‘rinmayapti</summary>
+                        <p data-i18n="q5.a">Administrator e’lonni bloklagan bo‘lishi mumkin: bunda e’lon ostida qizil ogohlantirish chiqadi va u faqat sizga ko‘rinadi. Aniqlik uchun administratorga yozing.</p></details>
+                    <details><summary data-i18n="q6.q">Tilni yoki qorong‘u rejimni qanday o‘zgartiraman?</summary>
+                        <p data-i18n="q6.a">Profil → Sozlamalar. Til: o‘zbekcha, русский, English. Mavzu: Tizim (telefon sozlamasiga ergashadi), Yorug‘ yoki Qorong‘u.</p></details>
+                    <details><summary data-i18n="q7.q">iPhone uchun ilova bormi?</summary>
+                        <p data-i18n="q7.a">Hozircha yo‘q: ilova faqat Android uchun.</p></details>
+                    <details><summary data-i18n="q8.q">Ilova xavfsizmi?</summary>
+                        <p data-i18n="q8.a">Ilova faqat kamera va joylashuv ruxsatini so‘raydi. Ma’lumotlar himoyalangan serverda saqlanadi; boshqalar faqat ismingiz va e’loningizni ko‘radi, email va telefon ko‘rinmaydi.</p></details>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-word" aria-hidden="true">ENERGYVIBE</div>
+            <div class="footer-inner">
+                <span>© <span id="year">2026</span> Daler Qurbonaliyev</span>
+                <span><a class="link" href="/" data-i18n="foot.home">Bosh sahifa</a> · <a class="link" href="/uyovqat/" data-i18n="nav.food">Uy taomlari</a></span>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
