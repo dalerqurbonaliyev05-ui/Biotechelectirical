@@ -108,3 +108,9 @@ html[data-platform="ios"] .mu-ios-note { display: block; }
     .mu-gshots { gap: 14px; }
 }
 @media (prefers-reduced-motion: reduce) { .mu-float, .mu-eyebrow .dot { animation: none; } }
+
+/* Reklama video */
+.mu-promo-grid { display: grid; grid-template-columns: 1fr auto; gap: 56px; align-items: center; }
+.mu-video { margin: 0; width: 300px; justify-self: center; }
+.mu-video video { display: block; width: 100%; height: auto; aspect-ratio: 9 / 16; border: 2px solid var(--ink); border-radius: 30px; background: #000; box-shadow: 6px 6px 0 var(--mu), 6px 6px 0 2px var(--ink); }
+@media (max-width: 860px) { .mu-promo-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; } .mu-video { width: min(300px, 100%); } }

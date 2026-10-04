@@ -20,3 +20,7 @@ Saytning `style.css` uslubida (`../uyovqat/` kabi), **o'zbek / русский / 
 
 ## Ekran rasmlarini yangilash
 Ilova repo'sida (`mushuk-it-top-app`): `npm run build:test`, so'ng `cd tests && GUIDE_SHOTS=papka npm test` uchala tilda 9 ta ekran rasmini yaratadi; `convert x.png -resize 480x -quality 76 x.webp` bilan siqilib `img/` ga qo'yiladi.
+
+## Reklama videosi
+
+`reklama.mp4` (20 soniya, 720x1280, o‘zbekcha) sahifadagi `#promo` bo‘limida ko‘rsatiladi; poster: `img/promo-poster.webp`.
