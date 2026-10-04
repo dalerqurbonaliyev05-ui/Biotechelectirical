@@ -92,3 +92,40 @@ test('mobil ko\'rinish: gorizontal skroll yo\'q, menyu ochiladi, bosh sahifada h
   assert.equal((await link.textContent()).trim(), 'Uy taomlari');
   await p3.screenshot({ path: `${SHOTS}home-nav.png`, clip: { x: 0, y: 0, width: 1280, height: 120 } });
 });
+
+test('reklama videosi: bo\'lim, poster va mp4 fayl (30 soniya, 9:16) joyida', async () => {
+  const { execFileSync } = await import('node:child_process');
+  const file = `${ROOT}uyovqat/video/uyovqat-reklama.mp4`;
+  const info = execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'stream=codec_name,width,height,duration', '-of', 'default=nw=1', file]).toString();
+  assert.match(info, /codec_name=h264/);
+  assert.match(info, /width=720/); assert.match(info, /height=1280/);
+  assert.ok(Math.abs(Number(/duration=([\d.]+)/.exec(info)[1]) - 30) < 0.2, 'davomiyligi 30 s');
+  assert.ok(statSync(file).size < 5 * 1048576, 'veb uchun 5 MB dan kichik');
+
+  const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  const page = await ctx.newPage();
+  await page.route(/fonts\.(googleapis|gstatic)\.com/, (r) => r.abort());
+  const bad = [];
+  page.on('response', (r) => { if (r.status() >= 400 && !/fonts\.g/.test(r.url())) bad.push(`${r.status()} ${r.url()}`); });
+  await page.goto(`${base}uyovqat/`);
+  const video = page.locator('#video video');
+  assert.equal(await video.getAttribute('preload'), 'none');
+  assert.equal(await video.locator('source').getAttribute('src'), '/uyovqat/video/uyovqat-reklama.mp4');
+  assert.equal((await page.request.get(`${base}uyovqat/video/uyovqat-reklama.mp4`, { headers: { Range: 'bytes=0-99' } })).status() < 400, true);
+  await page.locator('#video').scrollIntoViewIfNeeded();
+  await page.waitForTimeout(900);
+  assert.ok(await video.isVisible());
+  await page.screenshot({ path: `${SHOTS}site-video.png` });
+  // Raqamlash: 01 video, 02 yuklab olish
+  assert.deepEqual(await page.locator('.station b').allTextContents(), ['01', '02', '03', '04', '05']);
+  assert.deepEqual(bad, []);
+
+  const m = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 });
+  const p2 = await m.newPage();
+  await p2.route(/fonts\.(googleapis|gstatic)\.com/, (r) => r.abort());
+  await p2.goto(`${base}uyovqat/`);
+  assert.ok((await p2.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)) <= 1, 'gorizontal skroll yo\'q');
+  await p2.locator('#video').scrollIntoViewIfNeeded();
+  await p2.waitForTimeout(900);
+  await p2.screenshot({ path: `${SHOTS}site-video-mobile.png` });
+});
