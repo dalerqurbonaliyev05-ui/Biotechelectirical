@@ -40,12 +40,12 @@
     });
     d.querySelectorAll('[data-apk]').forEach(function (el) {
         var k = el.getAttribute('data-apk');
-        if (!ready) { el.textContent = k === 'meta' ? 'APK yig‘ilmoqda — bir necha daqiqadan so‘ng sahifani yangilang. Hozircha veb-ilovadan foydalaning.' : '—'; return; }
+        if (!ready) { el.textContent = k === 'meta' ? 'APK yig‘ilmoqda — bir necha daqiqadan so‘ng sahifani yangilang.' : '—'; return; }
         if (k === 'version') el.textContent = apk.VERSION;
         else if (k === 'size') el.textContent = mb(apk.BYTES);
         else if (k === 'sha') el.textContent = apk.SHA256;
         else if (k === 'date') el.textContent = apk.DATE || '—';
-        else if (k === 'meta') el.textContent = 'Versiya ' + apk.VERSION + ', ' + mb(apk.BYTES) + ', Android 7 va undan yuqori.';
+        else if (k === 'meta') el.textContent = 'Versiya ' + apk.VERSION + ', ' + mb(apk.BYTES) + ', Android 5.1 va undan yuqori.';
     });
 
     // yo'riqnoma: joriy bo'limni mundarijada belgilash

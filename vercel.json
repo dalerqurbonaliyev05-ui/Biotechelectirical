@@ -31,9 +31,29 @@
       "permanent": true
     },
     {
-      "source": "/fizika/app",
-      "destination": "/fizika/app/",
+      "source": "/fizika/app/admin.html",
+      "destination": "/fizika/admin/",
       "permanent": true
+    },
+    {
+      "source": "/fizika/app",
+      "destination": "/fizika/",
+      "permanent": true
+    },
+    {
+      "source": "/fizika/app/:path*",
+      "destination": "/fizika/",
+      "permanent": true
+    },
+    {
+      "source": "/fizika/admin",
+      "destination": "/fizika/admin/",
+      "permanent": true
+    },
+    {
+      "source": "/fizika-src/:path*",
+      "destination": "/fizika/",
+      "permanent": false
     },
     {
       "source": "/fizika/yoriqnoma",
@@ -315,100 +335,64 @@
       ]
     },
     {
-      "source": "/fizika/app/sw.js",
+      "source": "/fizika/admin/",
       "headers": [
         {
-          "key": "Content-Type",
-          "value": "text/javascript; charset=utf-8"
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/fizika/admin/index.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/fizika/admin/admin.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/fizika/admin/admin.css",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/fizika/admin/config.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/fizika/admin/(.*)",
+      "headers": [
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
         },
         {
-          "key": "Cache-Control",
-          "value": "no-cache"
-        }
-      ]
-    },
-    {
-      "source": "/fizika/app/manifest.webmanifest",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "application/manifest+json"
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
         },
         {
-          "key": "Cache-Control",
-          "value": "no-cache"
-        }
-      ]
-    },
-    {
-      "source": "/fizika/app/",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache"
-        }
-      ]
-    },
-    {
-      "source": "/fizika/app/index.html",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache"
-        }
-      ]
-    },
-    {
-      "source": "/fizika/app/admin.html",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache"
-        }
-      ]
-    },
-    {
-      "source": "/fizika/app/config.js",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache"
-        }
-      ]
-    },
-    {
-      "source": "/fizika/app/app.js",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache"
-        }
-      ]
-    },
-    {
-      "source": "/fizika/app/app.css",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache"
-        }
-      ]
-    },
-    {
-      "source": "/fizika/app/admin.js",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache"
-        }
-      ]
-    },
-    {
-      "source": "/fizika/app/admin.css",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache"
+          "key": "X-Robots-Tag",
+          "value": "noindex"
         }
       ]
     },
@@ -418,19 +402,6 @@
         {
           "key": "Cache-Control",
           "value": "no-cache"
-        }
-      ]
-    },
-    {
-      "source": "/.well-known/assetlinks.json",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "application/json"
-        },
-        {
-          "key": "Access-Control-Allow-Origin",
-          "value": "*"
         }
       ]
     }

@@ -1,0 +1,28 @@
+{
+  "name": "fizika-ilova",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "6–11-sinf o'quvchilari va abituriyentlar uchun fizika ilovasi: Android (Capacitor) + Supabase, admin panel veb",
+  "scripts": {
+    "build": "node build.mjs",
+    "build:native": "NATIVE=1 node build.mjs",
+    "android:prepare": "node mobile/prepare-android.mjs"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.2.0",
+    "@capacitor/app": "^6.0.0",
+    "@capacitor/browser": "^6.0.0",
+    "@capacitor/core": "^6.2.0",
+    "@fontsource/bricolage-grotesque": "^5.0.0",
+    "@fontsource/caveat": "^5.0.0",
+    "@fontsource/stix-two-text": "^5.0.0",
+    "@supabase/supabase-js": "^2.45.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.2.0",
+    "esbuild": "^0.25.0"
+  }
+}

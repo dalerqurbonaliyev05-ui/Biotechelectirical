@@ -1,0 +1,12 @@
+{
+  "appId": "uz.energyvibe.fizika",
+  "appName": "Fizika",
+  "webDir": "dist-native",
+  "android": {
+    "allowMixedContent": false,
+    "backgroundColor": "#F3F6FC"
+  },
+  "server": {
+    "androidScheme": "https"
+  }
+}
