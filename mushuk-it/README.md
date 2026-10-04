@@ -23,4 +23,4 @@ Ilova repo'sida (`mushuk-it-top-app`): `npm run build:test`, so'ng `cd tests && 
 
 ## Reklama videosi
 
-`reklama.mp4` (20 soniya, 720x1280, ilova skrinshotlari + motion, o‘zbekcha) sahifadagi `#promo` bo‘limida ko‘rsatiladi; poster: `img/promo-poster.webp`.
+`reklama.mp4` (20 soniya, 720x1280, ilova skrinshotlari + motion: 3D-tilt, kinetik matn, pop-tech musiqa; o‘zbekcha) sahifadagi `#promo` bo‘limida ko‘rsatiladi; poster: `img/promo-poster.webp`.
