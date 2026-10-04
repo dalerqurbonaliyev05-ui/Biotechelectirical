@@ -90,6 +90,9 @@
 .mu-faq-list details p { margin: 0 0 16px; color: var(--ink-2); font-weight: 600; }
 
 html[data-platform="ios"] .mu-ios-note { display: block; }
+/* iPhone'da veb-ilova tugmasi birinchi va asosiy, APK ikkinchi darajali */
+html[data-platform="ios"] .mu-open { order: -1; }
+html[data-platform="ios"] .mu-cta-apk { background: #fff; color: var(--ink); box-shadow: 4px 4px 0 var(--ink); padding: 14px 22px; font-size: .95rem; }
 
 /* ---------- Moslashuvchanlik ---------- */
 @media (max-width: 960px) {
@@ -128,3 +131,28 @@ html[data-platform="ios"] .mu-ios-note { display: block; }
 .mu-policy ul { padding-left: 22px; margin: 8px 0; }
 .mu-policy li { margin: 6px 0; }
 @media (max-width: 640px) { .mu-pv { padding: 110px 0 60px; } .mu-pv-toc ol { columns: 1; } }
+
+/* ---------- iPhone (veb-ilova) ---------- */
+.mu-open { background: #2563eb; box-shadow: 6px 6px 0 var(--ink), 0 14px 34px rgba(37, 99, 235, .35); }
+.mu-open:hover { box-shadow: 9px 9px 0 var(--ink), 0 18px 40px rgba(37, 99, 235, .45); }
+.mu-links { display: flex; flex-wrap: wrap; gap: 10px 22px; margin: 18px 0 0; }
+.mu-ios-alt { margin: 14px 0 0; font-weight: 700; color: var(--ink-2); }
+.mu-st-ico { display: inline-grid; place-items: center; }
+.mu-isteps { list-style: none; margin: 34px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+.mu-istep { position: relative; background: #fff; border: 2px solid var(--ink); border-radius: 22px; padding: 22px 20px 24px; box-shadow: 6px 6px 0 var(--accent, var(--mu)), 6px 6px 0 2px var(--ink); }
+.mu-istep:nth-child(1) { --accent: #4b93f0; } .mu-istep:nth-child(2) { --accent: #ffb020; } .mu-istep:nth-child(3) { --accent: #2fd6a3; } .mu-istep:nth-child(4) { --accent: #f0845f; }
+.mu-istep .mu-no { margin-bottom: 12px; }
+.mu-ill { background: #f6f3ff; border: 1.5px solid var(--ink); border-radius: 16px; padding: 10px; margin-bottom: 14px; }
+.mu-ill svg { display: block; width: 100%; height: auto; max-height: 110px; }
+.mu-istep h3 { margin: 0 0 8px; font: 800 1.05rem / 1.3 var(--display); letter-spacing: -.01em; overflow-wrap: anywhere; }
+.mu-istep p { margin: 0; color: var(--ink-2); font-weight: 600; font-size: .94rem; }
+.mu-warn { display: inline-block; background: #ffe1ea; color: #b4123f; border-radius: 8px; padding: 1px 7px; font-weight: 800; }
+.mu-ios-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; margin: 34px 0 0; }
+.mu-url { font: 700 .95rem var(--mono); color: var(--ink-2); overflow-wrap: anywhere; }
+.mu-result { display: flex; gap: 18px; align-items: flex-start; margin: 30px 0 0; background: #e8fbf3; border: 2px solid var(--ink); border-radius: 26px; padding: 22px 24px; }
+.mu-result-icon { flex: none; border-radius: 16px; border: 2px solid var(--ink); background: #fff; }
+.mu-result h3 { margin: 0 0 6px; font: 800 1.1rem var(--display); }
+.mu-result p { margin: 0 0 8px; color: var(--ink-2); font-weight: 600; }
+.mu-result .mu-res-note { font-size: .92rem; }
+@media (max-width: 960px) { .mu-isteps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .mu-isteps { grid-template-columns: minmax(0, 1fr); } .mu-result { flex-direction: column; } .mu-ctas .mu-download { width: 100%; justify-content: center; } }

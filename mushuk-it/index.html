@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mushuk va Itlarni Top: Android ilovasini yuklab olish va foydalanish qo‘llanmasi | EnergyVibe</title>
-    <meta name="description" content="Ko‘chada uchragan mushuk va itlarni suratga oling, GPS joylashuvi avtomatik belgilanadi. Android ilovasini (APK) yuklab oling, o‘rnatish va foydalanish bo‘yicha qadamma-qadam qo‘llanma. O‘zbek, rus va ingliz tillari, qorong‘u rejim.">
+    <title>Mushuk va Itlarni Top: Android (APK) va iPhone uchun ilova, foydalanish qo‘llanmasi | EnergyVibe</title>
+    <meta name="description" content="Ko‘chada uchragan mushuk va itlarni suratga oling, GPS joylashuvi avtomatik belgilanadi. Android uchun APK, iPhone uchun veb-ilova (App Store kerak emas). O‘rnatish va foydalanish bo‘yicha qadamma-qadam qo‘llanma, 3 tilda.">
     <link rel="canonical" href="https://energyvibe.uz/mushuk-it/">
     <meta name="theme-color" content="#16a34a">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="EnergyVibe">
     <meta property="og:url" content="https://energyvibe.uz/mushuk-it/">
-    <meta property="og:title" content="Mushuk va Itlarni Top: Android ilovasi">
-    <meta property="og:description" content="Ko‘rdingmi: belgila. Qidiryapsanmi: top! APK yuklab oling va foydalanish qo‘llanmasini o‘qing.">
+    <meta property="og:title" content="Mushuk va Itlarni Top: Android va iPhone uchun ilova">
+    <meta property="og:description" content="Ko‘rdingmi: belgila. Qidiryapsanmi: top! Android (APK) va iPhone (veb-ilova) uchun bepul.">
     <link rel="icon" type="image/svg+xml" href="/mushuk-it/icon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,7 +21,8 @@
     <script>
         (function (d, n) {
             d.classList.add('js');
-            d.setAttribute('data-platform', /iPad|iPhone|iPod/.test(n.userAgent) ? 'ios' : /Android/i.test(n.userAgent) ? 'android' : 'desktop');
+            var u = n.userAgent, ios = /iPad|iPhone|iPod/.test(u) || (/Macintosh/.test(u) && n.maxTouchPoints > 1);
+            d.setAttribute('data-platform', ios ? 'ios' : /Android/i.test(u) ? 'android' : 'desktop');
         })(document.documentElement, navigator);
     </script>
     <script src="/mushuk-it/config.js" defer></script>
@@ -66,17 +67,22 @@
         <section class="mu-hero" id="top">
             <div class="container mu-hero-grid">
                 <div>
-                    <p class="mu-eyebrow"><span class="dot"></span><span data-i18n="h.eyebrow">Android · bepul · APK</span></p>
+                    <p class="mu-eyebrow"><span class="dot"></span><span data-i18n="h.eyebrow">Android · iPhone · bepul</span></p>
                     <h1 class="mu-title" data-i18n-h="h.title">Mushuk va Itlarni <span class="mu-grad">Top</span></h1>
                     <p class="mu-lead" data-i18n="h.lead">Ko‘chada mushuk yoki it uchradimi? Suratga oling: joylashuv avtomatik belgilanadi. Yo‘qolgan yoki topilgan hayvonni yaqin atrofdagi e’lonlardan va xaritadan toping.</p>
+                    <!-- Ikkala variant doim bor; iPhone'da veb-ilova tugmasi birinchi (page.css → data-platform) -->
                     <div class="mu-ctas">
-                        <a class="btn btn-primary mu-download" href="#download">
+                        <a class="btn btn-primary mu-download mu-cta-apk" href="#download">
                             <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m6.5 10 5.5 5.5 5.5-5.5"/><path d="M4 20h16"/></svg>
-                            <span data-i18n="h.cta">Ilovani yuklab olish</span>
+                            <span data-i18n="h.cta">Android: yuklab olish (APK)</span>
                         </a>
-                        <a class="link" href="#guide" data-i18n="h.guide">Foydalanish qo‘llanmasi ↓</a>
+                        <a class="btn btn-primary mu-download mu-open" href="/mushuk-it/app/">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10.5 18.5h3"/><path d="m9.5 9.5 2.5-2.5 2.5 2.5"/><path d="M12 7v7"/></svg>
+                            <span data-i18n="h.open">iPhone / brauzer: ilovani ochish</span>
+                        </a>
                     </div>
-                    <p class="mu-ios-note" id="ios-note" hidden data-i18n-h="h.ios">⚠️ Ilova hozircha faqat <b>Android</b> uchun. iPhone uchun versiya yo‘q.</p>
+                    <p class="mu-links"><a class="link" href="#ios" data-i18n="h.howIos">iPhone’ga o‘rnatish ↓</a> <a class="link" href="#guide" data-i18n="h.guide">Foydalanish qo‘llanmasi ↓</a></p>
+                    <p class="mu-ios-note" id="ios-note" hidden data-i18n-h="h.ios">📱 iPhone’dasiz: App Store kerak emas. <b>«Ilovani ochish»</b> ni bosing va ilovani bosh ekranga qo‘shing: <a class="link" href="#ios">qanday qilish ↓</a></p>
                 </div>
                 <div class="mu-hero-art" aria-hidden="true">
                     <div class="mu-icon-card">
@@ -129,6 +135,7 @@
                         </a>
                         <p class="mu-meta"><span class="mu-chip">v<b data-v>1.0</b></span><span class="mu-chip"><b data-size>7.0</b> MB</span><span class="mu-chip" data-i18n="d.android">Android 5.1+</span></p>
                         <details class="mu-hash"><summary>SHA-256</summary><code data-hash></code></details>
+                        <p class="mu-ios-alt"><span data-i18n="d.iosAlt">iPhone’mi? APK u yerda o‘rnatilmaydi.</span> <a class="link" href="#ios" data-i18n="d.iosLink">Veb-versiyani o‘rnating ↓</a></p>
                     </article>
                     <figure class="mu-hero-shot reveal"><img src="/mushuk-it/img/uz-home.webp" alt="" width="260" height="535" loading="lazy" data-shot="home"></figure>
                 </div>
@@ -164,6 +171,59 @@
                         <p data-i18n-h="i5.p">Ilovani oching, <b>«Google bilan kirish»</b> ni bosing, so‘ng ism-sharifingizni kiriting. Kamera va joylashuv ruxsati so‘ralganda <b>«Ilovadan foydalanayotganda»</b> ni tanlang.</p>
                     </div></li>
                 </ol>
+            </div>
+        </section>
+
+        <!-- iPhone (iOS): veb-ilova (PWA) /mushuk-it/app/ -->
+        <section class="section mu-ios" id="ios">
+            <div class="container">
+                <header class="section-head reveal">
+                    <span class="station"><b class="mu-st-ico"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M10.5 18.5h3"/></svg></b><span data-i18n="ios.station">iPhone · iOS</span></span>
+                    <h2 class="section-title" data-i18n="ios.title">iPhone’ga o‘rnatish: 4 qadam</h2>
+                </header>
+                <p class="section-lead reveal" data-i18n="ios.lead">App Store kerak emas: veb-ilova bosh ekranga ikonka bo‘lib o‘rnatiladi va to‘liq ekranda ochiladi. Kamera, GPS va Google bilan kirish xuddi Android’dagidek ishlaydi.</p>
+                <ol class="mu-isteps">
+                    <li class="mu-istep reveal">
+                        <span class="mu-no">1</span>
+                        <div class="mu-ill" aria-hidden="true"><svg viewBox="0 0 120 84"><circle cx="60" cy="42" r="33" fill="#9be7ff" stroke="#1b1440" stroke-width="3"/><circle cx="60" cy="42" r="25" fill="#fff" stroke="#1b1440" stroke-width="2"/><g stroke="#1b1440" stroke-width="2" stroke-linecap="round"><path d="M60 19v5M60 60v5M37 42h5M78 42h5"/></g><path d="M73 29 63 45 57 39Z" fill="#ff5c8a" stroke="#1b1440" stroke-width="2" stroke-linejoin="round"/><path d="M47 55 57 39 63 45Z" fill="#fff" stroke="#1b1440" stroke-width="2" stroke-linejoin="round"/><circle cx="60" cy="42" r="2.6" fill="#1b1440"/></svg></div>
+                        <h3 data-i18n="ios.s1.t">Havolani Safari’da oching</h3>
+                        <p><span class="mu-warn" data-i18n="ios.s1.warn">Chrome emas, aynan Safari!</span> <span data-i18n="ios.s1.d">Boshqa brauzerlarda «Bosh ekranga qo‘shish» bo‘lmasligi mumkin. Pastdagi «Ilovani ochish» tugmasini Safari’da bosing.</span></p>
+                    </li>
+                    <li class="mu-istep reveal">
+                        <span class="mu-no">2</span>
+                        <div class="mu-ill" aria-hidden="true"><svg viewBox="0 0 120 84"><rect x="6" y="40" width="108" height="34" rx="9" fill="#fff" stroke="#1b1440" stroke-width="3"/><g fill="none" stroke="#1b1440" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 51l-5 6 5 6"/><path d="M36 51l5 6-5 6"/><path d="M83 52h10v10H83z"/><path d="M98 50h-12"/></g><circle cx="60" cy="57" r="13" fill="#ffd27a" stroke="#1b1440" stroke-width="2.4"/><g fill="none" stroke="#1b1440" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M55 56v7h10v-7"/><path d="M60 59V48"/><path d="m56.5 51.5 3.5-3.5 3.5 3.5"/></g><path d="M60 30v-9" stroke="#ff5c8a" stroke-width="3" stroke-linecap="round"/><path d="m54 26 6 6 6-6" fill="none" stroke="#ff5c8a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                        <h3 data-i18n="ios.s2.t">«Ulashish» tugmasini bosing</h3>
+                        <p><span data-i18n="ios.s2.d">Ekran pastidagi kvadrat va yuqoriga strelka belgisi. Yangi iOS’da avval «•••» menyusini oching.</span></p>
+                    </li>
+                    <li class="mu-istep reveal">
+                        <span class="mu-no">3</span>
+                        <div class="mu-ill" aria-hidden="true"><svg viewBox="0 0 120 84"><rect x="14" y="6" width="92" height="72" rx="9" fill="#fff" stroke="#1b1440" stroke-width="3"/><g stroke="#d9d0f0" stroke-width="5" stroke-linecap="round"><path d="M26 20h52"/><path d="M26 64h40"/></g><rect x="20" y="31" width="80" height="20" rx="6" fill="#a8f0d6" stroke="#1b1440" stroke-width="2.4"/><rect x="27" y="35" width="12" height="12" rx="3" fill="#fff" stroke="#1b1440" stroke-width="2"/><path d="M33 38v6M30 41h6" stroke="#1b1440" stroke-width="2" stroke-linecap="round"/><path d="M46 41h44" stroke="#1b1440" stroke-width="4" stroke-linecap="round"/></svg></div>
+                        <h3 data-i18n="ios.s3.t">«Bosh ekranga qo‘shish»ni tanlang</h3>
+                        <p><span data-i18n="ios.s3.d">Menyuni pastga suring. Telefon tili ruscha bo‘lsa «На экран „Домой“», inglizcha bo‘lsa «Add to Home Screen».</span></p>
+                    </li>
+                    <li class="mu-istep reveal">
+                        <span class="mu-no">4</span>
+                        <div class="mu-ill" aria-hidden="true"><svg viewBox="0 0 120 84"><rect x="10" y="6" width="100" height="72" rx="9" fill="#fff" stroke="#1b1440" stroke-width="3"/><path d="M10 24h100" stroke="#1b1440" stroke-width="2"/><rect x="72" y="10" width="32" height="11" rx="5.5" fill="#ffd27a" stroke="#1b1440" stroke-width="2"/><path d="m82 15.5 3 3 6-6" fill="none" stroke="#1b1440" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><image href="/mushuk-it/icon.svg" x="22" y="33" width="32" height="32"/><g stroke="#d9d0f0" stroke-width="5" stroke-linecap="round"><path d="M62 42h34"/><path d="M62 54h24"/></g></svg></div>
+                        <h3 data-i18n="ios.s4.t">«Qo‘shish»ni bosing</h3>
+                        <p><span data-i18n="ios.s4.d">Oynaning o‘ng yuqori burchagida. Bosh ekranda «Mushuk va It» ikonkasi paydo bo‘ladi.</span></p>
+                    </li>
+                </ol>
+                <div class="mu-ios-actions reveal">
+                    <a class="btn btn-primary mu-download mu-open" href="/mushuk-it/app/">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10.5 18.5h3"/><path d="m9.5 9.5 2.5-2.5 2.5 2.5"/><path d="M12 7v7"/></svg>
+                        <span data-i18n="ios.open">Ilovani ochish</span>
+                    </a>
+                    <span class="mu-url">energyvibe.uz/mushuk-it/app</span>
+                </div>
+                <aside class="mu-result reveal" aria-labelledby="mu-result-title">
+                    <img src="/mushuk-it/app/icons/icon-192.png" width="64" height="64" alt="" loading="lazy" decoding="async" class="mu-result-icon">
+                    <div>
+                        <h3 id="mu-result-title" data-i18n="ios.res.t">Natija: bosh ekranda ilova</h3>
+                        <p data-i18n="ios.res.d">Ikonkani bosing → «Google bilan kirish» → Google hisobingizni tanlang. Birinchi e’londa Safari kamera va joylashuvga ruxsat so‘raydi: «Ruxsat berish»ni bosing.</p>
+                        <p class="mu-res-note" data-i18n="ios.res.loc">Joylashuv aniqlanmasa: Sozlamalar → Maxfiylik va xavfsizlik → Joylashuv xizmatlari → Safari veb-saytlari → «Ilovadan foydalanganda».</p>
+                        <p class="mu-res-note"><b data-i18n="ios.android.t">Android’da ham:</b> <span data-i18n="ios.android.d">APK o‘rnatmasdan shu veb-versiyani Chrome’da ochish mumkin: «⋮» → «Ilovani o‘rnatish» (yoki «Bosh ekranga qo‘shish»).</span></p>
+                    </div>
+                </aside>
             </div>
         </section>
 
@@ -253,7 +313,7 @@
                     <details><summary data-i18n="q6.q">Tilni yoki qorong‘u rejimni qanday o‘zgartiraman?</summary>
                         <p data-i18n="q6.a">Profil → Sozlamalar. Til: o‘zbekcha, русский, English. Mavzu: Tizim (telefon sozlamasiga ergashadi), Yorug‘ yoki Qorong‘u.</p></details>
                     <details><summary data-i18n="q7.q">iPhone uchun ilova bormi?</summary>
-                        <p data-i18n="q7.a">Hozircha yo‘q: ilova faqat Android uchun.</p></details>
+                        <p data-i18n="q7.a">Ha, veb-versiya: Safari’da energyvibe.uz/mushuk-it/app ni oching → «Ulashish» → «Bosh ekranga qo‘shish». App Store kerak emas. Batafsil: «iPhone’ga o‘rnatish» bo‘limi.</p></details>
                     <details><summary data-i18n="q8.q">Ilova xavfsizmi?</summary>
                         <p data-i18n="q8.a">Ilova faqat kamera va joylashuv ruxsatini so‘raydi. Ma’lumotlar himoyalangan serverda saqlanadi; boshqalar faqat ismingiz va e’loningizni ko‘radi, email va telefon ko‘rinmaydi.</p></details>
                 </div>
