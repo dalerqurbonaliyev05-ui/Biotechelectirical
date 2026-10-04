@@ -211,3 +211,9 @@
 /* uzun manzil va CSS satrlari tor ekranda ustunni kengaytirmasin */
 .fz-doc-grid > *, .fz-step > *, .fz-hero-grid > *, .fz-dl > * { min-width: 0; }
 .fz-step p, .fz-step li, .fz-table td, .fz-kbd { overflow-wrap: anywhere; }
+
+/* reklama videosi */
+.fz-video-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 56px; align-items: center; }
+.fz-video-frame { justify-self: center; width: min(100%, 340px); aspect-ratio: 9 / 16; border: 10px solid var(--fz-ink); border-radius: 40px; overflow: hidden; background: var(--fz-ink); box-shadow: 14px 14px 0 rgba(35, 71, 214, .18); }
+.fz-video-frame video { display: block; width: 100%; height: 100%; object-fit: cover; background: var(--fz-ink); }
+@media (max-width: 900px) { .fz-video-grid { grid-template-columns: 1fr; gap: 30px; } .fz-video-frame { order: -1; } }
