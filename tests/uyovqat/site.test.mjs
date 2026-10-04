@@ -98,6 +98,7 @@ test('reklama videosi: bo\'lim, poster va mp4 fayl (30 soniya, 9:16) joyida', as
   const file = `${ROOT}uyovqat/video/uyovqat-reklama.mp4`;
   const info = execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'stream=codec_name,width,height,duration', '-of', 'default=nw=1', file]).toString();
   assert.match(info, /codec_name=h264/);
+  assert.match(execFileSync('ffprobe', ['-v', 'error', '-select_streams', 'a', '-show_entries', 'stream=codec_name', '-of', 'default=nw=1', file]).toString(), /codec_name=aac/, 'ovoz yo\'li (aac) bor');
   assert.match(info, /width=720/); assert.match(info, /height=1280/);
   assert.ok(Math.abs(Number(/duration=([\d.]+)/.exec(info)[1]) - 30) < 0.2, 'davomiyligi 30 s');
   assert.ok(statSync(file).size < 5 * 1048576, 'veb uchun 5 MB dan kichik');

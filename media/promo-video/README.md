@@ -34,6 +34,14 @@ brend nomi va slogan (`brandName`, `slogan`), har sahna sarlavhalari (`orderTitl
 promokod (`promoCode`, `discountPercent`), ranglar (`accent`, `accentDark`, `accentSoft`, `ink`, `cream`).
 Narxlar va chegirma avtomatik hisoblanadi (ilovadagi formula bilan bir xil: 250 000 − 10% + 8 000 = 233 000).
 
+## Ovoz effektlari (UI tovushlari)
+Video tayyor ovoz effektlari bilan renderlanadi: tugma bosish, matn "pop"i, o'tishlardagi whoosh, bildirishnoma (chime + tebranish), promokod yozilgandagi tiq-tiq,
+chegirma (coin), yulduzlar (ko'tarilib boruvchi ping), eshik qo'ng'irog'i, konfetti va h.k. Fayllar `public/sfx/*.wav` (kodda matematik sintez qilingan, litsenziya masalasi yo'q).
+- Qaysi tovush qaysi kadrda: `src/sfx.ts` (`SFX_EVENTS`). Animatsiya vaqtini o'zgartirsangiz, shu yerdagi kadrni ham o'zgartiring.
+- Balandlik: `sfxVolume` (0..1), butunlay o'chirish: `sfxEnabled: false` (Studio Props panelida ham bor).
+- Tovushlarni o'zgartirish yoki yangisini qo'shish: `scripts/make-sfx.py` (`pip install numpy && python3 scripts/make-sfx.py`).
+- Musiqa (`audioSrc`) effektlar ustidan qo'shiladi: ikkalasi bir vaqtda eshitiladi.
+
 ## Musiqa va ritm
 `bpm` (standart 120): pop-animatsiyalar, fon shakllari va CTA tugmasi har beat'da "uradi" (120 BPM = har 15 kadr). Sahna chegaralari ham 15 kadrning ko'paytmasida.
 Musiqa qo'shish: faylni `public/` ga qo'ying va `audioSrc` ga nomini yozing. Batafsil: `public/README.md`.

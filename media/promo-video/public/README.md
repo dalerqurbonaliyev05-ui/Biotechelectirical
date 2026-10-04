@@ -2,6 +2,9 @@
 
 Bu papkadagi fayllar `staticFile()` orqali video ichida ishlatiladi. Hozircha hammasi ixtiyoriy.
 
+## Ovoz effektlari
+`sfx/` papkasida tayyor `.wav` fayllar bor (`scripts/make-sfx.py` yaratadi). Qaysi kadrda qaysi tovush chiqishi `src/sfx.ts` da.
+
 ## Musiqa
 `music.mp3` (yoki istalgan nom) ni shu yerga qo'ying va **Studio → Props → `audioSrc`** ga `music.mp3` yozing
 (yoki `src/theme.ts` dagi `defaultProps.audioSrc`). Ritm `bpm` (120) bo'yicha sozlangan: har 0,5 soniyada urg'u.
