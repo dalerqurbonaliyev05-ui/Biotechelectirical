@@ -83,7 +83,10 @@ export async function installMock(context, { db, rpc = {}, user }) {
       if (ord) { const [col, dir] = ord.split('.'); rows.sort((a, b) => (a[col] > b[col] ? 1 : a[col] < b[col] ? -1 : 0) * (dir === 'desc' ? -1 : 1)); }
       // Ichki (embedded) bog'lanishlar: select=*,order_items(name,portions) -> order_id bo'yicha biriktiriladi
       for (const m of (u.searchParams.get('select') ?? '').matchAll(/(\w+)\([^)]*\)/g)) {
-        rows = rows.map((r) => ({ ...r, [m[1]]: (db[m[1]] ?? []).filter((x) => x.order_id === r.id) }));
+        const fk = `${m[1].replace(/s$/, '')}_id`;
+        rows = rows.map((r) => (fk in r
+          ? { ...r, [m[1]]: (db[m[1]] ?? []).find((x) => x.id === r[fk]) ?? null }                       // ko'pga-bir
+          : { ...r, [m[1]]: (db[m[1]] ?? []).filter((x) => x.order_id === r.id) }));                     // birga-ko'p
       }
       const lim = Number(u.searchParams.get('limit') ?? 0); if (lim) rows = rows.slice(0, lim);
       if (single) return rows.length ? route.fulfill({ json: rows[0] }) : route.fulfill({ status: 406, json: { message: 'no rows', code: 'PGRST116' } });

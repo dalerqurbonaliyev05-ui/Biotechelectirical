@@ -116,3 +116,129 @@ test('xaridor: buyurtma holati timeline va sharh', async () => {
   await page.screenshot({ path: `${SHOTS}buyer-orders.png` });
   assert.deepEqual(errors, []);
 });
+
+const sellerUser = { id: D.IDS.seller, email: 'malika@test.uz' };
+
+test('sotuvchi: buyurtmani qabul qilish, taom qo\'shish, bonus progressi', async () => {
+  const db = baseDb();
+  db.orders = [D.order('new', { ready_at: new Date(Date.now() + 3 * 3600000).toISOString() })];
+  db.order_items = D.order_items;
+  db.seller_earnings = Array.from({ length: 37 }, (_, i) => ({ id: `e${i}`, seller_id: D.IDS.seller, order_id: `00000000-0000-0000-0000-${String(500 + i).padStart(12, '0')}`, gross: 100000, commission: 10000, net: 90000, created_at: new Date(Date.now() - i * 86400000).toISOString() }));
+  db.seller_bonuses = [];
+  const calls = [];
+  const { page, errors } = await open('seller', sellerUser, {
+    db, rpc: { uy_seller_set_status: (a) => { calls.push(a); db.orders[0].status = a.p_status; return null; } },
+  });
+  await page.waitForSelector('text=Yangi buyurtma');
+  assert.ok(await page.getByText('Mastava').first().isVisible());
+  await page.screenshot({ path: `${SHOTS}seller-orders.png` });
+  await page.getByRole('button', { name: 'Qabul qilish' }).click();
+  await page.getByRole('button', { name: 'Tayyorlashni boshlash' }).waitFor();
+  assert.deepEqual(calls.map((c) => c.p_status), ['accepted']);
+
+  await page.getByRole('link', { name: /Daromad/ }).click();
+  await page.waitForSelector('text=Yana');
+  await page.waitForTimeout(900);
+  assert.ok(await page.getByText('13 ta').first().isVisible());           // 50 - 37
+  await page.screenshot({ path: `${SHOTS}seller-earnings.png` });
+
+  await page.getByRole('link', { name: /Taomlar/ }).click();
+  await page.getByRole('button', { name: /Taom qo'shish/ }).click();
+  await page.waitForSelector('text=Yangi taom');
+  await page.getByPlaceholder('Masalan: Mastava').fill('Lag\'mon');
+  await page.locator('select').selectOption({ label: 'Mastava' });
+  await page.locator('input[type=number]').first().fill('26000');
+  await page.screenshot({ path: `${SHOTS}seller-foodform.png` });
+  await page.getByRole('button', { name: 'Saqlash' }).click();
+  await page.waitForURL(/#\/foods$/);
+  const added = db.food_items.find((x) => x.name === 'Lag\'mon');
+  assert.ok(added && Number(added.price_per_portion) === 26000 && added.seller_id === D.IDS.seller);
+  assert.deepEqual(errors, []);
+});
+
+const courierUser = { id: D.IDS.courier, email: 'jasur@test.uz' };
+
+test('kuryer: xarita, bo\'sh holat va yetkazish bosqichlari', async () => {
+  const db = baseDb();
+  db.couriers = [{ id: D.IDS.courier, availability: 'busy', lat: 41.3, lng: 69.25, location_updated_at: null, vehicle: null }];
+  db.uy_profiles.push({ ...D.uy_profiles[0], id: D.IDS.buyer });
+  db.orders = [D.order('preparing')];
+  db.courier_assignments = [{ id: 'a1', order_id: D.IDS.order, courier_id: D.IDS.courier, delivery_status: 'assigned', distance_km: 1.3, assigned_at: new Date().toISOString(), picked_up_at: null, delivered_at: null }];
+  const steps = [];
+  const { page, errors } = await open('courier', courierUser, {
+    db, rpc: { uy_courier_set_delivery: (a) => { steps.push(a.p_status); db.courier_assignments[0].delivery_status = a.p_status; if (a.p_status === 'delivered') db.courier_assignments[0].delivered_at = new Date().toISOString(); return null; } },
+  });
+  await page.waitForSelector('.leaflet-container');
+  await page.waitForSelector('text=Buyurtma bajarilmoqda');
+  await page.waitForTimeout(1200);
+  await page.screenshot({ path: `${SHOTS}courier-map.png` });
+  assert.ok(await page.locator('.u-pin').count() >= 2);                     // oshxona va mijoz belgilari
+  await page.getByRole('button', { name: 'Oldim' }).click();
+  await page.getByRole('button', { name: "Yo'ldaman" }).click();
+  await page.getByRole('button', { name: 'Yetkazdim' }).click();
+  await page.waitForTimeout(400);
+  assert.deepEqual(steps, ['picked_up', 'on_the_way', 'delivered']);
+  assert.deepEqual(errors, []);
+});
+
+test('admin panel: statistika, buyurtmalar, promokod yaratish, rol tekshiruvi', async () => {
+  const ADMIN_DIR = new URL('../../admin/', import.meta.url).pathname;
+  const { srv, url } = await serveDir(ADMIN_DIR);
+  servers.push(srv);
+  const db = baseDb();
+  const admin = { id: '00000000-0000-0000-0000-0000000000ad', email: 'admin@test.uz' };
+  db.uy_profiles.push({ ...D.uy_profiles[0], id: admin.id, role: 'admin', full_name: 'Admin' });
+  db.orders = [D.order('delivered'), D.order('new', { id: '00000000-0000-0000-0000-000000000101', buyer_id: D.IDS.buyer })];
+  db.order_items = D.order_items; db.promo_codes = []; db.couriers = [{ id: D.IDS.courier, availability: 'free', lat: 41.3, lng: 69.25, location_updated_at: new Date().toISOString(), vehicle: 'Skuter' }];
+  db.courier_assignments = [];
+  const daily = Array.from({ length: 14 }, (_, i) => ({ day: new Date(Date.now() - (13 - i) * 86400000).toISOString().slice(0, 10), orders: i % 5, revenue: (i % 5) * 100000 }));
+  const rpc = {
+    uy_admin_stats: () => ({ today_orders: 3, today_revenue: 640000, total_orders: 2, delivered_orders: 1, active_orders: 1, total_revenue: 258000, sellers: 2, couriers: 1, free_couriers: 1, buyers: 5, daily }),
+    uy_admin_seller_stats: () => [{ seller_id: D.IDS.seller, shop_name: 'Malika oshxonasi', full_name: 'Malika', phone: '+998901234567', rating_avg: 4.8, delivered_orders: 37, gross_total: 3700000, net_total: 3330000, bonus_total: 0 }],
+  };
+  const ctx = await browser.newContext({ viewport: { width: 1280, height: 860 } });
+  await installMock(ctx, { db, rpc, user: admin });
+  const page = await ctx.newPage();
+  const errors = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await page.goto(url);
+  await page.waitForSelector('text=Umumiy statistika');
+  await page.waitForTimeout(700);
+  await page.screenshot({ path: `${SHOTS}admin-stats.png` });
+  assert.ok(await page.getByText('640').first().isVisible());
+
+  await page.getByRole('tab', { name: 'Buyurtmalar' }).click();
+  await page.waitForSelector('table');
+  assert.equal(await page.locator('tbody tr').count(), 2);
+  await page.locator('#of').selectOption('new');
+  assert.equal(await page.locator('tbody tr').count(), 1);
+
+  await page.getByRole('tab', { name: 'Sotuvchilar' }).click();
+  await page.waitForSelector('text=Malika oshxonasi');
+  await page.getByRole('tab', { name: 'Kuryerlar' }).click();
+  await page.waitForSelector('text=Skuter');
+
+  await page.getByRole('tab', { name: 'Promokodlar' }).click();
+  await page.waitForSelector('#pf');
+  await page.locator('#pf input[name=code]').fill('yoz10');
+  await page.locator('#pf input[name=value]').fill('10');
+  await page.locator('#pf button[type=submit]').click();
+  await page.waitForTimeout(500);
+  assert.equal(db.promo_codes.length, 1);
+  assert.equal(db.promo_codes[0].code, 'YOZ10');
+  assert.equal(db.promo_codes[0].discount_percent, 10);
+  await page.screenshot({ path: `${SHOTS}admin-promo.png` });
+
+  await page.getByRole('tab', { name: 'Sozlamalar' }).click();
+  await page.waitForSelector('text=Sotuvchi bonus qoidalari');
+  assert.equal(await page.locator('[data-rule] input[name=n]').inputValue(), '50');
+  assert.deepEqual(errors, []);
+
+  // Admin bo'lmagan hisob kira olmaydi
+  const ctx2 = await browser.newContext();
+  const db2 = baseDb();
+  await installMock(ctx2, { db: db2, rpc: {}, user: { id: D.IDS.buyer, email: 'ali@test.uz' } });
+  const p2 = await ctx2.newPage();
+  await p2.goto(url);
+  await p2.waitForSelector('text=administrator emas');
+});
