@@ -106,6 +106,7 @@ async function openPostModal(post, author, onChange) {
     m.el.innerHTML = `
       ${safeImg(post.image_url) ? `<img class="lightbox" src="${esc(safeImg(post.image_url))}" alt="">` : ""}
       <div class="row between mt"><div>${personHtml(author)}</div><div>${animalBadge(post.animal_type)} ${postStatusBadge(post.status)}</div></div>
+      ${post.title ? `<h3 style="margin-top:10px">${esc(post.title)}</h3>` : ""}
       ${post.caption ? `<p>${esc(post.caption)}</p>` : ""}
       ${post.status === "blocked" && post.blocked_reason ? `<div class="alert err">Bloklash sababi: ${esc(post.blocked_reason)}</div>` : ""}
       <p class="small">📍 ${esc(post.address || "Manzil aniqlanmagan")} <span class="muted">(${coords(post.latitude, post.longitude)})</span> · <a href="${esc(mapsUrl(post.latitude, post.longitude))}" target="_blank" rel="noopener noreferrer">Xaritada ochish</a><br><span class="muted">${fmtDateTime(post.created_at)}</span></p>
@@ -141,7 +142,7 @@ sections.posts = async (el) => {
   const posts = new Map();
 
   const load = (from, to) => {
-    let q = sb.from("posts").select("id, user_id, animal_type, image_url, latitude, longitude, address, caption, status, blocked_reason, created_at, likes(count), comments(count)")
+    let q = sb.from("posts").select("id, user_id, animal_type, title, image_url, latitude, longitude, address, caption, status, blocked_reason, created_at, likes(count), comments(count)")
       .order("created_at", { ascending: false }).range(from, to);
     const s = el.querySelector("#fs").value, a = el.querySelector("#fa").value, t = cleanFilter(el.querySelector("#fq").value).toLowerCase();
     if (s) q = q.eq("status", s);
@@ -160,6 +161,7 @@ sections.posts = async (el) => {
       <div class="pimg">${safeImg(p.image_url) ? `<img src="${esc(safeImg(p.image_url))}" alt="" loading="lazy" data-zoom="${esc(safeImg(p.image_url))}">` : ""}
         <div class="tags">${animalBadge(p.animal_type)}${blocked ? '<span class="badge bad">Bloklangan</span>' : ""}</div></div>
       <div class="pbody">
+        ${p.title ? `<b>${esc(p.title)}</b>` : ""}
         ${personHtml(u)}
         <div class="small">📍 ${esc(p.address || "Manzil aniqlanmagan")}<br><span class="muted">${coords(p.latitude, p.longitude)}</span> · <a href="${esc(mapsUrl(p.latitude, p.longitude))}" target="_blank" rel="noopener noreferrer">Xarita</a></div>
         <div class="muted small">${fmtDateTime(p.created_at)} · ❤️ ${p.likes?.[0]?.count ?? 0} · 💬 ${p.comments?.[0]?.count ?? 0}</div>

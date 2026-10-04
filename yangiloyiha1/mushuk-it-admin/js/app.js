@@ -137,8 +137,9 @@ export async function fetchAll(build, page = 1000) {
 }
 
 // ---------- Storage fayllarini o'chirish ----------
+// Har bir postning asl rasmi va kichik nusxasi (<uuid>_t.jpg) ham o'chiriladi.
 export async function removePhotos(urls) {
-  const paths = urls.map(storagePath).filter(Boolean);
+  const paths = urls.flatMap((u) => [storagePath(u), storagePath(String(u).replace(/\.jpg$/, "_t.jpg"))]).filter(Boolean);
   for (let i = 0; i < paths.length; i += 100) {
     const { error } = await sb.storage.from(BUCKET).remove(paths.slice(i, i + 100));
     if (error) throw error;
