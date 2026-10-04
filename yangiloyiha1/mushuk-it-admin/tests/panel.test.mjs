@@ -21,7 +21,7 @@ before(async () => {
     if (u.pathname === "/favicon.ico") { res.writeHead(204); return res.end(); }
     const p = path.join(ROOT, decodeURIComponent(u.pathname));
     if (!p.startsWith(ROOT) || !fs.existsSync(p) || fs.statSync(p).isDirectory()) { res.writeHead(404); return res.end("yo'q"); }
-    res.writeHead(200, { "Content-Type": MIME[path.extname(p)] || "application/octet-stream" }); fs.createReadStream(p).pipe(res);
+    res.writeHead(200, { "Content-Type": MIME[path.extname(p)] || "application/octet-stream", "Referrer-Policy": "no-referrer" }); fs.createReadStream(p).pipe(res);
   });
   await new Promise((r) => server.listen(0, "127.0.0.1", r));
   base = `http://127.0.0.1:${server.address().port}`;
@@ -63,7 +63,7 @@ async function openPanel(db, { page: pageName = "admin_panel.html", hash = "", s
   if (process.env.DBG) page.on("console", (m) => console.log("CONSOLE", m.type(), m.text()));
   page.on("console", (m) => { if (m.type() === "error" && !/Failed to load resource/.test(m.text())) errors.push(m.text()); });
   await page.route("**/js/config.js", (r) => r.fulfill({ contentType: "text/javascript", body: `export const SUPABASE_URL=${JSON.stringify(SB)}; export const SUPABASE_KEY="sb_publishable_test";` }));
-  await page.route("https://tile.openstreetmap.org/**", (r) => r.fulfill({ status: 200, contentType: "image/png", body: Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==", "base64") }));
+  await page.route("https://tile.openstreetmap.org/**", (r) => (db.tileRefs ||= []).push(r.request().headers().referer || "") && r.fulfill({ status: 200, contentType: "image/png", body: Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==", "base64") }));
   await page.route(`${SB}/**`, async (route) => {
     const req = route.request(), u = new URL(req.url()), m = req.method();
     const cors = { "access-control-allow-origin": "*", "access-control-allow-headers": "*", "access-control-allow-methods": "*" };
@@ -243,6 +243,9 @@ test("xarita: pinlar, filtr, pin tanlash va kartadan bloklash", async () => {
   await page.locator(".leaflet-container").waitFor();
   await page.waitForFunction(() => document.querySelectorAll(".photo-pin").length === 2);
   assert.match(await page.locator("#mcount").innerText(), /2 ta/);
+  // OSM plitka siyosati: sahifa no-referrer bo'lsa ham plitkalar Referer (origin) bilan so'raladi, aks holda "Access blocked"
+  await page.waitForFunction(() => document.querySelectorAll(".leaflet-tile-loaded").length > 0);
+  assert.ok(db.tileRefs.length > 0 && db.tileRefs.every((r) => r === base + "/"), "plitkalarda Referer yo'q: " + JSON.stringify(db.tileRefs.slice(0, 3)));
   assert.ok(await page.locator(".photo-pin img").first().evaluate((i) => i.complete && i.naturalWidth > 0), "pin rasmi (kichik rasm yo'q bo'lsa asl rasm)");
   await page.screenshot({ path: (process.env.SHOTS || "/tmp/claude-0") + "/admin-map.png" });
   await page.selectOption("#ma", "dog");
