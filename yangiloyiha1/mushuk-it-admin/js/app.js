@@ -20,6 +20,25 @@ export const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
   auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, flowType: "pkce" },
 });
 
+// ---------- Ikonkalar (inline SVG; tashqi kutubxonasiz) ----------
+const IC = {
+  home: "M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10",
+  image: "M4 5h16v14H4V5zM4 16l5-5 4 4 3-3 4 4M9 9.5a1 1 0 1 0 0-.01",
+  users: "M9 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2 20c0-3.5 3-5.5 7-5.5s7 2 7 5.5M16 4.5a3.5 3.5 0 0 1 0 6.5M18 14.5c2.5.6 4 2.3 4 5.5",
+  comment: "M4 5h16v11H9l-5 4V5z",
+  heart: "M12 20S4 14.5 4 9a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 9c0 5.5-8 11-8 11z",
+  map: "M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2zM9 4v14M15 6v14",
+  mail: "M3 6h18v12H3V6zM3 7l9 7 9-7",
+  chart: "M4 20V10M10 20V4M16 20v-7M22 20H2",
+  settings: "M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19 12a7 7 0 0 0-.1-1.2l2-1.5-2-3.4-2.3 1a7 7 0 0 0-2-1.2L14.2 3h-4l-.4 2.7a7 7 0 0 0-2 1.2l-2.3-1-2 3.4 2 1.5a7 7 0 0 0 0 2.4l-2 1.5 2 3.4 2.3-1a7 7 0 0 0 2 1.2l.4 2.7h4l.4-2.7a7 7 0 0 0 2-1.2l2.3 1 2-3.4-2-1.5c.1-.4.1-.8.1-1.2z",
+  user: "M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21c0-4 4-6 8-6s8 2 8 6",
+  pin: "M12 21s7-6 7-12a7 7 0 1 0-14 0c0 6 7 12 7 12zM12 11.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z",
+  alert: "M12 4l9 16H3L12 4zM12 10v4M12 17v.01",
+};
+export function icon(name, size = 20) {
+  return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${IC[name] || ""}"/></svg>`;
+}
+
 // ---------- Kirish ----------
 export function pageUrl(name) { return new URL(name, location.href).href; }
 
@@ -152,14 +171,14 @@ export function initShell({ title, subtitle, profile, menu, sections, defaultSec
   const first = defaultSection || menu.find((m) => m.id)?.id;
   const nav = menu.map((m) => {
     if (m.sep) return '<div class="sep"></div>';
-    if (m.href) return `<a href="${esc(m.href)}"><span>${m.icon || ""}</span>${esc(m.label)}</a>`;
-    return `<button data-id="${esc(m.id)}"><span>${m.icon || ""}</span>${esc(m.label)}</button>`;
+    if (m.href) return `<a href="${esc(m.href)}"><span class="ico">${m.icon || ""}</span>${esc(m.label)}</a>`;
+    return `<button data-id="${esc(m.id)}"><span class="ico">${m.icon || ""}</span><span class="lbl">${esc(m.label)}</span><i class="nbadge hidden" data-badge="${esc(m.id)}"></i></button>`;
   }).join("");
   const initial = esc((profile.full_name || "?").trim().charAt(0).toUpperCase());
   document.body.innerHTML = `
     <div class="layout">
       <aside class="sidebar" id="sidebar">
-        <div class="brand"><b>${esc(title)}</b><small>${esc(subtitle || "")}</small></div>
+        <div class="brand"><img src="assets/logo.svg" alt="" width="40" height="40"><div><b>${esc(title)}</b><small>${esc(subtitle || "")}</small></div></div>
         <nav class="nav">${nav}</nav>
       </aside>
       <div class="main">
@@ -179,7 +198,14 @@ export function initShell({ title, subtitle, profile, menu, sections, defaultSec
   const content = document.getElementById("content");
   const sidebar = document.getElementById("sidebar");
   const dd = document.getElementById("userDd");
-  const ctx = { profile, content, navigate };
+  // Yon menyudagi nishon: n bo'sh/0 bo'lsa yashiriladi; cls "red" — diqqat talab qiladi (masalan, yangi xabarlar).
+  function setBadge(id, n, cls = "") {
+    const b = sidebar.querySelector(`[data-badge="${id}"]`);
+    if (!b) return;
+    b.textContent = n > 999 ? "999+" : String(n);
+    b.className = `nbadge ${cls}${n ? "" : " hidden"}`;
+  }
+  const ctx = { profile, content, navigate, setBadge };
   const tick = () => { const el = document.getElementById("clock"); if (el) el.textContent = new Date().toLocaleString("uz-UZ"); };
   tick(); setInterval(tick, 30000);
 
