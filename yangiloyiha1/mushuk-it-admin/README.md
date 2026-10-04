@@ -13,12 +13,12 @@ Mobil ilova: alohida repo `mushuk-it-top-app` (React + Vite + TypeScript + Capac
 | Layklar | eng yangi layklar, bittadan yoki foydalanuvchi bo'yicha hammasini olib tashlash (bot layklari) |
 
 ## Sozlash (bir marta)
-1. **Alohida Supabase loyihasi** oching (mavjud "res loyihasi"da `profiles` jadvali boshqa sxema bilan band, unga qo'llamang).
-2. SQL Editor'da [`supabase/schema.sql`](supabase/schema.sql) ni ishga tushiring: jadvallar (`profiles`, `posts`, `likes`, `comments`, `admins`), RLS, `animal-photos` bucket, admin funksiyalari. Qayta ishga tushirish xavfsiz.
+1. **Alohida Supabase loyihasi** (mavjud "res loyihasi"da `profiles` jadvali boshqa sxema bilan band, unga qo'llamang). Hozirgi loyiha: `mushuk-it-top-app` (`mjtdilcbwbqpibrooamz`).
+2. Sxema (`profiles`, `posts`, `likes`, `comments`, `admins`, RLS, `animal-photos` bucket, admin funksiyalari) bu loyihaga qo'llangan, **faqat** [`supabase/admin_block_delete.sql`](supabase/admin_block_delete.sql) ni SQL Editor'da bir marta ishga tushiring (foydalanuvchini bloklash/o'chirish funksiyalari). Yangi loyiha uchun avval [`supabase/schema.sql`](supabase/schema.sql), so'ng shu fayl.
 3. Authentication > Providers > Google'ni yoqing (Google Cloud Console'dan OAuth client ID/secret). Authentication > URL Configuration > Redirect URLs'ga qo'shing:
    - admin paneli: `https://<sayt>/yangiloyiha1/mushuk-it-admin/admin_panel.html` (lokal sinov uchun `http://localhost:PORT/admin_panel.html`)
    - mobil ilova: `uz.mushukit.top://auth/callback`
-4. `js/config.js` ga loyiha URL va publishable (anon) kalitini yozing. `service_role` kalitini hech qayerga yozmang.
+4. `js/config.js` da loyiha URL va publishable kalit allaqachon yozilgan. `service_role` kalitini hech qayerga yozmang.
 5. Admin tayinlash: avval shu Google hisob bilan ilovaga yoki panelga bir marta kiring, so'ng SQL Editor'da
    `insert into public.admins (user_id) select id from auth.users where email = 'sizning@gmail.com';`
    (Email+parol bilan kirish uchun: Authentication > Users > Add user, so'ng shu SQL.)
