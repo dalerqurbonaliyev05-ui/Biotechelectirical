@@ -1,0 +1,43 @@
+/* Dizayn-tokenlar: uchala ilova (xaridor, sotuvchi, kuryer) uchun yagona manba.
+   Bitta aksent rang (to'q sariq) butun tizim bo'ylab ishlatiladi. */
+:root {
+  --brand: #ff6a13;
+  --brand-600: #ee5a00;
+  --brand-100: #ffe3d1;
+  --brand-50: #fff4ec;
+  --on-brand: #ffffff;
+
+  --bg: #ffffff;
+  --surface: #f5f5f7;
+  --card: #ffffff;
+  --text: #17171c;
+  --text-2: #4a4a55;
+  --muted: #8b8b97;
+  --line: #ececf0;
+
+  --success: #17a05d;
+  --success-50: #e6f6ee;
+  --danger: #e5484d;
+  --danger-50: #fdeced;
+  --info: #2f7cf6;
+
+  --r-sm: 12px;
+  --r-md: 18px;
+  --r-lg: 24px;
+  --r-pill: 999px;
+
+  --shadow-sm: 0 1px 2px rgba(23, 23, 28, 0.06);
+  --shadow-md: 0 6px 20px rgba(23, 23, 28, 0.08);
+  --shadow-lg: 0 14px 40px rgba(23, 23, 28, 0.14);
+  --shadow-brand: 0 8px 22px rgba(255, 106, 19, 0.38);
+
+  --font: 'Manrope Variable', 'Manrope', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --tabbar-h: 62px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --page-pad: 16px;
+  --app-max: 560px;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
