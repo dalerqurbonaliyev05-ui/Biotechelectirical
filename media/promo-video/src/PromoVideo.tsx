@@ -2,6 +2,7 @@ import React from 'react';
 import { AbsoluteFill, Audio, Sequence, staticFile } from 'remotion';
 import { OVERLAP, SCENES, VideoProps } from './theme';
 import { IrisIn, PropsCtx } from './anim';
+import { Sfx } from './Sfx';
 import { Scene1, Scene2, Scene3, Scene4, Scene5, Scene6, Scene7 } from './scenes';
 
 const COMPONENTS = [Scene1, Scene2, Scene3, Scene4, Scene5, Scene6, Scene7];
@@ -20,6 +21,7 @@ export const PromoVideo: React.FC<VideoProps> = (props) => (
           </Sequence>
         );
       })}
+      <Sfx enabled={props.sfxEnabled} volume={props.sfxVolume} />
       {props.audioSrc ? <Audio src={staticFile(props.audioSrc)} volume={props.audioVolume} /> : null}
     </AbsoluteFill>
   </PropsCtx.Provider>

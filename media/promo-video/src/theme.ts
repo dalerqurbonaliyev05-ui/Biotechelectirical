@@ -37,6 +37,9 @@ export const propsSchema = z.object({
   bpm: z.number().min(60).max(200), // animatsiya ritmi; 120 BPM = har 0,5 soniyada urg'u
   audioSrc: z.string().optional(),   // public/ ichidagi fayl, masalan "music.mp3" (ixtiyoriy)
   audioVolume: z.number().min(0).max(1),
+  // ---- Ovoz effektlari (tugma bosish, pop, bildirishnoma, yulduz...): public/sfx/ ----
+  sfxEnabled: z.boolean(),
+  sfxVolume: z.number().min(0).max(1),
 
   // ---- Sahna matnlari ----
   orderTitle1: z.string(),
@@ -96,6 +99,8 @@ export const defaultProps: VideoProps = {
   bpm: 120,
   audioSrc: undefined,
   audioVolume: 0.9,
+  sfxEnabled: true,
+  sfxVolume: 0.8,
 
   orderTitle1: 'Suyuq? Xamirli?',
   orderTitle2: 'Hammasi shu yerda',
