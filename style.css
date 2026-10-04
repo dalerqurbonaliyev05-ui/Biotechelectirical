@@ -353,13 +353,22 @@ ul, ol { list-style: none; }
    Oraliq sintaksisi ataylab: Windows 125% masshtabida kenglik kasrli bo'ladi
    (masalan 900.8px) va `min-width: 901px` bilan `max-width: 900px` orasida
    hech qaysi qoida ishlamaydigan "teshik" qolardi. */
-@media (900px < width <= 1320px) {
+@media (width > 900px) {  /* 8 ta havola (Fizika qo‘shilgach) keng ekranda ham ixcham */
     .nav-pill { padding-left: 16px; gap: 10px; }
     .nav-menu a { padding: 9px 10px; font-size: .84rem; white-space: nowrap; }
     .lang-btn { padding: 8px 9px; }
 }
 @media (900px < width <= 1040px) {
     .nav-logo span { display: none; }   /* chaqmoq belgisi qoladi, aria-label bor */
+}
+@media (900px < width <= 1100px) {
+    .nav-menu a { padding: 8px 7px; font-size: .8rem; }
+    .nav-right { gap: 6px; }
+}
+@media (900px < width <= 980px) {
+    .nav-pill { padding-left: 12px; gap: 6px; }
+    .nav-menu a { padding: 8px 5px; font-size: .76rem; }
+    .lang-btn { padding: 7px 7px; }
 }
 
 @media (max-width: 900px) {

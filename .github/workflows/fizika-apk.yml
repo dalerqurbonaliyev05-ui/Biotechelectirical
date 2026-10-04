@@ -1,0 +1,185 @@
+# Fizika ilovasi: energyvibe.uz/fizika/app veb-ilovasidan Android APK (Trusted Web Activity) yig'adi,
+# imzolaydi va fizika/apk/fizika.apk + fizika/apk-info.js + .well-known/assetlinks.json ni main'ga qaytaradi.
+#
+# Imzo kaliti: ixtiyoriy ravishda Settings > Secrets > Actions ga qo'shing (kalit doimiy bo'lishi uchun tavsiya etiladi):
+#   FIZIKA_KEYSTORE_B64  — base64 ko'rinishidagi .keystore fayl (alias: fizika)
+#   FIZIKA_KEYSTORE_PASS — kalit paroli
+# Secret bo'lmasa kalit birinchi yig'ishda yaratiladi va Actions keshida saqlanadi.
+name: Fizika APK
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'fizika/app/manifest.webmanifest'
+      - 'fizika/app/icon-512.png'
+      - 'fizika/twa/**'
+      - '.github/workflows/fizika-apk.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: fizika-apk
+  cancel-in-progress: false
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: write
+    env:
+      MANIFEST_URL: https://energyvibe.uz/fizika/app/manifest.webmanifest
+      KS_DIR: /home/runner/fizika-ks
+      LOG: /home/runner/fizika-ci.log
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Android SDK litsenziyalari
+        run: |
+          set -o pipefail
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+          ls "$ANDROID_HOME/build-tools" 2>&1 | tee -a "$LOG"
+
+      - name: Sayt joylanishini kutish (Vercel)
+        run: |
+          for i in $(seq 1 60); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "$MANIFEST_URL" || true)
+            echo "urinish $i: $code" | tee -a "$LOG"
+            [ "$code" = "200" ] && exit 0
+            sleep 15
+          done
+          echo "Manifest ochilmadi: $MANIFEST_URL" | tee -a "$LOG"; exit 1
+
+      - name: Imzo kalitini keshdan olish
+        id: kscache
+        uses: actions/cache/restore@v4
+        with:
+          path: ~/fizika-ks
+          key: fizika-keystore-v1
+
+      - name: Imzo kaliti
+        id: ks
+        env:
+          KS_B64: ${{ secrets.FIZIKA_KEYSTORE_B64 }}
+          KS_PASS_SECRET: ${{ secrets.FIZIKA_KEYSTORE_PASS }}
+        run: |
+          set -o pipefail
+          mkdir -p "$KS_DIR"
+          if [ -n "$KS_B64" ]; then
+            echo "$KS_B64" | base64 -d > "$KS_DIR/android.keystore"
+            echo "$KS_PASS_SECRET" > "$KS_DIR/pass"
+            echo "kalit: secret" | tee -a "$LOG"
+          elif [ -f "$KS_DIR/android.keystore" ] && [ -f "$KS_DIR/pass" ]; then
+            echo "kalit: kesh" | tee -a "$LOG"
+          else
+            openssl rand -hex 24 > "$KS_DIR/pass"
+            P=$(cat "$KS_DIR/pass")
+            keytool -genkeypair -v -keystore "$KS_DIR/android.keystore" -alias fizika -keyalg RSA -keysize 2048 \
+              -validity 10000 -storepass "$P" -keypass "$P" \
+              -dname "CN=Fizika, OU=EnergyVibe, O=EnergyVibe, L=Tashkent, C=UZ" 2>&1 | tee -a "$LOG"
+            echo "kalit: yangi yaratildi" | tee -a "$LOG"
+            echo "new=1" >> "$GITHUB_OUTPUT"
+          fi
+          echo "::add-mask::$(cat "$KS_DIR/pass")"
+
+      - name: Imzo kalitini keshga saqlash
+        if: steps.ks.outputs.new == '1'
+        uses: actions/cache/save@v4
+        with:
+          path: ~/fizika-ks
+          key: fizika-keystore-v1
+
+      - name: TWA loyihasini yaratish (Bubblewrap)
+        run: |
+          set -o pipefail
+          mkdir -p "$RUNNER_TEMP/twa" && cp fizika/twa/generate.cjs "$RUNNER_TEMP/twa/"
+          cd "$RUNNER_TEMP/twa"
+          npm init -y > /dev/null
+          npm install --no-audit --no-fund @bubblewrap/core@^1 2>&1 | tail -n 20 | tee -a "$LOG"
+          OUT_DIR="$RUNNER_TEMP/twa/build" KEYSTORE="$KS_DIR/android.keystore" \
+          VERSION_CODE="${{ github.run_number }}" VERSION_NAME="1.0.${{ github.run_number }}" \
+            node generate.cjs 2>&1 | tee -a "$LOG"
+          ls -la build | tee -a "$LOG"
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Gradle assembleRelease
+        working-directory: ${{ runner.temp }}/twa/build
+        run: |
+          set -o pipefail
+          chmod +x gradlew
+          ./gradlew assembleRelease --no-daemon --stacktrace 2>&1 | tail -n 200 | tee -a "$LOG"
+          ls -la app/build/outputs/apk/release | tee -a "$LOG"
+
+      - name: Imzolash
+        working-directory: ${{ runner.temp }}/twa/build
+        run: |
+          set -o pipefail
+          BT=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -n 1)
+          P=$(cat "$KS_DIR/pass")
+          IN=$(ls app/build/outputs/apk/release/*.apk | head -n 1)
+          "$BT/zipalign" -f -p 4 "$IN" aligned.apk 2>&1 | tee -a "$LOG"
+          "$BT/apksigner" sign --ks "$KS_DIR/android.keystore" --ks-key-alias fizika \
+            --ks-pass "pass:$P" --key-pass "pass:$P" --out fizika.apk aligned.apk 2>&1 | tee -a "$LOG"
+          "$BT/apksigner" verify --print-certs fizika.apk 2>&1 | tee -a "$LOG"
+
+      - name: Fayllarni yangilash va main'ga yozish
+        run: |
+          set -o pipefail
+          B="$RUNNER_TEMP/twa/build"
+          mkdir -p fizika/apk .well-known
+          cp "$B/fizika.apk" fizika/apk/fizika.apk
+          P=$(cat "$KS_DIR/pass")
+          FP=$(keytool -list -v -keystore "$KS_DIR/android.keystore" -alias fizika -storepass "$P" | grep -m1 'SHA256:' | sed 's/.*SHA256: *//')
+          BYTES=$(stat -c %s fizika/apk/fizika.apk)
+          SHA=$(sha256sum fizika/apk/fizika.apk | cut -d' ' -f1)
+          VER="1.0.${{ github.run_number }}"
+          DATE=$(TZ=Asia/Tashkent date +%d.%m.%Y)
+          printf '%s\n' \
+            "/* GitHub Actions (.github/workflows/fizika-apk.yml) har safar APK yig'ilganda shu faylni yangilaydi. */" \
+            "window.FIZIKA_APK = {" \
+            "    VERSION: '$VER'," \
+            "    FILE: '/fizika/apk/fizika.apk'," \
+            "    BYTES: $BYTES," \
+            "    SHA256: '$SHA'," \
+            "    DATE: '$DATE'" \
+            "};" > fizika/apk-info.js
+          # assetlinks: eski barmoq izlari saqlanadi (eski o'rnatilgan ilovalar ham tasdiqlansin)
+          FP="$FP" node -e '
+            const fs=require("fs"), f=".well-known/assetlinks.json", fp=process.env.FP;
+            let a=[]; try { a=JSON.parse(fs.readFileSync(f,"utf8")); } catch {}
+            let e=a.find(x=>x.target&&x.target.package_name==="uz.energyvibe.fizika");
+            if(!e){ e={relation:["delegate_permission/common.handle_all_urls"],target:{namespace:"android_app",package_name:"uz.energyvibe.fizika",sha256_cert_fingerprints:[]}}; a.push(e); }
+            const l=e.target.sha256_cert_fingerprints; if(!l.includes(fp)) l.unshift(fp);
+            fs.writeFileSync(f, JSON.stringify(a,null,2)+"\n");'
+          cat fizika/apk-info.js .well-known/assetlinks.json | tee -a "$LOG"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898699+github-actions[bot]@users.noreply.github.com"
+          git add fizika/apk/fizika.apk fizika/apk-info.js .well-known/assetlinks.json
+          git commit -m "Fizika APK $VER [skip actions]"
+          for i in 1 2 3; do git pull --rebase origin main && git push origin HEAD:main && exit 0; sleep 5; done
+          exit 1
+
+      - name: Xato bo'lsa jurnalni fizika-ci-log tarmog'iga yozish
+        if: failure()
+        run: |
+          cd "$RUNNER_TEMP" && rm -rf logrepo && mkdir logrepo && cd logrepo
+          git init -q && git checkout -q -b fizika-ci-log
+          cp "$LOG" ci.log 2>/dev/null || echo "jurnal yo'q" > ci.log
+          echo "run ${{ github.run_id }} / ${{ github.sha }}" > run.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898699+github-actions[bot]@users.noreply.github.com"
+          git add . && git commit -qm "CI log ${{ github.run_id }}"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" fizika-ci-log
