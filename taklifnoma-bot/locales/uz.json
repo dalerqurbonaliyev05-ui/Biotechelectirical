@@ -1,0 +1,158 @@
+{
+  "lang_name": "🇺🇿 O'zbekcha",
+  "choose_lang": "🌐 Tilni tanlang / Выберите язык / Choose language:",
+  "lang_set": "✅ Til: O'zbekcha",
+  "welcome": "👋 Salom, <b>{name}</b>!\n\nMen <b>TaklifnomaBot</b>man — chiroyli taklifnomalar yarataman va ularni istalgan chatga yuborishga yordam beraman. Hammasi shu yerning o'zida, Telegram ichida 💌",
+  "fallback": "🤔 Tushunmadim. Yangi taklifnoma uchun /new, ro'yxat uchun /mine, yordam uchun /help.",
+
+  "types": {
+    "wedding": "To'y",
+    "birthday": "Tug'ilgan kun",
+    "date": "Uchrashuv / randevu",
+    "event": "Tadbir",
+    "general": "Umumiy"
+  },
+
+  "places": {
+    "cafe": "Kafe",
+    "restaurant": "Restoran",
+    "cinema": "Kino",
+    "bowling": "Bouling",
+    "lunch": "Tushlik",
+    "walk": "Sayr",
+    "icecream": "Muzqaymoq",
+    "concert": "Konsert"
+  },
+
+  "btn": {
+    "back": "⬅️ Orqaga",
+    "cancel": "❌ Bekor qilish",
+    "yes": "✅ Ha",
+    "no": "🚫 Yo'q",
+    "keep": "➡️ O'zgartirmasdan davom etish",
+    "continue": "Davom etish ➡️",
+    "save": "💾 Saqlash",
+    "share": "↗️ Chatga yuborish",
+    "test": "🧪 Shu yerda sinab ko'rish",
+    "new": "➕ Yangi taklifnoma",
+    "mine": "📋 Taklifnomalarim",
+    "responses": "📊 Javoblar",
+    "delete": "🗑 O'chirish",
+    "confirm_delete": "🗑 Ha, o'chirish",
+    "back_to_card": "⬅️ Orqaga",
+    "accept": "Ha 💖",
+    "decline": "Yo'q"
+  },
+
+  "create": {
+    "choose_type": "💌 <b>Qanday taklifnoma yaratamiz?</b>",
+    "ask_eyebrow": "✏️ <b>Kichik sarlavha</b> (eyebrow) yozing — xabarning eng tepasidagi qisqa satr.\n\n<i>Masalan: «Siz taklif qilinasiz» yoki «Maxsus kun uchun»</i>",
+    "ask_message": "📝 <b>Asosiy xabar matnini</b> yozing.\n\n<i>Masalan: «Sizni hayotimizdagi eng baxtli kunda yonimizda ko'rishni istaymiz!»</i>",
+    "ask_question": "❓ <b>Savol matnini</b> tanlang yoki o'zingiz yozing:",
+    "ask_allow_no": "🙅 <b>«Yo'q» javobiga ruxsat berilsinmi?</b>\n\n<i>«Ha» desangiz, xabar ostida «Yo'q» tugmasi ham bo'ladi (lekin u oson taslim bo'lmaydi 😏). «Yo'q» desangiz — faqat «Ha 💖» tugmasi.</i>",
+    "ask_guest_pick": "📍 <b>Joy va vaqtni qabul qiluvchi o'zi tanlasinmi?</b>\n\n<i>«Ha» — siz variantlar berasiz, u tanlaydi. «Yo'q» — aniq joy va vaqtni o'zingiz yozasiz.</i>",
+    "ask_places": "📍 <b>Joy variantlarini</b> belgilang (bir nechtasini tanlash mumkin), so'ng «Davom etish»ni bosing:",
+    "ask_times": "🕐 <b>Vaqt variantlarini</b> yozing — har qatorda bittadan.\n\n<i>Masalan:</i>\n<code>Shanba, 18:00\nYakshanba, 12:00\nDushanba, 19:30</code>",
+    "ask_fixed_place": "📍 <b>Joyni</b> yozing.\n\n<i>Masalan: «Navro'z to'yxonasi, Toshkent»</i>",
+    "ask_fixed_time": "🕐 <b>Vaqtni</b> yozing.\n\n<i>Masalan: «12-oktabr, shanba, 18:00»</i>",
+    "current": "\n\n📌 Hozirgi qiymat: <i>{value}</i>",
+    "preview_title": "👀 <b>Taklifnoma chatda shunday ko'rinadi:</b>",
+    "confirm": "Hammasi to'g'rimi? <b>💾 Saqlash</b> tugmasini bosing yoki orqaga qaytib tuzating.",
+    "saved": "✅ <b>Tayyor!</b> Endi istalgan chatda yozuv qatoriga <code>@{bot}</code> deb yozib, shu taklifnomani tanlab yuborishingiz mumkin.\n\n<i>Yoki pastdagi «↗️ Chatga yuborish» tugmasini bosing.</i>",
+    "cancelled": "❌ Bekor qilindi. Yangi taklifnoma uchun /new",
+    "err_text": "✍️ Iltimos, matn yuboring.",
+    "err_too_long": "⚠️ Juda uzun — ko'pi bilan {max} ta belgi bo'lsin.",
+    "err_no_places": "Kamida bitta joyni tanlang",
+    "err_times_count": "⚠️ 1 tadan {max} tagacha vaqt varianti yozing (har qatorda bittadan).",
+    "err_time_long": "⚠️ Har bir vaqt varianti {max} belgidan oshmasin.",
+    "expired": "⌛ Bu bosqich eskirgan. /new bilan qaytadan boshlang."
+  },
+
+  "question_suggestions": {
+    "wedding": ["To'yimizga kelasizmi? 💍", "Bu quvonchli kunni biz bilan baham ko'rasizmi?", "Sizni to'yimizda kutsak bo'ladimi?"],
+    "birthday": ["Tug'ilgan kunimga kelasizmi? 🎂", "Bayramimni birga nishonlaymizmi?", "Tortdan bir bo'lak siz uchun saqlab qo'yaymi? 🍰"],
+    "date": ["Men bilan uchrashuvga chiqasizmi? 💞", "Birga vaqt o'tkazamizmi?", "Sizni bir piyola choyga taklif qilsam maylimi? ☕"],
+    "event": ["Tadbirimizga qatnashasizmi?", "Sizni mehmonlar ro'yxatiga qo'shaylikmi?", "Kelishingizni kutsak bo'ladimi?"],
+    "general": ["Kelasizmi?", "Rozimisiz? 😊", "Taklifimni qabul qilasizmi?"]
+  },
+
+  "inv": {
+    "guest_pick_note": "✨ <i>Joy va vaqtni o'zingiz tanlaysiz</i>",
+    "place": "📍 <b>Joy:</b> {value}",
+    "time": "🕐 <b>Vaqt:</b> {value}",
+    "accepted": "✅ <b>{name}</b> rozi bo'ldi — {place}, {time}",
+    "auto_yes": "😄 <b>10 marta</b> urinib ko'rdingiz... mayli, baribir Ha ekan 😏",
+    "no_phrases": [
+      "Aniqmi? Yana bir bor o'ylab ko'ring 🤔",
+      "Voy, unchalik ham ishonmadim... 😏",
+      "Qattiqqo'lsiz-a. Yana urinib ko'ramizmi?",
+      "Yuragim buni qabul qilmayapti 💔 Yana bir imkoniyat bering",
+      "Balki shoshyapsiz? Yana bir bor so'rayman...",
+      "Men sabrliman, bilasizmi 😌 Yana?",
+      "Siz meni sinayapsiz shekilli 😅",
+      "Oxirgi marta deb o'ylagandim... yana emasmi?",
+      "Yana bittagina... iltimos? 🥺"
+    ],
+    "no_button_labels": [
+      "Yo'q 🙅",
+      "Baribir yo'q",
+      "Baribir Yo'q 😤",
+      "Yo'q dedim-ku! 😠",
+      "Haliyam yo'q 🙄",
+      "Yo'q... balki 🤏",
+      "Hmm... yo'q 😶",
+      "Deyarli yo'q 🫣",
+      "Oxirgi marta yo'q 🥲"
+    ]
+  },
+
+  "toast": {
+    "already_answered": "Bu taklifnoma allaqachon javob berilgan",
+    "own": "Bu sizning taklifnomangiz 🙂 Javobni qabul qiluvchi beradi",
+    "deleted": "Bu taklifnoma o'chirilgan",
+    "preview": "Bu shunchaki namuna 🙂 Saqlagandan keyin tugmalar ishlaydi",
+    "yes": "🎉 Ajoyib!",
+    "no_not_allowed": "Bu taklifnomada «Yo'q» varianti yo'q 😉",
+    "stale": "Bu tugma endi faol emas",
+    "pick_place": "📍 Joyni tanlang",
+    "pick_time": "🕐 Endi vaqtni tanlang"
+  },
+
+  "notify": {
+    "yes": "🎉 <b>{name}</b> 'Ha' dedi — {place}, {time}",
+    "no": "🤍 <b>{name}</b> 'Yo'q' dedi... lekin bot hali taslim bo'lgani yo'q 😏",
+    "forced": "🎉 <b>{name}</b> 10 marta 'Yo'q' deb o'ynashdan keyin baribir 'Ha' dedi 😄",
+    "ref": "💌 <i>{snippet}</i> · #{id}"
+  },
+
+  "mine": {
+    "empty": "📭 Hali taklifnomangiz yo'q. /new bilan birinchisini yarating!",
+    "header": "📋 <b>Taklifnomalaringiz</b> · {pos}/{total}",
+    "created": "🗓 {date}",
+    "stats": "↗️ Yuborilgan: {sent} · 💬 Javoblar: {responses}",
+    "mode_pick": "✨ Joy va vaqtni mehmon tanlaydi",
+    "mode_no_allowed": "🙅 «Yo'q» tugmasi bor",
+    "responses_title": "📊 <b>Javoblar</b> · #{id}",
+    "no_responses": "Hali hech kim javob bermadi.",
+    "resp_yes": "✅ Ha",
+    "resp_forced": "😄 Ha (10 marta «Yo'q»dan keyin)",
+    "resp_no_progress": "🙈 «Yo'q» × {n} (hali o'ylanmoqda)",
+    "resp_picking": "⏳ Ha — joy/vaqt tanlanmoqda",
+    "more": "… va yana {n} ta",
+    "delete_confirm": "🗑 <b>#{id}</b> taklifnomani o'chirasizmi?\n\nUnga berilgan barcha javoblar ham o'chadi, yuborilgan xabarlardagi tugmalar ishlamay qoladi.",
+    "deleted": "🗑 O'chirildi"
+  },
+
+  "inline": {
+    "create": "➕ Yangi taklifnoma yaratish"
+  },
+
+  "help": "ℹ️ <b>TaklifnomaBot — qisqa yo'riqnoma</b>\n\n1️⃣ /new — yangi taklifnoma yarating: turi, sarlavha, matn, savol, joy va vaqt.\n2️⃣ Oxirida namunani ko'rib, <b>💾 Saqlash</b>ni bosing.\n3️⃣ Istalgan chatga kiring va yozuv qatoriga <code>@{bot}</code> deb yozing — saqlangan taklifnomalaringiz ro'yxati chiqadi. Birini tanlang — u tugmalari bilan chatga joylanadi.\n\n🔎 <b>Misol:</b>\nDo'stingiz bilan chatda <code>@{bot}</code> yozasiz → «💞 Uchrashuv / randevu · 05.10.2026» ni tanlaysiz → do'stingiz «Ha 💖» ni bosadi → joy va vaqtni tanlaydi → sizga darhol xabar keladi 🎉\n\n💡 <code>@{bot} #12</code> — faqat 12-raqamli taklifnoma; <code>@{bot} kino</code> — matn bo'yicha qidiruv.\n😏 «Yo'q» tugmasi oson taslim bo'lmaydi — 10 marta bosilgandan keyingina…\n\n📋 /mine — taklifnomalaringiz, javoblar va o'chirish\n🌐 /start — tilni o'zgartirish",
+
+  "commands": {
+    "start": "Boshlash / tilni tanlash",
+    "new": "Yangi taklifnoma yaratish",
+    "mine": "Mening taklifnomalarim",
+    "help": "Yo'riqnoma"
+  }
+}

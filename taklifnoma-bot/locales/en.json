@@ -1,0 +1,158 @@
+{
+  "lang_name": "🇬🇧 English",
+  "choose_lang": "🌐 Tilni tanlang / Выберите язык / Choose language:",
+  "lang_set": "✅ Language: English",
+  "welcome": "👋 Hi, <b>{name}</b>!\n\nI'm <b>TaklifnomaBot</b> — I make lovely invitations and help you send them to any chat. Everything happens right here, inside Telegram 💌",
+  "fallback": "🤔 I didn't get that. New invitation — /new, your list — /mine, help — /help.",
+
+  "types": {
+    "wedding": "Wedding",
+    "birthday": "Birthday",
+    "date": "Date / meetup",
+    "event": "Event",
+    "general": "General"
+  },
+
+  "places": {
+    "cafe": "Cafe",
+    "restaurant": "Restaurant",
+    "cinema": "Cinema",
+    "bowling": "Bowling",
+    "lunch": "Lunch",
+    "walk": "Walk",
+    "icecream": "Ice cream",
+    "concert": "Concert"
+  },
+
+  "btn": {
+    "back": "⬅️ Back",
+    "cancel": "❌ Cancel",
+    "yes": "✅ Yes",
+    "no": "🚫 No",
+    "keep": "➡️ Keep as is",
+    "continue": "Continue ➡️",
+    "save": "💾 Save",
+    "share": "↗️ Send to a chat",
+    "test": "🧪 Try it here",
+    "new": "➕ New invitation",
+    "mine": "📋 My invitations",
+    "responses": "📊 Responses",
+    "delete": "🗑 Delete",
+    "confirm_delete": "🗑 Yes, delete",
+    "back_to_card": "⬅️ Back",
+    "accept": "Yes 💖",
+    "decline": "No"
+  },
+
+  "create": {
+    "choose_type": "💌 <b>What kind of invitation are we making?</b>",
+    "ask_eyebrow": "✏️ Write a <b>small heading</b> (eyebrow) — the short line at the very top of the message.\n\n<i>For example: “You're invited” or “A special day”</i>",
+    "ask_message": "📝 Write the <b>main message</b>.\n\n<i>For example: “We'd love to have you with us on the happiest day of our lives!”</i>",
+    "ask_question": "❓ Pick a <b>question</b> or write your own:",
+    "ask_allow_no": "🙅 <b>Allow a “No” answer?</b>\n\n<i>“Yes” — the message gets a “No” button too (though it won't give up easily 😏). “No” — only the “Yes 💖” button.</i>",
+    "ask_guest_pick": "📍 <b>Let the recipient pick the place and time?</b>\n\n<i>“Yes” — you give options, they choose. “No” — you set the exact place and time yourself.</i>",
+    "ask_places": "📍 Tick the <b>place options</b> (several allowed), then tap “Continue”:",
+    "ask_times": "🕐 Write the <b>time options</b> — one per line.\n\n<i>For example:</i>\n<code>Saturday, 18:00\nSunday, 12:00\nMonday, 19:30</code>",
+    "ask_fixed_place": "📍 Write the <b>place</b>.\n\n<i>For example: “Navruz Hall, Tashkent”</i>",
+    "ask_fixed_time": "🕐 Write the <b>time</b>.\n\n<i>For example: “Saturday, 12 October, 18:00”</i>",
+    "current": "\n\n📌 Current value: <i>{value}</i>",
+    "preview_title": "👀 <b>This is how the invitation will look in a chat:</b>",
+    "confirm": "All good? Tap <b>💾 Save</b>, or go back to fix something.",
+    "saved": "✅ <b>Done!</b> Now in any chat type <code>@{bot}</code> in the message field, pick this invitation and send it.\n\n<i>Or tap “↗️ Send to a chat” below.</i>",
+    "cancelled": "❌ Cancelled. New invitation — /new",
+    "err_text": "✍️ Please send some text.",
+    "err_too_long": "⚠️ Too long — {max} characters max.",
+    "err_no_places": "Pick at least one place",
+    "err_times_count": "⚠️ Write 1 to {max} time options (one per line).",
+    "err_time_long": "⚠️ Each time option must be at most {max} characters.",
+    "expired": "⌛ This step has expired. Start again with /new."
+  },
+
+  "question_suggestions": {
+    "wedding": ["Will you come to our wedding? 💍", "Will you share this joyful day with us?", "Can we count on you at our wedding?"],
+    "birthday": ["Will you come to my birthday? 🎂", "Shall we celebrate together?", "Should I save you a slice of cake? 🍰"],
+    "date": ["Will you go on a date with me? 💞", "Shall we spend some time together?", "May I invite you for a cup of tea? ☕"],
+    "event": ["Will you join our event?", "Shall we add you to the guest list?", "Can we expect you?"],
+    "general": ["Are you coming?", "Are you in? 😊", "Do you accept my invitation?"]
+  },
+
+  "inv": {
+    "guest_pick_note": "✨ <i>You get to pick the place and time</i>",
+    "place": "📍 <b>Place:</b> {value}",
+    "time": "🕐 <b>Time:</b> {value}",
+    "accepted": "✅ <b>{name}</b> said yes — {place}, {time}",
+    "auto_yes": "😄 You tried <b>10 times</b>... fine, it's a Yes after all 😏",
+    "no_phrases": [
+      "Are you sure? Give it one more thought 🤔",
+      "Hmm, I'm not quite convinced... 😏",
+      "Tough one, aren't you. Shall we try again?",
+      "My heart can't accept that 💔 Give it one more chance",
+      "Maybe you're rushing? Let me ask once more...",
+      "I'm very patient, you know 😌 Again?",
+      "I think you're testing me 😅",
+      "I thought that was the last time... still no?",
+      "Just one more... please? 🥺"
+    ],
+    "no_button_labels": [
+      "No 🙅",
+      "Still no",
+      "Still No 😤",
+      "I said no! 😠",
+      "Nope, still 🙄",
+      "No... maybe 🤏",
+      "Hmm... no 😶",
+      "Barely a no 🫣",
+      "One last no 🥲"
+    ]
+  },
+
+  "toast": {
+    "already_answered": "This invitation has already been answered",
+    "own": "This is your own invitation 🙂 The recipient answers it",
+    "deleted": "This invitation has been deleted",
+    "preview": "Just a preview 🙂 Buttons work once it's saved",
+    "yes": "🎉 Wonderful!",
+    "no_not_allowed": "This invitation has no “No” option 😉",
+    "stale": "This button is no longer active",
+    "pick_place": "📍 Pick a place",
+    "pick_time": "🕐 Now pick a time"
+  },
+
+  "notify": {
+    "yes": "🎉 <b>{name}</b> said 'Yes' — {place}, {time}",
+    "no": "🤍 <b>{name}</b> said 'No'... but the bot hasn't given up yet 😏",
+    "forced": "🎉 <b>{name}</b> played the 'No' game 10 times and still said 'Yes' 😄",
+    "ref": "💌 <i>{snippet}</i> · #{id}"
+  },
+
+  "mine": {
+    "empty": "📭 You have no invitations yet. Create your first one with /new!",
+    "header": "📋 <b>Your invitations</b> · {pos}/{total}",
+    "created": "🗓 {date}",
+    "stats": "↗️ Sent: {sent} · 💬 Responses: {responses}",
+    "mode_pick": "✨ Guest picks place and time",
+    "mode_no_allowed": "🙅 Has a “No” button",
+    "responses_title": "📊 <b>Responses</b> · #{id}",
+    "no_responses": "No one has answered yet.",
+    "resp_yes": "✅ Yes",
+    "resp_forced": "😄 Yes (after 10 × “No”)",
+    "resp_no_progress": "🙈 “No” × {n} (still thinking)",
+    "resp_picking": "⏳ Yes — picking place/time",
+    "more": "… and {n} more",
+    "delete_confirm": "🗑 Delete invitation <b>#{id}</b>?\n\nAll its responses will be deleted too, and buttons in messages already sent will stop working.",
+    "deleted": "🗑 Deleted"
+  },
+
+  "inline": {
+    "create": "➕ Create a new invitation"
+  },
+
+  "help": "ℹ️ <b>TaklifnomaBot — quick guide</b>\n\n1️⃣ /new — create an invitation: type, heading, text, question, place and time.\n2️⃣ Check the preview at the end and tap <b>💾 Save</b>.\n3️⃣ Open any chat and type <code>@{bot}</code> in the message field — your saved invitations show up. Pick one and it's posted to the chat with its buttons.\n\n🔎 <b>Example:</b>\nIn a chat with a friend you type <code>@{bot}</code> → pick “💞 Date / meetup · 05.10.2026” → your friend taps “Yes 💖” → picks a place and time → you get a notification right away 🎉\n\n💡 <code>@{bot} #12</code> — only invitation #12; <code>@{bot} cinema</code> — search by text.\n😏 The “No” button doesn't give up easily — only after 10 taps…\n\n📋 /mine — your invitations, responses and deletion\n🌐 /start — change language",
+
+  "commands": {
+    "start": "Start / choose language",
+    "new": "Create a new invitation",
+    "mine": "My invitations",
+    "help": "Quick guide"
+  }
+}
