@@ -1,0 +1,407 @@
+{
+ "calc": {
+  "voltage_v": 220,
+  "frequency_hz": 50,
+  "cosphi_default": 0.95,
+  "cosphi_resistive": 1,
+  "rho_copper": 0.0175,
+  "vdrop_warn_pct": 3,
+  "vdrop_max_pct": 5,
+  "breaker_ratings_a": [
+   6,
+   10,
+   13,
+   16,
+   20,
+   25,
+   32
+  ],
+  "cross_sections": [
+   {
+    "mm2": 1.5,
+    "max_breaker_a": 10,
+    "i_allow_hidden_a": 16,
+    "i_allow_open_a": 19
+   },
+   {
+    "mm2": 2.5,
+    "max_breaker_a": 16,
+    "i_allow_hidden_a": 21,
+    "i_allow_open_a": 25
+   },
+   {
+    "mm2": 4,
+    "max_breaker_a": 25,
+    "i_allow_hidden_a": 27,
+    "i_allow_open_a": 35
+   },
+   {
+    "mm2": 6,
+    "max_breaker_a": 32,
+    "i_allow_hidden_a": 34,
+    "i_allow_open_a": 42
+   }
+  ],
+  "lighting": {
+   "min_mm2": 1.5,
+   "breaker_a": 10,
+   "max_breaker_a": 16
+  },
+  "sockets": {
+   "min_mm2": 2.5,
+   "breaker_a": 16
+  },
+  "max_sockets_per_group": 6,
+  "max_lamps_per_group": 10,
+  "socket_design_load_w": 300,
+  "lamp_default_w": 60,
+  "socket_group_max_w": 3500,
+  "separate_line_threshold_w": 2000,
+  "diy_max_appliance_w": 3500,
+  "max_room_area_m2": 30,
+  "cable_reserve_pct": 12,
+  "termination_allowance_m": 0.2,
+  "clip_spacing_m": 0.45,
+  "norms_note": "ShNK / KMK / PUE"
+ },
+ "heights": {
+  "socket_m": 0.3,
+  "switch_m": 1,
+  "switch_min_m": 0.9,
+  "switch_max_m": 1.1,
+  "ceiling_offset_m": 0.15,
+  "corner_offset_m": 0.15,
+  "junction_box_below_ceiling_m": 0.2,
+  "socket_loop_mode": "ceiling"
+ },
+ "appliances": [
+  {
+   "key": "tv",
+   "power_w": 150,
+   "cosphi": 0.95,
+   "t": {
+    "uz": "Televizor",
+    "ru": "Телевизор",
+    "en": "TV"
+   }
+  },
+  {
+   "key": "fridge",
+   "power_w": 300,
+   "cosphi": 0.85,
+   "t": {
+    "uz": "Muzlatkich",
+    "ru": "Холодильник",
+    "en": "Fridge"
+   }
+  },
+  {
+   "key": "computer",
+   "power_w": 400,
+   "cosphi": 0.95,
+   "t": {
+    "uz": "Kompyuter",
+    "ru": "Компьютер",
+    "en": "Computer"
+   }
+  },
+  {
+   "key": "ac_small",
+   "power_w": 1000,
+   "cosphi": 0.9,
+   "t": {
+    "uz": "Konditsioner (7–9 ming BTU)",
+    "ru": "Кондиционер (7–9 тыс. BTU)",
+    "en": "Air conditioner (7–9k BTU)"
+   }
+  },
+  {
+   "key": "ac_large",
+   "power_w": 2500,
+   "cosphi": 0.9,
+   "t": {
+    "uz": "Konditsioner (18–24 ming BTU)",
+    "ru": "Кондиционер (18–24 тыс. BTU)",
+    "en": "Air conditioner (18–24k BTU)"
+   }
+  },
+  {
+   "key": "heater",
+   "power_w": 2000,
+   "cosphi": 1,
+   "t": {
+    "uz": "Isitgich",
+    "ru": "Обогреватель",
+    "en": "Heater"
+   }
+  },
+  {
+   "key": "kettle",
+   "power_w": 2000,
+   "cosphi": 1,
+   "t": {
+    "uz": "Elektr choynak",
+    "ru": "Электрочайник",
+    "en": "Electric kettle"
+   }
+  },
+  {
+   "key": "microwave",
+   "power_w": 1200,
+   "cosphi": 0.95,
+   "t": {
+    "uz": "Mikroto'lqinli pech",
+    "ru": "Микроволновка",
+    "en": "Microwave"
+   }
+  },
+  {
+   "key": "iron",
+   "power_w": 2000,
+   "cosphi": 1,
+   "t": {
+    "uz": "Dazmol",
+    "ru": "Утюг",
+    "en": "Iron"
+   }
+  },
+  {
+   "key": "washing_machine",
+   "power_w": 2200,
+   "cosphi": 0.95,
+   "t": {
+    "uz": "Kir yuvish mashinasi",
+    "ru": "Стиральная машина",
+    "en": "Washing machine"
+   }
+  },
+  {
+   "key": "oven",
+   "power_w": 3600,
+   "cosphi": 1,
+   "t": {
+    "uz": "Elektr pech (duxovka)",
+    "ru": "Духовой шкаф",
+    "en": "Electric oven"
+   }
+  },
+  {
+   "key": "water_heater",
+   "power_w": 2000,
+   "cosphi": 1,
+   "out_of_scope": true,
+   "t": {
+    "uz": "Suv isitgich (boyler)",
+    "ru": "Водонагреватель (бойлер)",
+    "en": "Water heater (boiler)"
+   }
+  },
+  {
+   "key": "electric_stove",
+   "power_w": 7000,
+   "cosphi": 1,
+   "t": {
+    "uz": "Elektr plita",
+    "ru": "Электроплита",
+    "en": "Electric cooker"
+   }
+  }
+ ],
+ "out_of_scope_rules": [
+  {
+   "code": "panel_work",
+   "severity": "block",
+   "t": {
+    "uz": "Elektr shchiti ichidagi ishlar",
+    "ru": "Работы внутри электрощита",
+    "en": "Work inside the distribution board"
+   }
+  },
+  {
+   "code": "grounding",
+   "severity": "block",
+   "t": {
+    "uz": "Yerga ulash tizimini yaratish yoki o'zgartirish",
+    "ru": "Создание или изменение системы заземления",
+    "en": "Creating or changing the earthing system"
+   }
+  },
+  {
+   "code": "three_phase",
+   "severity": "block",
+   "t": {
+    "uz": "3 fazali tarmoq",
+    "ru": "Трёхфазная сеть",
+    "en": "Three-phase supply"
+   }
+  },
+  {
+   "code": "wet_zone",
+   "severity": "block",
+   "t": {
+    "uz": "Ho'l zona (vannaxona, dush, hojatxona)",
+    "ru": "Влажная зона (ванная, душ, санузел)",
+    "en": "Wet zone (bathroom, shower, toilet)"
+   }
+  },
+  {
+   "code": "aluminium",
+   "severity": "block",
+   "t": {
+    "uz": "Eski alyuminiy simlar",
+    "ru": "Старая алюминиевая проводка",
+    "en": "Old aluminium wiring"
+   }
+  },
+  {
+   "code": "damaged_wiring",
+   "severity": "block",
+   "t": {
+    "uz": "Shikastlangan sim belgilari (kuyish, hid, uchqun)",
+    "ru": "Признаки повреждённой проводки (гарь, запах, искры)",
+    "en": "Signs of damaged wiring (burns, smell, sparks)"
+   }
+  },
+  {
+   "code": "high_power",
+   "severity": "block",
+   "t": {
+    "uz": "3,5 kW dan kuchli bitta qurilma liniyasi",
+    "ru": "Линия для прибора мощнее 3,5 кВт",
+    "en": "Line for a single appliance above 3.5 kW"
+   }
+  },
+  {
+   "code": "boiler",
+   "severity": "block",
+   "t": {
+    "uz": "Suv isitgich (boyler) liniyasi",
+    "ru": "Линия водонагревателя (бойлера)",
+    "en": "Water heater (boiler) line"
+   }
+  },
+  {
+   "code": "room_too_large",
+   "severity": "warn",
+   "t": {
+    "uz": "Xona katta (30 m² dan ortiq) — bu ilova bitta kichik xona uchun",
+    "ru": "Комната большая (более 30 м²) — приложение рассчитано на одну небольшую комнату",
+    "en": "Room is large (over 30 m²) — this app is for one small room"
+   }
+  },
+  {
+   "code": "too_many_sockets",
+   "severity": "warn",
+   "t": {
+    "uz": "Bitta guruhda rozetkalar ko'p — ikkinchi guruh kerak bo'lishi mumkin",
+    "ru": "Много розеток в одной группе — может понадобиться вторая группа",
+    "en": "Many sockets in one circuit — a second circuit may be needed"
+   }
+  },
+  {
+   "code": "dedicated_line",
+   "severity": "warn",
+   "t": {
+    "uz": "Kuchli qurilma uchun alohida liniya va avtomat kerak (shchitga ulash — elektrik)",
+    "ru": "Для мощного прибора нужна отдельная линия и автомат (подключение в щите — электрик)",
+    "en": "A powerful appliance needs a dedicated line and breaker (panel connection by an electrician)"
+   }
+  },
+  {
+   "code": "wood_hidden",
+   "severity": "warn",
+   "t": {
+    "uz": "Yog'och devorda yashirin simlar — elektrik bilan maslahatlashing",
+    "ru": "Скрытая проводка в деревянной стене — проконсультируйтесь с электриком",
+    "en": "Concealed wiring in a wooden wall — consult an electrician"
+   }
+  },
+  {
+   "code": "no_pe",
+   "severity": "warn",
+   "t": {
+    "uz": "Uyda PE (yerga ulash) simi yo'q — RCD va yerga ulash haqida elektrik bilan maslahatlashing",
+    "ru": "В доме нет провода PE — проконсультируйтесь с электриком об УЗО и заземлении",
+    "en": "No PE (earth) conductor — consult an electrician about RCD and earthing"
+   }
+  },
+  {
+   "code": "vdrop_high",
+   "severity": "warn",
+   "t": {
+    "uz": "Kuchlanish yo'qotilishi yuqori — kabel kesimini oshiring",
+    "ru": "Высокие потери напряжения — увеличьте сечение кабеля",
+    "en": "High voltage drop — increase the cable cross-section"
+   }
+  }
+ ],
+ "safety_checklist": [
+  {
+   "key": "breaker_off",
+   "t": {
+    "uz": "Avtomatni o'chirdim",
+    "ru": "Я выключил(а) автомат",
+    "en": "I turned off the breaker"
+   }
+  },
+  {
+   "key": "no_voltage",
+   "t": {
+    "uz": "Indikator/tester bilan kuchlanish yo'qligini tekshirdim",
+    "ru": "Я проверил(а) отсутствие напряжения индикатором/тестером",
+    "en": "I verified there is no voltage with an indicator/tester"
+   }
+  },
+  {
+   "key": "sign_posted",
+   "t": {
+    "uz": "\"Yoqmang\" belgisini osib qo'ydim",
+    "ru": "Я повесил(а) табличку «Не включать»",
+    "en": "I put a \"Do not switch on\" sign"
+   }
+  },
+  {
+   "key": "insulated_tools",
+   "t": {
+    "uz": "Izolyatsiyalangan asboblardan foydalanaman",
+    "ru": "Я использую изолированный инструмент",
+    "en": "I use insulated tools"
+   }
+  }
+ ],
+ "ai_limits": {
+  "estimate-room": {
+   "per_hour": 10,
+   "per_day": 30
+  },
+  "check-work": {
+   "per_hour": 10,
+   "per_day": 30
+  },
+  "max_image_bytes": 5242880,
+  "max_images": 4
+ },
+ "feature_flags": {
+  "ai_estimate": true,
+  "ai_check": true,
+  "ar_measure": true,
+  "voice_guide": true,
+  "marketplace": true
+ },
+ "currency": {
+  "default": "UZS",
+  "rates_to_uzs": {
+   "UZS": 1,
+   "USD": 12700
+  },
+  "_note": "USD rate is a placeholder; admin updates it."
+ },
+ "wire_colors": {
+  "phase": "#8B4513",
+  "phase_alt": "#D32F2F",
+  "neutral": "#1E63D6",
+  "pe": "#9ACD32",
+  "pe_stripe": "#F2C200",
+  "traveller": "#111111"
+ }
+}

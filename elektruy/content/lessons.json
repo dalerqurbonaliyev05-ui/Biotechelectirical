@@ -1,0 +1,861 @@
+{
+  "version": 1,
+  "lessons": [
+    {
+      "slug": "safety-basics",
+      "order": 1,
+      "difficulty": 1,
+      "est_minutes": 10,
+      "icon": "shield",
+      "t": {
+        "uz": { "title": "Xavfsizlik asoslari", "summary": "Har qanday elektr ishidan oldin bilishingiz shart bo'lgan qoidalar." },
+        "ru": { "title": "Основы безопасности", "summary": "Правила, которые нужно знать перед любой электрической работой." },
+        "en": { "title": "Safety basics", "summary": "Rules you must know before any electrical work." }
+      },
+      "steps": [
+        {
+          "illustration": "breaker_off",
+          "tools": [],
+          "t": {
+            "uz": { "text": "Elektr toki ko'rinmaydi va hidi yo'q. 220 V kuchlanish o'ldirishi mumkin. Shuning uchun hech qachon kuchlanish ostidagi simlar bilan ishlamang.", "warning": "Kuchlanish ostida ishlash taqiqlanadi." },
+            "ru": { "text": "Электрический ток невидим и не имеет запаха. Напряжение 220 В может убить. Поэтому никогда не работайте с проводами под напряжением.", "warning": "Работа под напряжением запрещена." },
+            "en": { "text": "Electric current is invisible and has no smell. 220 V can kill. Never work on wires that are live.", "warning": "Working on live wires is forbidden." }
+          }
+        },
+        {
+          "illustration": "breaker_off",
+          "tools": [],
+          "t": {
+            "uz": { "text": "Ishni boshlashdan oldin elektr shchitidagi tegishli avtomatni o'chiring. Qaysi avtomat ekanini bilmasangiz, kirish (umumiy) avtomatni o'chiring.", "warning": "" },
+            "ru": { "text": "Перед началом работы выключите соответствующий автомат в электрощите. Если не знаете, какой именно, выключите вводной (общий) автомат.", "warning": "" },
+            "en": { "text": "Before you start, switch off the matching circuit breaker in the panel. If you are not sure which one, switch off the main breaker.", "warning": "" }
+          }
+        },
+        {
+          "illustration": "warning_sign",
+          "tools": [],
+          "t": {
+            "uz": { "text": "Shchitga \"Yoqmang! Odamlar ishlayapti\" degan yozuv iling va oiladagilarni ogohlantiring. Imkon bo'lsa, shchitni qulflang.", "warning": "" },
+            "ru": { "text": "Повесьте на щит табличку «Не включать! Работают люди» и предупредите домашних. Если возможно, заприте щит.", "warning": "" },
+            "en": { "text": "Hang a \"Do not switch on! Work in progress\" sign on the panel and tell everyone at home. Lock the panel if you can.", "warning": "" }
+          }
+        },
+        {
+          "illustration": "voltage_tester",
+          "tools": ["tool_voltage_tester"],
+          "t": {
+            "uz": { "text": "Indikator yoki tester bilan barcha simlarda kuchlanish yo'qligini tekshiring. Avval testerni ishlayotgan rozetkada sinab ko'ring, keyin ish joyini, so'ng yana ishlayotgan rozetkani.", "warning": "Tester ishlamasa — ishni boshlamang." },
+            "ru": { "text": "Индикатором или тестером проверьте отсутствие напряжения на всех проводах. Сначала проверьте тестер на заведомо рабочей розетке, затем место работы, затем снова рабочую розетку.", "warning": "Если тестер неисправен — не начинайте работу." },
+            "en": { "text": "Use a voltage indicator or tester to confirm there is no voltage on every wire. Test the tester on a known live socket first, then the work area, then the live socket again.", "warning": "If the tester does not work, do not start." }
+          }
+        },
+        {
+          "illustration": "tools",
+          "tools": ["tool_screwdriver_set", "tool_pliers"],
+          "t": {
+            "uz": { "text": "Faqat izolyatsiyalangan dastali asboblardan foydalaning (1000 V belgisi bilan). Quruq qo'lda, quruq poyabzalda ishlang, uzuk va soatni yeching.", "warning": "" },
+            "ru": { "text": "Используйте только инструмент с изолированными рукоятками (маркировка 1000 В). Работайте сухими руками, в сухой обуви, снимите кольца и часы.", "warning": "" },
+            "en": { "text": "Use only insulated tools (rated 1000 V). Work with dry hands and dry shoes; remove rings and watches.", "warning": "" }
+          }
+        },
+        {
+          "illustration": "wire_colors",
+          "tools": [],
+          "t": {
+            "uz": { "text": "Sim ranglari: jigarrang/qizil/qora — faza (L), ko'k — nol (N), sariq-yashil — himoya yerga ulash (PE). Eski uylarda ranglar boshqacha bo'lishi mumkin — har doim tester bilan tekshiring.", "warning": "" },
+            "ru": { "text": "Цвета проводов: коричневый/красный/чёрный — фаза (L), синий — ноль (N), жёлто-зелёный — защитное заземление (PE). В старых домах цвета могут отличаться — всегда проверяйте тестером.", "warning": "" },
+            "en": { "text": "Wire colours: brown/red/black — phase (L), blue — neutral (N), yellow-green — protective earth (PE). Old houses may differ — always verify with a tester.", "warning": "" }
+          }
+        },
+        {
+          "illustration": "electrician",
+          "tools": [],
+          "t": {
+            "uz": { "text": "Shchit ichidagi ishlar, yerga ulash tizimi, 3 fazali tarmoq, vannaxona va kuchli qurilmalar (pech, qozon, kuchli konditsioner) — faqat litsenziyali elektrik ishi. Kuyish izi, hid yoki uchqun ko'rsangiz — to'xtang va elektrik chaqiring.", "warning": "Shubha bo'lsa — elektrik chaqiring." },
+            "ru": { "text": "Работы в щите, система заземления, 3-фазная сеть, ванная комната и мощные приборы (духовка, бойлер, мощный кондиционер) — только для лицензированного электрика. Если видите следы гари, запах или искры — остановитесь и вызовите электрика.", "warning": "Сомневаетесь — вызовите электрика." },
+            "en": { "text": "Panel work, earthing systems, 3-phase supply, bathrooms and high-power appliances (oven, boiler, large AC) are for a licensed electrician only. If you see burn marks, smell burning or see sparks — stop and call an electrician.", "warning": "When in doubt, call an electrician." }
+          }
+        }
+      ],
+      "quiz": [
+        {
+          "correct": 1,
+          "t": {
+            "uz": { "q": "Ishni boshlashdan oldin birinchi navbatda nima qilinadi?", "options": ["Simlarni kesish", "Avtomatni o'chirish va kuchlanish yo'qligini tekshirish", "Rozetkani yechish"], "explanation": "Avval avtomat o'chiriladi, keyin tester bilan kuchlanish yo'qligi tekshiriladi." },
+            "ru": { "q": "Что делается в первую очередь перед началом работы?", "options": ["Отрезать провода", "Выключить автомат и проверить отсутствие напряжения", "Снять розетку"], "explanation": "Сначала выключают автомат, затем тестером проверяют отсутствие напряжения." },
+            "en": { "q": "What do you do first before starting work?", "options": ["Cut the wires", "Switch off the breaker and verify there is no voltage", "Remove the socket"], "explanation": "Switch off the breaker first, then verify absence of voltage with a tester." }
+          }
+        },
+        {
+          "correct": 2,
+          "t": {
+            "uz": { "q": "Sariq-yashil sim nimani bildiradi?", "options": ["Faza", "Nol", "Himoya yerga ulash (PE)"], "explanation": "Sariq-yashil rang faqat himoya yerga ulash o'tkazgichi uchun ishlatiladi." },
+            "ru": { "q": "Что означает жёлто-зелёный провод?", "options": ["Фаза", "Ноль", "Защитное заземление (PE)"], "explanation": "Жёлто-зелёный цвет используется только для защитного проводника." },
+            "en": { "q": "What does a yellow-green wire mean?", "options": ["Phase", "Neutral", "Protective earth (PE)"], "explanation": "Yellow-green is used only for the protective earth conductor." }
+          }
+        },
+        {
+          "correct": 0,
+          "t": {
+            "uz": { "q": "Rozetka atrofida kuyish izi ko'rdingiz. Nima qilasiz?", "options": ["Ishni to'xtatib, elektrik chaqiraman", "Lenta bilan o'rab qo'yaman", "E'tibor bermayman"], "explanation": "Kuyish izi — shikastlangan sim belgisi. Bu DIY ish emas." },
+            "ru": { "q": "Вы увидели следы гари у розетки. Что делать?", "options": ["Остановить работу и вызвать электрика", "Замотать изолентой", "Не обращать внимания"], "explanation": "Следы гари — признак повреждённой проводки. Это не работа «своими руками»." },
+            "en": { "q": "You see burn marks around a socket. What do you do?", "options": ["Stop and call an electrician", "Wrap it with tape", "Ignore it"], "explanation": "Burn marks indicate damaged wiring. This is not a DIY job." }
+          }
+        }
+      ]
+    },
+    {
+      "slug": "voltage-tester",
+      "order": 2,
+      "difficulty": 1,
+      "est_minutes": 10,
+      "icon": "tester",
+      "t": {
+        "uz": { "title": "Indikator va multimetrdan foydalanish", "summary": "Kuchlanish yo'qligini to'g'ri tekshirishni o'rganing." },
+        "ru": { "title": "Как пользоваться индикатором и мультиметром", "summary": "Научитесь правильно проверять отсутствие напряжения." },
+        "en": { "title": "Using a voltage indicator and multimeter", "summary": "Learn to verify absence of voltage correctly." }
+      },
+      "steps": [
+        {
+          "illustration": "voltage_tester",
+          "tools": ["tool_voltage_tester"],
+          "t": {
+            "uz": { "text": "Indikator-otvyortka: uchi bilan simga tegasiz, barmog'ingiz bilan orqa kontaktga tegasiz. Chiroq yonsa — bu faza. Arzon indikatorlar har doim ham ishonchli emas.", "warning": "Indikatorning metall uchiga barmoq bilan tegmang." },
+            "ru": { "text": "Индикаторная отвёртка: касаетесь жалом провода, пальцем — контакта на торце. Загорелась лампочка — это фаза. Дешёвые индикаторы не всегда надёжны.", "warning": "Не касайтесь пальцами металлического жала." },
+            "en": { "text": "Indicator screwdriver: touch the wire with the tip and the cap contact with your finger. If the lamp lights, it is phase. Cheap indicators are not always reliable.", "warning": "Never touch the metal tip with your fingers." }
+          }
+        },
+        {
+          "illustration": "multimeter",
+          "tools": ["tool_multimeter"],
+          "t": {
+            "uz": { "text": "Multimetr: qora shchupni COM ga, qizilni V ga ulang. O'zgaruvchan kuchlanish rejimini tanlang (V~, 600 V yoki 750 V).", "warning": "Hech qachon tok (A) rejimida rozetkaga tiqmang — qisqa tutashuv bo'ladi." },
+            "ru": { "text": "Мультиметр: чёрный щуп — в гнездо COM, красный — в V. Выберите режим переменного напряжения (V~, 600 В или 750 В).", "warning": "Никогда не вставляйте щупы в розетку в режиме тока (A) — будет короткое замыкание." },
+            "en": { "text": "Multimeter: black probe in COM, red probe in V. Select AC voltage (V~, 600 V or 750 V range).", "warning": "Never put probes into a socket in current (A) mode — it causes a short circuit." }
+          }
+        },
+        {
+          "illustration": "multimeter",
+          "tools": ["tool_multimeter"],
+          "t": {
+            "uz": { "text": "Asbobni sinang: ishlayotgan rozetkada L–N orasida taxminan 220–230 V ko'rinishi kerak.", "warning": "" },
+            "ru": { "text": "Проверьте прибор: на рабочей розетке между L и N должно быть примерно 220–230 В.", "warning": "" },
+            "en": { "text": "Prove the tester: on a known live socket you should read about 220–230 V between L and N.", "warning": "" }
+          }
+        },
+        {
+          "illustration": "breaker_off",
+          "tools": ["tool_multimeter"],
+          "t": {
+            "uz": { "text": "Avtomatni o'chirgach, ish joyida barcha juftliklarni tekshiring: L–N, L–PE, N–PE. Hammasi 0 V bo'lishi kerak.", "warning": "Hatto bitta juftlikda kuchlanish bo'lsa — ishlamang." },
+            "ru": { "text": "После отключения автомата проверьте на месте работы все пары: L–N, L–PE, N–PE. Везде должно быть 0 В.", "warning": "Если хотя бы на одной паре есть напряжение — не работайте." },
+            "en": { "text": "After switching off the breaker, test every pair at the work area: L–N, L–PE, N–PE. All must read 0 V.", "warning": "If any pair shows voltage — do not work." }
+          }
+        },
+        {
+          "illustration": "multimeter",
+          "tools": ["tool_multimeter"],
+          "t": {
+            "uz": { "text": "Yana ishlayotgan rozetkada asbobni tekshiring. Bu \"yoniq–o'chiq–yoniq\" usuli asbob buzilmaganini tasdiqlaydi.", "warning": "" },
+            "ru": { "text": "Снова проверьте прибор на рабочей розетке. Метод «есть–нет–есть» подтверждает, что прибор исправен.", "warning": "" },
+            "en": { "text": "Check the tester again on the live socket. This \"live–dead–live\" method proves the tester did not fail.", "warning": "" }
+          }
+        }
+      ],
+      "quiz": [
+        {
+          "correct": 1,
+          "t": {
+            "uz": { "q": "Multimetr rozetkani o'lchash uchun qaysi rejimda bo'lishi kerak?", "options": ["Tok (A)", "O'zgaruvchan kuchlanish (V~)", "Qarshilik (Ω)"], "explanation": "Rozetkada kuchlanish o'lchanadi — V~ rejimi." },
+            "ru": { "q": "В каком режиме должен быть мультиметр для измерения розетки?", "options": ["Ток (A)", "Переменное напряжение (V~)", "Сопротивление (Ω)"], "explanation": "В розетке измеряют напряжение — режим V~." },
+            "en": { "q": "Which multimeter mode do you use on a socket?", "options": ["Current (A)", "AC voltage (V~)", "Resistance (Ω)"], "explanation": "You measure voltage on a socket — V~ mode." }
+          }
+        },
+        {
+          "correct": 2,
+          "t": {
+            "uz": { "q": "\"Yoniq–o'chiq–yoniq\" usuli nima uchun kerak?", "options": ["Tezroq ishlash uchun", "Batareyani tejash uchun", "Tester ishlayotganini tasdiqlash uchun"], "explanation": "Tester buzilgan bo'lsa, u 0 V ko'rsatadi va siz adashasiz." },
+            "ru": { "q": "Зачем нужен метод «есть–нет–есть»?", "options": ["Чтобы работать быстрее", "Чтобы сэкономить батарейку", "Чтобы подтвердить исправность тестера"], "explanation": "Неисправный тестер покажет 0 В, и вы ошибётесь." },
+            "en": { "q": "Why use the live–dead–live method?", "options": ["To work faster", "To save the battery", "To prove the tester works"], "explanation": "A broken tester reads 0 V and misleads you." }
+          }
+        },
+        {
+          "correct": 0,
+          "t": {
+            "uz": { "q": "Qaysi juftliklarni tekshirish kerak?", "options": ["L–N, L–PE, N–PE", "Faqat L–N", "Faqat L–PE"], "explanation": "Barcha juftliklarni tekshirish xavfsizroq." },
+            "ru": { "q": "Какие пары нужно проверить?", "options": ["L–N, L–PE, N–PE", "Только L–N", "Только L–PE"], "explanation": "Проверять все пары безопаснее." },
+            "en": { "q": "Which pairs must you test?", "options": ["L–N, L–PE, N–PE", "Only L–N", "Only L–PE"], "explanation": "Testing all pairs is the safe way." }
+          }
+        }
+      ]
+    },
+    {
+      "slug": "replace-bulb",
+      "order": 3,
+      "difficulty": 1,
+      "est_minutes": 5,
+      "icon": "bulb",
+      "t": {
+        "uz": { "title": "Lampochkani almashtirish", "summary": "Eng oddiy ish — lekin u ham qoidalar bilan." },
+        "ru": { "title": "Замена лампочки", "summary": "Самая простая работа — но тоже по правилам." },
+        "en": { "title": "Replacing a light bulb", "summary": "The simplest job — still done by the rules." }
+      },
+      "steps": [
+        {
+          "illustration": "switch_off",
+          "tools": [],
+          "t": {
+            "uz": { "text": "Kalitni o'chiring. Patron shikastlangan yoki lampochka sinib qolgan bo'lsa — avtomatni ham o'chiring.", "warning": "" },
+            "ru": { "text": "Выключите выключатель. Если патрон повреждён или лампа разбита — отключите и автомат.", "warning": "" },
+            "en": { "text": "Turn the switch off. If the holder is damaged or the bulb is broken, switch off the breaker too.", "warning": "" }
+          }
+        },
+        {
+          "illustration": "bulb",
+          "tools": [],
+          "t": {
+            "uz": { "text": "Lampochka sovishini 5–10 daqiqa kuting. Barqaror narvon yoki stul ishlating.", "warning": "Issiq lampochka qo'lni kuydiradi." },
+            "ru": { "text": "Подождите 5–10 минут, пока лампа остынет. Используйте устойчивую стремянку.", "warning": "Горячая лампа обжигает руки." },
+            "en": { "text": "Wait 5–10 minutes for the bulb to cool. Use a stable step ladder.", "warning": "A hot bulb burns your hand." }
+          }
+        },
+        {
+          "illustration": "bulb",
+          "tools": [],
+          "t": {
+            "uz": { "text": "Eski lampochkani soat miliga teskari burab chiqaring. Yangi lampochkaning tsokoli (E27/E14) va quvvati yoritgich ruxsat etganidan oshmasligini tekshiring.", "warning": "" },
+            "ru": { "text": "Выкрутите старую лампу против часовой стрелки. Проверьте цоколь (E27/E14) новой лампы и что её мощность не выше допустимой для светильника.", "warning": "" },
+            "en": { "text": "Unscrew the old bulb anticlockwise. Check the new bulb's base (E27/E14) and that its wattage does not exceed the fixture's maximum.", "warning": "" }
+          }
+        },
+        {
+          "illustration": "bulb",
+          "tools": [],
+          "t": {
+            "uz": { "text": "Yangi lampochkani soat mili bo'yicha qattiq kuch ishlatmasdan burang. Keyin yoqib tekshiring.", "warning": "" },
+            "ru": { "text": "Вкрутите новую лампу по часовой стрелке без чрезмерного усилия. Затем включите и проверьте.", "warning": "" },
+            "en": { "text": "Screw in the new bulb clockwise without excessive force. Then switch on and test.", "warning": "" }
+          }
+        },
+        {
+          "illustration": "electrician",
+          "tools": [],
+          "t": {
+            "uz": { "text": "Lampochkalar tez-tez kuyib qolsa yoki patron qizib ketsa — bu kontakt muammosi. Elektrik ko'rigidan o'tkazing.", "warning": "" },
+            "ru": { "text": "Если лампы часто перегорают или патрон греется — это проблема контакта. Обратитесь к электрику.", "warning": "" },
+            "en": { "text": "If bulbs blow often or the holder gets hot, there is a contact problem. Have an electrician check it.", "warning": "" }
+          }
+        }
+      ],
+      "quiz": [
+        {
+          "correct": 0,
+          "t": {
+            "uz": { "q": "Lampochka quvvati qanday bo'lishi kerak?", "options": ["Yoritgich ruxsat etgan maksimaldan oshmasligi", "Iloji boricha katta", "Farqi yo'q"], "explanation": "Ortiqcha quvvat patron va simlarni qizdiradi." },
+            "ru": { "q": "Какой должна быть мощность лампы?", "options": ["Не выше максимума светильника", "Как можно больше", "Неважно"], "explanation": "Лишняя мощность перегревает патрон и провода." },
+            "en": { "q": "What wattage should the bulb have?", "options": ["Not above the fixture's maximum", "As high as possible", "It does not matter"], "explanation": "Excess wattage overheats the holder and wires." }
+          }
+        },
+        {
+          "correct": 1,
+          "t": {
+            "uz": { "q": "Lampochka sinib qolgan bo'lsa, nima qilasiz?", "options": ["Faqat kalitni o'chiraman", "Avtomatni ham o'chiraman", "Qo'l bilan tortib olaman"], "explanation": "Singan lampochkada metall qismlar ochiq — avtomatni o'chiring." },
+            "ru": { "q": "Лампа разбилась. Что делать?", "options": ["Только выключить выключатель", "Отключить и автомат", "Выкрутить руками"], "explanation": "У разбитой лампы открыты металлические части — отключите автомат." },
+            "en": { "q": "The bulb is broken. What do you do?", "options": ["Only turn the switch off", "Switch off the breaker too", "Pull it out by hand"], "explanation": "A broken bulb exposes metal parts — switch off the breaker." }
+          }
+        }
+      ]
+    },
+    {
+      "slug": "install-socket",
+      "order": 4,
+      "difficulty": 2,
+      "est_minutes": 30,
+      "icon": "socket",
+      "t": {
+        "uz": { "title": "Rozetka o'rnatish", "summary": "Rozetkani podrozetnikka to'g'ri ulash." },
+        "ru": { "title": "Установка розетки", "summary": "Правильное подключение розетки в подрозетник." },
+        "en": { "title": "Installing a socket", "summary": "Connecting a socket correctly into a wall box." }
+      },
+      "steps": [
+        {
+          "illustration": "breaker_off",
+          "tools": ["tool_voltage_tester"],
+          "t": {
+            "uz": { "text": "Rozetkalar guruhining avtomatini o'chiring, belgi iling va simlarda kuchlanish yo'qligini tekshiring.", "warning": "Kuchlanish yo'qligi tasdiqlanmaguncha simlarga tegmang." },
+            "ru": { "text": "Отключите автомат розеточной группы, повесьте табличку и проверьте отсутствие напряжения на проводах.", "warning": "Не трогайте провода, пока не подтвердили отсутствие напряжения." },
+            "en": { "text": "Switch off the socket circuit breaker, hang the sign and verify there is no voltage on the wires.", "warning": "Do not touch the wires until absence of voltage is confirmed." }
+          }
+        },
+        {
+          "illustration": "socket_box",
+          "tools": ["tool_wire_stripper"],
+          "t": {
+            "uz": { "text": "Podrozetnikdan simlarni chiqaring. 10–15 sm zapas qoldiring. Har bir simning uchidan 10 mm izolyatsiyani tozalang.", "warning": "" },
+            "ru": { "text": "Выведите провода из подрозетника, оставив запас 10–15 см. Снимите с конца каждой жилы 10 мм изоляции.", "warning": "" },
+            "en": { "text": "Pull the wires out of the wall box, leaving 10–15 cm of slack. Strip 10 mm of insulation from each conductor.", "warning": "" }
+          }
+        },
+        {
+          "illustration": "socket_wiring",
+          "tools": ["tool_screwdriver_set"],
+          "t": {
+            "uz": { "text": "Fazani (jigarrang) va nolni (ko'k) rozetkaning ikkita yon klemmasiga ulang. Vintlarni mahkam torting, mis ochiq qolmasin.", "warning": "" },
+            "ru": { "text": "Фазу (коричневый) и ноль (синий) подключите к двум боковым клеммам розетки. Затяните винты, чтобы оголённая медь не торчала.", "warning": "" },
+            "en": { "text": "Connect phase (brown) and neutral (blue) to the two side terminals. Tighten firmly; no bare copper should stick out.", "warning": "" }
+          }
+        },
+        {
+          "illustration": "socket_wiring",
+          "tools": ["tool_screwdriver_set"],
+          "t": {
+            "uz": { "text": "Sariq-yashil PE simi bo'lsa, uni rozetkaning yerga ulash klemmasiga (o'rtadagi mo'ylovlar) ulang. PE simi yo'q bo'lsa, yerga ulash klemmasini nolga ULAMANG.", "warning": "Yerga ulash klemmasini nol bilan tutashtirish xavfli." },
+            "ru": { "text": "Если есть жёлто-зелёный провод PE, подключите его к клемме заземления (средние усики). Если PE нет — НЕ соединяйте клемму заземления с нулём.", "warning": "Соединять клемму заземления с нулём опасно." },
+            "en": { "text": "If there is a yellow-green PE wire, connect it to the earth terminal (the centre clips). If there is no PE, do NOT connect the earth terminal to neutral.", "warning": "Bridging earth to neutral is dangerous." }
+          }
+        },
+        {
+          "illustration": "socket_box",
+          "tools": ["tool_screwdriver_set"],
+          "t": {
+            "uz": { "text": "Simlarni ehtiyotkorlik bilan podrozetnikka joylang. Mexanizmni tekis qo'yib, vintlar bilan mahkamlang, keyin ramka va qopqoqni o'rnating.", "warning": "" },
+            "ru": { "text": "Аккуратно уложите провода в подрозетник. Установите механизм ровно, закрепите винтами, затем рамку и крышку.", "warning": "" },
+            "en": { "text": "Fold the wires neatly into the box. Set the mechanism level, fix it with the screws, then fit the frame and cover.", "warning": "" }
+          }
+        },
+        {
+          "illustration": "multimeter",
+          "tools": ["tool_multimeter"],
+          "t": {
+            "uz": { "text": "Belgini olib, avtomatni yoqing. Multimetr bilan L–N orasida ~220 V borligini tekshiring. Rozetka qizisa yoki chirsillasa — darhol o'chiring.", "warning": "" },
+            "ru": { "text": "Снимите табличку, включите автомат. Мультиметром проверьте ~220 В между L и N. Если розетка греется или трещит — немедленно отключите.", "warning": "" },
+            "en": { "text": "Remove the sign and switch the breaker on. Check ~220 V between L and N with the multimeter. If the socket heats up or crackles, switch off at once.", "warning": "" }
+          }
+        }
+      ],
+      "quiz": [
+        {
+          "correct": 2,
+          "t": {
+            "uz": { "q": "PE simi bo'lmasa, yerga ulash klemmasini nima qilasiz?", "options": ["Nolga ulayman", "Fazaga ulayman", "Bo'sh qoldiraman va elektrik bilan maslahatlashaman"], "explanation": "Klemmani nolga ulash nol uzilganda korpusda kuchlanish paydo bo'lishiga olib keladi." },
+            "ru": { "q": "Если нет провода PE, что делать с клеммой заземления?", "options": ["Соединить с нулём", "Соединить с фазой", "Оставить свободной и проконсультироваться с электриком"], "explanation": "Перемычка на ноль при обрыве нуля даёт напряжение на корпусе." },
+            "en": { "q": "With no PE wire, what do you do with the earth terminal?", "options": ["Connect it to neutral", "Connect it to phase", "Leave it free and consult an electrician"], "explanation": "Bridging to neutral puts voltage on appliance cases if the neutral breaks." }
+          }
+        },
+        {
+          "correct": 0,
+          "t": {
+            "uz": { "q": "Rozetka guruhi uchun odatda qaysi kabel ishlatiladi?", "options": ["Mis 2,5 mm²", "Mis 0,75 mm²", "Alyuminiy 1 mm²"], "explanation": "Rozetka guruhi — mis 2,5 mm², avtomat 16 A (mahalliy normalar bilan tekshiring)." },
+            "ru": { "q": "Какой кабель обычно для розеточной группы?", "options": ["Медь 2,5 мм²", "Медь 0,75 мм²", "Алюминий 1 мм²"], "explanation": "Розеточная группа — медь 2,5 мм², автомат 16 А (сверяйтесь с местными нормами)." },
+            "en": { "q": "Which cable is typical for a socket circuit?", "options": ["Copper 2.5 mm²", "Copper 0.75 mm²", "Aluminium 1 mm²"], "explanation": "Socket circuit — copper 2.5 mm², 16 A breaker (check local norms)." }
+          }
+        },
+        {
+          "correct": 1,
+          "t": {
+            "uz": { "q": "Izolyatsiya qancha tozalanadi?", "options": ["30 mm", "Taxminan 10 mm", "Umuman tozalanmaydi"], "explanation": "Klemmaga kerakli uzunlik ~10 mm; ortiqcha ochiq mis xavfli." },
+            "ru": { "q": "Сколько изоляции снимать?", "options": ["30 мм", "Около 10 мм", "Не снимать"], "explanation": "Для клеммы нужно ~10 мм; лишняя оголённая медь опасна." },
+            "en": { "q": "How much insulation do you strip?", "options": ["30 mm", "About 10 mm", "None"], "explanation": "About 10 mm fits the terminal; extra bare copper is dangerous." }
+          }
+        }
+      ]
+    },
+    {
+      "slug": "switch-single",
+      "order": 5,
+      "difficulty": 2,
+      "est_minutes": 25,
+      "icon": "switch",
+      "t": {
+        "uz": { "title": "Bir klavishli kalit", "summary": "Kalit fazani uzadi — nolni emas." },
+        "ru": { "title": "Одноклавишный выключатель", "summary": "Выключатель разрывает фазу — не ноль." },
+        "en": { "title": "Single-gang switch", "summary": "A switch breaks the phase — never the neutral." }
+      },
+      "steps": [
+        {
+          "illustration": "breaker_off",
+          "tools": ["tool_voltage_tester"],
+          "t": {
+            "uz": { "text": "Yoritish avtomatini o'chiring, belgi iling, kuchlanish yo'qligini tekshiring.", "warning": "" },
+            "ru": { "text": "Отключите автомат освещения, повесьте табличку, проверьте отсутствие напряжения.", "warning": "" },
+            "en": { "text": "Switch off the lighting breaker, hang the sign, verify there is no voltage.", "warning": "" }
+          }
+        },
+        {
+          "illustration": "switch_single",
+          "tools": [],
+          "t": {
+            "uz": { "text": "Sxema: tarqatish qutisidan faza kalitning kirish (L) klemmasiga keladi. Kalitning chiqishidan (L1) sim chiroqqa boradi. Nol qutidan to'g'ridan-to'g'ri chiroqqa boradi.", "warning": "Nolni kalit orqali o'tkazmang." },
+            "ru": { "text": "Схема: фаза из распаечной коробки приходит на входную клемму выключателя (L). С выхода (L1) провод идёт на светильник. Ноль идёт из коробки прямо на светильник.", "warning": "Не пропускайте ноль через выключатель." },
+            "en": { "text": "Diagram: phase from the junction box goes to the switch input (L). From the output (L1) a wire goes to the lamp. Neutral goes straight from the box to the lamp.", "warning": "Never route the neutral through the switch." }
+          }
+        },
+        {
+          "illustration": "switch_single",
+          "tools": ["tool_wire_stripper", "tool_screwdriver_set"],
+          "t": {
+            "uz": { "text": "Simlarni 10 mm tozalab, kalit klemmalariga ulang (vintli yoki prujinali). Simni tortib ko'ring — chiqib ketmasligi kerak.", "warning": "" },
+            "ru": { "text": "Зачистите жилы на 10 мм и подключите к клеммам выключателя (винтовым или пружинным). Потяните провод — он не должен выскакивать.", "warning": "" },
+            "en": { "text": "Strip 10 mm and connect to the switch terminals (screw or spring). Tug each wire — it must not come out.", "warning": "" }
+          }
+        },
+        {
+          "illustration": "socket_box",
+          "tools": ["tool_screwdriver_set"],
+          "t": {
+            "uz": { "text": "Kalitni shunday o'rnatingki, klavishning yuqori qismi bosilganda chiroq yonsin. Mexanizmni podrozetnikka mahkamlang, ramka va klavishni qo'ying.", "warning": "" },
+            "ru": { "text": "Установите выключатель так, чтобы свет включался нажатием на верхнюю часть клавиши. Закрепите механизм, установите рамку и клавишу.", "warning": "" },
+            "en": { "text": "Orient the switch so pressing the top of the rocker turns the light on. Fix the mechanism, then fit the frame and rocker.", "warning": "" }
+          }
+        },
+        {
+          "illustration": "voltage_tester",
+          "tools": ["tool_voltage_tester"],
+          "t": {
+            "uz": { "text": "Avtomatni yoqing va tekshiring. Kalit o'chiq holatda chiroq patronida faza bo'lmasligi kerak (indikator yonmaydi).", "warning": "" },
+            "ru": { "text": "Включите автомат и проверьте. При выключенном выключателе на патроне не должно быть фазы (индикатор не светится).", "warning": "" },
+            "en": { "text": "Switch the breaker on and test. With the switch off there must be no phase at the lamp holder (indicator stays dark).", "warning": "" }
+          }
+        }
+      ],
+      "quiz": [
+        {
+          "correct": 0,
+          "t": {
+            "uz": { "q": "Kalit qaysi simni uzishi kerak?", "options": ["Fazani (L)", "Nolni (N)", "PE ni"], "explanation": "Faza uzilsa, o'chiq chiroqda kuchlanish bo'lmaydi." },
+            "ru": { "q": "Какой провод должен разрывать выключатель?", "options": ["Фазу (L)", "Ноль (N)", "PE"], "explanation": "При разрыве фазы на выключенном светильнике нет напряжения." },
+            "en": { "q": "Which wire must the switch break?", "options": ["Phase (L)", "Neutral (N)", "PE"], "explanation": "Breaking the phase leaves no voltage on a switched-off lamp." }
+          }
+        },
+        {
+          "correct": 1,
+          "t": {
+            "uz": { "q": "Yoritish guruhi uchun odatiy avtomat?", "options": ["32 A", "10 A", "63 A"], "explanation": "Mis 1,5 mm² yoritish uchun odatda 10 A avtomat." },
+            "ru": { "q": "Типичный автомат для группы освещения?", "options": ["32 А", "10 А", "63 А"], "explanation": "Для меди 1,5 мм² на освещение обычно автомат 10 А." },
+            "en": { "q": "Typical breaker for a lighting circuit?", "options": ["32 A", "10 A", "63 A"], "explanation": "For copper 1.5 mm² lighting, typically a 10 A breaker." }
+          }
+        }
+      ]
+    },
+    {
+      "slug": "switch-double",
+      "order": 6,
+      "difficulty": 2,
+      "est_minutes": 30,
+      "icon": "switch2",
+      "t": {
+        "uz": { "title": "Ikki klavishli kalit", "summary": "Ikki chiroq guruhini alohida boshqarish." },
+        "ru": { "title": "Двухклавишный выключатель", "summary": "Раздельное управление двумя группами ламп." },
+        "en": { "title": "Double-gang switch", "summary": "Controlling two groups of lights separately." }
+      },
+      "steps": [
+        {
+          "illustration": "breaker_off",
+          "tools": ["tool_voltage_tester"],
+          "t": {
+            "uz": { "text": "Yoritish avtomatini o'chiring, belgi iling, kuchlanish yo'qligini tekshiring.", "warning": "" },
+            "ru": { "text": "Отключите автомат освещения, повесьте табличку, проверьте отсутствие напряжения.", "warning": "" },
+            "en": { "text": "Switch off the lighting breaker, hang the sign, verify there is no voltage.", "warning": "" }
+          }
+        },
+        {
+          "illustration": "switch_double",
+          "tools": [],
+          "t": {
+            "uz": { "text": "Kalitning bitta umumiy kirishi (L) va ikkita chiqishi (L1, L2) bor. Kalitga 3 tomirli kabel keladi: faza va ikki chiqish. Chiroqqa ham 3 tomirli kabel: L1, L2, N (+PE bo'lsa 4 tomir).", "warning": "" },
+            "ru": { "text": "У выключателя один общий вход (L) и два выхода (L1, L2). К выключателю идёт 3-жильный кабель: фаза и два выхода. К люстре тоже 3 жилы: L1, L2, N (+PE — 4 жилы).", "warning": "" },
+            "en": { "text": "The switch has one common input (L) and two outputs (L1, L2). A 3-core cable runs to the switch: phase plus two outputs. The fixture also gets 3 cores: L1, L2, N (+PE makes 4).", "warning": "" }
+          }
+        },
+        {
+          "illustration": "switch_double",
+          "tools": ["tool_wire_stripper", "tool_screwdriver_set"],
+          "t": {
+            "uz": { "text": "Fazani L klemmaga, chiqish simlarini L1 va L2 ga ulang. Qutida L1 va L2 ni chiroqning ikki guruhiga, nolni chiroqning N ga WAGO tipidagi klemmalar bilan ulang.", "warning": "" },
+            "ru": { "text": "Фазу подключите к клемме L, выходы — к L1 и L2. В коробке соедините L1 и L2 с двумя группами люстры, ноль — с N люстры клеммами типа WAGO.", "warning": "" },
+            "en": { "text": "Connect phase to L, the outputs to L1 and L2. In the junction box join L1 and L2 to the two lamp groups and neutral to the fixture's N using WAGO-type connectors.", "warning": "" }
+          }
+        },
+        {
+          "illustration": "socket_box",
+          "tools": ["tool_screwdriver_set"],
+          "t": {
+            "uz": { "text": "Mexanizmni podrozetnikka mahkamlang, ramka va klavishlarni o'rnating.", "warning": "" },
+            "ru": { "text": "Закрепите механизм в подрозетнике, установите рамку и клавиши.", "warning": "" },
+            "en": { "text": "Fix the mechanism in the wall box, fit the frame and rockers.", "warning": "" }
+          }
+        },
+        {
+          "illustration": "voltage_tester",
+          "tools": ["tool_voltage_tester"],
+          "t": {
+            "uz": { "text": "Yoqing va har ikkala klavishni alohida tekshiring. Har bir klavish faqat o'z guruhini yoqishi kerak.", "warning": "" },
+            "ru": { "text": "Включите и проверьте каждую клавишу отдельно. Каждая клавиша должна включать только свою группу.", "warning": "" },
+            "en": { "text": "Power up and test each rocker separately. Each must switch only its own group.", "warning": "" }
+          }
+        }
+      ],
+      "quiz": [
+        {
+          "correct": 1,
+          "t": {
+            "uz": { "q": "Ikki klavishli kalitga necha tomirli kabel keladi (PE siz)?", "options": ["2", "3", "5"], "explanation": "Faza + ikkita chiqish = 3 tomir." },
+            "ru": { "q": "Сколько жил кабеля идёт к двухклавишному выключателю (без PE)?", "options": ["2", "3", "5"], "explanation": "Фаза + два выхода = 3 жилы." },
+            "en": { "q": "How many cores go to a double-gang switch (without PE)?", "options": ["2", "3", "5"], "explanation": "Phase + two outputs = 3 cores." }
+          }
+        },
+        {
+          "correct": 0,
+          "t": {
+            "uz": { "q": "Qutida simlar qanday ulanadi?", "options": ["WAGO tipidagi klemmalar bilan", "Faqat buralib, lenta bilan", "Skotch bilan"], "explanation": "Buralgan ulanish vaqt o'tib qiziydi; klemmalar ishonchli." },
+            "ru": { "q": "Как соединять провода в коробке?", "options": ["Клеммами типа WAGO", "Просто скруткой с изолентой", "Скотчем"], "explanation": "Скрутка со временем греется; клеммы надёжнее." },
+            "en": { "q": "How are wires joined in the box?", "options": ["With WAGO-type connectors", "Just twisted and taped", "With sticky tape"], "explanation": "Twisted joints heat up over time; connectors are reliable." }
+          }
+        }
+      ]
+    },
+    {
+      "slug": "switch-pass-through",
+      "order": 7,
+      "difficulty": 3,
+      "est_minutes": 45,
+      "icon": "switch_pass",
+      "t": {
+        "uz": { "title": "O'tish (proxodnoy) kaliti", "summary": "Bitta chiroqni ikki joydan boshqarish." },
+        "ru": { "title": "Проходной выключатель", "summary": "Управление одной лампой из двух мест." },
+        "en": { "title": "Two-way (pass-through) switch", "summary": "Controlling one light from two places." }
+      },
+      "steps": [
+        {
+          "illustration": "breaker_off",
+          "tools": ["tool_voltage_tester"],
+          "t": {
+            "uz": { "text": "Yoritish avtomatini o'chiring, belgi iling, kuchlanish yo'qligini tekshiring.", "warning": "" },
+            "ru": { "text": "Отключите автомат освещения, повесьте табличку, проверьте отсутствие напряжения.", "warning": "" },
+            "en": { "text": "Switch off the lighting breaker, hang the sign, verify there is no voltage.", "warning": "" }
+          }
+        },
+        {
+          "illustration": "switch_pass",
+          "tools": [],
+          "t": {
+            "uz": { "text": "Har bir o'tish kalitida umumiy klemma (COM) va ikkita chiqish (L1, L2) bor. Har ikkala kalitga 3 tomirli kabel keladi.", "warning": "" },
+            "ru": { "text": "У каждого проходного выключателя есть общая клемма (COM) и два выхода (L1, L2). К каждому выключателю идёт 3-жильный кабель.", "warning": "" },
+            "en": { "text": "Each two-way switch has a common terminal (COM) and two outputs (L1, L2). A 3-core cable runs to each switch.", "warning": "" }
+          }
+        },
+        {
+          "illustration": "switch_pass",
+          "tools": [],
+          "t": {
+            "uz": { "text": "Qutida: faza → 1-kalitning COM. 1-kalitning L1 → 2-kalitning L1, L2 → L2 (bu \"o'tish\" simlari). 2-kalitning COM → chiroq. Nol → to'g'ridan-to'g'ri chiroqqa.", "warning": "" },
+            "ru": { "text": "В коробке: фаза → COM первого выключателя. L1 первого → L1 второго, L2 → L2 (это «перемычки»). COM второго → светильник. Ноль → прямо на светильник.", "warning": "" },
+            "en": { "text": "In the box: phase → COM of switch 1. L1 of switch 1 → L1 of switch 2, L2 → L2 (the travellers). COM of switch 2 → lamp. Neutral → straight to the lamp.", "warning": "" }
+          }
+        },
+        {
+          "illustration": "junction_box",
+          "tools": ["tool_wire_stripper"],
+          "t": {
+            "uz": { "text": "Simlarni chalkashtirmaslik uchun har birini marker yoki rangli lenta bilan belgilang (COM, L1, L2). Ulanishlarni WAGO tipidagi klemmalar bilan bajaring.", "warning": "" },
+            "ru": { "text": "Чтобы не перепутать, промаркируйте каждую жилу (COM, L1, L2) маркером или цветной изолентой. Соединения — клеммами типа WAGO.", "warning": "" },
+            "en": { "text": "Label every core (COM, L1, L2) with a marker or coloured tape so you don't mix them up. Make joints with WAGO-type connectors.", "warning": "" }
+          }
+        },
+        {
+          "illustration": "socket_box",
+          "tools": ["tool_screwdriver_set"],
+          "t": {
+            "uz": { "text": "Ikkala kalitni podrozetniklarga mahkamlang.", "warning": "" },
+            "ru": { "text": "Закрепите оба выключателя в подрозетниках.", "warning": "" },
+            "en": { "text": "Fix both switches in their wall boxes.", "warning": "" }
+          }
+        },
+        {
+          "illustration": "voltage_tester",
+          "tools": ["tool_voltage_tester"],
+          "t": {
+            "uz": { "text": "Yoqing va tekshiring: har ikkala kalitning istalgan holatida ikkinchisi chiroqni yoqib-o'chira olishi kerak. Ishlamasa — avtomatni o'chirib, COM simini qayta tekshiring.", "warning": "" },
+            "ru": { "text": "Включите и проверьте: в любом положении одного выключателя второй должен включать и выключать свет. Не работает — отключите автомат и проверьте провод COM.", "warning": "" },
+            "en": { "text": "Power up and test: in any position of one switch, the other must turn the light on and off. If not, switch off the breaker and recheck the COM wire.", "warning": "" }
+          }
+        }
+      ],
+      "quiz": [
+        {
+          "correct": 2,
+          "t": {
+            "uz": { "q": "Faza 1-kalitning qaysi klemmasiga ulanadi?", "options": ["L1", "L2", "COM"], "explanation": "Faza umumiy klemma COM ga keladi." },
+            "ru": { "q": "К какой клемме первого выключателя подключается фаза?", "options": ["L1", "L2", "COM"], "explanation": "Фаза приходит на общую клемму COM." },
+            "en": { "q": "Which terminal of switch 1 gets the phase?", "options": ["L1", "L2", "COM"], "explanation": "Phase goes to the common terminal COM." }
+          }
+        },
+        {
+          "correct": 0,
+          "t": {
+            "uz": { "q": "Ikki kalit orasida nechta \"o'tish\" simi bor?", "options": ["2", "1", "4"], "explanation": "L1–L1 va L2–L2 — ikkita o'tish simi." },
+            "ru": { "q": "Сколько перемычек между двумя выключателями?", "options": ["2", "1", "4"], "explanation": "L1–L1 и L2–L2 — две перемычки." },
+            "en": { "q": "How many travellers run between the two switches?", "options": ["2", "1", "4"], "explanation": "L1–L1 and L2–L2 — two travellers." }
+          }
+        }
+      ]
+    },
+    {
+      "slug": "lamp-install",
+      "order": 8,
+      "difficulty": 2,
+      "est_minutes": 40,
+      "icon": "lamp",
+      "t": {
+        "uz": { "title": "Chiroq (svetilnik) o'rnatish", "summary": "Shiftga yoki devorga chiroqni xavfsiz osish va ulash." },
+        "ru": { "title": "Установка светильника", "summary": "Безопасный монтаж и подключение светильника на потолок или стену." },
+        "en": { "title": "Installing a light fixture", "summary": "Mounting and connecting a ceiling or wall light safely." }
+      },
+      "steps": [
+        {
+          "illustration": "breaker_off",
+          "tools": ["tool_voltage_tester"],
+          "t": {
+            "uz": { "text": "Yoritish avtomatini o'chiring (faqat kalitni emas!), belgi iling, shiftdagi simlarda kuchlanish yo'qligini tekshiring.", "warning": "Faqat kalitni o'chirish yetarli emas — kalit nolni uzgan bo'lishi mumkin." },
+            "ru": { "text": "Отключите автомат освещения (не только выключатель!), повесьте табличку, проверьте отсутствие напряжения на проводах в потолке.", "warning": "Выключателя недостаточно — он мог быть подключён в разрыв нуля." },
+            "en": { "text": "Switch off the lighting breaker (not just the wall switch!), hang the sign, verify there is no voltage on the ceiling wires.", "warning": "The wall switch alone is not enough — it may have been wired on the neutral." }
+          }
+        },
+        {
+          "illustration": "lamp",
+          "tools": ["tool_drill"],
+          "t": {
+            "uz": { "text": "Chiroq og'irligiga mos mahkamlagich (planka yoki ilmoq) o'rnating. Og'ir qandil uchun anker ishlating. Ikkinchi odam yordam bersin.", "warning": "Burg'ilashdan oldin devor/shiftda sim yo'qligini detektor bilan tekshiring." },
+            "ru": { "text": "Установите крепление (планку или крюк) под вес светильника. Для тяжёлой люстры — анкер. Работайте вдвоём.", "warning": "Перед сверлением проверьте детектором, что в этом месте нет проводки." },
+            "en": { "text": "Fit a mount (bracket or hook) rated for the fixture weight. Use an anchor for a heavy chandelier. Work with a helper.", "warning": "Before drilling, check with a detector that there are no wires there." }
+          }
+        },
+        {
+          "illustration": "lamp_wiring",
+          "tools": ["tool_wire_stripper"],
+          "t": {
+            "uz": { "text": "Chiroq simlarini WAGO tipidagi klemmalar bilan ulang: kalitdan kelgan faza → chiroqning L, nol → N, PE (bo'lsa) → chiroq korpusidagi yerga ulash. Patron bo'lsa: faza markaziy kontaktga.", "warning": "" },
+            "ru": { "text": "Подключите провода светильника клеммами типа WAGO: фаза с выключателя → L светильника, ноль → N, PE (если есть) → клемма заземления корпуса. В патроне фаза — на центральный контакт.", "warning": "" },
+            "en": { "text": "Connect with WAGO-type connectors: switched phase → fixture L, neutral → N, PE (if present) → the fixture's earth terminal. In a lamp holder the phase goes to the centre contact.", "warning": "" }
+          }
+        },
+        {
+          "illustration": "lamp",
+          "tools": ["tool_screwdriver_set"],
+          "t": {
+            "uz": { "text": "Klemmalarni chiroq qopqog'i ichiga joylang, simlar qisilib qolmasin. Chiroqni mahkamlagichga burab qo'ying.", "warning": "" },
+            "ru": { "text": "Уберите клеммы под декоративный стакан, чтобы провода не пережались. Закрепите светильник на креплении.", "warning": "" },
+            "en": { "text": "Tuck the connectors under the canopy without pinching the wires. Fix the fixture to its mount.", "warning": "" }
+          }
+        },
+        {
+          "illustration": "voltage_tester",
+          "tools": ["tool_voltage_tester"],
+          "t": {
+            "uz": { "text": "Lampochkalarni o'rnating (quvvati ruxsat etilgandan oshmasin), avtomatni yoqing va tekshiring.", "warning": "" },
+            "ru": { "text": "Вкрутите лампы (не мощнее допустимого), включите автомат и проверьте.", "warning": "" },
+            "en": { "text": "Fit bulbs (not above the rated wattage), switch the breaker on and test.", "warning": "" }
+          }
+        }
+      ],
+      "quiz": [
+        {
+          "correct": 1,
+          "t": {
+            "uz": { "q": "Chiroq o'rnatishda nimani o'chirish kerak?", "options": ["Faqat devor kalitini", "Yoritish avtomatini", "Hech narsani"], "explanation": "Kalit nolni uzgan bo'lishi mumkin, shuning uchun avtomatni o'chiring." },
+            "ru": { "q": "Что нужно отключить при установке светильника?", "options": ["Только выключатель", "Автомат освещения", "Ничего"], "explanation": "Выключатель мог разрывать ноль, поэтому отключайте автомат." },
+            "en": { "q": "What must you switch off to install a fixture?", "options": ["Only the wall switch", "The lighting breaker", "Nothing"], "explanation": "The switch may break the neutral, so switch off the breaker." }
+          }
+        },
+        {
+          "correct": 0,
+          "t": {
+            "uz": { "q": "E27 patronida faza qayerga ulanadi?", "options": ["Markaziy kontaktga", "Rezbali qismga", "Farqi yo'q"], "explanation": "Rezbali qismga tegish ehtimoli bor — u nolda bo'lishi kerak." },
+            "ru": { "q": "Куда подключается фаза в патроне E27?", "options": ["На центральный контакт", "На резьбу", "Неважно"], "explanation": "Резьбы можно коснуться — на ней должен быть ноль." },
+            "en": { "q": "Where does the phase go in an E27 holder?", "options": ["Centre contact", "Screw thread", "It does not matter"], "explanation": "The thread can be touched — it must carry the neutral." }
+          }
+        }
+      ]
+    },
+    {
+      "slug": "junction-box",
+      "order": 9,
+      "difficulty": 2,
+      "est_minutes": 30,
+      "icon": "junction",
+      "t": {
+        "uz": { "title": "Tarqatish qutisida ulash", "summary": "Simlarni qutida tartibli va ishonchli ulash." },
+        "ru": { "title": "Соединения в распаечной коробке", "summary": "Аккуратные и надёжные соединения в коробке." },
+        "en": { "title": "Junction box connections", "summary": "Tidy, reliable joints inside a junction box." }
+      },
+      "steps": [
+        {
+          "illustration": "breaker_off",
+          "tools": ["tool_voltage_tester"],
+          "t": {
+            "uz": { "text": "Xonaning barcha guruh avtomatlarini o'chiring, belgi iling, qutidagi har bir simda kuchlanish yo'qligini tekshiring.", "warning": "Qutiga bir nechta guruh kelishi mumkin — hammasini tekshiring." },
+            "ru": { "text": "Отключите автоматы всех групп комнаты, повесьте табличку, проверьте отсутствие напряжения на каждом проводе в коробке.", "warning": "В коробку может приходить несколько групп — проверьте все." },
+            "en": { "text": "Switch off all breakers feeding the room, hang the sign, verify no voltage on every wire in the box.", "warning": "Several circuits may enter one box — check them all." }
+          }
+        },
+        {
+          "illustration": "junction_box",
+          "tools": [],
+          "t": {
+            "uz": { "text": "Qutini shiftdan 15–20 sm pastda, oson ochiladigan joyda o'rnating. Quti ustini suvoq bilan butunlay yopmang — unga keyin ham kirish kerak bo'ladi.", "warning": "" },
+            "ru": { "text": "Устанавливайте коробку на 15–20 см ниже потолка, в доступном месте. Не замуровывайте коробку — к ней нужен доступ.", "warning": "" },
+            "en": { "text": "Mount the box 15–20 cm below the ceiling in an accessible place. Never plaster over it — it must stay accessible.", "warning": "" }
+          }
+        },
+        {
+          "illustration": "junction_box",
+          "tools": ["tool_wire_stripper"],
+          "t": {
+            "uz": { "text": "Har bir kabel uchini qutiga 10–15 sm zapas bilan kiriting. Tomirlarni rangi bo'yicha guruhlang: barcha nollar (ko'k), barcha PE (sariq-yashil), fazalar alohida.", "warning": "" },
+            "ru": { "text": "Заведите кабели в коробку с запасом 10–15 см. Сгруппируйте жилы по цвету: все нули (синие), все PE (жёлто-зелёные), фазы отдельно.", "warning": "" },
+            "en": { "text": "Bring each cable into the box with 10–15 cm slack. Group the cores by colour: all neutrals (blue), all PE (yellow-green), phases separately.", "warning": "" }
+          }
+        },
+        {
+          "illustration": "wago",
+          "tools": [],
+          "t": {
+            "uz": { "text": "WAGO tipidagi klemmalardan foydalaning: izolyatsiyani klemmadagi belgi bo'yicha (odatda 11 mm) tozalang, simni oxirigacha kiriting, richagni yoping. Simni tortib tekshiring.", "warning": "Mis va alyuminiy simni to'g'ridan-to'g'ri ulash taqiqlanadi." },
+            "ru": { "text": "Используйте клеммы типа WAGO: зачистите изоляцию по метке на клемме (обычно 11 мм), вставьте жилу до упора, закройте рычажок. Проверьте, потянув провод.", "warning": "Прямое соединение меди с алюминием запрещено." },
+            "en": { "text": "Use WAGO-type lever connectors: strip to the gauge on the connector (usually 11 mm), push the core fully in, close the lever. Tug to check.", "warning": "Never join copper directly to aluminium." }
+          }
+        },
+        {
+          "illustration": "junction_box",
+          "tools": [],
+          "t": {
+            "uz": { "text": "Klemmalar soni guruhlar soniga mos bo'lsin; bitta klemmaga uning ruxsat etilgan simlar sonidan ko'p sim kiritmang. Qopqoqni yoping.", "warning": "" },
+            "ru": { "text": "Не вставляйте в одну клемму больше жил, чем она рассчитана. Закройте крышку коробки.", "warning": "" },
+            "en": { "text": "Do not put more conductors into a connector than it is rated for. Close the box lid.", "warning": "" }
+          }
+        },
+        {
+          "illustration": "multimeter",
+          "tools": ["tool_multimeter"],
+          "t": {
+            "uz": { "text": "Belgini olib, avtomatlarni yoqing va har bir rozetka, kalit va chiroqni tekshiring.", "warning": "" },
+            "ru": { "text": "Снимите табличку, включите автоматы и проверьте каждую розетку, выключатель и светильник.", "warning": "" },
+            "en": { "text": "Remove the sign, switch the breakers on and test every socket, switch and light.", "warning": "" }
+          }
+        }
+      ],
+      "quiz": [
+        {
+          "correct": 0,
+          "t": {
+            "uz": { "q": "Tarqatish qutisini suvoq bilan yopish mumkinmi?", "options": ["Yo'q, unga kirish bo'lishi kerak", "Ha", "Faqat oshxonada"], "explanation": "Quti xizmat ko'rsatish uchun ochiq bo'lishi kerak." },
+            "ru": { "q": "Можно ли замуровать распаечную коробку?", "options": ["Нет, к ней нужен доступ", "Да", "Только на кухне"], "explanation": "Коробка должна оставаться доступной для обслуживания." },
+            "en": { "q": "May you plaster over a junction box?", "options": ["No, it must stay accessible", "Yes", "Only in kitchens"], "explanation": "The box must remain accessible for maintenance." }
+          }
+        },
+        {
+          "correct": 2,
+          "t": {
+            "uz": { "q": "Mis va alyuminiy simni qanday ulaysiz?", "options": ["Burab", "Lenta bilan", "DIY qilmayman — elektrik chaqiraman"], "explanation": "Eski alyuminiy simlar — elektrik ishi." },
+            "ru": { "q": "Как соединить медь с алюминием?", "options": ["Скруткой", "Изолентой", "Не делаю сам — вызываю электрика"], "explanation": "Старая алюминиевая проводка — работа для электрика." },
+            "en": { "q": "How do you join copper to aluminium?", "options": ["Twist them", "Tape them", "Not DIY — call an electrician"], "explanation": "Old aluminium wiring is an electrician's job." }
+          }
+        }
+      ]
+    },
+    {
+      "slug": "cable-routing",
+      "order": 10,
+      "difficulty": 3,
+      "est_minutes": 60,
+      "icon": "route",
+      "t": {
+        "uz": { "title": "Kabel trassasi va devorni shtrobalash", "summary": "Kabelni to'g'ri yo'naltirish va devorga yotqizish." },
+        "ru": { "title": "Трасса кабеля и штробление стен", "summary": "Правильная прокладка кабеля и штробление." },
+        "en": { "title": "Cable routing and wall chasing", "summary": "Routing cable correctly and cutting wall chases." }
+      },
+      "steps": [
+        {
+          "illustration": "cable_route",
+          "tools": [],
+          "t": {
+            "uz": { "text": "Kabel faqat vertikal va gorizontal yo'naladi. Gorizontal trassa shiftdan 15 sm pastda, vertikal trassa burchakdan, eshik va derazadan kamida 10–15 sm uzoqda.", "warning": "Diagonal yotqizish taqiqlanadi — keyin mixlaganda kabelga tegib ketasiz." },
+            "ru": { "text": "Кабель прокладывается только вертикально и горизонтально. Горизонталь — на 15 см ниже потолка, вертикаль — не ближе 10–15 см от углов, дверей и окон.", "warning": "Диагональная прокладка запрещена — потом легко попасть в кабель." },
+            "en": { "text": "Cable runs only vertically and horizontally. Horizontal runs 15 cm below the ceiling; vertical runs at least 10–15 cm from corners, doors and windows.", "warning": "No diagonal runs — you would hit the cable when drilling later." }
+          }
+        },
+        {
+          "illustration": "cable_route",
+          "tools": ["tool_pencil_level"],
+          "t": {
+            "uz": { "text": "Devorga qalam va daraja (uroven) bilan trassani chizing. Rozetkalar polidan 30 sm, kalitlar 90–100 sm balandlikda. Trassani telefon bilan suratga oling — keyin kerak bo'ladi.", "warning": "" },
+            "ru": { "text": "Разметьте трассу на стене карандашом и уровнем. Розетки — 30 см от пола, выключатели — 90–100 см. Сфотографируйте разметку — пригодится.", "warning": "" },
+            "en": { "text": "Mark the route on the wall with a pencil and level. Sockets 30 cm from the floor, switches at 90–100 cm. Photograph the marks — you will need them later.", "warning": "" }
+          }
+        },
+        {
+          "illustration": "wall_chase",
+          "tools": ["tool_cable_detector"],
+          "t": {
+            "uz": { "text": "Shtrobalashdan oldin detektor bilan eski simlar va quvurlarni qidiring. Panelli uylarda yuk ko'taruvchi devorlarni shtrobalash taqiqlanadi — ochiq kabel kanalidan foydalaning.", "warning": "Yuk ko'taruvchi devorni gorizontal shtrobalamang." },
+            "ru": { "text": "Перед штроблением найдите детектором старую проводку и трубы. В панельных домах штробить несущие стены запрещено — используйте открытый кабель-канал.", "warning": "Не штробите несущие стены горизонтально." },
+            "en": { "text": "Before chasing, scan for old wires and pipes with a detector. In panel buildings chasing load-bearing walls is forbidden — use surface cable trunking instead.", "warning": "Never chase load-bearing walls horizontally." }
+          }
+        },
+        {
+          "illustration": "wall_chase",
+          "tools": ["tool_wall_chaser", "tool_drill"],
+          "t": {
+            "uz": { "text": "Shtroba chuqurligi ~20–25 mm, kengligi kabel yoki gofra quvurdan biroz katta. Changga qarshi niqob, ko'zoynak va quloqchin taqing. Podrozetniklar uchun 68 mm toj ishlating.", "warning": "Shtrobalash paytida ishchi xonadagi barcha guruhlar o'chirilgan bo'lsin." },
+            "ru": { "text": "Глубина штробы ~20–25 мм, ширина — чуть больше кабеля или гофры. Наденьте респиратор, очки и наушники. Под подрозетники — коронка 68 мм.", "warning": "Во время штробления все группы в комнате должны быть отключены." },
+            "en": { "text": "Chase depth ~20–25 mm, width a little more than the cable or conduit. Wear a dust mask, goggles and ear protection. Use a 68 mm hole saw for wall boxes.", "warning": "Keep all circuits in the room switched off while chasing." }
+          }
+        },
+        {
+          "illustration": "cable_route",
+          "tools": [],
+          "t": {
+            "uz": { "text": "Kabelni tortmasdan, zapas bilan yotqizing va klipslar bilan har 40–50 sm da mahkamlang. Gipsokarton va yog'och devorlarda — faqat yonmaydigan gofra quvurda. Kabelni tutashtirmang — ulanishlar faqat qutida.", "warning": "Yog'och devorlarda yashirin yotqizish — elektrik bilan maslahatlashing." },
+            "ru": { "text": "Укладывайте кабель без натяга, с запасом, крепите клипсами каждые 40–50 см. В гипсокартоне и дереве — только в негорючей гофре. Не сращивайте кабель в стене — соединения только в коробке.", "warning": "Скрытая проводка в деревянных стенах — проконсультируйтесь с электриком." },
+            "en": { "text": "Lay the cable without tension, with slack, clipped every 40–50 cm. In plasterboard and wood use only non-flammable conduit. Never splice inside the wall — joints only in boxes.", "warning": "Concealed wiring in wooden walls — consult an electrician." }
+          }
+        },
+        {
+          "illustration": "multimeter",
+          "tools": ["tool_multimeter"],
+          "t": {
+            "uz": { "text": "Shtrobani yopishdan oldin multimetr bilan har bir kabelning butunligini (prozvonka) tekshiring va trassani suratga oling. Keyin alebastr bilan yoping.", "warning": "" },
+            "ru": { "text": "Перед заделкой штробы прозвоните каждый кабель мультиметром и сфотографируйте трассу. Затем заделайте алебастром.", "warning": "" },
+            "en": { "text": "Before filling the chase, continuity-test every cable with a multimeter and photograph the route. Then fill with gypsum plaster.", "warning": "" }
+          }
+        }
+      ],
+      "quiz": [
+        {
+          "correct": 1,
+          "t": {
+            "uz": { "q": "Gorizontal trassa qayerdan o'tadi?", "options": ["Devor o'rtasidan", "Shiftdan ~15 sm pastdan", "Diagonal"], "explanation": "Standart joy — kabel qayerdaligini oldindan bilish mumkin." },
+            "ru": { "q": "Где проходит горизонтальная трасса?", "options": ["Посередине стены", "~15 см ниже потолка", "По диагонали"], "explanation": "Стандартное место — всегда известно, где кабель." },
+            "en": { "q": "Where does a horizontal run go?", "options": ["Mid-wall", "~15 cm below the ceiling", "Diagonally"], "explanation": "A standard place means you always know where the cable is." }
+          }
+        },
+        {
+          "correct": 0,
+          "t": {
+            "uz": { "q": "Kabelni devor ichida ulash mumkinmi?", "options": ["Yo'q, faqat qutida", "Ha, lenta bilan", "Ha, buralib"], "explanation": "Devordagi ulanish ko'rinmaydi va qizib ketishi mumkin." },
+            "ru": { "q": "Можно ли сращивать кабель внутри стены?", "options": ["Нет, только в коробке", "Да, изолентой", "Да, скруткой"], "explanation": "Соединение в стене недоступно и может перегреться." },
+            "en": { "q": "May you join cable inside the wall?", "options": ["No, only in a box", "Yes, with tape", "Yes, twisted"], "explanation": "A joint in the wall is inaccessible and may overheat." }
+          }
+        },
+        {
+          "correct": 2,
+          "t": {
+            "uz": { "q": "Gipsokarton devorda kabel qanday yotqiziladi?", "options": ["To'g'ridan-to'g'ri", "Plastik lentada", "Yonmaydigan gofra quvurda"], "explanation": "Gipsokarton ichida kabel himoyalangan bo'lishi kerak." },
+            "ru": { "q": "Как прокладывать кабель в гипсокартоне?", "options": ["Просто так", "В пластиковой ленте", "В негорючей гофре"], "explanation": "Внутри гипсокартона кабель должен быть защищён." },
+            "en": { "q": "How do you run cable in plasterboard walls?", "options": ["Bare", "In plastic tape", "In non-flammable conduit"], "explanation": "Inside plasterboard the cable must be protected." }
+          }
+        }
+      ]
+    }
+  ]
+}
