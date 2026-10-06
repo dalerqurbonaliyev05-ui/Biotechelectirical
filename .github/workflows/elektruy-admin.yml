@@ -1,0 +1,41 @@
+# ElektrUy admin panel (elektruy/admin): lint, typecheck and production build.
+# Deployment is done by Vercel (project root directory: elektruy/admin).
+name: ElektrUy admin
+
+on:
+  push:
+    branches: [main, 'claude/**']
+    paths:
+      - 'elektruy/admin/**'
+      - '.github/workflows/elektruy-admin.yml'
+  pull_request:
+    paths:
+      - 'elektruy/admin/**'
+      - '.github/workflows/elektruy-admin.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: elektruy-admin-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Lint, typecheck, build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: elektruy/admin
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: elektruy/admin/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run build
