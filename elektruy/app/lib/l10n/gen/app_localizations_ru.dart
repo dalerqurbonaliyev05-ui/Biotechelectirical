@@ -1235,4 +1235,35 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get pdfSum => 'Сумма';
+
+  @override
+  String get signOutUnsynced =>
+      'Часть изменений ещё не синхронизирована. Если выйти сейчас, они будут удалены с телефона.';
+
+  @override
+  String get voiceGuideAuto => 'Автоматически читать шаги урока вслух';
+
+  @override
+  String get voiceNoLanguage =>
+      'Голос для этого языка не установлен — используется системный. Установите его в настройках Android → Синтез речи.';
+
+  @override
+  String legalAcceptedOn(String v, String date) {
+    return 'Принята версия $v от $date';
+  }
+
+  @override
+  String imagesDownloaded(int n) {
+    return 'Загружено картинок: $n';
+  }
+
+  @override
+  String get contentUpdated => 'Контент обновлён';
+
+  @override
+  String get privacyNote =>
+      'Ваши фото приватны. Их видите только вы; администраторы видят фото проверки ИИ, только если вы пожаловались на результат.';
+
+  @override
+  String get offlineModeOn => 'Офлайн-режим (без аккаунта)';
 }

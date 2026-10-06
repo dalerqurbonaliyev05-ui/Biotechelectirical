@@ -639,5 +639,30 @@
   "pdfItem": "Item",
   "pdfQty": "Qty",
   "pdfPrice": "Price",
-  "pdfSum": "Sum"
+  "pdfSum": "Sum",
+  "signOutUnsynced": "Some changes are not synced yet. If you sign out now they will be removed from this phone.",
+  "voiceGuideAuto": "Read lesson steps aloud automatically",
+  "voiceNoLanguage": "No voice for this language is installed — the system voice is used. Install it in Android settings → Text-to-speech.",
+  "legalAcceptedOn": "Accepted version {v} on {date}",
+  "@legalAcceptedOn": {
+    "placeholders": {
+      "v": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "imagesDownloaded": "{n} pictures downloaded",
+  "@imagesDownloaded": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "contentUpdated": "Content updated",
+  "privacyNote": "Your photos are private. Only you can see them; admins see AI-check photos only if you flag the result.",
+  "offlineModeOn": "Offline mode (no account)"
 }

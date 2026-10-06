@@ -413,4 +413,12 @@ export const strings = [
   ['pdfQty', 'Qty', 'Кол-во', 'Soni'],
   ['pdfPrice', 'Price', 'Цена', 'Narx'],
   ['pdfSum', 'Sum', 'Сумма', 'Summa'],
+  ['signOutUnsynced', 'Some changes are not synced yet. If you sign out now they will be removed from this phone.', 'Часть изменений ещё не синхронизирована. Если выйти сейчас, они будут удалены с телефона.', "Ba'zi o'zgarishlar hali sinxronlanmagan. Hozir chiqsangiz, ular telefondan o'chiriladi."],
+  ['voiceGuideAuto', 'Read lesson steps aloud automatically', 'Автоматически читать шаги урока вслух', "Dars qadamlarini avtomatik ovoz chiqarib o'qish"],
+  ['voiceNoLanguage', 'No voice for this language is installed — the system voice is used. Install it in Android settings → Text-to-speech.', 'Голос для этого языка не установлен — используется системный. Установите его в настройках Android → Синтез речи.', "Bu til uchun ovoz o'rnatilmagan — tizim ovozi ishlatiladi. Android sozlamalari → Matnni nutqqa aylantirish bo'limida o'rnating."],
+  ['legalAcceptedOn', 'Accepted version {v} on {date}', 'Принята версия {v} от {date}', "{v}-versiya {date} kuni qabul qilingan", { v: 'String', date: 'String' }],
+  ['imagesDownloaded', '{n} pictures downloaded', 'Загружено картинок: {n}', '{n} ta rasm yuklandi', { n: 'int' }],
+  ['contentUpdated', 'Content updated', 'Контент обновлён', 'Kontent yangilandi'],
+  ['privacyNote', 'Your photos are private. Only you can see them; admins see AI-check photos only if you flag the result.', 'Ваши фото приватны. Их видите только вы; администраторы видят фото проверки ИИ, только если вы пожаловались на результат.', "Rasmlaringiz shaxsiy. Ularni faqat siz ko'rasiz; adminlar AI tekshiruv rasmlarini faqat siz natija ustidan shikoyat qilsangiz ko'radi."],
+  ['offlineModeOn', 'Offline mode (no account)', 'Офлайн-режим (без аккаунта)', 'Oflayn rejim (akkauntsiz)'],
 ];

@@ -1237,4 +1237,36 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get pdfSum => 'Summa';
+
+  @override
+  String get signOutUnsynced =>
+      'Ba\'zi o\'zgarishlar hali sinxronlanmagan. Hozir chiqsangiz, ular telefondan o\'chiriladi.';
+
+  @override
+  String get voiceGuideAuto =>
+      'Dars qadamlarini avtomatik ovoz chiqarib o\'qish';
+
+  @override
+  String get voiceNoLanguage =>
+      'Bu til uchun ovoz o\'rnatilmagan — tizim ovozi ishlatiladi. Android sozlamalari → Matnni nutqqa aylantirish bo\'limida o\'rnating.';
+
+  @override
+  String legalAcceptedOn(String v, String date) {
+    return '$v-versiya $date kuni qabul qilingan';
+  }
+
+  @override
+  String imagesDownloaded(int n) {
+    return '$n ta rasm yuklandi';
+  }
+
+  @override
+  String get contentUpdated => 'Kontent yangilandi';
+
+  @override
+  String get privacyNote =>
+      'Rasmlaringiz shaxsiy. Ularni faqat siz ko\'rasiz; adminlar AI tekshiruv rasmlarini faqat siz natija ustidan shikoyat qilsangiz ko\'radi.';
+
+  @override
+  String get offlineModeOn => 'Oflayn rejim (akkauntsiz)';
 }

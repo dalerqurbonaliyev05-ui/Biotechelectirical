@@ -373,5 +373,13 @@
   "pdfItem": "Nomi",
   "pdfQty": "Soni",
   "pdfPrice": "Narx",
-  "pdfSum": "Summa"
+  "pdfSum": "Summa",
+  "signOutUnsynced": "Ba'zi o'zgarishlar hali sinxronlanmagan. Hozir chiqsangiz, ular telefondan o'chiriladi.",
+  "voiceGuideAuto": "Dars qadamlarini avtomatik ovoz chiqarib o'qish",
+  "voiceNoLanguage": "Bu til uchun ovoz o'rnatilmagan — tizim ovozi ishlatiladi. Android sozlamalari → Matnni nutqqa aylantirish bo'limida o'rnating.",
+  "legalAcceptedOn": "{v}-versiya {date} kuni qabul qilingan",
+  "imagesDownloaded": "{n} ta rasm yuklandi",
+  "contentUpdated": "Kontent yangilandi",
+  "privacyNote": "Rasmlaringiz shaxsiy. Ularni faqat siz ko'rasiz; adminlar AI tekshiruv rasmlarini faqat siz natija ustidan shikoyat qilsangiz ko'radi.",
+  "offlineModeOn": "Oflayn rejim (akkauntsiz)"
 }

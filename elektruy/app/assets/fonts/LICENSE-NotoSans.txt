@@ -1,0 +1,4 @@
+Noto Sans fonts are licensed under the SIL Open Font License, Version 1.1.
+Copyright 2022 The Noto Project Authors (https://github.com/notofonts/latin-greek-cyrillic)
+Full text: https://openfontlicense.org/open-font-license-official-text/
+Used by ElektrUy for offline PDF export (Latin + Cyrillic).

@@ -1237,4 +1237,35 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pdfSum => 'Sum';
+
+  @override
+  String get signOutUnsynced =>
+      'Some changes are not synced yet. If you sign out now they will be removed from this phone.';
+
+  @override
+  String get voiceGuideAuto => 'Read lesson steps aloud automatically';
+
+  @override
+  String get voiceNoLanguage =>
+      'No voice for this language is installed — the system voice is used. Install it in Android settings → Text-to-speech.';
+
+  @override
+  String legalAcceptedOn(String v, String date) {
+    return 'Accepted version $v on $date';
+  }
+
+  @override
+  String imagesDownloaded(int n) {
+    return '$n pictures downloaded';
+  }
+
+  @override
+  String get contentUpdated => 'Content updated';
+
+  @override
+  String get privacyNote =>
+      'Your photos are private. Only you can see them; admins see AI-check photos only if you flag the result.';
+
+  @override
+  String get offlineModeOn => 'Offline mode (no account)';
 }

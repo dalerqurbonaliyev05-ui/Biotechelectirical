@@ -2343,6 +2343,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sum'**
   String get pdfSum;
+
+  /// No description provided for @signOutUnsynced.
+  ///
+  /// In en, this message translates to:
+  /// **'Some changes are not synced yet. If you sign out now they will be removed from this phone.'**
+  String get signOutUnsynced;
+
+  /// No description provided for @voiceGuideAuto.
+  ///
+  /// In en, this message translates to:
+  /// **'Read lesson steps aloud automatically'**
+  String get voiceGuideAuto;
+
+  /// No description provided for @voiceNoLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'No voice for this language is installed — the system voice is used. Install it in Android settings → Text-to-speech.'**
+  String get voiceNoLanguage;
+
+  /// No description provided for @legalAcceptedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Accepted version {v} on {date}'**
+  String legalAcceptedOn(String v, String date);
+
+  /// No description provided for @imagesDownloaded.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} pictures downloaded'**
+  String imagesDownloaded(int n);
+
+  /// No description provided for @contentUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Content updated'**
+  String get contentUpdated;
+
+  /// No description provided for @privacyNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Your photos are private. Only you can see them; admins see AI-check photos only if you flag the result.'**
+  String get privacyNote;
+
+  /// No description provided for @offlineModeOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline mode (no account)'**
+  String get offlineModeOn;
 }
 
 class _AppLocalizationsDelegate
