@@ -1,0 +1,668 @@
+{
+  "@@locale": "en",
+  "appTitle": "ElektrUy",
+  "next": "Next",
+  "back": "Back",
+  "cancel": "Cancel",
+  "save": "Save",
+  "delete": "Delete",
+  "edit": "Edit",
+  "done": "Done",
+  "close": "Close",
+  "retry": "Try again",
+  "continueLabel": "Continue",
+  "skip": "Skip",
+  "yes": "Yes",
+  "no": "No",
+  "ok": "OK",
+  "add": "Add",
+  "search": "Search",
+  "loading": "Loading…",
+  "offlineBanner": "You are offline. Lessons, calculators and the 3D viewer still work.",
+  "errorGeneric": "Something went wrong. Please try again.",
+  "errorNetwork": "No internet connection.",
+  "errorWithDetail": "Error: {detail}",
+  "@errorWithDetail": {
+    "placeholders": {
+      "detail": {
+        "type": "String"
+      }
+    }
+  },
+  "needsSignIn": "Sign in to use this feature.",
+  "needsOnline": "This feature needs internet.",
+  "unitM": "m",
+  "unitCm": "cm",
+  "unitPcs": "pcs",
+  "unitKg": "kg",
+  "currencyUZS": "UZS",
+  "currencyUSD": "USD",
+  "savedLocally": "Saved on this phone",
+  "synced": "Synced",
+  "chooseLanguage": "Choose language",
+  "languageUz": "O'zbekcha",
+  "languageRu": "Русский",
+  "languageEn": "English",
+  "onb1Title": "Plan your room wiring",
+  "onb1Body": "Take photos, mark sockets, switches and lamps — get the cable route, diagram and material list.",
+  "onb2Title": "Learn step by step",
+  "onb2Body": "Short lessons with pictures and a voice guide that reads every step — even with dirty hands.",
+  "onb3Title": "Safety first",
+  "onb3Body": "Never work on live wires. If the job is too risky, the app tells you to call a licensed electrician.",
+  "disclaimerTitle": "Safety and disclaimer",
+  "privacyTitle": "Privacy policy",
+  "acceptDisclaimer": "I have read and accept the safety rules and disclaimer",
+  "acceptPrivacy": "I accept the privacy policy",
+  "mustAccept": "Please accept both to continue.",
+  "reconsentTitle": "The terms have been updated",
+  "reconsentBody": "Please read and accept the new version to continue.",
+  "signInTitle": "Sign in",
+  "signInBody": "Sign in with Google to save projects, sync progress and use AI checks.",
+  "signInGoogle": "Continue with Google",
+  "signInError": "Sign-in failed: {error}",
+  "@signInError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "signInNotConfigured": "Google sign-in is not configured in this build.",
+  "continueOffline": "Continue offline (lessons and calculators)",
+  "signOut": "Sign out",
+  "signedInAs": "Signed in as {email}",
+  "@signedInAs": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "notSignedIn": "Not signed in",
+  "homeGreeting": "Hello, {name}!",
+  "@homeGreeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "homeGreetingAnon": "Hello!",
+  "myProjects": "My projects",
+  "newProject": "New room project",
+  "lessons": "Lessons",
+  "materialsCalc": "Materials calculator",
+  "electricians": "Electricians",
+  "settings": "Settings",
+  "checkWork": "Check my work",
+  "noProjects": "No projects yet",
+  "noProjectsHint": "Start by taking photos of one small room.",
+  "projectUntitled": "Room project",
+  "projectTitleLabel": "Project name",
+  "deleteProjectConfirm": "Delete this project and its photos?",
+  "statusDraft": "Draft",
+  "statusPlanned": "Planned",
+  "statusInProgress": "In progress",
+  "statusDone": "Done",
+  "statusOutOfScope": "Electrician needed",
+  "wizardTitle": "Room project",
+  "stepPhotos": "Photos",
+  "stepMarkers": "Markers",
+  "stepDimensions": "Size",
+  "stepQuestions": "Questions",
+  "stepOf": "Step {current} of {total}",
+  "@stepOf": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "photosTitle": "Add 1–6 photos of the room",
+  "photosHint": "Photograph each wall from the opposite side so the floor and ceiling are visible. Sockets, switches and lamps should be clearly seen.",
+  "takePhoto": "Take photo",
+  "pickFromGallery": "Gallery",
+  "photoLimit": "Up to 6 photos",
+  "photoShowsWall": "This photo shows wall:",
+  "wallName": "Wall {name}",
+  "@wallName": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "wallsHelp": "Stand in the room facing the wall with the door — that is wall A. Turn to your left: the next wall is B, then C, then D.",
+  "needOnePhoto": "Add at least one photo.",
+  "markersTitle": "Mark the points",
+  "markersHint": "Choose a type and tap the photo. Drag a marker to move it, tap it to edit or delete.",
+  "markerInput": "Input cable",
+  "markerSocket": "Socket",
+  "markerSwitch": "Switch",
+  "markerLamp": "Lamp",
+  "markerJunction": "Junction box",
+  "markerNote": "Note",
+  "markerDelete": "Delete marker",
+  "markerSamePoint": "Same point as on another photo",
+  "markerSamePointNone": "New point",
+  "switchType": "Switch type",
+  "switchSingle": "Single-gang",
+  "switchDouble": "Double-gang",
+  "switchPass": "Pass-through (two-way)",
+  "lampMount": "Mounted on",
+  "lampCeiling": "Ceiling",
+  "lampWall": "Wall",
+  "markersCount": "{sockets} sockets · {switches} switches · {lamps} lamps",
+  "@markersCount": {
+    "placeholders": {
+      "sockets": {
+        "type": "int"
+      },
+      "switches": {
+        "type": "int"
+      },
+      "lamps": {
+        "type": "int"
+      }
+    }
+  },
+  "markersNone": "No markers yet — you can also skip and add devices on the plan.",
+  "dimsTitle": "Room dimensions",
+  "dimLength": "Length",
+  "dimWidth": "Width",
+  "dimHeight": "Height",
+  "dimManual": "Enter manually",
+  "dimAi": "AI estimate from photo",
+  "dimAr": "Measure with camera (AR)",
+  "dimInvalid": "Enter a value between {min} and {max}",
+  "@dimInvalid": {
+    "placeholders": {
+      "min": {
+        "type": "String"
+      },
+      "max": {
+        "type": "String"
+      }
+    }
+  },
+  "aiEstimating": "Estimating from your photos…",
+  "aiResultTitle": "AI estimate",
+  "aiConfidence": "Confidence: {level}",
+  "@aiConfidence": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "confidenceLow": "low",
+  "confidenceMedium": "medium",
+  "confidenceHigh": "high",
+  "aiConfirmHint": "AI estimates are approximate. Check with a tape measure and correct the numbers before you continue.",
+  "aiUnusable": "The AI could not estimate the size from these photos. Please enter it manually.",
+  "useValues": "Use these values",
+  "arUnsupported": "This phone does not support AR measuring. Please enter the size manually.",
+  "arMeasureWhat": "What do you want to measure?",
+  "arTapFirst": "Tap the first point",
+  "arTapSecond": "Tap the second point",
+  "arScanHint": "Move the phone slowly so it can find the floor and walls.",
+  "arUse": "Use",
+  "arReset": "Reset",
+  "arResult": "Measured: {value} m",
+  "@arResult": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "questionsTitle": "A few questions",
+  "qSockets": "Sockets",
+  "qLamps": "Lamps",
+  "qSwitches": "Switches",
+  "qCountsHint": "Counts come from your markers. Devices without a marker are placed automatically — move them on the plan.",
+  "qJunctionBox": "There is already a junction box in the room",
+  "qWallMaterial": "Wall material",
+  "wallBrick": "Brick",
+  "wallConcrete": "Concrete",
+  "wallGypsum": "Gypsum board",
+  "wallWood": "Wood",
+  "qWiringType": "Wiring type",
+  "wiringHidden": "Hidden (in wall chases)",
+  "wiringOpen": "Open (cable channel or conduit)",
+  "qHasPe": "There is a yellow-green earth (PE) wire",
+  "qPanelDistance": "Approximate cable length to the electric panel, m",
+  "qLampPower": "Power per lamp, W",
+  "qAppliances": "Planned appliances",
+  "qAppliancePower": "Power, W",
+  "qApplianceSocket": "Socket for this appliance",
+  "qApplianceAutoSocket": "Add a new socket",
+  "qChecksTitle": "Important — answer honestly",
+  "qPanelWork": "The job needs work inside the electric panel",
+  "qGrounding": "I need to install or change grounding",
+  "qThreePhase": "The house has a 3-phase supply",
+  "qWetZone": "This is a bathroom, shower or other wet room",
+  "qAluminium": "The old wiring is aluminium",
+  "qDamaged": "I see burn marks, smell burning or see sparks",
+  "qUnsure": "Not sure about any of these? Ask an electrician first.",
+  "buildPlan": "Build plan",
+  "resultTitle": "Wiring plan",
+  "tabPlan": "Plan 2D",
+  "tab3d": "3D",
+  "tabRoute": "Cable route",
+  "tabDiagram": "Diagram",
+  "tabMaterials": "Materials",
+  "tabSteps": "Steps",
+  "topView": "Top view",
+  "planDragHint": "Long-press a device and drag it along the wall to move it.",
+  "legendPhase": "Phase (L)",
+  "legendNeutral": "Neutral (N)",
+  "legendPe": "Earth (PE)",
+  "legendSwitched": "Switched phase",
+  "legendTraveller": "Traveller",
+  "viewer3dError": "The 3D view could not start on this phone.",
+  "circuitLighting": "Lighting",
+  "circuitSockets": "Sockets, group {n}",
+  "@circuitSockets": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "circuitDedicated": "Dedicated line: {appliance}",
+  "@circuitDedicated": {
+    "placeholders": {
+      "appliance": {
+        "type": "String"
+      }
+    }
+  },
+  "breakerA": "Breaker {a} A",
+  "@breakerA": {
+    "placeholders": {
+      "a": {
+        "type": "int"
+      }
+    }
+  },
+  "crossSection": "Copper {mm2} mm²",
+  "@crossSection": {
+    "placeholders": {
+      "mm2": {
+        "type": "String"
+      }
+    }
+  },
+  "designCurrent": "Load {power} W · {current} A",
+  "@designCurrent": {
+    "placeholders": {
+      "power": {
+        "type": "int"
+      },
+      "current": {
+        "type": "String"
+      }
+    }
+  },
+  "vdrop": "Voltage drop {pct}%",
+  "@vdrop": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      }
+    }
+  },
+  "panelWorkNote": "Connection in the panel: licensed electrician only.",
+  "segmentFromTo": "{from} → {to}",
+  "@segmentFromTo": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "segmentLength": "{m} m of cable ({cable})",
+  "@segmentLength": {
+    "placeholders": {
+      "m": {
+        "type": "String"
+      },
+      "cable": {
+        "type": "String"
+      }
+    }
+  },
+  "routeTotal": "Total cable route {m} m",
+  "@routeTotal": {
+    "placeholders": {
+      "m": {
+        "type": "String"
+      }
+    }
+  },
+  "routingRulesTitle": "Routing rules",
+  "routingRules": "Only vertical and horizontal runs, never diagonal.\nHorizontal runs 15 cm below the ceiling.\nVertical runs at least 15 cm from corners, doors and windows.\nJoints only inside junction or socket boxes.\nSockets 30 cm and switches 90–110 cm above the floor.",
+  "devInput": "Input",
+  "devJunction": "Junction box",
+  "devSocket": "Socket",
+  "devSwitch": "Switch",
+  "devLamp": "Lamp",
+  "diagramSingle": "Single-gang switch and lamp",
+  "diagramDouble": "Double-gang switch, two lamp groups",
+  "diagramPass": "Two-way (pass-through) switches",
+  "diagramSockets": "Socket group",
+  "diagramDedicated": "Dedicated appliance line",
+  "diagramNote": "Wire colours: brown/red — phase L, blue — neutral N, yellow-green — earth PE. Always verify with a tester.",
+  "materialsTotal": "Total",
+  "materialsOptional": "Optional (tools and fixtures)",
+  "materialsPricesNote": "Prices are estimates for {region}. Tap a line to change quantity or price.",
+  "@materialsPricesNote": {
+    "placeholders": {
+      "region": {
+        "type": "String"
+      }
+    }
+  },
+  "materialsReserveNote": "Cable includes a {pct}% reserve.",
+  "@materialsReserveNote": {
+    "placeholders": {
+      "pct": {
+        "type": "int"
+      }
+    }
+  },
+  "quantity": "Quantity",
+  "unitPrice": "Unit price",
+  "includeInTotal": "Include in total",
+  "reasonElectricianInstalls": "Installed in the panel by an electrician",
+  "reasonSafety": "Required for safety",
+  "reasonConduit": "Required in drywall and wooden walls",
+  "exportPdf": "Export PDF",
+  "stepsIntro": "Recommended order of work",
+  "openLesson": "Open lesson",
+  "startWork": "Start work (safety check)",
+  "markDone": "Mark project as done",
+  "warningsTitle": "Check these",
+  "editProject": "Edit project",
+  "projectSaved": "Project saved",
+  "warn_input_assumed": "No input cable was marked — we assumed it enters near wall A. Mark it for a better plan.",
+  "warn_switch_auto_added": "No switch was marked — one was added next to the junction box. Move it on the plan.",
+  "warn_pass_unpaired": "Pass-through switches work in pairs. The single one is treated as a normal switch.",
+  "warn_near_corner": "A device was too close to a corner and was moved 15 cm away.",
+  "warn_too_many_lamps": "Many lamps on one circuit. Check the total power.",
+  "warn_extra_socket_groups": "Sockets were split into several groups. Each extra group is a new line from the panel — an electrician must connect it.",
+  "warn_dedicated_socket_auto": "A socket was added for a powerful appliance. Move it to the right place.",
+  "warn_cable_upsized": "The cable was made thicker because of a long run.",
+  "warn_switch_without_lamp": "There are switches but no lamps. Mark the lamps.",
+  "warn_lighting_overload": "The lighting load is too high for one circuit.",
+  "warn_socket_overload": "A socket group is overloaded.",
+  "oosTitle": "This job needs a licensed electrician",
+  "oosBody": "For your safety ElektrUy does not give instructions for this work. Please call a licensed electrician.",
+  "oosReasons": "Why:",
+  "oosFindElectrician": "Find an electrician",
+  "oosLessons": "You can still read the lessons",
+  "oosChangeAnswers": "Change answers",
+  "gateTitle": "Safety check",
+  "gateBody": "Tick every item. You cannot continue until all are done.",
+  "gateContinue": "All done — continue",
+  "lessonsTitle": "Lessons",
+  "lessonMinutes": "{n} min",
+  "@lessonMinutes": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "difficulty1": "Easy",
+  "difficulty2": "Medium",
+  "difficulty3": "Hard",
+  "lessonCompleted": "Completed",
+  "lessonStart": "Start",
+  "lessonContinue": "Continue",
+  "lessonStepOf": "Step {current} of {total}",
+  "@lessonStepOf": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "toolsNeeded": "Tools",
+  "warningLabel": "Warning",
+  "stepDoneCheck": "I did this step",
+  "nextStep": "Next step",
+  "prevStep": "Previous",
+  "toQuiz": "Go to quiz",
+  "quizTitle": "Quick quiz",
+  "quizCorrect": "Correct!",
+  "quizWrong": "Not quite.",
+  "quizScore": "Your score: {score}%",
+  "@quizScore": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "quizRetry": "Try again",
+  "quizFinish": "Finish lesson",
+  "voiceGuide": "Voice guide",
+  "voiceCommandsHint": "Say \"next\", \"back\" or \"repeat\"",
+  "voiceUnavailable": "Voice commands are not available on this phone.",
+  "voiceListening": "Listening…",
+  "reportMistake": "Report a mistake",
+  "lessonsOfflineReady": "All lessons are available offline.",
+  "downloadsTitle": "Offline content",
+  "downloadsBody": "Lessons, safety texts, prices and the 3D viewer are stored on your phone. Update them when you have internet.",
+  "downloadImages": "Download lesson pictures",
+  "syncNow": "Update now",
+  "lastSync": "Last update: {date}",
+  "@lastSync": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "neverSynced": "Using the built-in content",
+  "cachedItems": "{lessons} lessons · {materials} materials",
+  "@cachedItems": {
+    "placeholders": {
+      "lessons": {
+        "type": "int"
+      },
+      "materials": {
+        "type": "int"
+      }
+    }
+  },
+  "clearCache": "Clear downloaded content",
+  "electriciansTitle": "Electricians",
+  "filterRegion": "Region",
+  "filterDistrict": "District",
+  "allRegions": "All regions",
+  "searchName": "Search by name or service",
+  "noElectricians": "No electricians found here yet.",
+  "experienceYears": "{n} years of experience",
+  "@experienceYears": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "priceRange": "{from}–{to} {currency}",
+  "@priceRange": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "ratingLabel": "{avg} ★ · {count} reviews",
+  "@ratingLabel": {
+    "placeholders": {
+      "avg": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "call": "Call",
+  "telegram": "Telegram",
+  "reviews": "Reviews",
+  "noReviews": "No reviews yet",
+  "writeReview": "Write a review",
+  "editReview": "Edit my review",
+  "yourRating": "Your rating",
+  "reviewText": "Comment (optional)",
+  "reviewSaved": "Thank you for your review!",
+  "becomeElectrician": "I am an electrician",
+  "applyTitle": "Electrician profile",
+  "applyName": "Full name",
+  "applyPhone": "Phone, e.g. +998 90 123 45 67",
+  "applyTelegram": "Telegram username (optional)",
+  "applyExperience": "Experience, years",
+  "applyPriceFrom": "Price from",
+  "applyPriceTo": "Price to",
+  "applyBio": "About you and your work",
+  "applyServices": "Services",
+  "applySubmit": "Send for review",
+  "applyPending": "Your profile is waiting for review by an admin.",
+  "applyApproved": "Your profile is published.",
+  "applyRejected": "Your profile was not approved. Edit it and send again.",
+  "applyBlocked": "Your profile is blocked.",
+  "applyEditNote": "Any change sends the profile for review again.",
+  "fieldRequired": "Required",
+  "phoneInvalid": "Enter a valid phone number",
+  "serviceSockets": "Sockets and switches",
+  "serviceLighting": "Lighting",
+  "serviceWiring": "Full rewiring",
+  "servicePanel": "Distribution panel",
+  "serviceGrounding": "Grounding",
+  "serviceInspection": "Inspection",
+  "reportElectrician": "Report this profile",
+  "checkTitle": "Check my work",
+  "checkIntro": "Take 1–4 clear, close photos of the finished work (open boxes, terminals, cable routes). Switch the power off before opening anything.",
+  "checkContext": "What did you do? (optional)",
+  "checkSend": "Check with AI",
+  "checkChecking": "Checking your photos…",
+  "checkOk": "No visible problems found",
+  "checkWarning": "Warnings found",
+  "checkCritical": "Critical problems",
+  "checkUnclear": "The photos are not clear enough",
+  "checkCallElectrician": "Do not switch on. Call a licensed electrician.",
+  "checkPositives": "Looks good",
+  "checkFlagWrong": "The AI is wrong",
+  "checkFlagged": "Thank you — an admin will review this result.",
+  "checkHistory": "Previous checks",
+  "severityInfo": "Info",
+  "severityWarning": "Warning",
+  "severityCritical": "Critical",
+  "aiDisclaimerShort": "AI can miss problems. This is not an inspection.",
+  "settingsTitle": "Settings",
+  "language": "Language",
+  "theme": "Theme",
+  "themeSystem": "System",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "units": "Units",
+  "unitsMeters": "Metres",
+  "unitsCentimeters": "Centimetres",
+  "region": "Region (for prices)",
+  "currency": "Currency",
+  "legal": "Legal texts",
+  "appVersion": "Version {v}",
+  "@appVersion": {
+    "placeholders": {
+      "v": {
+        "type": "String"
+      }
+    }
+  },
+  "account": "Account",
+  "deleteAccount": "Delete my data",
+  "deleteAccountBody": "This permanently deletes all your projects, photos, lesson progress, reviews and AI checks in ElektrUy. It cannot be undone.",
+  "deleteAccountTypeHint": "Type DELETE to confirm",
+  "deleteAccountDone": "Your data was deleted.",
+  "about": "About",
+  "reportTitle": "Report a problem",
+  "reportText": "Describe the problem",
+  "reportSend": "Send",
+  "reportSent": "Sent. Thank you!",
+  "pdfTitle": "ElektrUy — room wiring plan",
+  "pdfGenerated": "Created {date}",
+  "@pdfGenerated": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "pdfRoom": "Room {l} × {w} × {h} m",
+  "@pdfRoom": {
+    "placeholders": {
+      "l": {
+        "type": "String"
+      },
+      "w": {
+        "type": "String"
+      },
+      "h": {
+        "type": "String"
+      }
+    }
+  },
+  "pdfCircuits": "Circuits",
+  "pdfCableRoute": "Cable route",
+  "pdfMaterials": "Materials",
+  "pdfDiagrams": "Wiring diagrams",
+  "pdfItem": "Item",
+  "pdfQty": "Qty",
+  "pdfPrice": "Price",
+  "pdfSum": "Sum",
+  "signOutUnsynced": "Some changes are not synced yet. If you sign out now they will be removed from this phone.",
+  "voiceGuideAuto": "Read lesson steps aloud automatically",
+  "voiceNoLanguage": "No voice for this language is installed — the system voice is used. Install it in Android settings → Text-to-speech.",
+  "legalAcceptedOn": "Accepted version {v} on {date}",
+  "@legalAcceptedOn": {
+    "placeholders": {
+      "v": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "imagesDownloaded": "{n} pictures downloaded",
+  "@imagesDownloaded": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "contentUpdated": "Content updated",
+  "privacyNote": "Your photos are private. Only you can see them; admins see AI-check photos only if you flag the result.",
+  "offlineModeOn": "Offline mode (no account)"
+}

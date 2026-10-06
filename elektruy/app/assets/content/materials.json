@@ -1,0 +1,637 @@
+{
+ "version": 1,
+ "materials": [
+  {
+   "id": "ed35bed0-0a82-ff32-9568-7fc2e5d3d688",
+   "key": "cable_3x1_5",
+   "category": "cable",
+   "unit": "m",
+   "default_price": 9000,
+   "currency": "UZS",
+   "sort_order": 0,
+   "t": {
+    "uz": "Kabel VVGng 3×1,5 mm² (mis)",
+    "ru": "Кабель ВВГнг 3×1,5 мм² (медь)",
+    "en": "Cable VVGng 3×1.5 mm² (copper)"
+   }
+  },
+  {
+   "id": "92143da2-04c2-706f-4682-ba28d46c82a0",
+   "key": "cable_3x2_5",
+   "category": "cable",
+   "unit": "m",
+   "default_price": 14000,
+   "currency": "UZS",
+   "sort_order": 1,
+   "t": {
+    "uz": "Kabel VVGng 3×2,5 mm² (mis)",
+    "ru": "Кабель ВВГнг 3×2,5 мм² (медь)",
+    "en": "Cable VVGng 3×2.5 mm² (copper)"
+   }
+  },
+  {
+   "id": "9d508449-58c4-ae70-5097-3273afc6fc8d",
+   "key": "cable_4x1_5",
+   "category": "cable",
+   "unit": "m",
+   "default_price": 12000,
+   "currency": "UZS",
+   "sort_order": 2,
+   "t": {
+    "uz": "Kabel VVGng 4×1,5 mm² (mis, ikki klavishli/o'tish kaliti uchun)",
+    "ru": "Кабель ВВГнг 4×1,5 мм² (медь, для двухклавишных/проходных)",
+    "en": "Cable VVGng 4×1.5 mm² (copper, for double/two-way switches)"
+   }
+  },
+  {
+   "id": "f4ffd962-ff4e-e0bf-dbde-92c54bb70e68",
+   "key": "cable_3x4",
+   "category": "cable",
+   "unit": "m",
+   "default_price": 22000,
+   "currency": "UZS",
+   "sort_order": 3,
+   "t": {
+    "uz": "Kabel VVGng 3×4 mm² (mis, alohida liniya)",
+    "ru": "Кабель ВВГнг 3×4 мм² (медь, отдельная линия)",
+    "en": "Cable VVGng 3×4 mm² (copper, dedicated line)"
+   }
+  },
+  {
+   "id": "2015da63-89e7-f9d8-72f6-314af6d3af87",
+   "key": "socket",
+   "category": "device",
+   "unit": "pcs",
+   "default_price": 35000,
+   "currency": "UZS",
+   "sort_order": 4,
+   "t": {
+    "uz": "Rozetka (yerga ulash kontakti bilan)",
+    "ru": "Розетка (с заземляющим контактом)",
+    "en": "Socket outlet (with earth contact)"
+   }
+  },
+  {
+   "id": "424742db-ca96-f740-883c-7ab478c27ab3",
+   "key": "switch_single",
+   "category": "device",
+   "unit": "pcs",
+   "default_price": 30000,
+   "currency": "UZS",
+   "sort_order": 5,
+   "t": {
+    "uz": "Bir klavishli kalit",
+    "ru": "Выключатель одноклавишный",
+    "en": "Single-gang switch"
+   }
+  },
+  {
+   "id": "40beff33-1d5d-9a71-8bea-d8da365dd006",
+   "key": "switch_double",
+   "category": "device",
+   "unit": "pcs",
+   "default_price": 40000,
+   "currency": "UZS",
+   "sort_order": 6,
+   "t": {
+    "uz": "Ikki klavishli kalit",
+    "ru": "Выключатель двухклавишный",
+    "en": "Double-gang switch"
+   }
+  },
+  {
+   "id": "956583a5-ec8b-d055-88f0-48f780ee3bbf",
+   "key": "switch_pass",
+   "category": "device",
+   "unit": "pcs",
+   "default_price": 45000,
+   "currency": "UZS",
+   "sort_order": 7,
+   "t": {
+    "uz": "O'tish (proxodnoy) kaliti",
+    "ru": "Проходной выключатель",
+    "en": "Two-way (pass-through) switch"
+   }
+  },
+  {
+   "id": "915655fa-7535-b769-9fb9-dc60f6512272",
+   "key": "socket_box",
+   "category": "box",
+   "unit": "pcs",
+   "default_price": 2500,
+   "currency": "UZS",
+   "sort_order": 8,
+   "t": {
+    "uz": "Podrozetnik (68 mm)",
+    "ru": "Подрозетник (68 мм)",
+    "en": "Wall box (68 mm)"
+   }
+  },
+  {
+   "id": "7cc000a0-1c22-fc98-a0a8-d498d276f775",
+   "key": "socket_box_drywall",
+   "category": "box",
+   "unit": "pcs",
+   "default_price": 4000,
+   "currency": "UZS",
+   "sort_order": 9,
+   "t": {
+    "uz": "Gipsokarton uchun podrozetnik",
+    "ru": "Подрозетник для гипсокартона",
+    "en": "Drywall wall box"
+   }
+  },
+  {
+   "id": "58d893de-6642-5511-900a-80a3d2ffa05b",
+   "key": "junction_box_hidden",
+   "category": "box",
+   "unit": "pcs",
+   "default_price": 8000,
+   "currency": "UZS",
+   "sort_order": 10,
+   "t": {
+    "uz": "Tarqatish qutisi (yashirin)",
+    "ru": "Распаечная коробка (скрытая)",
+    "en": "Junction box (flush)"
+   }
+  },
+  {
+   "id": "1030a017-30e6-c204-f8c6-308853652cc6",
+   "key": "junction_box_open",
+   "category": "box",
+   "unit": "pcs",
+   "default_price": 9000,
+   "currency": "UZS",
+   "sort_order": 11,
+   "t": {
+    "uz": "Tarqatish qutisi (ochiq)",
+    "ru": "Распаечная коробка (открытая)",
+    "en": "Junction box (surface)"
+   }
+  },
+  {
+   "id": "cff97fcc-2c03-df2c-04ee-d0297e2ca450",
+   "key": "corrugated_pipe_16",
+   "category": "conduit",
+   "unit": "m",
+   "default_price": 1500,
+   "currency": "UZS",
+   "sort_order": 12,
+   "t": {
+    "uz": "Gofra quvur 16 mm (yonmaydigan)",
+    "ru": "Гофротруба 16 мм (негорючая)",
+    "en": "Corrugated conduit 16 mm (non-flammable)"
+   }
+  },
+  {
+   "id": "5790053e-e440-c494-4b98-c8056b163662",
+   "key": "cable_channel_16",
+   "category": "conduit",
+   "unit": "m",
+   "default_price": 6000,
+   "currency": "UZS",
+   "sort_order": 13,
+   "t": {
+    "uz": "Kabel kanali 16×16 mm",
+    "ru": "Кабель-канал 16×16 мм",
+    "en": "Cable trunking 16×16 mm"
+   }
+  },
+  {
+   "id": "dff3f8df-fb8a-409d-842c-587bddea1123",
+   "key": "clip_16",
+   "category": "fixing",
+   "unit": "pcs",
+   "default_price": 300,
+   "currency": "UZS",
+   "sort_order": 14,
+   "t": {
+    "uz": "Klips 16 mm (dyubel bilan)",
+    "ru": "Клипса 16 мм (с дюбелем)",
+    "en": "Clip 16 mm (with plug)"
+   }
+  },
+  {
+   "id": "36663b9e-a08b-b7de-7c30-db74d04b8cd5",
+   "key": "wago_3",
+   "category": "connector",
+   "unit": "pcs",
+   "default_price": 5000,
+   "currency": "UZS",
+   "sort_order": 15,
+   "t": {
+    "uz": "WAGO tipidagi klemma, 3 kontakt",
+    "ru": "Клемма типа WAGO, 3 контакта",
+    "en": "WAGO-type connector, 3-way"
+   }
+  },
+  {
+   "id": "4d2b6d15-489f-108e-138b-bb2a500241d6",
+   "key": "wago_5",
+   "category": "connector",
+   "unit": "pcs",
+   "default_price": 7000,
+   "currency": "UZS",
+   "sort_order": 16,
+   "t": {
+    "uz": "WAGO tipidagi klemma, 5 kontakt",
+    "ru": "Клемма типа WAGO, 5 контактов",
+    "en": "WAGO-type connector, 5-way"
+   }
+  },
+  {
+   "id": "fef3e0c5-d876-5b2b-c6c4-db50c434ef1a",
+   "key": "insulation_tape",
+   "category": "consumable",
+   "unit": "pcs",
+   "default_price": 8000,
+   "currency": "UZS",
+   "sort_order": 17,
+   "t": {
+    "uz": "Izolyatsiya lentasi (rangli to'plam)",
+    "ru": "Изолента (набор цветов)",
+    "en": "Insulation tape (colour set)"
+   }
+  },
+  {
+   "id": "d9fdeab7-01ac-0ca1-e93e-86f18e8e3409",
+   "key": "breaker_10a",
+   "category": "protection",
+   "unit": "pcs",
+   "default_price": 45000,
+   "currency": "UZS",
+   "sort_order": 18,
+   "t": {
+    "uz": "Avtomat 1P C10 (elektrik o'rnatadi)",
+    "ru": "Автомат 1P C10 (устанавливает электрик)",
+    "en": "Breaker 1P C10 (fitted by an electrician)"
+   }
+  },
+  {
+   "id": "ce389900-efdf-1251-65b8-e4d5e1411f5a",
+   "key": "breaker_16a",
+   "category": "protection",
+   "unit": "pcs",
+   "default_price": 45000,
+   "currency": "UZS",
+   "sort_order": 19,
+   "t": {
+    "uz": "Avtomat 1P C16 (elektrik o'rnatadi)",
+    "ru": "Автомат 1P C16 (устанавливает электрик)",
+    "en": "Breaker 1P C16 (fitted by an electrician)"
+   }
+  },
+  {
+   "id": "4b9b9fda-86d4-2368-cbb5-ca5f57179758",
+   "key": "breaker_20a",
+   "category": "protection",
+   "unit": "pcs",
+   "default_price": 50000,
+   "currency": "UZS",
+   "sort_order": 20,
+   "t": {
+    "uz": "Avtomat 1P C20 (elektrik o'rnatadi)",
+    "ru": "Автомат 1P C20 (устанавливает электрик)",
+    "en": "Breaker 1P C20 (fitted by an electrician)"
+   }
+  },
+  {
+   "id": "334c1b2c-c722-e2cb-783b-e2143fb0a86d",
+   "key": "breaker_25a",
+   "category": "protection",
+   "unit": "pcs",
+   "default_price": 55000,
+   "currency": "UZS",
+   "sort_order": 21,
+   "t": {
+    "uz": "Avtomat 1P C25 (elektrik o'rnatadi)",
+    "ru": "Автомат 1P C25 (устанавливает электрик)",
+    "en": "Breaker 1P C25 (fitted by an electrician)"
+   }
+  },
+  {
+   "id": "25ffec1c-1ff8-1c11-896a-946c74e1a489",
+   "key": "gypsum_plaster",
+   "category": "consumable",
+   "unit": "pcs",
+   "default_price": 25000,
+   "currency": "UZS",
+   "sort_order": 22,
+   "t": {
+    "uz": "Alebastr (gips), 5 kg",
+    "ru": "Алебастр (гипс), 5 кг",
+    "en": "Gypsum plaster, 5 kg"
+   }
+  },
+  {
+   "id": "b7f1b327-1442-9e3f-06e7-60a546037bc6",
+   "key": "led_bulb",
+   "category": "device",
+   "unit": "pcs",
+   "default_price": 15000,
+   "currency": "UZS",
+   "sort_order": 23,
+   "t": {
+    "uz": "LED lampochka E27, 10 W",
+    "ru": "LED-лампа E27, 10 Вт",
+    "en": "LED bulb E27, 10 W"
+   }
+  },
+  {
+   "id": "a292cda7-3214-2b79-53f2-378f86655fda",
+   "key": "ceiling_light",
+   "category": "device",
+   "unit": "pcs",
+   "default_price": 120000,
+   "currency": "UZS",
+   "sort_order": 24,
+   "t": {
+    "uz": "Shift chirog'i (oddiy)",
+    "ru": "Потолочный светильник (простой)",
+    "en": "Ceiling light (basic)"
+   }
+  },
+  {
+   "id": "0c8a4672-df10-5840-afde-7e50689f7aa7",
+   "key": "warning_sign",
+   "category": "consumable",
+   "unit": "pcs",
+   "default_price": 5000,
+   "currency": "UZS",
+   "sort_order": 25,
+   "t": {
+    "uz": "\"Yoqmang!\" ogohlantirish belgisi",
+    "ru": "Табличка «Не включать!»",
+    "en": "\"Do not switch on!\" sign"
+   }
+  },
+  {
+   "id": "7f3c7f93-b3e0-0a25-c8b0-5b971367fb3d",
+   "key": "tool_voltage_tester",
+   "category": "tool",
+   "unit": "pcs",
+   "default_price": 60000,
+   "currency": "UZS",
+   "sort_order": 26,
+   "t": {
+    "uz": "Kuchlanish indikatori / ikki qutbli tester",
+    "ru": "Указатель напряжения / двухполюсный тестер",
+    "en": "Voltage indicator / two-pole tester"
+   }
+  },
+  {
+   "id": "580ca0bd-08b0-eaa8-23a7-484fa21323d3",
+   "key": "tool_multimeter",
+   "category": "tool",
+   "unit": "pcs",
+   "default_price": 120000,
+   "currency": "UZS",
+   "sort_order": 27,
+   "t": {
+    "uz": "Multimetr (CAT III 600 V)",
+    "ru": "Мультиметр (CAT III 600 В)",
+    "en": "Multimeter (CAT III 600 V)"
+   }
+  },
+  {
+   "id": "9e1b0b21-c298-5ad3-051c-077c92b46110",
+   "key": "tool_screwdriver_set",
+   "category": "tool",
+   "unit": "pcs",
+   "default_price": 90000,
+   "currency": "UZS",
+   "sort_order": 28,
+   "t": {
+    "uz": "Izolyatsiyalangan otvyortkalar to'plami (1000 V)",
+    "ru": "Набор изолированных отвёрток (1000 В)",
+    "en": "Insulated screwdriver set (1000 V)"
+   }
+  },
+  {
+   "id": "b3cd4220-dffc-b23c-bf80-07421dd8b23c",
+   "key": "tool_pliers",
+   "category": "tool",
+   "unit": "pcs",
+   "default_price": 70000,
+   "currency": "UZS",
+   "sort_order": 29,
+   "t": {
+    "uz": "Izolyatsiyalangan passatij va kusachki",
+    "ru": "Изолированные пассатижи и бокорезы",
+    "en": "Insulated pliers and side cutters"
+   }
+  },
+  {
+   "id": "60c43074-d220-5840-8125-73643a73fb15",
+   "key": "tool_wire_stripper",
+   "category": "tool",
+   "unit": "pcs",
+   "default_price": 60000,
+   "currency": "UZS",
+   "sort_order": 30,
+   "t": {
+    "uz": "Izolyatsiya tozalagich (stripper)",
+    "ru": "Стриппер для снятия изоляции",
+    "en": "Wire stripper"
+   }
+  },
+  {
+   "id": "216201e3-7c6f-c132-67f0-09423b82b087",
+   "key": "tool_drill",
+   "category": "tool",
+   "unit": "pcs",
+   "default_price": 0,
+   "currency": "UZS",
+   "sort_order": 31,
+   "t": {
+    "uz": "Perforator/drel (ijaraga olish mumkin)",
+    "ru": "Перфоратор/дрель (можно арендовать)",
+    "en": "Hammer drill (can be rented)"
+   }
+  },
+  {
+   "id": "8c47992b-3afc-b9d7-42ce-df39a060ad8d",
+   "key": "tool_crown_68",
+   "category": "tool",
+   "unit": "pcs",
+   "default_price": 80000,
+   "currency": "UZS",
+   "sort_order": 32,
+   "t": {
+    "uz": "Podrozetnik uchun toj 68 mm",
+    "ru": "Коронка 68 мм под подрозетник",
+    "en": "68 mm hole saw for wall boxes"
+   }
+  },
+  {
+   "id": "aa678f51-3aea-ca4f-c326-2867468bdf93",
+   "key": "tool_wall_chaser",
+   "category": "tool",
+   "unit": "pcs",
+   "default_price": 0,
+   "currency": "UZS",
+   "sort_order": 33,
+   "t": {
+    "uz": "Shtroborez (ijaraga olish mumkin)",
+    "ru": "Штроборез (можно арендовать)",
+    "en": "Wall chaser (can be rented)"
+   }
+  },
+  {
+   "id": "f7330ce4-33dd-3b3a-977c-cfdea38148d8",
+   "key": "tool_cable_detector",
+   "category": "tool",
+   "unit": "pcs",
+   "default_price": 90000,
+   "currency": "UZS",
+   "sort_order": 34,
+   "t": {
+    "uz": "Yashirin sim detektori",
+    "ru": "Детектор скрытой проводки",
+    "en": "Hidden wire detector"
+   }
+  },
+  {
+   "id": "8a7417fd-70f9-5474-4049-32561c7f2ebb",
+   "key": "tool_pencil_level",
+   "category": "tool",
+   "unit": "pcs",
+   "default_price": 40000,
+   "currency": "UZS",
+   "sort_order": 35,
+   "t": {
+    "uz": "Daraja (uroven) va qalam",
+    "ru": "Уровень и карандаш",
+    "en": "Spirit level and pencil"
+   }
+  },
+  {
+   "id": "959d639d-a041-9dc1-7f0c-a5fc792b9f88",
+   "key": "ppe_kit",
+   "category": "tool",
+   "unit": "pcs",
+   "default_price": 50000,
+   "currency": "UZS",
+   "sort_order": 36,
+   "t": {
+    "uz": "Ko'zoynak, respirator, quloqchin",
+    "ru": "Очки, респиратор, наушники",
+    "en": "Goggles, dust mask, ear protection"
+   }
+  }
+ ],
+ "regions": [
+  {
+   "code": "tashkent_city",
+   "t": {
+    "uz": "Toshkent shahri",
+    "ru": "г. Ташкент",
+    "en": "Tashkent city"
+   }
+  },
+  {
+   "code": "tashkent",
+   "t": {
+    "uz": "Toshkent viloyati",
+    "ru": "Ташкентская обл.",
+    "en": "Tashkent region"
+   }
+  },
+  {
+   "code": "andijan",
+   "t": {
+    "uz": "Andijon",
+    "ru": "Андижан",
+    "en": "Andijan"
+   }
+  },
+  {
+   "code": "bukhara",
+   "t": {
+    "uz": "Buxoro",
+    "ru": "Бухара",
+    "en": "Bukhara"
+   }
+  },
+  {
+   "code": "fergana",
+   "t": {
+    "uz": "Farg'ona",
+    "ru": "Фергана",
+    "en": "Fergana"
+   }
+  },
+  {
+   "code": "jizzakh",
+   "t": {
+    "uz": "Jizzax",
+    "ru": "Джизак",
+    "en": "Jizzakh"
+   }
+  },
+  {
+   "code": "kashkadarya",
+   "t": {
+    "uz": "Qashqadaryo",
+    "ru": "Кашкадарья",
+    "en": "Kashkadarya"
+   }
+  },
+  {
+   "code": "khorezm",
+   "t": {
+    "uz": "Xorazm",
+    "ru": "Хорезм",
+    "en": "Khorezm"
+   }
+  },
+  {
+   "code": "namangan",
+   "t": {
+    "uz": "Namangan",
+    "ru": "Наманган",
+    "en": "Namangan"
+   }
+  },
+  {
+   "code": "navoi",
+   "t": {
+    "uz": "Navoiy",
+    "ru": "Навои",
+    "en": "Navoi"
+   }
+  },
+  {
+   "code": "samarkand",
+   "t": {
+    "uz": "Samarqand",
+    "ru": "Самарканд",
+    "en": "Samarkand"
+   }
+  },
+  {
+   "code": "surkhandarya",
+   "t": {
+    "uz": "Surxondaryo",
+    "ru": "Сурхандарья",
+    "en": "Surkhandarya"
+   }
+  },
+  {
+   "code": "syrdarya",
+   "t": {
+    "uz": "Sirdaryo",
+    "ru": "Сырдарья",
+    "en": "Syrdarya"
+   }
+  },
+  {
+   "code": "karakalpakstan",
+   "t": {
+    "uz": "Qoraqalpog'iston",
+    "ru": "Каракалпакстан",
+    "en": "Karakalpakstan"
+   }
+  }
+ ]
+}

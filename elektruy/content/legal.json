@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "texts": [
+    {
+      "kind": "disclaimer_short",
+      "version": 1,
+      "t": {
+        "uz": "Faqat ta'limiy maslahat. Mahalliy elektr normalari va litsenziyali elektrik ko'rigi ustuvor. Ishingiz uchun o'zingiz javobgarsiz.",
+        "ru": "Только образовательные рекомендации. Местные электротехнические нормы и проверка лицензированным электриком имеют приоритет. Вы несёте ответственность за свою работу.",
+        "en": "Educational guidance only. Local electrical norms and a licensed electrician's inspection take priority. You are responsible for your work."
+      }
+    },
+    {
+      "kind": "disclaimer",
+      "version": 1,
+      "t": {
+        "uz": "XAVFSIZLIK VA JAVOBGARLIKDAN VOZ KECHISH\n\n1. ElektrUy — ta'limiy ilova. U litsenziyali elektrik ishi, loyihasi yoki tekshiruvi o'rnini bosmaydi.\n\n2. Hisob-kitoblar (kabel kesimi, avtomat, uzunlik, materiallar) taxminiy tavsiyalardir. Ularni mahalliy normalar (ShNK/KMK, PUE) bilan tekshiring.\n\n3. Hech qachon kuchlanish ostida ishlamang. Har bir ishdan oldin avtomatni o'chiring, kuchlanish yo'qligini tester bilan tekshiring, \"Yoqmang\" belgisini osing va izolyatsiyalangan asboblardan foydalaning.\n\n4. Shchit ichidagi ishlar, yerga ulash tizimi, 3 fazali tarmoq, ho'l zonalar, alyuminiy simlar va 3,5 kW dan kuchli qurilmalar — faqat litsenziyali elektrik uchun.\n\n5. Sun'iy intellekt (AI) natijalari taxminiy va xato bo'lishi mumkin. AI tekshiruvi rasmiy ekspertiza emas.\n\n6. Ishni bajarganingizdan so'ng elektrikka ko'rsating. Ishingiz va uning oqibatlari uchun o'zingiz javobgarsiz.\n\nDavom etish orqali siz ushbu shartlarni o'qiganingiz va qabul qilganingizni tasdiqlaysiz.",
+        "ru": "БЕЗОПАСНОСТЬ И ОТКАЗ ОТ ОТВЕТСТВЕННОСТИ\n\n1. ElektrUy — образовательное приложение. Оно не заменяет работу, проект или проверку лицензированного электрика.\n\n2. Расчёты (сечение кабеля, автомат, длины, материалы) — приблизительные рекомендации. Сверяйте их с местными нормами (ШНК/КМК, ПУЭ).\n\n3. Никогда не работайте под напряжением. Перед каждой работой отключайте автомат, проверяйте отсутствие напряжения тестером, вешайте табличку «Не включать» и используйте изолированный инструмент.\n\n4. Работы в щите, система заземления, трёхфазная сеть, влажные зоны, алюминиевая проводка и приборы мощнее 3,5 кВт — только для лицензированного электрика.\n\n5. Результаты искусственного интеллекта (ИИ) приблизительны и могут быть ошибочными. Проверка ИИ — не официальная экспертиза.\n\n6. После выполнения работы покажите её электрику. Вы несёте ответственность за свою работу и её последствия.\n\nПродолжая, вы подтверждаете, что прочитали и принимаете эти условия.",
+        "en": "SAFETY AND DISCLAIMER\n\n1. ElektrUy is an educational app. It does not replace the work, design or inspection of a licensed electrician.\n\n2. Calculations (cable size, breaker, lengths, materials) are approximate recommendations. Verify them against local norms (ShNK/KMK, PUE).\n\n3. Never work on live circuits. Before every job switch off the breaker, verify absence of voltage with a tester, hang a \"Do not switch on\" sign and use insulated tools.\n\n4. Distribution board work, earthing systems, three-phase supply, wet zones, aluminium wiring and appliances above 3.5 kW are for a licensed electrician only.\n\n5. Artificial intelligence (AI) results are approximate and can be wrong. An AI check is not a certified inspection.\n\n6. Have an electrician inspect your finished work. You are responsible for your work and its consequences.\n\nBy continuing you confirm you have read and accept these terms."
+      }
+    },
+    {
+      "kind": "privacy",
+      "version": 1,
+      "t": {
+        "uz": "MAXFIYLIK SIYOSATI\n\n• Biz Google hisobingizdan ism, email va rasmni kirish uchun olamiz.\n• Xona rasmlari va ish rasmlari shaxsiy saqlanadi; ularni faqat siz ko'rasiz. Administrator faqat xato haqida xabar berilgan AI natijalarini ko'rib chiqishi mumkin.\n• AI tahlili uchun rasm Anthropic Claude API ga yuboriladi va javob olingach saqlanmaydi.\n• Sozlamalar → \"Hisobni o'chirish\" orqali barcha ma'lumotlaringiz va rasmlaringizni o'chirishingiz mumkin.\n• Ma'lumotlar uchinchi shaxslarga sotilmaydi.",
+        "ru": "ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ\n\n• Для входа мы получаем из Google-аккаунта имя, email и фото.\n• Фото комнат и работ хранятся приватно; их видите только вы. Администратор может просматривать результаты ИИ-проверок, отмеченные как ошибочные.\n• Для анализа ИИ фото отправляется в Anthropic Claude API и не сохраняется там после ответа.\n• В Настройки → «Удалить аккаунт» можно удалить все ваши данные и фото.\n• Данные не продаются третьим лицам.",
+        "en": "PRIVACY POLICY\n\n• To sign in we receive your name, email and photo from your Google account.\n• Room and work photos are stored privately; only you can see them. Admins may review AI check results that were flagged as wrong.\n• For AI analysis a photo is sent to the Anthropic Claude API and is not retained there after the response.\n• Settings → \"Delete account\" removes all your data and photos.\n• Your data is never sold to third parties."
+      }
+    }
+  ]
+}
