@@ -1,0 +1,14 @@
+{
+  "name": "elektruy-viewer3d",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Three.js room viewer bundled into a single offline HTML file for the app",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "three": "^0.186.1"
+  }
+}
