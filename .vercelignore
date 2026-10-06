@@ -2,3 +2,5 @@
 /taklifnoma-bot
 # ElektrUy manba kodi (ilova, admin, Supabase) — saytga joylanmaydi; sahifasi /elektr-uy/ da
 /elektruy
+# Milliy o'yinlar manba kodi (Next.js) — saytga joylanmaydi; tayyor statik natija /oyinlar/ da
+/oyinlar-src

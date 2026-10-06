@@ -1,0 +1,115 @@
+.wrap {
+  max-width: 680px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.intro {
+  padding: 22px 18px;
+  align-items: center;
+  text-align: center;
+  font-weight: 600;
+}
+.big {
+  font-size: 2.6rem;
+}
+.hud {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.hud b {
+  color: var(--ink);
+}
+.table {
+  padding: 12px;
+  border-radius: 26px;
+  background:
+    radial-gradient(circle at 50% 50%, transparent 60%, rgba(0, 0, 0, 0.08)),
+    repeating-linear-gradient(45deg, #c8323c 0 10px, #b02a33 10px 20px);
+  border: 4px solid var(--gold);
+  box-shadow: var(--shadow);
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), 1fr);
+  gap: 8px;
+}
+@media (max-width: 420px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+  .table {
+    padding: 8px;
+  }
+}
+.card {
+  aspect-ratio: 3 / 4;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  perspective: 600px;
+  border-radius: 14px;
+}
+.inner {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.4s;
+  transform-style: preserve-3d;
+}
+.flipped .inner {
+  transform: rotateY(180deg);
+}
+.back,
+.front {
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.back {
+  background-color: #1d2a5c;
+  background-image: var(--ikat);
+  background-size: 40px 27px;
+  border: 3px solid #fbf3e4;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2);
+}
+.front {
+  transform: rotateY(180deg);
+  background: #fffaf1;
+  color: #1b1440;
+  border: 3px solid var(--gold);
+  gap: 2px;
+}
+.emoji {
+  font-size: clamp(1.5rem, 7vw, 2.2rem);
+  line-height: 1;
+  display: grid;
+  place-items: center;
+}
+.front small {
+  font-size: clamp(0.58rem, 2.4vw, 0.75rem);
+  font-weight: 800;
+  text-align: center;
+  line-height: 1.1;
+  padding: 0 2px;
+}
+.matched .front {
+  border-color: var(--ok);
+  background: #e8f7ec;
+  animation: pop 0.4s ease-out;
+}
+.card:disabled {
+  cursor: default;
+}

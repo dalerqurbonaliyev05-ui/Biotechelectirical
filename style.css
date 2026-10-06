@@ -371,6 +371,26 @@ ul, ol { list-style: none; }
     .lang-btn { padding: 7px 7px; }
 }
 
+/* Bosh sahifa menyusi 11 ta havolaga yetganda (O‘yinlar qo‘shilgach) til tugmalari pilldan chiqib
+   ketmasligi uchun — faqat shunday ko'p havolali menyuga ta'sir qiladi (boshqa sahifalar o'zgarmaydi). */
+@media (width > 900px) {
+    .nav-pill:has(> .nav-menu > a:nth-child(11)) { width: min(1280px, calc(100% - 28px)); padding-left: 14px; gap: 8px; }
+    .nav-pill:has(> .nav-menu > a:nth-child(11)) .nav-menu { gap: 0; }
+    .nav-pill:has(> .nav-menu > a:nth-child(11)) .nav-menu a { padding: 8px 7px; font-size: .8rem; }
+    .nav-pill:has(> .nav-menu > a:nth-child(11)) .lang-btn { padding: 7px 7px; }
+}
+@media (900px < width <= 1280px) {
+    .nav-pill:has(> .nav-menu > a:nth-child(11)) .nav-logo span { display: none; }
+}
+@media (900px < width <= 1100px) {
+    .nav-pill:has(> .nav-menu > a:nth-child(11)) .nav-menu a { padding: 7px 4px; font-size: .72rem; }
+}
+@media (900px < width <= 960px) {
+    .nav-pill:has(> .nav-menu > a:nth-child(11)) { padding-left: 10px; gap: 4px; }
+    .nav-pill:has(> .nav-menu > a:nth-child(11)) .nav-menu a { padding: 7px 3px; font-size: .69rem; }
+    .nav-pill:has(> .nav-menu > a:nth-child(11)) .lang-btn { padding: 6px 5px; }
+}
+
 @media (max-width: 900px) {
     .hamburger { display: flex; }
     .nav-menu {

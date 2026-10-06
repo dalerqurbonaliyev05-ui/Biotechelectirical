@@ -1,0 +1,144 @@
+.wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.choose {
+  padding: 22px 18px;
+  text-align: center;
+  align-items: center;
+  font-weight: 600;
+}
+.trees {
+  font-size: 2.6rem;
+}
+.board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 16px;
+  border-radius: 24px;
+  color: #fff;
+  text-align: center;
+  transition: background 0.15s;
+  border: 3px solid rgba(255, 255, 255, 0.4);
+}
+.board strong {
+  font: 800 clamp(1.6rem, 8vw, 2.6rem) var(--display);
+  line-height: 1.1;
+}
+.board small {
+  font-weight: 800;
+  font-size: 1rem;
+  opacity: 0.9;
+}
+.tree {
+  font-size: 2.4rem;
+  animation: pop 0.3s ease-out;
+}
+.go {
+  background: linear-gradient(135deg, #2e9d5b, #1aa6a6);
+}
+.stop {
+  background: linear-gradient(135deg, #1d2a5c, #2f5fd0);
+}
+.lanes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.lane {
+  position: relative;
+  height: 56px;
+  border-radius: 16px;
+  background: repeating-linear-gradient(90deg, var(--chip) 0 22px, transparent 22px 44px), var(--card);
+  border: 2px solid var(--turq);
+  overflow: hidden;
+}
+.lane2 {
+  border-color: var(--red);
+}
+.finish {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 14px;
+  background: repeating-conic-gradient(#1b1440 0 25%, #fff 0 50%) 0 0 / 14px 14px;
+}
+.runner {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  font-size: 2rem;
+  transform: translate(-10%, -50%) scaleX(-1);
+  margin-left: 4px;
+}
+.lane .runner {
+  max-width: calc(100% - 40px);
+}
+.moving {
+  animation: bob 0.3s infinite alternate;
+}
+.caughtR {
+  filter: grayscale(1);
+  animation: shake 0.3s 2;
+}
+@keyframes bob {
+  to {
+    transform: translate(-10%, -62%) scaleX(-1);
+  }
+}
+.pads {
+  display: grid;
+  gap: 10px;
+}
+.duo {
+  grid-template-columns: 1fr 1fr;
+}
+.pad {
+  min-height: 130px;
+  border-radius: 24px;
+  border: 3px solid var(--turq);
+  background: color-mix(in srgb, var(--turq) 12%, var(--card));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  transition: transform 0.1s, background 0.15s;
+}
+.pad b {
+  font: 800 1.1rem var(--display);
+}
+.pad small {
+  font-weight: 700;
+  color: var(--ink-2);
+}
+.pad2 {
+  border-color: var(--red);
+  background: color-mix(in srgb, var(--red) 12%, var(--card));
+}
+.pressed {
+  transform: scale(0.97);
+  background: var(--turq);
+  color: #fff;
+}
+.pressed small {
+  color: #fff;
+}
+.pad2.pressed {
+  background: var(--red);
+}
+.pad:disabled {
+  opacity: 0.6;
+  cursor: default;
+}

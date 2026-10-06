@@ -1,0 +1,126 @@
+.intro,
+.quiz {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+@media (min-width: 640px) {
+  .intro,
+  .quiz {
+    padding: 26px 28px;
+  }
+}
+.intro {
+  align-items: center;
+  text-align: center;
+}
+.summary strong {
+  display: block;
+  font: 800 3rem var(--display);
+  background: var(--atlas);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.summary span {
+  font-weight: 700;
+  color: var(--ink-2);
+}
+.top {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+.bar {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--chip);
+  overflow: hidden;
+}
+.bar i {
+  display: block;
+  height: 100%;
+  background: var(--atlas);
+  transition: width 0.4s;
+}
+.badge {
+  font-size: 2.6rem;
+  text-align: center;
+}
+.q {
+  font: 700 clamp(1.05rem, 4.2vw, 1.35rem) / 1.4 var(--display);
+  outline: none;
+}
+.options {
+  display: grid;
+  gap: 10px;
+}
+@media (min-width: 640px) {
+  .options {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.opt {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 54px;
+  padding: 10px 14px;
+  border-radius: 16px;
+  border: 2px solid var(--line);
+  background: var(--card);
+  text-align: left;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.1s, background 0.2s;
+}
+.opt:hover:not(:disabled) {
+  border-color: var(--turq);
+  transform: translateY(-2px);
+}
+.opt:disabled {
+  cursor: default;
+}
+.num {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  background: var(--chip);
+  font: 700 0.8rem var(--mono);
+}
+.right {
+  border-color: var(--ok);
+  background: color-mix(in srgb, var(--ok) 16%, var(--card));
+  animation: pop 0.35s ease-out;
+}
+.wrongOpt {
+  border-color: var(--red);
+  background: color-mix(in srgb, var(--red) 14%, var(--card));
+  animation: shake 0.3s;
+}
+.dim {
+  opacity: 0.55;
+}
+.feedback {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  font-weight: 600;
+}
+.fbOk {
+  background: color-mix(in srgb, var(--ok) 14%, transparent);
+  border-left: 4px solid var(--ok);
+}
+.fbBad {
+  background: color-mix(in srgb, var(--red) 12%, transparent);
+  border-left: 4px solid var(--red);
+}

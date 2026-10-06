@@ -1,0 +1,134 @@
+.wrap {
+  max-width: 680px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px 16px;
+}
+@media (min-width: 640px) {
+  .wrap {
+    padding: 26px 28px;
+  }
+}
+.intro {
+  align-items: center;
+  text-align: center;
+  font-weight: 600;
+}
+.big {
+  font-size: 3rem;
+}
+.top {
+  display: flex;
+  justify-content: space-between;
+}
+.top b {
+  color: var(--ink);
+}
+.langNote {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink-2);
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: var(--chip);
+}
+.riddle {
+  font: 700 clamp(1.1rem, 4.5vw, 1.45rem) / 1.45 var(--display);
+  padding: 18px;
+  border-radius: 20px;
+  background:
+    linear-gradient(var(--card), var(--card)) padding-box,
+    var(--atlas) border-box;
+  border: 3px solid transparent;
+  text-align: center;
+  animation: pop 0.35s ease-out;
+}
+.riddle span {
+  color: var(--gold);
+}
+.options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.opt {
+  min-height: 54px;
+  padding: 10px;
+  border-radius: 16px;
+  border: 2px solid var(--line);
+  background: var(--card);
+  font-weight: 800;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.1s, border-color 0.15s;
+}
+.opt:hover:not(:disabled) {
+  border-color: var(--turq);
+  transform: translateY(-2px);
+}
+.right {
+  border-color: var(--ok);
+  background: color-mix(in srgb, var(--ok) 18%, var(--card));
+  animation: pop 0.35s;
+}
+.wrong {
+  border-color: var(--red);
+  background: color-mix(in srgb, var(--red) 14%, var(--card));
+  animation: shake 0.3s;
+}
+.typeRow {
+  display: flex;
+  gap: 8px;
+}
+.typeRow input {
+  flex: 1;
+  min-width: 0;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 2px solid var(--line);
+  background: var(--card);
+  font-weight: 700;
+  font-size: 1rem;
+}
+.typeRow input:focus {
+  outline: none;
+  border-color: var(--turq);
+}
+.hint {
+  font-weight: 700;
+  color: var(--ink-2);
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--gold) 18%, transparent);
+}
+.feedback {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  font-weight: 700;
+}
+.feedback span {
+  font: 800 1.1rem var(--display);
+}
+.feedback button {
+  margin-left: auto;
+}
+.fbOk {
+  background: color-mix(in srgb, var(--ok) 15%, transparent);
+  border-left: 4px solid var(--ok);
+}
+.fbBad {
+  background: color-mix(in srgb, var(--red) 12%, transparent);
+  border-left: 4px solid var(--red);
+}
+.small {
+  font-size: 0.8rem;
+  color: var(--ink-2);
+  font-weight: 600;
+  text-align: center;
+}
