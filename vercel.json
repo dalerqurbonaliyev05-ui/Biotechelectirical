@@ -81,9 +81,30 @@
       "permanent": true
     },
     {
+      "source": "/elektr-uy/admin",
+      "destination": "/elektr-uy/admin/",
+      "permanent": true
+    },
+    {
+      "source": "/elektruy/admin",
+      "destination": "/elektr-uy/admin/",
+      "permanent": true
+    },
+    {
+      "source": "/elektruy/admin/:path*",
+      "destination": "/elektr-uy/admin/",
+      "permanent": false
+    },
+    {
       "source": "/elektruy/:path*",
       "destination": "/elektr-uy/",
       "permanent": false
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/elektr-uy/admin/:path*",
+      "destination": "/elektr-uy/admin/index.html"
     }
   ],
   "headers": [
@@ -427,6 +448,23 @@
         {
           "key": "Cache-Control",
           "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/elektr-uy/admin/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
         }
       ]
     }
