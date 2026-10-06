@@ -39,3 +39,37 @@ jobs:
       - run: npm run lint
       - run: npm run typecheck
       - run: npm run build
+
+  publish-site:
+    # energyvibe.uz is a static Vercel site without a build step, so the built panel
+    # is committed to elektr-uy/admin/ (served at https://www.energyvibe.uz/elektr-uy/admin/).
+    name: Publish to energyvibe.uz/elektr-uy/admin
+    needs: check
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: elektruy/admin/package-lock.json
+      - name: Build for /elektr-uy/admin/
+        working-directory: elektruy/admin
+        env:
+          ADMIN_BASE: /elektr-uy/admin/
+        run: |
+          npm ci
+          npx vite build --outDir ../../elektr-uy/admin --emptyOutDir
+      - name: Commit if changed
+        run: |
+          git add -A elektr-uy/admin
+          if git diff --cached --quiet; then echo "No changes"; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898699+github-actions[bot]@users.noreply.github.com"
+          git commit -m "ElektrUy admin build for energyvibe.uz [skip actions]"
+          for i in 1 2 3; do git pull --rebase origin main && git push origin HEAD:main && exit 0; sleep 5; done
+          exit 1

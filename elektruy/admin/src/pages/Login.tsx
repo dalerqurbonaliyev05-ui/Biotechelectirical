@@ -11,7 +11,8 @@ export function Login() {
   const { session, isAdmin } = useAuth()
   const [email, setEmail] = useState('')
   const [sent, setSent] = useState(false)
-  const redirectTo = window.location.origin
+  // Back to the panel itself (root on Vercel, /elektr-uy/admin/ on energyvibe.uz).
+  const redirectTo = window.location.origin + import.meta.env.BASE_URL
 
   async function google() {
     const { error } = await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo } })
@@ -30,7 +31,7 @@ export function Login() {
     <div className="flex min-h-full items-center justify-center bg-muted/40 p-4">
       <Card className="w-full max-w-sm">
         <CardHeader className="items-center text-center">
-          <img src="/favicon.svg" alt="" className="mb-2 size-14" />
+          <img src={`${import.meta.env.BASE_URL}favicon.svg`} alt="" className="mb-2 size-14" />
           <CardTitle className="text-xl">ElektrUy Admin</CardTitle>
           <CardDescription>Only accounts listed as admins can use this panel.</CardDescription>
         </CardHeader>
