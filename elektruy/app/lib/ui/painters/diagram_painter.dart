@@ -70,7 +70,7 @@ class DiagramPainter extends CustomPainter {
           final tp = TextPainter(
             text: TextSpan(
               text: p.text,
-              style: TextStyle(color: _c(p.color), fontSize: p.size, fontWeight: p.bold ? FontWeight.w700 : FontWeight.w400),
+              style: TextStyle(fontFamily: kPainterFont, color: _c(p.color), fontSize: p.size, fontWeight: p.bold ? FontWeight.w700 : FontWeight.w400),
             ),
             textDirection: TextDirection.ltr,
           )..layout();

@@ -93,9 +93,9 @@ class _LessonCard extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(lesson.summary(lang), maxLines: 2, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.bodySmall),
                 const SizedBox(height: 6),
-                Wrap(spacing: 10, children: [
-                  Text('⏱ ${l.lessonMinutes(lesson.minutes)}', style: Theme.of(context).textTheme.labelMedium),
-                  Text('● $difficulty', style: Theme.of(context).textTheme.labelMedium),
+                Wrap(spacing: 12, crossAxisAlignment: WrapCrossAlignment.center, children: [
+                  _Meta(icon: Icons.schedule, text: l.lessonMinutes(lesson.minutes)),
+                  _Meta(icon: Icons.signal_cellular_alt, text: difficulty),
                   if (completed) Text(l.lessonCompleted, style: const TextStyle(color: RiskColors.ok, fontWeight: FontWeight.w600)),
                 ]),
                 if (started) ...[
@@ -109,4 +109,18 @@ class _LessonCard extends StatelessWidget {
       ),
     );
   }
+}
+
+class _Meta extends StatelessWidget {
+  const _Meta({required this.icon, required this.text});
+
+  final IconData icon;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) => Row(mainAxisSize: MainAxisSize.min, children: [
+        Icon(icon, size: 14, color: Theme.of(context).colorScheme.onSurfaceVariant),
+        const SizedBox(width: 3),
+        Text(text, style: Theme.of(context).textTheme.labelMedium),
+      ]);
 }

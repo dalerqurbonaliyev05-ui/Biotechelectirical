@@ -111,6 +111,22 @@ flutter build apk --release --dart-define=GOOGLE_WEB_CLIENT_ID=...
 - **Content changes:** edit `content/*.json` and run `node scripts/build-content.mjs`. This regenerates the app assets and the seed migration; CI fails if they are stale.
 - **Translations:** edit `app/l10n_src/strings.mjs`, then run `node l10n_src/build.mjs && flutter gen-l10n`. Every key must exist in uz, ru and en.
 
+### Public download page (energyvibe.uz/elektr-uy/)
+
+The website section lives in the repository root: `elektr-uy/` (landing page with the download button and install guide) and `elektr-uy/yoriqnoma/` (usage guide). The source folder `elektruy/` itself is excluded from the static site via `.vercelignore`.
+
+- **Release APKs** come from `.github/workflows/elektruy-release.yml`. On every push to `main` that changes the app, it:
+  - builds a signed release APK (arm and arm64),
+  - publishes it as the GitHub Release `elektruy-v1.0.N` (asset `elektruy.apk`),
+  - commits `elektr-uy/apk-info.js`, which the page reads for the link, version, size and SHA-256.
+
+  Pull requests only build it, without publishing.
+- **Signing key:** it must never change, or users cannot install updates over the old app.
+  - Store it as the repository secrets `ELEKTRUY_RELEASE_KEYSTORE_B64` and `ELEKTRUY_RELEASE_KEYSTORE_PASSWORD`.
+  - Without them, the first run on `main` generates a key and keeps it in the Actions cache. A weekly scheduled run touches the cache so it is not evicted.
+  - The run summary shows the SHA-1 to register on the Android OAuth client.
+- **Screenshots** on the page are rendered from the real app. Run `flutter test tool/screenshots/screens_test.dart --update-goldens` in `app/`, then convert `tool/screenshots/out/*.png` to WebP into `elektr-uy/img/`.
+
 ### 4. Admin panel
 
 ```bash

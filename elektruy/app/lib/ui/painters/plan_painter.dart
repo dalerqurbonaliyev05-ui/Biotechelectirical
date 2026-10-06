@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 
 import '../../core/calc/calc.dart';
 
+/// Canvas text has no inherited theme, so name the family explicitly (the system font on Android).
+const kPainterFont = 'Roboto';
+
 Color hexColor(String? hex, Color fallback) {
   if (hex == null) return fallback;
   final h = hex.replaceAll('#', '');
@@ -67,7 +70,7 @@ class PlanPainter extends CustomPainter {
     // Wall labels outside the walls.
     void label(String text, Offset at) {
       final tp = TextPainter(
-        text: TextSpan(text: text, style: TextStyle(color: const Color(0xFF1565C0), fontWeight: FontWeight.w800, fontSize: 16)),
+        text: TextSpan(text: text, style: TextStyle(fontFamily: kPainterFont, color: const Color(0xFF1565C0), fontWeight: FontWeight.w800, fontSize: 16)),
         textDirection: TextDirection.ltr,
       )..layout();
       tp.paint(canvas, at - Offset(tp.width / 2, tp.height / 2));
@@ -114,7 +117,7 @@ class PlanPainter extends CustomPainter {
         DeviceType.switchSingle => 'S',
       };
       final tp = TextPainter(
-        text: TextSpan(text: glyph, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 10)),
+        text: TextSpan(text: glyph, style: const TextStyle(fontFamily: kPainterFont, color: Colors.white, fontWeight: FontWeight.bold, fontSize: 10)),
         textDirection: TextDirection.ltr,
       )..layout();
       tp.paint(canvas, p - Offset(tp.width / 2, tp.height / 2));
@@ -124,7 +127,7 @@ class PlanPainter extends CustomPainter {
     final dim = TextPainter(
       text: TextSpan(
         text: '${room.length.toStringAsFixed(2)} × ${room.width.toStringAsFixed(2)} m',
-        style: TextStyle(color: ink, fontSize: 12),
+        style: TextStyle(fontFamily: kPainterFont, color: ink, fontSize: 12),
       ),
       textDirection: TextDirection.ltr,
     )..layout();
@@ -170,7 +173,7 @@ class ElevationPainter extends CustomPainter {
         ..color = ink.withValues(alpha: 0.3)
         ..strokeWidth = 1);
       final tp = TextPainter(
-        text: TextSpan(text: w.label, style: const TextStyle(color: Color(0xFF1565C0), fontWeight: FontWeight.w800, fontSize: 15)),
+        text: TextSpan(text: w.label, style: const TextStyle(fontFamily: kPainterFont, color: Color(0xFF1565C0), fontWeight: FontWeight.w800, fontSize: 15)),
         textDirection: TextDirection.ltr,
       )..layout();
       tp.paint(canvas, Offset(rect.center.dx - tp.width / 2, 0));

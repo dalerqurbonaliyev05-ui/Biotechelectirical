@@ -1,0 +1,188 @@
+# ElektrUy: signed release APK for the website (energyvibe.uz/elektr-uy/).
+#
+# On every push to main that changes the app, this workflow:
+#   1. builds a release APK (arm + arm64) signed with the ElektrUy release key,
+#   2. publishes it as a GitHub Release "elektruy-v1.0.N" (asset elektruy.apk),
+#   3. writes elektr-uy/apk-info.js on main, which the download page reads.
+# Pull requests only build (no publishing) so signing / R8 problems show up early.
+#
+# Signing key (must never change, otherwise users cannot update over the old app):
+#   - preferred: repository secrets ELEKTRUY_RELEASE_KEYSTORE_B64 + ELEKTRUY_RELEASE_KEYSTORE_PASSWORD
+#   - otherwise: a key generated on the first run and kept in the Actions cache
+#     (a weekly scheduled run touches the cache so it is not evicted).
+# Optional repository variable: ELEKTRUY_GOOGLE_WEB_CLIENT_ID (Google sign-in).
+name: ElektrUy release APK
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'elektruy/app/**'
+      - 'elektruy/content/**'
+      - '.github/workflows/elektruy-release.yml'
+  pull_request:
+    paths:
+      - 'elektruy/app/android/**'
+      - 'elektruy/app/pubspec.yaml'
+      - '.github/workflows/elektruy-release.yml'
+  schedule:
+    - cron: '23 4 * * 1'
+  workflow_dispatch:
+
+concurrency:
+  group: elektruy-release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  FLUTTER_VERSION: '3.47.6'
+  KS_DIR: /home/runner/elektruy-ks
+  KS_CACHE_KEY: elektruy-release-keystore-v1
+
+jobs:
+  release:
+    if: github.event_name != 'schedule'
+    name: Build${{ github.ref == 'refs/heads/main' && ' and publish' || '' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: write
+    env:
+      PUBLISH: ${{ github.ref == 'refs/heads/main' && github.event_name != 'pull_request' }}
+      VERSION: 1.0.${{ github.run_number }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Restore signing key
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ env.KS_DIR }}
+          key: ${{ env.KS_CACHE_KEY }}
+
+      - name: Signing key
+        id: ks
+        env:
+          KS_B64: ${{ secrets.ELEKTRUY_RELEASE_KEYSTORE_B64 }}
+          KS_PASS_SECRET: ${{ secrets.ELEKTRUY_RELEASE_KEYSTORE_PASSWORD }}
+        run: |
+          mkdir -p "$KS_DIR"
+          if [ -n "$KS_B64" ] && [ -n "$KS_PASS_SECRET" ]; then
+            echo "$KS_B64" | base64 -d > "$KS_DIR/release.jks"
+            printf '%s' "$KS_PASS_SECRET" > "$KS_DIR/pass"
+            SRC=secret
+          elif [ -f "$KS_DIR/release.jks" ] && [ -f "$KS_DIR/pass" ]; then
+            SRC=cache
+          else
+            openssl rand -hex 24 | tr -d '\n' > "$KS_DIR/pass"
+            P=$(cat "$KS_DIR/pass")
+            keytool -genkeypair -keystore "$KS_DIR/release.jks" -alias elektruy -keyalg RSA -keysize 2048 \
+              -validity 10000 -storepass "$P" -keypass "$P" \
+              -dname "CN=ElektrUy, OU=EnergyVibe, O=EnergyVibe, L=Tashkent, C=UZ"
+            SRC=new
+          fi
+          echo "source=$SRC" >> "$GITHUB_OUTPUT"
+          P=$(cat "$KS_DIR/pass")
+          echo "::add-mask::$P"
+          ALIAS=$(keytool -list -keystore "$KS_DIR/release.jks" -storepass "$P" | awk -F, '/PrivateKeyEntry/ {print $1; exit}')
+          printf 'storeFile=%s\nstorePassword=%s\nkeyAlias=%s\nkeyPassword=%s\n' "$KS_DIR/release.jks" "$P" "$ALIAS" "$P" \
+            > elektruy/app/android/key.properties
+          {
+            echo "### ElektrUy release signing"
+            echo "Key source: \`$SRC\`"
+            echo ""
+            echo "Register this SHA-1 on the Android OAuth client (package \`uz.elektruy.app\`):"
+            echo '```'
+            keytool -list -v -keystore "$KS_DIR/release.jks" -storepass "$P" | grep -E 'SHA1:|SHA256:'
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Keep the new key (main only)
+        if: steps.ks.outputs.source == 'new' && env.PUBLISH == 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ env.KS_DIR }}
+          key: ${{ env.KS_CACHE_KEY }}
+
+      - name: Build release APK
+        working-directory: elektruy/app
+        env:
+          GOOGLE_WEB_CLIENT_ID: ${{ vars.ELEKTRUY_GOOGLE_WEB_CLIENT_ID }}
+        run: |
+          defines=()
+          [ -n "$GOOGLE_WEB_CLIENT_ID" ] && defines+=(--dart-define=GOOGLE_WEB_CLIENT_ID="$GOOGLE_WEB_CLIENT_ID")
+          flutter pub get
+          flutter build apk --release --target-platform android-arm,android-arm64 \
+            --build-name "$VERSION" --build-number "${{ github.run_number }}" "${defines[@]}"
+          cp build/app/outputs/flutter-apk/app-release.apk "$RUNNER_TEMP/elektruy.apk"
+          ls -l "$RUNNER_TEMP/elektruy.apk"
+          BT=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -n 1)
+          "$BT/apksigner" verify --print-certs "$RUNNER_TEMP/elektruy.apk" | head -n 3
+
+      - name: Upload build (pull requests)
+        if: env.PUBLISH != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: elektruy-release-apk-unpublished
+          path: ${{ runner.temp }}/elektruy.apk
+          retention-days: 7
+
+      - name: Publish GitHub Release
+        if: env.PUBLISH == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="elektruy-v$VERSION"
+          gh release create "$TAG" "$RUNNER_TEMP/elektruy.apk" \
+            --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --latest=false \
+            --title "ElektrUy $VERSION" \
+            --notes "ElektrUy Android ilovasi, versiya $VERSION. O‘rnatish yo‘riqnomasi: https://energyvibe.uz/elektr-uy/#install"
+
+      - name: Update download page (apk-info.js on main)
+        if: env.PUBLISH == 'true'
+        run: |
+          TAG="elektruy-v$VERSION"
+          BYTES=$(stat -c %s "$RUNNER_TEMP/elektruy.apk")
+          SHA=$(sha256sum "$RUNNER_TEMP/elektruy.apk" | cut -d' ' -f1)
+          DATE=$(TZ=Asia/Tashkent date +%d.%m.%Y)
+          printf '%s\n' \
+            "/* GitHub Actions (.github/workflows/elektruy-release.yml) har safar release APK chiqarilganda shu faylni yangilaydi. */" \
+            "window.ELEKTRUY_APK = {" \
+            "    VERSION: '$VERSION'," \
+            "    FILE: 'https://github.com/$GITHUB_REPOSITORY/releases/download/$TAG/elektruy.apk'," \
+            "    BYTES: $BYTES," \
+            "    SHA256: '$SHA'," \
+            "    DATE: '$DATE'" \
+            "};" > elektr-uy/apk-info.js
+          cat elektr-uy/apk-info.js
+          git checkout -- elektruy/app 2>/dev/null || true
+          git config user.name "github-actions[bot]"
+          git config user.email "41898699+github-actions[bot]@users.noreply.github.com"
+          git add elektr-uy/apk-info.js
+          git commit -m "ElektrUy APK $VERSION [skip actions]"
+          for i in 1 2 3; do git pull --rebase origin main && git push origin HEAD:main && exit 0; sleep 5; done
+          exit 1
+
+  keep-key:
+    # Actions cache entries unused for 7 days are evicted; touching it weekly keeps the signing key.
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/cache/restore@v4
+        with:
+          path: ${{ env.KS_DIR }}
+          key: ${{ env.KS_CACHE_KEY }}
