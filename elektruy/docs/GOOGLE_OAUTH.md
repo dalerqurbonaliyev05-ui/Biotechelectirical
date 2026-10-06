@@ -53,6 +53,8 @@ The project is shared with other apps, so keep their existing entries.
 
 ## 5. Build the app with the web client ID
 
+The project's web client ID (`750388048949-4ki7eeq6j59nbhn6dqliij86g9g1jnmo.apps.googleusercontent.com`, shared with the other apps in this Supabase project) is compiled in as the default in `lib/core/env.dart`. Override it only for another Google Cloud project:
+
 ```bash
 flutter run --dart-define=GOOGLE_WEB_CLIENT_ID=1234-abc.apps.googleusercontent.com
 ```
