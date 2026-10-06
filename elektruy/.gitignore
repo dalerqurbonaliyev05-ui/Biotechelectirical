@@ -29,3 +29,6 @@ supabase/.temp/
 supabase/.branches/
 
 .DS_Store
+
+# rendered screenshots (regenerate with tool/screenshots/screens_test.dart)
+app/tool/screenshots/out/

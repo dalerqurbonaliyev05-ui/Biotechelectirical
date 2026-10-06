@@ -64,6 +64,26 @@
       "source": "/fizika/yoriqnoma",
       "destination": "/fizika/yoriqnoma/",
       "permanent": true
+    },
+    {
+      "source": "/elektr-uy",
+      "destination": "/elektr-uy/",
+      "permanent": true
+    },
+    {
+      "source": "/elektr-uy/yoriqnoma",
+      "destination": "/elektr-uy/yoriqnoma/",
+      "permanent": true
+    },
+    {
+      "source": "/elektruy",
+      "destination": "/elektr-uy/",
+      "permanent": true
+    },
+    {
+      "source": "/elektruy/:path*",
+      "destination": "/elektr-uy/",
+      "permanent": false
     }
   ],
   "headers": [

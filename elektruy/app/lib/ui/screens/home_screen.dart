@@ -53,7 +53,7 @@ class HomeScreen extends ConsumerWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 mainAxisSpacing: 12,
                 crossAxisSpacing: 12,
-                childAspectRatio: 1.45,
+                childAspectRatio: 1.3,
                 children: [
                   for (final (icon, label, path, color) in actions)
                     Card(
@@ -64,7 +64,7 @@ class HomeScreen extends ConsumerWidget {
                           padding: const EdgeInsets.all(14),
                           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                             CircleAvatar(backgroundColor: color.withValues(alpha: 0.12), child: Icon(icon, color: color)),
-                            Text(label, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15), maxLines: 2),
+                            Text(label, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15), maxLines: 2, overflow: TextOverflow.ellipsis),
                           ]),
                         ),
                       ),
