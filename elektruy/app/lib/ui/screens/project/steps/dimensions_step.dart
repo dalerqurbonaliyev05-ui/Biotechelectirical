@@ -136,7 +136,8 @@ class _DimensionsStepState extends ConsumerState<DimensionsStep> {
     final unit = _cm ? l.unitCm : l.unitM;
     final content = ref.watch(contentProvider).value;
     final aiEnabled = content?.feature('ai_estimate') ?? true;
-    final arEnabled = (content?.feature('ar_measure') ?? true) && _ar == ArAvailability.supported;
+    final arEnabled = (content?.feature('ar_measure') ?? true) &&
+        (_ar == ArAvailability.supported || _ar == ArAvailability.notInstalled); // the AR screen offers the ARCore install
 
     Widget field(_Dim d, String label) {
       final (lo, hi) = _range[d]!;
@@ -177,7 +178,7 @@ class _DimensionsStepState extends ConsumerState<DimensionsStep> {
       const SizedBox(height: 8),
       if (arEnabled)
         OutlinedButton.icon(onPressed: _pickArTarget, icon: const Icon(Icons.view_in_ar), label: Text(l.dimAr))
-      else if (_ar == ArAvailability.unsupported || _ar == ArAvailability.notInstalled)
+      else if (_ar == ArAvailability.unsupported)
         Text(l.arUnsupported, style: Theme.of(context).textTheme.bodySmall),
       if (_estimate != null) ...[
         const SizedBox(height: 16),
