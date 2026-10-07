@@ -1,5 +1,5 @@
 // login.html sahifasi mantig'i (alohida fayl: CSP inline skriptga ruxsat bermaydi).
-import { sb, SUPABASE_KEY, ROLE_HOME, loginToEmail, loadProfile, callFn, passwordProblem, setNewPassword, signOutAndGo } from "../app.js";
+import { sb, ROLE_HOME, loginToEmail, loadProfile, callFn, passwordProblem, setNewPassword, signOutAndGo, setRemember } from "../app.js";
 
 const $ = (id) => document.getElementById(id);
 const msg = $("msg");
@@ -57,6 +57,7 @@ $("loginForm").addEventListener("submit", async (e) => {
   const login = $("login").value.trim(), password = $("password").value;
   if (!login || !password) return say("Login va parolni kiriting");
   busy($("loginBtn"), true, "Kirish");
+  setRemember($("remember").checked); // sessiya qayerda saqlanishini kirishdan OLDIN belgilaymiz
   try { await afterSignIn(await signIn(login, password)); }
   catch (err) { say(err.message); }
   busy($("loginBtn"), false, "Kirish");
@@ -71,6 +72,7 @@ $("activateForm").addEventListener("submit", async (e) => {
   const prob = passwordProblem(p1, p2);
   if (prob) return say(prob);
   busy($("activateBtn"), true, "Faollashtirish va kirish");
+  setRemember($("aRemember").checked);
   try {
     await callFn("activate-student", { hemis_id: hemis, code, password: p1 }, { auth: false });
     await afterSignIn(await signIn(hemis, p1));
