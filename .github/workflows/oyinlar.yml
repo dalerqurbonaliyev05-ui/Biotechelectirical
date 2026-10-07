@@ -1,0 +1,41 @@
+# Milliy o'yinlar (oyinlar-src): lint, typecheck va production build tekshiruvi.
+# Sayt statik: tayyor natija `npm run deploy` bilan oyinlar/ ga yoziladi va commit qilinadi.
+name: Milliy o'yinlar
+
+on:
+  push:
+    branches: [main, 'claude/**']
+    paths:
+      - 'oyinlar-src/**'
+      - '.github/workflows/oyinlar.yml'
+  pull_request:
+    paths:
+      - 'oyinlar-src/**'
+      - '.github/workflows/oyinlar.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: oyinlar-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Lint, typecheck, build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: oyinlar-src
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: oyinlar-src/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run build

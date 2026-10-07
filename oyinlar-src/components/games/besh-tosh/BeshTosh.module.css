@@ -1,0 +1,189 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+.hud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.hud b {
+  color: var(--ink);
+}
+.area {
+  position: relative;
+  height: clamp(300px, 58vh, 440px);
+  border-radius: 24px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #bfe7ee 0%, #f6e7c8 70%);
+  border: 2px solid var(--navy);
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: pointer;
+}
+@media (prefers-color-scheme: dark) {
+  .area {
+    background: linear-gradient(180deg, #23325e 0%, #3a3550 70%);
+  }
+}
+.cloth {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 30%;
+  background-image: var(--ikat);
+  background-size: 60px 40px;
+  border-top: 4px solid var(--red);
+  opacity: 0.9;
+}
+.stone {
+  position: absolute;
+  bottom: 13%;
+  width: 34px;
+  height: 28px;
+  margin-left: -17px;
+  border-radius: 48% 52% 45% 55% / 55% 50% 50% 45%;
+  background: radial-gradient(circle at 32% 30%, #f2efe8, #a59f94 55%, #6c665d);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.18);
+  transform: rotate(var(--r, 0deg));
+  transition: left 0.35s ease-in, bottom 0.35s ease-in, opacity 0.35s, transform 0.35s;
+}
+.taken {
+  left: 50% !important;
+  bottom: 6%;
+  opacity: 0;
+  transform: scale(0.6);
+}
+.flyer {
+  left: 50%;
+  margin-left: 0;
+  bottom: 9%;
+  width: 38px;
+  height: 32px;
+  background: radial-gradient(circle at 32% 30%, #fff6e0, #d9a441 55%, #8a5a12);
+  z-index: 2;
+  transform: translate(-50%, 0);
+  transition: none;
+}
+.air {
+  box-shadow: 0 18px 18px rgba(0, 0, 0, 0.12);
+}
+.hand {
+  position: absolute;
+  left: 50%;
+  bottom: 2%;
+  transform: translateX(-50%);
+  font-size: 2.2rem;
+  z-index: 1;
+}
+.clapping {
+  animation: pop 0.3s ease-out;
+}
+.timeline {
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  right: 14px;
+  height: 14px;
+  border-radius: 999px;
+  background: rgba(29, 42, 92, 0.18);
+}
+.zonePick,
+.zoneCatch {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: 999px;
+}
+.zonePick {
+  background: rgba(46, 157, 91, 0.75);
+}
+.zoneCatch {
+  background: rgba(224, 165, 38, 0.95);
+}
+.marker {
+  position: absolute;
+  top: -5px;
+  width: 6px;
+  height: 24px;
+  margin-left: -3px;
+  border-radius: 4px;
+  background: var(--red);
+  left: 0;
+}
+.groups {
+  position: absolute;
+  top: 36px;
+  left: 14px;
+  display: flex;
+  gap: 6px;
+}
+.groups span {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.7);
+  font-weight: 800;
+  font-size: 0.85rem;
+  color: #1d2a5c;
+}
+.groups .cur {
+  background: var(--gold);
+  transform: scale(1.12);
+}
+.groups .done {
+  background: var(--ok);
+  color: #fff;
+}
+.msg {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 8px 16px;
+  border-radius: 14px;
+  font-weight: 800;
+  text-align: center;
+  max-width: 88%;
+  animation: pop 0.35s ease-out;
+  pointer-events: none;
+}
+.ok {
+  background: var(--ok);
+  color: #fff;
+}
+.bad {
+  background: var(--red);
+  color: #fff;
+  animation: pop 0.35s ease-out, shake 0.3s 0.35s;
+}
+.info {
+  background: rgba(29, 42, 92, 0.85);
+  color: #fff;
+}
+.intro {
+  position: absolute;
+  inset: 70px 16px auto;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(255, 250, 241, 0.92);
+  color: #1b1440;
+  font-weight: 700;
+  text-align: center;
+}
+.action {
+  width: 100%;
+}
+.keys {
+  text-align: center;
+  color: var(--ink-2);
+  font-size: 0.82rem;
+  font-weight: 600;
+}

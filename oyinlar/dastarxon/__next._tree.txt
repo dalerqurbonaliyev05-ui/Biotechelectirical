@@ -1,0 +1,6 @@
+:HL["/oyinlar/_next/static/chunks/225v7hglajt5q.css","style"]
+:HL["/oyinlar/_next/static/chunks/1uhio9x-dfn77.css","style"]
+:HL["https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600;700&display=swap","style"]
+2:[["children",{"s":"__PAGE__","h":160}]]
+1:[["children",{"s":"dastarxon","h":96,"c":"$Q2"}]]
+0:{"b":"f3m8odHBRFg6_rCKzkHIJ","t":{"t":{"s":"","h":80,"c":"$Q1"}}}

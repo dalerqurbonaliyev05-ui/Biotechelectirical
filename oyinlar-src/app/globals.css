@@ -1,0 +1,337 @@
+/* =========================================================
+   Milliy o'yinlar — dizayn tokenlari.
+   Asosiy sayt (EnergyVibe) shriftlari va "pill" navigatsiyasi saqlangan,
+   ranglar esa milliy: firuza, to'q ko'k, oltin, anor qizil, krem.
+   ========================================================= */
+:root {
+  --ink: #1b1440;
+  --ink-2: #57507a;
+  --paper: #fbf3e4;
+  --card: #fffaf1;
+  --line: #eadfca;
+  --turq: #1aa6a6;
+  --turq-d: #0f7c7c;
+  --navy: #1d2a5c;
+  --gold: #e0a526;
+  --red: #c8323c;
+  --violet: #6d4aff;
+  --pink: #ff5c8a;
+  --amber: #ffb020;
+  --ok: #2e9d5b;
+  --sunset: linear-gradient(120deg, #6d4aff 0%, #ff5c8a 55%, #ffb020 100%);
+  --atlas: linear-gradient(120deg, #1aa6a6 0%, #1d2a5c 45%, #c8323c 78%, #e0a526 100%);
+  --shadow: 0 12px 30px rgba(29, 42, 92, 0.12);
+  --shadow-lg: 0 26px 60px rgba(29, 42, 92, 0.2);
+  --radius: 22px;
+  --display: "Unbounded", "Rubik", system-ui, sans-serif;
+  --font: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --nav-bg: rgba(255, 255, 255, 0.8);
+  --chip: #f3e9d6;
+  /* Ikat (abr) naqshi: yumshoq qirrali rombchalar */
+  --ikat: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='80' viewBox='0 0 120 80'%3E%3Cdefs%3E%3Cfilter id='b'%3E%3CfeGaussianBlur stdDeviation='1.4'/%3E%3C/filter%3E%3C/defs%3E%3Cg filter='url(%23b)'%3E%3Cpath d='M30 4 52 40 30 76 8 40Z' fill='%231aa6a6' opacity='.55'/%3E%3Cpath d='M30 18 43 40 30 62 17 40Z' fill='%23fbf3e4'/%3E%3Cpath d='M30 28 37 40 30 52 23 40Z' fill='%23c8323c' opacity='.8'/%3E%3Cpath d='M90 4 112 40 90 76 68 40Z' fill='%23e0a526' opacity='.55'/%3E%3Cpath d='M90 18 103 40 90 62 77 40Z' fill='%23fbf3e4'/%3E%3Cpath d='M90 28 97 40 90 52 83 40Z' fill='%231d2a5c' opacity='.75'/%3E%3C/g%3E%3C/svg%3E");
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink: #f4ecdc;
+    --ink-2: #c4b9a5;
+    --paper: #121527;
+    --card: #1b2038;
+    --line: #2c3354;
+    --navy: #9fb2ff;
+    --chip: #262c4a;
+    --nav-bg: rgba(27, 32, 56, 0.86);
+    --shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+    --shadow-lg: 0 26px 60px rgba(0, 0, 0, 0.5);
+    color-scheme: dark;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+a {
+  color: inherit;
+}
+ul,
+ol {
+  list-style: none;
+}
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+img,
+svg {
+  max-width: 100%;
+}
+
+:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+.container {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+@media (min-width: 640px) {
+  .container {
+    padding: 0 24px;
+  }
+}
+
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: 8px;
+  z-index: 3000;
+  background: var(--navy);
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+.skip-link:focus {
+  left: 8px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Tugmalar ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 46px;
+  padding: 12px 22px;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  font: 800 0.95rem var(--font);
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: transform 0.15s, box-shadow 0.2s, background 0.2s, color 0.2s, border-color 0.2s;
+}
+.btn:active {
+  transform: scale(0.96);
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+.btn-primary {
+  background: linear-gradient(120deg, var(--turq) 0%, #1d6fa3 100%);
+  color: #fff;
+  box-shadow: 0 10px 24px rgba(26, 166, 166, 0.35);
+}
+.btn-primary:hover:not(:disabled) {
+  box-shadow: 0 14px 30px rgba(26, 166, 166, 0.45);
+  transform: translateY(-2px);
+}
+.btn-gold {
+  background: linear-gradient(120deg, var(--gold), #f0c75e);
+  color: #2a1c00;
+  box-shadow: 0 10px 24px rgba(224, 165, 38, 0.35);
+}
+.btn-red {
+  background: linear-gradient(120deg, var(--red), #e35d5d);
+  color: #fff;
+  box-shadow: 0 10px 24px rgba(200, 50, 60, 0.3);
+}
+.btn-ghost {
+  background: var(--card);
+  border-color: var(--line);
+  color: var(--ink);
+}
+.btn-ghost:hover:not(:disabled) {
+  border-color: var(--turq);
+}
+.btn-sm {
+  min-height: 38px;
+  padding: 7px 14px;
+  font-size: 0.85rem;
+}
+.btn-big {
+  min-height: 64px;
+  padding: 16px 30px;
+  font-size: 1.1rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--chip);
+  font: 700 0.8rem var(--font);
+  color: var(--ink-2);
+}
+
+.seg {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 16px;
+  background: var(--chip);
+}
+.seg button {
+  border: 0;
+  background: transparent;
+  padding: 8px 14px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.88rem;
+  cursor: pointer;
+  color: var(--ink-2);
+  min-height: 38px;
+}
+.seg button[aria-pressed="true"] {
+  background: var(--navy);
+  color: #fff;
+}
+@media (prefers-color-scheme: dark) {
+  .seg button[aria-pressed="true"] {
+    background: var(--turq);
+    color: #08101f;
+  }
+}
+
+.panel {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.ikat-band {
+  height: 14px;
+  background-image: var(--ikat);
+  background-size: 60px 40px;
+  opacity: 0.9;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+.center {
+  text-align: center;
+  justify-content: center;
+}
+
+.prose p + p {
+  margin-top: 0.8em;
+}
+.prose h3 {
+  font: 700 1.05rem var(--display);
+  margin: 1.2em 0 0.5em;
+}
+.prose ul {
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+.prose ul li {
+  position: relative;
+  padding-left: 22px;
+}
+.prose ul li::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 0.62em;
+  width: 9px;
+  height: 9px;
+  background: var(--turq);
+  transform: rotate(45deg);
+  border-radius: 2px;
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.06);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-6px);
+  }
+  75% {
+    transform: translateX(6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -99,6 +99,21 @@
       "source": "/elektruy/:path*",
       "destination": "/elektr-uy/",
       "permanent": false
+    },
+    {
+      "source": "/oyinlar",
+      "destination": "/oyinlar/",
+      "permanent": true
+    },
+    {
+      "source": "/oyinlar/:slug([a-z-]+)",
+      "destination": "/oyinlar/:slug/",
+      "permanent": true
+    },
+    {
+      "source": "/oyinlar-src/:path*",
+      "destination": "/oyinlar/",
+      "permanent": false
     }
   ],
   "rewrites": [
@@ -465,6 +480,15 @@
         {
           "key": "Referrer-Policy",
           "value": "strict-origin-when-cross-origin"
+        }
+      ]
+    },
+    {
+      "source": "/oyinlar/_next/static/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
         }
       ]
     }
