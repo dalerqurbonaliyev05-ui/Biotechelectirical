@@ -1,0 +1,14 @@
+{
+  "name": "amaliyot-portal-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Amaliyot portali serveri: kirish, rollar, ma'lumotlar shlyuzi, fayllar. Faqat bitta tashqi bog'liqlik: pg.",
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "start": "node src/index.js",
+    "migrate": "node src/migrate-cli.js",
+    "test": "node --test --test-concurrency=1 test/*.test.js"
+  },
+  "dependencies": { "pg": "8.13.1" }
+}
