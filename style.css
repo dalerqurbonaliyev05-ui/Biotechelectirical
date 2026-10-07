@@ -236,6 +236,18 @@ ul, ol { list-style: none; }
 .t4 { grid-column: span 2; background: #ffb3c8; }
 .t5 { grid-column: span 2; background: #a8f0d6; }
 .t6 { grid-column: span 2; background: #cfc4ff; }
+.t7 { grid-column: span 4; color: #fff; background: linear-gradient(120deg, #1b1840 0%, #2c2470 60%, #4a2f9a 100%); }
+.t7 .tile-body { max-width: 46%; }
+.mini-board { position: absolute; right: 28px; top: 18px; bottom: 18px; width: min(46%, 440px); height: calc(100% - 36px); }
+.mb-rail { fill: #b9bec8; }
+.mb-dev rect:first-child { fill: #e9ecf1; stroke: #0f1233; stroke-width: 2; }
+.mb-meter rect:first-child { fill: #d6dae3; }
+.mb-lv { fill: #15161a; }
+.mb-lcd { fill: #a8b49a; }
+.mb-led { fill: #ff4a3a; animation: mbblink 1.2s steps(1) infinite; }
+.mb-wire { fill: none; stroke: #ffb020; stroke-width: 3.2; stroke-linecap: round; stroke-dasharray: 5 7; animation: flow 1.1s linear infinite; }
+@keyframes mbblink { 50% { opacity: .15; } }
+@media (prefers-reduced-motion: reduce) { .mb-led, .mb-wire { animation: none; } }
 .tile-no { position: absolute; right: 20px; top: 12px; font: 800 2.3rem var(--display); color: transparent; -webkit-text-stroke: 2px currentColor; opacity: .28; }
 .tile-body { position: relative; display: grid; gap: 8px; }
 .tile-tag { justify-self: start; font: 700 .68rem var(--mono); letter-spacing: .1em; text-transform: uppercase; padding: 4px 11px; border-radius: 999px; background: rgba(255, 255, 255, .7); color: var(--ink); border: 1.5px solid var(--ink); }
@@ -343,7 +355,7 @@ ul, ol { list-style: none; }
     .bento { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 200px; }
     .t1 { grid-column: span 2; grid-row: span 2; }
     .t2, .t3 { grid-column: span 1; }
-    .t4, .t5, .t6 { grid-column: span 2; }
+    .t4, .t5, .t6, .t7 { grid-column: span 2; }
     .skills-grid { grid-template-columns: 1fr; }
     .skill-category h3 { min-height: 0; }
     .fb { display: none; }
@@ -415,7 +427,10 @@ ul, ol { list-style: none; }
     .hero-waves { height: 130px; }
     .marquee-track { font-size: .85rem; gap: 20px; }
     .bento { grid-template-columns: 1fr; grid-auto-rows: auto; }
-    .t1, .t2, .t3, .t4, .t5, .t6 { grid-column: span 1; grid-row: span 1; min-height: 200px; }
+    .t1, .t2, .t3, .t4, .t5, .t6, .t7 { grid-column: span 1; grid-row: span 1; min-height: 200px; }
+    .t7 { min-height: 350px; }
+    .t7 .tile-body { max-width: none; }
+    .mini-board { left: 20px; right: 20px; width: auto; top: 14px; bottom: auto; height: 120px; }
     .t1 { min-height: 340px; }
     .form-group { grid-template-columns: 1fr; }
     .contact-form { padding: 24px 20px; }
