@@ -119,6 +119,11 @@
       "source": "/shit-montaji",
       "destination": "/shit-montaji/",
       "permanent": true
+    },
+    {
+      "source": "/avtomat-yigish",
+      "destination": "/avtomat-yigish/",
+      "permanent": true
     }
   ],
   "rewrites": [
