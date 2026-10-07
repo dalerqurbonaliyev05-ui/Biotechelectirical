@@ -125,7 +125,10 @@ export async function createApp(config, { db: injectedDb } = {}) {
     const segs = rel.split("/");
     if (!full.startsWith(base + path.sep) || segs.some((s) => s.startsWith(".")) || rel.includes("\0")) throw new HttpError(404, "Topilmadi");
     let stat;
-    try { stat = fs.statSync(full); } catch { throw new HttpError(404, "Topilmadi"); }
+    try { stat = fs.statSync(full); } catch {
+      if (rel === "/favicon.ico") { res.writeHead(204, secHeaders()); return res.end(); } // brauzer so'raydi, xato ko'rsatmaymiz
+      throw new HttpError(404, "Topilmadi");
+    }
     if (!stat.isFile()) throw new HttpError(404, "Topilmadi");
     const ext = path.extname(full).toLowerCase();
     if (!MIME[ext]) throw new HttpError(404, "Topilmadi");

@@ -1,0 +1,12 @@
+{
+  "name": "amaliyot-e2e-tests",
+  "private": true,
+  "type": "module",
+  "description": "Brauzer sinovlari: haqiqiy Chromium + haqiqiy server va PostgreSQL. Ishga tushirish: npm install && npm test (TEST_DATABASE_ADMIN_URL kerak)",
+  "scripts": {
+    "test": "node --test --test-concurrency=1 import.test.mjs e2e.test.mjs"
+  },
+  "devDependencies": {
+    "playwright-core": "1.56.1"
+  }
+}

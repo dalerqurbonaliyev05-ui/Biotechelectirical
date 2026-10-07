@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Amaliyot portali | Kirish</title>
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<div class="auth-wrap">
+  <div class="card auth-card">
+    <div class="auth-logo"><div class="ico">⚡</div><h2 style="margin:6px 0 0">Amaliyot portali</h2><div class="muted small" id="subtitle">Tizimga kirish</div></div>
+    <div id="msg" class="alert hidden" role="alert"></div>
+
+    <!-- Kirish va faollashtirish -->
+    <div id="mainView">
+      <div class="tabs" role="tablist">
+        <button id="tabLogin" class="active" role="tab">Kirish</button>
+        <button id="tabActivate" role="tab">Talaba: faollashtirish</button>
+      </div>
+
+      <form id="loginForm" autocomplete="on">
+        <label class="field"><span>Login (talaba uchun HEMIS ID)</span>
+          <input type="text" id="login" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="Masalan: 312211100543" required></label>
+        <label class="field"><span>Parol</span>
+          <div class="pw"><input type="password" id="password" name="password" autocomplete="current-password" required><button type="button" class="eye" data-for="password" aria-label="Parolni ko'rsatish">👁</button></div></label>
+        <label class="row small" style="gap:8px;margin:0 0 14px;align-items:flex-start"><input type="checkbox" id="remember" style="margin-top:3px"><span>Meni eslab qol <span class="muted">(faqat o'zingizning kompyuteringizda; umumiy kompyuterda belgilamang)</span></span></label>
+        <button class="btn block" id="loginBtn" type="submit">Kirish</button>
+        <p class="muted small center mt">Birinchi marta kirayotgan talabasizmi? «Talaba: faollashtirish» bo'limiga o'ting.</p>
+      </form>
+
+      <form id="activateForm" class="hidden" autocomplete="off">
+        <p class="muted small">Faollashtirish kodini amaliyot rahbaridan oling. Kod bir marta ishlatiladi. Faqat HEMIS bazasida bor talabalar kira oladi.</p>
+        <label class="field"><span>HEMIS ID</span><input type="text" id="aHemis" inputmode="numeric" autocomplete="off" placeholder="312211100543" required></label>
+        <label class="field"><span>Faollashtirish kodi</span><input type="text" id="aCode" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="XXXX-XXXX" required></label>
+        <label class="field"><span>O'zingiz uchun parol o'ylab toping (kamida 8 belgi)</span>
+          <div class="pw"><input type="password" id="aPass" autocomplete="new-password" required><button type="button" class="eye" data-for="aPass" aria-label="Parolni ko'rsatish">👁</button></div></label>
+        <label class="field"><span>Parolni takrorlang</span><input type="password" id="aPass2" autocomplete="new-password" required></label>
+        <label class="row small" style="gap:8px;margin:0 0 14px;align-items:flex-start"><input type="checkbox" id="aRemember" style="margin-top:3px"><span>Meni eslab qol <span class="muted">(faqat o'zingizning kompyuteringizda)</span></span></label>
+        <button class="btn block" id="activateBtn" type="submit">Faollashtirish va kirish</button>
+      </form>
+    </div>
+
+    <!-- Majburiy parol almashtirish (vaqtinchalik parol bilan kirganda) -->
+    <form id="changeForm" class="hidden" autocomplete="off">
+      <div class="alert info">Siz vaqtinchalik parol bilan kirdingiz. Davom etish uchun o'zingizning yangi parolingizni o'rnating.</div>
+      <label class="field"><span>Vaqtinchalik (hozirgi) parol</span><input type="password" id="cOld" autocomplete="current-password" required></label>
+      <label class="field"><span>Yangi parol (kamida 8 belgi)</span>
+        <div class="pw"><input type="password" id="cPass" autocomplete="new-password" required><button type="button" class="eye" data-for="cPass" aria-label="Parolni ko'rsatish">👁</button></div></label>
+      <label class="field"><span>Yangi parolni takrorlang</span><input type="password" id="cPass2" autocomplete="new-password" required></label>
+      <button class="btn block" id="changeBtn" type="submit">Parolni saqlash</button>
+      <button class="btn secondary block mt" id="changeOut" type="button">Chiqish</button>
+    </form>
+  </div>
+</div>
+
+<script type="module" src="js/pages/login.js"></script>
+
+</body>
+</html>
