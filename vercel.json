@@ -114,6 +114,11 @@
       "source": "/oyinlar-src/:path*",
       "destination": "/oyinlar/",
       "permanent": false
+    },
+    {
+      "source": "/shit-montaji",
+      "destination": "/shit-montaji/",
+      "permanent": true
     }
   ],
   "rewrites": [

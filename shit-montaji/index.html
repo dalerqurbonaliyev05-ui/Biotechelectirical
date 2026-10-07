@@ -1,0 +1,1626 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Elektr shit montaji | EnergyVibe</title>
+<meta name="description" content="Uy elektr shitini 3D da o‘zingiz yig‘ing: kirish avtomati, УЗО, Меркурий hisoblagich, guruh avtomatlari. Qisqa tutashuv va sizish toki simulyatsiyasi bilan.">
+<link rel="icon" type="image/png" href="/rasmlar1/rasm5/rasm4.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans+Condensed:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: sticky status bar over a two-column workspace. Left: a real-scale 3D switchboard (WebGL) with orbit, zoom and a fullscreen mode. Right: progress, controls, checklist. Stacks on phones. */
+:root{
+  --bg:#E4E9ED; --surface:#F3F6F8; --ink:#15222D; --ink-2:#51626F; --line:#C5CED6;
+  --accent:#E39B00; --accent-ink:#1B1400;
+  --wire-l:#D8352A; --wire-n:#1F6FD1; --wire-pe:#2E9E4F;
+  --ok:#1B7F46; --bad:#C62828;
+  --f-ui:'IBM Plex Sans Condensed','Arial Narrow',system-ui,sans-serif;
+  --f-mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F161D; --surface:#17212A; --ink:#E7EDF2; --ink-2:#9AABB9; --line:#2B3944;
+    --accent:#F2B21B; --accent-ink:#1B1400;
+    --wire-l:#F0584B; --wire-n:#4C97F0; --wire-pe:#3DBE6A;
+    --ok:#4CC585; --bad:#FF6B6B;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F161D; --surface:#17212A; --ink:#E7EDF2; --ink-2:#9AABB9; --line:#2B3944;
+  --accent:#F2B21B; --accent-ink:#1B1400;
+  --wire-l:#F0584B; --wire-n:#4C97F0; --wire-pe:#3DBE6A;
+  --ok:#4CC585; --bad:#FF6B6B;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-ui);font-size:15px;line-height:1.4;padding-inline:16px;padding-block:22px 48px}
+.wrap{max-width:1100px;margin-inline:auto;display:flex;flex-direction:column;gap:14px}
+.head{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between}
+h1{margin:0;font-weight:700;font-size:clamp(26px,5vw,38px);letter-spacing:.03em;text-transform:uppercase;line-height:1.05;text-wrap:balance}
+.sub{margin:6px 0 0;color:var(--ink-2);max-width:52ch}
+.seg{display:inline-flex;border:1.5px solid var(--ink);border-radius:3px;overflow:hidden}
+.seg button{font:inherit;font-weight:600;padding:8px 16px;background:transparent;color:var(--ink);border:0;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--surface);border:1px solid var(--line);border-radius:4px;box-shadow:0 8px 16px -12px rgba(0,0,0,.45)}
+.dot{flex:none;width:10px;height:10px;border-radius:50%;background:var(--ink-2)}
+.dot.ok{background:var(--ok)}
+.dot.bad{background:var(--bad)}
+#status{margin:0;flex:1;min-width:0;font-size:15px;font-weight:500}
+.btn{font:inherit;font-weight:600;font-size:14px;padding:8px 14px;border:1.5px solid var(--ink);border-radius:3px;background:transparent;color:var(--ink);cursor:pointer}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);flex:none}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+
+.main{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:18px;align-items:start}
+.board{margin:0;min-width:0}
+.stage{position:relative;height:clamp(540px,86vh,900px);background:#10161b;border:1px solid var(--line);border-radius:4px;overflow:hidden;touch-action:pan-y}
+.stage canvas{position:absolute;left:0;top:0;width:100%;height:100%;display:block;touch-action:pan-y;outline:none}
+.stage.full{position:fixed;inset:0;z-index:60;height:auto;border:0;border-radius:0}
+.stage.full canvas{touch-action:none}
+#tags{position:absolute;left:0;top:0;right:0;bottom:0;pointer-events:none;overflow:hidden}
+.tag{position:absolute;left:0;top:0;white-space:nowrap;font-size:12px;font-weight:600;line-height:1.2;padding:3px 8px;background:rgba(10,15,19,.8);color:#E7EDF2;border:1px solid rgba(255,255,255,.2);border-radius:3px;will-change:transform}
+.ctrls{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:6px;z-index:3}
+.cbtn{width:38px;height:38px;display:grid;place-items:center;font:inherit;font-weight:700;font-size:18px;line-height:1;color:#E7EDF2;background:rgba(10,15,19,.8);border:1px solid rgba(255,255,255,.28);border-radius:3px;cursor:pointer}
+.cbtn.wide{width:auto;padding-inline:12px;font-size:14px;font-weight:600}
+.cbtn[aria-pressed="false"]{opacity:.6}
+.cbtn:disabled{opacity:.4;cursor:not-allowed}
+.cbtn:focus-visible{outline:2px solid #F2B21B;outline-offset:2px}
+.fsbar{display:none}
+.stage.full .fsbar{display:flex;position:absolute;left:0;right:0;top:0;z-index:4;align-items:center;gap:8px;padding:calc(env(safe-area-inset-top,0px) + 8px) 10px 8px;background:rgba(10,15,19,.92);color:#E7EDF2}
+.fsbar p{margin:0;flex:1;min-width:0;font-size:14px;font-weight:500}
+.fsbar p.ok{color:#7BE3A5}
+.fsbar p.bad{color:#FF8A80}
+.stage.full .ctrls{top:calc(env(safe-area-inset-top,0px) + 74px)}
+.loading{position:absolute;left:0;right:0;top:50%;margin:0;text-align:center;color:#9AABB9;font-size:14px}
+.how{margin:8px 2px 0;font-size:13px;color:var(--ink-2)}
+.panel{min-width:0;display:flex;flex-direction:column;gap:16px}
+.prog .pn{font-family:var(--f-mono);font-weight:500;font-size:30px;line-height:1;font-variant-numeric:tabular-nums}
+.prog .pl{font-size:13px;color:var(--ink-2);margin-top:4px}
+.track{height:6px;background:var(--line);margin-top:8px}
+.track i{display:block;height:100%;width:0;background:var(--ok);transition:width .35s ease}
+.acts{display:flex;flex-wrap:wrap;gap:8px}
+.steps{list-style:none;margin:0;padding:0}
+.steps li{display:grid;grid-template-columns:18px minmax(0,1fr) auto;gap:10px;align-items:start;padding:9px 0;border-top:1px solid var(--line);font-size:14px}
+.steps li:last-child{border-bottom:1px solid var(--line)}
+.mk{width:16px;height:16px;margin-top:1px;border:2px solid var(--ink-2);position:relative}
+.part .mk{background:linear-gradient(to top,var(--accent) 50%,transparent 50%);border-color:var(--accent)}
+.done .mk{background:var(--ok);border-color:var(--ok)}
+.done .mk::after{content:"";position:absolute;left:3px;top:0;width:4px;height:8px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+.done .tx{color:var(--ink-2)}
+.ct{font-family:var(--f-mono);font-size:12px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.exam p{margin:0 0 10px;font-size:14px}
+.report{margin:0;padding-left:18px;font-size:14px;display:flex;flex-direction:column;gap:8px}
+.lg-t{margin:0 0 6px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);font-weight:600}
+.legend{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:14px}
+.legend li{display:flex;align-items:center;gap:10px}
+.sw{flex:none;width:20px;height:20px;border-radius:50%;border:4px solid}
+.sw.l{border-color:var(--wire-l)}
+.sw.n{border-color:var(--wire-n)}
+.sw.pe{border-color:var(--wire-pe)}
+
+.faults{border:1px solid var(--line);background:var(--surface);border-radius:4px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.faults[hidden]{display:none}
+.faults .lg-t{margin:0}
+.sel{font:inherit;font-size:14px;font-weight:500;padding:8px 10px;border:1.5px solid var(--ink);border-radius:3px;background:var(--bg);color:var(--ink);width:100%}
+.fnote{margin:0;font-size:13px;color:var(--ink-2)}
+.snd{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2)}
+@media (max-width:860px){
+  .main{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:520px){
+  body{padding-block:16px 40px}
+  #status{font-size:14px}
+  .btn.pri{padding-inline:10px}
+  .stage{height:clamp(520px,80vh,760px)}
+  .tag{font-size:11px;padding:2px 6px}
+}
+@media (prefers-reduced-motion: reduce){
+  .track i{transition:none}
+}
+.back{display:inline-block;margin-bottom:10px;font-size:13px;font-weight:600;color:var(--ink-2);text-decoration:none;border-bottom:1.5px solid var(--line)}
+.back:hover{color:var(--ink);border-color:var(--ink)}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header class="head">
+    <div>
+      <a class="back" href="/#tools">← EnergyVibe · Vositalar</a>
+      <h1>Elektr shit montaji</h1>
+      <p class="sub">Haqiqiy o'lchamdagi 3D shitda kirish avtomati, УЗО, hisoblagich va guruh avtomatlarini o'zingiz ulang, so'ng kuchlanish bering.</p>
+    </div>
+    <div class="seg" role="group" aria-label="Rejim">
+      <button type="button" id="m-learn" aria-pressed="true">O'rganish</button>
+      <button type="button" id="m-exam" aria-pressed="false">Imtihon</button>
+    </div>
+  </header>
+
+  <div class="bar">
+    <span class="dot" id="dot"></span>
+    <p id="status" role="status" aria-live="polite"></p>
+    <button type="button" class="btn pri" id="power" disabled>Kuchlanish berish</button>
+  </div>
+
+  <div class="main">
+    <section class="board">
+      <div class="stage" id="stage">
+        <canvas id="cv" aria-label="Elektr shitining 3D ko'rinishi"></canvas>
+        <div id="tags"></div>
+        <div class="fsbar">
+          <p id="status2" role="status"></p>
+          <button type="button" class="cbtn wide" id="power2" disabled>Kuchlanish berish</button>
+          <button type="button" class="cbtn wide" id="close">Yopish</button>
+        </div>
+        <div class="ctrls">
+          <button type="button" class="cbtn" id="zin" aria-label="Yaqinlashtirish">+</button>
+          <button type="button" class="cbtn" id="zout" aria-label="Uzoqlashtirish">&minus;</button>
+          <button type="button" class="cbtn" id="zreset" aria-label="Asl ko'rinish"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 0 2.6-5.9M4 4v4.5h4.5"/></svg></button>
+          <button type="button" class="cbtn" id="tg" aria-pressed="true" aria-label="Nomlarni ko'rsatish yoki yashirish">Aa</button>
+          <button type="button" class="cbtn" id="fs" aria-label="To'liq ekran"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+        </div>
+        <p class="loading" id="loading">3D sahna tayyorlanmoqda...</p>
+      </div>
+      <p class="how">Terminal vintini bosib boshqasiga sudrang yoki ikkita vintni ketma-ket bosing. Simni bosib olib tashlang. Bo'sh joydan sudrab aylantiring (telefonda &laquo;To'liq ekran&raquo; ni oching).</p>
+    </section>
+
+    <aside class="panel">
+      <div class="prog" id="prog">
+        <div class="pn"><span id="pdone">0</span> / 12</div>
+        <div class="pl">zanjir to'g'ri ulangan</div>
+        <div class="track"><i id="pfill"></i></div>
+      </div>
+
+      <div class="acts">
+        <button type="button" class="btn" id="undo">Orqaga</button>
+        <button type="button" class="btn" id="clear">Tozalash</button>
+        <button type="button" class="btn" id="hint">Maslahat</button>
+        <button type="button" class="btn" id="check" hidden>Tekshirish</button>
+      </div>
+
+      <ol class="steps" id="steps"></ol>
+
+      <div class="exam" id="exam" hidden>
+        <p>Imtihon rejimi: maslahatsiz ulang, tayyor bo'lgach <b>Tekshirish</b> ni bosing. Ulangan simlar: <b id="wcount">0</b></p>
+        <ul class="report" id="report"></ul>
+      </div>
+
+      <div class="faults" id="faults" hidden>
+        <p class="lg-t">Nosozlik sinovi</p>
+        <select id="fg" class="sel" aria-label="Nosozlik joyi">
+          <option value="0">Kabel №1 · yoritish (AB-1)</option>
+          <option value="1">Kabel №2 · rozetka (AB-2)</option>
+          <option value="2">Kabel №3 · ventilyator (AB-3)</option>
+        </select>
+        <div class="acts">
+          <button type="button" class="btn" id="fshort">Qisqa tutashuv (L–N)</button>
+          <button type="button" class="btn" id="fleak">Sizish toki (L→PE)</button>
+          <button type="button" class="btn" id="ftest">УЗО Test tugmasi</button>
+        </div>
+        <div class="acts">
+          <button type="button" class="btn pri" id="freset">Qayta yoqish</button>
+          <button type="button" class="btn" id="fclear">Nosozlikni olib tashlash</button>
+        </div>
+        <p class="fnote" id="fnote"></p>
+        <label class="snd"><input type="checkbox" id="snd" checked> Ovoz</label>
+      </div>
+
+      <div>
+        <p class="lg-t">Vint halqasining rangi</p>
+        <ul class="legend">
+          <li><i class="sw l"></i>L, faza</li>
+          <li><i class="sw n"></i>N, ishchi nol</li>
+          <li><i class="sw pe"></i>PE, himoya nol</li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const stage=$("stage"),cv=$("cv");
+function setStatus(t,tone){
+  $("status").textContent=t;
+  $("status2").textContent=t;
+  $("status2").className=tone||"";
+  $("dot").className="dot "+(tone||"");
+}
+function fail(m){setStatus(m,"bad");const l=$("loading");if(l)l.hidden=true;}
+
+if(!window.THREE){fail("3D kutubxonasi yuklanmadi. Internetni tekshirib, sahifani qayta oching.");return;}
+let renderer;
+try{
+  renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,powerPreference:"high-performance"});
+}catch(err){
+  fail("Brauzer 3D grafikani (WebGL) ishga tushira olmadi. Chrome yoki Safari da oching.");
+  return;
+}
+try{main();}catch(err){console.error(err);fail("Sahna xatosi: "+(err&&err.message?err.message:err));}
+
+function main(){
+/* =====================================================================
+   RENDERER, CAMERA, LIGHTS
+   ===================================================================== */
+renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+renderer.outputEncoding=THREE.sRGBEncoding;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure=0.95;
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+const MAXA=Math.max(1,Math.min(8,renderer.capabilities.getMaxAnisotropy()));
+const REDUCED=!!(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0x10161b);
+const cam=new THREE.PerspectiveCamera(28,1,20,5000);
+const view={yaw:.14,pitch:.07,zoom:1,tx:0,ty:0,fitD:1500};
+const FOV_T=Math.tan(THREE.MathUtils.degToRad(14));
+const BOUND={w:480,h:720,cy:0};
+let dirty=true;
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+
+function resize(){
+  const w=Math.max(200,stage.clientWidth),h=Math.max(200,stage.clientHeight);
+  renderer.setSize(w,h,false);
+  cam.aspect=w/h;cam.updateProjectionMatrix();
+  const dH=(BOUND.h/2)/FOV_T,dW=(BOUND.w/2)/(FOV_T*cam.aspect);
+  view.fitD=Math.max(dH,dW)+70;
+  dirty=true;
+}
+function updateCam(){
+  const D=view.fitD/view.zoom,cx=view.tx,cy=BOUND.cy+view.ty,cp=Math.cos(view.pitch);
+  cam.position.set(cx+Math.sin(view.yaw)*cp*D,cy+Math.sin(view.pitch)*D,40+Math.cos(view.yaw)*cp*D);
+  cam.lookAt(cx,cy,40);
+}
+function perPx(){return 2*(view.fitD/view.zoom)*FOV_T/Math.max(1,stage.clientHeight);}
+
+try{
+  const es=new THREE.Scene();
+  const gc=document.createElement("canvas");gc.width=4;gc.height=256;
+  const gg=gc.getContext("2d"),gr=gg.createLinearGradient(0,0,0,256);
+  gr.addColorStop(0,"#f2f6fb");gr.addColorStop(.45,"#9aa4ad");gr.addColorStop(.5,"#59616a");gr.addColorStop(1,"#1b2025");
+  gg.fillStyle=gr;gg.fillRect(0,0,4,256);
+  const gt=new THREE.CanvasTexture(gc);gt.encoding=THREE.sRGBEncoding;
+  es.add(new THREE.Mesh(new THREE.SphereGeometry(50,32,16),new THREE.MeshBasicMaterial({map:gt,side:THREE.BackSide})));
+  const bm=new THREE.MeshBasicMaterial({color:new THREE.Color(5,5,5),side:THREE.DoubleSide});
+  const b1=new THREE.Mesh(new THREE.PlaneGeometry(26,14),bm);b1.position.set(-18,20,30);b1.lookAt(0,0,0);es.add(b1);
+  const b2=new THREE.Mesh(new THREE.PlaneGeometry(12,26),bm);b2.position.set(30,5,26);b2.lookAt(0,0,0);es.add(b2);
+  const pm=new THREE.PMREMGenerator(renderer);
+  scene.environment=pm.fromScene(es,0.035).texture;
+  pm.dispose();
+}catch(e){console.warn("environment",e);}
+
+const key=new THREE.DirectionalLight(0xfff3e4,1.35);
+key.position.set(-260,430,720);key.target.position.set(0,20,0);
+key.castShadow=true;key.shadow.mapSize.set(2048,2048);
+const sc=key.shadow.camera;sc.left=-300;sc.right=300;sc.top=390;sc.bottom=-390;sc.near=200;sc.far=1700;
+key.shadow.bias=-0.0004;key.shadow.normalBias=0.6;
+scene.add(key);scene.add(key.target);
+scene.add(new THREE.HemisphereLight(0xdfe9f5,0x30363d,0.32));
+
+/* =====================================================================
+   MATERIALS, TEXTURES, HELPERS
+   ===================================================================== */
+function std(o,phys){
+  if(o.envMapIntensity==null)o.envMapIntensity=.75;
+  return phys?new THREE.MeshPhysicalMaterial(o):new THREE.MeshStandardMaterial(o);
+}
+const MAT={
+  rail:std({color:0xb9bec3,roughness:.32,metalness:.9}),
+  body:std({color:0xdfe2e4,roughness:.5,metalness:0}),
+  bodyHi:std({color:0xe9ecee,roughness:.42,metalness:0}),
+  meter:std({color:0xcfd3d6,roughness:.5,metalness:0}),
+  cover:std({color:0xa9aeb2,roughness:.55,metalness:0}),
+  dark:std({color:0x1b1e21,roughness:.6}),
+  slot:std({color:0x24282b,roughness:.85,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2}),
+  lever:std({color:0x18191b,roughness:.28,clearcoat:.9,clearcoatRoughness:.25},true),
+  steel:std({color:0xb4bbc2,roughness:.28,metalness:1}),
+  brass:std({color:0xc79a4a,roughness:.3,metalness:1}),
+  ferrule:std({color:0xcfd3d6,roughness:.25,metalness:1}),
+  sheath:std({color:0x151617,roughness:.75}),
+  white:std({color:0xe8eaec,roughness:.45}),
+  gland:std({color:0x2a2e32,roughness:.6}),
+  blue:std({color:0x2a6db3,roughness:.5}),
+  green:std({color:0x3a9a45,roughness:.5}),
+  grey:std({color:0x9ea4a9,roughness:.5}),
+  blade:std({color:0x3a6ea5,roughness:.45})
+};
+function makeStripeTex(){
+  const c=document.createElement("canvas");c.width=8;c.height=64;const g=c.getContext("2d");
+  for(let k=0;k<8;k++){g.fillStyle=k%2?"#f1cd1c":"#2f9e44";g.fillRect(0,k*8,8,8);}
+  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;return t;
+}
+const stripeTex=makeStripeTex();
+const WM={
+  L:std({color:0xc92d1f,roughness:.4,clearcoat:.35,clearcoatRoughness:.4},true),
+  N:std({color:0x1d62c4,roughness:.4,clearcoat:.35,clearcoatRoughness:.4},true),
+  PE:std({color:0xffffff,map:stripeTex,roughness:.4,clearcoat:.35,clearcoatRoughness:.4},true),
+  hover:std({color:0xff7a4d,emissive:0x8a2a10,roughness:.4},true),
+  bad:std({color:0xff2d2d,emissive:0xaa1010,roughness:.4},true)
+};
+
+function rrShape(w,h,r){
+  const s=new THREE.Shape(),x=-w/2,y=-h/2;
+  s.moveTo(x+r,y);s.lineTo(x+w-r,y);s.quadraticCurveTo(x+w,y,x+w,y+r);
+  s.lineTo(x+w,y+h-r);s.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  s.lineTo(x+r,y+h);s.quadraticCurveTo(x,y+h,x,y+h-r);
+  s.lineTo(x,y+r);s.quadraticCurveTo(x,y,x+r,y);
+  return s;
+}
+const slabCache={};
+function slabGeo(w,h,d,r,b){
+  const key=[w,h,d,r,b].join("_");
+  if(slabCache[key])return slabCache[key];
+  const inner=d-2*b;
+  const g=new THREE.ExtrudeGeometry(rrShape(w-2*b,h-2*b,Math.max(.1,r-b)),{depth:inner,bevelEnabled:b>0,bevelThickness:b,bevelSize:b,bevelSegments:2,curveSegments:5});
+  g.translate(0,0,-inner/2);
+  slabCache[key]=g;return g;
+}
+function slab(parent,w,h,d,r,mat,x,y,zFront,b){
+  b=b==null?.6:b;r=Math.max(r,b+.05);
+  const m=new THREE.Mesh(slabGeo(w,h,d,r,b),mat);
+  m.position.set(x,y,zFront-d/2);
+  m.castShadow=true;m.receiveShadow=true;
+  parent.add(m);return m;
+}
+
+/* canvas decals: all drawing helpers work in millimetres through k = px per mm */
+function decal(parent,wmm,hmm,x,y,z,k,draw){
+  const c=document.createElement("canvas");
+  c.width=Math.max(8,Math.round(wmm*k));c.height=Math.max(8,Math.round(hmm*k));
+  const g=c.getContext("2d");
+  draw(g,wmm,hmm,k);
+  const tex=new THREE.CanvasTexture(c);tex.encoding=THREE.sRGBEncoding;tex.anisotropy=MAXA;
+  const mat=new THREE.MeshStandardMaterial({map:tex,transparent:true,roughness:.6,metalness:0,envMapIntensity:.5,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-3,polygonOffsetUnits:-3});
+  const m=new THREE.Mesh(new THREE.PlaneGeometry(wmm,hmm),mat);
+  m.position.set(x,y,z);m.receiveShadow=true;parent.add(m);
+  return {mesh:m,tex:tex,canvas:c,ctx:g};
+}
+function tx(g,k,s,x,y,size,color,weight,align){
+  g.font=(weight||"600")+" "+Math.round(size*k)+"px Arial, Helvetica, sans-serif";
+  g.fillStyle=color||"#262b2f";g.textAlign=align||"center";g.textBaseline="middle";
+  g.fillText(s,x*k,y*k);
+}
+function rc(g,k,x,y,w,h,color,r){
+  g.fillStyle=color;
+  if(r&&g.roundRect){g.beginPath();g.roundRect(x*k,y*k,w*k,h*k,r*k);g.fill();}
+  else g.fillRect(x*k,y*k,w*k,h*k);
+}
+
+const aoCache={};
+function aoPlane(x,y,w,h){
+  const key=w+"x"+h;
+  let tex=aoCache[key];
+  if(!tex){
+    const k=3,pad=26,c=document.createElement("canvas");
+    c.width=Math.round((w+pad*2)*k);c.height=Math.round((h+pad*2)*k);
+    const g=c.getContext("2d");
+    g.shadowColor="rgba(0,0,0,.6)";g.shadowBlur=11*k;g.shadowOffsetX=2000;g.shadowOffsetY=0;
+    g.fillStyle="#000";g.fillRect(pad*k-2000,pad*k,w*k,h*k);
+    tex=new THREE.CanvasTexture(c);tex.encoding=THREE.sRGBEncoding;aoCache[key]=tex;
+  }
+  const m=new THREE.Mesh(new THREE.PlaneGeometry(w+52,h+52),new THREE.MeshBasicMaterial({map:tex,transparent:true,depthWrite:false,opacity:.85}));
+  m.position.set(x+4,y-5,1.4);scene.add(m);
+}
+
+/* shared small geometries */
+const G={
+  head:new THREE.CylinderGeometry(3.2,3.6,2.2,28).rotateX(Math.PI/2),
+  rec:new THREE.CylinderGeometry(4.7,4.7,.6,28).rotateX(Math.PI/2),
+  slotA:new THREE.BoxGeometry(5.4,1,.7),
+  slotB:new THREE.BoxGeometry(1,5.4,.7),
+  ferrule:new THREE.CylinderGeometry(1.8,1.8,9.5,12)
+};
+function screw(parent,x,y,zs,ang){
+  const rec=new THREE.Mesh(G.rec,MAT.dark);rec.position.set(x,y,zs+.15);parent.add(rec);
+  const head=new THREE.Mesh(G.head,MAT.steel);head.position.set(x,y,zs+1.3);parent.add(head);
+  const a=new THREE.Mesh(G.slotA,MAT.dark),b=new THREE.Mesh(G.slotB,MAT.dark);
+  a.position.set(x,y,zs+2.4);b.position.set(x,y,zs+2.4);
+  a.rotation.z=ang||0;b.rotation.z=ang||0;
+  parent.add(a);parent.add(b);
+}
+
+/* =====================================================================
+   TERMINALS REGISTRY
+   ===================================================================== */
+const ZR=7.5,ZF=57.5,ZW=64.5,ZB=47.5,ZU=37.5;
+const T={};
+function addT(id,x,yFace,dirSign,kind,desc,o){
+  o=o||{};
+  const zf=o.zf||ZF,inset=o.inset||9;
+  T[id]={
+    id:id,x:x,y:yFace,kind:kind,desc:desc,depth:o.depth,dev:id.split(".")[0],net:null,
+    anchor:new THREE.Vector3(x,yFace,Math.max(18,zf-14)),
+    pos:new THREE.Vector3(x,yFace-dirSign*inset,zf+3),
+    dir:new THREE.Vector3(0,dirSign,0)
+  };
+  return T[id];
+}
+
+/* =====================================================================
+   SCENE: plate, rails, devices
+   ===================================================================== */
+const levers=[];
+function easeIO(t){return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;}
+function applyLever(l){
+  const e=easeIO(l.t);
+  l.grp.position.y=l.baseY-5+10*e;
+  l.grp.rotation.x=.2-.4*e;
+  if(l.t>.5){l.ind.material.color.setHex(0xd62718);l.ind.material.emissive.setHex(0x701008);}
+  else{l.ind.material.color.setHex(0x1f9d4a);l.ind.material.emissive.setHex(0x0d4a22);}
+}
+function addLever(g,X,Y,slotW,lvY){
+  const sl=new THREE.Mesh(new THREE.PlaneGeometry(slotW+2.8,27),MAT.slot);
+  sl.position.set(X,Y+lvY,ZW+.05);g.add(sl);
+  const lg=new THREE.Group();lg.position.set(X,Y+lvY,ZW);g.add(lg);
+  slab(lg,slotW,15,9,1.6,MAT.lever,0,0,9,.7);
+  const ind=new THREE.Mesh(new THREE.BoxGeometry(slotW*.55,3.4,.5),new THREE.MeshStandardMaterial({color:0x1f9d4a,emissive:0x0d4a22,roughness:.5}));
+  ind.position.set(0,3.2,9.3);lg.add(ind);
+  const L={grp:lg,baseY:Y+lvY,ind:ind,t:0,to:0,wait:0,speed:3.4};
+  levers.push(L);applyLever(L);return L;
+}
+
+function buildPlate(){
+  const c=document.createElement("canvas");c.width=c.height=160;const g=c.getContext("2d");
+  g.fillStyle="#cdd2d6";g.fillRect(0,0,160,160);
+  const gr=g.createRadialGradient(80,80,6,80,80,17);
+  gr.addColorStop(0,"#6f777d");gr.addColorStop(.62,"#8f979d");gr.addColorStop(.7,"#dfe3e6");gr.addColorStop(1,"rgba(205,210,214,0)");
+  g.fillStyle=gr;g.beginPath();g.arc(80,80,17,0,Math.PI*2);g.fill();
+  g.fillStyle="#2a2f33";g.beginPath();g.arc(80,80,11,0,Math.PI*2);g.fill();
+  const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(440/40,545/40);t.encoding=THREE.sRGBEncoding;t.anisotropy=MAXA;
+  const plate=new THREE.Mesh(new THREE.PlaneGeometry(440,545),std({map:t,roughness:.6,metalness:.3}));
+  plate.position.set(0,42.5,0);plate.receiveShadow=true;scene.add(plate);
+  const back=new THREE.Mesh(new THREE.PlaneGeometry(500,610),new THREE.MeshStandardMaterial({color:0x2a3036,roughness:.8}));
+  back.position.set(0,42.5,-4);scene.add(back);
+
+  /* plaster wall behind the cabinet */
+  const wc=document.createElement("canvas");wc.width=wc.height=256;const wg=wc.getContext("2d");
+  wg.fillStyle="#6c737a";wg.fillRect(0,0,256,256);
+  for(let i=0;i<5200;i++){
+    const v=Math.floor(90+Math.random()*50);
+    wg.fillStyle="rgba("+v+","+(v+4)+","+(v+8)+",.16)";
+    wg.fillRect(Math.random()*256,Math.random()*256,1+Math.random()*2.2,1+Math.random()*2.2);
+  }
+  const wt=new THREE.CanvasTexture(wc);wt.wrapS=wt.wrapT=THREE.RepeatWrapping;wt.repeat.set(10,10);wt.encoding=THREE.sRGBEncoding;wt.anisotropy=MAXA;
+  const wall=new THREE.Mesh(new THREE.PlaneGeometry(3600,3600),new THREE.MeshStandardMaterial({map:wt,roughness:.95,metalness:0,envMapIntensity:.4}));
+  wall.position.set(0,42.5,-12);wall.receiveShadow=true;scene.add(wall);
+
+  /* open metal cabinet: side walls, top, bottom with cable entries */
+  const cabMat=std({color:0xaab0b6,roughness:.42,metalness:.65});
+  const D=80,TH=3;
+  function cabBox(w,h,x,y){
+    const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,D),cabMat);
+    m.position.set(x,y,D/2);m.castShadow=true;m.receiveShadow=true;scene.add(m);
+  }
+  cabBox(TH,545+2*TH,-220-TH/2,42.5);
+  cabBox(TH,545+2*TH,220+TH/2,42.5);
+  cabBox(440,TH,0,315+TH/2);
+  [[-220,-144],[-116,-14],[14,116],[144,220]].forEach(r=>cabBox(r[1]-r[0],TH,(r[0]+r[1])/2,-230-TH/2));
+  /* soft contact darkening along the inner edges of the plate */
+  const ec=document.createElement("canvas");ec.width=440;ec.height=545;const eg=ec.getContext("2d");
+  function edge(x0,y0,x1,y1,rx,ry,rw,rh){
+    const gr=eg.createLinearGradient(x0,y0,x1,y1);
+    gr.addColorStop(0,"rgba(0,0,0,.5)");gr.addColorStop(1,"rgba(0,0,0,0)");
+    eg.fillStyle=gr;eg.fillRect(rx,ry,rw,rh);
+  }
+  edge(0,0,34,0,0,0,34,545);edge(440,0,406,0,406,0,34,545);
+  edge(0,0,0,40,0,0,440,40);edge(0,545,0,505,0,505,440,40);
+  const et=new THREE.CanvasTexture(ec);et.encoding=THREE.sRGBEncoding;
+  const edgeM=new THREE.Mesh(new THREE.PlaneGeometry(440,545),new THREE.MeshBasicMaterial({map:et,transparent:true,depthWrite:false}));
+  edgeM.position.set(0,42.5,1.2);scene.add(edgeM);
+}
+let slotTex=null;
+function addRail(y,len){
+  const s=new THREE.Shape();
+  s.moveTo(-17.5,0);s.lineTo(-17.5,1);s.lineTo(-7.5,1);s.lineTo(-7.5,ZR);s.lineTo(7.5,ZR);s.lineTo(7.5,1);s.lineTo(17.5,1);s.lineTo(17.5,0);s.lineTo(-17.5,0);
+  const g=new THREE.ExtrudeGeometry(s,{depth:len,bevelEnabled:false});
+  g.translate(0,0,-len/2);
+  g.applyMatrix4(new THREE.Matrix4().set(0,0,1,0, 1,0,0,0, 0,1,0,0, 0,0,0,1));
+  const m=new THREE.Mesh(g,MAT.rail);
+  m.position.set(0,y,0);m.castShadow=true;m.receiveShadow=true;scene.add(m);
+  if(!slotTex){
+    const c=document.createElement("canvas");c.width=125;c.height=60;const q=c.getContext("2d");
+    q.fillStyle="#2b2f33";
+    if(q.roundRect){q.beginPath();q.roundRect(32,19,60,22,10);q.fill();}else q.fillRect(32,19,60,22);
+    slotTex=new THREE.CanvasTexture(c);slotTex.wrapS=THREE.RepeatWrapping;slotTex.encoding=THREE.sRGBEncoding;
+  }
+  const tt=slotTex.clone();tt.needsUpdate=true;tt.wrapS=THREE.RepeatWrapping;tt.repeat.set(len/25,1);
+  const sp=new THREE.Mesh(new THREE.PlaneGeometry(len,12),new THREE.MeshBasicMaterial({map:tt,transparent:true,depthWrite:false,opacity:.9}));
+  sp.position.set(0,y,ZR+.06);scene.add(sp);
+}
+
+/* ---- modular breaker / RCD ---- */
+function mcb(o){
+  const P=o.poles,W=P*17.5-.9,H=90,X=o.x,Y=o.y;
+  const g=new THREE.Group();scene.add(g);
+  aoPlane(X,Y,W,H);
+  slab(g,W,H,50,1.6,MAT.body,X,Y,ZF);
+  slab(g,W-2,o.winH||46,7.5,1.2,MAT.bodyHi,X,Y,ZW);
+  const letters=[];
+  o.ports.forEach(p=>{
+    const dirS=p.top?1:-1,yFace=Y+(p.top?H/2:-H/2);
+    addT(p.id,X+p.dx,yFace,dirS,p.kind,p.desc,{depth:p.depth});
+    screw(g,X+p.dx,yFace-dirS*9,ZF,p.ang||0);
+    letters.push({x:p.dx,y:p.top?H/2-17.9:-H/2+17.9,s:p.letter});
+  });
+  decal(g,W,H,X,Y,ZF+.08,9,(c,w,h,k)=>{
+    letters.forEach(l=>tx(c,k,l.s,w/2+l.x,h/2-l.y,3,"#2b3135","700"));
+  });
+  const slotW=P===1?9:24;
+  addLever(g,X,Y,slotW,o.leverY||0);
+  decal(g,W-2,o.winH||46,X,Y,ZW+.07,10,(c,w,h,k)=>o.win(c,w,h,k));
+  return g;
+}
+
+/* ---- Mercury 201.5 style single phase meter ---- */
+let meter=null;
+function drawSeg(c,k,x,y,w,h,d){
+  const t=h*.17,on={0:"abcdef",1:"bc",2:"abdeg",3:"abcdg",4:"bcfg",5:"acdfg",6:"acdefg",7:"abc",8:"abcdefg",9:"abcdfg"}[d];
+  const S={
+    a:[x+t,y,w-2*t,t],g:[x+t,y+h/2-t/2,w-2*t,t],d:[x+t,y+h-t,w-2*t,t],
+    f:[x,y+t,t,h/2-t*1.4],b:[x+w-t,y+t,t,h/2-t*1.4],e:[x,y+h/2+t*.4,t,h/2-t*1.4],c:[x+w-t,y+h/2+t*.4,t,h/2-t*1.4]
+  };
+  for(const s in S){
+    c.fillStyle=on.indexOf(s)>=0?"#1b2217":"rgba(30,40,25,.07)";
+    c.fillRect(S[s][0]*k,S[s][1]*k,S[s][2]*k,S[s][3]*k);
+  }
+}
+function drawLcd(on){
+  const m=meter;if(!m)return;
+  const c=m.lcd.ctx,k=m.lcd.k,w=m.lcd.w,h=m.lcd.h;
+  c.fillStyle="#a8b49a";c.fillRect(0,0,w*k,h*k);
+  const gl=c.createLinearGradient(0,0,0,h*k);gl.addColorStop(0,"rgba(255,255,255,.28)");gl.addColorStop(.5,"rgba(255,255,255,0)");
+  if(on){
+    const s=(Math.floor(kwhN)/10).toFixed(1).padStart(7,"0").replace(".","");
+    const dw=4.6,dh=8.4,gap=1.9,x0=2.2;
+    for(let i=0;i<s.length;i++)drawSeg(c,k,x0+i*(dw+gap),2.3,dw,dh,+s[i]);
+    c.fillStyle="#1b2217";c.fillRect((x0+5*(dw+gap)-1.2)*k,(2.3+dh-1.1)*k,1.2*k,1.2*k);
+    tx(c,k,"kWh",w-3.6,h-2.4,1.9,"#1b2217","600");
+  }
+  c.fillStyle=gl;c.fillRect(0,0,w*k,h*k);
+  m.lcd.tex.needsUpdate=true;
+}
+function buildMeter(){
+  const X=90,Y=145,W=72,H=90;
+  const g=new THREE.Group();scene.add(g);
+  aoPlane(X,Y,W,H);
+  slab(g,W,H,50,2.2,MAT.meter,X,Y,ZF);
+  slab(g,W-4,62,7.5,1.6,MAT.bodyHi,X,Y+9,ZW);
+  slab(g,W-6,22,6,1.4,MAT.cover,X,Y-33,ZF+6);
+  slab(g,50,17,1.4,1,MAT.dark,X-5,Y+30,ZW+1.4,.4);
+  const lcd=decal(g,44,12.5,X-5,Y+30,ZW+2.2,10,()=>{});
+  lcd.k=10;lcd.w=44;lcd.h=12.5;
+  const led=new THREE.Mesh(new THREE.CylinderGeometry(1.7,1.7,1.2,16).rotateX(Math.PI/2),new THREE.MeshStandardMaterial({color:0x4a0f0f,emissive:0x000000,roughness:.4}));
+  led.position.set(X+26,Y+30,ZW+1.6);g.add(led);
+  decal(g,W-10,30,X,Y+2.5,ZW+.12,9,(c,w,h,k)=>{
+    c.fillStyle="#f4f5f2";c.fillRect(0,0,w*k,h*k);
+    c.strokeStyle="#9aa09a";c.lineWidth=.3*k;c.strokeRect(.2*k,.2*k,(w-.4)*k,(h-.4)*k);
+    tx(c,k,"Меркурий 201.5",w/2,6.2,5.2,"#15324f","700");
+    tx(c,k,"Счётчик электрической энергии",w/2,12.2,2.6,"#2b3135","600");
+    tx(c,k,"однофазный, 1 тариф",w/2,15.7,2.4,"#2b3135","500");
+    tx(c,k,"220 V   5(60) A   50 Hz   кл.1",w/2,21.2,2.7,"#2b3135","700");
+    tx(c,k,"imp/kWh 1000",w/2,25.4,2.4,"#555c60","500");
+  });
+  const xs=[63,81,99,117],nm=["1","2","3","4"],kinds=["L","L","N","N"];
+  const desc=["Hisoblagich, 1-qisqich: faza kirishi","Hisoblagich, 2-qisqich: faza chiqishi","Hisoblagich, 3-qisqich: nol kirishi","Hisoblagich, 4-qisqich: nol chiqishi"];
+  const dep=[5,6,5,6];
+  xs.forEach((x,i)=>{
+    addT("m."+nm[i],x,Y-H/2,-1,kinds[i],desc[i],{depth:dep[i],zf:ZF+6});
+    screw(g,x,Y-H/2+9,ZF+6,i*.4);
+  });
+  decal(g,W-6,22,X,Y-33,ZF+6.08,9,(c,w,h,k)=>{
+    xs.forEach((x,i)=>tx(c,k,nm[i],w/2+(x-X),5.2,3.4,"#1d2124","700"));
+  });
+  meter={lcd:lcd,led:led,g:g};
+  drawLcd(false);
+}
+
+/* ---- DIN feed-through terminal blocks ---- */
+function block(o){
+  const g=new THREE.Group();scene.add(g);
+  const mat=o.kind==="L"?MAT.grey:o.kind==="N"?MAT.blue:MAT.green;
+  aoPlane(o.x,o.y,10,40);
+  slab(g,10,40,40,1.2,mat,o.x,o.y,ZB,.5);
+  const yI=o.y+(o.top?20:-20),dI=o.top?1:-1;
+  addT(o.id,o.x,yI,dI,o.kind,o.desc,{depth:o.depth,zf:ZB});
+  screw(g,o.x,yI-dI*9,ZB,o.ang||0);
+  screw(g,o.x,o.y-(o.top?20:-20)+dI*9,ZB,(o.ang||0)+.7);
+  decal(g,10,40,o.x,o.y,ZB+.08,10,(c,w,h,k)=>{
+    if(o.kind==="PE"){c.fillStyle="#f1cd1c";c.fillRect(0,h*.36*k,w*k,h*.28*k);}
+    tx(c,k,o.kind,w/2,h/2,o.kind==="PE"?2.7:3.6,o.kind==="L"?"#1b1e21":"#ffffff","700");
+  });
+}
+
+/* ---- DIN busbar (N / PE) ---- */
+function bus(o){
+  const g=new THREE.Group();scene.add(g);
+  const mat=o.kind==="N"?MAT.blue:MAT.green,n=4,sp=28,W=n*sp+12;
+  aoPlane(o.x,o.y,W,28);
+  slab(g,W,28,30,1.5,mat,o.x,o.y,ZU,.6);
+  slab(g,W-10,3.2,1.6,.6,MAT.brass,o.x,o.y,ZU+1.6,.3);
+  for(let i=0;i<n;i++){
+    const xi=o.x+(i-(n-1)/2)*sp;
+    addT(o.prefix+(i+1),xi,o.y+14,1,o.kind,o.desc,{depth:o.kind==="N"?7:undefined,zf:ZU,inset:8});
+    screw(g,xi,o.y+6,ZU,i*.5);
+    addT(o.prefix+(i+5),xi,o.y-14,-1,o.kind,o.desc,{depth:o.kind==="N"?7:undefined,zf:ZU,inset:8});
+    screw(g,xi,o.y-6,ZU,i*.5+.3);
+  }
+  decal(g,W,28,o.x,o.y,ZU+.08,6,(c,w,h,k)=>{
+    if(o.kind==="PE"){c.fillStyle="#f1cd1c";c.fillRect(0,0,6*k,h*k);c.fillRect((w-6)*k,0,6*k,h*k);}
+    tx(c,k,o.kind,w/2,h/2,5,o.kind==="N"?"#ffffff":"#10321a","700");
+  });
+}
+
+/* ---- static conductors & cable sheaths ---- */
+function tubeMesh(curve,radius,mat){
+  const len=curve.getLength(),seg=Math.max(16,Math.min(160,Math.round(len/2.5)));
+  const m=new THREE.Mesh(new THREE.TubeGeometry(curve,seg,radius,10,false),mat);
+  m.castShadow=true;m.receiveShadow=true;return m;
+}
+function staticConductor(kind,x,yFace,dirS,xEnd,yEnd){
+  const a0=new THREE.Vector3(x,yFace+dirS*5.5,33.5),p3=new THREE.Vector3(xEnd,yEnd,62);
+  const dy=Math.abs(yEnd-a0.y);
+  const p1=new THREE.Vector3(x,a0.y+dirS*dy*.55,a0.z+(62-a0.z)*.3);
+  const p2=new THREE.Vector3(xEnd,yEnd-dirS*dy*.3,62);
+  scene.add(tubeMesh(new THREE.CubicBezierCurve3(a0,p1,p2,p3),2.1,WM[kind]));
+  const f=new THREE.Mesh(G.ferrule,MAT.ferrule);f.position.set(x,yFace+dirS*1.25,33.5);scene.add(f);
+}
+function sheath(x,yA,yB,r){
+  const len=Math.abs(yB-yA);
+  const m=new THREE.Mesh(new THREE.CylinderGeometry(r,r,len,24),MAT.sheath);
+  m.position.set(x,(yA+yB)/2,62);m.castShadow=true;m.receiveShadow=true;scene.add(m);
+}
+function glandRing(x,y){
+  const m=new THREE.Mesh(new THREE.CylinderGeometry(11,11,10,24),MAT.gland);
+  m.position.set(x,y,62);m.castShadow=true;scene.add(m);
+}
+
+/* ---- tags ---- */
+const tags=[];
+function addTag(text,x,y,z,mode){
+  const el=document.createElement("div");el.className="tag";el.textContent=text;
+  $("tags").appendChild(el);
+  tags.push({el:el,p:new THREE.Vector3(x,y,z),mode:mode||"top"});
+}
+const TAGT={top:"translate(-50%,-100%)",left:"translate(0,-50%)",right:"translate(-100%,-50%)",bottom:"translate(-50%,0)"};
+
+/* ---- loads ---- */
+const glowTex=(()=>{
+  const c=document.createElement("canvas");c.width=c.height=128;const g=c.getContext("2d");
+  const r=g.createRadialGradient(64,64,0,64,64,64);
+  r.addColorStop(0,"rgba(255,226,160,1)");r.addColorStop(.35,"rgba(255,190,100,.45)");r.addColorStop(1,"rgba(255,170,60,0)");
+  g.fillStyle=r;g.fillRect(0,0,128,128);
+  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;return t;
+})();
+const loads={lamp:null,socket:null,fan:null};
+function buildLamp(xc,yTop){
+  const g=new THREE.Group();scene.add(g);
+  const holder=new THREE.Mesh(new THREE.CylinderGeometry(12,12,26,24),MAT.white);
+  holder.position.set(xc,yTop-13,62);holder.castShadow=true;g.add(holder);
+  const thread=new THREE.Mesh(new THREE.CylinderGeometry(10,10,12,24),MAT.steel);
+  thread.position.set(xc,yTop-32,62);g.add(thread);
+  const pts=[[6.5,0],[7.5,-4],[11,-11],[16.5,-23],[19.5,-37],[19,-49],[14.5,-59],[7.5,-64],[0,-66]].map(p=>new THREE.Vector2(p[0],p[1]));
+  const glass=new THREE.Mesh(new THREE.LatheGeometry(pts,32),std({color:0xf8f1e2,roughness:.05,metalness:0,transparent:true,opacity:.42,clearcoat:1,side:THREE.DoubleSide,depthWrite:false,envMapIntensity:1.2},true));
+  glass.position.set(xc,yTop-38,62);g.add(glass);
+  const fil=new THREE.Mesh(new THREE.TorusGeometry(3.4,.55,8,20),new THREE.MeshStandardMaterial({color:0x6a5a40,emissive:0x000000,roughness:.5}));
+  fil.position.set(xc,yTop-62,62);g.add(fil);
+  const glow=new THREE.Mesh(new THREE.PlaneGeometry(190,190),new THREE.MeshBasicMaterial({map:glowTex,transparent:true,opacity:0,blending:THREE.AdditiveBlending,depthWrite:false}));
+  glow.position.set(xc,yTop-70,120);g.add(glow);
+  const pl=new THREE.PointLight(0xffd7a0,0,560,1.6);pl.position.set(xc,yTop-70,130);g.add(pl);
+  loads.lamp={fil:fil,glow:glow,light:pl,glass:glass};
+}
+function buildSocket(xc,yTop){
+  const g=new THREE.Group();scene.add(g);
+  const cy=yTop-38;
+  slab(g,76,76,28,4,MAT.white,xc,cy,88,1);
+  decal(g,76,76,xc,cy,88.1,6,(c,w,h,k)=>{
+    c.fillStyle="#d4d7da";c.beginPath();c.arc(w/2*k,h/2*k,31*k,0,Math.PI*2);c.fill();
+    c.fillStyle="#bfc3c7";c.beginPath();c.arc(w/2*k,h/2*k,26*k,0,Math.PI*2);c.fill();
+    c.fillStyle="#2a2e31";
+    [-9.5,9.5].forEach(dx=>{c.beginPath();c.arc((w/2+dx)*k,h/2*k,2.7*k,0,Math.PI*2);c.fill();});
+    c.fillStyle="#9aa1a7";c.fillRect((w/2-4)*k,(h/2-31)*k,8*k,4*k);c.fillRect((w/2-4)*k,(h/2+27)*k,8*k,4*k);
+  });
+  const plug=slab(g,36,54,26,5,MAT.white,xc,cy,114,1.2);
+  const led=new THREE.Mesh(new THREE.CylinderGeometry(2.6,2.6,1.4,16).rotateX(Math.PI/2),new THREE.MeshStandardMaterial({color:0x14301c,emissive:0x000000,roughness:.4}));
+  led.position.set(xc,cy+14,114.9);g.add(led);
+  const lg=new THREE.PointLight(0x62ff9a,0,120,2);lg.position.set(xc,cy+14,126);g.add(lg);
+  loads.socket={led:led,light:lg,plug:plug};
+}
+function buildFan(xc,yTop){
+  const g=new THREE.Group();scene.add(g);
+  const cy=yTop-20;
+  const motor=new THREE.Mesh(new THREE.CylinderGeometry(18,18,30,28).rotateX(Math.PI/2),std({color:0x8a9096,roughness:.4,metalness:.7}));
+  motor.position.set(xc,cy,62);motor.castShadow=true;g.add(motor);
+  const cap=new THREE.Mesh(new THREE.CylinderGeometry(9,9,4,24).rotateX(Math.PI/2),MAT.steel);
+  cap.position.set(xc,cy,78);g.add(cap);
+  const ring=new THREE.Mesh(new THREE.TorusGeometry(34,1,8,48),MAT.steel);
+  ring.position.set(xc,cy,86);ring.castShadow=true;g.add(ring);
+  for(let i=0;i<4;i++){
+    const sp=new THREE.Mesh(new THREE.CylinderGeometry(.45,.45,68,6),MAT.steel);
+    sp.position.set(xc,cy,86);sp.rotation.z=i*Math.PI/4;g.add(sp);
+  }
+  const rot=new THREE.Group();rot.position.set(xc,cy,82);g.add(rot);
+  for(let i=0;i<3;i++){
+    const bg=new THREE.Group();bg.rotation.z=i*2.0944;rot.add(bg);
+    const geo=new THREE.BoxGeometry(12,26,1.2);geo.translate(0,19,0);
+    const b=new THREE.Mesh(geo,MAT.blade);b.rotation.y=.5;b.castShadow=true;bg.add(b);
+  }
+  const hub=new THREE.Mesh(new THREE.CylinderGeometry(5,5,6,20).rotateX(Math.PI/2),MAT.steel);
+  rot.add(hub);
+  loads.fan={rot:rot,w:0};
+}
+
+function buildBoard(){
+  buildPlate();
+  [255,145,20,-95,-180].forEach(y=>addRail(y,420));
+
+  /* supply terminal blocks at top-left */
+  const sx=[-185,-160,-135],sk=["PE","L","N"],sid=["src.pe","src.l","src.n"];
+  const sd=["Tarmoq kabeli, himoya nol (PE)","Tarmoq kabeli, faza (L)","Tarmoq kabeli, ishchi nol (N)"];
+  sx.forEach((x,i)=>{
+    block({x:x,y:255,kind:sk[i],id:sid[i],top:false,desc:sd[i],depth:sk[i]==="PE"?undefined:0,ang:i*.5});
+    staticConductor(sk[i],x,275,1,-160+(i-1)*4.2,304);
+  });
+  sheath(-160,298,362,7);glandRing(-160,316);
+
+  /* main breaker (kirish avtomati) */
+  mcb({x:-150,y:145,poles:2,
+    ports:[
+      {id:"ab.li",dx:-8.75,top:true,kind:"L",desc:"Kirish avtomati, yuqori faza (L)",depth:1,letter:"L",ang:.2},
+      {id:"ab.ni",dx:8.75,top:true,kind:"N",desc:"Kirish avtomati, yuqori nol (N)",depth:1,letter:"N",ang:.7},
+      {id:"ab.lo",dx:-8.75,top:false,kind:"L",desc:"Kirish avtomati, pastki faza (L)",depth:2,letter:"L",ang:.4},
+      {id:"ab.no",dx:8.75,top:false,kind:"N",desc:"Kirish avtomati, pastki nol (N)",depth:2,letter:"N",ang:.1}
+    ],
+    win:(c,w,h,k)=>{
+      tx(c,k,"AB",w/2,5,4.4,"#1d2124","700");
+      tx(c,k,"C32",w/2,h-9.5,3.6,"#1d2124","700");
+      tx(c,k,"2P  230 V",w/2,h-4.2,2.6,"#44494d","600");
+    }});
+
+  /* RCD (УЗО) */
+  const rcd=mcb({x:-150,y:20,poles:2,winH:50,leverY:14,
+    ports:[
+      {id:"rcd.li",dx:-8.75,top:true,kind:"L",desc:"УЗО, yuqori faza (L)",depth:3,letter:"L",ang:.3},
+      {id:"rcd.ni",dx:8.75,top:true,kind:"N",desc:"УЗО, yuqori nol (N)",depth:3,letter:"N",ang:.8},
+      {id:"rcd.lo",dx:-8.75,top:false,kind:"L",desc:"УЗО, pastki faza (L)",depth:4,letter:"L",ang:.1},
+      {id:"rcd.no",dx:8.75,top:false,kind:"N",desc:"УЗО, pastki nol (N)",depth:4,letter:"N",ang:.6}
+    ],
+    win:(c,w,h,k)=>{
+      tx(c,k,"УЗО",w/2,h-22,4.8,"#1d2124","700");
+      tx(c,k,"25 A / 30 mA",w/2,h-16.4,2.7,"#1d2124","700");
+      tx(c,k,"тип AC",w/2,h-12.6,2.3,"#44494d","600");
+      tx(c,k,"T",w/2+8.2,h-4.4,2.5,"#ffffff","700");
+    }});
+  const tb=new THREE.Mesh(new THREE.CylinderGeometry(3.3,3.3,2.4,24).rotateX(Math.PI/2),std({color:0x2b66c9,roughness:.35}));
+  tb.position.set(-141.8,5,ZW+1.3);rcd.add(tb);
+
+  buildMeter();
+
+  /* single-pole group breakers */
+  [30,64,98].forEach((x,i)=>{
+    const k=i+1;
+    mcb({x:x,y:20,poles:1,
+      ports:[
+        {id:"ab"+k+".i",dx:0,top:true,kind:"L",desc:"AB-"+k+", yuqori qisqich (kirish)",depth:7,letter:"1",ang:i*.5},
+        {id:"ab"+k+".o",dx:0,top:false,kind:"L",desc:"AB-"+k+", pastki qisqich (chiqish)",depth:8,letter:"2",ang:i*.5+.3}
+      ],
+      win:(c,w,h,k2)=>{
+        tx(c,k2,"AB-"+k,w/2,5,3.4,"#1d2124","700");
+        tx(c,k2,"C16",w/2,h-8.5,3.2,"#1d2124","700");
+        tx(c,k2,"1P",w/2,h-4,2.4,"#44494d","600");
+      }});
+  });
+
+  /* busbars */
+  bus({x:95,y:-95,kind:"N",prefix:"nb",desc:"N shina, nol uyasi"});
+  bus({x:-130,y:-95,kind:"PE",prefix:"pb",desc:"PE shina, himoya uyasi"});
+
+  /* outgoing cables: terminal blocks + sheath + loads */
+  const xcs=[-130,0,130],names=["Yoritish","Rozetka","Ventilyator"];
+  xcs.forEach((xc,i)=>{
+    const k=i+1,xs=[xc-24,xc,xc+24],kk=["L","N","PE"];
+    const dd=["faza (L)","nol (N)","himoya nol (PE)"];
+    kk.forEach((kind,j)=>{
+      block({x:xs[j],y:-180,kind:kind,id:"k"+k+"."+(kind==="L"?"l":kind==="N"?"n":"pe"),top:true,desc:"Kabel №"+k+", "+dd[j],depth:kind==="L"?9:kind==="N"?8:undefined,ang:j*.6+i});
+      staticConductor(kind,xs[j],-200,-1,xc+(j-1)*4.2,-226);
+    });
+  });
+  glandRing(-130,-230);glandRing(0,-230);glandRing(130,-230);
+  sheath(-130,-222,-266,6.5);buildLamp(-130,-266);
+  sheath(0,-222,-262,6.5);buildSocket(0,-262);
+  sheath(130,-222,-282,6.5);buildFan(130,-282);
+
+  /* name tags */
+  addTag("Tarmoq kabeli 220 V",-124,262,70,"left");
+  addTag("AB · kirish avtomati",-126,150,70,"left");
+  addTag("УЗО",-126,25,70,"left");
+  addTag("Hisoblagich",90,198,70,"top");
+  addTag("N shina",163,-95,70,"left");
+  addTag("PE shina",-64,-95,70,"left");
+  addTag("Kabel №1 · yoritish",-120,-246,70,"left");
+  addTag("Kabel №2 · rozetka",10,-246,70,"left");
+  addTag("Kabel №3 · ventilyator",140,-246,70,"left");
+}
+
+/* =====================================================================
+   NETS AND LOGIC
+   ===================================================================== */
+buildBoard();
+const NETS=[
+  {id:"l1",text:"Tarmoq fazasi (L) → kirish avtomati L kirishi",m:["src.l","ab.li"]},
+  {id:"n1",text:"Tarmoq noli (N) → kirish avtomati N kirishi",m:["src.n","ab.ni"]},
+  {id:"l2",text:"Kirish avtomati L chiqishi → УЗО L kirishi",m:["ab.lo","rcd.li"]},
+  {id:"n2",text:"Kirish avtomati N chiqishi → УЗО N kirishi",m:["ab.no","rcd.ni"]},
+  {id:"l3",text:"УЗО L chiqishi → hisoblagich 1-qisqich",m:["rcd.lo","m.1"]},
+  {id:"n3",text:"УЗО N chiqishi → hisoblagich 3-qisqich",m:["rcd.no","m.3"]},
+  {id:"l4",text:"Hisoblagich 2-qisqich → AB-1, AB-2, AB-3 kirishlari",m:["m.2","ab1.i","ab2.i","ab3.i"]},
+  {id:"l5",text:"AB-1 chiqishi → Kabel №1 fazasi",m:["ab1.o","k1.l"]},
+  {id:"l6",text:"AB-2 chiqishi → Kabel №2 fazasi",m:["ab2.o","k2.l"]},
+  {id:"l7",text:"AB-3 chiqishi → Kabel №3 fazasi",m:["ab3.o","k3.l"]},
+  {id:"n4",text:"Hisoblagich 4-qisqich → N shina → uchala kabel noli",m:["m.4","nbus","k1.n","k2.n","k3.n"]},
+  {id:"pe",text:"Tarmoq PE → PE shina → uchala kabel PE si",m:["src.pe","pbus","k1.pe","k2.pe","k3.pe"]}
+];
+const NET_COUNT=NETS.length;
+function rep(m){return m==="nbus"?"nb1":m==="pbus"?"pb1":m;}
+NETS.forEach(n=>n.m.forEach(m=>{
+  if(m==="nbus"){for(const id in T){if(/^nb\d/.test(id))T[id].net=n.id;}}
+  else if(m==="pbus"){for(const id in T){if(/^pb\d/.test(id))T[id].net=n.id;}}
+  else{if(!T[m])throw new Error("terminal topilmadi: "+m);T[m].net=n.id;}
+}));
+for(const id in T){if(!T[id].net)throw new Error("zanjirsiz terminal: "+id);}
+
+let mode="learn",wires=[],selected=null,wd=null,gest=null,pinch=null,powered=false,checked=false,examOK=false;
+let AN=null,kwhN=12340,meterTimer=null,hintTimer=null,hovT=null,hovW=-1;
+const tr={rcd:false,g:[false,false,false]};
+let fault=null,fx=null,fanW=0;
+const lv=[0,0,0],timers=[];
+const DEFAULT="Vintni bosib boshqasiga sudrang yoki ikkita vintni ketma-ket bosing.";
+const say=setStatus;
+
+function orient(a,b){
+  const A=T[a],B=T[b];
+  if(A.kind===B.kind&&A.kind!=="PE"&&A.depth!=null&&B.depth!=null){
+    const asc=A.depth<=B.depth;
+    if(A.kind==="L")return asc?[a,b]:[b,a];
+    return asc?[b,a]:[a,b];
+  }
+  return [a,b];
+}
+function addWire(a,b){const o=orient(a,b);wires.push({from:o[0],to:o[1],kind:T[o[0]].kind});}
+function reason(a,b){
+  const A=T[a],B=T[b];
+  if(A.kind!==B.kind){
+    const k=[A.kind,B.kind].sort().join("-");
+    if(k==="L-N")return "Faza (L) va nol (N) ulandi: bu qisqa tutashuv, avtomat darhol o'chadi.";
+    if(k==="L-PE")return "Faza PE ga tushdi: shkaf va asbob korpusi xavfli kuchlanish ostida qoladi.";
+    return "Ishchi nol (N) va himoya nol (PE) alohida yuradi. Ularni birlashtirsangiz УЗО noto'g'ri ishlaydi.";
+  }
+  if(A.dev===B.dev)return "Bir qurilmaning kirishi va chiqishini ulash tokni qurilmadan chetlab o'tkazadi. Zanjir qurilma ichidan o'tishi kerak.";
+  return "Bu ikki qisqich bevosita ulanmaydi. Tartib: tarmoq → AB → УЗО → hisoblagich → guruh avtomatlari → kabel.";
+}
+function analyze(){
+  const par={};
+  for(const id in T)par[id]=id;
+  function find(x){while(par[x]!==x){par[x]=par[par[x]];x=par[x];}return x;}
+  function uni(a,b){a=find(a);b=find(b);if(a!==b)par[a]=b;}
+  const nb=[],pb=[];
+  for(const id in T){if(/^nb\d/.test(id))nb.push(id);if(/^pb\d/.test(id))pb.push(id);}
+  nb.slice(1).forEach(x=>uni(x,nb[0]));
+  pb.slice(1).forEach(x=>uni(x,pb[0]));
+  wires.forEach(w=>uni(w.from,w.to));
+  const states=NETS.map(n=>{
+    const cnt={};let max=0;
+    n.m.forEach(m=>{const r=find(rep(m));cnt[r]=(cnt[r]||0)+1;if(cnt[r]>max)max=cnt[r];});
+    return {net:n,done:max===n.m.length,have:max>1?max:0,total:n.m.length};
+  });
+  const bad=[];
+  wires.forEach((w,i)=>{if(T[w.from].net!==T[w.to].net)bad.push(i);});
+  const doneCount=states.filter(s=>s.done).length;
+  return {states:states,bad:bad,doneCount:doneCount,find:find,solved:doneCount===NET_COUNT&&bad.length===0};
+}
+function canPower(){return AN.solved&&(mode==="learn"||examOK);}
+
+/* =====================================================================
+   WIRES IN 3D
+   ===================================================================== */
+const wireGroup=new THREE.Group();scene.add(wireGroup);
+const ghostGroup=new THREE.Group();scene.add(ghostGroup);
+const ringGroup=new THREE.Group();scene.add(ringGroup);
+let wireObjs=[];
+let previewMesh=null;
+
+function disposeChildren(grp){
+  while(grp.children.length){
+    const o=grp.children[0];grp.remove(o);
+    o.traverse(n=>{if(n.geometry&&!n.userData.shared)n.geometry.dispose();});
+  }
+}
+function wireCurve(fromId,toId,i){
+  const A=T[fromId],B=T[toId];
+  const a0=A.anchor.clone().addScaledVector(A.dir,5.5),b0=B.anchor.clone().addScaledVector(B.dir,5.5);
+  const dist=a0.distanceTo(b0),k=Math.min(95,Math.max(26,dist*.4)),lift=92+(i%8)*7;
+  const a1=a0.clone().addScaledVector(A.dir,k);a1.z=lift;
+  const b1=b0.clone().addScaledVector(B.dir,k);b1.z=lift;
+  return new THREE.CubicBezierCurve3(a0,a1,b1,b0);
+}
+function makeWireObj(fromId,toId,i,matKey){
+  const grp=new THREE.Group();
+  const curve=wireCurve(fromId,toId,i);
+  const tube=tubeMesh(curve,2.1,WM[matKey]);
+  tube.userData.wire=i;grp.add(tube);
+  [fromId,toId].forEach(id=>{
+    const f=new THREE.Mesh(G.ferrule,MAT.ferrule);f.userData.shared=true;
+    f.position.copy(T[id].anchor).addScaledVector(T[id].dir,1.25);
+    f.castShadow=true;grp.add(f);
+  });
+  return {grp:grp,tube:tube,curve:curve,kind:matKey};
+}
+function buildWires(){
+  disposeChildren(wireGroup);
+  wireObjs=[];
+  wires.forEach((w,i)=>{
+    const bad=checked&&T[w.from].net!==T[w.to].net;
+    const o=makeWireObj(w.from,w.to,i,bad?"bad":w.kind);
+    o.baseKind=w.kind;
+    wireGroup.add(o.grp);wireObjs.push(o);
+  });
+  hovW=-1;dirty=true;
+}
+function flashBad(a,b){
+  const o=makeWireObj(a,b,wires.length,"bad");
+  ghostGroup.add(o.grp);dirty=true;
+  setTimeout(()=>{ghostGroup.remove(o.grp);o.grp.traverse(n=>{if(n.geometry&&!n.userData.shared)n.geometry.dispose();});dirty=true;},1500);
+}
+function setHoverWire(i){
+  if(i===hovW)return;
+  if(hovW>=0&&wireObjs[hovW]){
+    const w=wires[hovW];
+    const bad=checked&&T[w.from].net!==T[w.to].net;
+    wireObjs[hovW].tube.material=WM[bad?"bad":w.kind];
+  }
+  hovW=i;
+  if(i>=0&&wireObjs[i]&&!powered)wireObjs[i].tube.material=WM.hover;
+  dirty=true;
+}
+
+/* ring halos on terminals */
+const ringGeo=new THREE.RingGeometry(5.3,6.9,32);
+const ringMats={sel:new THREE.MeshBasicMaterial({color:0xffb400,transparent:true,depthTest:false,depthWrite:false,toneMapped:false}),
+                hint:new THREE.MeshBasicMaterial({color:0x35e0ff,transparent:true,depthTest:false,depthWrite:false,toneMapped:false})};
+const rings={};
+for(const id in T){
+  const r=new THREE.Mesh(ringGeo,ringMats.sel);
+  r.position.copy(T[id].pos);r.position.z+=1.5;r.visible=false;r.renderOrder=20;
+  ringGroup.add(r);rings[id]=r;
+}
+const hintSet=new Set();
+function paintRings(){
+  for(const id in rings){
+    const r=rings[id];
+    const isHint=hintSet.has(id);
+    const on=id===selected||id===hovT||isHint;
+    r.visible=on;
+    r.material=isHint&&id!==selected?ringMats.hint:ringMats.sel;
+  }
+  dirty=true;
+}
+function paintSel(){paintRings();}
+
+/* which wires carry current right now (breakers may have tripped) */
+function groupOf(id){const m=/^ab(\d)\.o$/.exec(id)||/^k(\d)\./.exec(id);return m?+m[1]-1:-1;}
+function endAlive(id){
+  if(/^(src\.|ab\.|rcd\.[ln]i$)/.test(id))return true;
+  const anyG=!tr.g[0]||!tr.g[1]||!tr.g[2];
+  const g=groupOf(id);
+  if(g>=0)return !tr.rcd&&!tr.g[g];
+  if(/^(m\.4|nb\d)$/.test(id))return !tr.rcd&&anyG;
+  return !tr.rcd;
+}
+function wireAlive(w){return endAlive(w.from)&&endAlive(w.to);}
+
+/* live current dots */
+const MAXDOTS=900;
+const dotMesh=new THREE.InstancedMesh(new THREE.SphereGeometry(1.35,8,6),new THREE.MeshBasicMaterial({color:0xfff1a8,toneMapped:false}),MAXDOTS);
+const glowMesh=new THREE.InstancedMesh(new THREE.SphereGeometry(3.4,8,6),new THREE.MeshBasicMaterial({color:0xffc94a,transparent:true,opacity:.2,blending:THREE.AdditiveBlending,depthWrite:false,toneMapped:false}),MAXDOTS);
+dotMesh.count=0;glowMesh.count=0;dotMesh.frustumCulled=false;glowMesh.frustumCulled=false;
+scene.add(dotMesh);scene.add(glowMesh);
+let flows=[];
+function buildFlows(){
+  flows=[];
+  wireObjs.forEach((o,i)=>{
+    const k=wires[i].kind;
+    if(k!=="L"&&k!=="N")return;
+    if(!wireAlive(wires[i]))return;
+    const len=o.curve.getLength(),w=wires[i];
+    flows.push({curve:o.curve,len:len,n:Math.max(2,Math.floor(len/19)),ph:(i*.173)%1,grp:Math.max(groupOf(w.from),groupOf(w.to))});
+  });
+}
+const _m=new THREE.Matrix4(),FLOW_SPEED=82;
+function updateFlows(dt){
+  let c=0;
+  for(const f of flows){
+    let sp=FLOW_SPEED;
+    if(fault&&fault.type==="short"&&!tr.g[fault.g]&&f.grp===fault.g)sp*=5;
+    if(!REDUCED)f.ph=(f.ph+dt*sp/f.len)%1;
+    for(let j=0;j<f.n&&c<MAXDOTS;j++){
+      const u=(f.ph+j/f.n)%1;
+      const p=f.curve.getPointAt(u);
+      _m.setPosition(p.x,p.y,p.z+2.7);
+      dotMesh.setMatrixAt(c,_m);glowMesh.setMatrixAt(c,_m);c++;
+    }
+  }
+  dotMesh.count=c;glowMesh.count=c;
+  dotMesh.instanceMatrix.needsUpdate=true;glowMesh.instanceMatrix.needsUpdate=true;
+}
+
+/* preview wire while dragging */
+function drawPreview(id,p){
+  clearPreview();
+  const A=T[id],a0=A.anchor.clone().addScaledVector(A.dir,5.5);
+  const dist=a0.distanceTo(p),k=Math.min(80,Math.max(20,dist*.35));
+  const a1=a0.clone().addScaledVector(A.dir,k);a1.z=100;
+  const b=p.clone();b.z=100;
+  const curve=new THREE.CubicBezierCurve3(a0,a1,b,b.clone());
+  previewMesh=new THREE.Mesh(new THREE.TubeGeometry(curve,32,1.5,6,false),new THREE.MeshBasicMaterial({color:0xffb400,toneMapped:false}));
+  scene.add(previewMesh);dirty=true;
+}
+function clearPreview(){
+  if(previewMesh){scene.remove(previewMesh);previewMesh.geometry.dispose();previewMesh.material.dispose();previewMesh=null;dirty=true;}
+}
+
+/* =====================================================================
+   UI RENDERING
+   ===================================================================== */
+function renderSteps(){
+  $("steps").innerHTML=AN.states.map(s=>
+    `<li class="${s.done?"done":s.have?"part":""}"><span class="mk" aria-hidden="true"></span><span class="tx">${s.net.text}<span class="sr">${s.done?" (tayyor)":""}</span></span>${s.total>2?`<span class="ct">${s.have}/${s.total}</span>`:""}</li>`
+  ).join("");
+}
+function renderAll(){
+  AN=analyze();
+  buildWires();
+  const learn=mode==="learn";
+  $("prog").hidden=!learn;$("steps").hidden=!learn;$("exam").hidden=learn;
+  $("hint").hidden=!learn;$("check").hidden=learn;
+  if(learn){
+    $("pdone").textContent=AN.doneCount;
+    $("pfill").style.width=(AN.doneCount/NET_COUNT*100)+"%";
+    renderSteps();
+  }else{
+    $("wcount").textContent=wires.length;
+  }
+  $("undo").disabled=powered||!wires.length;
+  $("clear").disabled=powered||!wires.length;
+  $("hint").disabled=powered||AN.solved;
+  $("check").disabled=powered||!wires.length;
+  const dis=!powered&&!canPower(),label=powered?"O'chirish":"Kuchlanish berish";
+  ["power","power2"].forEach(id=>{
+    const b=$(id);b.textContent=label;b.disabled=dis;
+    b.title=dis?"Avval sxemani to'liq va to'g'ri yig'ing":"";
+  });
+  if(powered)buildFlows();else{flows=[];dotMesh.count=0;glowMesh.count=0;}
+  updateFaultUI();
+  dirty=true;
+}
+function changed(){
+  checked=false;examOK=false;
+  $("report").innerHTML="";
+  renderAll();
+}
+
+/* =====================================================================
+   ACTIONS
+   ===================================================================== */
+function connect(a,b){
+  if(wires.some(w=>(w.from===a&&w.to===b)||(w.from===b&&w.to===a))){
+    say("Bu ikki vint allaqachon ulangan.","");return;
+  }
+  const valid=T[a].net===T[b].net;
+  if(mode==="learn"&&!valid){flashBad(a,b);say(reason(a,b),"bad");return;}
+  addWire(a,b);
+  changed();
+  if(mode==="learn"){
+    if(AN.solved)say("Sxema to'g'ri yig'ildi. Kuchlanish berib ko'ring.","ok");
+    else say(`To'g'ri ulandi. ${AN.doneCount} / ${NET_COUNT} zanjir tayyor.`,"ok");
+  }else{
+    say(`Sim ulandi. Jami ${wires.length} ta.`,"");
+  }
+}
+function tap(id){
+  if(powered){say("Kuchlanish ostida sxemani o'zgartirib bo'lmaydi. Avval o'chiring.","bad");return;}
+  if(selected&&selected!==id){
+    const a=selected;selected=null;paintSel();connect(a,id);
+  }else if(selected===id){
+    selected=null;paintSel();say(DEFAULT,"");
+  }else{
+    selected=id;paintSel();say(T[id].desc+". Ikkinchi vintni tanlang.","");
+  }
+}
+function removeWire(i){
+  if(powered){say("Kuchlanish ostida simni olib bo'lmaydi.","bad");return;}
+  wires.splice(i,1);
+  changed();
+  say("Sim olib tashlandi.","");
+}
+function runCheck(){
+  AN=analyze();checked=true;
+  const items=AN.bad.map(i=>{const w=wires[i];return `Xato sim: ${T[w.from].desc} va ${T[w.to].desc}. ${reason(w.from,w.to)}`;});
+  const missing=AN.states.filter(s=>!s.done).length;
+  if(missing&&!AN.bad.length)items.push(`Hali ulanmagan zanjirlar: ${missing} ta.`);
+  else if(missing)items.push(`Yana ${missing} ta zanjir to'liq emas.`);
+  examOK=AN.solved;
+  $("report").innerHTML=items.map(x=>`<li>${x}</li>`).join("");
+  renderAll();
+  if(AN.solved)say("Sxema to'g'ri va to'liq. Kuchlanish berishingiz mumkin.","ok");
+  else say(`Tekshiruv: ${items.length} ta muammo topildi.`,"bad");
+}
+function hint(){
+  if(powered||mode!=="learn")return;
+  const s=AN.states.find(x=>!x.done);
+  if(!s)return;
+  let ids=s.net.m.filter(m=>m!=="nbus"&&m!=="pbus");
+  const busName=s.net.m.includes("nbus")?"nbus":s.net.m.includes("pbus")?"pbus":null;
+  if(busName){const br=AN.find(rep(busName));ids=ids.filter(m=>AN.find(m)!==br);}
+  hintSet.clear();ids.forEach(id=>hintSet.add(id));paintRings();
+  clearTimeout(hintTimer);
+  hintTimer=setTimeout(()=>{hintSet.clear();paintRings();},3600);
+  say("Maslahat: "+s.net.text,"");
+}
+function setPower(on){
+  if(on&&!canPower())return;
+  clearFaults();
+  powered=on;selected=null;paintSel();
+  levers.forEach((l,i)=>{l.to=on?1:0;l.wait=i*.16;});
+  setHoverWire(-1);
+  renderAll();
+  if(on){
+    meterTimer=setInterval(()=>{if(!tr.rcd){if(!tr.g[0]||!tr.g[1]||!tr.g[2])kwhN+=1;drawLcd(true);dirty=true;}},900);
+    drawLcd(true);
+    say("Kuchlanish berildi. Faza simida tok iste'molchiga boradi, nol simida qaytadi. PE da tok yo'q.","ok");
+  }else{
+    clearInterval(meterTimer);meterTimer=null;drawLcd(false);
+    say("Kuchlanish o'chirildi. Sxemani o'zgartirishingiz mumkin.","");
+  }
+}
+function setMode(m){
+  if(m===mode)return;
+  mode=m;wires.length=0;selected=null;
+  if(powered){clearFaults();powered=false;levers.forEach(l=>{l.to=0;l.wait=0;});clearInterval(meterTimer);meterTimer=null;drawLcd(false);}
+  paintSel();
+  $("m-learn").setAttribute("aria-pressed",String(m==="learn"));
+  $("m-exam").setAttribute("aria-pressed",String(m==="exam"));
+  changed();
+  say(m==="learn"?"O'rganish rejimi: noto'g'ri ulanish darhol tushuntiriladi.":"Imtihon rejimi: xohlagan simni ulang, tayyor bo'lgach Tekshirish ni bosing.","");
+}
+
+/* =====================================================================
+   POINTER INTERACTION
+   ===================================================================== */
+const _v=new THREE.Vector3(),ray=new THREE.Raycaster(),ndc=new THREE.Vector2();
+function xy(e){const r=cv.getBoundingClientRect();return {x:e.clientX-r.left,y:e.clientY-r.top,w:r.width,h:r.height};}
+function nearestT(e){
+  const p=xy(e),rad=e.pointerType==="touch"?28:18;
+  let best=null,bd=rad;
+  for(const id in T){
+    _v.copy(T[id].pos).project(cam);
+    if(_v.z>1)continue;
+    const d=Math.hypot((_v.x*.5+.5)*p.w-p.x,(-_v.y*.5+.5)*p.h-p.y);
+    if(d<bd){bd=d;best=id;}
+  }
+  return best;
+}
+function worldAt(e,z){
+  const p=xy(e);ndc.set(p.x/p.w*2-1,-(p.y/p.h)*2+1);ray.setFromCamera(ndc,cam);
+  const out=new THREE.Vector3();
+  return ray.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0,0,1),-z),out)?out:null;
+}
+function wireAt(e){
+  if(!wireObjs.length)return -1;
+  const p=xy(e);ndc.set(p.x/p.w*2-1,-(p.y/p.h)*2+1);ray.setFromCamera(ndc,cam);
+  const hits=ray.intersectObjects(wireObjs.map(o=>o.tube),false);
+  return hits.length?hits[0].object.userData.wire:-1;
+}
+function isFull(){return stage.classList.contains("full");}
+const pointers=new Map();
+function startPinch(){
+  const a=[...pointers.values()];
+  pinch={d:Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y)||1,z:view.zoom,mx:(a[0].x+a[1].x)/2,my:(a[0].y+a[1].y)/2,tx:view.tx,ty:view.ty};
+}
+function doPinch(){
+  const a=[...pointers.values()];
+  const d=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y)||1,mx=(a[0].x+a[1].x)/2,my=(a[0].y+a[1].y)/2,s=perPx();
+  view.zoom=clamp(pinch.z*d/pinch.d,.8,4);
+  view.tx=clamp(pinch.tx-(mx-pinch.mx)*s,-300,300);
+  view.ty=clamp(pinch.ty+(my-pinch.my)*s,-420,420);
+  dirty=true;
+}
+function cancelWireDrag(){if(wd){wd=null;clearPreview();}}
+
+cv.addEventListener("contextmenu",e=>e.preventDefault());
+cv.addEventListener("pointerdown",e=>{
+  if(e.pointerType==="mouse"&&e.button>2)return;
+  pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  try{cv.setPointerCapture(e.pointerId);}catch(_){}
+  if(pointers.size===2){cancelWireDrag();gest=null;startPinch();return;}
+  if(pointers.size>2)return;
+  const id=(e.pointerType==="mouse"&&e.button!==0)?null:nearestT(e);
+  if(id){
+    e.preventDefault();
+    if(powered||(selected&&selected!==id)){tap(id);return;}
+    wd={from:id,moved:false,sx:e.clientX,sy:e.clientY,wasSel:selected===id};
+    selected=id;paintSel();
+    say(T[id].desc+". Boshqa vintga sudrang yoki ikkinchisini bosing.","");
+  }else{
+    let type=null;
+    if(e.pointerType==="mouse")type=(e.button===2||e.shiftKey)?"pan":"orbit";
+    else if(isFull())type="pan";
+    gest={type:type,sx:e.clientX,sy:e.clientY,yaw:view.yaw,pitch:view.pitch,tx:view.tx,ty:view.ty,moved:false};
+  }
+});
+cv.addEventListener("pointermove",e=>{
+  const p=pointers.get(e.pointerId);if(p){p.x=e.clientX;p.y=e.clientY;}
+  if(pointers.size===2&&pinch){doPinch();return;}
+  if(wd){
+    if(!wd.moved&&Math.hypot(e.clientX-wd.sx,e.clientY-wd.sy)>8)wd.moved=true;
+    if(wd.moved){const w=worldAt(e,100);if(w)drawPreview(wd.from,w);}
+    const n=nearestT(e);if(n!==hovT){hovT=n;paintRings();}
+    return;
+  }
+  if(gest&&gest.type){
+    const dx=e.clientX-gest.sx,dy=e.clientY-gest.sy;
+    if(!gest.moved&&Math.hypot(dx,dy)>5)gest.moved=true;
+    if(gest.moved){
+      if(gest.type==="orbit"){
+        view.yaw=clamp(gest.yaw-dx*.006,-.75,.75);
+        view.pitch=clamp(gest.pitch+dy*.005,-.3,.45);
+      }else{
+        const s=perPx();
+        view.tx=clamp(gest.tx-dx*s,-300,300);
+        view.ty=clamp(gest.ty+dy*s,-420,420);
+      }
+      dirty=true;
+    }
+    return;
+  }
+  if(e.pointerType==="mouse"&&!pointers.size){
+    const n=nearestT(e);
+    if(n!==hovT){hovT=n;paintRings();}
+    setHoverWire(n?-1:wireAt(e));
+    cv.style.cursor=n||hovW>=0?"pointer":"grab";
+  }
+});
+function endPointer(e,cancel){
+  pointers.delete(e.pointerId);
+  if(pinch){if(pointers.size<2)pinch=null;gest=null;return;}
+  if(wd){
+    const d=wd;wd=null;clearPreview();
+    if(cancel){selected=null;paintSel();return;}
+    if(d.moved){
+      const t=nearestT(e);
+      selected=null;paintSel();
+      if(t&&t!==d.from)connect(d.from,t);else say(DEFAULT,"");
+    }else if(d.wasSel){
+      selected=null;paintSel();say(DEFAULT,"");
+    }
+    return;
+  }
+  if(gest){
+    const g=gest;gest=null;
+    if(!g.moved&&!cancel){
+      const i=wireAt(e);
+      if(i>=0)removeWire(i);
+      else if(selected){selected=null;paintSel();say(DEFAULT,"");}
+    }
+  }
+}
+cv.addEventListener("pointerup",e=>endPointer(e,false));
+cv.addEventListener("pointercancel",e=>endPointer(e,true));
+cv.addEventListener("pointerleave",()=>{if(hovT){hovT=null;paintRings();}setHoverWire(-1);});
+cv.addEventListener("wheel",e=>{
+  if(!(isFull()||e.ctrlKey||e.metaKey))return;
+  e.preventDefault();
+  view.zoom=clamp(view.zoom*(e.deltaY<0?1.12:.89),.8,4);dirty=true;
+},{passive:false});
+
+/* camera buttons */
+$("zin").addEventListener("click",()=>{view.zoom=clamp(view.zoom*1.25,.8,4);dirty=true;});
+$("zout").addEventListener("click",()=>{view.zoom=clamp(view.zoom/1.25,.8,4);dirty=true;});
+$("zreset").addEventListener("click",()=>{view.yaw=.14;view.pitch=.07;view.zoom=1;view.tx=0;view.ty=0;dirty=true;});
+$("tg").addEventListener("click",()=>{
+  const on=$("tg").getAttribute("aria-pressed")!=="true";
+  $("tg").setAttribute("aria-pressed",String(on));$("tags").hidden=!on;
+});
+function setFull(on){
+  stage.classList.toggle("full",on);
+  document.body.style.overflow=on?"hidden":"";
+  resize();
+}
+$("fs").addEventListener("click",()=>setFull(!isFull()));
+$("close").addEventListener("click",()=>setFull(false));
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&isFull())setFull(false);});
+
+/* panel buttons */
+$("undo").addEventListener("click",()=>{
+  if(powered||!wires.length)return;
+  wires.pop();selected=null;paintSel();changed();say("Oxirgi sim olib tashlandi.","");
+});
+$("clear").addEventListener("click",()=>{
+  if(powered||!wires.length)return;
+  wires.length=0;selected=null;paintSel();changed();say("Sxema tozalandi. Tarmoq simlaridan boshlang.","");
+});
+$("hint").addEventListener("click",hint);
+$("check").addEventListener("click",runCheck);
+$("power").addEventListener("click",()=>setPower(!powered));
+$("power2").addEventListener("click",()=>setPower(!powered));
+$("m-learn").addEventListener("click",()=>setMode("learn"));
+$("m-exam").addEventListener("click",()=>setMode("exam"));
+$("fshort").addEventListener("click",()=>triggerFault("short",+$("fg").value));
+$("fleak").addEventListener("click",()=>triggerFault("leak",+$("fg").value));
+$("ftest").addEventListener("click",()=>triggerFault("test",0));
+$("freset").addEventListener("click",resetBreakers);
+$("fclear").addEventListener("click",clearFault);
+$("fg").addEventListener("change",updateFaultUI);
+
+/* =====================================================================
+   FAULTS: short circuit trips the group breaker, earth leakage trips the RCD
+   ===================================================================== */
+const XC=[-130,0,130];
+function later(sec,fn){timers.push({t:sec,fn:fn});}
+function runTimers(dt){
+  if(!timers.length)return false;
+  timers.forEach(k=>{k.t-=dt;});
+  const due=[];
+  for(let i=timers.length-1;i>=0;i--){if(timers[i].t<=0)due.unshift(timers.splice(i,1)[0]);}
+  due.forEach(k=>k.fn());
+  return true;
+}
+let AC=null;
+function beep(kind){
+  const on=$("snd");
+  if(on&&!on.checked)return;
+  try{
+    AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+    if(AC.state==="suspended")AC.resume();
+    const sr=AC.sampleRate,len=kind==="bang"?.5:kind==="zap"?.25:.09;
+    const buf=AC.createBuffer(1,Math.ceil(sr*len),sr),d=buf.getChannelData(0);
+    const tau=kind==="click"?.012:kind==="bang"?.09:.05;
+    for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*Math.exp(-i/(sr*tau))*(kind==="click"?.55:.8);
+    const src=AC.createBufferSource();src.buffer=buf;
+    const f=AC.createBiquadFilter();
+    f.type=kind==="click"?"bandpass":"lowpass";
+    f.frequency.value=kind==="click"?2200:kind==="bang"?1800:3500;
+    const g=AC.createGain();g.gain.value=.3;
+    src.connect(f);f.connect(g);g.connect(AC.destination);src.start();
+  }catch(e){}
+}
+const fxLight=new THREE.PointLight(0xffe0b0,0,620,1.4);scene.add(fxLight);
+const fxFlash=new THREE.Mesh(new THREE.PlaneGeometry(150,150),new THREE.MeshBasicMaterial({map:glowTex,transparent:true,opacity:0,blending:THREE.AdditiveBlending,depthWrite:false,toneMapped:false}));
+fxFlash.visible=false;scene.add(fxFlash);
+const NSP=36;
+const sparkMesh=new THREE.InstancedMesh(new THREE.SphereGeometry(.9,6,4),new THREE.MeshBasicMaterial({color:0xffe9a8,toneMapped:false}),NSP);
+sparkMesh.count=0;sparkMesh.frustumCulled=false;scene.add(sparkMesh);
+let sparks=[];
+function startFx(type,g){
+  const big=type==="short";
+  fx={t:0,big:big,x:XC[g],y:-244,z:84};
+  fxLight.position.set(fx.x,fx.y,fx.z+25);
+  fxFlash.position.set(fx.x,fx.y,fx.z+20);
+  fxFlash.material.color.setHex(big?0xffffff:0xaed4ff);
+  fxLight.color.setHex(big?0xffe0b0:0x9cc8ff);
+  fxFlash.visible=true;
+  sparks=[];
+  const n=big?NSP:12;
+  for(let i=0;i<n;i++){
+    const a=Math.random()*Math.PI*2,sp=(big?190:90)*(.35+Math.random());
+    sparks.push({x:fx.x,y:fx.y,z:fx.z,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp*.8+50,vz:(Math.random()-.2)*sp*.7,life:.25+Math.random()*.55});
+  }
+  beep(big?"bang":"zap");
+  dirty=true;
+}
+function stopFx(){
+  fx=null;sparks=[];
+  fxLight.intensity=0;fxFlash.visible=false;fxFlash.material.opacity=0;sparkMesh.count=0;dirty=true;
+}
+function updateFx(dt){
+  if(!fx)return false;
+  fx.t+=dt;
+  const t=fx.t,a=Math.exp(-t*(fx.big?7:9));
+  fxLight.intensity=(fx.big?14:6)*a;
+  fxFlash.material.opacity=Math.min(1,(fx.big?1.2:.7)*a);
+  const sc=(fx.big?1:.6)*(1+t*3);
+  fxFlash.scale.set(sc,sc,1);
+  let c=0;
+  for(const s of sparks){
+    if(t>s.life)continue;
+    s.vy-=520*dt;s.x+=s.vx*dt;s.y+=s.vy*dt;s.z=Math.max(4,s.z+s.vz*dt);
+    const f=1-t/s.life;
+    _m.makeScale(f,f,f);_m.setPosition(s.x,s.y,s.z);
+    sparkMesh.setMatrixAt(c++,_m);
+  }
+  sparkMesh.count=c;sparkMesh.instanceMatrix.needsUpdate=true;
+  if(t>1.1){stopFx();}
+  return true;
+}
+function clearFaults(){
+  fault=null;timers.length=0;
+  tr.rcd=false;tr.g=[false,false,false];
+  levers.forEach(l=>{l.speed=3.4;});
+  stopFx();
+}
+function trip(i){const l=levers[i];l.speed=16;l.wait=0;l.to=.28;}
+function refreshFlows(){if(powered)buildFlows();}
+function updateFaultUI(){
+  const box=$("faults");
+  box.hidden=!powered;
+  if(!powered)return;
+  const g=+$("fg").value,anyTrip=tr.rcd||tr.g.some(Boolean);
+  $("fshort").disabled=!!fault||tr.rcd||tr.g[g];
+  $("fleak").disabled=!!fault||tr.rcd||tr.g[g];
+  $("ftest").disabled=tr.rcd;
+  $("freset").disabled=!anyTrip;
+  $("fclear").disabled=!fault;
+  let s;
+  if(tr.rcd)s="УЗО o'chgan: butun shitda kuchlanish yo'q.";
+  else if(tr.g.some(Boolean))s=tr.g.map((x,i)=>x?"AB-"+(i+1):"").filter(Boolean).join(", ")+" o'chgan, qolgan guruhlar ishlayapti.";
+  else s="Hamma himoya qurilmalari yoqilgan.";
+  if(fault)s+=" Nosozlik hali bartaraf etilmagan.";
+  $("fnote").textContent=s;
+}
+function applyTrip(type,g){
+  if(!powered)return;
+  if(type==="short"){
+    if(tr.rcd||tr.g[g])return;
+    tr.g[g]=true;trip(2+g);
+    say("AB-"+(g+1)+" o'chdi. Qisqa tutashuv toki yuzlab amperga yetdi, C16 avtomatning magnit ajratgichi millisekundlar ichida ishladi. Boshqa guruhlar ishlashda davom etyapti.","ok");
+  }else{
+    if(tr.rcd)return;
+    tr.rcd=true;trip(1);
+    if(type==="leak")say("УЗО o'chdi. Fazadan oqib chiqqan tok nol orqali qaytmadi, farq 30 mA dan oshdi. Avtomatlar ishlamadi: tok ularning nominalidan ancha kichik. УЗО hisoblagichdan oldin turgani uchun butun shit o'chdi.","ok");
+    else say("Test tugmasi sun'iy sizish toki hosil qildi va УЗО o'chdi. Uni oyiga bir marta shunday tekshirib turing.","ok");
+  }
+  beep("click");
+  refreshFlows();updateFaultUI();drawLcd(powered&&!tr.rcd);dirty=true;
+}
+function triggerFault(type,g){
+  if(!powered)return;
+  if(type==="test"){
+    if(tr.rcd)return;
+    beep("click");
+    later(.18,()=>applyTrip("test",0));
+    return;
+  }
+  if(fault||tr.rcd||tr.g[g])return;
+  fault={type:type,g:g};
+  updateFaultUI();
+  startFx(type,g);
+  say(type==="short"?"Kabel №"+(g+1)+" da faza va nol tutashdi. Tok keskin oshyapti...":"Kabel №"+(g+1)+" da faza simi asbob korpusiga tushdi. Sizish toki oqyapti...","bad");
+  later(type==="short"?.1:.3,()=>applyTrip(type,g));
+}
+function resetBreakers(){
+  if(!powered)return;
+  const hadRcd=tr.rcd,hadG=tr.g.slice();
+  if(!hadRcd&&!hadG.some(Boolean))return;
+  tr.rcd=false;tr.g=[false,false,false];
+  let k=0;
+  if(hadRcd){levers[1].speed=3.4;levers[1].to=1;levers[1].wait=0;k++;}
+  hadG.forEach((x,i)=>{if(x){levers[2+i].speed=3.4;levers[2+i].to=1;levers[2+i].wait=k*.12;k++;}});
+  beep("click");
+  refreshFlows();updateFaultUI();drawLcd(true);
+  if(fault){
+    const f=fault;
+    say("Avtomat qayta yoqildi, lekin nosozlik hali bor...","bad");
+    later(.7,()=>{
+      if(!powered||fault!==f)return;
+      startFx(f.type,f.g);
+      later(f.type==="short"?.1:.3,()=>applyTrip(f.type,f.g));
+    });
+  }else{
+    say("Himoya qurilmalari qayta yoqildi, kuchlanish tiklandi.","ok");
+  }
+}
+function clearFault(){
+  if(!fault)return;
+  fault=null;
+  say("Nosozlik bartaraf etildi. Endi o'chgan avtomatni qayta yoqish mumkin.","ok");
+  updateFaultUI();
+}
+
+/* =====================================================================
+   ANIMATION LOOP
+   ===================================================================== */
+let pw=0,last=performance.now(),t0=last,firstFrame=true;
+function animate(dt,time){
+  let busy=false;
+  levers.forEach(l=>{
+    if(l.wait>0){l.wait-=dt;busy=true;return;}
+    if(l.t!==l.to){
+      const d=l.to-l.t;
+      l.t+=Math.sign(d)*Math.min(Math.abs(d),dt*(l.speed||3.4));
+      applyLever(l);busy=true;
+    }
+  });
+  if(runTimers(dt))busy=true;
+  if(updateFx(dt))busy=true;
+  const target=powered?1:0;
+  if(Math.abs(target-pw)>.002){pw+=(target-pw)*Math.min(1,dt*3.2);busy=true;}
+  else if(pw!==target){pw=target;busy=true;}
+  for(let i=0;i<3;i++){
+    const tg=(powered&&!tr.rcd&&!tr.g[i])?1:0,d=tg-lv[i];
+    if(Math.abs(d)>.002){lv[i]+=d*Math.min(1,dt*(tg?3.2:10));busy=true;}
+    else if(lv[i]!==tg){lv[i]=tg;busy=true;}
+  }
+  const mLive=powered&&!tr.rcd;
+  if(powered||pw>.002||lv[0]+lv[1]+lv[2]+fanW>.002){
+    busy=true;
+    if(loads.lamp){
+      const f=lv[0]*(REDUCED?1:(.97+.03*Math.sin(time*9)));
+      loads.lamp.glow.material.opacity=.85*f;
+      loads.lamp.light.intensity=1.8*f;
+      loads.lamp.fil.material.emissive.setRGB(1*f,.62*f,.2*f);
+      loads.lamp.glass.material.emissive.setRGB(.55*f,.36*f,.1*f);
+    }
+    if(loads.socket){
+      loads.socket.led.material.emissive.setRGB(.2*lv[1],1*lv[1],.35*lv[1]);
+      loads.socket.light.intensity=.9*lv[1];
+    }
+    fanW+=(lv[2]-fanW)*Math.min(1,dt*(lv[2]>fanW?1.6:.7));
+    if(loads.fan&&!REDUCED){loads.fan.rot.rotation.z-=dt*16*fanW;}
+    if(meter){
+      const blink=mLive&&!REDUCED&&Math.floor(time*2.4)%2===0;
+      meter.led.material.emissive.setRGB(blink?1:(mLive?.12*pw:0),.05,.04);
+      meter.led.material.color.setHex(blink?0xff4a3a:0x4a0f0f);
+    }
+    if(powered)updateFlows(dt);
+  }else if(meter){
+    meter.led.material.emissive.setRGB(0,0,0);meter.led.material.color.setHex(0x4a0f0f);
+  }
+  return busy;
+}
+function projectTags(){
+  const w=stage.clientWidth,h=stage.clientHeight;
+  for(const t of tags){
+    _v.copy(t.p).project(cam);
+    if(_v.z>1||Math.abs(_v.x)>1.15||Math.abs(_v.y)>1.15){t.el.style.visibility="hidden";continue;}
+    t.el.style.visibility="visible";
+    t.el.style.transform="translate("+((_v.x*.5+.5)*w).toFixed(1)+"px,"+((-_v.y*.5+.5)*h).toFixed(1)+"px) "+TAGT[t.mode];
+  }
+}
+function frame(now){
+  requestAnimationFrame(frame);
+  const dt=Math.min(.06,(now-last)/1000);last=now;
+  const busy=animate(dt,(now-t0)/1000);
+  if(dirty||busy){
+    const pulse=1+.12*Math.sin(now/180);
+    for(const id in rings){if(rings[id].visible)rings[id].scale.set(pulse,pulse,1);}
+    updateCam();
+    renderer.render(scene,cam);
+    projectTags();
+    dirty=false;
+    if(firstFrame){firstFrame=false;const l=$("loading");if(l)l.hidden=true;}
+  }
+}
+
+/* =====================================================================
+   START
+   ===================================================================== */
+if(window.ResizeObserver)new ResizeObserver(resize).observe(stage);
+window.addEventListener("resize",resize);
+resize();
+addWire("src.l","ab.li");
+addWire("src.n","ab.ni");
+renderAll();
+say("Namuna: tarmoq L va N simlari kirish avtomatiga ulangan. Endi avtomat pastki vintlarini УЗО ga ulang.","");
+requestAnimationFrame(frame);
+}
+})();
+</script>
+
+</body>
+</html>
