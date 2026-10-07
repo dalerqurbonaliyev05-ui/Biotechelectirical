@@ -124,6 +124,11 @@
       "source": "/avtomat-yigish",
       "destination": "/avtomat-yigish/",
       "permanent": true
+    },
+    {
+      "source": "/chastota-yigish",
+      "destination": "/chastota-yigish/",
+      "permanent": true
     }
   ],
   "rewrites": [
