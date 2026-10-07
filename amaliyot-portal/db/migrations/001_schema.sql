@@ -1,5 +1,5 @@
 -- =====================================================================
--- Amaliyot portali: baza sxemasi (oddiy PostgreSQL 14+; hech qanday bulut xizmatiga bog'liq emas)
+-- Amaliyot portali: baza sxemasi (oddiy PostgreSQL 15+; hech qanday bulut xizmatiga bog'liq emas)
 --
 -- Xavfsizlik modeli (uch qatlam):
 --   1) server (Node.js): kirish, parol, sessiya, so'rov chegaralari;

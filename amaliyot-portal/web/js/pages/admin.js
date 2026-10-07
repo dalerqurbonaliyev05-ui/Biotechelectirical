@@ -88,12 +88,27 @@ sections.settings = async (el) => {
   };
 };
 
+// ---------- Audit jurnali ----------
+const ACTION_LABEL = {
+  login: "Tizimga kirdi", login_failed: "Kirish muvaffaqiyatsiz", password_changed: "Parolni almashtirdi", password_reset: "Parol tiklandi",
+  staff_created: "Xodim yaratildi", user_activated: "Hisob yoqildi", user_deactivated: "Hisob o'chirildi", student_activated: "Talaba faollashtirildi",
+  students_imported: "Talabalar import qilindi", refresh_reuse_detected: "Sessiya tokeni qayta ishlatildi (xavfli)",
+};
+sections.audit = async (el) => {
+  const { data } = await sb.getJson("/api/admin/audit?limit=200");
+  el.innerHTML = `<h2>🧾 Audit jurnali</h2>
+    <p class="muted">Oxirgi 200 ta muhim amal: kirishlar, parol o'zgarishlari, import va hisoblarni boshqarish. Parollar va kodlar bu yerda saqlanmaydi.</p>
+    <div class="table-wrap"><table><thead><tr><th>Vaqt</th><th>Kim</th><th>Amal</th><th>Kimga</th><th>IP</th></tr></thead><tbody>${
+      data.map((r) => `<tr class="${r.action === "refresh_reuse_detected" || r.action === "login_failed" ? "warnrow" : ""}"><td>${esc(fmtDateTime(r.at))}</td><td>${esc(r.actor_login || "—")}</td><td>${esc(ACTION_LABEL[r.action] || r.action)}</td><td>${esc(r.target || "")}</td><td class="small muted">${esc(r.ip || "")}</td></tr>`).join("") || '<tr><td colspan="5" class="muted">Hozircha yozuv yo\'q</td></tr>'
+    }</tbody></table></div>`;
+};
+
 var ctx = initShell({
   title: "ADMINISTRATOR", subtitle: "Amaliyot portali", profile,
   menu: [
     { id: "dashboard", icon: "🏠", label: "Bosh sahifa" }, { id: "users", icon: "🧑‍💼", label: "Xodimlar" },
     { id: "students", icon: "👥", label: "Talabalar va import" }, { id: "periods", icon: "🗓", label: "Amaliyot davrlari" },
-    { id: "announcements", icon: "📢", label: "E'lonlar" }, { id: "settings", icon: "⚙️", label: "Sozlamalar" },
+    { id: "announcements", icon: "📢", label: "E'lonlar" }, { id: "settings", icon: "⚙️", label: "Sozlamalar" }, { id: "audit", icon: "🧾", label: "Audit jurnali" },
     { sep: true }, { href: "res_panel.html", icon: "📅", label: "RES rahbari paneli" }, { href: "amaliyot_panel.html", icon: "📋", label: "Amaliyot rahbari paneli" },
   ],
   sections,

@@ -132,3 +132,4 @@ code.kod { font-family: ui-monospace, Menlo, Consolas, monospace; font-weight: 7
   .kv { grid-template-columns: 110px 1fr; }
 }
 @media print { .sidebar, .topbar, #toasts, .no-print { display: none !important; } .content { padding: 0; } .card { box-shadow: none; } body { background: #fff; } }
+.warnrow td { background: var(--warn-soft); }

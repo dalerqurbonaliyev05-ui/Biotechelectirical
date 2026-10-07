@@ -1,0 +1,20 @@
+# Docker'siz o'rnatish uchun systemd xizmati (docs/INSTALL.md, "Docker'siz" bo'limi).
+[Unit]
+Description=Amaliyot portali
+After=network.target postgresql.service
+
+[Service]
+User=amaliyot
+WorkingDirectory=/opt/amaliyot-portal/server
+EnvironmentFile=/etc/amaliyot-portal.env
+ExecStartPre=/usr/bin/node src/migrate-cli.js
+ExecStart=/usr/bin/node src/index.js
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/amaliyot-portal
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

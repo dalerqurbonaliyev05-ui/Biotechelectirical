@@ -600,6 +600,10 @@ test("admin: xodim yaratish, parol tiklash, faolsizlantirish, sozlamalar", async
   await toast(page, /Saqlandi/);
   assert.equal((await snap()).settings[0].head_name, "Yangi Rahbar Y.Y.");
   await section(page, "periods"); await section(page, "announcements"); await section(page, "students");
+  await section(page, "audit");
+  const audit = await page.textContent("#content");
+  assert.match(audit, /Xodim yaratildi/); assert.match(audit, /Parol tiklandi/); assert.match(audit, /sobirov/);
+  assert.doesNotMatch(audit, new RegExp(temp), "auditda parollar ko'rinmasligi kerak");
   clean(page); await ctx.close();
 });
 

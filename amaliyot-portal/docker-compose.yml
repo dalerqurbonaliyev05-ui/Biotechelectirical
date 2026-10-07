@@ -1,0 +1,70 @@
+# Amaliyot portali: PostgreSQL + server. Ishga tushirish: docker compose up -d --build
+# Sozlamalar .env faylidan olinadi (.env.example ga qarang).
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-amaliyot}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD .env faylida berilmagan}
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-amaliyot}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    # Baza tashqariga ochilmaydi: unga faqat `app` konteyneri ichki tarmoqdan ulanadi.
+
+  app:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_ADMIN_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-amaliyot}
+      APP_DB_PASSWORD: ${APP_DB_PASSWORD:?APP_DB_PASSWORD .env faylida berilmagan}
+      DATABASE_URL: postgresql://app:${APP_DB_PASSWORD}@db:5432/${POSTGRES_DB:-amaliyot}
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET .env faylida berilmagan}
+      ACTIVATION_PEPPER: ${ACTIVATION_PEPPER:-}
+      TRUST_PROXY: ${TRUST_PROXY:-1}
+      HSTS: ${HSTS:-0}
+      ACCESS_TTL_SEC: ${ACCESS_TTL_SEC:-1800}
+      REFRESH_TTL_SEC: ${REFRESH_TTL_SEC:-43200}
+      REFRESH_TTL_REMEMBER_SEC: ${REFRESH_TTL_REMEMBER_SEC:-2592000}
+      MAX_PHOTO_BYTES: ${MAX_PHOTO_BYTES:-5242880}
+      LOGIN_MAX_FAILURES: ${LOGIN_MAX_FAILURES:-10}
+      LOGIN_LOCK_SEC: ${LOGIN_LOCK_SEC:-900}
+      RATE_LIMIT_AUTH_PER_MIN: ${RATE_LIMIT_AUTH_PER_MIN:-20}
+      RATE_LIMIT_API_PER_MIN: ${RATE_LIMIT_API_PER_MIN:-600}
+      HEMIS_API_URL: ${HEMIS_API_URL:-}
+      HEMIS_API_TOKEN: ${HEMIS_API_TOKEN:-}
+      HEMIS_UNIVERSITY: ${HEMIS_UNIVERSITY:-}
+      HEMIS_QUERY: ${HEMIS_QUERY:-}
+    volumes:
+      - appdata:/data
+    ports:
+      - "${PUBLISH:-127.0.0.1:8080}:8080"
+
+  # Ixtiyoriy: avtomatik HTTPS (Let's Encrypt). Ishga tushirish: docker compose --profile https up -d
+  # Internetga ulanmagan yopiq tarmoqda ishlatilmaydi: docs/INSTALL.md dagi nginx variantiga qarang.
+  caddy:
+    profiles: ["https"]
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on: [app]
+    environment:
+      DOMAIN: ${DOMAIN:-localhost}
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddydata:/data
+    ports:
+      - "80:80"
+      - "443:443"
+
+volumes:
+  dbdata:
+  appdata:
+  caddydata:

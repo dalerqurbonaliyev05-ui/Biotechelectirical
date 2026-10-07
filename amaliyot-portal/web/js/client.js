@@ -187,5 +187,12 @@ export function createClient({ store, base = "" }) {
     const e = new Error(toErr(r).message); e.status = r.status; e.data = r.json; throw e;
   }
 
-  return { from: (t) => new Query(t), auth, storage, callFn };
+  // Faqat o'qish uchun GET (audit jurnali)
+  async function getJson(path) {
+    const r = await authed("GET", path);
+    if (r.status === 200) return r.json;
+    throw new Error(toErr(r).message);
+  }
+
+  return { from: (t) => new Query(t), auth, storage, callFn, getJson };
 }

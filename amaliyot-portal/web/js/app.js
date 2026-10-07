@@ -111,7 +111,8 @@ export function downloadFile(name, text, mime = "text/csv;charset=utf-8") {
   setTimeout(() => URL.revokeObjectURL(a.href), 2000);
 }
 export function toCSV(rows) {
-  const q = (v) => { const s = String(v ?? ""); return /[",;\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; };
+  // Excel formulasi sifatida bajarilmasin: =, +, -, @ bilan boshlansa oldiga ' qo'yiladi
+  const q = (v) => { let s = String(v ?? ""); if (/^[=+\-@\t\r]/.test(s)) s = "'" + s; return /[",;\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; };
   return "﻿" + rows.map((r) => r.map(q).join(";")).join("\r\n");
 }
 
