@@ -9,8 +9,32 @@ if (!window.supabase || !window.supabase.createClient) {
   document.body.innerHTML = '<p style="padding:24px;font-family:sans-serif">Supabase kutubxonasi yuklanmadi (vendor/supabase-js.umd.js). Sahifani yangilang.</p>';
   throw new Error("supabase-js yuklanmagan");
 }
+// ---------- Sessiya qayerda saqlanadi ----------
+// Odatda sessiya brauzer/oyna yopilganda tugaydi (sessionStorage): umumiy kompyuterda xavfsiz.
+// Foydalanuvchi kirishda «Meni eslab qol» ni belgilasa - localStorage (brauzer yopilgandan keyin ham qoladi).
+// Tanlov kirishdan oldin o'zgarishi mumkin, shuning uchun xotira har chaqiruvda tanlanadi.
+const REMEMBER_KEY = "amaliyot_remember";
+const safe = (fn, fallback) => { try { return fn(); } catch { return fallback; } };
+const remembered = () => safe(() => window.localStorage.getItem(REMEMBER_KEY) === "1", false);
+export function setRemember(on) {
+  safe(() => (on ? window.localStorage.setItem(REMEMBER_KEY, "1") : window.localStorage.removeItem(REMEMBER_KEY)));
+}
+const sessionStore = {
+  getItem: (k) => safe(() => (remembered() ? window.localStorage : window.sessionStorage).getItem(k), null),
+  setItem: (k, v) => safe(() => {
+    const on = remembered() ? window.localStorage : window.sessionStorage;
+    (on === window.localStorage ? window.sessionStorage : window.localStorage).removeItem(k); // eski nusxa qolmasin
+    on.setItem(k, v);
+  }),
+  removeItem: (k) => safe(() => { window.localStorage.removeItem(k); window.sessionStorage.removeItem(k); }),
+};
+// Eslab qolish yoqilmagan bo'lsa, oldingi versiyadan qolgan (localStorage) sessiya tokenini o'chiramiz.
+if (!remembered()) {
+  safe(() => { for (const k of Object.keys(window.localStorage)) if (/^sb-.+-auth-token/.test(k)) window.localStorage.removeItem(k); });
+}
+
 export const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
-  auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false },
+  auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false, storage: sessionStore },
 });
 
 // ---------- Rollar ----------
@@ -62,6 +86,7 @@ export async function requireRole(roles) {
 
 export async function signOutAndGo() {
   try { await sb.auth.signOut(); } catch { /* baribir chiqamiz */ }
+  setRemember(false); // keyingi kirishda «Meni eslab qol» yana o'zingiz tanlaysiz
   location.replace("login.html");
 }
 

@@ -657,3 +657,77 @@ test("talaba: rasm o'zgarsa tasdiqlangan hisobot yaroqsiz bo'ladi (xesh rasmlarn
   assert.ok(!bad.text.includes("Tasdiq kodi"));
   clean(page); await ctx.close();
 });
+
+// ====================== SESSIYA SAQLASH (haqiqiy supabase-js, tarmoq javoblari soxta) ======================
+const SB = "https://vcbdzfwvavxkedgmbrvf.supabase.co";
+const TOKEN_KEY = "sb-vcbdzfwvavxkedgmbrvf-auth-token";
+async function openReal(ctxOpts = {}) {
+  const ctx = ctxOpts.ctx || await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  const prof = { id: "u-res", login: "raxmonov", full_name: "Raxmonov I.O.", role: "res_head", active: true };
+  const user = { id: "u-res", aud: "authenticated", role: "authenticated", email: "raxmonov@staff.res.invalid", user_metadata: {}, app_metadata: {}, created_at: "2026-10-03T00:00:00Z" };
+  const cors = { "access-control-allow-origin": "*", "access-control-allow-headers": "*", "access-control-allow-methods": "*", "access-control-expose-headers": "*" };
+  if (!ctx.__routed) {
+    ctx.__routed = true;
+    await ctx.route(`${SB}/**`, async (route) => {
+      const req = route.request(), u = new URL(req.url());
+      if (req.method() === "OPTIONS") return route.fulfill({ status: 204, headers: cors });
+      const json = (b, s = 200) => route.fulfill({ status: s, headers: cors, contentType: "application/json", body: JSON.stringify(b) });
+      if (u.pathname === "/auth/v1/token") return json({ access_token: "aaa.bbb.ccc", token_type: "bearer", expires_in: 3600, expires_at: Math.floor(Date.now() / 1000) + 3600, refresh_token: "rt-1", user });
+      if (u.pathname === "/auth/v1/logout") return route.fulfill({ status: 204, headers: cors });
+      if (u.pathname === "/rest/v1/profiles") return json(prof);
+      return json([]);
+    });
+  }
+  const page = await ctx.newPage();
+  return { ctx, page };
+}
+const keys = (page) => page.evaluate((k) => ({ local: Object.keys(localStorage).filter((x) => x.startsWith("sb-")), session: Object.keys(sessionStorage).filter((x) => x === k), flag: localStorage.getItem("amaliyot_remember") }), TOKEN_KEY);
+async function loginReal(page, remember) {
+  await page.goto(`${base}/login.html`); await page.waitForSelector("#login");
+  await page.fill("#login", "raxmonov"); await page.fill("#password", "ResPass123");
+  if (remember) await page.check("#remember");
+  await page.click("#loginBtn"); await page.waitForURL(/res_panel/, { timeout: 15000 });
+}
+
+test("sessiya: «Meni eslab qol» belgilanmasa tokenlar faqat shu oynada turadi; yangi oynada qayta kirish so'raladi", async () => {
+  const { ctx, page } = await openReal();
+  await loginReal(page, false);
+  await page.waitForSelector("#content h2");
+  let k = await keys(page);
+  assert.deepEqual(k.local, [], "localStorage'da token bo'lmasligi kerak");
+  assert.deepEqual(k.session, [TOKEN_KEY], "token sessionStorage'da");
+  assert.equal(k.flag, null);
+  // Yangi oyna (brauzer qayta ochilganiga teng: sessionStorage bo'sh) -> login sahifasida qoladi
+  const p2 = await ctx.newPage(); await p2.goto(`${base}/login.html`); await p2.waitForSelector("#login");
+  await p2.waitForTimeout(1500);
+  assert.match(p2.url(), /login\.html/, "avtomatik kirib ketmasligi kerak");
+  assert.equal(await p2.isVisible("#loginForm"), true);
+  // Panel ham yangi oynada login'ga qaytaradi
+  const p3 = await ctx.newPage(); await p3.goto(`${base}/res_panel.html`); await p3.waitForURL(/login\.html/);
+  await ctx.close();
+});
+
+test("sessiya: «Meni eslab qol» belgilansa yangi oynada ham avtomatik kiradi; chiqish hammasini tozalaydi", async () => {
+  const { ctx, page } = await openReal();
+  await loginReal(page, true); await page.waitForSelector("#content h2");
+  let k = await keys(page);
+  assert.deepEqual(k.local, [TOKEN_KEY]); assert.equal(k.flag, "1");
+  const p2 = await ctx.newPage(); await p2.goto(`${base}/login.html`); await p2.waitForURL(/res_panel/, { timeout: 15000 });
+  // Chiqish: token ham, «eslab qol» belgisi ham o'chadi
+  await page.click("#userBtn"); await page.click("#outBtn"); await page.waitForURL(/login\.html/);
+  k = await keys(page);
+  assert.deepEqual(k.local, [], "chiqishdan keyin localStorage'da token qolmasligi kerak"); assert.deepEqual(k.session, []); assert.equal(k.flag, null);
+  const p3 = await ctx.newPage(); await p3.goto(`${base}/login.html`); await p3.waitForSelector("#login"); await p3.waitForTimeout(1200);
+  assert.match(p3.url(), /login\.html/, "chiqishdan keyin avtomatik kirmasligi kerak");
+  await ctx.close();
+});
+
+test("sessiya: eski versiyadan qolgan localStorage tokeni o'chiriladi (avtomatik kirmaydi)", async () => {
+  const ctx = await browser.newContext();
+  await ctx.addInitScript((k) => { if (!localStorage.getItem("__seeded")) { localStorage.setItem(k, JSON.stringify({ access_token: "a.b.c", refresh_token: "r", expires_at: Math.floor(Date.now() / 1000) + 3000, user: { id: "u-res" } })); localStorage.setItem("__seeded", "1"); } }, TOKEN_KEY);
+  const { page } = await openReal({ ctx });
+  await page.goto(`${base}/login.html`); await page.waitForSelector("#login"); await page.waitForTimeout(1200);
+  assert.match(page.url(), /login\.html/);
+  assert.equal(await page.evaluate((k) => localStorage.getItem(k), TOKEN_KEY), null, "eski token o'chirilishi kerak");
+  await ctx.close();
+});
