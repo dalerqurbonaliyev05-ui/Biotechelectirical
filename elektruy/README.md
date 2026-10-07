@@ -136,7 +136,13 @@ npm run dev        # http://localhost:5173
 npm run lint && npm run typecheck && npm run build
 ```
 
-**Deploy on Vercel** (one-time, in the Vercel dashboard):
+**Live on the website:** https://www.energyvibe.uz/elektr-uy/admin/ (also reachable from `/elektruy/admin`).
+
+- The site is a static Vercel project without a build step. The panel is therefore built with `ADMIN_BASE=/elektr-uy/admin/` and committed to `elektr-uy/admin/`.
+- The *ElektrUy admin* workflow rebuilds and commits it on every push to `main` that changes `elektruy/admin`.
+- Add `https://www.energyvibe.uz/elektr-uy/admin/**` to Supabase → Authentication → Redirect URLs.
+
+**Optional separate Vercel project** (one-time, in the Vercel dashboard):
 
 1. *Add New → Project* → import `dalerqurbonaliyev05-ui/Biotechelectirical`.
 2. Name it `elektruy-admin` and set **Root Directory** to `elektruy/admin`. The framework (Vite) and the settings in `admin/vercel.json` are picked up automatically.

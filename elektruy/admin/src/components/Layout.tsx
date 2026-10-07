@@ -28,7 +28,7 @@ export function Layout() {
     <div className="flex min-h-full">
       <aside className="sticky top-0 hidden h-screen w-60 shrink-0 flex-col border-r border-border bg-muted/40 p-3 md:flex">
         <div className="mb-4 flex items-center gap-2 px-2 py-1">
-          <img src="/favicon.svg" alt="" className="size-8" />
+          <img src={`${import.meta.env.BASE_URL}favicon.svg`} alt="" className="size-8" />
           <div>
             <div className="font-bold leading-tight">ElektrUy</div>
             <div className="text-xs text-muted-foreground">Admin</div>

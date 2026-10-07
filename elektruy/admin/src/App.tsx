@@ -22,7 +22,7 @@ export default function App() {
   // The UI gate is a convenience; the database (RLS + ew_admins) is what actually protects the data.
   if (!session || !isAdmin) return <Login />
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '')}>
       <Routes>
         <Route element={<Layout />}>
           <Route index element={<Dashboard />} />

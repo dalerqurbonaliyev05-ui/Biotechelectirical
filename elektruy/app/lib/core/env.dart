@@ -15,7 +15,10 @@ class Env {
 
   /// OAuth 2.0 *Web* client ID from Google Cloud (used as serverClientId so the
   /// ID token is accepted by Supabase). See docs/GOOGLE_OAUTH.md.
-  static const googleWebClientId = String.fromEnvironment('GOOGLE_WEB_CLIENT_ID');
+  static const googleWebClientId = String.fromEnvironment(
+    'GOOGLE_WEB_CLIENT_ID',
+    defaultValue: '750388048949-4ki7eeq6j59nbhn6dqliij86g9g1jnmo.apps.googleusercontent.com',
+  );
 
   static const lessonMediaBucket = 'ew-lesson-media';
   static const projectPhotosBucket = 'ew-project-photos';
