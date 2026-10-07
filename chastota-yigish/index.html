@@ -1,0 +1,1927 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chastota o'zgartirgich 3D | EnergyVibe</title>
+<meta name="description" content="Chastota o‘zgartirgich (VFD), asinxron motor, tormoz rezistori, potensiometr va START/STOP tugmalarini 3D laboratoriya stendida o‘zingiz ulang, so‘ng motorni yurgizing va himoyalarni sinang.">
+<link rel="icon" type="image/png" href="/rasmlar1/rasm5/rasm4.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans+Condensed:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: sticky status bar over a two-column workspace. Left: a real-scale 3D lab stand (WebGL) with orbit, zoom and a fullscreen mode. Right: progress, controls, checklist. Stacks on phones. */
+:root{
+  --bg:#E4E9ED; --surface:#F3F6F8; --ink:#15222D; --ink-2:#51626F; --line:#C5CED6;
+  --accent:#E39B00; --accent-ink:#1B1400;
+    --ok:#1B7F46; --bad:#C62828;
+  --f-ui:'IBM Plex Sans Condensed','Arial Narrow',system-ui,sans-serif;
+  --f-mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F161D; --surface:#17212A; --ink:#E7EDF2; --ink-2:#9AABB9; --line:#2B3944;
+    --accent:#F2B21B; --accent-ink:#1B1400;
+    --wire-l:#F0584B; --wire-n:#4C97F0; --wire-pe:#3DBE6A;
+    --ok:#4CC585; --bad:#FF6B6B;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F161D; --surface:#17212A; --ink:#E7EDF2; --ink-2:#9AABB9; --line:#2B3944;
+  --accent:#F2B21B; --accent-ink:#1B1400;
+  --wire-l:#F0584B; --wire-n:#4C97F0; --wire-pe:#3DBE6A;
+  --ok:#4CC585; --bad:#FF6B6B;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-ui);font-size:15px;line-height:1.4;padding-inline:16px;padding-block:22px 48px}
+.wrap{max-width:1100px;margin-inline:auto;display:flex;flex-direction:column;gap:14px}
+.head{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between}
+h1{margin:0;font-weight:700;font-size:clamp(26px,5vw,38px);letter-spacing:.03em;text-transform:uppercase;line-height:1.05;text-wrap:balance}
+.sub{margin:6px 0 0;color:var(--ink-2);max-width:52ch}
+.seg{display:inline-flex;border:1.5px solid var(--ink);border-radius:3px;overflow:hidden}
+.seg button{font:inherit;font-weight:600;padding:8px 16px;background:transparent;color:var(--ink);border:0;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--surface);border:1px solid var(--line);border-radius:4px;box-shadow:0 8px 16px -12px rgba(0,0,0,.45)}
+.dot{flex:none;width:10px;height:10px;border-radius:50%;background:var(--ink-2)}
+.dot.ok{background:var(--ok)}
+.dot.bad{background:var(--bad)}
+#status{margin:0;flex:1;min-width:0;font-size:15px;font-weight:500}
+.btn{font:inherit;font-weight:600;font-size:14px;padding:8px 14px;border:1.5px solid var(--ink);border-radius:3px;background:transparent;color:var(--ink);cursor:pointer}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);flex:none}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+
+.main{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:18px;align-items:start}
+.board{margin:0;min-width:0}
+.stage{position:relative;height:clamp(540px,86vh,900px);background:#10161b;border:1px solid var(--line);border-radius:4px;overflow:hidden;touch-action:pan-y}
+.stage canvas{position:absolute;left:0;top:0;width:100%;height:100%;display:block;touch-action:pan-y;outline:none}
+.stage.full{position:fixed;inset:0;z-index:60;height:auto;border:0;border-radius:0}
+.stage.full canvas{touch-action:none}
+#tags{position:absolute;left:0;top:0;right:0;bottom:0;pointer-events:none;overflow:hidden}
+.tag{position:absolute;left:0;top:0;white-space:nowrap;font-size:12px;font-weight:600;line-height:1.2;padding:3px 8px;background:rgba(10,15,19,.8);color:#E7EDF2;border:1px solid rgba(255,255,255,.2);border-radius:3px;will-change:transform}
+.ctrls{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:6px;z-index:3}
+.cbtn{width:38px;height:38px;display:grid;place-items:center;font:inherit;font-weight:700;font-size:18px;line-height:1;color:#E7EDF2;background:rgba(10,15,19,.8);border:1px solid rgba(255,255,255,.28);border-radius:3px;cursor:pointer}
+.cbtn.wide{width:auto;padding-inline:12px;font-size:14px;font-weight:600}
+.cbtn[aria-pressed="false"]{opacity:.6}
+.cbtn:disabled{opacity:.4;cursor:not-allowed}
+.cbtn:focus-visible{outline:2px solid #F2B21B;outline-offset:2px}
+.fsbar{display:none}
+.stage.full .fsbar{display:flex;position:absolute;left:0;right:0;top:0;z-index:4;align-items:center;gap:8px;padding:calc(env(safe-area-inset-top,0px) + 8px) 10px 8px;background:rgba(10,15,19,.92);color:#E7EDF2}
+.fsbar p{margin:0;flex:1;min-width:0;font-size:14px;font-weight:500}
+.fsbar p.ok{color:#7BE3A5}
+.fsbar p.bad{color:#FF8A80}
+.stage.full .ctrls{top:calc(env(safe-area-inset-top,0px) + 74px)}
+.loading{position:absolute;left:0;right:0;top:50%;margin:0;text-align:center;color:#9AABB9;font-size:14px}
+.how{margin:8px 2px 0;font-size:13px;color:var(--ink-2)}
+.panel{min-width:0;display:flex;flex-direction:column;gap:16px}
+.prog .pn{font-family:var(--f-mono);font-weight:500;font-size:30px;line-height:1;font-variant-numeric:tabular-nums}
+.prog .pl{font-size:13px;color:var(--ink-2);margin-top:4px}
+.track{height:6px;background:var(--line);margin-top:8px}
+.track i{display:block;height:100%;width:0;background:var(--ok);transition:width .35s ease}
+.acts{display:flex;flex-wrap:wrap;gap:8px}
+.steps{list-style:none;margin:0;padding:0}
+.steps li{display:grid;grid-template-columns:18px minmax(0,1fr) auto;gap:10px;align-items:start;padding:9px 0;border-top:1px solid var(--line);font-size:14px}
+.steps li:last-child{border-bottom:1px solid var(--line)}
+.mk{width:16px;height:16px;margin-top:1px;border:2px solid var(--ink-2);position:relative}
+.part .mk{background:linear-gradient(to top,var(--accent) 50%,transparent 50%);border-color:var(--accent)}
+.done .mk{background:var(--ok);border-color:var(--ok)}
+.done .mk::after{content:"";position:absolute;left:3px;top:0;width:4px;height:8px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+.done .tx{color:var(--ink-2)}
+.ct{font-family:var(--f-mono);font-size:12px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.exam p{margin:0 0 10px;font-size:14px}
+.report{margin:0;padding-left:18px;font-size:14px;display:flex;flex-direction:column;gap:8px}
+.lg-t{margin:0 0 6px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);font-weight:600}
+.legend{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:14px}
+.legend li{display:flex;align-items:center;gap:10px}
+.sw{flex:none;width:20px;height:20px;border-radius:50%;border:4px solid}
+.sw.l{border-color:var(--wire-l)}
+.sw.n{border-color:var(--wire-n)}
+.sw.pe{border-color:var(--wire-pe)}
+
+.faults{border:1px solid var(--line);background:var(--surface);border-radius:4px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.faults[hidden]{display:none}
+.faults .lg-t{margin:0}
+.sel{font:inherit;font-size:14px;font-weight:500;padding:8px 10px;border:1.5px solid var(--ink);border-radius:3px;background:var(--bg);color:var(--ink);width:100%}
+.fnote{margin:0;font-size:13px;color:var(--ink-2)}
+.snd{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2)}
+@media (max-width:860px){
+  .main{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:520px){
+  body{padding-block:16px 40px}
+  #status{font-size:14px}
+  .btn.pri{padding-inline:10px}
+  .stage{height:clamp(520px,80vh,760px)}
+  .tag{font-size:11px;padding:2px 6px}
+}
+@media (prefers-reduced-motion: reduce){
+  .track i{transition:none}
+}
+
+.sw{flex:none;width:18px;height:18px;border-radius:50%;border:5px solid var(--c,#999);background:transparent}
+.sw.pe{border-color:#2E9E4F;border-top-color:#E3B800;border-bottom-color:#E3B800}
+.legend{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;font-size:13px}
+.legend li{display:flex;align-items:center;gap:8px}
+.ctl{border:1px solid var(--line);background:var(--surface);border-radius:4px;padding:12px;display:flex;flex-direction:column;gap:12px}
+.ctl[hidden]{display:none}
+.ctl .lg-t{margin:0}
+.runb{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.big{font:inherit;font-weight:700;font-size:16px;letter-spacing:.04em;padding:14px 10px;border:2px solid var(--ink);border-radius:4px;cursor:pointer;color:#fff;user-select:none;touch-action:none;-webkit-user-select:none}
+.big.go{background:#14a24a;border-color:#0d7a35}
+.big.stp{background:#cf1b1b;border-color:#9c1010}
+.big:active,.big.on{transform:translateY(2px);filter:brightness(.9)}
+.big:disabled{opacity:.4;cursor:not-allowed}
+.rng{display:flex;flex-direction:column;gap:6px;font-size:14px}
+.rng input{width:100%;accent-color:var(--accent)}
+.rd{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;margin:0}
+.rd div{display:flex;flex-direction:column;border-top:1px solid var(--line);padding-top:4px}
+.rd dt{font-size:12px;color:var(--ink-2)}
+.rd dd{margin:0;font-family:var(--f-mono);font-size:16px;font-variant-numeric:tabular-nums}
+.rd dd.bad{color:var(--bad)}
+.back{display:inline-block;margin-bottom:10px;font-size:13px;font-weight:600;color:var(--ink-2);text-decoration:none;border-bottom:1.5px solid var(--line)}
+.back:hover{color:var(--ink);border-color:var(--ink)}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="head">
+    <div>
+      <a class="back" href="/#tools">← EnergyVibe · Vositalar</a>
+      <h1>Chastota o'zgartirgich</h1>
+      <p class="sub">3D laboratoriya stendida manba, chastota o'zgartirgich, motor, tormoz rezistori, potensiometr va START/STOP tugmalarini o'zingiz ulang. So'ng kuchlanish berib motorni yurgizing.</p>
+    </div>
+    <div class="seg" role="group" aria-label="Rejim">
+      <button type="button" id="m-learn" aria-pressed="true">O'rganish</button>
+      <button type="button" id="m-exam" aria-pressed="false">Imtihon</button>
+    </div>
+  </header>
+
+  <div class="bar">
+    <span class="dot" id="dot"></span>
+    <p id="status" role="status" aria-live="polite"></p>
+    <button type="button" class="btn pri" id="power" disabled>Kuchlanish berish</button>
+  </div>
+
+  <div class="main">
+    <section class="board">
+      <div class="stage" id="stage">
+        <canvas id="cv" aria-label="Chastota o'zgartirgich stendining 3D ko'rinishi"></canvas>
+        <div id="tags"></div>
+        <div class="fsbar">
+          <p id="status2" role="status"></p>
+          <button type="button" class="cbtn wide" id="power2" disabled>Kuchlanish berish</button>
+          <button type="button" class="cbtn wide" id="close">Yopish</button>
+        </div>
+        <div class="ctrls">
+          <button type="button" class="cbtn" id="zin" aria-label="Yaqinlashtirish">+</button>
+          <button type="button" class="cbtn" id="zout" aria-label="Uzoqlashtirish">&minus;</button>
+          <button type="button" class="cbtn" id="zreset" aria-label="Asl ko'rinish"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 0 2.6-5.9M4 4v4.5h4.5"/></svg></button>
+          <button type="button" class="cbtn" id="tg" aria-pressed="true" aria-label="Nomlarni ko'rsatish yoki yashirish">Aa</button>
+          <button type="button" class="cbtn" id="fs" aria-label="To'liq ekran"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+        </div>
+        <p class="loading" id="loading">3D sahna tayyorlanmoqda...</p>
+      </div>
+      <p class="how">Klemma halqasini bosib boshqasiga sudrang yoki ikkita klemmani ketma-ket bosing. Simni bosib olib tashlang. Bo'sh joydan sudrab aylantiring. Kuchlanishdan keyin START/STOP tugmalarini bosing, zadatchik dastasini aylantiring (telefonda &laquo;To'liq ekran&raquo; ni oching).</p>
+    </section>
+
+    <aside class="panel">
+      <div class="prog" id="prog">
+        <div class="pn"><span id="pdone">0</span> / 13</div>
+        <div class="pl">ulanish to'g'ri bajarilgan</div>
+        <div class="track"><i id="pfill"></i></div>
+      </div>
+
+      <div class="acts">
+        <button type="button" class="btn" id="undo">Orqaga</button>
+        <button type="button" class="btn" id="clear">Tozalash</button>
+        <button type="button" class="btn" id="hint">Maslahat</button>
+        <button type="button" class="btn" id="check" hidden>Tekshirish</button>
+      </div>
+
+      <ol class="steps" id="steps"></ol>
+
+      <div class="exam" id="exam" hidden>
+        <p>Imtihon rejimi: maslahatsiz ulang, tayyor bo'lgach <b>Tekshirish</b> ni bosing. Ulangan simlar: <b id="wcount">0</b></p>
+        <ul class="report" id="report"></ul>
+      </div>
+
+      <div class="ctl" id="ctl" hidden>
+        <p class="lg-t">Boshqaruv</p>
+        <div class="runb">
+          <button type="button" class="big go" id="b-start">START</button>
+          <button type="button" class="big stp" id="b-stop">STOP</button>
+        </div>
+        <label class="rng">Chastota zadatchigi: <b id="potv">36.0 Hz</b>
+          <input type="range" id="pot" min="0" max="100" value="72" aria-label="Potensiometr holati">
+        </label>
+        <dl class="rd">
+          <div><dt>Holat</dt><dd id="r-state">tayyor</dd></div>
+          <div><dt>Chiqish chastotasi</dt><dd id="r-f">0.00 Hz</dd></div>
+          <div><dt>Aylanish (taxminan)</dt><dd id="r-rpm">0 ayl/min</dd></div>
+          <div><dt>Chiqish kuchlanishi</dt><dd id="r-v">0 V</dd></div>
+        </dl>
+        <p class="fnote">Stendda aylanish tezligi ko'zga ko'rinishi uchun sekinlashtirib ko'rsatilgan.</p>
+        <p class="lg-t">Nosozlik sinovi</p>
+        <div class="acts">
+          <button type="button" class="btn" id="f-ol">Motor ortiqcha yuki</button>
+          <button type="button" class="btn" id="f-pl">Kirish fazasi uzildi</button>
+          <button type="button" class="btn" id="f-oc">Chiqishda qisqa tutashuv</button>
+        </div>
+        <div class="acts">
+          <button type="button" class="btn pri" id="f-reset">Xatoni tiklash (RESET)</button>
+        </div>
+        <p class="fnote" id="fnote"></p>
+        <label class="snd"><input type="checkbox" id="snd" checked> Ovoz</label>
+      </div>
+
+      <div>
+        <p class="lg-t">Klemma halqasining rangi</p>
+        <ul class="legend">
+          <li><i class="sw" style="--c:#e3b800"></i>L1, U</li>
+          <li><i class="sw" style="--c:#2f9e44"></i>L2, V</li>
+          <li><i class="sw" style="--c:#d8352a"></i>L3, W</li>
+          <li><i class="sw pe"></i>PE (yerlash)</li>
+          <li><i class="sw" style="--c:#8a5a2b"></i>P, PB (tormoz)</li>
+          <li><i class="sw" style="--c:#f08a00"></i>M0, M2, tugma</li>
+          <li><i class="sw" style="--c:#1c1c1e"></i>COM, GND</li>
+          <li><i class="sw" style="--c:#e0508a"></i>+10 V</li>
+          <li><i class="sw" style="--c:#cfcfcf"></i>AI (signal)</li>
+          <li><i class="sw" style="--c:#8a8f96"></i>Rele (ishlatilmaydi)</li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const stage=$("stage"),cv=$("cv");
+function setStatus(t,tone){
+  $("status").textContent=t;
+  $("status2").textContent=t;
+  $("status2").className=tone||"";
+  $("dot").className="dot "+(tone||"");
+}
+function fail(m){setStatus(m,"bad");const l=$("loading");if(l)l.hidden=true;}
+
+if(!window.THREE){fail("3D kutubxonasi yuklanmadi. Internetni tekshirib, sahifani qayta oching.");return;}
+let renderer;
+try{
+  renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,powerPreference:"high-performance"});
+}catch(err){
+  fail("Brauzer 3D grafikani (WebGL) ishga tushira olmadi. Chrome yoki Safari da oching.");
+  return;
+}
+try{main();}catch(err){console.error(err);fail("Sahna xatosi: "+(err&&err.message?err.message:err));}
+
+function main(){
+/* =====================================================================
+   RENDERER, CAMERA, LIGHTS
+   ===================================================================== */
+renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+renderer.outputEncoding=THREE.sRGBEncoding;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure=0.8;
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+const MAXA=Math.max(1,Math.min(8,renderer.capabilities.getMaxAnisotropy()));
+const REDUCED=!!(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0x10161b);
+const cam=new THREE.PerspectiveCamera(28,1,20,6000);
+const view={yaw:.12,pitch:.1,zoom:1,tx:0,ty:0,fitD:2000};
+const FOV_T=Math.tan(THREE.MathUtils.degToRad(14));
+const BOUND={w:860,h:1060,cy:0};
+let dirty=true;
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+
+function resize(){
+  const w=Math.max(200,stage.clientWidth),h=Math.max(200,stage.clientHeight);
+  renderer.setSize(w,h,false);
+  cam.aspect=w/h;cam.updateProjectionMatrix();
+  const dH=(BOUND.h/2)/FOV_T,dW=(BOUND.w/2)/(FOV_T*cam.aspect);
+  view.fitD=Math.max(dH,dW)+120;
+  dirty=true;
+}
+function updateCam(){
+  const D=view.fitD/view.zoom,cx=view.tx,cy=BOUND.cy+view.ty,cp=Math.cos(view.pitch);
+  cam.position.set(cx+Math.sin(view.yaw)*cp*D,cy+Math.sin(view.pitch)*D,60+Math.cos(view.yaw)*cp*D);
+  cam.lookAt(cx,cy,60);
+}
+function perPx(){return 2*(view.fitD/view.zoom)*FOV_T/Math.max(1,stage.clientHeight);}
+
+try{
+  const es=new THREE.Scene();
+  const gc=document.createElement("canvas");gc.width=4;gc.height=256;
+  const gg=gc.getContext("2d"),gr=gg.createLinearGradient(0,0,0,256);
+  gr.addColorStop(0,"#f2f6fb");gr.addColorStop(.45,"#9aa4ad");gr.addColorStop(.5,"#59616a");gr.addColorStop(1,"#1b2025");
+  gg.fillStyle=gr;gg.fillRect(0,0,4,256);
+  const gt=new THREE.CanvasTexture(gc);gt.encoding=THREE.sRGBEncoding;
+  es.add(new THREE.Mesh(new THREE.SphereGeometry(50,32,16),new THREE.MeshBasicMaterial({map:gt,side:THREE.BackSide})));
+  const bm=new THREE.MeshBasicMaterial({color:new THREE.Color(5,5,5),side:THREE.DoubleSide});
+  const b1=new THREE.Mesh(new THREE.PlaneGeometry(26,14),bm);b1.position.set(-18,20,30);b1.lookAt(0,0,0);es.add(b1);
+  const b2=new THREE.Mesh(new THREE.PlaneGeometry(12,26),bm);b2.position.set(30,5,26);b2.lookAt(0,0,0);es.add(b2);
+  const pm=new THREE.PMREMGenerator(renderer);
+  scene.environment=pm.fromScene(es,0.035).texture;
+  pm.dispose();
+}catch(e){console.warn("environment",e);}
+
+const key=new THREE.DirectionalLight(0xfff3e4,1.15);
+key.position.set(-420,760,1100);key.target.position.set(0,0,0);
+key.castShadow=true;key.shadow.mapSize.set(4096,4096);
+const sc=key.shadow.camera;sc.left=-560;sc.right=560;sc.top=620;sc.bottom=-620;sc.near=300;sc.far=2800;
+key.shadow.bias=-0.0003;key.shadow.normalBias=1.2;
+scene.add(key);scene.add(key.target);
+scene.add(new THREE.HemisphereLight(0xdfe9f5,0x30363d,0.26));
+const fillL=new THREE.DirectionalLight(0xcfe0ff,0.25);fillL.position.set(520,-200,700);scene.add(fillL);
+
+/* =====================================================================
+   MATERIALS, TEXTURES, HELPERS
+   ===================================================================== */
+function std(o,phys){
+  if(o.envMapIntensity==null)o.envMapIntensity=.45;
+  return phys?new THREE.MeshPhysicalMaterial(o):new THREE.MeshStandardMaterial(o);
+}
+function noiseTex(w,h,base,amp,rep){
+  const c=document.createElement("canvas");c.width=w;c.height=h;const g=c.getContext("2d");
+  const id=g.createImageData(w,h);
+  for(let i=0;i<w*h;i++){const v=base+(Math.random()-.5)*amp;id.data[i*4]=v;id.data[i*4+1]=v;id.data[i*4+2]=v;id.data[i*4+3]=255;}
+  g.putImageData(id,0,0);
+  const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;if(rep)t.repeat.set(rep[0],rep[1]);t.anisotropy=MAXA;return t;
+}
+const boardBump=noiseTex(256,256,128,60,[6,7]);
+const MAT={
+  board:std({color:0xc3c9ce,roughness:.7,metalness:0,bumpMap:boardBump,bumpScale:.35}),
+  boardEdge:std({color:0x8f979d,roughness:.5,metalness:.2}),
+  console:std({color:0x1a1e22,roughness:.55,metalness:.05,envMapIntensity:.3}),
+  consoleTop:std({color:0x30363c,roughness:.45}),
+  vfd:std({color:0x1f2327,roughness:.5,metalness:.04,clearcoat:.2,clearcoatRoughness:.55,envMapIntensity:.3},true),
+  vfdFas:std({color:0x15181b,roughness:.45,metalness:.05,clearcoat:.4,clearcoatRoughness:.35,envMapIntensity:.3},true),
+  vfdLight:std({color:0xa9afb4,roughness:.55}),
+  vfdBlk:std({color:0x15171a,roughness:.6}),
+  black:std({color:0x101214,roughness:.55}),
+  dark:std({color:0x1b1e21,roughness:.6}),
+  rubber:std({color:0x0d0e0f,roughness:.85}),
+  steel:std({color:0xb4bbc2,roughness:.28,metalness:1}),
+  steelDark:std({color:0x6b7178,roughness:.4,metalness:1}),
+  brass:std({color:0xc79a4a,roughness:.3,metalness:1}),
+  copper:std({color:0xc4743c,roughness:.3,metalness:1}),
+  nickel:std({color:0xd4d8dc,roughness:.18,metalness:1}),
+  alu:std({color:0xc7ccd1,roughness:.34,metalness:.85}),
+  aluDark:std({color:0x5d646b,roughness:.4,metalness:.85}),
+  white:std({color:0xe8eaec,roughness:.45}),
+  grey:std({color:0x9ea4a9,roughness:.5}),
+  motor:std({color:0x0f6aa6,roughness:.45,metalness:.1,clearcoat:.45,clearcoatRoughness:.4,envMapIntensity:.3},true),
+  motorDk:std({color:0x0b4f7c,roughness:.55,metalness:.1,clearcoat:.25,envMapIntensity:.3},true),
+  cast:std({color:0x8c939a,roughness:.55,metalness:.5}),
+  bake:std({color:0x2b201a,roughness:.7}),
+  pbRed:std({color:0xcf1b1b,roughness:.2,clearcoat:1,clearcoatRoughness:.12},true),
+  pbGreen:std({color:0x14a24a,roughness:.2,clearcoat:1,clearcoatRoughness:.12},true),
+  pbBody:std({color:0x1c1e20,roughness:.5}),
+  block:std({color:0xdcdfe1,roughness:.5}),
+  knob:std({color:0x0c0d0e,roughness:.3,clearcoat:.8,clearcoatRoughness:.25},true),
+  plate:std({color:0x2a2f34,roughness:.55,metalness:.1}),
+  resAl:std({color:0xb9bec4,roughness:.38,metalness:.9}),
+  lampOff:std({color:0x3a1010,roughness:.3,emissive:0x000000}),
+  glass:std({color:0x0b0f12,roughness:.08,metalness:0,clearcoat:1,clearcoatRoughness:.05},true)
+};
+function makeStripeTex(){
+  const c=document.createElement("canvas");c.width=8;c.height=64;const g=c.getContext("2d");
+  for(let k=0;k<8;k++){g.fillStyle=k%2?"#f1cd1c":"#2f9e44";g.fillRect(0,k*8,8,8);}
+  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;return t;
+}
+const stripeTex=makeStripeTex();
+/* signal kinds: ring colour on the terminals and colour of the wire */
+const KC={A:0xe3b800,B:0x2f9e44,C:0xd8352a,PE:0x2f9e44,N:0x1f6fd1,L:0xd8552a,BR:0x8a5a2b,V10:0xe0508a,AI:0xf2f2f2,GND:0x1c1c1e,CT:0xf08a00,RL:0x8a8f96,GR:0x8a8f96};
+const WM={};
+for(const k in KC){
+  WM[k]=std({color:KC[k],roughness:.4,clearcoat:.35,clearcoatRoughness:.4},true);
+}
+WM.PE=std({color:0xffffff,map:stripeTex,roughness:.4,clearcoat:.35,clearcoatRoughness:.4},true);
+WM.hover=std({color:0xff7a4d,emissive:0x8a2a10,roughness:.4},true);
+WM.bad=std({color:0xff2d2d,emissive:0xaa1010,roughness:.4},true);
+function rrShape(w,h,r){
+  const s=new THREE.Shape(),x=-w/2,y=-h/2;
+  s.moveTo(x+r,y);s.lineTo(x+w-r,y);s.quadraticCurveTo(x+w,y,x+w,y+r);
+  s.lineTo(x+w,y+h-r);s.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  s.lineTo(x+r,y+h);s.quadraticCurveTo(x,y+h,x,y+h-r);
+  s.lineTo(x,y+r);s.quadraticCurveTo(x,y,x+r,y);
+  return s;
+}
+const slabCache={};
+function slabGeo(w,h,d,r,b){
+  const key=[w,h,d,r,b].join("_");
+  if(slabCache[key])return slabCache[key];
+  const inner=d-2*b;
+  const g=new THREE.ExtrudeGeometry(rrShape(w-2*b,h-2*b,Math.max(.1,r-b)),{depth:inner,bevelEnabled:b>0,bevelThickness:b,bevelSize:b,bevelSegments:2,curveSegments:5});
+  g.translate(0,0,-inner/2);
+  slabCache[key]=g;return g;
+}
+function slab(parent,w,h,d,r,mat,x,y,zFront,b){
+  b=b==null?.6:b;r=Math.max(r,b+.05);
+  const m=new THREE.Mesh(slabGeo(w,h,d,r,b),mat);
+  m.position.set(x,y,zFront-d/2);
+  m.castShadow=true;m.receiveShadow=true;
+  parent.add(m);return m;
+}
+
+/* canvas decals: all drawing helpers work in millimetres through k = px per mm */
+function decal(parent,wmm,hmm,x,y,z,k,draw){
+  const c=document.createElement("canvas");
+  c.width=Math.max(8,Math.round(wmm*k));c.height=Math.max(8,Math.round(hmm*k));
+  const g=c.getContext("2d");
+  draw(g,wmm,hmm,k);
+  const tex=new THREE.CanvasTexture(c);tex.encoding=THREE.sRGBEncoding;tex.anisotropy=MAXA;
+  const mat=new THREE.MeshStandardMaterial({map:tex,transparent:true,roughness:.6,metalness:0,envMapIntensity:.5,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-3,polygonOffsetUnits:-3});
+  const m=new THREE.Mesh(new THREE.PlaneGeometry(wmm,hmm),mat);
+  m.position.set(x,y,z);m.receiveShadow=true;parent.add(m);
+  return {mesh:m,tex:tex,canvas:c,ctx:g};
+}
+function tx(g,k,s,x,y,size,color,weight,align){
+  g.font=(weight||"600")+" "+Math.round(size*k)+"px Arial, Helvetica, sans-serif";
+  g.fillStyle=color||"#262b2f";g.textAlign=align||"center";g.textBaseline="middle";
+  g.fillText(s,x*k,y*k);
+}
+function rc(g,k,x,y,w,h,color,r){
+  g.fillStyle=color;
+  if(r&&g.roundRect){g.beginPath();g.roundRect(x*k,y*k,w*k,h*k,r*k);g.fill();}
+  else g.fillRect(x*k,y*k,w*k,h*k);
+}
+
+const aoCache={};
+function aoPlane(x,y,w,h){
+  const key=w+"x"+h;
+  let tex=aoCache[key];
+  if(!tex){
+    const k=3,pad=26,c=document.createElement("canvas");
+    c.width=Math.round((w+pad*2)*k);c.height=Math.round((h+pad*2)*k);
+    const g=c.getContext("2d");
+    g.shadowColor="rgba(0,0,0,.6)";g.shadowBlur=11*k;g.shadowOffsetX=2000;g.shadowOffsetY=0;
+    g.fillStyle="#000";g.fillRect(pad*k-2000,pad*k,w*k,h*k);
+    tex=new THREE.CanvasTexture(c);tex.encoding=THREE.sRGBEncoding;aoCache[key]=tex;
+  }
+  const m=new THREE.Mesh(new THREE.PlaneGeometry(w+52,h+52),new THREE.MeshBasicMaterial({map:tex,transparent:true,depthWrite:false,opacity:.85}));
+  m.position.set(x+4,y-5,1.4);scene.add(m);
+}
+
+/* shared small geometries */
+const G={
+  head:new THREE.CylinderGeometry(3.2,3.6,2.2,28).rotateX(Math.PI/2),
+  rec:new THREE.CylinderGeometry(4.7,4.7,.6,28).rotateX(Math.PI/2),
+  slotA:new THREE.BoxGeometry(5.4,1,.7),
+  slotB:new THREE.BoxGeometry(1,5.4,.7),
+  ferrule:new THREE.CylinderGeometry(1.8,1.8,9.5,12)
+};
+function screw(parent,x,y,zs,ang){
+  const rec=new THREE.Mesh(G.rec,MAT.dark);rec.position.set(x,y,zs+.15);parent.add(rec);
+  const head=new THREE.Mesh(G.head,MAT.steel);head.position.set(x,y,zs+1.3);parent.add(head);
+  const a=new THREE.Mesh(G.slotA,MAT.dark),b=new THREE.Mesh(G.slotB,MAT.dark);
+  a.position.set(x,y,zs+2.4);b.position.set(x,y,zs+2.4);
+  a.rotation.z=ang||0;b.rotation.z=ang||0;
+  parent.add(a);parent.add(b);
+}
+/* =====================================================================
+   TERMINAL REGISTRY AND HARDWARE (screws, jacks, studs, wire ends)
+   ===================================================================== */
+const V3=(x,y,z)=>new THREE.Vector3(x,y,z);
+const T={};
+const ringPETex=(()=>{
+  const c=document.createElement("canvas");c.width=64;c.height=8;const g=c.getContext("2d");
+  for(let k=0;k<8;k++){g.fillStyle=k%2?"#f1cd1c":"#2f9e44";g.fillRect(k*8,0,8,8);}
+  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.wrapS=THREE.RepeatWrapping;t.repeat.set(3,1);return t;
+})();
+const ringMats={};
+for(const k in KC)ringMats[k]=std({color:KC[k],roughness:.35,clearcoat:.5},true);
+ringMats.PE=std({color:0xffffff,map:ringPETex,roughness:.35,clearcoat:.5},true);
+const TG={
+  ring:new THREE.TorusGeometry(8.4,1.15,8,32),
+  well:new THREE.CylinderGeometry(7.2,7.2,1,28).rotateX(Math.PI/2),
+  head:new THREE.CylinderGeometry(4.6,5,2.8,26).rotateX(Math.PI/2),
+  slotA:new THREE.BoxGeometry(7.4,1.3,1),
+  slotB:new THREE.BoxGeometry(1.3,7.4,1),
+  jack:new THREE.CylinderGeometry(9.5,10.5,8,32).rotateX(Math.PI/2),
+  jackCol:new THREE.CylinderGeometry(12.2,12.2,2.4,32).rotateX(Math.PI/2),
+  jackHole:new THREE.CylinderGeometry(3.7,3.7,1,20).rotateX(Math.PI/2),
+  stud:new THREE.CylinderGeometry(2.7,2.7,17,16).rotateX(Math.PI/2),
+  nut:new THREE.CylinderGeometry(5.3,5.3,4.4,6).rotateX(Math.PI/2),
+  washer:new THREE.CylinderGeometry(6.6,6.6,.9,24).rotateX(Math.PI/2),
+  plugPin:new THREE.CylinderGeometry(2.1,2.1,22,14).rotateX(Math.PI/2),
+  plugBody:new THREE.CylinderGeometry(6.3,6.3,20,24).rotateX(Math.PI/2),
+  plugCap:new THREE.CylinderGeometry(7.2,7.2,3,24).rotateX(Math.PI/2),
+  sleeve:new THREE.CylinderGeometry(3,3,1,14)
+};
+const lugGeo=(()=>{
+  const s=new THREE.Shape();s.absarc(0,0,5.4,0,Math.PI*2,false);
+  const h=new THREE.Path();h.absarc(0,0,2.4,0,Math.PI*2,true);s.holes.push(h);
+  return new THREE.ExtrudeGeometry(s,{depth:.9,bevelEnabled:false,curveSegments:20}).translate(0,0,-.45);
+})();
+function addT(id,o){
+  const plug=o.type==="plug",stud=o.type==="stud";
+  const d=o.dir||[0,1];
+  const az=o.az!=null?o.az:(plug?o.z+26:stud?o.z+8:o.z+3.6);
+  T[id]={id:id,x:o.x,y:o.y,z0:o.z,kind:o.kind,desc:o.desc,dom:o.dom,sig:o.sig||null,dev:id.split(".")[0],type:o.type||"lug",
+    dir:V3(d[0],d[1],0).normalize(),
+    pos:V3(o.x,o.y,o.z+(plug?11:stud?10:5)),
+    anchor:V3(o.x,o.y,az),
+    lead:plug?6.5:13};
+  return T[id];
+}
+function hwScrew(parent,id){
+  const t=T[id],x=t.x,y=t.y,z=t.z0;
+  const well=new THREE.Mesh(TG.well,MAT.black);well.position.set(x,y,z+.5);parent.add(well);
+  const head=new THREE.Mesh(TG.head,MAT.steel);head.position.set(x,y,z+1.6);head.castShadow=true;parent.add(head);
+  const a=new THREE.Mesh(TG.slotA,MAT.dark),b=new THREE.Mesh(TG.slotB,MAT.dark);
+  const ang=((Math.abs(x*13+y*7))%10)/10*1.2;a.rotation.z=b.rotation.z=ang;
+  a.position.set(x,y,z+3.1);b.position.copy(a.position);parent.add(a);parent.add(b);
+  const r=new THREE.Mesh(TG.ring,ringMats[t.kind]||ringMats.GR);r.position.set(x,y,z+.7);parent.add(r);
+}
+function hwJack(parent,id){
+  const t=T[id],x=t.x,y=t.y,z=t.z0;
+  const col=new THREE.Mesh(TG.jackCol,MAT.black);col.position.set(x,y,z+1.2);parent.add(col);
+  const bz=new THREE.Mesh(TG.jack,ringMats[t.kind]||ringMats.GR);bz.position.set(x,y,z+4);bz.castShadow=true;bz.receiveShadow=true;parent.add(bz);
+  const hole=new THREE.Mesh(TG.jackHole,MAT.black);hole.position.set(x,y,z+8.05);parent.add(hole);
+  const pin=new THREE.Mesh(new THREE.TorusGeometry(3.7,.5,6,20),MAT.nickel);pin.position.set(x,y,z+8.1);parent.add(pin);
+}
+function hwStud(parent,id,nutToo){
+  const t=T[id],x=t.x,y=t.y,z=t.z0;
+  const st=new THREE.Mesh(TG.stud,MAT.steel);st.position.set(x,y,z+8.5);st.castShadow=true;parent.add(st);
+  const w=new THREE.Mesh(TG.washer,MAT.nickel);w.position.set(x,y,z+.5);parent.add(w);
+  const r=new THREE.Mesh(TG.ring,ringMats[t.kind]||ringMats.GR);r.position.set(x,y,z+.3);r.scale.set(.95,.95,1);parent.add(r);
+  if(nutToo!==false){
+    const n=new THREE.Mesh(TG.nut,MAT.nickel);n.position.set(x,y,z+t.anchor.z-z+3.2);n.castShadow=true;parent.add(n);
+  }
+}
+/* wire end fittings: ring lug + insulated sleeve, or a right-angle banana plug */
+function endMesh(id,key,idx){
+  const t=T[id],g=new THREE.Group(),km=WM[key]||WM.GR,off=(idx||0)*2.2;
+  g.userData.shared=true;
+  if(t.type==="plug"){
+    const z0=t.z0;
+    const pin=new THREE.Mesh(TG.plugPin,MAT.nickel);pin.position.set(t.x,t.y,z0+8+off*0);g.add(pin);
+    const body=new THREE.Mesh(TG.plugBody,km);body.position.set(t.x,t.y,z0+18+off);body.castShadow=true;g.add(body);
+    const cap=new THREE.Mesh(TG.plugCap,MAT.black);cap.position.set(t.x,t.y,z0+27.5+off);g.add(cap);
+    return g;
+  }
+  const lug=new THREE.Mesh(lugGeo,MAT.copper);lug.position.set(t.x,t.y,t.anchor.z+off);lug.castShadow=true;g.add(lug);
+  const ang=Math.atan2(-t.dir.x,t.dir.y);
+  const sl=new THREE.Mesh(TG.sleeve,km);
+  sl.scale.set(1,t.lead-4.5,1);
+  sl.position.set(t.x+t.dir.x*(4.5+(t.lead-4.5)/2),t.y+t.dir.y*(4.5+(t.lead-4.5)/2),t.anchor.z+off);
+  sl.rotation.z=ang;sl.castShadow=true;g.add(sl);
+  const br=new THREE.Mesh(TG.sleeve,MAT.nickel);
+  br.scale.set(.82,3.2,1);br.position.set(t.x+t.dir.x*5.5,t.y+t.dir.y*5.5,t.anchor.z+off);br.rotation.z=ang;g.add(br);
+  return g;
+}
+/* =====================================================================
+   SCENE: board, source console, frequency converter
+   ===================================================================== */
+const BW=800,BH=980;
+const tags=[];
+function addTag(text,x,y,z,mode){
+  const el=document.createElement("div");el.className="tag";el.textContent=text;
+  $("tags").appendChild(el);
+  tags.push({el:el,p:new THREE.Vector3(x,y,z),mode:mode||"top"});
+}
+const TAGT={top:"translate(-50%,-100%)",left:"translate(0,-50%)",right:"translate(-100%,-50%)",bottom:"translate(-50%,0)"};
+function mkBox(parent,w,h,d,mat,x,y,z0){
+  const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);m.position.set(x,y,z0+d/2);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m;
+}
+function mkCylZ(parent,r1,r2,len,mat,x,y,z0,seg){
+  const m=new THREE.Mesh(new THREE.CylinderGeometry(r1,r2,len,seg||28).rotateX(Math.PI/2),mat);
+  m.position.set(x,y,z0+len/2);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m;
+}
+const glowTex=(()=>{
+  const c=document.createElement("canvas");c.width=c.height=128;const g=c.getContext("2d");
+  const r=g.createRadialGradient(64,64,0,64,64,64);
+  r.addColorStop(0,"rgba(255,226,160,1)");r.addColorStop(.35,"rgba(255,190,100,.45)");r.addColorStop(1,"rgba(255,170,60,0)");
+  g.fillStyle=r;g.fillRect(0,0,128,128);
+  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;return t;
+})();
+
+/* ---- board with printed frames ---- */
+function buildBoard(){
+  slab(scene,BW,BH,22,14,MAT.board,0,0,0,1.6);
+  [[-372,-452],[372,-452],[-372,452],[372,452]].forEach((p,i)=>{
+    const m=new THREE.Mesh(new THREE.CylinderGeometry(7,7,2.6,22).rotateX(Math.PI/2),MAT.steel);m.position.set(p[0],p[1],1.3);scene.add(m);
+    const a=new THREE.Mesh(new THREE.BoxGeometry(11,1.8,1),MAT.dark);a.position.set(p[0],p[1],2.8);a.rotation.z=i*.7+.3;scene.add(a);
+  });
+  decal(scene,BW,BH,0,0,.16,1.5,(g,w,h,k)=>{
+    const X=x=>(x+w/2)*k,Y=y=>(h/2-y)*k;
+    function fr(x0,y0,x1,y1,title){
+      g.strokeStyle="rgba(40,50,58,.55)";g.lineWidth=1.6*k/1.5;g.setLineDash([10,6]);
+      g.beginPath();g.roundRect?g.roundRect(X(x0),Y(y1),(x1-x0)*k,(y1-y0)*k,10*k/1.5):g.rect(X(x0),Y(y1),(x1-x0)*k,(y1-y0)*k);g.stroke();g.setLineDash([]);
+      g.fillStyle="rgba(40,50,58,.85)";g.font="700 "+Math.round(9.5*k)+"px Arial, sans-serif";g.textAlign="left";g.textBaseline="middle";
+      g.fillText(title,X(x0+10),Y(y1)+0);
+      const tw=g.measureText(title).width;
+    }
+    function lab(title,x0,y1){
+      g.font="700 "+Math.round(9*k)+"px Arial, sans-serif";g.textAlign="left";g.textBaseline="middle";
+      const tw=g.measureText(title).width;
+      g.fillStyle="#d7dce0";g.fillRect(X(x0+8),Y(y1)-7*k,tw+12*k,14*k);
+      g.fillStyle="rgba(40,50,58,.9)";g.fillText(title,X(x0+14),Y(y1));
+    }
+    const frames=[
+      [-380,-4,-8,292,"CHASTOTA O'ZGARTIRGICH"],
+      [-380,-368,-4,-142,"ASINXRON MOTOR  3~ 380 V"],
+      [-130,-150,56,-28,"TORMOZ REZISTORI"],
+      [148,92,282,284,"ZADATCHIK"],
+      [188,-268,312,90,"BOSHQARUV TUGMALARI"]
+    ];
+    frames.forEach(f=>{
+      g.strokeStyle="rgba(40,50,58,.5)";g.lineWidth=2.2;g.setLineDash([12,8]);
+      g.strokeRect(X(f[0]),Y(f[3]),(f[2]-f[0])*k,(f[3]-f[1])*k);g.setLineDash([]);
+      lab(f[4],f[0],f[3]);
+    });
+  });
+}
+
+/* ---- source console with 4 mm safety sockets ---- */
+const CONS={x:0,y:425,w:700,h:96,d:70};
+const lamps=[];
+function buildConsole(){
+  const g=new THREE.Group();scene.add(g);
+  slab(g,CONS.w,CONS.h,CONS.d,9,MAT.console,CONS.x,CONS.y,CONS.d,1.8);
+  const SK=[
+    ["src.l1",-300,"A","Manba L1 (380 V, A fazasi) rozetkasi","m3","L1"],
+    ["src.l2",-230,"B","Manba L2 (380 V, B fazasi) rozetkasi","m3","L2"],
+    ["src.l3",-160,"C","Manba L3 (380 V, C fazasi) rozetkasi","m3","L3"],
+    ["src.l",60,"L","Manba L (220 V, bir fazali) rozetkasi","m1","SL"],
+    ["src.n",130,"N","Manba N (nol) rozetkasi","m1","SN"],
+    ["src.e",200,"PE","Manba PE (E, himoya yerlash) rozetkasi","pe","PE"]
+  ];
+  SK.forEach(s=>{
+    addT(s[0],{x:s[1],y:418,z:CONS.d,dir:[0,-1],kind:s[2],desc:s[3],dom:s[4],sig:s[5],type:"plug"});
+    hwJack(g,s[0]);
+  });
+  // phase lamps above L1..L3
+  [[-300,0xe3b800],[-230,0x2f9e44],[-160,0xd8352a]].forEach(p=>{
+    const base=mkCylZ(g,7.4,7.4,3,MAT.black,p[0],456,CONS.d,22);
+    const m=std({color:p[1],roughness:.2,emissive:0x000000,transparent:true,opacity:.92,clearcoat:1},true);
+    m.userData.col=p[1];
+    const dome=new THREE.Mesh(new THREE.SphereGeometry(5.6,18,12,0,Math.PI*2,0,Math.PI/2).rotateX(Math.PI/2),m);
+    dome.position.set(p[0],456,CONS.d+3);g.add(dome);lamps.push(m);
+  });
+  decal(g,CONS.w,CONS.h,CONS.x,CONS.y,CONS.d+.12,4,(c,w,h,k)=>{
+    const X=x=>(x+w/2)*k,Yf=y=>(h/2-(y-CONS.y))*k;
+    c.fillStyle="#e7ecef";c.textAlign="center";c.textBaseline="middle";
+    [["L1",-300],["L2",-230],["L3",-160],["L",60],["N",130],["PE",200]].forEach(a=>{
+      c.font="700 "+Math.round(9*k)+"px Arial, sans-serif";c.fillStyle="#e7ecef";c.fillText(a[0],X(a[1]),Yf(396));
+    });
+    c.font="700 "+Math.round(7.5*k)+"px Arial, sans-serif";c.fillStyle="#9fb0bc";
+    c.fillText("MANBA  3~ 380 V  50 Hz",X(-230),Yf(468));c.fillText("MANBA  1~ 220 V  50 Hz",X(130),Yf(468));
+    c.strokeStyle="#5a6a76";c.lineWidth=1.6*k/3;c.beginPath();c.moveTo(X(-80),Yf(395));c.lineTo(X(-80),Yf(470));c.stroke();
+    // earth symbol next to PE
+    const ex=X(236),ey=Yf(418);c.lineWidth=1.4*k/2.4;c.beginPath();c.moveTo(ex,ey-5*k);c.lineTo(ex,ey);c.moveTo(ex-5*k,ey);c.lineTo(ex+5*k,ey);c.moveTo(ex-3.4*k,ey+2.6*k);c.lineTo(ex+3.4*k,ey+2.6*k);c.moveTo(ex-1.6*k,ey+5*k);c.lineTo(ex+1.6*k,ey+5*k);c.stroke();
+  });
+  aoPlane(0,CONS.y,CONS.w,CONS.h);
+  addTag("Manba · 380 V",-230,CONS.y+CONS.h/2+6,CONS.d,"top");
+  addTag("Manba · 220 V",130,CONS.y+CONS.h/2+6,CONS.d,"top");
+}
+
+/* ---- seven-segment display ---- */
+const SEG={"0":"abcdef","1":"bc","2":"abdeg","3":"abcdg","4":"bcfg","5":"acdfg","6":"acdefg","7":"abc","8":"abcdefg","9":"abcdfg",
+  "E":"adefg","L":"def","O":"abcdef","C":"adef","P":"abefg","H":"bcefg","F":"aefg","-":"g","U":"bcdef","n":"ceg","r":"eg"," ":""};
+const DISP={cv:null,g:null,tex:null,last:""};
+function drawSeg(g,k,x,y,w,h,t,on){
+  const s={a:[x+t,y,w-2*t,t],g:[x+t,y+(h-t)/2,w-2*t,t],d:[x+t,y+h-t,w-2*t,t]};
+  const v={f:[x,y+t,t,(h-3*t)/2],b:[x+w-t,y+t,t,(h-3*t)/2],e:[x,y+(h+t)/2,t,(h-3*t)/2],c:[x+w-t,y+(h+t)/2,t,(h-3*t)/2]};
+  return {on:on,s:s,v:v};
+}
+function drawDisplay(text,o){
+  o=o||{};
+  const g=DISP.g,k=DISP.k,W=DISP.w,H=DISP.h;
+  g.clearRect(0,0,W*k,H*k);
+  const bg=g.createLinearGradient(0,0,0,H*k);bg.addColorStop(0,"#1a0b0b");bg.addColorStop(1,"#0d0505");
+  g.fillStyle=bg;g.fillRect(0,0,W*k,H*k);
+  const chars=[];
+  for(let i=0;i<text.length;i++){
+    const ch=text[i];
+    if(ch==="."&&chars.length){chars[chars.length-1].dp=true;continue;}
+    chars.push({ch:ch,dp:false});
+  }
+  while(chars.length<4)chars.unshift({ch:" ",dp:false});
+  const dw=13.6,dh=21,t=2.6,gap=3.2,x0=3.5,y0=2.6;
+  const lit=o.on?"#ff4030":null;
+  for(let i=0;i<4;i++){
+    const c=chars[i],x=x0+i*(dw+gap),on=(o.on&&!o.blank)?(SEG[c.ch]||""):"";
+    const all=drawSeg(g,k,x,y0,dw,dh,t);
+    const segs={...all.s,...all.v};
+    for(const n in segs){
+      const r=segs[n],isOn=on.indexOf(n)>=0;
+      g.fillStyle=isOn?lit:"#1b0b0a";
+      if(isOn){g.shadowColor="#ff2a18";g.shadowBlur=9*k;}else g.shadowBlur=0;
+      g.beginPath();
+      if(n==="a"||n==="g"||n==="d"){
+        g.moveTo((r[0]-.8)*k,(r[1]+r[3]/2)*k);g.lineTo((r[0]+1.4)*k,r[1]*k);g.lineTo((r[0]+r[2]-1.4)*k,r[1]*k);g.lineTo((r[0]+r[2]+.8)*k,(r[1]+r[3]/2)*k);g.lineTo((r[0]+r[2]-1.4)*k,(r[1]+r[3])*k);g.lineTo((r[0]+1.4)*k,(r[1]+r[3])*k);
+      }else{
+        g.moveTo((r[0]+r[2]/2)*k,(r[1]-.8)*k);g.lineTo((r[0]+r[2])*k,(r[1]+1.4)*k);g.lineTo((r[0]+r[2])*k,(r[1]+r[3]-1.4)*k);g.lineTo((r[0]+r[2]/2)*k,(r[1]+r[3]+.8)*k);g.lineTo(r[0]*k,(r[1]+r[3]-1.4)*k);g.lineTo(r[0]*k,(r[1]+1.4)*k);
+      }
+      g.closePath();g.fill();g.shadowBlur=0;
+    }
+    const dpOn=o.on&&!o.blank&&c.dp;
+    g.fillStyle=dpOn?lit:"#1b0b0a";if(dpOn){g.shadowColor="#ff2a18";g.shadowBlur=9*k;}
+    g.beginPath();g.arc((x+dw+1.2)*k,(y0+dh-.6)*k,1.25*k,0,Math.PI*2);g.fill();g.shadowBlur=0;
+  }
+  const lab=[["FWD",o.fwd],["HZ",o.hz],["RUN",o.runLed]];
+  g.font="700 "+Math.round(3.5*k)+"px Arial, sans-serif";g.textAlign="left";g.textBaseline="middle";
+  lab.forEach((a,i)=>{
+    const on=o.on&&a[1];
+    g.fillStyle=on?"#ff4a38":"#331210";if(on){g.shadowColor="#ff2a18";g.shadowBlur=7*k;}
+    g.fillText(a[0],70.5*k,(5.2+i*7.4)*k);g.shadowBlur=0;
+  });
+  DISP.tex.needsUpdate=true;
+}
+
+/* ---- frequency converter ---- */
+const VX=-170,VY=140,VW=130,VH=235,VD=105;
+const keyDefs=[["PROG",-42,176,"g"],["up",-14,176,"c"],["SHIFT",14,176,"g"],["RUN",42,176,"r"],["M-FUN",-42,158,"g"],["dn",-14,158,"c"],["ENTER",14,158,"g"],["STOP",42,158,"s"]];
+const keyMats={g:std({color:0x9ba1a7,roughness:.4}),c:std({color:0x22b8cc,roughness:.35,emissive:0x053038}),r:std({color:0x1fae48,roughness:.35,emissive:0x052a10}),s:std({color:0xd23030,roughness:.35,emissive:0x300707})};
+function buildVFD(){
+  const g=new THREE.Group();scene.add(g);
+  slab(g,VW,VH,VD,7,MAT.vfd,VX,VY,VD,1.6);
+  // mounting ears with screws
+  [[-1,1],[1,1],[-1,-1],[1,-1]].forEach(s=>{
+    const ex=VX+s[0]*(VW/2+9),ey=VY+s[1]*(VH/2-10);
+    slab(g,24,15,5,4,MAT.vfd,ex,ey,5,.8);
+    const sc=new THREE.Mesh(new THREE.CylinderGeometry(4.6,4.6,2,18).rotateX(Math.PI/2),MAT.steel);sc.position.set(ex+s[0]*2,ey,5.9);g.add(sc);
+    const sl=new THREE.Mesh(new THREE.BoxGeometry(7,1.2,.8),MAT.dark);sl.position.set(ex+s[0]*2,ey,7);sl.rotation.z=.5+s[0]*s[1]*.4;g.add(sl);
+  });
+  // top & bottom terminal housings
+  slab(g,122,28,10,4,MAT.vfdBlk,VX,242,VD+10,.8);
+  slab(g,122,28,10,4,MAT.vfdBlk,VX,35,VD+10,.8);
+  // keypad fascia
+  slab(g,118,83,3,5,MAT.vfdFas,VX,184.5,VD+3,.6);
+  slab(g,100,34,1.6,3,MAT.black,VX,207,VD+4.6,.4);
+  // display
+  DISP.w=92;DISP.h=26;DISP.k=6;
+  DISP.cv=document.createElement("canvas");DISP.cv.width=DISP.w*DISP.k;DISP.cv.height=DISP.h*DISP.k;DISP.g=DISP.cv.getContext("2d");
+  DISP.tex=new THREE.CanvasTexture(DISP.cv);DISP.tex.encoding=THREE.sRGBEncoding;DISP.tex.anisotropy=MAXA;
+  const dm=new THREE.Mesh(new THREE.PlaneGeometry(DISP.w,DISP.h),new THREE.MeshBasicMaterial({map:DISP.tex,toneMapped:false}));
+  dm.position.set(VX,207,VD+4.75);g.add(dm);
+  drawDisplay("0.00",{on:false});
+  // glass reflection
+  const gl=new THREE.Mesh(new THREE.PlaneGeometry(DISP.w,DISP.h),new THREE.MeshStandardMaterial({color:0xffffff,transparent:true,opacity:.07,roughness:.05,metalness:0,depthWrite:false}));
+  gl.position.set(VX,207,VD+4.9);g.add(gl);
+  // keys
+  keyDefs.forEach(kd=>{
+    const x=VX+kd[1],y=kd[2];
+    slab(g,24,15,4,3,keyMats[kd[3]],x,y,VD+7,.6);
+    decal(g,24,15,x,y,VD+7.1,8,(c,w,h,kk)=>{
+      c.fillStyle=kd[3]==="g"?"#15191c":"#06161a";c.textAlign="center";c.textBaseline="middle";
+      if(kd[0]==="up"||kd[0]==="dn"){
+        c.beginPath();const s=kd[0]==="up"?-1:1;c.moveTo(w/2*kk,(h/2+s*3.2)*kk);c.lineTo((w/2-4)*kk,(h/2-s*2.4)*kk);c.lineTo((w/2+4)*kk,(h/2-s*2.4)*kk);c.closePath();c.fill();
+      }else{
+        c.fillStyle=(kd[3]==="r"||kd[3]==="s")?"#f4f4f4":"#15191c";
+        c.font="700 "+Math.round((kd[0].length>5?3.1:3.7)*kk)+"px Arial, sans-serif";
+        const lab=kd[0]==="STOP"?"STOP":kd[0];
+        if(kd[0]==="STOP"){c.fillText("STOP",w/2*kk,(h/2-1.8)*kk);c.font="700 "+Math.round(3*kk)+"px Arial, sans-serif";c.fillText("REST",w/2*kk,(h/2+2.4)*kk);}
+        else c.fillText(lab,w/2*kk,h/2*kk);
+      }
+    });
+  });
+  decal(g,118,83,VX,184.5,VD+3.1,6,(c,w,h,k)=>{
+    c.fillStyle="#7d8791";c.textAlign="center";c.textBaseline="middle";
+    c.font="700 "+Math.round(3.4*k)+"px Arial, sans-serif";c.fillText("ENERGYVIBE  VFD-075  ·  0.75 kW  ·  3~ 380 V",w/2*k,(h-3.2)*k);
+  });
+  // control terminal plate
+  slab(g,118,96,2,4,MAT.vfdLight,VX,97,VD+2,.6);
+  // terminals
+  const TOP=[["vfd.r",-45,"A","R: tarmoq kirishi (L1)","vin","L1"],["vfd.s",-15,"B","S: tarmoq kirishi (L2)","vin","L2"],["vfd.t",15,"C","T: tarmoq kirishi (L3)","vin","L3"],["vfd.pe",45,"PE","⊕: himoya yerlash (PE)","pe","PE"]];
+  TOP.forEach(a=>{addT(a[0],{x:VX+a[1],y:240,z:VD+10,dir:[0,1],kind:a[2],desc:a[3],dom:a[4],sig:a[5]});hwScrew(g,a[0]);});
+  const BOT=[["vfd.u",-48,"A","U: motor chiqishi (U)","vout","U"],["vfd.v",-24,"B","V: motor chiqishi (V)","vout","V"],["vfd.w",0,"C","W: motor chiqishi (W)","vout","W"],["vfd.p",24,"BR","P: tormoz rezistori (+)","brk","P"],["vfd.pb",48,"BR","PB: tormoz rezistori (-)","brk","PB"]];
+  BOT.forEach(a=>{addT(a[0],{x:VX+a[1],y:32,z:VD+10,dir:[0,-1],kind:a[2],desc:a[3],dom:a[4],sig:a[5]});hwScrew(g,a[0]);});
+  const R1=[["vfd.ra",-30,"RL","RA (COM): signal relesi umumiy kontakti","relay","RA"],["vfd.rb",0,"RL","RB (NO): relening ochiq kontakti","relay","RB"],["vfd.rc",30,"RL","RC (NC): relening yopiq kontakti","relay","RC"]];
+  R1.forEach(a=>{addT(a[0],{x:VX+a[1],y:126,z:VD+2,dir:[1,0],kind:a[2],desc:a[3],dom:a[4],sig:a[5]});hwScrew(g,a[0]);});
+  const R2=[["vfd.m0",-45,"CT","M0 (FWD): oldinga yurgizish kirishi","ctl","M0"],["vfd.m1",-15,"CT","M1 (REV): teskari yurgizish kirishi","ctl","M1"],["vfd.m2",15,"CT","M2 (STOP): to'xtatish kirishi","ctl","M2"],["vfd.com",45,"GND","COM: boshqaruv kirishlarining umumiy nuqtasi","ctl","GND"]];
+  R2.forEach(a=>{addT(a[0],{x:VX+a[1],y:98,z:VD+2,dir:[1,0],kind:a[2],desc:a[3],dom:a[4],sig:a[5]});hwScrew(g,a[0]);});
+  const R3=[["vfd.v10",-45,"V10","+10 V: potensiometr ta'minoti","ana","V10"],["vfd.ai",-15,"AI","AI: analog kirish (chastota zadatchigi)","ana","AI"],["vfd.gnd",15,"GND","GND: analog kirish umumiy nuqtasi","ana","GND"]];
+  R3.forEach(a=>{addT(a[0],{x:VX+a[1],y:70,z:VD+2,dir:[1,0],kind:a[2],desc:a[3],dom:a[4],sig:a[5]});hwScrew(g,a[0]);});
+  // labels
+  decal(g,122,28,VX,242,VD+10.1,6,(c,w,h,k)=>{
+    c.fillStyle="#e7ecef";c.textAlign="center";c.textBaseline="middle";c.font="700 "+Math.round(5.2*k)+"px Arial, sans-serif";
+    [["R",-45],["S",-15],["T",15]].forEach(a=>c.fillText(a[0],(w/2+a[1])*k,5*k));
+    // earth symbol
+    const ex=(w/2+45)*k,ey=5*k;c.strokeStyle="#e7ecef";c.lineWidth=.55*k;c.beginPath();c.moveTo(ex,ey-2.6*k);c.lineTo(ex,ey);c.moveTo(ex-2.8*k,ey);c.lineTo(ex+2.8*k,ey);c.moveTo(ex-1.9*k,ey+1.6*k);c.lineTo(ex+1.9*k,ey+1.6*k);c.moveTo(ex-.9*k,ey+3.1*k);c.lineTo(ex+.9*k,ey+3.1*k);c.stroke();
+  });
+  decal(g,122,28,VX,35,VD+10.1,6,(c,w,h,k)=>{
+    c.fillStyle="#e7ecef";c.textAlign="center";c.textBaseline="middle";c.font="700 "+Math.round(5.2*k)+"px Arial, sans-serif";
+    [["U",-48],["V",-24],["W",0],["P",24],["PB",48]].forEach(a=>c.fillText(a[0],(w/2+a[1])*k,5.5*k));
+  });
+  decal(g,118,96,VX,97,VD+2.12,6,(c,w,h,k)=>{
+    c.fillStyle="#141a1f";c.textAlign="center";c.textBaseline="middle";
+    const row=(yr,items)=>items.forEach(a=>{
+      const cy=y=>(h/2-(y-97))*k;
+      c.fillStyle="#141a1f";c.font="700 "+Math.round(4.2*k)+"px Arial, sans-serif";
+      c.fillText(a[0],(w/2+a[1])*k,cy(yr+14.8));
+      if(a[2]){c.font="600 "+Math.round(3.2*k)+"px Arial, sans-serif";c.fillStyle="#3b4853";c.fillText(a[2],(w/2+a[1])*k,cy(yr+10.6));}
+    });
+    row(126,[["RA",-30,"COM"],["RB",0,"NO"],["RC",30,"NC"]]);
+    row(98,[["M0",-45,"FWD"],["M1",-15,"REV"],["M2",15,"STOP"],["COM",45,""]]);
+    row(70,[["+10V",-45,""],["AI",-15,""],["GND",15,""]]);
+  });
+  aoPlane(VX,VY,VW,VH);
+  addTag("Chastota o'zgartirgich",VX,12,VD+10,"bottom");
+}
+/* =====================================================================
+   SCENE: motor, braking resistor, potentiometer, pushbutton stations
+   ===================================================================== */
+const MX=-200,MY=-255,MZ=66,MR=62;
+const mot={rot:null,ang:0};
+function buildMotor(){
+  const g=new THREE.Group();scene.add(g);
+  // wall mounting plate (feet)
+  slab(g,176,108,14,6,MAT.cast,MX,MY,14,1);
+  [[-72,-42],[72,-42],[-72,42],[72,42]].forEach(p=>{
+    const b=new THREE.Mesh(new THREE.CylinderGeometry(6.5,6.5,3,6).rotateX(Math.PI/2),MAT.steelDark);b.position.set(MX+p[0],MY+p[1],15.5);g.add(b);
+  });
+  // stator frame
+  const body=new THREE.Mesh(new THREE.CylinderGeometry(MR,MR,200,64).rotateZ(Math.PI/2),MAT.motor);
+  body.position.set(MX,MY,MZ);body.castShadow=true;body.receiveShadow=true;g.add(body);
+  // cooling fins
+  const N=36;
+  for(let i=0;i<N;i++){
+    const th=i/N*Math.PI*2;
+    if(Math.cos(th)>.74&&Math.abs(Math.sin(th))<.7)continue;
+    const r=MR+2.6;
+    const f=new THREE.Mesh(new THREE.BoxGeometry(168,3.2,7),MAT.motor);
+    f.position.set(MX,MY+r*Math.sin(th),MZ+r*Math.cos(th));f.rotation.x=-th;f.castShadow=true;g.add(f);
+  }
+  // end shields
+  const de=new THREE.Mesh(new THREE.CylinderGeometry(64,64,24,64).rotateZ(Math.PI/2),MAT.motorDk);de.position.set(MX+112,MY,MZ);de.castShadow=true;g.add(de);
+  const de2=new THREE.Mesh(new THREE.CylinderGeometry(40,48,10,48).rotateZ(Math.PI/2),MAT.cast);de2.position.set(MX+129,MY,MZ);g.add(de2);
+  const nde=new THREE.Mesh(new THREE.CylinderGeometry(62,62,24,64).rotateZ(Math.PI/2),MAT.motorDk);nde.position.set(MX-112,MY,MZ);nde.castShadow=true;g.add(nde);
+  // fan cowl
+  const cowl=new THREE.Mesh(new THREE.CylinderGeometry(55,58,52,56).rotateZ(Math.PI/2),MAT.motorDk);cowl.position.set(MX-148,MY,MZ);cowl.castShadow=true;g.add(cowl);
+  const cap=new THREE.Mesh(new THREE.CylinderGeometry(45,55,10,56).rotateZ(Math.PI/2),MAT.motorDk);cap.position.set(MX-179,MY,MZ);g.add(cap);
+  for(let i=0;i<6;i++){
+    const th=i/6*Math.PI*2+.26,r=56.4;
+    const rib=new THREE.Mesh(new THREE.BoxGeometry(50,3,5),MAT.motorDk);rib.position.set(MX-148,MY+r*Math.sin(th),MZ+r*Math.cos(th));rib.rotation.x=-th;g.add(rib);
+  }
+  // terminal box
+  const bx=MX,by=MY,zb=100;
+  mkBox(g,94,82,34,MAT.bake,bx,by,zb);                       // board inside the box (top z=134)
+  [[-49.5,0,5,92],[49.5,0,5,92],[0,43.5,104,5],[0,-43.5,104,5]].forEach(w=>{
+    const m=new THREE.Mesh(new THREE.BoxGeometry(w[2],w[3],50),MAT.motor);m.position.set(bx+w[0],by+w[1],zb+25);m.castShadow=true;m.receiveShadow=true;g.add(m);
+  });
+  // corner bosses with cover screws
+  [[-46,39],[46,39],[-46,-39],[46,-39]].forEach(p=>{
+    const m=new THREE.Mesh(new THREE.CylinderGeometry(4.4,4.4,50,16).rotateX(Math.PI/2),MAT.motor);m.position.set(bx+p[0],by+p[1],zb+25);g.add(m);
+    const sc=new THREE.Mesh(new THREE.CylinderGeometry(1.8,1.8,1,12).rotateX(Math.PI/2),MAT.dark);sc.position.set(bx+p[0],by+p[1],zb+50.2);g.add(sc);
+  });
+  // cable gland on the right wall
+  const gl=new THREE.Mesh(new THREE.CylinderGeometry(9,9,20,22).rotateZ(Math.PI/2),MAT.black);gl.position.set(bx+57,by+14,zb+22);g.add(gl);
+  const gn=new THREE.Mesh(new THREE.CylinderGeometry(11,11,6,6).rotateZ(Math.PI/2),MAT.steelDark);gn.position.set(bx+50,by+14,zb+22);g.add(gn);
+  // studs
+  const row=[["mot.u",-26,16,"A","U1: motor chulg'ami boshi (U)","motor","U"],["mot.v",0,16,"B","V1: motor chulg'ami boshi (V)","motor","V"],["mot.w",26,16,"C","W1: motor chulg'ami boshi (W)","motor","W"]];
+  row.forEach(a=>{addT(a[0],{x:bx+a[1],y:by+a[2],z:134,type:"stud",dir:[0,1],kind:a[3],desc:a[4],dom:a[5],sig:a[6]});hwStud(g,a[0],true);});
+  addT("mot.pe",{x:bx+36,y:by-30,z:134,type:"stud",dir:[1,0],kind:"PE",desc:"Motor korpusining himoya yerlash vinti (PE)",dom:"pe",sig:"PE"});hwStud(g,"mot.pe",true);
+  // lower row studs + star bridge (380 V star connection, factory fitted)
+  [-26,0,26].forEach(dx=>{
+    const st=new THREE.Mesh(TG.stud,MAT.steel);st.position.set(bx+dx,by-10,142.5);st.castShadow=true;g.add(st);
+    const w=new THREE.Mesh(TG.washer,MAT.nickel);w.position.set(bx+dx,by-10,134.5);g.add(w);
+  });
+  const bar=new THREE.Mesh(new THREE.BoxGeometry(66,8.5,1.8),MAT.brass);bar.position.set(bx,by-10,138.6);bar.castShadow=true;g.add(bar);
+  [-26,0,26].forEach(dx=>{const n=new THREE.Mesh(TG.nut,MAT.nickel);n.position.set(bx+dx,by-10,142.6);n.castShadow=true;g.add(n);});
+  decal(g,94,82,bx,by,134.1,6,(c,w,h,k)=>{
+    c.fillStyle="#e8dcc8";c.textAlign="center";c.textBaseline="middle";c.font="700 "+Math.round(3.8*k)+"px Arial, sans-serif";
+    const X=x=>(w/2+x)*k,Y=y=>(h/2-y)*k;
+    [["U1",-26,27],["V1",0,27],["W1",26,27]].forEach(a=>c.fillText(a[0],X(a[1]),Y(a[2])));
+    [["W2",-26,-19.5],["U2",0,-19.5],["V2",26,-19.5]].forEach(a=>c.fillText(a[0],X(a[1]),Y(a[2])));
+    c.font="600 "+Math.round(2.8*k)+"px Arial, sans-serif";c.fillStyle="#c9b99a";c.fillText("YULDUZ (Y) · 380 V",X(-18),Y(-31));
+    c.strokeStyle="#e8dcc8";c.lineWidth=.5*k;const ex=X(15),ey=Y(-33);c.beginPath();c.moveTo(ex,ey-2*k);c.lineTo(ex,ey+.4*k);c.moveTo(ex-2.4*k,ey+.4*k);c.lineTo(ex+2.4*k,ey+.4*k);c.moveTo(ex-1.5*k,ey+1.8*k);c.lineTo(ex+1.5*k,ey+1.8*k);c.stroke();
+  });
+  // name plate
+  slab(g,42,28,1.6,2,MAT.steel,MX-78,MY-4,MZ+MR+1.8,.3);
+  decal(g,42,28,MX-78,MY-4,MZ+MR+1.9,8,(c,w,h,k)=>{
+    c.fillStyle="#1b2227";c.textAlign="left";c.textBaseline="middle";
+    const L=[["3~ MOTOR  IP54",true],["0.75 kW  S1",false],["Y 380 V  1.9 A",false],["1400 min-1  cos 0.8",false],["50 Hz  F",false]];
+    L.forEach((a,i)=>{c.font=(a[1]?"700 ":"600 ")+Math.round(3.2*k)+"px Arial, sans-serif";c.fillText(a[0],3*k,(3.6+i*4.6)*k);});
+  });
+  // rotating shaft with a stroboscopic drum and a three-colour propeller
+  const rg=new THREE.Group();rg.position.set(MX+134,MY,MZ);g.add(rg);mot.rot=rg;
+  const sh=new THREE.Mesh(new THREE.CylinderGeometry(10.5,10.5,64,32).rotateZ(Math.PI/2),MAT.steel);sh.position.set(30,0,0);sh.castShadow=true;rg.add(sh);
+  const key=new THREE.Mesh(new THREE.BoxGeometry(34,4,4),MAT.steelDark);key.position.set(22,10.8,0);rg.add(key);
+  const drumTex=(()=>{const c=document.createElement("canvas");c.width=128;c.height=16;const gg=c.getContext("2d");
+    const cols=["#e8e8ea","#d12a22","#e8e8ea","#17181a"];for(let i=0;i<8;i++){gg.fillStyle=cols[i%4];gg.fillRect(i*16,0,16,16);}
+    const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.wrapS=THREE.RepeatWrapping;return t;})();
+  const drum=new THREE.Mesh(new THREE.CylinderGeometry(25,25,26,48).rotateZ(Math.PI/2),std({color:0xffffff,map:drumTex,roughness:.45,metalness:.1}));drum.position.set(12,0,0);drum.castShadow=true;rg.add(drum);
+  const hub=new THREE.Mesh(new THREE.CylinderGeometry(8,8,12,24).rotateZ(Math.PI/2),MAT.nickel);hub.position.set(46,0,0);hub.castShadow=true;rg.add(hub);
+  const bol=new THREE.Mesh(new THREE.CylinderGeometry(4.6,4.6,4,6).rotateZ(Math.PI/2),MAT.steelDark);bol.position.set(54,0,0);rg.add(bol);
+  [[0xf2c200,0],[0xd12a22,2.0944],[0x2767c7,4.1888]].forEach(b=>{
+    const bm=std({color:b[0],roughness:.35,clearcoat:.6},true);
+    const arm=new THREE.Group();arm.rotation.x=b[1];rg.add(arm);
+    const bl=new THREE.Mesh(new THREE.BoxGeometry(11,38,2),bm);bl.position.set(46,24,0);bl.rotation.y=.62;bl.castShadow=true;arm.add(bl);
+  });
+  aoPlane(MX-30,MY,350,150);
+  addTag("Asinxron motor",MX-60,MY+MR+8,MZ+MR,"top");
+}
+
+function buildResistor(){
+  const RX=-34,RY=-88,g=new THREE.Group();scene.add(g);
+  mkBox(g,130,16,6,MAT.aluDark,RX,RY,0);
+  slab(g,116,38,30,6,MAT.resAl,RX,RY,34,1.4);
+  for(let i=0;i<9;i++){const f=new THREE.Mesh(new THREE.BoxGeometry(2.2,38.6,1.4),MAT.alu);f.position.set(RX-48+i*12,RY,34.6);g.add(f);}
+  [-1,1].forEach(s=>{slab(g,22,38,10,3,MAT.vfdBlk,RX+s*58,RY,44,.6);});
+  addT("res.1",{x:RX-58,y:RY,z:44,dir:[0,1],kind:"BR",desc:"Tormoz rezistorining chap uchi",dom:"brk"});hwScrew(g,"res.1");
+  addT("res.2",{x:RX+58,y:RY,z:44,dir:[0,1],kind:"BR",desc:"Tormoz rezistorining o'ng uchi",dom:"brk"});hwScrew(g,"res.2");
+  decal(g,100,26,RX,RY,64.15,6,(c,w,h,k)=>{
+    c.fillStyle="#222a30";c.textAlign="center";c.textBaseline="middle";
+    c.font="700 "+Math.round(6.2*k)+"px Arial, sans-serif";c.fillText("100 Ω   150 W",w/2*k,h/2*k-3*k);
+    c.font="600 "+Math.round(3.6*k)+"px Arial, sans-serif";c.fillStyle="#46545f";c.fillText("tormoz rezistori · alyuminiy korpus",w/2*k,h/2*k+5*k);
+  });
+  aoPlane(RX,RY,150,44);
+  addTag("Tormoz rezistori",RX,RY-26,64,"bottom");
+}
+
+/* potentiometer with a dial */
+const POT={x:215,y:205,z:26,u:.72,knob:null,ptr:null};
+function buildPot(){
+  const g=new THREE.Group();scene.add(g);
+  slab(g,112,172,POT.z,8,MAT.plate,POT.x,POT.y-10,POT.z,1.4);
+  // dial plate
+  const disc=new THREE.Mesh(new THREE.CylinderGeometry(47,47,2.4,64).rotateX(Math.PI/2),MAT.alu);disc.position.set(POT.x,POT.y,POT.z+1.2);disc.castShadow=true;disc.receiveShadow=true;g.add(disc);
+  decal(g,96,96,POT.x,POT.y,POT.z+2.5,8,(c,w,h,k)=>{
+    const cx=w/2*k,cy=h/2*k;c.strokeStyle="#1b2025";c.fillStyle="#1b2025";c.textAlign="center";c.textBaseline="middle";
+    for(let i=0;i<=50;i++){
+      const a=(-135+270*i/50)*Math.PI/180,major=i%5===0,r0=major?35:38,r1=43;
+      c.lineWidth=(major?.9:.5)*k;c.beginPath();c.moveTo(cx+Math.sin(a)*r0*k,cy-Math.cos(a)*r0*k);c.lineTo(cx+Math.sin(a)*r1*k,cy-Math.cos(a)*r1*k);c.stroke();
+      if(major){const rr=30;c.font="700 "+Math.round(4.6*k)+"px Arial, sans-serif";c.fillText(String(i/5),cx+Math.sin(a)*rr*k,cy-Math.cos(a)*rr*k);}
+    }
+    c.font="700 "+Math.round(3.3*k)+"px Arial, sans-serif";c.fillText("10 kΩ",cx,cy+40*k);
+  });
+  // knob
+  const kg=new THREE.Group();kg.position.set(POT.x,POT.y,POT.z+2.4);g.add(kg);POT.knob=kg;
+  const base=new THREE.Mesh(new THREE.CylinderGeometry(28,30,7,56).rotateX(Math.PI/2),MAT.knob);base.position.z=3.5;base.castShadow=true;kg.add(base);
+  const body=new THREE.Mesh(new THREE.CylinderGeometry(21,25,22,56).rotateX(Math.PI/2),MAT.knob);body.position.z=18;body.castShadow=true;kg.add(body);
+  for(let i=0;i<24;i++){const a=i/24*Math.PI*2;const r=new THREE.Mesh(new THREE.BoxGeometry(1.6,4,19),MAT.knob);r.position.set(Math.cos(a)*24.2,Math.sin(a)*24.2,17);r.rotation.z=a;kg.add(r);}
+  const top=new THREE.Mesh(new THREE.CylinderGeometry(17,21,2.4,56).rotateX(Math.PI/2),MAT.knob);top.position.z=30.2;kg.add(top);
+  const ptr=new THREE.Mesh(new THREE.BoxGeometry(3.2,19,.8),std({color:0xf4f4f4,roughness:.4,emissive:0x303030}));ptr.position.set(0,11,31.6);kg.add(ptr);
+  const dot=new THREE.Mesh(new THREE.BoxGeometry(3.4,10,.7),std({color:0xf4f4f4,roughness:.4}));dot.position.set(0,26.3,6.8);dot.rotation.x=0;kg.add(dot);
+  kg.userData.pot=true;kg.traverse(o=>{if(o.isMesh)o.userData.pot=true;});
+  // terminals
+  const PT=[["pot.1",-34,"GND","Potensiometr 1-uchi (CCW chetki holat)"],["pot.2",0,"AI","Potensiometr 2-uchi (sirpanchi, o'rta nuqta)"],["pot.3",34,"V10","Potensiometr 3-uchi (CW chetki holat)"]];
+  PT.forEach(a=>{addT(a[0],{x:POT.x+a[1],y:130,z:POT.z,dir:[0,-1],kind:a[2],desc:a[3],dom:"ana",sig:a[2]==="GND"?"GND":a[2]});hwScrew(g,a[0]);});
+  decal(g,112,30,POT.x,130,POT.z+.1,6,(c,w,h,k)=>{
+    c.fillStyle="#e7ecef";c.textAlign="center";c.textBaseline="middle";c.font="700 "+Math.round(5*k)+"px Arial, sans-serif";
+    [["1",-34],["2",0],["3",34]].forEach(a=>c.fillText(a[0],(w/2+a[1])*k,(h/2-12)*k));
+  });
+  setPotAngle(POT.u);
+  aoPlane(POT.x,POT.y-10,112,172);
+  addTag("Chastota zadatchigi (potensiometr)",POT.x,POT.y+POT.z+54,60,"top");
+}
+function setPotAngle(u){
+  POT.u=Math.max(0,Math.min(1,u));
+  if(POT.knob)POT.knob.rotation.z=-(-135+270*POT.u)*Math.PI/180;
+}
+
+/* push-button stations: a mushroom head and two contact blocks (NC above, NO below) */
+const BTN={start:null,stop:null};
+function buildStation(kind,cx,y0){
+  const g=new THREE.Group();scene.add(g);
+  const isStart=kind==="start",pre=isStart?"bs":"bt";
+  slab(g,100,136,18,6,MAT.plate,cx,y0-33,18,1.2);
+  mkCylZ(g,21,21,4,MAT.nickel,cx,y0,18,48);
+  mkCylZ(g,16,16,10,MAT.pbBody,cx,y0,22,36);
+  // mushroom head
+  const hg=new THREE.Group();hg.position.set(cx,y0,32);g.add(hg);
+  const prof=[[0,0],[17.5,0],[20.4,1.4],[22,4.6],[21.6,8.6],[19,12.4],[13,15.6],[6,17.2],[0,17.6]].map(p=>new THREE.Vector2(p[0],p[1]));
+  const head=new THREE.Mesh(new THREE.LatheGeometry(prof,56).rotateX(Math.PI/2),isStart?MAT.pbGreen:MAT.pbRed);head.castShadow=true;head.receiveShadow=true;hg.add(head);
+  hg.traverse(o=>{if(o.isMesh)o.userData.btn=kind;});
+  BTN[kind]={grp:hg,z0:32,pressed:false,y0:y0,cx:cx,led:{}};
+  // contact blocks
+  const blocks=[["NC",y0-54,"11","12",0xd23030],["NO",y0-82,"23","24",0x1fae48]];
+  blocks.forEach(b=>{
+    slab(g,78,24,14,3,MAT.block,cx,b[1],32,.6);
+    const win=std({color:b[4],roughness:.4,emissive:0x000000});
+    const wm=new THREE.Mesh(new THREE.BoxGeometry(16,7,.8),win);wm.position.set(cx,b[1]+3.5,32.4);g.add(wm);
+    BTN[kind].led[b[0]]=win;
+    addT(pre+"."+b[2],{x:cx-27,y:b[1],z:32,dir:[-1,0],kind:"CT",desc:(isStart?"START":"STOP")+" tugmasi, "+b[0]+" kontakt bloki, "+b[2]+"-qisqich",dom:"btn"});hwScrew(g,pre+"."+b[2]);
+    addT(pre+"."+b[3],{x:cx+27,y:b[1],z:32,dir:[1,0],kind:"CT",desc:(isStart?"START":"STOP")+" tugmasi, "+b[0]+" kontakt bloki, "+b[3]+"-qisqich",dom:"btn"});hwScrew(g,pre+"."+b[3]);
+    decal(g,78,24,cx,b[1],32.1,7,(c,w,h,k)=>{
+      c.fillStyle="#1b2227";c.textAlign="center";c.textBaseline="middle";c.font="700 "+Math.round(3.8*k)+"px Arial, sans-serif";
+      c.fillText(b[0],w/2*k,(h/2-2.6)*k);
+      c.font="700 "+Math.round(3.6*k)+"px Arial, sans-serif";
+      c.fillText(b[2],(w/2-27)*k,(h/2+10.2)*k);c.fillText(b[3],(w/2+27)*k,(h/2+10.2)*k);
+    });
+  });
+  decal(g,100,20,cx,y0+27,18.12,7,(c,w,h,k)=>{
+    c.fillStyle="#e7ecef";c.textAlign="center";c.textBaseline="middle";c.font="700 "+Math.round(6.4*k)+"px Arial, sans-serif";
+    c.fillText(isStart?"START":"STOP",w/2*k,h/2*k);
+  });
+  aoPlane(cx,y0-33,100,136);
+}
+function buildStations(){
+  buildStation("stop",250,48);
+  buildStation("start",250,-122);
+  // tags
+}
+function setBtn(kind,down){
+  const b=BTN[kind];if(!b)return;
+  b.pressed=down;b.grp.position.z=b.z0-(down?6:0);
+  const nc=b.led.NC,no=b.led.NO;
+  // NC lit when closed (not pressed); NO lit when closed (pressed)
+  const closedNC=!down,closedNO=down;
+  nc.emissive.setRGB(closedNC?.55:0,closedNC?.06:0,closedNC?.06:0);
+  no.emissive.setRGB(closedNO?.05:0,closedNO?.6:0,closedNO?.15:0);
+  dirty=true;
+}
+/* =====================================================================
+   BUILD THE SCENE, THEN THE CONNECTION RULES
+   ===================================================================== */
+buildBoard();buildConsole();buildVFD();buildMotor();buildResistor();buildPot();buildStations();
+setBtn("start",false);setBtn("stop",false);
+
+const ALLOWED=[
+  ["src.l1","vfd.r","A"],["src.l2","vfd.s","B"],["src.l3","vfd.t","C"],
+  ["src.e","vfd.pe","PE"],["src.e","mot.pe","PE"],["vfd.pe","mot.pe","PE"],
+  ["vfd.u","mot.u","A"],["vfd.v","mot.v","B"],["vfd.w","mot.w","C"],
+  ["vfd.p","res.1","BR"],["vfd.p","res.2","BR"],["vfd.pb","res.1","BR"],["vfd.pb","res.2","BR"],
+  ["vfd.v10","pot.3","V10"],["vfd.ai","pot.2","AI"],["vfd.gnd","pot.1","GND"],["vfd.com","pot.1","GND"]
+];
+[["bs","vfd.m0"],["bt","vfd.m2"]].forEach(p=>{
+  const ends=p[0]==="bs"?["23","24"]:["11","12"];
+  ends.forEach(e=>{
+    ALLOWED.push([p[1],p[0]+"."+e,"CT"]);
+    ALLOWED.push(["vfd.com",p[0]+"."+e,"GND"]);
+    ALLOWED.push(["vfd.gnd",p[0]+"."+e,"GND"]);
+  });
+});
+const pk=(a,b)=>a<b?a+"|"+b:b+"|"+a;
+const ALLOW={};ALLOWED.forEach(p=>{ALLOW[pk(p[0],p[1])]=p[2];});
+const BUS=[["vfd.com","vfd.gnd"]];
+const CONTACTS=[["bs.11","bs.12"],["bs.23","bs.24"],["bt.11","bt.12"],["bt.23","bt.24"],["res.1","res.2"]];
+const RANK={src:0,vfd:1,mot:2,res:2,pot:2,bs:2,bt:2};
+
+const REQ=[
+  {text:"Manba L1 → o'zgartirgich R klemmasi",ids:["src.l1","vfd.r"],parts:[F=>F("src.l1")===F("vfd.r")]},
+  {text:"Manba L2 → o'zgartirgich S klemmasi",ids:["src.l2","vfd.s"],parts:[F=>F("src.l2")===F("vfd.s")]},
+  {text:"Manba L3 → o'zgartirgich T klemmasi",ids:["src.l3","vfd.t"],parts:[F=>F("src.l3")===F("vfd.t")]},
+  {text:"Himoya yerlash: manba E → o'zgartirgich ⊕ va motor korpusi",ids:["src.e","vfd.pe","mot.pe"],parts:[F=>F("src.e")===F("vfd.pe"),F=>F("src.e")===F("mot.pe")]},
+  {text:"O'zgartirgich U → motor U1",ids:["vfd.u","mot.u"],parts:[F=>F("vfd.u")===F("mot.u")]},
+  {text:"O'zgartirgich V → motor V1",ids:["vfd.v","mot.v"],parts:[F=>F("vfd.v")===F("mot.v")]},
+  {text:"O'zgartirgich W → motor W1",ids:["vfd.w","mot.w"],parts:[F=>F("vfd.w")===F("mot.w")]},
+  {text:"Tormoz rezistori: P va PB klemmalariga (har biri bir uchiga)",ids:["vfd.p","res.1","vfd.pb","res.2"],
+    parts:[F=>F("vfd.p")===F("res.1")||F("vfd.p")===F("res.2"),
+           F=>(F("vfd.p")===F("res.1")&&F("vfd.pb")===F("res.2"))||(F("vfd.p")===F("res.2")&&F("vfd.pb")===F("res.1"))]},
+  {text:"Potensiometr 3-uchi (CW) → +10 V",ids:["vfd.v10","pot.3"],parts:[F=>F("vfd.v10")===F("pot.3")]},
+  {text:"Potensiometr sirpanchisi (2) → AI",ids:["vfd.ai","pot.2"],parts:[F=>F("vfd.ai")===F("pot.2")]},
+  {text:"Potensiometr 1-uchi (CCW) → GND",ids:["vfd.gnd","pot.1"],parts:[F=>F("vfd.gnd")===F("pot.1")]},
+  {text:"START tugmasi, NO kontakt (23–24): M0 va COM orasiga",ids:["vfd.m0","bs.23","vfd.com","bs.24"],
+    parts:[F=>F("vfd.m0")===F("bs.23")||F("vfd.m0")===F("bs.24"),
+           F=>(F("vfd.m0")===F("bs.23")&&F("vfd.com")===F("bs.24"))||(F("vfd.m0")===F("bs.24")&&F("vfd.com")===F("bs.23"))]},
+  {text:"STOP tugmasi, NC kontakt (11–12): M2 va COM orasiga",ids:["vfd.m2","bt.11","vfd.com","bt.12"],
+    parts:[F=>F("vfd.m2")===F("bt.11")||F("vfd.m2")===F("bt.12"),
+           F=>(F("vfd.m2")===F("bt.11")&&F("vfd.com")===F("bt.12"))||(F("vfd.m2")===F("bt.12")&&F("vfd.com")===F("bt.11"))]}
+];
+const NET_COUNT=REQ.length;
+
+let mode="learn",wires=[],selected=null,wd=null,gest=null,pinch=null,powered=false,checked=false,examOK=false;
+let AN=null,hintTimer=null,hovT=null,hovW=-1;
+const DEFAULT="Klemma halqasini bosib boshqasiga sudrang yoki ikkita klemmani ketma-ket bosing.";
+const say=setStatus;
+
+function compute(extra){
+  const par={};for(const id in T)par[id]=id;
+  function find(x){while(par[x]!==x){par[x]=par[par[x]];x=par[x];}return x;}
+  function uni(a,b){a=find(a);b=find(b);if(a!==b)par[a]=b;}
+  BUS.forEach(b=>uni(b[0],b[1]));
+  const list=extra?wires.concat([extra]):wires;
+  list.forEach(w=>uni(w.from,w.to));
+  const sigs={};
+  for(const id in T){if(T[id].sig){const r=find(id);(sigs[r]=sigs[r]||new Set()).add(T[id].sig);}}
+  const badRoot=new Set();
+  for(const r in sigs){if(sigs[r].size>1)badRoot.add(r);}
+  CONTACTS.forEach(c=>{if(find(c[0])===find(c[1]))badRoot.add(find(c[0]));});
+  return {find:find,badRoot:badRoot,sigs:sigs};
+}
+function orient(a,b){
+  const ra=RANK[T[a].dev],rb=RANK[T[b].dev];
+  return ra<=rb?[a,b]:[b,a];
+}
+function wireKind(a,b){return ALLOW[pk(a,b)]||T[a].kind||"GR";}
+function addWire(a,b){const o=orient(a,b);wires.push({from:o[0],to:o[1],kind:wireKind(o[0],o[1])});}
+function conflictText(a,b){
+  const c=compute({from:a,to:b}),r=c.find(a),s=c.sigs[r]?[...c.sigs[r]]:[];
+  const nm={L1:"L1",L2:"L2",L3:"L3",U:"U",V:"V",W:"W",P:"P",PB:"PB",M0:"M0",M2:"M2",GND:"COM/GND",V10:"+10 V",AI:"AI",PE:"PE"};
+  if(s.length>1)return (s.map(x=>nm[x]||x).join(" va "))+" bir nuqtada tutashib qoladi: bu qisqa tutashuv. Har bir signal o'z klemmasiga ulanadi.";
+  return "Bu ulanish kontaktning ikki uchini yoki rezistorning ikki uchini o'zaro tutashtirib qo'yadi, qurilma ishlamay qoladi.";
+}
+function reason(a,b){
+  const A=T[a],B=T[b],ds=[A.dom,B.dom],has=d=>ds.indexOf(d)>=0;
+  const mains=has("m3")||has("m1");
+  if(A.dev===B.dev)return "Bir qurilmaning ikki klemmasini o'zaro ulash tokni qurilmadan chetlab o'tkazadi. Zanjir qurilma ichidan o'tishi kerak.";
+  if((A.dom==="m3"||A.dom==="m1")&&(B.dom==="m3"||B.dom==="m1"))return "Manba rozetkalarini o'zaro ulash qisqa tutashuv hosil qiladi.";
+  if(has("m1"))return "Bu bir fazali 220 V manba. O'zgartirgichning R, S, T kirishi 3 fazali 380 V uchun: bir faza ulansa «kirish fazasi yo'q» xatosi chiqadi. Bu sxemada L, N ishlatilmaydi.";
+  if(has("m3")&&(has("vout")||has("motor")))return "Tarmoqni o'zgartirgich chiqishiga (U, V, W) yoki motorga to'g'ridan ulab bo'lmaydi: chiqishga tarmoq tushsa o'zgartirgich zumda kuyadi. Tarmoq faqat R, S, T ga ulanadi.";
+  if(has("m3")&&(has("ctl")||has("ana")||has("relay")||has("btn")||has("brk")))return "380 V ni boshqaruv zanjiriga ulash o'zgartirgichni kuydiradi: boshqaruv klemmalari faqat past kuchlanish uchun.";
+  if(has("m3")&&has("vin"))return "Kirishda fazalar tartibi elektr jihatdan ahamiyatsiz, lekin bu mashqda standart tartib: L1→R, L2→S, L3→T.";
+  if(has("pe")&&mains===false&&(has("vin")||has("vout")||has("motor")||has("brk")||has("ctl")||has("ana")))return "Himoya yerlash (PE) faqat korpus va yerlash klemmalariga ulanadi: manba E → o'zgartirgich ⊕ va motor korpusi.";
+  if(has("pe"))return "Himoya yerlash (PE) tok o'tkazuvchi klemmaga ulanmaydi. Uni faqat yerlash klemmalari bilan bog'lang.";
+  if(has("vin")&&(has("vout")||has("motor")))return "Kirish va chiqishni bir-biriga ulash tarmoqni to'g'ridan motorga uzatadi: o'zgartirgich chetlab o'tiladi va buziladi.";
+  if((has("vout")&&has("motor"))){return "Fazalar nomi bilan mos ulanadi: U→U1, V→V1, W→W1. Ikki simni almashtirsangiz motor teskari tomonga aylanadi (REV).";}
+  if(has("vout")||has("motor"))return "O'zgartirgichning U, V, W chiqishlari faqat motorning U1, V1, W1 klemmalariga ulanadi.";
+  if(has("brk")&&(has("ctl")||has("ana")||has("btn")))return "P va PB faqat tormoz rezistoriga ulanadi.";
+  if(has("brk"))return "Tormoz rezistorining ikki uchi P va PB klemmalariga ulanadi, har biri bittadan.";
+  if(has("ana")&&has("btn"))return "Potensiometr va tugmalar bir-biriga ulanmaydi.";
+  if(ds.indexOf("btn")>=0){
+    const bt=(A.dom==="btn"?a:b),oth=(A.dom==="btn"?b:a),isStart=/^bs\./.test(bt);
+    if(isStart){
+      if(oth==="vfd.m0"&&(bt==="bs.11"||bt==="bs.12"))return "START tugmasining NC (11–12) kontakti normal holatda yopiq: M0 doim ulangan bo'lib o'zgartirgich o'zi yurib ketadi. START uchun NO (23–24) kontakt ishlatiladi.";
+      if(oth==="vfd.com"||oth==="vfd.gnd"){if(bt==="bs.11"||bt==="bs.12")return "START tugmasi uchun NO (23–24) kontakt ishlatiladi, NC (11–12) emas.";}
+      return "START tugmasi M0 (FWD) va COM orasiga ulanadi, NO (23–24) kontakt orqali.";
+    }
+    if(oth==="vfd.m2"&&(bt==="bt.23"||bt==="bt.24"))return "STOP tugmasi NC (11–12) kontakti orqali ulanadi: M2 normal holatda COM ga ulangan bo'lishi kerak. NO kontaktda o'zgartirgich hech qachon yurmaydi.";
+    if(oth==="vfd.com"||oth==="vfd.gnd"){if(bt==="bt.23"||bt==="bt.24")return "STOP tugmasi uchun NC (11–12) kontakt ishlatiladi, NO emas.";}
+    return "STOP tugmasi M2 (STOP) va COM orasiga ulanadi, NC (11–12) kontakt orqali.";
+  }
+  if(has("ana")||has("ctl"))return "+10 V potensiometrning 3-uchiga, GND 1-uchiga, AI esa o'rta (2) uchiga ulanadi. M0 START ga, M2 STOP ga ulanadi.";
+  return "Bu ikki klemma o'zaro ulanmaydi. Tartib: manba → R, S, T; U, V, W → motor; P, PB → rezistor; M0, M2 → tugmalar; +10 V, AI, GND → potensiometr.";
+}
+function analyze(){
+  const c=compute(),F=c.find;
+  const states=REQ.map(r=>{
+    const ok=r.parts.map(f=>f(F)),have=ok.filter(Boolean).length;
+    return {req:r,done:have===r.parts.length,have:have,total:r.parts.length};
+  });
+  const bad=[];
+  wires.forEach((w,i)=>{
+    const notAllowed=!ALLOW[pk(w.from,w.to)];
+    const inBad=c.badRoot.has(F(w.from));
+    if(notAllowed||inBad)bad.push(i);
+  });
+  const doneCount=states.filter(s=>s.done).length;
+  return {states:states,bad:bad,doneCount:doneCount,find:F,solved:doneCount===NET_COUNT&&bad.length===0};
+}
+function canPower(){return AN.solved&&(mode==="learn"||examOK);}
+
+/* =====================================================================
+   WIRES IN 3D
+   ===================================================================== */
+const wireGroup=new THREE.Group();scene.add(wireGroup);
+const ghostGroup=new THREE.Group();scene.add(ghostGroup);
+const ringGroup=new THREE.Group();scene.add(ringGroup);
+let wireObjs=[];
+let previewMesh=null;
+function tubeMesh(curve,radius,mat){
+  const len=curve.getLength(),seg=Math.max(20,Math.min(200,Math.round(len/2.5)));
+  const m=new THREE.Mesh(new THREE.TubeGeometry(curve,seg,radius,10,false),mat);
+  m.castShadow=true;m.receiveShadow=true;return m;
+}
+function disposeChildren(grp){
+  while(grp.children.length){
+    const o=grp.children[0];grp.remove(o);
+    o.traverse(n=>{if(n.geometry&&!n.userData.shared&&!(n.parent&&n.parent.userData.shared))n.geometry.dispose();});
+  }
+}
+function endPt(id,s){const t=T[id];return t.anchor.clone().add(V3(0,0,s*2.2)).addScaledVector(t.dir,t.lead);}
+function wireCurve(fromId,toId,i,sa,sb){
+  const A=T[fromId],B=T[toId],a0=endPt(fromId,sa||0),b0=endPt(toId,sb||0);
+  const dist=a0.distanceTo(b0),k=Math.min(110,Math.max(30,dist*.38)),lift=Math.max(a0.z,b0.z)+36+(i%7)*7;
+  const a1=a0.clone().addScaledVector(A.dir,k);a1.z=lift;
+  const b1=b0.clone().addScaledVector(B.dir,k);b1.z=lift;
+  return new THREE.CubicBezierCurve3(a0,a1,b1,b0);
+}
+function makeWireObj(fromId,toId,i,matKey,sa,sb){
+  const grp=new THREE.Group();
+  const curve=wireCurve(fromId,toId,i,sa,sb);
+  const tube=tubeMesh(curve,2.2,WM[matKey]||WM.GR);
+  tube.userData.wire=i;grp.add(tube);
+  grp.add(endMesh(fromId,matKey,sa));grp.add(endMesh(toId,matKey,sb));
+  return {grp:grp,tube:tube,curve:curve,kind:matKey};
+}
+function buildWires(){
+  disposeChildren(wireGroup);
+  wireObjs=[];
+  const cnt={};
+  wires.forEach((w,i)=>{
+    const bad=checked&&AN.bad.indexOf(i)>=0;
+    const sa=cnt[w.from]||0,sb=cnt[w.to]||0;cnt[w.from]=sa+1;cnt[w.to]=sb+1;
+    const o=makeWireObj(w.from,w.to,i,bad?"bad":w.kind,sa,sb);
+    o.baseKind=w.kind;
+    wireGroup.add(o.grp);wireObjs.push(o);
+  });
+  hovW=-1;dirty=true;
+}
+function flashBad(a,b){
+  const o=makeWireObj(a,b,wires.length,"bad");
+  ghostGroup.add(o.grp);dirty=true;
+  setTimeout(()=>{ghostGroup.remove(o.grp);o.grp.traverse(n=>{if(n.geometry&&!n.userData.shared&&!(n.parent&&n.parent.userData.shared))n.geometry.dispose();});dirty=true;},1500);
+}
+function setHoverWire(i){
+  if(i===hovW)return;
+  if(hovW>=0&&wireObjs[hovW]){
+    const bad=checked&&AN.bad.indexOf(hovW)>=0;
+    wireObjs[hovW].tube.material=WM[bad?"bad":wires[hovW].kind]||WM.GR;
+  }
+  hovW=i;
+  if(i>=0&&wireObjs[i]&&!powered)wireObjs[i].tube.material=WM.hover;
+  dirty=true;
+}
+
+/* halo rings on terminals */
+const ringGeo=new THREE.RingGeometry(10.2,12.6,40);
+const ringMats2={sel:new THREE.MeshBasicMaterial({color:0xffb400,transparent:true,depthTest:false,depthWrite:false,toneMapped:false}),
+                 hint:new THREE.MeshBasicMaterial({color:0x35e0ff,transparent:true,depthTest:false,depthWrite:false,toneMapped:false})};
+const rings={};
+for(const id in T){
+  const r=new THREE.Mesh(ringGeo,ringMats2.sel);
+  r.position.copy(T[id].pos);r.position.z+=2;r.visible=false;r.renderOrder=20;
+  ringGroup.add(r);rings[id]=r;
+}
+const hintSet=new Set();
+function paintRings(){
+  for(const id in rings){
+    const r=rings[id];
+    const isHint=hintSet.has(id);
+    const on=id===selected||id===hovT||isHint;
+    r.visible=on;
+    r.material=isHint&&id!==selected?ringMats2.hint:ringMats2.sel;
+  }
+  dirty=true;
+}
+function paintSel(){paintRings();}
+
+/* live current dots; the rate depends on what the wire does */
+const MAXDOTS=900;
+const dotMesh=new THREE.InstancedMesh(new THREE.SphereGeometry(1.5,8,6),new THREE.MeshBasicMaterial({color:0xfff1a8,toneMapped:false}),MAXDOTS);
+const glowMesh=new THREE.InstancedMesh(new THREE.SphereGeometry(3.8,8,6),new THREE.MeshBasicMaterial({color:0xffc94a,transparent:true,opacity:.2,blending:THREE.AdditiveBlending,depthWrite:false,toneMapped:false}),MAXDOTS);
+dotMesh.count=0;glowMesh.count=0;dotMesh.frustumCulled=false;glowMesh.frustumCulled=false;
+scene.add(dotMesh);scene.add(glowMesh);
+let flows=[];
+function wireClass(w){
+  const A=T[w.from],B=T[w.to],ds=[A.dom,B.dom],has=d=>ds.indexOf(d)>=0;
+  if(has("m3"))return "in";
+  if(has("vout")||has("motor"))return "out";
+  if(has("brk"))return "brk";
+  if(has("pe"))return "pe";
+  if(has("ana"))return "ana";
+  if(w.from.indexOf("bs.")===0||w.to.indexOf("bs.")===0)return "start";
+  if(w.from.indexOf("bt.")===0||w.to.indexOf("bt.")===0)return "stop";
+  return "ctl";
+}
+function buildFlows(){
+  flows=[];
+  wireObjs.forEach((o,i)=>{
+    const cls=wireClass(wires[i]);if(cls==="pe")return;
+    const len=o.curve.getLength();
+    flows.push({curve:o.curve,len:len,n:Math.max(2,Math.floor(len/21)),ph:(i*.173)%1,cls:cls});
+  });
+}
+const _m=new THREE.Matrix4(),FLOW_SPEED=84;
+function flowRate(cls){
+  if(!powered)return 0;
+  switch(cls){
+    case "in":return SIM.fault&&SIM.fault.code==="E.PL"?0:1;
+    case "out":return SIM.fOut>.4?.25+SIM.fOut/50*1.1:0;
+    case "brk":return SIM.braking?1.2:0;
+    case "ana":return .35;
+    case "stop":return BTN.stop.pressed?0:.45;
+    case "start":return BTN.start.pressed?1.1:0;
+  }
+  return 0;
+}
+function updateFlows(dt){
+  let c=0;
+  for(const f of flows){
+    const rate=flowRate(f.cls);if(rate<=0)continue;
+    if(!REDUCED)f.ph=(f.ph+dt*FLOW_SPEED*rate/f.len)%1;
+    for(let j=0;j<f.n&&c<MAXDOTS;j++){
+      const u=(f.ph+j/f.n)%1,p=f.curve.getPointAt(u);
+      _m.setPosition(p.x,p.y,p.z+3);
+      dotMesh.setMatrixAt(c,_m);glowMesh.setMatrixAt(c,_m);c++;
+    }
+  }
+  dotMesh.count=c;glowMesh.count=c;
+  dotMesh.instanceMatrix.needsUpdate=true;glowMesh.instanceMatrix.needsUpdate=true;
+}
+/* preview wire while dragging */
+function drawPreview(id,p){
+  clearPreview();
+  const A=T[id],a0=endPt(id,0);
+  const dist=a0.distanceTo(p),k=Math.min(80,Math.max(20,dist*.35));
+  const a1=a0.clone().addScaledVector(A.dir,k);a1.z=a0.z+70;
+  const b=p.clone();b.z=a0.z+70;
+  const curve=new THREE.CubicBezierCurve3(a0,a1,b,b.clone());
+  previewMesh=new THREE.Mesh(new THREE.TubeGeometry(curve,32,1.7,6,false),new THREE.MeshBasicMaterial({color:0xffb400,toneMapped:false}));
+  scene.add(previewMesh);dirty=true;
+}
+function clearPreview(){
+  if(previewMesh){scene.remove(previewMesh);previewMesh.geometry.dispose();previewMesh.material.dispose();previewMesh=null;dirty=true;}
+}
+/* =====================================================================
+   SIMULATION STATE
+   ===================================================================== */
+const SIM={run:false,fOut:0,motorW:0,fault:null,braking:false,t:0,lastDisp:"",lastCtl:""};
+const fSet=()=>POT.u*50;
+
+/* =====================================================================
+   UI RENDERING
+   ===================================================================== */
+function renderSteps(){
+  $("steps").innerHTML=AN.states.map(s=>
+    `<li class="${s.done?"done":s.have?"part":""}"><span class="mk" aria-hidden="true"></span><span class="tx">${s.req.text}<span class="sr">${s.done?" (tayyor)":""}</span></span>${s.total>1?`<span class="ct">${s.have}/${s.total}</span>`:""}</li>`
+  ).join("");
+}
+function renderAll(){
+  AN=analyze();
+  buildWires();
+  const learn=mode==="learn";
+  $("prog").hidden=!learn;$("steps").hidden=!learn;$("exam").hidden=learn;
+  $("hint").hidden=!learn;$("check").hidden=learn;
+  if(learn){
+    $("pdone").textContent=AN.doneCount;
+    $("pfill").style.width=(AN.doneCount/NET_COUNT*100)+"%";
+    renderSteps();
+  }else{
+    $("wcount").textContent=wires.length;
+  }
+  $("undo").disabled=powered||!wires.length;
+  $("clear").disabled=powered||!wires.length;
+  $("hint").disabled=powered||AN.solved;
+  $("check").disabled=powered||!wires.length;
+  const dis=!powered&&!canPower(),label=powered?"O'chirish":"Kuchlanish berish";
+  ["power","power2"].forEach(id=>{
+    const b=$(id);b.textContent=label;b.disabled=dis;
+    b.title=dis?"Avval sxemani to'liq va to'g'ri yig'ing":"";
+  });
+  $("ctl").hidden=!powered;
+  if(powered)buildFlows();else{flows=[];dotMesh.count=0;glowMesh.count=0;}
+  updateCtlUI(true);
+  dirty=true;
+}
+function changed(){
+  checked=false;examOK=false;
+  $("report").innerHTML="";
+  renderAll();
+}
+
+/* =====================================================================
+   ACTIONS
+   ===================================================================== */
+function connect(a,b){
+  if(wires.some(w=>(w.from===a&&w.to===b)||(w.from===b&&w.to===a))){
+    say("Bu ikki klemma allaqachon ulangan.","");return;
+  }
+  if(mode==="learn"){
+    if(!ALLOW[pk(a,b)]){flashBad(a,b);say(reason(a,b),"bad");return;}
+    const c=compute({from:a,to:b});
+    if(c.badRoot.has(c.find(a))){flashBad(a,b);say(conflictText(a,b),"bad");return;}
+  }
+  addWire(a,b);
+  changed();
+  if(mode==="learn"){
+    if(AN.solved)say("Sxema to'g'ri yig'ildi. Kuchlanish berib ko'ring.","ok");
+    else say(`To'g'ri ulandi. ${AN.doneCount} / ${NET_COUNT} ulanish tayyor.`,"ok");
+  }else{
+    say(`Sim ulandi. Jami ${wires.length} ta.`,"");
+  }
+}
+function tap(id){
+  if(powered){say("Kuchlanish ostida sxemani o'zgartirib bo'lmaydi. Avval o'chiring.","bad");return;}
+  if(selected&&selected!==id){
+    const a=selected;selected=null;paintSel();connect(a,id);
+  }else if(selected===id){
+    selected=null;paintSel();say(DEFAULT,"");
+  }else{
+    selected=id;paintSel();say(T[id].desc+". Ikkinchi klemmani tanlang.","");
+  }
+}
+function removeWire(i){
+  if(powered){say("Kuchlanish ostida simni olib bo'lmaydi.","bad");return;}
+  wires.splice(i,1);
+  changed();
+  say("Sim olib tashlandi.","");
+}
+function runCheck(){
+  AN=analyze();checked=true;
+  const items=AN.bad.map(i=>{const w=wires[i];return `Xato sim: ${T[w.from].desc} va ${T[w.to].desc}. ${reason(w.from,w.to)}`;});
+  const missing=AN.states.filter(s=>!s.done).length;
+  if(missing&&!AN.bad.length)items.push(`Hali bajarilmagan ulanishlar: ${missing} ta.`);
+  else if(missing)items.push(`Yana ${missing} ta ulanish to'liq emas.`);
+  examOK=AN.solved;
+  $("report").innerHTML=items.map(x=>`<li>${x}</li>`).join("");
+  renderAll();
+  if(AN.solved)say("Sxema to'g'ri va to'liq. Kuchlanish berishingiz mumkin.","ok");
+  else say(`Tekshiruv: ${items.length} ta muammo topildi.`,"bad");
+}
+function hint(){
+  if(powered||mode!=="learn")return;
+  const s=AN.states.find(x=>!x.done);
+  if(!s)return;
+  let ids=s.req.ids.filter(id=>!wires.some(w=>w.from===id||w.to===id));
+  if(!ids.length)ids=s.req.ids.slice();
+  hintSet.clear();ids.forEach(id=>hintSet.add(id));paintRings();
+  clearTimeout(hintTimer);
+  hintTimer=setTimeout(()=>{hintSet.clear();paintRings();},3800);
+  say("Maslahat: "+s.req.text,"");
+}
+function setPower(on){
+  if(on&&!canPower())return;
+  clearFaults();
+  powered=on;selected=null;paintSel();
+  setHoverWire(-1);
+  SIM.run=false;SIM.fOut=0;SIM.braking=false;
+  if(!on){setBtn("start",false);setBtn("stop",false);SIM.motorW=SIM.motorW;}
+  beep("contactor");
+  renderAll();
+  if(on){
+    humStart();
+    say("Kuchlanish berildi: o'zgartirgich ekrani yondi. Hozir u tayyor holatda. START tugmasini bosing.","ok");
+  }else{
+    humStop();
+    say("Kuchlanish o'chirildi. Sxemani o'zgartirishingiz mumkin.","");
+  }
+}
+function setMode(m){
+  if(m===mode)return;
+  mode=m;wires.length=0;selected=null;
+  if(powered){clearFaults();powered=false;SIM.run=false;SIM.fOut=0;humStop();}
+  paintSel();
+  $("m-learn").setAttribute("aria-pressed",String(m==="learn"));
+  $("m-exam").setAttribute("aria-pressed",String(m==="exam"));
+  changed();
+  say(m==="learn"?"O'rganish rejimi: noto'g'ri ulanish darhol tushuntiriladi.":"Imtihon rejimi: xohlagan simni ulang, tayyor bo'lgach Tekshirish ni bosing.","");
+}
+
+/* =====================================================================
+   RUN CONTROL: START / STOP buttons, potentiometer, faults
+   ===================================================================== */
+function pressBtn(kind,down){
+  const b=BTN[kind];if(!b||b.pressed===down)return;
+  setBtn(kind,down);
+  if(down)beep("click");
+  if(!powered){if(down)say((kind==="start"?"START":"STOP")+" tugmasi bosildi, lekin kuchlanish berilmagan. Avval «Kuchlanish berish» ni bosing.","");$("b-"+kind).classList.toggle("on",down);return;}
+  $("b-"+kind).classList.toggle("on",down);
+  if(kind==="start"&&down){
+    if(SIM.fault){say("O'zgartirgichda xato ("+SIM.fault.code+"). Avval «Xatoni tiklash» ni bosing.","bad");return;}
+    if(BTN.stop.pressed){say("STOP tugmasi bosilgan: M2 uzilgan, o'zgartirgich yurmaydi.","bad");return;}
+    SIM.run=true;
+    if(fSet()<.6)say("START: M0 va COM tutashdi, lekin zadatchik nolda. Potensiometr dastasini buring.","");
+    else say("START: M0 va COM qisqa vaqt tutashdi, o'zgartirgich buyruqni eslab qoldi va motorni tezlatyapti.","ok");
+  }
+  if(kind==="stop"&&down){
+    if(SIM.run||SIM.fOut>.5)say("STOP: M2 va COM orasi uzildi, o'zgartirgich chastotani pasaytirib motorni to'xtatyapti.","ok");
+    SIM.run=false;
+  }
+  if(kind==="stop"&&!down&&powered&&!SIM.run)say("STOP qo'yib yuborildi. Qayta yurgizish uchun START ni bosing.","");
+  updateCtlUI(true);dirty=true;
+}
+function setPotFromSlider(){
+  const v=+$("pot").value/100;setPotAngle(v);updateCtlUI(true);dirty=true;
+}
+function updateCtlUI(force){
+  const f=fSet();
+  const state=!powered?"":SIM.fault?SIM.fault.code:(SIM.run?(SIM.fOut<f-.3?"tezlanish":SIM.fOut>f+.3?"sekinlanish":"ishlayapti"):(SIM.fOut>.5?"to'xtayapti":"tayyor"));
+  const rpm=Math.round(SIM.fOut*30*.96),vOut=Math.round(Math.min(380,SIM.fOut*7.6));
+  const key=[state,SIM.fOut.toFixed(1),f.toFixed(1),rpm,powered].join();
+  if(!force&&key===SIM.lastCtl)return;
+  SIM.lastCtl=key;
+  $("potv").textContent=f.toFixed(1)+" Hz";
+  $("pot").value=Math.round(POT.u*100);
+  $("r-state").textContent=state||"-";
+  $("r-state").className=SIM.fault?"bad":"";
+  $("r-f").textContent=SIM.fOut.toFixed(2)+" Hz";
+  $("r-rpm").textContent=rpm+" ayl/min";
+  $("r-v").textContent=vOut+" V";
+  $("b-start").disabled=!powered;$("b-stop").disabled=!powered;
+  const anyFault=!!SIM.fault;
+  $("f-ol").disabled=!powered||anyFault;$("f-pl").disabled=!powered||anyFault;$("f-oc").disabled=!powered||anyFault;
+  $("f-reset").disabled=!anyFault;
+  $("fnote").textContent=anyFault?"Xato sababini bartaraf etib «Xatoni tiklash» ni bosing, so'ng START bilan qayta yurgizing.":"";
+}
+function setFault(code,msg){
+  SIM.fault={code:code};SIM.run=false;SIM.fOut=0;SIM.braking=false;
+  say(msg,"bad");
+  if(code==="E.PL"){lampSet(2,false);}
+  updateCtlUI(true);buildFlows();dirty=true;
+}
+function faultOL(){
+  if(!powered||SIM.fault)return;
+  if(SIM.fOut<2){say("Ortiqcha yuk motor aylanayotganda sinaladi. Avval START bilan motorni yurgizing.","");return;}
+  beep("click");
+  setFault("E.OL","E.OL: motor toki nominaldan oshdi, o'zgartirgichning issiqlik himoyasi chiqishni uzdi. Motor inersiya bilan to'xtayapti.");
+}
+function faultPL(){
+  if(!powered||SIM.fault)return;
+  beep("click");
+  setFault("E.PL","E.PL: L3 fazasi uzildi. O'zgartirgich kirish fazasi yo'qligini aniqlab chiqishni uzdi. Himoyasiz bo'lsa kondensatorlar va ko'prik haddan tashqari yuklanardi.");
+}
+function faultOC(){
+  if(!powered||SIM.fault)return;
+  if(SIM.fOut<2){say("Chiqishdagi qisqa tutashuv motor yurib turganda yaqqol ko'rinadi. Avval START bosing.","");return;}
+  startFx();
+  setFault("E.OC","E.OC: chiqishda qisqa tutashuv, tok keskin oshdi. Tranzistorlarni himoya qiluvchi sxema mikrosekundlarda chiqishni uzdi.");
+}
+function faultReset(){
+  if(!powered||!SIM.fault)return;
+  SIM.fault=null;lampSet(2,true);beep("click");
+  say("Xato tiklandi. O'zgartirgich tayyor: START bilan qayta yurgizing.","ok");
+  updateCtlUI(true);buildFlows();dirty=true;
+}
+function clearFaults(){SIM.fault=null;SIM.braking=false;lampSet(2,powered);stopFx();}
+function lampSet(i,on){
+  const m=lamps[i];if(!m)return;
+  m.emissive.setHex(on?m.userData.col:0x000000);m.emissiveIntensity=on?1:0;dirty=true;
+}
+
+/* =====================================================================
+   AUDIO AND EFFECTS
+   ===================================================================== */
+let AC=null,hum=null;
+function ac(){
+  const on=$("snd");if(on&&!on.checked)return null;
+  try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();return AC;}catch(e){return null;}
+}
+function beep(kind){
+  const a=ac();if(!a)return;
+  try{
+    const sr=a.sampleRate,len=kind==="bang"?.5:kind==="contactor"?.16:.09;
+    const buf=a.createBuffer(1,Math.ceil(sr*len),sr),d=buf.getChannelData(0);
+    const tau=kind==="click"?.012:kind==="bang"?.09:.035;
+    for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*Math.exp(-i/(sr*tau))*(kind==="click"?.55:.8);
+    const src=a.createBufferSource();src.buffer=buf;
+    const f=a.createBiquadFilter();f.type=kind==="click"||kind==="contactor"?"bandpass":"lowpass";
+    f.frequency.value=kind==="click"?2200:kind==="contactor"?900:1800;
+    const g=a.createGain();g.gain.value=.3;
+    src.connect(f);f.connect(g);g.connect(a.destination);src.start();
+  }catch(e){}
+}
+function humStart(){
+  const a=ac();if(!a||hum)return;
+  try{
+    const o=a.createOscillator(),o2=a.createOscillator(),g=a.createGain(),f=a.createBiquadFilter();
+    o.type="sawtooth";o2.type="triangle";f.type="lowpass";f.frequency.value=420;g.gain.value=0;
+    o.connect(f);o2.connect(f);f.connect(g);g.connect(a.destination);o.start();o2.start();
+    hum={o:o,o2:o2,g:g};
+  }catch(e){hum=null;}
+}
+function humStop(){
+  if(!hum)return;
+  try{hum.g.gain.value=0;hum.o.stop();hum.o2.stop();}catch(e){}
+  hum=null;
+}
+function humTick(){
+  if(!hum||!AC)return;
+  const on=$("snd");
+  const lvl=(on&&!on.checked)?0:Math.min(1,SIM.motorW/22);
+  try{
+    const t=AC.currentTime;
+    hum.g.gain.setTargetAtTime(lvl*.05,t,.08);
+    hum.o.frequency.setTargetAtTime(30+SIM.motorW*3.2,t,.08);
+    hum.o2.frequency.setTargetAtTime(60+SIM.motorW*6.4,t,.08);
+  }catch(e){}
+}
+const fxLight=new THREE.PointLight(0xffe0b0,0,900,1.4);scene.add(fxLight);
+const fxFlash=new THREE.Mesh(new THREE.PlaneGeometry(190,190),new THREE.MeshBasicMaterial({map:glowTex,transparent:true,opacity:0,blending:THREE.AdditiveBlending,depthWrite:false,toneMapped:false}));
+fxFlash.visible=false;scene.add(fxFlash);
+const NSP=40;
+const sparkMesh=new THREE.InstancedMesh(new THREE.SphereGeometry(1.2,6,4),new THREE.MeshBasicMaterial({color:0xffe9a8,toneMapped:false}),NSP);
+sparkMesh.count=0;sparkMesh.frustumCulled=false;scene.add(sparkMesh);
+let sparks=[],fx=null;
+function startFx(){
+  fx={t:0,x:MX,y:MY+14,z:170};
+  fxLight.position.set(fx.x,fx.y,fx.z+40);fxFlash.position.set(fx.x,fx.y,fx.z+30);
+  fxFlash.material.color.setHex(0xffffff);fxLight.color.setHex(0xffe0b0);fxFlash.visible=true;
+  sparks=[];
+  for(let i=0;i<NSP;i++){
+    const a=Math.random()*Math.PI*2,sp=230*(.35+Math.random());
+    sparks.push({x:fx.x,y:fx.y,z:fx.z,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp*.8+60,vz:(Math.random()-.2)*sp*.7,life:.25+Math.random()*.55});
+  }
+  beep("bang");dirty=true;
+}
+function stopFx(){
+  fx=null;sparks=[];fxLight.intensity=0;fxFlash.visible=false;fxFlash.material.opacity=0;sparkMesh.count=0;dirty=true;
+}
+function updateFx(dt){
+  if(!fx)return false;
+  fx.t+=dt;const t=fx.t,a=Math.exp(-t*7);
+  fxLight.intensity=18*a;fxFlash.material.opacity=Math.min(1,1.2*a);
+  const sc=1+t*3;fxFlash.scale.set(sc,sc,1);
+  let c=0;
+  for(const s of sparks){
+    if(t>s.life)continue;
+    s.vy-=620*dt;s.x+=s.vx*dt;s.y+=s.vy*dt;s.z=Math.max(10,s.z+s.vz*dt);
+    const f=1-t/s.life;
+    _m.makeScale(f,f,f);_m.setPosition(s.x,s.y,s.z);sparkMesh.setMatrixAt(c++,_m);
+  }
+  sparkMesh.count=c;sparkMesh.instanceMatrix.needsUpdate=true;
+  if(t>1.1)stopFx();
+  return true;
+}
+/* =====================================================================
+   POINTER INTERACTION
+   ===================================================================== */
+const _v=new THREE.Vector3(),ray=new THREE.Raycaster(),ndc=new THREE.Vector2();
+function xy(e){const r=cv.getBoundingClientRect();return {x:e.clientX-r.left,y:e.clientY-r.top,w:r.width,h:r.height};}
+function nearestT(e){
+  const p=xy(e),rad=e.pointerType==="touch"?30:20;
+  let best=null,bd=rad;
+  for(const id in T){
+    _v.copy(T[id].pos).project(cam);
+    if(_v.z>1)continue;
+    const d=Math.hypot((_v.x*.5+.5)*p.w-p.x,(-_v.y*.5+.5)*p.h-p.y);
+    if(d<bd){bd=d;best=id;}
+  }
+  return best;
+}
+function worldAt(e,z){
+  const p=xy(e);ndc.set(p.x/p.w*2-1,-(p.y/p.h)*2+1);ray.setFromCamera(ndc,cam);
+  const out=new THREE.Vector3();
+  return ray.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0,0,1),-z),out)?out:null;
+}
+function wireAt(e){
+  if(!wireObjs.length)return -1;
+  const p=xy(e);ndc.set(p.x/p.w*2-1,-(p.y/p.h)*2+1);ray.setFromCamera(ndc,cam);
+  const hits=ray.intersectObjects(wireObjs.map(o=>o.tube),false);
+  return hits.length?hits[0].object.userData.wire:-1;
+}
+function pickInteractive(e){
+  const p=xy(e);ndc.set(p.x/p.w*2-1,-(p.y/p.h)*2+1);ray.setFromCamera(ndc,cam);
+  const objs=[BTN.start.grp,BTN.stop.grp,POT.knob];
+  const hits=ray.intersectObjects(objs,true);
+  if(!hits.length)return null;
+  const o=hits[0].object;
+  if(o.userData.btn)return {type:"btn",kind:o.userData.btn};
+  if(o.userData.pot)return {type:"pot"};
+  return null;
+}
+function knobScreen(){
+  const w=new THREE.Vector3();POT.knob.getWorldPosition(w);w.project(cam);
+  const r=cv.getBoundingClientRect();
+  return {x:r.left+(w.x*.5+.5)*r.width,y:r.top+(-w.y*.5+.5)*r.height};
+}
+function isFull(){return stage.classList.contains("full");}
+const pointers=new Map();
+let act=null;
+function startPinch(){
+  const a=[...pointers.values()];
+  pinch={d:Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y)||1,z:view.zoom,mx:(a[0].x+a[1].x)/2,my:(a[0].y+a[1].y)/2,tx:view.tx,ty:view.ty};
+}
+function doPinch(){
+  const a=[...pointers.values()];
+  const d=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y)||1,mx=(a[0].x+a[1].x)/2,my=(a[0].y+a[1].y)/2,s=perPx();
+  view.zoom=clamp(pinch.z*d/pinch.d,.8,5);
+  view.tx=clamp(pinch.tx-(mx-pinch.mx)*s,-420,420);
+  view.ty=clamp(pinch.ty+(my-pinch.my)*s,-520,520);
+  dirty=true;
+}
+function cancelWireDrag(){if(wd){wd=null;clearPreview();}}
+function releaseAct(){if(act&&act.type==="btn")pressBtn(act.kind,false);act=null;}
+
+cv.addEventListener("contextmenu",e=>e.preventDefault());
+cv.addEventListener("pointerdown",e=>{
+  if(e.pointerType==="mouse"&&e.button>2)return;
+  pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  try{cv.setPointerCapture(e.pointerId);}catch(_){}
+  if(pointers.size===2){cancelWireDrag();releaseAct();gest=null;startPinch();return;}
+  if(pointers.size>2)return;
+  const primary=!(e.pointerType==="mouse"&&e.button!==0);
+  const id=primary?nearestT(e):null;
+  if(id){
+    e.preventDefault();
+    if(powered||(selected&&selected!==id)){tap(id);return;}
+    wd={from:id,moved:false,sx:e.clientX,sy:e.clientY,wasSel:selected===id};
+    selected=id;paintSel();
+    say(T[id].desc+". Boshqa klemmaga sudrang yoki ikkinchisini bosing.","");
+    return;
+  }
+  const it=primary?pickInteractive(e):null;
+  if(it){
+    e.preventDefault();
+    if(it.type==="btn"){act=it;pressBtn(it.kind,true);}
+    else{
+      const c=knobScreen();
+      act={type:"pot",last:Math.atan2(e.clientX-c.x,-(e.clientY-c.y))};
+      say("Dastani aylantiring: soat strelkasi bo'yicha chastota oshadi.","");
+    }
+    return;
+  }
+  let type=null;
+  if(e.pointerType==="mouse")type=(e.button===2||e.shiftKey)?"pan":"orbit";
+  else if(isFull())type="pan";
+  gest={type:type,sx:e.clientX,sy:e.clientY,yaw:view.yaw,pitch:view.pitch,tx:view.tx,ty:view.ty,moved:false};
+});
+cv.addEventListener("pointermove",e=>{
+  const p=pointers.get(e.pointerId);if(p){p.x=e.clientX;p.y=e.clientY;}
+  if(pointers.size===2&&pinch){doPinch();return;}
+  if(act&&act.type==="pot"){
+    const c=knobScreen(),a=Math.atan2(e.clientX-c.x,-(e.clientY-c.y));
+    let d=a-act.last;while(d>Math.PI)d-=2*Math.PI;while(d<-Math.PI)d+=2*Math.PI;
+    act.last=a;
+    setPotAngle(POT.u+d/(270*Math.PI/180));updateCtlUI(true);dirty=true;
+    return;
+  }
+  if(act)return;
+  if(wd){
+    if(!wd.moved&&Math.hypot(e.clientX-wd.sx,e.clientY-wd.sy)>8)wd.moved=true;
+    if(wd.moved){const w=worldAt(e,100);if(w)drawPreview(wd.from,w);}
+    const n=nearestT(e);if(n!==hovT){hovT=n;paintRings();}
+    return;
+  }
+  if(gest&&gest.type){
+    const dx=e.clientX-gest.sx,dy=e.clientY-gest.sy;
+    if(!gest.moved&&Math.hypot(dx,dy)>5)gest.moved=true;
+    if(gest.moved){
+      if(gest.type==="orbit"){
+        view.yaw=clamp(gest.yaw-dx*.006,-.8,.8);
+        view.pitch=clamp(gest.pitch+dy*.005,-.3,.5);
+      }else{
+        const s=perPx();
+        view.tx=clamp(gest.tx-dx*s,-420,420);
+        view.ty=clamp(gest.ty+dy*s,-520,520);
+      }
+      dirty=true;
+    }
+    return;
+  }
+  if(e.pointerType==="mouse"&&!pointers.size){
+    const n=nearestT(e);
+    if(n!==hovT){hovT=n;paintRings();}
+    setHoverWire(n?-1:wireAt(e));
+    const it=n?null:pickInteractive(e);
+    cv.style.cursor=n||hovW>=0||it?"pointer":"grab";
+  }
+});
+function endPointer(e,cancel){
+  pointers.delete(e.pointerId);
+  if(pinch){if(pointers.size<2)pinch=null;gest=null;return;}
+  if(act){releaseAct();return;}
+  if(wd){
+    const d=wd;wd=null;clearPreview();
+    if(cancel){selected=null;paintSel();return;}
+    if(d.moved){
+      const t=nearestT(e);
+      selected=null;paintSel();
+      if(t&&t!==d.from)connect(d.from,t);else say(DEFAULT,"");
+    }else if(d.wasSel){
+      selected=null;paintSel();say(DEFAULT,"");
+    }
+    return;
+  }
+  if(gest){
+    const g=gest;gest=null;
+    if(!g.moved&&!cancel){
+      const i=wireAt(e);
+      if(i>=0)removeWire(i);
+      else if(selected){selected=null;paintSel();say(DEFAULT,"");}
+    }
+  }
+}
+cv.addEventListener("pointerup",e=>endPointer(e,false));
+cv.addEventListener("pointercancel",e=>endPointer(e,true));
+cv.addEventListener("pointerleave",()=>{if(hovT){hovT=null;paintRings();}setHoverWire(-1);});
+cv.addEventListener("wheel",e=>{
+  if(!(isFull()||e.ctrlKey||e.metaKey))return;
+  e.preventDefault();
+  view.zoom=clamp(view.zoom*(e.deltaY<0?1.12:.89),.8,5);dirty=true;
+},{passive:false});
+
+/* camera buttons */
+$("zin").addEventListener("click",()=>{view.zoom=clamp(view.zoom*1.25,.8,5);dirty=true;});
+$("zout").addEventListener("click",()=>{view.zoom=clamp(view.zoom/1.25,.8,5);dirty=true;});
+$("zreset").addEventListener("click",()=>{view.yaw=.12;view.pitch=.1;view.zoom=1;view.tx=0;view.ty=0;dirty=true;});
+$("tg").addEventListener("click",()=>{
+  const on=$("tg").getAttribute("aria-pressed")!=="true";
+  $("tg").setAttribute("aria-pressed",String(on));$("tags").hidden=!on;
+});
+function setFull(on){
+  stage.classList.toggle("full",on);
+  document.body.style.overflow=on?"hidden":"";
+  resize();
+}
+$("fs").addEventListener("click",()=>setFull(!isFull()));
+$("close").addEventListener("click",()=>setFull(false));
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&isFull())setFull(false);});
+
+/* panel buttons */
+$("undo").addEventListener("click",()=>{
+  if(powered||!wires.length)return;
+  wires.pop();selected=null;paintSel();changed();say("Oxirgi sim olib tashlandi.","");
+});
+$("clear").addEventListener("click",()=>{
+  if(powered||!wires.length)return;
+  wires.length=0;selected=null;paintSel();changed();say("Sxema tozalandi. Manba simlaridan boshlang.","");
+});
+$("hint").addEventListener("click",hint);
+$("check").addEventListener("click",runCheck);
+$("power").addEventListener("click",()=>setPower(!powered));
+$("power2").addEventListener("click",()=>setPower(!powered));
+$("m-learn").addEventListener("click",()=>setMode("learn"));
+$("m-exam").addEventListener("click",()=>setMode("exam"));
+["start","stop"].forEach(k=>{
+  const b=$("b-"+k);
+  b.addEventListener("pointerdown",e=>{e.preventDefault();try{b.setPointerCapture(e.pointerId);}catch(_){}pressBtn(k,true);});
+  b.addEventListener("pointerup",()=>pressBtn(k,false));
+  b.addEventListener("pointercancel",()=>pressBtn(k,false));
+  b.addEventListener("keydown",e=>{if((e.key===" "||e.key==="Enter")&&!e.repeat){e.preventDefault();pressBtn(k,true);}});
+  b.addEventListener("keyup",e=>{if(e.key===" "||e.key==="Enter")pressBtn(k,false);});
+});
+$("pot").addEventListener("input",setPotFromSlider);
+$("f-ol").addEventListener("click",faultOL);
+$("f-pl").addEventListener("click",faultPL);
+$("f-oc").addEventListener("click",faultOC);
+$("f-reset").addEventListener("click",faultReset);
+
+/* =====================================================================
+   ANIMATION LOOP
+   ===================================================================== */
+let pw=0,last=performance.now(),t0=last,firstFrame=true;
+function updateDisplay(time){
+  let text,o;
+  if(pw<.05&&!powered){text="0.00";o={on:false};}
+  else if(SIM.fault){
+    const on=Math.floor(time*2.6)%2===0;
+    text=SIM.fault.code;o={on:true,blank:!on,hz:false};
+  }else if(SIM.run||SIM.fOut>.05){
+    text=SIM.fOut.toFixed(2);o={on:true,fwd:true,hz:true,runLed:true};
+  }else{
+    text=fSet().toFixed(2);o={on:true,hz:true};
+  }
+  const key=text+"|"+JSON.stringify(o);
+  if(key!==SIM.lastDisp){SIM.lastDisp=key;drawDisplay(text,o);dirty=true;}
+}
+function animate(dt,time){
+  let busy=false;
+  if(updateFx(dt))busy=true;
+  const target=powered?1:0;
+  if(Math.abs(target-pw)>.002){pw+=(target-pw)*Math.min(1,dt*4);busy=true;}
+  else if(pw!==target){pw=target;busy=true;}
+  // drive state machine
+  if(powered){
+    const f=fSet();
+    if(SIM.fault){SIM.fOut=0;SIM.braking=false;}
+    else{
+      if(BTN.stop.pressed&&SIM.run)SIM.run=false;
+      const tgt=SIM.run?f:0;
+      const prev=SIM.fOut;
+      if(SIM.fOut<tgt)SIM.fOut=Math.min(tgt,SIM.fOut+dt*12);
+      else if(SIM.fOut>tgt)SIM.fOut=Math.max(tgt,SIM.fOut-dt*(SIM.run?16:14));
+      SIM.braking=SIM.fOut<prev-.02&&SIM.fOut>3;
+      if(!SIM.run&&SIM.fOut<.02)SIM.fOut=0;
+    }
+  }else{SIM.fOut=0;SIM.braking=false;}
+  // rotor: follows the output frequency, coasts when the drive is blocked
+  const wTarget=SIM.fOut/50*22;
+  if(powered&&!SIM.fault)SIM.motorW+=(wTarget-SIM.motorW)*Math.min(1,dt*9);
+  else SIM.motorW*=Math.exp(-dt/(powered?1.4:1.8));
+  if(SIM.motorW<.01)SIM.motorW=0;
+  if(SIM.motorW>0){mot.ang+=SIM.motorW*dt;mot.rot.rotation.x=mot.ang;busy=true;}
+  // lamps and display
+  const lampOn=[powered,powered,powered&&!(SIM.fault&&SIM.fault.code==="E.PL")];
+  lamps.forEach((m,i)=>{const on=lampOn[i]?1:0;const cur=m.emissiveIntensity||0;if(Math.abs(cur-on)>.01){m.emissive.setHex(on?m.userData.col:0);m.emissiveIntensity=cur+(on-cur)*Math.min(1,dt*8);busy=true;}else if(cur!==on){m.emissiveIntensity=on;if(!on)m.emissive.setHex(0);}});
+  updateDisplay(time);
+  if(SIM.fault&&powered)busy=true;
+  if(powered||SIM.motorW>0){updateCtlUI(false);humTick();}
+  if(powered)updateFlows(dt);
+  if(powered&&(SIM.run||SIM.fOut>0))busy=true;
+  if(powered){busy=true;}
+  return busy;
+}
+function projectTags(){
+  const w=stage.clientWidth,h=stage.clientHeight;
+  for(const t of tags){
+    _v.copy(t.p).project(cam);
+    if(_v.z>1||Math.abs(_v.x)>1.15||Math.abs(_v.y)>1.15){t.el.style.visibility="hidden";continue;}
+    t.el.style.visibility="visible";
+    t.el.style.transform="translate("+((_v.x*.5+.5)*w).toFixed(1)+"px,"+((-_v.y*.5+.5)*h).toFixed(1)+"px) "+TAGT[t.mode];
+  }
+}
+function frame(now){
+  requestAnimationFrame(frame);
+  const dt=Math.min(.06,(now-last)/1000);last=now;
+  const busy=animate(dt,(now-t0)/1000);
+  if(dirty||busy){
+    const pulse=1+.12*Math.sin(now/180);
+    for(const id in rings){if(rings[id].visible)rings[id].scale.set(pulse,pulse,1);}
+    updateCam();
+    renderer.render(scene,cam);
+    projectTags();
+    dirty=false;
+    if(firstFrame){firstFrame=false;const l=$("loading");if(l)l.hidden=true;}
+  }
+}
+
+/* =====================================================================
+   START
+   ===================================================================== */
+if(window.ResizeObserver)new ResizeObserver(resize).observe(stage);
+window.addEventListener("resize",resize);
+resize();
+addWire("src.l1","vfd.r");
+renderAll();
+updateDisplay(0);
+say("Namuna: manba L1 o'zgartirgichning R klemmasiga ulangan. Endi L2 ni S ga, L3 ni T ga ulang.","");
+requestAnimationFrame(frame);
+}
+})();
+</script>
+
+</body>
+</html>

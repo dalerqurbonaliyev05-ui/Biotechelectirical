@@ -259,6 +259,20 @@ ul, ol { list-style: none; }
 .mm-wire { stroke: #ffb020; stroke-width: 4; stroke-linecap: round; }
 @keyframes mmtoggle { 0%, 45% { transform: rotate(-14deg); } 55%, 100% { transform: rotate(14deg); } }
 @media (prefers-reduced-motion: reduce) { .mm-lv, .mm-bi { animation: none; } }
+.t9 { grid-column: span 4; color: #fff; background: linear-gradient(120deg, #06303a 0%, #0b5666 55%, #11899b 100%); }
+.t9 .tile-body { max-width: 46%; }
+.mini-vfd { position: absolute; right: 40px; top: 14px; bottom: 14px; height: calc(100% - 28px); width: auto; max-width: 50%; }
+.mv-body { fill: #2a2f35; stroke: #021c22; stroke-width: 3; }
+.mv-disp { fill: #1a0807; }
+.mv-hz { fill: #ff4a38; font: 700 15px "IBM Plex Mono", monospace; }
+.mv-key { fill: #b9bfc6; }
+.mv-t { fill: #d9dde1; stroke: #021c22; stroke-width: 2; }
+.mv-w { fill: none; stroke: #ffb020; stroke-width: 3.2; stroke-linecap: round; stroke-dasharray: 5 7; animation: flow 1.1s linear infinite; }
+.mv-motor { fill: #1280c0; stroke: #021c22; stroke-width: 3; }
+.mv-cap { fill: #9aa3ab; stroke: #021c22; stroke-width: 2; }
+.mv-fan { stroke: #ffd24a; stroke-width: 3; stroke-linecap: round; fill: #ffd24a; transform-origin: 278px 78px; animation: mvspin 1.2s linear infinite; }
+@keyframes mvspin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .mv-w, .mv-fan { animation: none; } }
 .mb-wire { fill: none; stroke: #ffb020; stroke-width: 3.2; stroke-linecap: round; stroke-dasharray: 5 7; animation: flow 1.1s linear infinite; }
 @keyframes mbblink { 50% { opacity: .15; } }
 @media (prefers-reduced-motion: reduce) { .mb-led, .mb-wire { animation: none; } }
@@ -369,7 +383,7 @@ ul, ol { list-style: none; }
     .bento { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 200px; }
     .t1 { grid-column: span 2; grid-row: span 2; }
     .t2, .t3 { grid-column: span 1; }
-    .t4, .t5, .t6, .t7, .t8 { grid-column: span 2; }
+    .t4, .t5, .t6, .t7, .t8, .t9 { grid-column: span 2; }
     .skills-grid { grid-template-columns: 1fr; }
     .skill-category h3 { min-height: 0; }
     .fb { display: none; }
@@ -441,8 +455,10 @@ ul, ol { list-style: none; }
     .hero-waves { height: 130px; }
     .marquee-track { font-size: .85rem; gap: 20px; }
     .bento { grid-template-columns: 1fr; grid-auto-rows: auto; }
-    .t1, .t2, .t3, .t4, .t5, .t6, .t7, .t8 { grid-column: span 1; grid-row: span 1; min-height: 200px; }
-    .t7, .t8 { min-height: 350px; }
+    .t1, .t2, .t3, .t4, .t5, .t6, .t7, .t8, .t9 { grid-column: span 1; grid-row: span 1; min-height: 200px; }
+    .t7, .t8, .t9 { min-height: 350px; }
+    .t9 .tile-body { max-width: none; }
+    .mini-vfd { left: 50%; right: auto; transform: translateX(-50%); top: 12px; bottom: auto; height: 112px; max-width: none; }
     .t8 .tile-body { max-width: none; }
     .mini-mcb { left: 50%; right: auto; transform: translateX(-50%); top: 14px; bottom: auto; height: 130px; max-width: none; }
     .t7 .tile-body { max-width: none; }
