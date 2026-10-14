@@ -1,0 +1,79 @@
+# Hamyon: shaxsiy mablag'larni boshqarish ilovasi (React + Vite + Capacitor).
+# Faqat o'zim uchun: APK saytga chiqmaydi va repo'ga yozilmaydi — Actions > run > Artifacts > Hamyon-apk dan yuklab olinadi.
+name: Hamyon APK
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'hamyon-src/**'
+      - '.github/workflows/hamyon-apk.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: hamyon-apk
+  cancel-in-progress: true
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: hamyon-src
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Android SDK litsenziyalari
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+
+      - name: Paketlarni o'rnatish
+        run: npm install --no-audit --no-fund
+
+      - name: Hisob-kitob testlari
+        run: npm test
+
+      - name: React ilovasini yig'ish (vite)
+        run: npm run build
+
+      - name: Android loyihasini yaratish
+        run: |
+          npx cap add android
+          npx cap sync android
+
+      - name: Ikonka va splash yaratish
+        continue-on-error: true # chiqmasa ham APK yig'ilaveradi
+        run: >
+          npx --yes @capacitor/assets generate --android
+          --iconBackgroundColor '#0b1730' --iconBackgroundColorDark '#0b1730'
+          --splashBackgroundColor '#0b1730' --splashBackgroundColorDark '#0b1730'
+
+      - name: Eslatmalar uchun ruxsatlar
+        run: |
+          MANIFEST=android/app/src/main/AndroidManifest.xml
+          sed -i 's#</manifest>#    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />\n    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />\n</manifest>#' "$MANIFEST"
+          grep -n "uses-permission" "$MANIFEST"
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: APK yig'ish (debug, imzolangan)
+        working-directory: hamyon-src/android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon --stacktrace
+
+      - name: APK ni yuklab olish uchun saqlash
+        uses: actions/upload-artifact@v4
+        with:
+          name: Hamyon-apk
+          path: hamyon-src/android/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 30

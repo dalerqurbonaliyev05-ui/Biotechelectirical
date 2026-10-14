@@ -4,3 +4,5 @@
 /elektruy
 # Milliy o'yinlar manba kodi (Next.js) — saytga joylanmaydi; tayyor statik natija /oyinlar/ da
 /oyinlar-src
+# Hamyon (shaxsiy mablag'lar APK) manba kodi — saytga joylanmaydi, APK faqat Actions artifact sifatida
+/hamyon-src

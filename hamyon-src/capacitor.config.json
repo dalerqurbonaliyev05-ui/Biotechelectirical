@@ -1,0 +1,8 @@
+{
+  "appId": "uz.energyvibe.hamyon",
+  "appName": "Hamyon",
+  "webDir": "dist",
+  "android": {
+    "backgroundColor": "#0b1730"
+  }
+}
