@@ -129,6 +129,11 @@
       "source": "/chastota-yigish",
       "destination": "/chastota-yigish/",
       "permanent": true
+    },
+    {
+      "source": "/reversiv-yuritma",
+      "destination": "/reversiv-yuritma/",
+      "permanent": true
     }
   ],
   "rewrites": [

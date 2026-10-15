@@ -1,0 +1,1969 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Reversiv yuritma 3D | EnergyVibe</title>
+<meta name="description" content="Sensorli reversiv yuritmani 3D stendda o‘zingiz yig‘ing: avtomat, ikki kontaktor, 24 V blok, oraliq relelar, PNP sensorlar va motor. Simlar kabel kanallaridan o‘tadi, so‘ng aravachaning avtomatik borib-kelishini kuzating.">
+<link rel="icon" type="image/png" href="/rasmlar1/rasm5/rasm4.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans+Condensed:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: sticky status bar over a two-column workspace. Left: a real-scale 3D lab stand (WebGL) with orbit, zoom and a fullscreen mode. Right: progress, controls, checklist. Stacks on phones. */
+:root{
+  --bg:#E4E9ED; --surface:#F3F6F8; --ink:#15222D; --ink-2:#51626F; --line:#C5CED6;
+  --accent:#E39B00; --accent-ink:#1B1400;
+    --ok:#1B7F46; --bad:#C62828;
+  --f-ui:'IBM Plex Sans Condensed','Arial Narrow',system-ui,sans-serif;
+  --f-mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F161D; --surface:#17212A; --ink:#E7EDF2; --ink-2:#9AABB9; --line:#2B3944;
+    --accent:#F2B21B; --accent-ink:#1B1400;
+    --wire-l:#F0584B; --wire-n:#4C97F0; --wire-pe:#3DBE6A;
+    --ok:#4CC585; --bad:#FF6B6B;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F161D; --surface:#17212A; --ink:#E7EDF2; --ink-2:#9AABB9; --line:#2B3944;
+  --accent:#F2B21B; --accent-ink:#1B1400;
+  --wire-l:#F0584B; --wire-n:#4C97F0; --wire-pe:#3DBE6A;
+  --ok:#4CC585; --bad:#FF6B6B;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-ui);font-size:15px;line-height:1.4;padding-inline:16px;padding-block:22px 48px}
+.wrap{max-width:1100px;margin-inline:auto;display:flex;flex-direction:column;gap:14px}
+.head{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between}
+h1{margin:0;font-weight:700;font-size:clamp(26px,5vw,38px);letter-spacing:.03em;text-transform:uppercase;line-height:1.05;text-wrap:balance}
+.sub{margin:6px 0 0;color:var(--ink-2);max-width:52ch}
+.seg{display:inline-flex;border:1.5px solid var(--ink);border-radius:3px;overflow:hidden}
+.seg button{font:inherit;font-weight:600;padding:8px 16px;background:transparent;color:var(--ink);border:0;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--surface);border:1px solid var(--line);border-radius:4px;box-shadow:0 8px 16px -12px rgba(0,0,0,.45)}
+.dot{flex:none;width:10px;height:10px;border-radius:50%;background:var(--ink-2)}
+.dot.ok{background:var(--ok)}
+.dot.bad{background:var(--bad)}
+#status{margin:0;flex:1;min-width:0;font-size:15px;font-weight:500}
+.btn{font:inherit;font-weight:600;font-size:14px;padding:8px 14px;border:1.5px solid var(--ink);border-radius:3px;background:transparent;color:var(--ink);cursor:pointer}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);flex:none}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+
+.main{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:18px;align-items:start}
+.board{margin:0;min-width:0}
+.stage{position:relative;height:clamp(540px,86vh,900px);background:#10161b;border:1px solid var(--line);border-radius:4px;overflow:hidden;touch-action:pan-y}
+.stage canvas{position:absolute;left:0;top:0;width:100%;height:100%;display:block;touch-action:pan-y;outline:none}
+.stage.full{position:fixed;inset:0;z-index:60;height:auto;border:0;border-radius:0}
+.stage.full canvas{touch-action:none}
+#tags{position:absolute;left:0;top:0;right:0;bottom:0;pointer-events:none;overflow:hidden}
+.tag{position:absolute;left:0;top:0;white-space:nowrap;font-size:12px;font-weight:600;line-height:1.2;padding:3px 8px;background:rgba(10,15,19,.8);color:#E7EDF2;border:1px solid rgba(255,255,255,.2);border-radius:3px;will-change:transform}
+.ctrls{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:6px;z-index:3}
+.cbtn{width:38px;height:38px;display:grid;place-items:center;font:inherit;font-weight:700;font-size:18px;line-height:1;color:#E7EDF2;background:rgba(10,15,19,.8);border:1px solid rgba(255,255,255,.28);border-radius:3px;cursor:pointer}
+.cbtn.wide{width:auto;padding-inline:12px;font-size:14px;font-weight:600}
+.cbtn[aria-pressed="false"]{opacity:.6}
+.cbtn:disabled{opacity:.4;cursor:not-allowed}
+.cbtn:focus-visible{outline:2px solid #F2B21B;outline-offset:2px}
+.fsbar{display:none}
+.stage.full .fsbar{display:flex;position:absolute;left:0;right:0;top:0;z-index:4;align-items:center;gap:8px;padding:calc(env(safe-area-inset-top,0px) + 8px) 10px 8px;background:rgba(10,15,19,.92);color:#E7EDF2}
+.fsbar p{margin:0;flex:1;min-width:0;font-size:14px;font-weight:500}
+.fsbar p.ok{color:#7BE3A5}
+.fsbar p.bad{color:#FF8A80}
+.stage.full .ctrls{top:calc(env(safe-area-inset-top,0px) + 74px)}
+.loading{position:absolute;left:0;right:0;top:50%;margin:0;text-align:center;color:#9AABB9;font-size:14px}
+.how{margin:8px 2px 0;font-size:13px;color:var(--ink-2)}
+.panel{min-width:0;display:flex;flex-direction:column;gap:16px}
+.prog .pn{font-family:var(--f-mono);font-weight:500;font-size:30px;line-height:1;font-variant-numeric:tabular-nums}
+.prog .pl{font-size:13px;color:var(--ink-2);margin-top:4px}
+.track{height:6px;background:var(--line);margin-top:8px}
+.track i{display:block;height:100%;width:0;background:var(--ok);transition:width .35s ease}
+.acts{display:flex;flex-wrap:wrap;gap:8px}
+.steps{list-style:none;margin:0;padding:0}
+.steps li{display:grid;grid-template-columns:18px minmax(0,1fr) auto;gap:10px;align-items:start;padding:9px 0;border-top:1px solid var(--line);font-size:14px}
+.steps li:last-child{border-bottom:1px solid var(--line)}
+.mk{width:16px;height:16px;margin-top:1px;border:2px solid var(--ink-2);position:relative}
+.part .mk{background:linear-gradient(to top,var(--accent) 50%,transparent 50%);border-color:var(--accent)}
+.done .mk{background:var(--ok);border-color:var(--ok)}
+.done .mk::after{content:"";position:absolute;left:3px;top:0;width:4px;height:8px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+.done .tx{color:var(--ink-2)}
+.ct{font-family:var(--f-mono);font-size:12px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.exam p{margin:0 0 10px;font-size:14px}
+.report{margin:0;padding-left:18px;font-size:14px;display:flex;flex-direction:column;gap:8px}
+.lg-t{margin:0 0 6px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);font-weight:600}
+.legend{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:14px}
+.legend li{display:flex;align-items:center;gap:10px}
+.sw{flex:none;width:20px;height:20px;border-radius:50%;border:4px solid}
+.sw.l{border-color:var(--wire-l)}
+.sw.n{border-color:var(--wire-n)}
+.sw.pe{border-color:var(--wire-pe)}
+
+.faults{border:1px solid var(--line);background:var(--surface);border-radius:4px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.faults[hidden]{display:none}
+.faults .lg-t{margin:0}
+.sel{font:inherit;font-size:14px;font-weight:500;padding:8px 10px;border:1.5px solid var(--ink);border-radius:3px;background:var(--bg);color:var(--ink);width:100%}
+.fnote{margin:0;font-size:13px;color:var(--ink-2)}
+.snd{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2)}
+@media (max-width:860px){
+  .main{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:520px){
+  body{padding-block:16px 40px}
+  #status{font-size:14px}
+  .btn.pri{padding-inline:10px}
+  .stage{height:clamp(520px,80vh,760px)}
+  .tag{font-size:11px;padding:2px 6px}
+}
+@media (prefers-reduced-motion: reduce){
+  .track i{transition:none}
+}
+
+.sw{flex:none;width:18px;height:18px;border-radius:50%;border:5px solid var(--c,#999);background:transparent}
+.sw.pe{border-color:#2E9E4F;border-top-color:#E3B800;border-bottom-color:#E3B800}
+.legend{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;font-size:13px}
+.legend li{display:flex;align-items:center;gap:8px}
+.ctl{border:1px solid var(--line);background:var(--surface);border-radius:4px;padding:12px;display:flex;flex-direction:column;gap:12px}
+.ctl[hidden]{display:none}
+.ctl .lg-t{margin:0}
+.runb{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.big{font:inherit;font-weight:700;font-size:16px;letter-spacing:.04em;padding:14px 10px;border:2px solid var(--ink);border-radius:4px;cursor:pointer;color:#fff;user-select:none;touch-action:none;-webkit-user-select:none}
+.big.go{background:#14a24a;border-color:#0d7a35}
+.big.stp{background:#cf1b1b;border-color:#9c1010}
+.big:active,.big.on{transform:translateY(2px);filter:brightness(.9)}
+.big:disabled{opacity:.4;cursor:not-allowed}
+.rng{display:flex;flex-direction:column;gap:6px;font-size:14px}
+.rng input{width:100%;accent-color:var(--accent)}
+.rd{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;margin:0}
+.rd div{display:flex;flex-direction:column;border-top:1px solid var(--line);padding-top:4px}
+.rd dt{font-size:12px;color:var(--ink-2)}
+.rd dd{margin:0;font-family:var(--f-mono);font-size:16px;font-variant-numeric:tabular-nums}
+.rd dd.bad{color:var(--bad)}
+.rd dd.on{color:var(--ok)}
+.btn[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.back{display:inline-block;margin-bottom:10px;font-size:13px;font-weight:600;color:var(--ink-2);text-decoration:none;border-bottom:1.5px solid var(--line)}
+.back:hover{color:var(--ink);border-color:var(--ink)}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="head">
+    <div>
+      <a class="back" href="/#tools">← EnergyVibe · Vositalar</a>
+      <h1>Reversiv yuritma: sensorli avtomatik boshqaruv</h1>
+      <p class="sub">3D stendda avtomat, ikkita kontaktor, 24 V ta'minot bloki, ikkita oraliq rele, ikkita PNP induktiv sensor va motorni o'zingiz ulang. So'ng kuchlanish berib aravachaning sensorlar orasida avtomatik borib-kelishini kuzating.</p>
+    </div>
+    <div class="seg" role="group" aria-label="Rejim">
+      <button type="button" id="m-learn" aria-pressed="true">O'rganish</button>
+      <button type="button" id="m-exam" aria-pressed="false">Imtihon</button>
+    </div>
+  </header>
+
+  <div class="bar">
+    <span class="dot" id="dot"></span>
+    <p id="status" role="status" aria-live="polite"></p>
+    <button type="button" class="btn pri" id="power" disabled>Kuchlanish berish</button>
+  </div>
+
+  <div class="main">
+    <section class="board">
+      <div class="stage" id="stage">
+        <canvas id="cv" aria-label="Reversiv yuritma stendining 3D ko'rinishi"></canvas>
+        <div id="tags"></div>
+        <div class="fsbar">
+          <p id="status2" role="status"></p>
+          <button type="button" class="cbtn wide" id="power2" disabled>Kuchlanish berish</button>
+          <button type="button" class="cbtn wide" id="close">Yopish</button>
+        </div>
+        <div class="ctrls">
+          <button type="button" class="cbtn" id="zin" aria-label="Yaqinlashtirish">+</button>
+          <button type="button" class="cbtn" id="zout" aria-label="Uzoqlashtirish">&minus;</button>
+          <button type="button" class="cbtn" id="zreset" aria-label="Asl ko'rinish"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 0 2.6-5.9M4 4v4.5h4.5"/></svg></button>
+          <button type="button" class="cbtn" id="tg" aria-pressed="true" aria-label="Nomlarni ko'rsatish yoki yashirish">Aa</button>
+          <button type="button" class="cbtn" id="fs" aria-label="To'liq ekran"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+        </div>
+        <p class="loading" id="loading">3D sahna tayyorlanmoqda...</p>
+      </div>
+      <p class="how">Klemma halqasini bosib boshqasiga sudrang yoki ikkita klemmani ketma-ket bosing. Simni bosib olib tashlang. Bo'sh joydan sudrab aylantiring. Kuchlanishdan keyin avtomat (QF) dastasini bosib yoqing; sensor uchini bosib uning oldiga metall plastina qo'yishingiz mumkin (telefonda &laquo;To'liq ekran&raquo; ni oching).</p>
+    </section>
+
+    <aside class="panel">
+      <div class="prog" id="prog">
+        <div class="pn"><span id="pdone">0</span> / 17</div>
+        <div class="pl">bosqich to'g'ri bajarilgan</div>
+        <div class="track"><i id="pfill"></i></div>
+      </div>
+
+      <div class="acts">
+        <button type="button" class="btn" id="undo">Orqaga</button>
+        <button type="button" class="btn" id="clear">Tozalash</button>
+        <button type="button" class="btn" id="hint">Maslahat</button>
+        <button type="button" class="btn" id="check" hidden>Tekshirish</button>
+      </div>
+
+      <ol class="steps" id="steps"></ol>
+
+      <div class="exam" id="exam" hidden>
+        <p>Imtihon rejimi: maslahatsiz ulang, tayyor bo'lgach <b>Tekshirish</b> ni bosing. Ulangan simlar: <b id="wcount">0</b></p>
+        <ul class="report" id="report"></ul>
+      </div>
+
+      <div class="ctl" id="ctl" hidden>
+        <p class="lg-t">Boshqaruv</p>
+        <div class="acts">
+          <button type="button" class="btn pri" id="b-qf">QF ni yoqish</button>
+        </div>
+        <dl class="rd">
+          <div><dt>Avtomat QF</dt><dd id="r-qf">-</dd></div>
+          <div><dt>Motor</dt><dd id="r-mot">-</dd></div>
+          <div><dt>Sensor S1 / S2</dt><dd id="r-s">-</dd></div>
+          <div><dt>Rele K1 / K2</dt><dd id="r-k">-</dd></div>
+          <div><dt>KM1 (oldinga)</dt><dd id="r-km1">-</dd></div>
+          <div><dt>KM2 (orqaga)</dt><dd id="r-km2">-</dd></div>
+          <div><dt>Aravacha</dt><dd id="r-x">-</dd></div>
+        </dl>
+        <p class="fnote">Aravacha harakati ko'zga ko'rinishi uchun sekinlashtirib ko'rsatilgan.</p>
+        <p class="lg-t">Sinovlar</p>
+        <div class="acts">
+          <button type="button" class="btn" id="t-m1" aria-pressed="false">S1 oldiga metall</button>
+          <button type="button" class="btn" id="t-m2" aria-pressed="false">S2 oldiga metall</button>
+          <button type="button" class="btn" id="t-f2" aria-pressed="false">S2 sensori ishdan chiqdi</button>
+        </div>
+        <p class="fnote" id="fnote"></p>
+        <label class="snd"><input type="checkbox" id="snd" checked> Ovoz</label>
+      </div>
+
+      <div>
+        <p class="lg-t">Klemma halqasining rangi</p>
+        <ul class="legend">
+          <li><i class="sw" style="--c:#e3b800"></i>L1, U (2,5 mm²)</li>
+          <li><i class="sw" style="--c:#2f9e44"></i>L2, V (2,5 mm²)</li>
+          <li><i class="sw" style="--c:#d8352a"></i>L3, W (2,5 mm²)</li>
+          <li><i class="sw pe"></i>PE (yerlash)</li>
+          <li><i class="sw" style="--c:#c62828"></i>~220 V boshqaruv (1 mm²)</li>
+          <li><i class="sw" style="--c:#58aee8"></i>N (nol)</li>
+          <li><i class="sw" style="--c:#1d2f96"></i>=24 V boshqaruv (0,75 mm²)</li>
+          <li><i class="sw" style="--c:#8a8f96"></i>Ishlatilmaydi</li>
+        </ul>
+        <p class="fnote">Sim ranglari IEC 60204-1 bo'yicha: kuch zanjiri fazalar rangida, ~220 V boshqaruv qizil, =24 V to'q ko'k (0 V oq yo'lli). Har bir sim uchida raqamli markirovka va NShVI vtulkasi bor; simlar kabel kanallaridan o'tadi.</p>
+        
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const stage=$("stage"),cv=$("cv");
+function setStatus(t,tone){
+  $("status").textContent=t;
+  $("status2").textContent=t;
+  $("status2").className=tone||"";
+  $("dot").className="dot "+(tone||"");
+}
+function fail(m){setStatus(m,"bad");const l=$("loading");if(l)l.hidden=true;}
+
+if(!window.THREE){fail("3D kutubxonasi yuklanmadi. Internetni tekshirib, sahifani qayta oching.");return;}
+let renderer;
+try{
+  renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,powerPreference:"high-performance"});
+}catch(err){
+  fail("Brauzer 3D grafikani (WebGL) ishga tushira olmadi. Chrome yoki Safari da oching.");
+  return;
+}
+try{main();}catch(err){console.error(err);fail("Sahna xatosi: "+(err&&err.message?err.message:err));}
+
+function main(){
+/* =====================================================================
+   RENDERER, CAMERA, LIGHTS
+   ===================================================================== */
+renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+renderer.outputEncoding=THREE.sRGBEncoding;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure=0.8;
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+const MAXA=Math.max(1,Math.min(8,renderer.capabilities.getMaxAnisotropy()));
+const REDUCED=!!(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0x10161b);
+const cam=new THREE.PerspectiveCamera(28,1,20,6000);
+const view={yaw:.12,pitch:.1,zoom:1,tx:0,ty:0,fitD:2000};
+const FOV_T=Math.tan(THREE.MathUtils.degToRad(14));
+const BOUND={w:990,h:1080,cy:0};
+let dirty=true;
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+
+function resize(){
+  const w=Math.max(200,stage.clientWidth),h=Math.max(200,stage.clientHeight);
+  renderer.setSize(w,h,false);
+  cam.aspect=w/h;cam.updateProjectionMatrix();
+  const dH=(BOUND.h/2)/FOV_T,dW=(BOUND.w/2)/(FOV_T*cam.aspect);
+  view.fitD=Math.max(dH,dW)+120;
+  dirty=true;
+}
+function updateCam(){
+  const D=view.fitD/view.zoom,cx=view.tx,cy=BOUND.cy+view.ty,cp=Math.cos(view.pitch);
+  cam.position.set(cx+Math.sin(view.yaw)*cp*D,cy+Math.sin(view.pitch)*D,60+Math.cos(view.yaw)*cp*D);
+  cam.lookAt(cx,cy,60);
+}
+function perPx(){return 2*(view.fitD/view.zoom)*FOV_T/Math.max(1,stage.clientHeight);}
+
+try{
+  const es=new THREE.Scene();
+  const gc=document.createElement("canvas");gc.width=4;gc.height=256;
+  const gg=gc.getContext("2d"),gr=gg.createLinearGradient(0,0,0,256);
+  gr.addColorStop(0,"#f2f6fb");gr.addColorStop(.45,"#9aa4ad");gr.addColorStop(.5,"#59616a");gr.addColorStop(1,"#1b2025");
+  gg.fillStyle=gr;gg.fillRect(0,0,4,256);
+  const gt=new THREE.CanvasTexture(gc);gt.encoding=THREE.sRGBEncoding;
+  es.add(new THREE.Mesh(new THREE.SphereGeometry(50,32,16),new THREE.MeshBasicMaterial({map:gt,side:THREE.BackSide})));
+  const bm=new THREE.MeshBasicMaterial({color:new THREE.Color(5,5,5),side:THREE.DoubleSide});
+  const b1=new THREE.Mesh(new THREE.PlaneGeometry(26,14),bm);b1.position.set(-18,20,30);b1.lookAt(0,0,0);es.add(b1);
+  const b2=new THREE.Mesh(new THREE.PlaneGeometry(12,26),bm);b2.position.set(30,5,26);b2.lookAt(0,0,0);es.add(b2);
+  const pm=new THREE.PMREMGenerator(renderer);
+  scene.environment=pm.fromScene(es,0.035).texture;
+  pm.dispose();
+}catch(e){console.warn("environment",e);}
+
+const key=new THREE.DirectionalLight(0xfff3e4,1.15);
+key.position.set(-420,760,1100);key.target.position.set(0,0,0);
+key.castShadow=true;key.shadow.mapSize.set(4096,4096);
+const sc=key.shadow.camera;sc.left=-560;sc.right=560;sc.top=620;sc.bottom=-620;sc.near=300;sc.far=2800;
+key.shadow.bias=-0.0003;key.shadow.normalBias=1.2;
+scene.add(key);scene.add(key.target);
+scene.add(new THREE.HemisphereLight(0xdfe9f5,0x30363d,0.26));
+const fillL=new THREE.DirectionalLight(0xcfe0ff,0.25);fillL.position.set(520,-200,700);scene.add(fillL);
+
+/* =====================================================================
+   MATERIALS, TEXTURES, HELPERS
+   ===================================================================== */
+function std(o,phys){
+  if(o.envMapIntensity==null)o.envMapIntensity=.45;
+  return phys?new THREE.MeshPhysicalMaterial(o):new THREE.MeshStandardMaterial(o);
+}
+function noiseTex(w,h,base,amp,rep){
+  const c=document.createElement("canvas");c.width=w;c.height=h;const g=c.getContext("2d");
+  const id=g.createImageData(w,h);
+  for(let i=0;i<w*h;i++){const v=base+(Math.random()-.5)*amp;id.data[i*4]=v;id.data[i*4+1]=v;id.data[i*4+2]=v;id.data[i*4+3]=255;}
+  g.putImageData(id,0,0);
+  const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;if(rep)t.repeat.set(rep[0],rep[1]);t.anisotropy=MAXA;return t;
+}
+const boardBump=noiseTex(256,256,128,60,[6,7]);
+/* hot-dip galvanised mounting plate: soft crystalline spangle */
+function spangleTex(){
+  const S=512,c=document.createElement("canvas");c.width=c.height=S;const g=c.getContext("2d");
+  g.fillStyle="#b9c0c6";g.fillRect(0,0,S,S);
+  for(let i=0;i<260;i++){
+    const x=Math.random()*S,y=Math.random()*S,r=10+Math.random()*34,v=170+Math.floor(Math.random()*50);
+    g.fillStyle="rgba("+v+","+(v+5)+","+(v+9)+",.55)";g.beginPath();
+    const n=5+Math.floor(Math.random()*4);
+    for(let k=0;k<n;k++){const a=k/n*Math.PI*2+Math.random()*.5,rr=r*(.6+Math.random()*.5);g[k?"lineTo":"moveTo"](x+Math.cos(a)*rr,y+Math.sin(a)*rr);}
+    g.closePath();g.fill();
+  }
+  const id=g.getImageData(0,0,S,S);for(let i=0;i<id.data.length;i+=4){const d=(Math.random()-.5)*10;id.data[i]+=d;id.data[i+1]+=d;id.data[i+2]+=d;}g.putImageData(id,0,0);
+  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(2.2,2.4);t.anisotropy=MAXA;return t;
+}
+const MAT={
+  board:std({color:0xffffff,map:spangleTex(),roughness:.5,metalness:.55,bumpMap:boardBump,bumpScale:.12,envMapIntensity:.6}),
+  duct:std({color:0x9ba2a8,roughness:.72,metalness:0}),
+  ductDk:std({color:0x8a9197,roughness:.75}),
+  boardEdge:std({color:0x8f979d,roughness:.5,metalness:.2}),
+  console:std({color:0x1a1e22,roughness:.55,metalness:.05,envMapIntensity:.3}),
+  consoleTop:std({color:0x30363c,roughness:.45}),
+  vfd:std({color:0x1f2327,roughness:.5,metalness:.04,clearcoat:.2,clearcoatRoughness:.55,envMapIntensity:.3},true),
+  vfdFas:std({color:0x15181b,roughness:.45,metalness:.05,clearcoat:.4,clearcoatRoughness:.35,envMapIntensity:.3},true),
+  vfdLight:std({color:0xa9afb4,roughness:.55}),
+  vfdBlk:std({color:0x15171a,roughness:.6}),
+  black:std({color:0x101214,roughness:.55}),
+  dark:std({color:0x1b1e21,roughness:.6}),
+  rubber:std({color:0x0d0e0f,roughness:.85}),
+  steel:std({color:0xb4bbc2,roughness:.28,metalness:1}),
+  steelDark:std({color:0x6b7178,roughness:.4,metalness:1}),
+  brass:std({color:0xc79a4a,roughness:.3,metalness:1}),
+  copper:std({color:0xc4743c,roughness:.3,metalness:1}),
+  nickel:std({color:0xd4d8dc,roughness:.18,metalness:1}),
+  alu:std({color:0xc7ccd1,roughness:.34,metalness:.85}),
+  aluDark:std({color:0x5d646b,roughness:.4,metalness:.85}),
+  white:std({color:0xe8eaec,roughness:.45}),
+  grey:std({color:0x9ea4a9,roughness:.5}),
+  motor:std({color:0x0f6aa6,roughness:.45,metalness:.1,clearcoat:.45,clearcoatRoughness:.4,envMapIntensity:.3},true),
+  motorDk:std({color:0x0b4f7c,roughness:.55,metalness:.1,clearcoat:.25,envMapIntensity:.3},true),
+  cast:std({color:0x8c939a,roughness:.55,metalness:.5}),
+  bake:std({color:0x2b201a,roughness:.7}),
+  pbRed:std({color:0xcf1b1b,roughness:.2,clearcoat:1,clearcoatRoughness:.12},true),
+  pbGreen:std({color:0x14a24a,roughness:.2,clearcoat:1,clearcoatRoughness:.12},true),
+  pbBody:std({color:0x1c1e20,roughness:.5}),
+  block:std({color:0xdcdfe1,roughness:.5}),
+  knob:std({color:0x0c0d0e,roughness:.3,clearcoat:.8,clearcoatRoughness:.25},true),
+  plate:std({color:0x2a2f34,roughness:.55,metalness:.1}),
+  resAl:std({color:0xb9bec4,roughness:.38,metalness:.9}),
+  lampOff:std({color:0x3a1010,roughness:.3,emissive:0x000000}),
+  mcb:std({color:0xeef0f1,roughness:.42}),
+  km:std({color:0x2b3036,roughness:.5,envMapIntensity:.35}),
+  kmFront:std({color:0x8d949b,roughness:.48}),
+  kmAux:std({color:0x9aa1a8,roughness:.5}),
+  socket:std({color:0x1b1d20,roughness:.6}),
+  relayClear:std({color:0xdfe8ee,roughness:.08,metalness:0,transparent:true,opacity:.28,depthWrite:false,clearcoat:1,clearcoatRoughness:.05},true),
+  relayBase:std({color:0x2a2c30,roughness:.5}),
+  coil:std({color:0xb8662c,roughness:.35,metalness:.6}),
+  psu:std({color:0xb5bcc3,roughness:.36,metalness:.8}),
+  strip:std({color:0x8e959c,roughness:.5}),
+  pur:std({color:0x8b9197,roughness:.55}),
+  sensFace:std({color:0xe77a1a,roughness:.45}),
+  rail:std({color:0xc6ccd2,roughness:.3,metalness:.9}),
+  glass:std({color:0x0b0f12,roughness:.08,metalness:0,clearcoat:1,clearcoatRoughness:.05},true)
+};
+function makeStripeTex(){
+  const c=document.createElement("canvas");c.width=8;c.height=64;const g=c.getContext("2d");
+  for(let k=0;k<8;k++){g.fillStyle=k%2?"#f1cd1c":"#2f9e44";g.fillRect(0,k*8,8,8);}
+  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;return t;
+}
+const stripeTex=makeStripeTex();
+/* signal kinds: ring colour on the terminals and colour of the wire */
+const KC={A:0xe3b800,B:0x2f9e44,C:0xd8352a,PE:0x2f9e44,N:0x58aee8,L:0xc62828,CT:0xc62828,P24:0x1d2f96,M24:0x1d2f96,SIG:0x1d2f96,GR:0x8a8f96};
+const WM={};
+for(const k in KC){
+  WM[k]=std({color:KC[k],roughness:.4,clearcoat:.35,clearcoatRoughness:.4},true);
+}
+WM.PE=std({color:0xffffff,map:stripeTex,roughness:.4,clearcoat:.35,clearcoatRoughness:.4},true);
+WM.M24=std({color:0xffffff,map:(()=>{const c=document.createElement("canvas");c.width=8;c.height=64;const g=c.getContext("2d");
+  for(let k=0;k<8;k++){g.fillStyle=k%4===3?"#e9edf2":"#1d2f96";g.fillRect(0,k*8,8,8);}
+  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;return t;})(),roughness:.4,clearcoat:.35,clearcoatRoughness:.4},true);
+/* conductor size by circuit: power 2.5 mm2, AC control 1.0 mm2, 24 V 0.75 mm2 */
+const WR={A:2.5,B:2.5,C:2.5,PE:2.5,L:1.75,N:1.75,CT:1.75,P24:1.5,M24:1.5,SIG:1.5,GR:1.75,bad:1.9,hover:1.9};
+/* ferrule collar colours (DIN 46228-4): 2.5 blue, 1.0 red, 0.75 grey */
+const FER={A:0x1e5bd8,B:0x1e5bd8,C:0x1e5bd8,PE:0x1e5bd8,L:0xc8202a,N:0xc8202a,CT:0xc8202a,P24:0x9aa1a8,M24:0x9aa1a8,SIG:0x9aa1a8,GR:0x9aa1a8,bad:0xc8202a};
+const FERM={};for(const k in FER)FERM[k]=std({color:FER[k],roughness:.45});
+WM.hover=std({color:0xff7a4d,emissive:0x8a2a10,roughness:.4},true);
+WM.bad=std({color:0xff2d2d,emissive:0xaa1010,roughness:.4},true);
+function rrShape(w,h,r){
+  const s=new THREE.Shape(),x=-w/2,y=-h/2;
+  s.moveTo(x+r,y);s.lineTo(x+w-r,y);s.quadraticCurveTo(x+w,y,x+w,y+r);
+  s.lineTo(x+w,y+h-r);s.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  s.lineTo(x+r,y+h);s.quadraticCurveTo(x,y+h,x,y+h-r);
+  s.lineTo(x,y+r);s.quadraticCurveTo(x,y,x+r,y);
+  return s;
+}
+const slabCache={};
+function slabGeo(w,h,d,r,b){
+  const key=[w,h,d,r,b].join("_");
+  if(slabCache[key])return slabCache[key];
+  const inner=d-2*b;
+  const g=new THREE.ExtrudeGeometry(rrShape(w-2*b,h-2*b,Math.max(.1,r-b)),{depth:inner,bevelEnabled:b>0,bevelThickness:b,bevelSize:b,bevelSegments:2,curveSegments:5});
+  g.translate(0,0,-inner/2);
+  slabCache[key]=g;return g;
+}
+function slab(parent,w,h,d,r,mat,x,y,zFront,b){
+  b=b==null?.6:b;r=Math.max(r,b+.05);
+  const m=new THREE.Mesh(slabGeo(w,h,d,r,b),mat);
+  m.position.set(x,y,zFront-d/2);
+  m.castShadow=true;m.receiveShadow=true;
+  parent.add(m);return m;
+}
+
+/* canvas decals: all drawing helpers work in millimetres through k = px per mm */
+function decal(parent,wmm,hmm,x,y,z,k,draw){
+  const c=document.createElement("canvas");
+  c.width=Math.max(8,Math.round(wmm*k));c.height=Math.max(8,Math.round(hmm*k));
+  const g=c.getContext("2d");
+  draw(g,wmm,hmm,k);
+  const tex=new THREE.CanvasTexture(c);tex.encoding=THREE.sRGBEncoding;tex.anisotropy=MAXA;
+  const mat=new THREE.MeshStandardMaterial({map:tex,transparent:true,roughness:.6,metalness:0,envMapIntensity:.5,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-3,polygonOffsetUnits:-3});
+  const m=new THREE.Mesh(new THREE.PlaneGeometry(wmm,hmm),mat);
+  m.position.set(x,y,z);m.receiveShadow=true;parent.add(m);
+  return {mesh:m,tex:tex,canvas:c,ctx:g};
+}
+function tx(g,k,s,x,y,size,color,weight,align){
+  g.font=(weight||"600")+" "+Math.round(size*k)+"px Arial, Helvetica, sans-serif";
+  g.fillStyle=color||"#262b2f";g.textAlign=align||"center";g.textBaseline="middle";
+  g.fillText(s,x*k,y*k);
+}
+function rc(g,k,x,y,w,h,color,r){
+  g.fillStyle=color;
+  if(r&&g.roundRect){g.beginPath();g.roundRect(x*k,y*k,w*k,h*k,r*k);g.fill();}
+  else g.fillRect(x*k,y*k,w*k,h*k);
+}
+
+const aoCache={};
+function aoPlane(x,y,w,h){
+  const key=w+"x"+h;
+  let tex=aoCache[key];
+  if(!tex){
+    const k=3,pad=26,c=document.createElement("canvas");
+    c.width=Math.round((w+pad*2)*k);c.height=Math.round((h+pad*2)*k);
+    const g=c.getContext("2d");
+    g.shadowColor="rgba(0,0,0,.6)";g.shadowBlur=11*k;g.shadowOffsetX=2000;g.shadowOffsetY=0;
+    g.fillStyle="#000";g.fillRect(pad*k-2000,pad*k,w*k,h*k);
+    tex=new THREE.CanvasTexture(c);tex.encoding=THREE.sRGBEncoding;aoCache[key]=tex;
+  }
+  const m=new THREE.Mesh(new THREE.PlaneGeometry(w+52,h+52),new THREE.MeshBasicMaterial({map:tex,transparent:true,depthWrite:false,opacity:.85}));
+  m.position.set(x+4,y-5,1.4);scene.add(m);
+}
+
+/* shared small geometries */
+const G={
+  head:new THREE.CylinderGeometry(3.2,3.6,2.2,28).rotateX(Math.PI/2),
+  rec:new THREE.CylinderGeometry(4.7,4.7,.6,28).rotateX(Math.PI/2),
+  slotA:new THREE.BoxGeometry(5.4,1,.7),
+  slotB:new THREE.BoxGeometry(1,5.4,.7),
+  ferrule:new THREE.CylinderGeometry(1.8,1.8,9.5,12)
+};
+function screw(parent,x,y,zs,ang){
+  const rec=new THREE.Mesh(G.rec,MAT.dark);rec.position.set(x,y,zs+.15);parent.add(rec);
+  const head=new THREE.Mesh(G.head,MAT.steel);head.position.set(x,y,zs+1.3);parent.add(head);
+  const a=new THREE.Mesh(G.slotA,MAT.dark),b=new THREE.Mesh(G.slotB,MAT.dark);
+  a.position.set(x,y,zs+2.4);b.position.set(x,y,zs+2.4);
+  a.rotation.z=ang||0;b.rotation.z=ang||0;
+  parent.add(a);parent.add(b);
+}
+/* =====================================================================
+   TERMINAL REGISTRY AND HARDWARE (screws, jacks, studs, wire ends)
+   ===================================================================== */
+const V3=(x,y,z)=>new THREE.Vector3(x,y,z);
+const T={};
+const ringPETex=(()=>{
+  const c=document.createElement("canvas");c.width=64;c.height=8;const g=c.getContext("2d");
+  for(let k=0;k<8;k++){g.fillStyle=k%2?"#f1cd1c":"#2f9e44";g.fillRect(k*8,0,8,8);}
+  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.wrapS=THREE.RepeatWrapping;t.repeat.set(3,1);return t;
+})();
+const ringMats={};
+for(const k in KC)ringMats[k]=std({color:KC[k],roughness:.35,clearcoat:.5},true);
+ringMats.PE=std({color:0xffffff,map:ringPETex,roughness:.35,clearcoat:.5},true);
+const TG={
+  ring:new THREE.TorusGeometry(8.2,.6,6,32),
+  well:new THREE.CylinderGeometry(7.2,7.2,1,28).rotateX(Math.PI/2),
+  head:new THREE.CylinderGeometry(4.6,5,2.8,26).rotateX(Math.PI/2),
+  slotA:new THREE.BoxGeometry(7.4,1.3,1),
+  slotB:new THREE.BoxGeometry(1.3,7.4,1),
+  jack:new THREE.CylinderGeometry(9.5,10.5,8,32).rotateX(Math.PI/2),
+  jackCol:new THREE.CylinderGeometry(12.2,12.2,2.4,32).rotateX(Math.PI/2),
+  jackHole:new THREE.CylinderGeometry(3.7,3.7,1,20).rotateX(Math.PI/2),
+  stud:new THREE.CylinderGeometry(2.7,2.7,17,16).rotateX(Math.PI/2),
+  nut:new THREE.CylinderGeometry(5.3,5.3,4.4,6).rotateX(Math.PI/2),
+  washer:new THREE.CylinderGeometry(6.6,6.6,.9,24).rotateX(Math.PI/2),
+  plugPin:new THREE.CylinderGeometry(2.1,2.1,22,14).rotateX(Math.PI/2),
+  plugBody:new THREE.CylinderGeometry(6.3,6.3,20,24).rotateX(Math.PI/2),
+  plugCap:new THREE.CylinderGeometry(7.2,7.2,3,24).rotateX(Math.PI/2),
+  sleeve:new THREE.CylinderGeometry(3,3,1,14),
+  fSleeve:new THREE.CylinderGeometry(1.55,1.55,8,12),
+  fCollar:new THREE.CylinderGeometry(3.1,2.5,6.5,16)
+};
+const lugGeo=(()=>{
+  const s=new THREE.Shape();s.absarc(0,0,5.4,0,Math.PI*2,false);
+  const h=new THREE.Path();h.absarc(0,0,2.4,0,Math.PI*2,true);s.holes.push(h);
+  return new THREE.ExtrudeGeometry(s,{depth:.9,bevelEnabled:false,curveSegments:20}).translate(0,0,-.45);
+})();
+function addT(id,o){
+  const plug=o.type==="plug",stud=o.type==="stud";
+  const d=o.dir||[0,1];
+  const az=o.az!=null?o.az:(plug?o.z+26:stud?o.z+8:o.z+3.6);
+  T[id]={id:id,x:o.x,y:o.y,z0:o.z,kind:o.kind,desc:o.desc,dom:o.dom,sig:o.sig||null,dev:id.split(".")[0],type:o.type||"lug",
+    dir:V3(d[0],d[1],0).normalize(),
+    pos:V3(o.x,o.y,o.z+(plug?11:stud?10:5)),
+    anchor:V3(o.x,o.y,az),
+    lead:plug?6.5:13};
+  return T[id];
+}
+function hwScrew(parent,id){
+  const t=T[id],x=t.x,y=t.y,z=t.z0;
+  const well=new THREE.Mesh(TG.well,MAT.black);well.position.set(x,y,z+.5);parent.add(well);
+  const head=new THREE.Mesh(TG.head,MAT.steel);head.position.set(x,y,z+1.6);head.castShadow=true;parent.add(head);
+  const a=new THREE.Mesh(TG.slotA,MAT.dark),b=new THREE.Mesh(TG.slotB,MAT.dark);
+  const ang=((Math.abs(x*13+y*7))%10)/10*1.2;a.rotation.z=b.rotation.z=ang;
+  a.position.set(x,y,z+3.1);b.position.copy(a.position);parent.add(a);parent.add(b);
+  const r=new THREE.Mesh(TG.ring,ringMats[t.kind]||ringMats.GR);r.position.set(x,y,z+.7);parent.add(r);
+}
+function hwJack(parent,id){
+  const t=T[id],x=t.x,y=t.y,z=t.z0;
+  const col=new THREE.Mesh(TG.jackCol,MAT.black);col.position.set(x,y,z+1.2);parent.add(col);
+  const bz=new THREE.Mesh(TG.jack,ringMats[t.kind]||ringMats.GR);bz.position.set(x,y,z+4);bz.castShadow=true;bz.receiveShadow=true;parent.add(bz);
+  const hole=new THREE.Mesh(TG.jackHole,MAT.black);hole.position.set(x,y,z+8.05);parent.add(hole);
+  const pin=new THREE.Mesh(new THREE.TorusGeometry(3.7,.5,6,20),MAT.nickel);pin.position.set(x,y,z+8.1);parent.add(pin);
+}
+function hwStud(parent,id,nutToo){
+  const t=T[id],x=t.x,y=t.y,z=t.z0;
+  const st=new THREE.Mesh(TG.stud,MAT.steel);st.position.set(x,y,z+8.5);st.castShadow=true;parent.add(st);
+  const w=new THREE.Mesh(TG.washer,MAT.nickel);w.position.set(x,y,z+.5);parent.add(w);
+  const r=new THREE.Mesh(TG.ring,ringMats[t.kind]||ringMats.GR);r.position.set(x,y,z+.3);r.scale.set(.95,.95,1);parent.add(r);
+  if(nutToo!==false){
+    const n=new THREE.Mesh(TG.nut,MAT.nickel);n.position.set(x,y,z+t.anchor.z-z+3.2);n.castShadow=true;parent.add(n);
+  }
+}
+/* wire end fittings: ring lug + insulated sleeve, or a right-angle banana plug */
+function endMesh(id,key,idx){
+  const t=T[id],g=new THREE.Group(),km=WM[key]||WM.GR,off=(idx||0)*2.2;
+  g.userData.shared=true;
+  if(t.type==="plug"){
+    const z0=t.z0;
+    const pin=new THREE.Mesh(TG.plugPin,MAT.nickel);pin.position.set(t.x,t.y,z0+8+off*0);g.add(pin);
+    const body=new THREE.Mesh(TG.plugBody,km);body.position.set(t.x,t.y,z0+18+off);body.castShadow=true;g.add(body);
+    const cap=new THREE.Mesh(TG.plugCap,MAT.black);cap.position.set(t.x,t.y,z0+27.5+off);g.add(cap);
+    return g;
+  }
+  if(t.type!=="stud"){
+    // bootlace ferrule: tinned sleeve clamped under the screw, insulating collar at the clamp mouth
+    const ang=Math.atan2(-t.dir.x,t.dir.y),fz=t.anchor.z-1.4+off*.6;
+    const sl=new THREE.Mesh(TG.fSleeve,MAT.nickel);sl.rotation.z=ang;sl.position.set(t.x+t.dir.x*3.5,t.y+t.dir.y*3.5,fz);g.add(sl);
+    const col=new THREE.Mesh(TG.fCollar,FERM[key]||FERM.GR);col.rotation.z=ang;col.position.set(t.x+t.dir.x*9.6,t.y+t.dir.y*9.6,fz+.6);col.castShadow=true;g.add(col);
+    return g;
+  }
+  const lug=new THREE.Mesh(lugGeo,MAT.copper);lug.position.set(t.x,t.y,t.anchor.z+off);lug.castShadow=true;g.add(lug);
+  const ang=Math.atan2(-t.dir.x,t.dir.y);
+  const sl=new THREE.Mesh(TG.sleeve,km);
+  sl.scale.set(1,t.lead-4.5,1);
+  sl.position.set(t.x+t.dir.x*(4.5+(t.lead-4.5)/2),t.y+t.dir.y*(4.5+(t.lead-4.5)/2),t.anchor.z+off);
+  sl.rotation.z=ang;sl.castShadow=true;g.add(sl);
+  const br=new THREE.Mesh(TG.sleeve,MAT.nickel);
+  br.scale.set(.82,3.2,1);br.position.set(t.x+t.dir.x*5.5,t.y+t.dir.y*5.5,t.anchor.z+off);br.rotation.z=ang;g.add(br);
+  return g;
+}
+/* =====================================================================
+   SCENE A: board, source console, DIN rails, circuit breaker, contactors
+   ===================================================================== */
+const BW=940,BH=1000;
+const tags=[];
+function addTag(text,x,y,z,mode){
+  const el=document.createElement("div");el.className="tag";el.textContent=text;
+  $("tags").appendChild(el);
+  tags.push({el:el,p:new THREE.Vector3(x,y,z),mode:mode||"top"});
+}
+const TAGT={top:"translate(-50%,-100%)",left:"translate(0,-50%)",right:"translate(-100%,-50%)",bottom:"translate(-50%,0)"};
+function mkBox(parent,w,h,d,mat,x,y,z0){
+  const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);m.position.set(x,y,z0+d/2);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m;
+}
+function mkCylZ(parent,r1,r2,len,mat,x,y,z0,seg){
+  const m=new THREE.Mesh(new THREE.CylinderGeometry(r1,r2,len,seg||28).rotateX(Math.PI/2),mat);
+  m.position.set(x,y,z0+len/2);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m;
+}
+
+/* ---- board ---- */
+function buildBoard(){
+  slab(scene,BW,BH,22,14,MAT.board,0,0,0,1.6);
+  [[-452,-482],[452,-482],[-452,482],[452,482]].forEach((p,i)=>{
+    const m=new THREE.Mesh(new THREE.CylinderGeometry(7,7,2.6,22).rotateX(Math.PI/2),MAT.steel);m.position.set(p[0],p[1],1.3);scene.add(m);
+    const a=new THREE.Mesh(new THREE.BoxGeometry(11,1.8,1),MAT.dark);a.position.set(p[0],p[1],2.8);a.rotation.z=i*.7+.3;scene.add(a);
+  });
+  decal(scene,BW,BH,0,0,.16,1.5,(g,w,h,k)=>{
+    const X=x=>(x+w/2)*k,Y=y=>(h/2-y)*k;
+    g.font="700 "+Math.round(8*k)+"px Arial, sans-serif";g.textAlign="left";g.textBaseline="middle";g.fillStyle="rgba(30,38,44,.7)";
+    g.fillText("MEXANIZM: VINTLI UZATMA VA SENSORLAR",X(-440),Y(-232));
+    g.strokeStyle="rgba(30,38,44,.3)";g.lineWidth=1.4;g.setLineDash([10,7]);
+    g.beginPath();g.moveTo(X(-440),Y(-244));g.lineTo(X(440),Y(-244));g.stroke();g.setLineDash([]);
+  });
+}
+/* ---- slotted PVC cable ducts (covers removed for wiring) ---- */
+const DUCTS={
+  H:[{id:"D1",y:358,w:40,h:40,x0:-452,x1:396,z0:3},{id:"D2",y:138,w:28,h:30,x0:-452,x1:396,z0:3},{id:"D3",y:-45,w:40,h:40,x0:-452,x1:396,z0:3}],
+  V:[{id:"VL",x:-436,w:32,h:40,y0:-65,y1:378,z0:3},{id:"VR",x:380,w:32,h:40,y0:-65,y1:378,z0:3}]
+};
+function buildDucts(){
+  const g=new THREE.Group();scene.add(g);
+  const fingers=[],P=9,FW=5.2,T2=2;
+  const inH=(y)=>DUCTS.H.some(d=>Math.abs(y-d.y)<d.w/2+3);
+  const inV=(x)=>DUCTS.V.some(d=>Math.abs(x-d.x)<d.w/2+3);
+  DUCTS.H.forEach(d=>{
+    const L=d.x1-d.x0,cx=(d.x0+d.x1)/2;
+    mkBox(g,L,d.w,2,MAT.ductDk,cx,d.y,0);
+    [-1,1].forEach(s=>{
+      const wy=d.y+s*(d.w/2-T2/2);
+      mkBox(g,L,T2,8,MAT.duct,cx,wy,0);
+      for(let x=d.x0+P/2;x<d.x1;x+=P){if(!inV(x))fingers.push([x,wy,FW,T2,d.h]);}
+    });
+  });
+  DUCTS.V.forEach(d=>{
+    const L=d.y1-d.y0,cy=(d.y0+d.y1)/2;
+    mkBox(g,d.w,L,2,MAT.ductDk,d.x,cy,0);
+    [-1,1].forEach(s=>{
+      const wx=d.x+s*(d.w/2-T2/2);
+      for(let y=d.y0+P/2;y<d.y1;y+=P){if(!inH(y))fingers.push([wx,y,T2,FW,d.h]);}
+      // continuous base strip between the horizontal ducts
+      let ys=null;
+      for(let y=d.y0;y<=d.y1+1;y+=2){const free=!inH(y)&&y<d.y1;if(free&&ys===null)ys=y;if(!free&&ys!==null){mkBox(g,T2,y-ys,8,MAT.duct,wx,(y+ys)/2,0);ys=null;}}
+    });
+  });
+  const im=new THREE.InstancedMesh(new THREE.BoxGeometry(1,1,1),MAT.duct,fingers.length);
+  const m=new THREE.Matrix4(),q=new THREE.Quaternion(),sc=new THREE.Vector3(),ps=new THREE.Vector3();
+  fingers.forEach((f,i)=>{ps.set(f[0],f[1],f[4]/2);sc.set(f[2],f[3],f[4]);m.compose(ps,q,sc);im.setMatrixAt(i,m);});
+  im.castShadow=true;im.receiveShadow=true;g.add(im);
+}
+function buildRail(x0,x1,y){
+  const g=new THREE.Group();scene.add(g);
+  mkBox(g,x1-x0,35,1.2,MAT.rail,(x0+x1)/2,y,0);
+  mkBox(g,x1-x0,5,7.5,MAT.rail,(x0+x1)/2,y+15,0);
+  mkBox(g,x1-x0,5,7.5,MAT.rail,(x0+x1)/2,y-15,0);
+  for(let x=x0+20;x<x1-10;x+=50){const s=new THREE.Mesh(new THREE.BoxGeometry(15,5.2,1.4),MAT.dark);s.position.set(x,y,1);g.add(s);}
+}
+
+/* ---- source console with 4 mm safety sockets ---- */
+const CONS={x:0,y:440,w:840,h:96,d:70};
+const lamps=[];
+function buildConsole(){
+  const g=new THREE.Group();scene.add(g);
+  slab(g,CONS.w,CONS.h,CONS.d,9,MAT.console,CONS.x,CONS.y,CONS.d,1.8);
+  const SK=[
+    ["src.l1",-340,"A","Manba L1 (380 V, A fazasi) rozetkasi"],
+    ["src.l2",-270,"B","Manba L2 (380 V, B fazasi) rozetkasi"],
+    ["src.l3",-200,"C","Manba L3 (380 V, C fazasi) rozetkasi"],
+    ["src.l",120,"L","Manba L (220 V, boshqaruv fazasi) rozetkasi"],
+    ["src.n",190,"N","Manba N (nol) rozetkasi"],
+    ["src.e",260,"PE","Manba PE (E, himoya yerlash) rozetkasi"]
+  ];
+  SK.forEach(s=>{addT(s[0],{x:s[1],y:433,z:CONS.d,dir:[0,-1],kind:s[2],desc:s[3],type:"plug"});hwJack(g,s[0]);});
+  [[-340,0xe3b800],[-270,0x2f9e44],[-200,0xd8352a],[120,0xff5a2a]].forEach(p=>{
+    mkCylZ(g,7.4,7.4,3,MAT.black,p[0],468,CONS.d,22);
+    const m=std({color:p[1],roughness:.2,emissive:0x000000,transparent:true,opacity:.92,clearcoat:1},true);
+    m.userData.col=p[1];
+    const dome=new THREE.Mesh(new THREE.SphereGeometry(5.6,18,12,0,Math.PI*2,0,Math.PI/2).rotateX(Math.PI/2),m);
+    dome.position.set(p[0],468,CONS.d+3);g.add(dome);lamps.push(m);
+  });
+  decal(g,CONS.w,CONS.h,CONS.x,CONS.y,CONS.d+.12,4,(c,w,h,k)=>{
+    const X=x=>(x+w/2)*k,Yf=y=>(h/2-(y-CONS.y))*k;
+    c.textAlign="center";c.textBaseline="middle";
+    [["L1",-340],["L2",-270],["L3",-200],["L",120],["N",190],["PE",260]].forEach(a=>{
+      c.font="700 "+Math.round(9*k)+"px Arial, sans-serif";c.fillStyle="#e7ecef";c.fillText(a[0],X(a[1]),Yf(410));
+    });
+    c.font="700 "+Math.round(7.5*k)+"px Arial, sans-serif";c.fillStyle="#9fb0bc";
+    c.fillText("MANBA  3~ 380 V  50 Hz",X(-270),Yf(480));c.fillText("MANBA  1~ 220 V  50 Hz",X(190),Yf(480));
+    c.strokeStyle="#5a6a76";c.lineWidth=1.6*k/3;c.beginPath();c.moveTo(X(-40),Yf(398));c.lineTo(X(-40),Yf(482));c.stroke();
+    const ex=X(296),ey=Yf(433);c.lineWidth=1.4*k/2.4;c.strokeStyle="#9fb0bc";c.beginPath();c.moveTo(ex,ey-5*k);c.lineTo(ex,ey);c.moveTo(ex-5*k,ey);c.lineTo(ex+5*k,ey);c.moveTo(ex-3.4*k,ey+2.6*k);c.lineTo(ex+3.4*k,ey+2.6*k);c.moveTo(ex-1.6*k,ey+5*k);c.lineTo(ex+1.6*k,ey+5*k);c.stroke();
+  });
+  aoPlane(0,CONS.y,CONS.w,CONS.h);
+  addTag("Manba · 380 V",-270,CONS.y+CONS.h/2+6,CONS.d,"top");
+  addTag("Manba · 220 V",190,CONS.y+CONS.h/2+6,CONS.d,"top");
+}
+
+/* ---- three-pole circuit breaker QF (C16) ---- */
+const QX=-365,QY=240;
+const QF={grp:null,ang:0,on:false};
+function buildQF(){
+  const g=new THREE.Group();scene.add(g);
+  slab(g,84,150,52,3,MAT.mcb,QX,QY,60,1);
+  slab(g,84,72,20,4,MAT.mcb,QX,QY,80,1);
+  [-14,14].forEach(dx=>{const s=new THREE.Mesh(new THREE.BoxGeometry(.9,148,.8),MAT.grey);s.position.set(QX+dx,QY,60.3);g.add(s);
+    const s2=new THREE.Mesh(new THREE.BoxGeometry(.9,70,.8),MAT.grey);s2.position.set(QX+dx,QY,80.3);g.add(s2);});
+  const ids=[["qf.1",-28,1,"QF 1-qisqich: L1 fazasi kirishi"],["qf.3",0,1,"QF 3-qisqich: L2 fazasi kirishi"],["qf.5",28,1,"QF 5-qisqich: L3 fazasi kirishi"],
+             ["qf.2",-28,-1,"QF 2-qisqich: L1 fazasi chiqishi"],["qf.4",0,-1,"QF 4-qisqich: L2 fazasi chiqishi"],["qf.6",28,-1,"QF 6-qisqich: L3 fazasi chiqishi"]];
+  const kk=["A","B","C"];
+  ids.forEach((a,i)=>{
+    addT(a[0],{x:QX+a[1],y:QY+a[2]*56,z:60,dir:[0,a[2]],kind:kk[i%3],desc:a[3]});hwScrew(g,a[0]);
+    const w=new THREE.Mesh(new THREE.BoxGeometry(11,6,1),MAT.black);w.position.set(QX+a[1],QY+a[2]*70,60.2);g.add(w);
+  });
+  // tie-bar handle
+  const hg=new THREE.Group();hg.position.set(QX,QY+8,80);g.add(hg);QF.grp=hg;
+  const hm=new THREE.Mesh(new THREE.BoxGeometry(76,11,26),MAT.black);hm.position.set(0,0,13);hm.castShadow=true;hg.add(hm);
+  const tie=new THREE.Mesh(new THREE.BoxGeometry(78,6,4),MAT.dark);tie.position.set(0,0,25);hg.add(tie);
+  hg.traverse(o=>{if(o.isMesh)o.userData.qf=true;});
+  QF.win=std({color:0x1aa34a,roughness:.4,emissive:0x000000});
+  const win=new THREE.Mesh(new THREE.BoxGeometry(14,6,.8),QF.win);win.position.set(QX+24,QY-26,80.3);g.add(win);
+  decal(g,84,150,QX,QY,60.15,6,(c,w,h,k)=>{
+    c.fillStyle="#2a3035";c.textAlign="center";c.textBaseline="middle";c.font="700 "+Math.round(4.2*k)+"px Arial, sans-serif";
+    [["1",-28],["3",0],["5",28]].forEach(a=>c.fillText(a[0],(w/2+a[1])*k,(h/2-44)*k));
+    [["2",-28],["4",0],["6",28]].forEach(a=>c.fillText(a[0],(w/2+a[1])*k,(h/2+44)*k));
+  });
+  decal(g,84,72,QX,QY,80.15,6,(c,w,h,k)=>{
+    c.fillStyle="#2a3035";c.textAlign="center";c.textBaseline="middle";
+    c.font="700 "+Math.round(4.6*k)+"px Arial, sans-serif";c.fillText("I  ON",(w/2-26)*k,6*k);
+    c.font="700 "+Math.round(6.6*k)+"px Arial, sans-serif";c.fillText("C16",(w/2-22)*k,(h-12)*k);
+    c.font="600 "+Math.round(3.4*k)+"px Arial, sans-serif";c.fillText("400V~  6000",(w/2-22)*k,(h-5)*k);
+    c.font="700 "+Math.round(4.6*k)+"px Arial, sans-serif";c.fillText("O  OFF",(w/2+22)*k,(h-20)*k);
+  });
+  aoPlane(QX,QY,84,150);
+  addTag("QF avtomat",QX,QY+92,62,"top");
+  setQF(false,true);
+}
+function setQF(on,instant){
+  QF.on=on;QF.target=on?-.5:.5;
+  if(instant){QF.ang=QF.target;QF.grp.rotation.x=QF.ang;}
+  QF.win.color.setHex(on?0xd23030:0x1aa34a);
+  dirty=true;
+}
+
+/* ---- contactors KM1 / KM2 with a 2NO+2NC front auxiliary block ---- */
+const KM={};
+function buildKM(id,cx,cy,title){
+  const g=new THREE.Group();scene.add(g);
+  slab(g,100,178,48,6,MAT.km,cx,cy,48,1.2);
+  slab(g,94,122,24,6,MAT.kmFront,cx,cy,72,1);
+  // vent ribs on the shoulders
+  [-1,1].forEach(s=>{for(let i=0;i<3;i++){const r=new THREE.Mesh(new THREE.BoxGeometry(92,1.2,1),MAT.dark);r.position.set(cx,cy+s*(84-i*3.2),48.2);g.add(r);}});
+  // front auxiliary block F4-22 (moves with the armature)
+  const ag=new THREE.Group();g.add(ag);
+  slab(ag,92,82,26,5,MAT.kmAux,cx,cy,98,1);
+  const main=[["l1",-33,1,"A","1/L1: L1 fazasi kirishi"],["l2",-11,1,"B","3/L2: L2 fazasi kirishi"],["l3",11,1,"C","5/L3: L3 fazasi kirishi"],["a1",33,1,"CT","A1: g'altak (~220 V) boshi"],
+              ["t1",-33,-1,"A","2/T1: chiqish (motorga)"],["t2",-11,-1,"B","4/T2: chiqish (motorga)"],["t3",11,-1,"C","6/T3: chiqish (motorga)"],["a2",33,-1,"N","A2: g'altak oxiri (N ga)"]];
+  main.forEach(a=>{const tid=id+"."+a[0];addT(tid,{x:cx+a[1],y:cy+a[2]*74,z:48,dir:[0,a[2]],kind:a[3],desc:title+" "+a[4]});hwScrew(g,tid);});
+  const aux=[["53",-33,1,"NO"],["61",-11,1,"NC"],["71",11,1,"NC"],["83",33,1,"NO"],["54",-33,-1,"NO"],["62",-11,-1,"NC"],["72",11,-1,"NC"],["84",33,-1,"NO"]];
+  aux.forEach(a=>{const tid=id+"."+a[0];
+    addT(tid,{x:cx+a[1],y:cy+a[2]*27,z:98,dir:[0,a[2]],kind:"CT",desc:title+" yordamchi kontakti "+a[0]+" ("+(a[3]==="NO"?"NO, ochiq":"NC, yopiq")+")"});hwScrew(ag,tid);});
+  decal(ag,92,82,cx,cy,98.15,6,(c,w,h,k)=>{
+    c.fillStyle="#1a2025";c.textAlign="center";c.textBaseline="middle";
+    c.font="700 "+Math.round(4*k)+"px Arial, sans-serif";
+    [["53",-33],["61",-11],["71",11],["83",33]].forEach(a=>c.fillText(a[0],(w/2+a[1])*k,(h/2-11)*k));
+    [["54",-33],["62",-11],["72",11],["84",33]].forEach(a=>c.fillText(a[0],(w/2+a[1])*k,(h/2+11)*k));
+    c.font="700 "+Math.round(3.4*k)+"px Arial, sans-serif";c.fillStyle="#3c4851";
+    [["NO",-33],["NC",-11],["NC",11],["NO",33]].forEach(a=>c.fillText(a[0],(w/2+a[1])*k,(h/2)*k));
+  });
+  decal(g,94,122,cx,cy,72.15,6,(c,w,h,k)=>{
+    c.fillStyle="#1a2025";c.textAlign="center";c.textBaseline="middle";c.font="700 "+Math.round(3.7*k)+"px Arial, sans-serif";
+    [["1/L1",-33],["3/L2",-11],["5/L3",11],["A1",33]].forEach(a=>c.fillText(a[0],(w/2+a[1])*k,5.5*k));
+    [["2/T1",-33],["4/T2",-11],["6/T3",11],["A2",33]].forEach(a=>c.fillText(a[0],(w/2+a[1])*k,(h-5.5)*k));
+  });
+  aoPlane(cx,cy,100,178);
+  // armature indicator window: red flag shows when the contacts are closed
+  const ind=std({color:0x30353a,roughness:.4,emissive:0x000000});
+  const iw=new THREE.Mesh(new THREE.BoxGeometry(12,5,.8),ind);iw.position.set(cx,cy-47,72.3);g.add(iw);
+  const fr=new THREE.Mesh(new THREE.BoxGeometry(15,8,.5),MAT.dark);fr.position.set(cx,cy-47,72.1);g.add(fr);
+  KM[id]={grp:ag,ind:ind,on:false};
+  addTag(title,cx,cy+96,50,"top");
+}
+/* =====================================================================
+   SCENE B: 24 V power supply, interposing relays, sensor terminal strips,
+   motor with a lead-screw slide, PNP proximity sensors
+   ===================================================================== */
+
+/* ---- 24 V switch-mode power supply ---- */
+const PX=200,PY=262;
+const PSU={led:null};
+function perfTex(){
+  const c=document.createElement("canvas");c.width=256;c.height=128;const g=c.getContext("2d");
+  g.fillStyle="#c3cad0";g.fillRect(0,0,256,128);
+  g.fillStyle="#2a2f34";
+  for(let y=8;y<120;y+=9)for(let x=8+((y/9)%2)*4.5;x<250;x+=9){g.beginPath();g.arc(x,y,2.6,0,Math.PI*2);g.fill();}
+  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=MAXA;return t;
+}
+function buildPSU(){
+  const g=new THREE.Group();scene.add(g);
+  slab(g,236,122,46,3,MAT.psu,PX,PY,46,1);
+  // perforated cover area
+  const pm=std({color:0xffffff,map:perfTex(),roughness:.4,metalness:.75});
+  const pp=new THREE.Mesh(new THREE.PlaneGeometry(132,64),pm);pp.position.set(PX-44,PY+22,46.2);g.add(pp);
+  // terminal block with a hinged clear cover
+  slab(g,226,38,16,2,MAT.black,PX,PY-38,52,.6);
+  const order=[["psu.l",-78,"L","AC kirish L (~220 V)"],["psu.n",-52,"N","AC kirish N"],["psu.pe",-26,"PE","⏚ yerlash qisqichi"],
+               ["psu.vm1",0,"M24","−V (0 V) chiqish"],["psu.vm2",26,"M24","−V (0 V) chiqish, ikkinchi qisqich"],["psu.vp1",52,"P24","+V (+24 V) chiqish"],["psu.vp2",78,"P24","+V (+24 V) chiqish, ikkinchi qisqich"]];
+  order.forEach(a=>{addT(a[0],{x:PX+a[1],y:PY-42,z:52,dir:[0,-1],kind:a[2],desc:"Ta'minot bloki: "+a[3]});hwScrew(g,a[0]);});
+  for(let i=0;i<8;i++){const b=new THREE.Mesh(new THREE.BoxGeometry(1.4,34,3),MAT.dark);b.position.set(PX-91+i*26,PY-38,53);g.add(b);}
+  decal(g,236,122,PX,PY,46.12,5,(c,w,h,k)=>{
+    c.textAlign="center";c.textBaseline="middle";c.fillStyle="#1b2227";
+    c.font="700 "+Math.round(3.8*k)+"px Arial, sans-serif";
+    [["L",-78],["N",-52],["⏚",-26],["−V",0],["−V",26],["+V",52],["+V",78]].forEach(a=>c.fillText(a[0],(w/2+a[1])*k,75*k));
+    c.textAlign="left";
+    c.font="800 "+Math.round(7*k)+"px Arial, sans-serif";c.fillText("LRS-150-24",(w-96)*k,14*k);
+    c.font="600 "+Math.round(3.6*k)+"px Arial, sans-serif";
+    ["INPUT: 100–240 V~ 50/60 Hz","OUTPUT: 24 V ⎓ 6.5 A  156 W","Switching power supply"].forEach((s,i)=>c.fillText(s,(w-96)*k,(24+i*5.6)*k));
+    c.font="700 "+Math.round(3.4*k)+"px Arial, sans-serif";c.fillText("DC OK",(w-30)*k,66*k);c.fillText("+V ADJ",(w-30)*k,54*k);
+  });
+  PSU.led=std({color:0x0d5a24,roughness:.3,emissive:0x000000});
+  const led=new THREE.Mesh(new THREE.SphereGeometry(3,16,10),PSU.led);led.position.set(PX+80,PY-5,46);g.add(led);
+  const pot=mkCylZ(g,3.6,3.6,2.4,MAT.white,PX+80,PY+7,46,18);
+  const sl=new THREE.Mesh(new THREE.BoxGeometry(5,1,1),MAT.dark);sl.position.set(PX+80,PY+7,48.8);sl.rotation.z=.6;g.add(sl);
+  aoPlane(PX,PY,236,122);
+  addTag("Ta'minot bloki 24 V",PX,PY+66,48,"top");
+}
+
+/* ---- interposing relays (2 change-over contacts, coil 24 V DC) on DIN sockets ---- */
+const RL={};
+function buildRelay(id,cx,cy,title){
+  const g=new THREE.Group();scene.add(g);
+  slab(g,96,142,22,4,MAT.socket,cx,cy,30,.8);
+  const top=[["nc1",-33,"1","NC","1 (NC): 1-guruhning yopiq kontakti"],["no1",-11,"5","NO","5 (NO): 1-guruhning ochiq kontakti"],["nc2",11,"4","NC","4 (NC): 2-guruhning yopiq kontakti"],["no2",33,"8","NO","8 (NO): 2-guruhning ochiq kontakti"]];
+  const bot=[["c1",-33,"9","COM","9 (COM): 1-guruhning umumiy kontakti"],["a1",-11,"13","A1 +","13 (A1+): g'altak, +24 V tomoni"],["c2",11,"12","COM","12 (COM): 2-guruhning umumiy kontakti"],["a2",33,"14","A2 −","14 (A2−): g'altak, 0 V tomoni"]];
+  top.forEach(a=>{const tid=id+"."+a[0];addT(tid,{x:cx+a[1],y:cy+50,z:30,dir:[0,1],kind:"CT",desc:title+" rele, "+a[4]});hwScrew(g,tid);});
+  bot.forEach(a=>{const tid=id+"."+a[0];addT(tid,{x:cx+a[1],y:cy-50,z:30,dir:[0,-1],kind:a[0]==="a1"?"SIG":a[0]==="a2"?"M24":"CT",desc:title+" rele, "+a[4]});hwScrew(g,tid);});
+  decal(g,96,142,cx,cy,30.12,6,(c,w,h,k)=>{
+    c.fillStyle="#e7ecef";c.textAlign="center";c.textBaseline="middle";
+    top.forEach(a=>{c.font="700 "+Math.round(3.8*k)+"px Arial, sans-serif";c.fillText(a[2]+" "+a[3],(w/2+a[1])*k,5*k);});
+    bot.forEach(a=>{c.font="700 "+Math.round(3.4*k)+"px Arial, sans-serif";c.fillText(a[2]+" "+a[3],(w/2+a[1])*k,(h-5)*k);});
+  });
+  // relay: base, clear cover, coil, armature, contact blades, LED
+  slab(g,56,74,6,2,MAT.relayBase,cx,cy,36,.4);
+  const coil=new THREE.Mesh(new THREE.CylinderGeometry(11,11,34,24),MAT.coil);coil.position.set(cx-6,cy-6,52);g.add(coil);
+  const core=new THREE.Mesh(new THREE.CylinderGeometry(4.5,4.5,36,16),MAT.steel);core.position.set(cx-6,cy-6,52);g.add(core);
+  const yoke=new THREE.Mesh(new THREE.BoxGeometry(4,42,22),MAT.steelDark);yoke.position.set(cx-21,cy-4,48);g.add(yoke);
+  const arm=new THREE.Group();arm.position.set(cx-20,cy+17,60);g.add(arm);
+  const armM=new THREE.Mesh(new THREE.BoxGeometry(26,3,14),MAT.steel);armM.position.set(13,0,0);arm.add(armM);
+  [-1,1].forEach(s=>{
+    const bl=new THREE.Mesh(new THREE.BoxGeometry(2,26,8),MAT.copper);bl.position.set(cx+16+s*6,cy+10,52);g.add(bl);
+    const ct=new THREE.Mesh(new THREE.SphereGeometry(2,10,8),MAT.nickel);ct.position.set(cx+16+s*6,cy+24,57);g.add(ct);
+  });
+  const ledM=std({color:0x5a1010,roughness:.3,emissive:0x000000});
+  const led=new THREE.Mesh(new THREE.SphereGeometry(2.6,14,10),ledM);led.position.set(cx+18,cy-27,74);g.add(led);
+  const cover=new THREE.Mesh(slabGeo(56,74,38,4,1),MAT.relayClear);cover.position.set(cx,cy,36+19);cover.renderOrder=5;g.add(cover);
+  decal(g,56,74,cx,cy,74.2,6,(c,w,h,k)=>{
+    c.fillStyle="rgba(255,255,255,.92)";c.textAlign="center";c.textBaseline="middle";
+    c.font="800 "+Math.round(6*k)+"px Arial, sans-serif";c.fillText(title,(w/2-10)*k,8*k);
+    c.font="600 "+Math.round(3.4*k)+"px Arial, sans-serif";c.fillText("24 V DC · 2CO 5 A",w/2*k,(h-11)*k);
+  });
+  // retaining clips
+  [-1,1].forEach(s=>{const cl=new THREE.Mesh(new THREE.BoxGeometry(2,58,2),MAT.steel);cl.position.set(cx+s*31,cy,62);g.add(cl);});
+  aoPlane(cx,cy,96,142);
+  RL[id]={arm:arm,led:ledM,on:false};
+  addTag(title+" rele",cx,cy+76,32,"top");
+}
+
+/* ---- motor, coupling, lead screw and carriage ---- */
+const MX=-335,MY=-350,MZ=60,MR=50;
+const S1X=-100,S2X=262,XMIN=-118,XMAX=314;
+const mot={rot:null,ang:0};
+const CAR={grp:null,x:S1X};
+function stripesV(cols,n){
+  const c=document.createElement("canvas");c.width=8;c.height=64;const g=c.getContext("2d");
+  for(let i=0;i<n;i++){g.fillStyle=cols[i%cols.length];g.fillRect(0,i*64/n,8,64/n);}
+  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.wrapS=t.wrapT=THREE.RepeatWrapping;return t;
+}
+function stripes(cols,n){
+  const c=document.createElement("canvas");c.width=64;c.height=8;const g=c.getContext("2d");
+  for(let i=0;i<n;i++){g.fillStyle=cols[i%cols.length];g.fillRect(i*64/n,0,64/n,8);}
+  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.wrapS=t.wrapT=THREE.RepeatWrapping;return t;
+}
+function buildMotor(){
+  const g=new THREE.Group();scene.add(g);
+  slab(g,150,92,12,5,MAT.cast,MX,MY,12,1);
+  const body=new THREE.Mesh(new THREE.CylinderGeometry(MR,MR,160,56).rotateZ(Math.PI/2),MAT.motor);body.position.set(MX,MY,MZ);body.castShadow=true;g.add(body);
+  for(let i=0;i<32;i++){
+    const th=i/32*Math.PI*2;if(Math.cos(th)>.7&&Math.abs(Math.sin(th))<.75)continue;
+    const r=MR+2.2,f=new THREE.Mesh(new THREE.BoxGeometry(136,2.8,6),MAT.motor);
+    f.position.set(MX,MY+r*Math.sin(th),MZ+r*Math.cos(th));f.rotation.x=-th;f.castShadow=true;g.add(f);
+  }
+  const de=new THREE.Mesh(new THREE.CylinderGeometry(52,52,20,56).rotateZ(Math.PI/2),MAT.motorDk);de.position.set(MX+88,MY,MZ);g.add(de);
+  const de2=new THREE.Mesh(new THREE.CylinderGeometry(30,40,9,40).rotateZ(Math.PI/2),MAT.cast);de2.position.set(MX+102,MY,MZ);g.add(de2);
+  const nde=new THREE.Mesh(new THREE.CylinderGeometry(51,51,20,56).rotateZ(Math.PI/2),MAT.motorDk);nde.position.set(MX-88,MY,MZ);g.add(nde);
+  const cowl=new THREE.Mesh(new THREE.CylinderGeometry(44,47,30,48).rotateZ(Math.PI/2),MAT.motorDk);cowl.position.set(MX-111,MY,MZ);cowl.castShadow=true;g.add(cowl);
+  // terminal box on top (towards the viewer)
+  const bx=MX-6,by=MY,zb=MZ+MR-6;
+  mkBox(g,84,76,30,MAT.motor,bx,by,zb-6);
+  mkBox(g,74,66,4,MAT.bake,bx,by,zb+22);
+  const zt=zb+26;
+  // factory-fitted motor cable: 4 cores (BN, BK, GY, GNYE) from the studs to terminal strip XM
+  const studs=[[bx-22,by+14,"#7a4a26"],[bx,by+14,"#1d1f21"],[bx+22,by+14,"#8a9096"],[bx+30,by-24,"PE"]];
+  const glandX=bx+10,glandY=by+38,glandZ=zt-14;
+  const gl=new THREE.Mesh(new THREE.CylinderGeometry(7,8,12,20),MAT.black);gl.position.set(glandX,glandY+4,glandZ);g.add(gl);
+  const coreMat=c=>c==="PE"?WM.PE:std({color:new THREE.Color(c),roughness:.45});
+  studs.forEach((p,i)=>{
+    const st=new THREE.Mesh(TG.stud,MAT.steel);st.position.set(p[0],p[1],zt+8.5);g.add(st);
+    const w=new THREE.Mesh(TG.washer,MAT.nickel);w.position.set(p[0],p[1],zt+.5);g.add(w);
+    const lug=new THREE.Mesh(lugGeo,MAT.copper);lug.position.set(p[0],p[1],zt+2.2);g.add(lug);
+    const n=new THREE.Mesh(TG.nut,MAT.nickel);n.position.set(p[0],p[1],zt+4.6);n.castShadow=true;g.add(n);
+    const dirY=p[1]>by?1:-1;
+    const cc=new THREE.CatmullRomCurve3([V3(p[0],p[1]+dirY*5,zt+2.2),V3(p[0],p[1]+dirY*12,zt+3),V3(glandX+(i-1.5)*2.4,glandY-8,zt-2),V3(glandX+(i-1.5)*1.6,glandY-1,glandZ)]);
+    g.add(new THREE.Mesh(new THREE.TubeGeometry(cc,24,1.7,8,false),coreMat(p[2])));
+  });
+  // sheathed cable to XM
+  const XMX=-344,XMY=-112;
+  const cab=new THREE.CatmullRomCurve3([V3(glandX,glandY+10,glandZ),V3(glandX,glandY+40,glandZ-12),V3(XMX-30,XMY-110,30),V3(XMX-6,XMY-58,22),V3(XMX,XMY-36,20)]);
+  const cm=new THREE.Mesh(new THREE.TubeGeometry(cab,60,5.2,12,false),MAT.pur);cm.castShadow=true;g.add(cm);
+  const xg=new THREE.Group();scene.add(xg);
+  mkBox(xg,112,35,7.5,MAT.rail,XMX,XMY,0);
+  const xmT=[["mot.u",-36,"A","#7a4a26","U1","XM:1 — motor kabeli, U1 (jigarrang tomir)"],["mot.v",-12,"B","#1d1f21","V1","XM:2 — motor kabeli, V1 (qora tomir)"],["mot.w",12,"C","#8a9096","W1","XM:3 — motor kabeli, W1 (kulrang tomir)"],["mot.pe",36,"PE","PE","PE","XM:PE — motor korpusining yerlash tomiri"]];
+  const peBlock=std({color:0xffffff,map:stripeTex,roughness:.5});
+  xmT.forEach((c,i)=>{
+    slab(xg,22,58,34,2,c[0]==="mot.pe"?peBlock:MAT.strip,XMX+c[1],XMY,42,.6);
+    addT(c[0],{x:XMX+c[1],y:XMY+14,z:42,dir:[0,1],kind:c[2],desc:c[5]});hwScrew(xg,c[0]);
+    const hole=new THREE.Mesh(new THREE.BoxGeometry(9,6,2),MAT.black);hole.position.set(XMX+c[1],XMY-18,42.2);xg.add(hole);
+    const cc=new THREE.CatmullRomCurve3([V3(XMX+(i-1.5)*2.4,XMY-36,20),V3(XMX+c[1]*.6,XMY-33,22),V3(XMX+c[1],XMY-30,22)]);
+    xg.add(new THREE.Mesh(new THREE.TubeGeometry(cc,12,1.7,8,false),coreMat(c[3])));
+  });
+  decal(xg,94,16,XMX,XMY-8,42.15,6,(c,w,h,k)=>{
+    c.fillStyle="#1a2025";c.textAlign="center";c.textBaseline="middle";c.font="700 "+Math.round(3.6*k)+"px Arial, sans-serif";
+    [["U1",-36],["V1",-12],["W1",12],["PE",36]].forEach(a=>c.fillText(a[0],(w/2+a[1])*k,h/2*k));
+  });
+  addTag("XM · motor",XMX,XMY+36,44,"top");
+  [-22,0,22].forEach(dx=>{const st=new THREE.Mesh(TG.stud,MAT.steel);st.position.set(bx+dx,by-6,zt+8.5);g.add(st);});
+  const bar=new THREE.Mesh(new THREE.BoxGeometry(56,7,1.6),MAT.brass);bar.position.set(bx,by-6,zt+4);g.add(bar);
+  [-22,0,22].forEach(dx=>{const n=new THREE.Mesh(TG.nut,MAT.nickel);n.position.set(bx+dx,by-6,zt+6.5);g.add(n);});
+  decal(g,74,66,bx,by,zt+.1,7,(c,w,h,k)=>{
+    c.fillStyle="#e8dcc8";c.textAlign="center";c.textBaseline="middle";c.font="700 "+Math.round(3.6*k)+"px Arial, sans-serif";
+    const X=x=>(w/2+x)*k,Y=y=>(h/2-y)*k;
+    [["U1",-22,27],["V1",0,27],["W1",22,27]].forEach(a=>c.fillText(a[0],X(a[1]),Y(a[2])));
+    [["W2",-22,-16],["U2",0,-16],["V2",22,-16]].forEach(a=>c.fillText(a[0],X(a[1]),Y(a[2])));
+    c.font="600 "+Math.round(2.8*k)+"px Arial, sans-serif";c.fillText("Y · 380 V",X(-14),Y(-27));
+  });
+  slab(g,40,24,1.4,2,MAT.steel,MX+60,MY-26,MZ+MR-1,.3);
+  decal(g,40,24,MX+60,MY-26,MZ+MR-.5,8,(c,w,h,k)=>{
+    c.fillStyle="#1b2227";c.textAlign="left";c.textBaseline="middle";
+    ["3~ MOTOR 0.37 kW","Y 380 V  1.1 A","1370 min-1  50 Hz"].forEach((s,i)=>{c.font=(i?"600 ":"700 ")+Math.round(3*k)+"px Arial, sans-serif";c.fillText(s,2.4*k,(4+i*7.6)*k);});
+  });
+  aoPlane(MX-10,MY,280,120);
+  addTag("Asinxron motor",MX,MY+MR+20,MZ+MR,"top");
+}
+function buildSlide(){
+  const g=new THREE.Group();scene.add(g);
+  const x0=-175,x1=362,len=x1-x0,cxs=(x0+x1)/2;
+  slab(g,len,84,14,3,MAT.aluDark,cxs,MY,14,1);
+  // bearing blocks
+  [[-160,22],[352,22]].forEach(b=>{slab(g,b[1],84,MZ+26,3,MAT.alu,b[0],MY,MZ+26,1);});
+  // guide rods
+  [-26,26].forEach(dy=>{const r=new THREE.Mesh(new THREE.CylinderGeometry(4.6,4.6,512,20).rotateZ(Math.PI/2),MAT.nickel);r.position.set(96,MY+dy,MZ);r.castShadow=true;g.add(r);});
+  // rotating train: motor shaft, jaw coupling, lead screw
+  const rg=new THREE.Group();rg.position.set(0,MY,MZ);g.add(rg);mot.rot=rg;
+  const sh=new THREE.Mesh(new THREE.CylinderGeometry(7,7,40,24).rotateZ(Math.PI/2),MAT.steel);sh.position.set(MX+120,0,0);rg.add(sh);
+  const cp=new THREE.Mesh(new THREE.CylinderGeometry(15,15,30,32).rotateZ(Math.PI/2),std({color:0xffffff,map:stripes(["#c9ced4","#9aa1a8"],4),roughness:.35,metalness:.8}));cp.position.set(MX+146,0,0);cp.castShadow=true;rg.add(cp);
+  const spider=new THREE.Mesh(new THREE.CylinderGeometry(15.4,15.4,6,32).rotateZ(Math.PI/2),std({color:0xe2a000,roughness:.5}));spider.position.set(MX+146,0,0);rg.add(spider);
+  const sTex=stripes(["#b9bfc6","#4d545b"],2);sTex.repeat.set(1,90);
+  const screw=new THREE.Mesh(new THREE.CylinderGeometry(6,6,540,20,1).rotateZ(Math.PI/2),std({color:0xffffff,map:sTex,roughness:.3,metalness:.9}));
+  screw.position.set(MX+160+270,0,0);screw.castShadow=true;rg.add(screw);
+  // carriage
+  const cg=new THREE.Group();g.add(cg);CAR.grp=cg;
+  slab(cg,54,80,30,4,MAT.alu,0,MY,MZ+15,1.2);
+  mkCylZ(cg,11,11,4,MAT.brass,0,MY,MZ+14,20);
+  [-1,1].forEach(s=>{const sc=new THREE.Mesh(new THREE.CylinderGeometry(2.4,2.4,1,10).rotateX(Math.PI/2),MAT.steelDark);sc.position.set(s*18,MY+30,MZ+15.6);cg.add(sc);
+    const sc2=sc.clone();sc2.position.y=MY-30;cg.add(sc2);});
+  // steel flag that the sensors detect
+  const fl=new THREE.Mesh(new THREE.BoxGeometry(26,46,4),MAT.steel);fl.position.set(0,MY+60,MZ+12);fl.castShadow=true;cg.add(fl);
+  const fb=new THREE.Mesh(new THREE.BoxGeometry(26,10,14),MAT.steelDark);fb.position.set(0,MY+38,MZ+8);cg.add(fb);
+  setCarriage(CAR.x);
+  aoPlane(cxs,MY,len,84);
+  addTag("Aravacha",0,MY-48,MZ+20,"bottom");
+  CAR.tag=tags[tags.length-1];
+}
+function setCarriage(x){CAR.x=x;CAR.grp.position.x=x;if(CAR.tag)CAR.tag.p.x=x;}
+
+/* ---- PNP inductive proximity sensors M18 + their terminal strips ---- */
+const SENS={};
+const SFACE=MY+96;   // sensing face (y) above the flag
+function buildSensor(id,sx,title){
+  const g=new THREE.Group();scene.add(g);
+  const z=MZ+12;
+  // bracket
+  slab(g,46,10,z+22,2,MAT.aluDark,sx,SFACE+34,z+22,.8);
+  // threaded body
+  const thr=stripesV(["#e1e5e8","#7d848b"],2);thr.repeat.set(1,24);
+  const body=new THREE.Mesh(new THREE.CylinderGeometry(9,9,58,24),std({color:0xffffff,map:thr,roughness:.3,metalness:.9}));
+  body.position.set(sx,SFACE+29,z);body.castShadow=true;g.add(body);
+  [SFACE+26,SFACE+42].forEach(y=>{const n=new THREE.Mesh(new THREE.CylinderGeometry(13,13,5,6),MAT.nickel);n.position.set(sx,y,z);n.castShadow=true;g.add(n);});
+  const face=new THREE.Mesh(new THREE.CylinderGeometry(9,9,4,24),MAT.sensFace);face.position.set(sx,SFACE+2,z);g.add(face);
+  const tail=new THREE.Mesh(new THREE.CylinderGeometry(8,8,12,24),MAT.black);tail.position.set(sx,SFACE+64,z);g.add(tail);
+  const ledM=std({color:0x6a3a08,roughness:.3,emissive:0x000000,transparent:true,opacity:.95});
+  const led=new THREE.Mesh(new THREE.CylinderGeometry(8.4,8.4,4,24),ledM);led.position.set(sx,SFACE+71,z);g.add(led);
+  const gland=new THREE.Mesh(new THREE.CylinderGeometry(4.5,6,8,16),MAT.black);gland.position.set(sx,SFACE+77,z);g.add(gland);
+  g.traverse(o=>{if(o.isMesh)o.userData.sens=id;});
+  // manual metal plate (test: hold a piece of steel in front of the face)
+  const plate=new THREE.Mesh(new THREE.BoxGeometry(34,3,30),MAT.steel);plate.position.set(sx,SFACE-6,z);plate.visible=false;g.add(plate);
+  // cable up to the terminal strip
+  const sy=SFACE+81,ty=-142;
+  const cab=new THREE.CatmullRomCurve3([V3(sx,sy,z),V3(sx,sy+8,z+2),V3(sx+16,ty-20,34),V3(sx,ty-10,22)]);
+  const cm=new THREE.Mesh(new THREE.TubeGeometry(cab,40,3.2,10,false),MAT.pur);cm.castShadow=true;g.add(cm);
+  [["#8a4f23",-24],["#1c1c1e",0],["#2a45b8",24]].forEach(c=>{
+    const cc=new THREE.CatmullRomCurve3([V3(sx,ty-12,22),V3(sx+c[1]*.5,ty-6,24),V3(sx+c[1],ty-2,24)]);
+    const m=new THREE.Mesh(new THREE.TubeGeometry(cc,12,1.5,8,false),std({color:new THREE.Color(c[0]),roughness:.45}));g.add(m);
+  });
+  // terminal strip X (three DIN feed-through blocks)
+  const xg=new THREE.Group();scene.add(xg);
+  mkBox(xg,90,35,7.5,MAT.rail,sx,-112,0);
+  const pre=id==="s1"?"s1":"s2";
+  const cores=[["bn",-24,"P24","jigarrang (BN) sim: +24 V ta'minot"],["bk",0,"SIG","qora (BK) sim: chiqish signali (PNP)"],["bu",24,"M24","ko'k (BU) sim: 0 V"]];
+  cores.forEach(c=>{
+    slab(xg,22,58,34,2,MAT.strip,sx+c[1],-112,42,.6);
+    const tid=pre+"."+c[0];
+    addT(tid,{x:sx+c[1],y:-98,z:42,dir:[0,1],kind:c[2],desc:title+" sensori, "+c[3]});hwScrew(xg,tid);
+    const hole=new THREE.Mesh(new THREE.BoxGeometry(9,6,2),MAT.black);hole.position.set(sx+c[1],-130,42.2);xg.add(hole);
+  });
+  decal(xg,70,16,sx,-120,42.15,6,(c,w,h,k)=>{
+    c.fillStyle="#1a2025";c.textAlign="center";c.textBaseline="middle";c.font="700 "+Math.round(3.6*k)+"px Arial, sans-serif";
+    [["BN",-24],["BK",0],["BU",24]].forEach(a=>c.fillText(a[0],(w/2+a[1])*k,h/2*k));
+  });
+  SENS[id]={led:ledM,plate:plate,x:sx,on:false,manual:false,fail:false};
+  addTag(title+" (PNP)",sx+38,SFACE+40,z,"left");
+  addTag("X"+(id==="s1"?"1":"2")+" · "+title,sx,-76,44,"top");
+}
+/* =====================================================================
+   BUILD THE SCENE, THEN THE CONNECTION RULES
+   ===================================================================== */
+buildBoard();buildDucts();
+buildRail(-430,-30,240);buildRail(0,250,60);
+buildConsole();buildQF();
+buildKM("km1",-225,240,"KM1 (oldinga)");buildKM("km2",-100,240,"KM2 (orqaga)");
+buildPSU();buildRelay("k1",60,60,"K1");buildRelay("k2",190,60,"K2");
+buildMotor();buildSlide();buildSensor("s1",S1X,"S1");buildSensor("s2",S2X,"S2");
+
+/* Target nets: every terminal of a net must end up connected, and nothing else.
+   220 V coil circuits: L -> K2(9-1 NC) -> K1(12-8 NO) || KM1(53-54) -> KM2(61-62 NC) -> KM1 A1, and the mirror for KM2. */
+const NETS=[
+  {id:"L1",kind:"A",t:["src.l1","qf.1"],cls:"pw"},
+  {id:"L2",kind:"B",t:["src.l2","qf.3"],cls:"pw"},
+  {id:"L3",kind:"C",t:["src.l3","qf.5"],cls:"pw"},
+  {id:"a",kind:"A",t:["qf.2","km1.l1","km2.l1"],cls:"pw"},
+  {id:"b",kind:"B",t:["qf.4","km1.l2","km2.l2"],cls:"pw"},
+  {id:"c",kind:"C",t:["qf.6","km1.l3","km2.l3"],cls:"pw"},
+  {id:"u",kind:"A",t:["km1.t1","km2.t3","mot.u"],cls:"mot"},
+  {id:"v",kind:"B",t:["km1.t2","km2.t2","mot.v"],cls:"mot"},
+  {id:"w",kind:"C",t:["km1.t3","km2.t1","mot.w"],cls:"mot"},
+  {id:"pe",kind:"PE",t:["src.e","psu.pe","mot.pe"],cls:"pe"},
+  {id:"L",kind:"L",t:["src.l","psu.l","k1.c1","k2.c1"],cls:"ac"},
+  {id:"N",kind:"N",t:["src.n","psu.n","km1.a2","km2.a2"],cls:"ac"},
+  {id:"p24",kind:"P24",t:["psu.vp1","psu.vp2","s1.bn","s2.bn"],cls:"dc"},
+  {id:"m24",kind:"M24",t:["psu.vm1","psu.vm2","s1.bu","s2.bu","k1.a2","k2.a2"],cls:"dc"},
+  {id:"s1",kind:"SIG",t:["s1.bk","k1.a1"],cls:"s1"},
+  {id:"s2",kind:"SIG",t:["s2.bk","k2.a1"],cls:"s2"},
+  {id:"x1",kind:"CT",t:["k2.nc1","k1.c2","km1.53"],cls:"c1"},
+  {id:"y1",kind:"CT",t:["k1.no2","km1.54","km2.61"],cls:"c1"},
+  {id:"z1",kind:"CT",t:["km2.62","km1.a1"],cls:"c1"},
+  {id:"x2",kind:"CT",t:["k1.nc1","k2.c2","km2.53"],cls:"c2"},
+  {id:"y2",kind:"CT",t:["k2.no2","km2.54","km1.61"],cls:"c2"},
+  {id:"z2",kind:"CT",t:["km1.62","km2.a1"],cls:"c2"}
+];
+const NETOF={};NETS.forEach(n=>n.t.forEach(id=>{NETOF[id]=n;}));
+const BUS=[["psu.vp1","psu.vp2"],["psu.vm1","psu.vm2"]];
+const pk=(a,b)=>a<b?a+"|"+b:b+"|"+a;
+const sameNet=(a,b)=>!!NETOF[a]&&NETOF[a]===NETOF[b];
+const AC_NETS=new Set(["L1","L2","L3","a","b","c","u","v","w","L","N","x1","y1","z1","x2","y2","z2"]);
+const DC_NETS=new Set(["p24","m24","s1","s2"]);
+const PH={L1:"L1",L2:"L2",L3:"L3",a:"L1",b:"L2",c:"L3",L:"L"};
+
+const F2=(a,b)=>F=>F(a)===F(b);
+const REQ=[
+  {text:"Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari",ids:["src.l1","qf.1","src.l2","qf.3","src.l3","qf.5"],parts:[F2("src.l1","qf.1"),F2("src.l2","qf.3"),F2("src.l3","qf.5")]},
+  {text:"QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L3",ids:["qf.2","km1.l1","qf.4","km1.l2","qf.6","km1.l3"],parts:[F2("qf.2","km1.l1"),F2("qf.4","km1.l2"),F2("qf.6","km1.l3")]},
+  {text:"KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L3",ids:["km1.l1","km2.l1","km1.l2","km2.l2","km1.l3","km2.l3"],parts:[F2("km1.l1","km2.l1"),F2("km1.l2","km2.l2"),F2("km1.l3","km2.l3")]},
+  {text:"KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W1",ids:["km1.t1","mot.u","km1.t2","mot.v","km1.t3","mot.w"],parts:[F2("km1.t1","mot.u"),F2("km1.t2","mot.v"),F2("km1.t3","mot.w")]},
+  {text:"KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U1",ids:["km2.t1","mot.w","km2.t2","mot.v","km2.t3","mot.u"],parts:[F2("km2.t1","mot.w"),F2("km2.t2","mot.v"),F2("km2.t3","mot.u")]},
+  {text:"Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi)",ids:["src.e","psu.pe","mot.pe"],parts:[F2("src.e","psu.pe"),F2("src.e","mot.pe")]},
+  {text:"Ta'minot bloki: manba L → L, manba N → N",ids:["src.l","psu.l","src.n","psu.n"],parts:[F2("src.l","psu.l"),F2("src.n","psu.n")]},
+  {text:"+24 V (+V) → ikkala sensorning jigarrang (BN) simi",ids:["psu.vp1","s1.bn","s2.bn"],parts:[F2("psu.vp1","s1.bn"),F2("psu.vp1","s2.bn")]},
+  {text:"0 V (−V) → ikkala sensorning ko'k (BU) simi",ids:["psu.vm1","s1.bu","s2.bu"],parts:[F2("psu.vm1","s1.bu"),F2("psu.vm1","s2.bu")]},
+  {text:"S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V",ids:["s1.bk","k1.a1","k1.a2","psu.vm1"],parts:[F2("s1.bk","k1.a1"),F2("k1.a2","psu.vm1")]},
+  {text:"S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V",ids:["s2.bk","k2.a1","k2.a2","psu.vm1"],parts:[F2("s2.bk","k2.a1"),F2("k2.a2","psu.vm1")]},
+  {text:"Faza L → K1 va K2 ning 9 (COM) kontaktlari",ids:["src.l","k1.c1","k2.c1"],parts:[F2("src.l","k1.c1"),F2("src.l","k2.c1")]},
+  {text:"KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish)",ids:["k2.nc1","k1.c2","km1.53","k1.no2","km1.54"],parts:[F2("k2.nc1","k1.c2"),F2("k1.c2","km1.53"),F2("k1.no2","km1.54")]},
+  {text:"KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A1",ids:["k1.no2","km2.61","km2.62","km1.a1"],parts:[F2("k1.no2","km2.61"),F2("km2.62","km1.a1")]},
+  {text:"KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel",ids:["k1.nc1","k2.c2","km2.53","k2.no2","km2.54"],parts:[F2("k1.nc1","k2.c2"),F2("k2.c2","km2.53"),F2("k2.no2","km2.54")]},
+  {text:"KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A1",ids:["k2.no2","km1.61","km1.62","km2.a1"],parts:[F2("k2.no2","km1.61"),F2("km1.62","km2.a1")]},
+  {text:"Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N",ids:["km1.a2","km2.a2","src.n"],parts:[F2("km1.a2","src.n"),F2("km2.a2","src.n")]}
+];
+const NET_COUNT=REQ.length;
+
+let mode="learn",wires=[],selected=null,wd=null,gest=null,pinch=null,powered=false,checked=false,examOK=false;
+let AN=null,hintTimer=null,hovT=null,hovW=-1;
+const DEFAULT="Klemma halqasini bosib boshqasiga sudrang yoki ikkita klemmani ketma-ket bosing.";
+const say=setStatus;
+
+function compute(extra){
+  const par={};for(const id in T)par[id]=id;
+  function find(x){while(par[x]!==x){par[x]=par[par[x]];x=par[x];}return x;}
+  function uni(a,b){a=find(a);b=find(b);if(a!==b)par[a]=b;}
+  BUS.forEach(b=>uni(b[0],b[1]));
+  const list=extra?wires.concat([extra]):wires;
+  list.forEach(w=>uni(w.from,w.to));
+  return {find:find};
+}
+function wireKind(a,b){return sameNet(a,b)?NETOF[a].kind:"GR";}
+function addWire(a,b){wires.push({from:a,to:b,kind:wireKind(a,b)});}
+
+/* what each terminal is for: used in the learn-mode explanations */
+const ROLE={
+  "qf.1":"QF kirishi 1 manbaning L1 rozetkasiga ulanadi.","qf.3":"QF kirishi 3 manbaning L2 rozetkasiga ulanadi.","qf.5":"QF kirishi 5 manbaning L3 rozetkasiga ulanadi.",
+  "qf.2":"QF chiqishi 2 (L1) KM1 va KM2 ning 1/L1 qisqichlariga boradi.","qf.4":"QF chiqishi 4 (L2) KM1 va KM2 ning 3/L2 qisqichlariga boradi.","qf.6":"QF chiqishi 6 (L3) KM1 va KM2 ning 5/L3 qisqichlariga boradi.",
+  "src.l1":"L1 rozetkasi avtomat QF ning 1-qisqichiga ulanadi.","src.l2":"L2 rozetkasi QF ning 3-qisqichiga ulanadi.","src.l3":"L3 rozetkasi QF ning 5-qisqichiga ulanadi.",
+  "src.l":"220 V faza L ta'minot blokining L qisqichiga va K1, K2 relelarning 9 (COM) kontaktlariga boradi.",
+  "src.n":"Nol N ta'minot blokining N qisqichiga va ikkala kontaktorning A2 qisqichiga boradi.",
+  "src.e":"Yerlash E ta'minot blokining ⏚ qisqichiga va motor korpusiga boradi.",
+  "psu.l":"Blokning L qisqichi manba L ga ulanadi.","psu.n":"Blokning N qisqichi manba N ga ulanadi.","psu.pe":"Blokning ⏚ qisqichi manba E ga ulanadi.",
+  "psu.vp1":"+V (+24 V) sensorlarning jigarrang (BN) simlariga boradi.","psu.vp2":"+V (+24 V) sensorlarning jigarrang (BN) simlariga boradi.",
+  "psu.vm1":"−V (0 V) sensorlarning ko'k (BU) simlariga va relelarning 14 (A2−) qisqichlariga boradi.","psu.vm2":"−V (0 V) sensorlarning ko'k (BU) simlariga va relelarning 14 (A2−) qisqichlariga boradi.",
+  "s1.bn":"Sensorning jigarrang simi +24 V ga ulanadi.","s2.bn":"Sensorning jigarrang simi +24 V ga ulanadi.",
+  "s1.bu":"Sensorning ko'k simi 0 V ga ulanadi.","s2.bu":"Sensorning ko'k simi 0 V ga ulanadi.",
+  "s1.bk":"S1 ning qora (chiqish) simi K1 relening 13 (A1+) qisqichiga ulanadi.","s2.bk":"S2 ning qora (chiqish) simi K2 relening 13 (A1+) qisqichiga ulanadi.",
+  "k1.a1":"K1 g'altagining 13 (A1+) qisqichi S1 sensorining qora simidan boshqariladi.","k2.a1":"K2 g'altagining 13 (A1+) qisqichi S2 sensorining qora simidan boshqariladi.",
+  "k1.a2":"K1 g'altagining 14 (A2−) qisqichi 0 V ga ulanadi.","k2.a2":"K2 g'altagining 14 (A2−) qisqichi 0 V ga ulanadi.",
+  "k1.c1":"K1 ning 9 (COM) kontakti 220 V faza L ga ulanadi.","k2.c1":"K2 ning 9 (COM) kontakti 220 V faza L ga ulanadi.",
+  "k1.nc1":"K1 ning 1 (NC) kontakti KM2 zanjiriga boradi: K2 ning 12 (COM) va KM2 ning 53 qisqichiga.",
+  "k2.nc1":"K2 ning 1 (NC) kontakti KM1 zanjiriga boradi: K1 ning 12 (COM) va KM1 ning 53 qisqichiga.",
+  "k1.c2":"K1 ning 12 (COM) kontakti K2 ning 1 (NC) kontaktidan keladi.","k2.c2":"K2 ning 12 (COM) kontakti K1 ning 1 (NC) kontaktidan keladi.",
+  "k1.no2":"K1 ning 8 (NO) kontakti KM1 ning 54 qisqichiga va KM2 ning 61 (NC) qisqichiga boradi.",
+  "k2.no2":"K2 ning 8 (NO) kontakti KM2 ning 54 qisqichiga va KM1 ning 61 (NC) qisqichiga boradi.",
+  "km1.53":"KM1 ning 53 (NO) qisqichi K1 12 (COM) bilan bitta nuqtaga ulanadi.","km1.54":"KM1 ning 54 (NO) qisqichi K1 8 (NO) bilan bitta nuqtaga ulanadi: shu kontakt KM1 ni ushlab turadi.",
+  "km2.53":"KM2 ning 53 (NO) qisqichi K2 12 (COM) bilan bitta nuqtaga ulanadi.","km2.54":"KM2 ning 54 (NO) qisqichi K2 8 (NO) bilan bitta nuqtaga ulanadi.",
+  "km2.61":"KM2 ning 61 (NC) qisqichi K1 8 (NO) dan keladi: bu KM1 blokirovkasi.","km2.62":"KM2 ning 62 (NC) qisqichi KM1 ning A1 g'altagiga boradi.",
+  "km1.61":"KM1 ning 61 (NC) qisqichi K2 8 (NO) dan keladi: bu KM2 blokirovkasi.","km1.62":"KM1 ning 62 (NC) qisqichi KM2 ning A1 g'altagiga boradi.",
+  "km1.a1":"KM1 g'altagining A1 qisqichi KM2 ning 62 (NC) qisqichidan keladi.","km2.a1":"KM2 g'altagining A1 qisqichi KM1 ning 62 (NC) qisqichidan keladi.",
+  "km1.a2":"KM1 g'altagining A2 qisqichi N ga ulanadi.","km2.a2":"KM2 g'altagining A2 qisqichi N ga ulanadi.",
+  "km1.l1":"KM1 1/L1 QF ning 2-chiqishidan keladi (KM2 1/L1 bilan parallel).","km1.l2":"KM1 3/L2 QF ning 4-chiqishidan keladi.","km1.l3":"KM1 5/L3 QF ning 6-chiqishidan keladi.",
+  "km2.l1":"KM2 1/L1 KM1 1/L1 ga (yoki QF 2 ga) ulanadi.","km2.l2":"KM2 3/L2 KM1 3/L2 ga ulanadi.","km2.l3":"KM2 5/L3 KM1 5/L3 ga ulanadi.",
+  "km1.t1":"KM1 2/T1 motorning U1 qisqichiga boradi.","km1.t2":"KM1 4/T2 motorning V1 qisqichiga boradi.","km1.t3":"KM1 6/T3 motorning W1 qisqichiga boradi.",
+  "km2.t1":"KM2 2/T1 motorning W1 qisqichiga boradi (fazalar almashadi).","km2.t2":"KM2 4/T2 motorning V1 qisqichiga boradi.","km2.t3":"KM2 6/T3 motorning U1 qisqichiga boradi (fazalar almashadi).",
+  "mot.u":"XM:1 (motor U1) KM1 T1 va KM2 T3 dan keladi.","mot.v":"XM:2 (motor V1) KM1 T2 va KM2 T2 dan keladi.","mot.w":"XM:3 (motor W1) KM1 T3 va KM2 T1 dan keladi.","mot.pe":"XM:PE (motor korpusi) manba E ga ulanadi."
+};
+function roleOf(id){return ROLE[id]||(T[id].desc+": bu sxemada ishlatilmaydi.");}
+function reason(a,b){
+  const A=T[a],B=T[b],na=NETOF[a],nb=NETOF[b];
+  if(!na||!nb){
+    const u=!na?a:b;
+    return T[u].desc+": bu klemma bu sxemada ishlatilmaydi."+((na||nb)?" "+roleOf(na?a:b):"");
+  }
+  const ia=na.id,ib=nb.id;
+  if((a.indexOf("psu.v")===0&&b.indexOf("psu.v")===0))return "+V va −V ni tutashtirish blokning chiqishini qisqa tutashtiradi.";
+  if(A.dev===B.dev&&A.dev!=="psu")return "Bir qurilmaning ikki klemmasini o'zaro ulash tokni qurilmadan chetlab o'tkazadi. "+roleOf(a);
+  if((AC_NETS.has(ia)&&DC_NETS.has(ib))||(AC_NETS.has(ib)&&DC_NETS.has(ia)))return "~220/380 V ni 24 V zanjirga ulab bo'lmaydi: sensor, rele g'altagi va blok chiqishi kuyadi. Kuch va boshqaruv zanjirlarini aralashtirmang. "+roleOf(a);
+  if(ia==="pe"||ib==="pe")return "Himoya yerlash (PE) tok o'tkazuvchi klemmalarga ulanmaydi: E faqat blokning ⏚ qisqichiga va motor korpusiga boradi.";
+  const isKM2out=x=>/^km2\.t/.test(x),isMot=x=>/^mot\./.test(x),isKM1out=x=>/^km1\.t/.test(x);
+  if((isKM2out(a)&&isMot(b))||(isKM2out(b)&&isMot(a)))return "KM2 motorni teskari aylantirishi uchun ikki fazani almashtiradi: T1→W1, T2→V1, T3→U1. Agar KM1 dagidek ulasangiz, motor ikkala kontaktorda ham bir tomonga aylanadi.";
+  if((isKM1out(a)&&isMot(b))||(isKM1out(b)&&isMot(a)))return "KM1 (oldinga) to'g'ri tartibda ulanadi: T1→U1, T2→V1, T3→W1.";
+  if(["u","v","w"].indexOf(ia)>=0&&["u","v","w"].indexOf(ib)>=0)return "Kontaktor chiqishlari motor klemmalari orqali tutashadi: KM1 T1/T2/T3 → U1/V1/W1, KM2 esa almashtirib T1→W1, T2→V1, T3→U1. "+roleOf(a);
+  if(PH[ia]&&PH[ib]&&PH[ia]!==PH[ib])return "Bu qisqich "+PH[ib]+" uchun mo'ljallangan. Bu yerga "+PH[ia]+" ni ulasangiz, "+PH[ib]+" bilan bir nuqtada fazalararo qisqa tutashuv bo'ladi va QF darhol o'chadi. "+roleOf(a);
+  if((ia==="p24"&&ib==="m24")||(ia==="m24"&&ib==="p24"))return "+24 V ni 0 V ga ulash blok chiqishini qisqa tutashtiradi.";
+  if((/\.a1$/.test(a)&&/^k\d\.no2$/.test(b))||(/\.a1$/.test(b)&&/^k\d\.no2$/.test(a)))
+    return "Rele kontaktidan g'altakka to'g'ridan ulash blokirovkani chetlab o'tadi. Ikkala kontaktor bir vaqtda ulanib qolsa fazalararo qisqa tutashuv bo'ladi. G'altakka zanjir ikkinchi kontaktorning NC (61–62) kontakti orqali keladi.";
+  if((ia==="s1"&&ib==="s2")||(ia==="s2"&&ib==="s1"))return "Har bir sensor o'z relesini boshqaradi: S1 → K1, S2 → K2.";
+  if(ia==="s1"||ia==="s2"||ib==="s1"||ib==="s2")return "Sensorning qora (BK) chiqishi rele g'altagining 13 (A1+) qisqichiga ulanadi, 14 (A2−) esa 0 V ga. "+roleOf(a);
+  if(/^(x|y|z)[12]$/.test(ia)&&/^(x|y|z)[12]$/.test(ib)){
+    if(ia[1]!==ib[1])return "KM1 va KM2 zanjirlari alohida: bir kontaktor zanjirini ikkinchisiga ulasangiz ikkalasi birga ulanib qoladi. "+roleOf(a);
+    return "Zanjir ketma-ketligi buziladi: L → (boshqa rele NC) → (o'z rele NO va o'zini ushlab turuvchi 53–54) → (boshqa kontaktor NC 61–62) → A1. "+roleOf(a);
+  }
+  return "Bu ikki klemma o'zaro ulanmaydi. "+roleOf(a);
+}
+function analyze(){
+  const c=compute(),F=c.find;
+  const states=REQ.map(r=>{
+    const ok=r.parts.map(f=>f(F)),have=ok.filter(Boolean).length;
+    return {req:r,done:have===r.parts.length,have:have,total:r.parts.length};
+  });
+  const bad=[];
+  wires.forEach((w,i)=>{if(!sameNet(w.from,w.to))bad.push(i);});
+  // two different target nets merged through a chain of otherwise allowed wires cannot happen (each wire stays in one net)
+  const doneCount=states.filter(s=>s.done).length;
+  return {states:states,bad:bad,doneCount:doneCount,find:F,solved:doneCount===NET_COUNT&&bad.length===0};
+}
+function canPower(){return AN.solved&&(mode==="learn"||examOK);}
+
+/* =====================================================================
+   WIRES IN 3D
+   ===================================================================== */
+const wireGroup=new THREE.Group();scene.add(wireGroup);
+const ghostGroup=new THREE.Group();scene.add(ghostGroup);
+const ringGroup=new THREE.Group();scene.add(ringGroup);
+let wireObjs=[];
+let previewMesh=null;
+function tubeMesh(curve,radius,mat){
+  const len=curve.getLength(),seg=Math.max(24,Math.min(420,Math.round(len/2.6)));
+  const m=new THREE.Mesh(new THREE.TubeGeometry(curve,seg,radius,8,false),mat);
+  m.castShadow=true;m.receiveShadow=true;return m;
+}
+function disposeChildren(grp){
+  while(grp.children.length){
+    const o=grp.children[0];grp.remove(o);
+    o.traverse(n=>{if(n.geometry&&!n.userData.shared&&!(n.parent&&n.parent.userData.shared))n.geometry.dispose();});
+  }
+}
+function endPt(id,s){
+  const t=T[id],p=t.anchor.clone().addScaledVector(t.dir,t.lead);
+  p.z+=s*2.2;if(t.type==="lug")p.z-=.8;
+  return p;
+}
+/* ---- orthogonal routing through the cable ducts ---- */
+function ductFor(t){
+  const up=t.dir.y>0||(t.dir.y===0&&t.type==="stud");
+  let best=null;
+  for(const d of DUCTS.H){
+    if(up?d.y>t.y:d.y<t.y){if(!best||Math.abs(d.y-t.y)<Math.abs(best.y-t.y))best=d;}
+  }
+  return best||DUCTS.H[0];
+}
+function roundPath(pts,r){
+  const P=[pts[0]];
+  for(let i=1;i<pts.length;i++)if(pts[i].distanceTo(P[P.length-1])>.6)P.push(pts[i]);
+  const path=new THREE.CurvePath();
+  if(P.length<2){path.add(new THREE.LineCurve3(P[0],P[0].clone().add(V3(0,.1,0))));return path;}
+  let prev=P[0];
+  for(let i=1;i<P.length-1;i++){
+    const c=P[i],a=c.clone().sub(prev),b=P[i+1].clone().sub(c),la=a.length(),lb=b.length();
+    const d1=Math.min(r,la*.5),d2=Math.min(r,lb*.5);
+    const p1=c.clone().addScaledVector(a.normalize(),-d1),p2=c.clone().addScaledVector(b.normalize(),d2);
+    if(p1.distanceTo(prev)>.05)path.add(new THREE.LineCurve3(prev,p1));
+    path.add(new THREE.QuadraticBezierCurve3(p1,c,p2));
+    prev=p2;
+  }
+  path.add(new THREE.LineCurve3(prev,P[P.length-1]));
+  return path;
+}
+function stubPts(id,s,D,dy,lz,rev){
+  const t=T[id],p0=endPt(id,s),sg=D.y>t.y?1:-1,edge=D.y-sg*D.w/2;
+  const run=Math.abs(edge-p0.y),zIn=D.z0+lz;
+  const pts=[p0];
+  if(run>70){
+    // long drop (e.g. the motor cable): fall back towards the plate first, then run straight to the duct
+    pts.push(V3(p0.x,p0.y+sg*Math.min(40,run*.3),Math.max(zIn+18,p0.z*.45)));
+    pts.push(V3(p0.x,edge-sg*10,zIn+16));
+  }else pts.push(V3(p0.x,edge-sg*Math.min(6,run*.3),Math.max(p0.z,zIn+12)));
+  pts.push(V3(p0.x,D.y+dy,zIn));
+  return rev?pts.reverse():pts;
+}
+function wireCurve(fromId,toId,i,sa,sb){
+  const A=T[fromId],B=T[toId],Da=ductFor(A),Db=ductFor(B);
+  const lane=k=>((k*7)%5-2),dyA=lane(i)*Da.w*.17,dyB=lane(i)*Db.w*.17,lz=3+((i*3)%4)*3.6;
+  const pa=stubPts(fromId,sa||0,Da,dyA,lz,false),pb=stubPts(toId,sb||0,Db,dyB,lz,true);
+  let mid=[];
+  if(Da!==Db){
+    const xa=A.x,xb=B.x;
+    let V=DUCTS.V[0],bc=1e9;
+    for(const v of DUCTS.V){const c=Math.abs(xa-v.x)+Math.abs(xb-v.x);if(c<bc){bc=c;V=v;}}
+    const dx=lane(i+2)*V.w*.17,zv=V.z0+lz;
+    mid=[V3(V.x+dx,Da.y+dyA,zv),V3(V.x+dx,Db.y+dyB,zv)];
+  }
+  return roundPath(pa.concat(mid,pb),7);
+}
+/* printed wire markers (heat-shrink sleeves) */
+const MARK={L1:"L1",L2:"L2",L3:"L3",a:"L11",b:"L12",c:"L13",u:"U1",v:"V1",w:"W1",pe:"PE",L:"L",N:"N",p24:"+24V",m24:"0V",s1:"S1",s2:"S2",x1:"3",y1:"4",z1:"5",x2:"6",y2:"7",z2:"8"};
+const markTex={};
+function markMat(txt){
+  if(markTex[txt])return markTex[txt];
+  const c=document.createElement("canvas");c.width=128;c.height=84;const g=c.getContext("2d");
+  g.fillStyle="#f4f3ee";g.fillRect(0,0,128,84);
+  g.fillStyle="#141618";g.font="800 "+(txt.length>3?18:25)+"px Arial, sans-serif";g.textAlign="center";g.textBaseline="middle";
+  [0,32,64,96,128].forEach(u=>{g.save();g.translate(u,42);g.rotate(-Math.PI/2);g.fillText(txt,0,2);g.restore();});
+  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=MAXA;
+  return markTex[txt]=std({color:0xffffff,map:t,roughness:.55});
+}
+const _Y=V3(0,1,0);
+function markerMesh(curve,u,txt,r){
+  const p=curve.getPointAt(u),tg=curve.getTangentAt(u).normalize();
+  const m=new THREE.Mesh(new THREE.CylinderGeometry(r+.75,r+.75,13,18,1,true),markMat(txt));
+  m.position.copy(p);m.quaternion.setFromUnitVectors(_Y,tg);
+  m.castShadow=true;return m;
+}
+function makeWireObj(fromId,toId,i,matKey,sa,sb){
+  const grp=new THREE.Group();
+  const curve=wireCurve(fromId,toId,i,sa,sb);
+  const r=WR[matKey]||1.75;
+  const tube=tubeMesh(curve,r,WM[matKey]||WM.GR);
+  tube.userData.wire=i;grp.add(tube);
+  grp.add(endMesh(fromId,matKey,sa));grp.add(endMesh(toId,matKey,sb));
+  const n=sameNet(fromId,toId)?NETOF[fromId]:null;
+  if(n&&MARK[n.id]){
+    const L=curve.getLength(),u=Math.min(.45,22/L);
+    grp.add(markerMesh(curve,u,MARK[n.id],r));grp.add(markerMesh(curve,1-u,MARK[n.id],r));
+  }
+  return {grp:grp,tube:tube,curve:curve,kind:matKey};
+}
+function buildWires(){
+  disposeChildren(wireGroup);
+  wireObjs=[];
+  const cnt={};
+  wires.forEach((w,i)=>{
+    const bad=checked&&AN.bad.indexOf(i)>=0;
+    const sa=cnt[w.from]||0,sb=cnt[w.to]||0;cnt[w.from]=sa+1;cnt[w.to]=sb+1;
+    const o=makeWireObj(w.from,w.to,i,bad?"bad":w.kind,sa,sb);
+    wireGroup.add(o.grp);wireObjs.push(o);
+  });
+  hovW=-1;dirty=true;
+}
+function flashBad(a,b){
+  const o=makeWireObj(a,b,wires.length,"bad");
+  ghostGroup.add(o.grp);dirty=true;
+  setTimeout(()=>{ghostGroup.remove(o.grp);o.grp.traverse(n=>{if(n.geometry&&!n.userData.shared&&!(n.parent&&n.parent.userData.shared))n.geometry.dispose();});dirty=true;},1500);
+}
+function setHoverWire(i){
+  if(i===hovW)return;
+  if(hovW>=0&&wireObjs[hovW]){
+    const bad=checked&&AN.bad.indexOf(hovW)>=0;
+    wireObjs[hovW].tube.material=WM[bad?"bad":wires[hovW].kind]||WM.GR;
+  }
+  hovW=i;
+  if(i>=0&&wireObjs[i]&&!powered)wireObjs[i].tube.material=WM.hover;
+  dirty=true;
+}
+
+/* halo rings on terminals */
+const ringGeo=new THREE.RingGeometry(10.2,12.6,40);
+const ringMats2={sel:new THREE.MeshBasicMaterial({color:0xffb400,transparent:true,depthTest:false,depthWrite:false,toneMapped:false}),
+                 hint:new THREE.MeshBasicMaterial({color:0x35e0ff,transparent:true,depthTest:false,depthWrite:false,toneMapped:false})};
+const rings={};
+for(const id in T){
+  const r=new THREE.Mesh(ringGeo,ringMats2.sel);
+  r.position.copy(T[id].pos);r.position.z+=2;r.visible=false;r.renderOrder=20;
+  ringGroup.add(r);rings[id]=r;
+}
+const hintSet=new Set();
+function paintRings(){
+  for(const id in rings){
+    const r=rings[id],isHint=hintSet.has(id),on=id===selected||id===hovT||isHint;
+    r.visible=on;r.material=isHint&&id!==selected?ringMats2.hint:ringMats2.sel;
+  }
+  dirty=true;
+}
+function paintSel(){paintRings();}
+
+/* live current dots: which wires carry current depends on the circuit state */
+const MAXDOTS=1200;
+const dotMesh=new THREE.InstancedMesh(new THREE.SphereGeometry(1.25,8,6),new THREE.MeshBasicMaterial({color:0xfff1a8,toneMapped:false}),MAXDOTS);
+const glowMesh=new THREE.InstancedMesh(new THREE.SphereGeometry(3.2,8,6),new THREE.MeshBasicMaterial({color:0xffc94a,transparent:true,opacity:.14,blending:THREE.AdditiveBlending,depthWrite:false,toneMapped:false}),MAXDOTS);
+dotMesh.count=0;glowMesh.count=0;dotMesh.frustumCulled=false;glowMesh.frustumCulled=false;
+scene.add(dotMesh);scene.add(glowMesh);
+let flows=[];
+function buildFlows(){
+  flows=[];
+  wireObjs.forEach((o,i)=>{
+    const n=NETOF[wires[i].from];if(!n||n.cls==="pe")return;
+    const len=o.curve.getLength();
+    flows.push({curve:o.curve,len:len,n:Math.max(2,Math.floor(len/30)),ph:(i*.173)%1,cls:n.cls});
+  });
+}
+const _m=new THREE.Matrix4(),FLOW_SPEED=84;
+function flowRate(cls){
+  if(!powered)return 0;
+  const run=QF.on&&(SIM.km1||SIM.km2)&&!SIM.stall;
+  switch(cls){
+    case "pw":case "mot":return run?1:(QF.on&&SIM.stall?2:0);
+    case "ac":return .3+(SIM.c1||SIM.c2?.4:0);
+    case "dc":return .3;
+    case "s1":return SIM.s1?.6:0;
+    case "s2":return SIM.s2?.6:0;
+    case "c1":return SIM.c1?.6:0;
+    case "c2":return SIM.c2?.6:0;
+  }
+  return 0;
+}
+function updateFlows(dt){
+  let c=0;
+  for(const f of flows){
+    const rate=flowRate(f.cls);if(rate<=0)continue;
+    if(!REDUCED)f.ph=(f.ph+dt*FLOW_SPEED*rate/f.len)%1;
+    for(let j=0;j<f.n&&c<MAXDOTS;j++){
+      const u=(f.ph+j/f.n)%1,p=f.curve.getPointAt(u);
+      _m.setPosition(p.x,p.y,p.z+3);
+      dotMesh.setMatrixAt(c,_m);glowMesh.setMatrixAt(c,_m);c++;
+    }
+  }
+  dotMesh.count=c;glowMesh.count=c;
+  dotMesh.instanceMatrix.needsUpdate=true;glowMesh.instanceMatrix.needsUpdate=true;
+}
+function drawPreview(id,p){
+  clearPreview();
+  const A=T[id],a0=endPt(id,0);
+  const dist=a0.distanceTo(p),k=Math.min(80,Math.max(20,dist*.35));
+  const a1=a0.clone().addScaledVector(A.dir,k);a1.z=a0.z+70;
+  const b=p.clone();b.z=a0.z+70;
+  const curve=new THREE.CubicBezierCurve3(a0,a1,b,b.clone());
+  previewMesh=new THREE.Mesh(new THREE.TubeGeometry(curve,32,1.7,6,false),new THREE.MeshBasicMaterial({color:0xffb400,toneMapped:false}));
+  scene.add(previewMesh);dirty=true;
+}
+function clearPreview(){
+  if(previewMesh){scene.remove(previewMesh);previewMesh.geometry.dispose();previewMesh.material.dispose();previewMesh=null;dirty=true;}
+}
+/* =====================================================================
+   SIMULATION STATE
+   s1,s2: sensor outputs; k1,k2: relay armatures; c1,c2: contactor coil voltage;
+   km1,km2: main contacts; w: motor speed (signed); stall: carriage against an end stop
+   ===================================================================== */
+const SIM={s1:false,s2:false,k1:false,k2:false,c1:false,c2:false,km1:false,km2:false,
+  t1:0,t2:0,w:0,stall:false,stallT:0,tripped:false,lastCtl:"",lastMsg:""};
+const KM_ON=.035,KM_OFF=.02,W_MAX=15,V_PER_W=4.4,DETECT=17;
+
+/* =====================================================================
+   UI RENDERING
+   ===================================================================== */
+function renderSteps(){
+  $("steps").innerHTML=AN.states.map(s=>
+    `<li class="${s.done?"done":s.have?"part":""}"><span class="mk" aria-hidden="true"></span><span class="tx">${s.req.text}<span class="sr">${s.done?" (tayyor)":""}</span></span>${s.total>1?`<span class="ct">${s.have}/${s.total}</span>`:""}</li>`
+  ).join("");
+}
+function renderAll(){
+  AN=analyze();
+  buildWires();
+  const learn=mode==="learn";
+  $("prog").hidden=!learn;$("steps").hidden=!learn;$("exam").hidden=learn;
+  $("hint").hidden=!learn;$("check").hidden=learn;
+  if(learn){
+    $("pdone").textContent=AN.doneCount;
+    $("pfill").style.width=(AN.doneCount/NET_COUNT*100)+"%";
+    renderSteps();
+  }else{
+    $("wcount").textContent=wires.length;
+  }
+  $("undo").disabled=powered||!wires.length;
+  $("clear").disabled=powered||!wires.length;
+  $("hint").disabled=powered||AN.solved;
+  $("check").disabled=powered||!wires.length;
+  const dis=!powered&&!canPower(),label=powered?"O'chirish":"Kuchlanish berish";
+  ["power","power2"].forEach(id=>{
+    const b=$(id);b.textContent=label;b.disabled=dis;
+    b.title=dis?"Avval sxemani to'liq va to'g'ri yig'ing":"";
+  });
+  $("ctl").hidden=!powered;
+  if(powered)buildFlows();else{flows=[];dotMesh.count=0;glowMesh.count=0;}
+  updateCtlUI(true);
+  dirty=true;
+}
+function changed(){
+  checked=false;examOK=false;
+  $("report").innerHTML="";
+  renderAll();
+}
+
+/* =====================================================================
+   ACTIONS
+   ===================================================================== */
+function connect(a,b){
+  if(wires.some(w=>(w.from===a&&w.to===b)||(w.from===b&&w.to===a))){say("Bu ikki klemma allaqachon ulangan.","");return;}
+  if(mode==="learn"&&!sameNet(a,b)){flashBad(a,b);say(reason(a,b),"bad");return;}
+  addWire(a,b);
+  changed();
+  if(mode==="learn"){
+    if(AN.solved)say("Sxema to'g'ri yig'ildi. Kuchlanish bering, so'ng avtomat QF ni yoqing.","ok");
+    else say(`To'g'ri ulandi. ${AN.doneCount} / ${NET_COUNT} bosqich tayyor.`,"ok");
+  }else say(`Sim ulandi. Jami ${wires.length} ta.`,"");
+}
+function tap(id){
+  if(powered){say("Kuchlanish ostida sxemani o'zgartirib bo'lmaydi. Avval o'chiring.","bad");return;}
+  if(selected&&selected!==id){const a=selected;selected=null;paintSel();connect(a,id);}
+  else if(selected===id){selected=null;paintSel();say(DEFAULT,"");}
+  else{selected=id;paintSel();say(T[id].desc+". Ikkinchi klemmani tanlang.","");}
+}
+function removeWire(i){
+  if(powered){say("Kuchlanish ostida simni olib bo'lmaydi.","bad");return;}
+  wires.splice(i,1);changed();say("Sim olib tashlandi.","");
+}
+function runCheck(){
+  AN=analyze();checked=true;
+  const items=AN.bad.map(i=>{const w=wires[i];return `Xato sim: ${T[w.from].desc} va ${T[w.to].desc}. ${reason(w.from,w.to)}`;});
+  const missing=AN.states.filter(s=>!s.done);
+  missing.slice(0,6).forEach(s=>items.push("Bajarilmagan: "+s.req.text));
+  if(missing.length>6)items.push(`Yana ${missing.length-6} ta bosqich bajarilmagan.`);
+  examOK=AN.solved;
+  $("report").innerHTML=items.map(x=>`<li>${x}</li>`).join("");
+  renderAll();
+  if(AN.solved)say("Sxema to'g'ri va to'liq. Kuchlanish berishingiz mumkin.","ok");
+  else say(`Tekshiruv: ${AN.bad.length} ta xato sim, ${missing.length} ta bajarilmagan bosqich.`,"bad");
+}
+function hint(){
+  if(powered||mode!=="learn")return;
+  const s=AN.states.find(x=>!x.done);if(!s)return;
+  const F=AN.find;
+  let ids=s.req.ids.filter(id=>!s.req.ids.some(o=>o!==id&&F(o)===F(id)));
+  if(!ids.length)ids=s.req.ids.slice();
+  hintSet.clear();ids.forEach(id=>hintSet.add(id));paintRings();
+  clearTimeout(hintTimer);
+  hintTimer=setTimeout(()=>{hintSet.clear();paintRings();},4200);
+  say("Maslahat: "+s.req.text,"");
+}
+function resetSim(){
+  SIM.s1=SIM.s2=SIM.k1=SIM.k2=SIM.c1=SIM.c2=SIM.km1=SIM.km2=false;
+  SIM.t1=SIM.t2=0;SIM.stall=false;SIM.stallT=0;SIM.lastMsg="";
+}
+function setPower(on){
+  if(on&&!canPower())return;
+  powered=on;selected=null;paintSel();setHoverWire(-1);
+  resetSim();
+  if(!on){setQF(false);SIM.tripped=false;["m1","m2","f2"].forEach(k=>setTest(k,false,true));}
+  beep("contactor");
+  renderAll();
+  if(on){
+    humStart();
+    say("Kuchlanish berildi: blok 24 V chiqardi, boshqaruv zanjiri ishlayapti. Motor aylanishi uchun avtomat QF ni yoqing.","ok");
+  }else{
+    humStop();
+    say("Kuchlanish o'chirildi. Sxemani o'zgartirishingiz mumkin.","");
+  }
+}
+function setMode(m){
+  if(m===mode)return;
+  if(powered)setPower(false);
+  mode=m;wires.length=0;selected=null;paintSel();
+  $("m-learn").setAttribute("aria-pressed",String(m==="learn"));
+  $("m-exam").setAttribute("aria-pressed",String(m==="exam"));
+  changed();
+  say(m==="learn"?"O'rganish rejimi: noto'g'ri ulanish darhol tushuntiriladi.":"Imtihon rejimi: xohlagan simni ulang, tayyor bo'lgach Tekshirish ni bosing.","");
+}
+function toggleQF(){
+  if(!powered){say("Avval «Kuchlanish berish» ni bosing: stendga manba ulanmagan.","");return;}
+  setQF(!QF.on);beep("click");
+  if(QF.on){SIM.tripped=false;SIM.stallT=0;say("QF yoqildi: kuch zanjiriga 380 V berildi. Ulangan kontaktor motorni aylantiradi.","ok");}
+  else say("QF o'chirildi: motor kuch zanjiridan uzildi. Boshqaruv zanjiri (220 V va 24 V) ishlashda davom etadi.","");
+  updateCtlUI(true);dirty=true;
+}
+const TESTS={m1:false,m2:false,f2:false};
+function setTest(k,on,silent){
+  TESTS[k]=on;$("t-"+k).setAttribute("aria-pressed",String(on));
+  if(k==="m1")SENS.s1.manual=on;
+  if(k==="m2")SENS.s2.manual=on;
+  if(k==="f2")SENS.s2.fail=on;
+  SENS.s1.plate.visible=SENS.s1.manual;SENS.s2.plate.visible=SENS.s2.manual;
+  dirty=true;
+  if(silent)return;
+  const msg={
+    m1:on?"S1 oldiga metall plastina qo'yildi: S1 doim faol, K1 tortilgan.":"S1 oldidagi metall olindi.",
+    m2:on?"S2 oldiga metall plastina qo'yildi: S2 doim faol, K2 tortilgan.":"S2 oldidagi metall olindi.",
+    f2:on?"S2 sensori ishdan chiqdi (simi uzildi deb faraz qiling). Aravacha S2 ga yetganda nima bo'lishini kuzating.":"S2 sensori tuzatildi."
+  }[k];
+  say(msg,on&&k==="f2"?"bad":"");
+  if(TESTS.m1&&TESTS.m2)say("Ikkala sensor ham faol: K1 ning NC kontakti KM2 zanjirini, K2 ning NC kontakti KM1 zanjirini uzadi. Ikkala kontaktor o'chadi, motor to'xtaydi. Bu himoya: ikki buyruq bir vaqtda kelsa, hech biri bajarilmaydi.","ok");
+}
+function toggleTest(k){if(!powered)return;setTest(k,!TESTS[k]);updateCtlUI(true);}
+function updateCtlUI(force){
+  const dir=SIM.w>.6?"oldinga":SIM.w<-.6?"orqaga":"to'xtagan";
+  const key=[powered,QF.on,SIM.tripped,SIM.s1,SIM.s2,SIM.k1,SIM.k2,SIM.km1,SIM.km2,dir,SIM.stall,Math.round(CAR.x)].join();
+  if(!force&&key===SIM.lastCtl)return;
+  SIM.lastCtl=key;
+  const on=(id,v,txt)=>{const e=$(id);e.textContent=txt;e.className=v?"on":"";};
+  $("r-qf").textContent=SIM.tripped?"o'chdi (himoya)":QF.on?"yoqilgan":"o'chiq";$("r-qf").className=SIM.tripped?"bad":QF.on?"on":"";
+  $("r-mot").textContent=SIM.stall?"tiqilib qoldi":dir;$("r-mot").className=SIM.stall?"bad":dir!=="to'xtagan"?"on":"";
+  on("r-s",SIM.s1||SIM.s2,(SIM.s1?"faol":"—")+" / "+(SIM.s2?"faol":"—"));
+  on("r-k",SIM.k1||SIM.k2,(SIM.k1?"tortilgan":"—")+" / "+(SIM.k2?"tortilgan":"—"));
+  on("r-km1",SIM.km1,SIM.km1?"ulangan":"uzilgan");
+  on("r-km2",SIM.km2,SIM.km2?"ulangan":"uzilgan");
+  $("r-x").textContent=Math.round(CAR.x-S1X)+" mm";
+  $("b-qf").textContent=QF.on?"QF ni o'chirish":"QF ni yoqish";
+  $("b-qf").disabled=!powered;
+  ["m1","m2","f2"].forEach(k=>{$("t-"+k).disabled=!powered;});
+  $("fnote").textContent=SIM.tripped?"Real stendda bunday holatdan chekka o'chirgichlar (SQ) va motorning issiqlik relesi (KK) himoya qiladi. Sensorni tuzatib, QF ni qayta yoqing.":"";
+}
+
+/* =====================================================================
+   CIRCUIT SIMULATION
+   ===================================================================== */
+function note(msg,tone){if(msg!==SIM.lastMsg){SIM.lastMsg=msg;say(msg,tone||"");}}
+function simStep(dt){
+  if(!powered){SIM.w*=Math.exp(-dt*2.5);if(Math.abs(SIM.w)<.02)SIM.w=0;return;}
+  // sensors (PNP: output goes to +24 V when steel is in front of the face)
+  const near=s=>Math.abs(CAR.x-s.x)<DETECT;
+  const s1=(near(SENS.s1)||SENS.s1.manual),s2=!SENS.s2.fail&&(near(SENS.s2)||SENS.s2.manual);
+  SIM.s1=s1;SIM.s2=s2;
+  const pk1=SIM.k1,pk2=SIM.k2;
+  SIM.k1=s1;SIM.k2=s2;
+  if(SIM.k1!==pk1||SIM.k2!==pk2)beep("click");
+  // coil voltages through the contacts (NC interlocks 61-62, self-hold 53-54)
+  const pm1=SIM.km1,pm2=SIM.km2;
+  SIM.c1=!SIM.k2&&(SIM.k1||SIM.km1)&&!SIM.km2;
+  SIM.t1=SIM.c1===SIM.km1?0:SIM.t1+dt;
+  if(SIM.c1!==SIM.km1&&SIM.t1>=(SIM.c1?KM_ON:KM_OFF)){SIM.km1=SIM.c1;SIM.t1=0;}
+  SIM.c2=!SIM.k1&&(SIM.k2||SIM.km2)&&!SIM.km1;
+  SIM.t2=SIM.c2===SIM.km2?0:SIM.t2+dt;
+  if(SIM.c2!==SIM.km2&&SIM.t2>=(SIM.c2?KM_ON:KM_OFF)){SIM.km2=SIM.c2;SIM.t2=0;}
+  if(SIM.km1!==pm1||SIM.km2!==pm2){beep("contactor");eventMsg(pm1,pm2);}
+  // motor and carriage
+  const dir=QF.on?(SIM.km1?1:SIM.km2?-1:0):0;
+  const atEnd=(dir>0&&CAR.x>=XMAX-.01)||(dir<0&&CAR.x<=XMIN+.01);
+  SIM.stall=dir!==0&&atEnd;
+  const tgt=SIM.stall?0:dir*W_MAX;
+  SIM.w+=(tgt-SIM.w)*Math.min(1,dt*(dir===0?2.2:4.5));
+  if(Math.abs(SIM.w)<.02&&tgt===0)SIM.w=0;
+  let x=CAR.x+SIM.w*V_PER_W*dt;
+  x=Math.max(XMIN,Math.min(XMAX,x));
+  if(x!==CAR.x)setCarriage(x);
+  if(SIM.stall){
+    SIM.stallT+=dt;
+    if(SIM.stallT>2.2){
+      setQF(false);SIM.tripped=true;SIM.stall=false;SIM.stallT=0;beep("bang");
+      note("QF o'chdi! Aravacha chekkaga tiralib motor tiqilib qoldi, tok nominaldan 5–7 marta oshdi va avtomat himoyasi ishladi. Sababi: S2 ishlamadi, motorni teskari buradigan buyruq kelmadi.","bad");
+    }else note("Diqqat: aravacha chekkaga tiralib qoldi, motor aylana olmayapti, tok keskin oshmoqda...","bad");
+  }else SIM.stallT=0;
+  if(QF.on&&!SIM.km1&&!SIM.km2&&!SIM.s1&&!SIM.s2&&!SIM.tripped&&Math.abs(SIM.w)<.05)
+    note("Aravacha sensorlar orasida to'xtab turibdi: hech bir sensor faol emas, shuning uchun buyruq yo'q. Yurgizish uchun S1 yoki S2 oldiga metall qo'ying (sensor uchini bosing).","");
+}
+function eventMsg(pm1,pm2){
+  if(SIM.km1&&!pm1)note(QF.on?"KM1 ulandi: motor oldinga aylanib aravacha S2 tomon ketyapti. S1 dan chiqqach K1 qo'yib yuboradi, lekin KM1 o'zining 53–54 kontakti orqali ulanib turadi.":"KM1 ulandi, lekin QF o'chiq: motorga 380 V kelmayapti. QF ni yoqing.","ok");
+  else if(SIM.km2&&!pm2)note("S2 aravachani sezdi → K2 tortildi: K2 ning NC kontakti KM1 ni uzdi, KM1 ning 61–62 kontakti yopilgach KM2 ulandi. Motor teskari aylanyapti, aravacha S1 tomon qaytmoqda.","ok");
+  else if(!SIM.km1&&pm1&&!SIM.km2)note(SIM.k1&&SIM.k2?"Ikkala sensor faol: KM1 ham, KM2 ham uzildi. Motor to'xtadi.":"KM1 uzildi.","");
+  else if(!SIM.km2&&pm2&&SIM.km1)note("S1 aravachani sezdi → K1 KM2 ni uzdi va KM1 ni uladi: aravacha yana oldinga ketdi. Sikl takrorlanadi.","ok");
+}
+
+/* =====================================================================
+   AUDIO
+   ===================================================================== */
+let AC=null,hum=null;
+function ac(){
+  const on=$("snd");if(on&&!on.checked)return null;
+  try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();return AC;}catch(e){return null;}
+}
+function beep(kind){
+  const a=ac();if(!a)return;
+  try{
+    const sr=a.sampleRate,len=kind==="bang"?.5:kind==="contactor"?.16:.09;
+    const buf=a.createBuffer(1,Math.ceil(sr*len),sr),d=buf.getChannelData(0);
+    const tau=kind==="click"?.012:kind==="bang"?.09:.035;
+    for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*Math.exp(-i/(sr*tau))*(kind==="click"?.55:.8);
+    const src=a.createBufferSource();src.buffer=buf;
+    const f=a.createBiquadFilter();f.type=kind==="click"||kind==="contactor"?"bandpass":"lowpass";
+    f.frequency.value=kind==="click"?2200:kind==="contactor"?900:1800;
+    const g=a.createGain();g.gain.value=.3;
+    src.connect(f);f.connect(g);g.connect(a.destination);src.start();
+  }catch(e){}
+}
+function humStart(){
+  const a=ac();if(!a||hum)return;
+  try{
+    const o=a.createOscillator(),o2=a.createOscillator(),g=a.createGain(),f=a.createBiquadFilter();
+    o.type="sawtooth";o2.type="triangle";f.type="lowpass";f.frequency.value=420;g.gain.value=0;
+    o.connect(f);o2.connect(f);f.connect(g);g.connect(a.destination);o.start();o2.start();
+    hum={o:o,o2:o2,g:g};
+  }catch(e){hum=null;}
+}
+function humStop(){if(!hum)return;try{hum.g.gain.value=0;hum.o.stop();hum.o2.stop();}catch(e){}hum=null;}
+function humTick(){
+  if(!hum||!AC)return;
+  const on=$("snd"),sp=Math.abs(SIM.w)/W_MAX;
+  const lvl=(on&&!on.checked)?0:(SIM.stall?1:sp);
+  try{
+    const t=AC.currentTime;
+    hum.g.gain.setTargetAtTime(lvl*(SIM.stall?.08:.045),t,.08);
+    hum.o.frequency.setTargetAtTime(SIM.stall?50:35+sp*60,t,.08);
+    hum.o2.frequency.setTargetAtTime(SIM.stall?100:70+sp*120,t,.08);
+  }catch(e){}
+}
+/* =====================================================================
+   POINTER INTERACTION
+   ===================================================================== */
+const _v=new THREE.Vector3(),ray=new THREE.Raycaster(),ndc=new THREE.Vector2();
+function xy(e){const r=cv.getBoundingClientRect();return {x:e.clientX-r.left,y:e.clientY-r.top,w:r.width,h:r.height};}
+function nearestT(e){
+  const p=xy(e),rad=e.pointerType==="touch"?30:20;
+  let best=null,bd=rad;
+  for(const id in T){
+    _v.copy(T[id].pos).project(cam);
+    if(_v.z>1)continue;
+    const d=Math.hypot((_v.x*.5+.5)*p.w-p.x,(-_v.y*.5+.5)*p.h-p.y);
+    if(d<bd){bd=d;best=id;}
+  }
+  return best;
+}
+function worldAt(e,z){
+  const p=xy(e);ndc.set(p.x/p.w*2-1,-(p.y/p.h)*2+1);ray.setFromCamera(ndc,cam);
+  const out=new THREE.Vector3();
+  return ray.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0,0,1),-z),out)?out:null;
+}
+function wireAt(e){
+  if(!wireObjs.length)return -1;
+  const p=xy(e);ndc.set(p.x/p.w*2-1,-(p.y/p.h)*2+1);ray.setFromCamera(ndc,cam);
+  const hits=ray.intersectObjects(wireObjs.map(o=>o.tube),false);
+  return hits.length?hits[0].object.userData.wire:-1;
+}
+function pickInteractive(e){
+  const p=xy(e);ndc.set(p.x/p.w*2-1,-(p.y/p.h)*2+1);ray.setFromCamera(ndc,cam);
+  const sg=[];scene.traverse(o=>{if(o.isMesh&&(o.userData.qf||o.userData.sens))sg.push(o);});
+  const hits=ray.intersectObjects(sg,false);
+  if(!hits.length)return null;
+  const o=hits[0].object;
+  if(o.userData.qf)return {type:"qf"};
+  if(o.userData.sens)return {type:"sens",id:o.userData.sens};
+  return null;
+}
+function isFull(){return stage.classList.contains("full");}
+const pointers=new Map();
+let act=null;
+function startPinch(){
+  const a=[...pointers.values()];
+  pinch={d:Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y)||1,z:view.zoom,mx:(a[0].x+a[1].x)/2,my:(a[0].y+a[1].y)/2,tx:view.tx,ty:view.ty};
+}
+function doPinch(){
+  const a=[...pointers.values()];
+  const d=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y)||1,mx=(a[0].x+a[1].x)/2,my=(a[0].y+a[1].y)/2,s=perPx();
+  view.zoom=clamp(pinch.z*d/pinch.d,.8,5);
+  view.tx=clamp(pinch.tx-(mx-pinch.mx)*s,-460,460);
+  view.ty=clamp(pinch.ty+(my-pinch.my)*s,-520,520);
+  dirty=true;
+}
+function cancelWireDrag(){if(wd){wd=null;clearPreview();}}
+function releaseAct(){act=null;}
+
+cv.addEventListener("contextmenu",e=>e.preventDefault());
+cv.addEventListener("pointerdown",e=>{
+  if(e.pointerType==="mouse"&&e.button>2)return;
+  pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  try{cv.setPointerCapture(e.pointerId);}catch(_){}
+  if(pointers.size===2){cancelWireDrag();releaseAct();gest=null;startPinch();return;}
+  if(pointers.size>2)return;
+  const primary=!(e.pointerType==="mouse"&&e.button!==0);
+  const id=primary?nearestT(e):null;
+  if(id){
+    e.preventDefault();
+    if(powered||(selected&&selected!==id)){tap(id);return;}
+    wd={from:id,moved:false,sx:e.clientX,sy:e.clientY,wasSel:selected===id};
+    selected=id;paintSel();
+    say(T[id].desc+". Boshqa klemmaga sudrang yoki ikkinchisini bosing.","");
+    return;
+  }
+  const it=primary?pickInteractive(e):null;
+  if(it){
+    e.preventDefault();act=it;
+    if(it.type==="qf")toggleQF();
+    else if(!powered)say("Sensor sinovi uchun avval kuchlanish bering.","");
+    else toggleTest(it.id==="s1"?"m1":"m2");
+    return;
+  }
+  let type=null;
+  if(e.pointerType==="mouse")type=(e.button===2||e.shiftKey)?"pan":"orbit";
+  else if(isFull())type="pan";
+  gest={type:type,sx:e.clientX,sy:e.clientY,yaw:view.yaw,pitch:view.pitch,tx:view.tx,ty:view.ty,moved:false};
+});
+cv.addEventListener("pointermove",e=>{
+  const p=pointers.get(e.pointerId);if(p){p.x=e.clientX;p.y=e.clientY;}
+  if(pointers.size===2&&pinch){doPinch();return;}
+  if(act)return;
+  if(wd){
+    if(!wd.moved&&Math.hypot(e.clientX-wd.sx,e.clientY-wd.sy)>8)wd.moved=true;
+    if(wd.moved){const w=worldAt(e,100);if(w)drawPreview(wd.from,w);}
+    const n=nearestT(e);if(n!==hovT){hovT=n;paintRings();}
+    return;
+  }
+  if(gest&&gest.type){
+    const dx=e.clientX-gest.sx,dy=e.clientY-gest.sy;
+    if(!gest.moved&&Math.hypot(dx,dy)>5)gest.moved=true;
+    if(gest.moved){
+      if(gest.type==="orbit"){
+        view.yaw=clamp(gest.yaw-dx*.006,-.8,.8);
+        view.pitch=clamp(gest.pitch+dy*.005,-.3,.5);
+      }else{
+        const s=perPx();
+        view.tx=clamp(gest.tx-dx*s,-420,420);
+        view.ty=clamp(gest.ty+dy*s,-520,520);
+      }
+      dirty=true;
+    }
+    return;
+  }
+  if(e.pointerType==="mouse"&&!pointers.size){
+    const n=nearestT(e);
+    if(n!==hovT){hovT=n;paintRings();}
+    setHoverWire(n?-1:wireAt(e));
+    const it=n?null:pickInteractive(e);
+    cv.style.cursor=n||hovW>=0||it?"pointer":"grab";
+  }
+});
+function endPointer(e,cancel){
+  pointers.delete(e.pointerId);
+  if(pinch){if(pointers.size<2)pinch=null;gest=null;return;}
+  if(act){releaseAct();return;}
+  if(wd){
+    const d=wd;wd=null;clearPreview();
+    if(cancel){selected=null;paintSel();return;}
+    if(d.moved){
+      const t=nearestT(e);
+      selected=null;paintSel();
+      if(t&&t!==d.from)connect(d.from,t);else say(DEFAULT,"");
+    }else if(d.wasSel){
+      selected=null;paintSel();say(DEFAULT,"");
+    }
+    return;
+  }
+  if(gest){
+    const g=gest;gest=null;
+    if(!g.moved&&!cancel){
+      const i=wireAt(e);
+      if(i>=0)removeWire(i);
+      else if(selected){selected=null;paintSel();say(DEFAULT,"");}
+    }
+  }
+}
+cv.addEventListener("pointerup",e=>endPointer(e,false));
+cv.addEventListener("pointercancel",e=>endPointer(e,true));
+cv.addEventListener("pointerleave",()=>{if(hovT){hovT=null;paintRings();}setHoverWire(-1);});
+cv.addEventListener("wheel",e=>{
+  if(!(isFull()||e.ctrlKey||e.metaKey))return;
+  e.preventDefault();
+  view.zoom=clamp(view.zoom*(e.deltaY<0?1.12:.89),.8,5);dirty=true;
+},{passive:false});
+
+/* camera buttons */
+$("zin").addEventListener("click",()=>{view.zoom=clamp(view.zoom*1.25,.8,5);dirty=true;});
+$("zout").addEventListener("click",()=>{view.zoom=clamp(view.zoom/1.25,.8,5);dirty=true;});
+$("zreset").addEventListener("click",()=>{view.yaw=.12;view.pitch=.1;view.zoom=1;view.tx=0;view.ty=0;dirty=true;});
+$("tg").addEventListener("click",()=>{
+  const on=$("tg").getAttribute("aria-pressed")!=="true";
+  $("tg").setAttribute("aria-pressed",String(on));$("tags").hidden=!on;
+});
+function setFull(on){
+  stage.classList.toggle("full",on);
+  document.body.style.overflow=on?"hidden":"";
+  resize();
+}
+$("fs").addEventListener("click",()=>setFull(!isFull()));
+$("close").addEventListener("click",()=>setFull(false));
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&isFull())setFull(false);});
+
+/* panel buttons */
+$("undo").addEventListener("click",()=>{
+  if(powered||!wires.length)return;
+  wires.pop();selected=null;paintSel();changed();say("Oxirgi sim olib tashlandi.","");
+});
+$("clear").addEventListener("click",()=>{
+  if(powered||!wires.length)return;
+  wires.length=0;selected=null;paintSel();changed();say("Sxema tozalandi. Manba simlaridan boshlang.","");
+});
+$("hint").addEventListener("click",hint);
+$("check").addEventListener("click",runCheck);
+$("power").addEventListener("click",()=>setPower(!powered));
+$("power2").addEventListener("click",()=>setPower(!powered));
+$("m-learn").addEventListener("click",()=>setMode("learn"));
+$("m-exam").addEventListener("click",()=>setMode("exam"));
+$("b-qf").addEventListener("click",toggleQF);
+["m1","m2","f2"].forEach(k=>$("t-"+k).addEventListener("click",()=>toggleTest(k)));
+
+/* =====================================================================
+   ANIMATION LOOP
+   ===================================================================== */
+let pw=0,last=performance.now(),t0=last,firstFrame=true;
+const _ec=new THREE.Color();
+function glow(m,on,hex,base){
+  const tgt=on?1:0,cur=m.userData.g||0;
+  if(Math.abs(cur-tgt)<.01){if(cur!==tgt){m.userData.g=tgt;m.emissive.setHex(on?hex:0);m.emissiveIntensity=tgt;return true;}return false;}
+  const v=cur+(tgt-cur)*.35;m.userData.g=v;m.emissive.setHex(hex);m.emissiveIntensity=v;return true;
+}
+function animate(dt,time){
+  let busy=false;
+  const target=powered?1:0;
+  if(Math.abs(target-pw)>.002){pw+=(target-pw)*Math.min(1,dt*4);busy=true;}
+  else if(pw!==target){pw=target;busy=true;}
+  simStep(dt);
+  // breaker handle
+  if(Math.abs(QF.ang-QF.target)>.002){QF.ang+=(QF.target-QF.ang)*Math.min(1,dt*14);QF.grp.rotation.x=QF.ang;busy=true;}
+  // sensors, relays, contactors, PSU
+  if(glow(SENS.s1.led,powered&&SIM.s1,0xff9a1a))busy=true;
+  if(glow(SENS.s2.led,powered&&SIM.s2,0xff9a1a))busy=true;
+  if(glow(RL.k1.led,SIM.k1,0xff2a1a))busy=true;
+  if(glow(RL.k2.led,SIM.k2,0xff2a1a))busy=true;
+  [["k1",SIM.k1],["k2",SIM.k2]].forEach(a=>{const r=RL[a[0]],tg=a[1]?-.16:0;if(Math.abs(r.arm.rotation.y-tg)>.002){r.arm.rotation.y+=(tg-r.arm.rotation.y)*Math.min(1,dt*30);busy=true;}});
+  if(glow(KM.km1.ind,SIM.km1,0xd02020))busy=true;
+  if(glow(KM.km2.ind,SIM.km2,0xd02020))busy=true;
+  if(glow(PSU.led,powered,0x22ff66))busy=true;
+  const lampOn=[powered,powered,powered,powered];
+  lamps.forEach((m,i)=>{if(glow(m,lampOn[i],m.userData.col))busy=true;});
+  // rotating train
+  if(Math.abs(SIM.w)>0){mot.ang+=SIM.w*dt;mot.rot.rotation.x=mot.ang;busy=true;}
+  if(powered){updateCtlUI(false);humTick();updateFlows(dt);busy=true;}
+  return busy;
+}
+function projectTags(){
+  const w=stage.clientWidth,h=stage.clientHeight;
+  for(const t of tags){
+    _v.copy(t.p).project(cam);
+    if(_v.z>1||Math.abs(_v.x)>1.15||Math.abs(_v.y)>1.15){t.el.style.visibility="hidden";continue;}
+    t.el.style.visibility="visible";
+    t.el.style.transform="translate("+((_v.x*.5+.5)*w).toFixed(1)+"px,"+((-_v.y*.5+.5)*h).toFixed(1)+"px) "+TAGT[t.mode];
+  }
+}
+function frame(now){
+  requestAnimationFrame(frame);
+  const dt=Math.min(.06,(now-last)/1000);last=now;
+  const busy=animate(dt,(now-t0)/1000);
+  if(dirty||busy){
+    const pulse=1+.12*Math.sin(now/180);
+    for(const id in rings){if(rings[id].visible)rings[id].scale.set(pulse,pulse,1);}
+    updateCam();
+    renderer.render(scene,cam);
+    projectTags();
+    dirty=false;
+    if(firstFrame){firstFrame=false;const l=$("loading");if(l)l.hidden=true;}
+  }
+}
+
+/* =====================================================================
+   START
+   ===================================================================== */
+if(window.ResizeObserver)new ResizeObserver(resize).observe(stage);
+window.addEventListener("resize",resize);
+resize();
+addWire("src.l1","qf.1");
+renderAll();
+say("Namuna: manba L1 avtomat QF ning 1-qisqichiga ulangan. Endi L2 ni 3 ga, L3 ni 5 ga ulang.","");
+requestAnimationFrame(frame);
+}
+})();
+</script>
+
+</body>
+</html>
