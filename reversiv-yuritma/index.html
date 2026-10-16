@@ -6,7 +6,9 @@
 <title>Reversiv yuritma 3D | EnergyVibe</title>
 <meta name="description" content="Sensorli reversiv yuritmani 3D stendda o‘zingiz yig‘ing: avtomat, ikki kontaktor, 24 V blok, oraliq relelar, PNP sensorlar va motor. Simlar kabel kanallaridan o‘tadi, so‘ng aravachaning avtomatik borib-kelishini kuzating.">
 <link rel="icon" type="image/png" href="/rasmlar1/rasm5/rasm4.png">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans+Condensed:wght@400;500;600;700&display=swap">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans+Condensed:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
 <style>
 /* Layout: sticky status bar over a two-column workspace. Left: a real-scale 3D lab stand (WebGL) with orbit, zoom and a fullscreen mode. Right: progress, controls, checklist. Stacks on phones. */
 :root{
@@ -276,18 +278,22 @@ try{
   fail("Brauzer 3D grafikani (WebGL) ishga tushira olmadi. Chrome yoki Safari da oching.");
   return;
 }
-try{main();}catch(err){console.error(err);fail("Sahna xatosi: "+(err&&err.message?err.message:err));}
+// let the page and the loading note paint first, then build the 3D scene
+requestAnimationFrame(()=>setTimeout(()=>{try{main();}catch(err){console.error(err);fail("Sahna xatosi: "+(err&&err.message?err.message:err));}},0));
 
 function main(){
 /* =====================================================================
    RENDERER, CAMERA, LIGHTS
    ===================================================================== */
-renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+const COARSE=!!(window.matchMedia&&window.matchMedia("(pointer: coarse)").matches);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,COARSE?1.5:1.75));
 renderer.outputEncoding=THREE.sRGBEncoding;
 renderer.toneMapping=THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure=0.8;
 renderer.shadowMap.enabled=true;
-renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+renderer.shadowMap.type=THREE.PCFShadowMap;
+renderer.shadowMap.autoUpdate=false;   // shadows are re-rendered only when something that casts them changes
+let shadowDirty=true;
 const MAXA=Math.max(1,Math.min(8,renderer.capabilities.getMaxAnisotropy()));
 const REDUCED=!!(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches);
 
@@ -333,7 +339,7 @@ try{
 
 const key=new THREE.DirectionalLight(0xfff3e4,1.15);
 key.position.set(-420,760,1100);key.target.position.set(0,0,0);
-key.castShadow=true;key.shadow.mapSize.set(4096,4096);
+key.castShadow=true;key.shadow.mapSize.set(COARSE?1024:2048,COARSE?1024:2048);
 const sc=key.shadow.camera;sc.left=-560;sc.right=560;sc.top=620;sc.bottom=-620;sc.near=300;sc.far=2800;
 key.shadow.bias=-0.0003;key.shadow.normalBias=1.2;
 scene.add(key);scene.add(key.target);
@@ -345,6 +351,7 @@ const fillL=new THREE.DirectionalLight(0xcfe0ff,0.25);fillL.position.set(520,-20
    ===================================================================== */
 function std(o,phys){
   if(o.envMapIntensity==null)o.envMapIntensity=.45;
+  if(phys&&!o.transparent){if(o.clearcoat){o.roughness=Math.max(.12,(o.roughness||.4)*.8);}delete o.clearcoat;delete o.clearcoatRoughness;phys=false;}
   return phys?new THREE.MeshPhysicalMaterial(o):new THREE.MeshStandardMaterial(o);
 }
 function noiseTex(w,h,base,amp,rep){
@@ -357,17 +364,23 @@ function noiseTex(w,h,base,amp,rep){
 const boardBump=noiseTex(256,256,128,60,[6,7]);
 /* hot-dip galvanised mounting plate: soft crystalline spangle */
 function spangleTex(){
-  const S=512,c=document.createElement("canvas");c.width=c.height=S;const g=c.getContext("2d");
-  g.fillStyle="#b9c0c6";g.fillRect(0,0,S,S);
-  for(let i=0;i<260;i++){
-    const x=Math.random()*S,y=Math.random()*S,r=10+Math.random()*34,v=170+Math.floor(Math.random()*50);
-    g.fillStyle="rgba("+v+","+(v+5)+","+(v+9)+",.55)";g.beginPath();
-    const n=5+Math.floor(Math.random()*4);
-    for(let k=0;k<n;k++){const a=k/n*Math.PI*2+Math.random()*.5,rr=r*(.6+Math.random()*.5);g[k?"lineTo":"moveTo"](x+Math.cos(a)*rr,y+Math.sin(a)*rr);}
-    g.closePath();g.fill();
+  // Voronoi cells with random brightness = the crystalline "spangle" of hot-dip zinc; pure pixel maths, no canvas read-back
+  const S=256,G=12,cs=S/G,c=document.createElement("canvas");c.width=c.height=S;const g=c.getContext("2d");
+  const pts=[],val=[];
+  for(let j=0;j<G;j++)for(let i=0;i<G;i++){pts.push([(i+Math.random())*cs,(j+Math.random())*cs]);val.push(178+Math.random()*44);}
+  const id=g.createImageData(S,S),d=id.data;
+  for(let y=0;y<S;y++)for(let x=0;x<S;x++){
+    const ci=Math.floor(x/cs),cj=Math.floor(y/cs);let best=1e9,bv=190;
+    for(let dj=-1;dj<=1;dj++)for(let di=-1;di<=1;di++){
+      const ii=(ci+di+G)%G,jj=(cj+dj+G)%G,p=pts[jj*G+ii];
+      let dx=p[0]-x,dy=p[1]-y;if(dx>S/2)dx-=S;if(dx<-S/2)dx+=S;if(dy>S/2)dy-=S;if(dy<-S/2)dy+=S;
+      const dd=dx*dx+dy*dy;if(dd<best){best=dd;bv=val[jj*G+ii];}
+    }
+    const v=bv+(Math.random()-.5)*8,k=(y*S+x)*4;
+    d[k]=v;d[k+1]=v+4;d[k+2]=v+8;d[k+3]=255;
   }
-  const id=g.getImageData(0,0,S,S);for(let i=0;i<id.data.length;i+=4){const d=(Math.random()-.5)*10;id.data[i]+=d;id.data[i+1]+=d;id.data[i+2]+=d;}g.putImageData(id,0,0);
-  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(2.2,2.4);t.anisotropy=MAXA;return t;
+  g.putImageData(id,0,0);
+  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(3,3.2);t.anisotropy=MAXA;return t;
 }
 const MAT={
   board:std({color:0xffffff,map:spangleTex(),roughness:.5,metalness:.55,bumpMap:boardBump,bumpScale:.12,envMapIntensity:.6}),
@@ -467,8 +480,25 @@ function slab(parent,w,h,d,r,mat,x,y,zFront,b){
   parent.add(m);return m;
 }
 
+/* bake a list of meshes (world matrices up to date) into one mesh per material */
+function bakeMerge(list){
+  const byMat=new Map(),out=[];
+  list.forEach(o=>{const k=o.material.uuid;if(!byMat.has(k))byMat.set(k,[]);byMat.get(k).push(o);});
+  byMat.forEach(arr=>{
+    let n=0;const parts=arr.map(o=>{const g=o.geometry.index?o.geometry.toNonIndexed():o.geometry.clone();g.applyMatrix4(o.matrixWorld);n+=g.attributes.position.count;return g;});
+    const pos=new Float32Array(n*3),nor=new Float32Array(n*3),uv=new Float32Array(n*2);let off=0;
+    parts.forEach(g=>{const c=g.attributes.position.count;pos.set(g.attributes.position.array,off*3);
+      if(g.attributes.normal)nor.set(g.attributes.normal.array,off*3);if(g.attributes.uv)uv.set(g.attributes.uv.array,off*2);off+=c;g.dispose();});
+    const geo=new THREE.BufferGeometry();
+    geo.setAttribute("position",new THREE.BufferAttribute(pos,3));geo.setAttribute("normal",new THREE.BufferAttribute(nor,3));geo.setAttribute("uv",new THREE.BufferAttribute(uv,2));
+    geo.computeBoundingSphere();
+    const m=new THREE.Mesh(geo,arr[0].material);m.castShadow=arr.some(o=>o.castShadow);out.push(m);
+  });
+  return out;
+}
 /* canvas decals: all drawing helpers work in millimetres through k = px per mm */
 function decal(parent,wmm,hmm,x,y,z,k,draw){
+  k=Math.min(k,Math.sqrt(1.1e6/(wmm*hmm)));
   const c=document.createElement("canvas");
   c.width=Math.max(8,Math.round(wmm*k));c.height=Math.max(8,Math.round(hmm*k));
   const g=c.getContext("2d");
@@ -1044,7 +1074,7 @@ function buildSensor(id,sx,title){
   const gland=new THREE.Mesh(new THREE.CylinderGeometry(4.5,6,8,16),MAT.black);gland.position.set(sx,SFACE+77,z);g.add(gland);
   g.traverse(o=>{if(o.isMesh)o.userData.sens=id;});
   // manual metal plate (test: hold a piece of steel in front of the face)
-  const plate=new THREE.Mesh(new THREE.BoxGeometry(34,3,30),MAT.steel);plate.position.set(sx,SFACE-6,z);plate.visible=false;g.add(plate);
+  const plate=new THREE.Mesh(new THREE.BoxGeometry(34,3,30),MAT.steel);plate.position.set(sx,SFACE-6,z);plate.visible=false;plate.userData.keep=true;g.add(plate);
   // cable up to the terminal strip
   const sy=SFACE+81,ty=-142;
   const cab=new THREE.CatmullRomCurve3([V3(sx,sy,z),V3(sx,sy+8,z+2),V3(sx+16,ty-20,34),V3(sx,ty-10,22)]);
@@ -1081,6 +1111,47 @@ buildConsole();buildQF();
 buildKM("km1",-225,240,"KM1 (oldinga)");buildKM("km2",-100,240,"KM2 (orqaga)");
 buildPSU();buildRelay("k1",60,60,"K1");buildRelay("k2",190,60,"K2");
 buildMotor();buildSlide();buildSensor("s1",S1X,"S1");buildSensor("s2",S2X,"S2");
+mergeStatic();
+
+/* Merge every static, opaque mesh that shares a material into one draw call.
+   Moving or clickable parts (breaker handle, relay armatures, rotor, carriage, sensors) stay separate. */
+function mergeStatic(){
+  const keepRoots=new Set([QF.grp,RL.k1.arm,RL.k2.arm,mot.rot,CAR.grp]);
+  scene.updateMatrixWorld(true);
+  const groups=new Map(),victims=[];
+  scene.traverse(o=>{
+    if(!o.isMesh||o.isInstancedMesh||!o.visible)return;
+    const m=o.material;if(!m||Array.isArray(m)||m.transparent)return;
+    const u=o.userData;if(u.keep||u.qf||u.sens||u.btn)return;
+    for(let p=o.parent;p;p=p.parent)if(keepRoots.has(p))return;
+    const k=m.uuid+"|"+(o.castShadow?1:0)+(o.receiveShadow?1:0);
+    if(!groups.has(k))groups.set(k,{mat:m,cast:o.castShadow,recv:o.receiveShadow,list:[]});
+    groups.get(k).list.push(o);victims.push(o);
+  });
+  groups.forEach(gr=>{
+    if(gr.list.length<2)return;
+    let n=0;const parts=gr.list.map(o=>{
+      let g=o.geometry.index?o.geometry.toNonIndexed():o.geometry.clone();
+      g.applyMatrix4(o.matrixWorld);n+=g.attributes.position.count;return g;});
+    const pos=new Float32Array(n*3),nor=new Float32Array(n*3),uv=new Float32Array(n*2);
+    let off=0;
+    parts.forEach(g=>{
+      const c=g.attributes.position.count;
+      pos.set(g.attributes.position.array,off*3);
+      if(g.attributes.normal)nor.set(g.attributes.normal.array,off*3);
+      if(g.attributes.uv)uv.set(g.attributes.uv.array,off*2);
+      off+=c;g.dispose();
+    });
+    const geo=new THREE.BufferGeometry();
+    geo.setAttribute("position",new THREE.BufferAttribute(pos,3));
+    geo.setAttribute("normal",new THREE.BufferAttribute(nor,3));
+    geo.setAttribute("uv",new THREE.BufferAttribute(uv,2));
+    geo.computeBoundingSphere();
+    const mm=new THREE.Mesh(geo,gr.mat);mm.castShadow=gr.cast;mm.receiveShadow=gr.recv;mm.matrixAutoUpdate=false;
+    scene.add(mm);
+    gr.list.forEach(o=>{if(o.parent)o.parent.remove(o);});
+  });
+}
 
 /* Target nets: every terminal of a net must end up connected, and nothing else.
    220 V coil circuits: L -> K2(9-1 NC) -> K1(12-8 NO) || KM1(53-54) -> KM2(61-62 NC) -> KM1 A1, and the mirror for KM2. */
@@ -1239,16 +1310,44 @@ const ghostGroup=new THREE.Group();scene.add(ghostGroup);
 const ringGroup=new THREE.Group();scene.add(ringGroup);
 let wireObjs=[];
 let previewMesh=null;
+function pathPoints(curve){
+  const P=[];
+  const push=p=>{if(!P.length||P[P.length-1].distanceToSquared(p)>.04)P.push(p);};
+  if(curve.curves){
+    curve.curves.forEach(c=>{
+      if(c.isLineCurve3)push(c.v1.clone());
+      else for(let k=0;k<5;k++)push(c.getPoint(k/5));
+    });
+    const last=curve.curves[curve.curves.length-1];push((last.v2||last.getPoint(1)).clone());
+  }else{const n=40;for(let k=0;k<=n;k++)push(curve.getPoint(k/n));}
+  return P;
+}
+const _q=new THREE.Quaternion(),_t0=new THREE.Vector3(),_t1=new THREE.Vector3();
+function lightTube(P,r,R){
+  R=R||7;const n=P.length,pos=new Float32Array(n*R*3),nor=new Float32Array(n*R*3),idx=[];
+  const T=P.map((p,i)=>{const a=P[Math.max(0,i-1)],b=P[Math.min(n-1,i+1)];return b.clone().sub(a).normalize();});
+  let N=Math.abs(T[0].z)<.9?V3(0,0,1):V3(1,0,0);N=N.sub(T[0].clone().multiplyScalar(N.dot(T[0]))).normalize();
+  for(let i=0;i<n;i++){
+    if(i>0){_q.setFromUnitVectors(T[i-1],T[i]);N.applyQuaternion(_q);N.sub(T[i].clone().multiplyScalar(N.dot(T[i]))).normalize();}
+    const B=T[i].clone().cross(N);
+    for(let j=0;j<R;j++){
+      const a=j/R*Math.PI*2,cx=Math.cos(a),sx=Math.sin(a);
+      const nx=N.x*cx+B.x*sx,ny=N.y*cx+B.y*sx,nz=N.z*cx+B.z*sx,k=(i*R+j)*3;
+      nor[k]=nx;nor[k+1]=ny;nor[k+2]=nz;pos[k]=P[i].x+nx*r;pos[k+1]=P[i].y+ny*r;pos[k+2]=P[i].z+nz*r;
+    }
+    if(i<n-1)for(let j=0;j<R;j++){const a=i*R+j,b=i*R+(j+1)%R,c=a+R,d=b+R;idx.push(a,b,c,b,d,c);}
+  }
+  const g=new THREE.BufferGeometry();
+  g.setAttribute("position",new THREE.BufferAttribute(pos,3));g.setAttribute("normal",new THREE.BufferAttribute(nor,3));
+  g.setIndex(idx);g.computeBoundingSphere();return g;
+}
 function tubeMesh(curve,radius,mat){
-  const len=curve.getLength(),seg=Math.max(24,Math.min(420,Math.round(len/2.6)));
-  const m=new THREE.Mesh(new THREE.TubeGeometry(curve,seg,radius,8,false),mat);
+  const m=new THREE.Mesh(lightTube(pathPoints(curve),radius),mat);
   m.castShadow=true;m.receiveShadow=true;return m;
 }
+function disposeObj(o){o.traverse(n=>{if(n.geometry&&!n.userData.shared&&!(n.parent&&n.parent.userData.shared))n.geometry.dispose();});}
 function disposeChildren(grp){
-  while(grp.children.length){
-    const o=grp.children[0];grp.remove(o);
-    o.traverse(n=>{if(n.geometry&&!n.userData.shared&&!(n.parent&&n.parent.userData.shared))n.geometry.dispose();});
-  }
+  while(grp.children.length){const o=grp.children[0];grp.remove(o);disposeObj(o);}
 }
 function endPt(id,s){
   const t=T[id],p=t.anchor.clone().addScaledVector(t.dir,t.lead);
@@ -1319,10 +1418,11 @@ function markMat(txt){
   const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=MAXA;
   return markTex[txt]=std({color:0xffffff,map:t,roughness:.55});
 }
-const _Y=V3(0,1,0);
+const _Y=V3(0,1,0),markGeo={};
 function markerMesh(curve,u,txt,r){
   const p=curve.getPointAt(u),tg=curve.getTangentAt(u).normalize();
-  const m=new THREE.Mesh(new THREE.CylinderGeometry(r+.75,r+.75,13,18,1,true),markMat(txt));
+  const key="m"+r;if(!markGeo[key])markGeo[key]=new THREE.CylinderGeometry(r+.75,r+.75,13,14,1,true);
+  const m=new THREE.Mesh(markGeo[key],markMat(txt));m.userData.shared=true;
   m.position.copy(p);m.quaternion.setFromUnitVectors(_Y,tg);
   m.castShadow=true;return m;
 }
@@ -1332,25 +1432,37 @@ function makeWireObj(fromId,toId,i,matKey,sa,sb){
   const r=WR[matKey]||1.75;
   const tube=tubeMesh(curve,r,WM[matKey]||WM.GR);
   tube.userData.wire=i;grp.add(tube);
-  grp.add(endMesh(fromId,matKey,sa));grp.add(endMesh(toId,matKey,sb));
+  // fittings and markers of one wire are baked into one mesh per material (fewer draw calls)
+  const parts=new THREE.Group();
+  parts.add(endMesh(fromId,matKey,sa));parts.add(endMesh(toId,matKey,sb));
   const n=sameNet(fromId,toId)?NETOF[fromId]:null;
   if(n&&MARK[n.id]){
     const L=curve.getLength(),u=Math.min(.45,22/L);
-    grp.add(markerMesh(curve,u,MARK[n.id],r));grp.add(markerMesh(curve,1-u,MARK[n.id],r));
+    parts.add(markerMesh(curve,u,MARK[n.id],r));parts.add(markerMesh(curve,1-u,MARK[n.id],r));
   }
+  parts.updateMatrixWorld(true);
+  const list=[];parts.traverse(o=>{if(o.isMesh)list.push(o);});
+  bakeMerge(list).forEach(m=>grp.add(m));
   return {grp:grp,tube:tube,curve:curve,kind:matKey};
 }
+/* incremental: a wire whose route parameters did not change keeps its geometry */
+let wireCache=new Map();
 function buildWires(){
-  disposeChildren(wireGroup);
-  wireObjs=[];
+  while(wireGroup.children.length)wireGroup.remove(wireGroup.children[0]);
+  const next=new Map();wireObjs=[];
   const cnt={};
   wires.forEach((w,i)=>{
-    const bad=checked&&AN.bad.indexOf(i)>=0;
+    const bad=checked&&AN.bad.indexOf(i)>=0,kind=bad?"bad":w.kind;
     const sa=cnt[w.from]||0,sb=cnt[w.to]||0;cnt[w.from]=sa+1;cnt[w.to]=sb+1;
-    const o=makeWireObj(w.from,w.to,i,bad?"bad":w.kind,sa,sb);
-    wireGroup.add(o.grp);wireObjs.push(o);
+    const key=[w.from,w.to,i,kind,sa,sb].join("|");
+    let o=wireCache.get(key);
+    if(o)wireCache.delete(key);else o=makeWireObj(w.from,w.to,i,kind,sa,sb);
+    o.tube.material=WM[kind]||WM.GR;
+    next.set(key,o);wireGroup.add(o.grp);wireObjs.push(o);
   });
-  hovW=-1;dirty=true;
+  wireCache.forEach(o=>disposeObj(o.grp));
+  wireCache=next;
+  hovW=-1;dirty=true;shadowDirty=true;
 }
 function flashBad(a,b){
   const o=makeWireObj(a,b,wires.length,"bad");
@@ -1582,7 +1694,7 @@ function setTest(k,on,silent){
   if(k==="m1")SENS.s1.manual=on;
   if(k==="m2")SENS.s2.manual=on;
   if(k==="f2")SENS.s2.fail=on;
-  SENS.s1.plate.visible=SENS.s1.manual;SENS.s2.plate.visible=SENS.s2.manual;
+  SENS.s1.plate.visible=SENS.s1.manual;SENS.s2.plate.visible=SENS.s2.manual;shadowDirty=true;
   dirty=true;
   if(silent)return;
   const msg={
@@ -1796,7 +1908,7 @@ cv.addEventListener("pointermove",e=>{
   if(act)return;
   if(wd){
     if(!wd.moved&&Math.hypot(e.clientX-wd.sx,e.clientY-wd.sy)>8)wd.moved=true;
-    if(wd.moved){const w=worldAt(e,100);if(w)drawPreview(wd.from,w);}
+    if(wd.moved){wd.last=e;if(!wd.q){wd.q=true;requestAnimationFrame(()=>{if(!wd)return;wd.q=false;const w=worldAt(wd.last,100);if(w)drawPreview(wd.from,w);});}}
     const n=nearestT(e);if(n!==hovT){hovT=n;paintRings();}
     return;
   }
@@ -1817,13 +1929,19 @@ cv.addEventListener("pointermove",e=>{
     return;
   }
   if(e.pointerType==="mouse"&&!pointers.size){
-    const n=nearestT(e);
-    if(n!==hovT){hovT=n;paintRings();}
-    setHoverWire(n?-1:wireAt(e));
-    const it=n?null:pickInteractive(e);
-    cv.style.cursor=n||hovW>=0||it?"pointer":"grab";
+    hoverEv=e;
+    if(!hoverQueued){hoverQueued=true;requestAnimationFrame(doHover);}
   }
 });
+let hoverEv=null,hoverQueued=false;
+function doHover(){
+  hoverQueued=false;const e=hoverEv;if(!e||pointers.size||wd||gest)return;
+  const n=nearestT(e);
+  if(n!==hovT){hovT=n;paintRings();}
+  setHoverWire(n?-1:wireAt(e));
+  const it=n||hovW>=0?null:pickInteractive(e);
+  cv.style.cursor=n||hovW>=0||it?"pointer":"grab";
+}
 function endPointer(e,cancel){
   pointers.delete(e.pointerId);
   if(pinch){if(pointers.size<2)pinch=null;gest=null;return;}
@@ -1896,7 +2014,7 @@ $("b-qf").addEventListener("click",toggleQF);
 /* =====================================================================
    ANIMATION LOOP
    ===================================================================== */
-let pw=0,last=performance.now(),t0=last,firstFrame=true;
+let pw=0,last=performance.now(),t0=last,firstFrame=true,shX=CAR.x;
 const _ec=new THREE.Color();
 function glow(m,on,hex,base){
   const tgt=on?1:0,cur=m.userData.g||0;
@@ -1910,7 +2028,8 @@ function animate(dt,time){
   else if(pw!==target){pw=target;busy=true;}
   simStep(dt);
   // breaker handle
-  if(Math.abs(QF.ang-QF.target)>.002){QF.ang+=(QF.target-QF.ang)*Math.min(1,dt*14);QF.grp.rotation.x=QF.ang;busy=true;}
+  if(Math.abs(QF.ang-QF.target)>.002){QF.ang+=(QF.target-QF.ang)*Math.min(1,dt*14);QF.grp.rotation.x=QF.ang;busy=true;shadowDirty=true;}
+  if(Math.abs(CAR.x-shX)>4){shX=CAR.x;shadowDirty=true;}
   // sensors, relays, contactors, PSU
   if(glow(SENS.s1.led,powered&&SIM.s1,0xff9a1a))busy=true;
   if(glow(SENS.s2.led,powered&&SIM.s2,0xff9a1a))busy=true;
@@ -1944,10 +2063,11 @@ function frame(now){
     const pulse=1+.12*Math.sin(now/180);
     for(const id in rings){if(rings[id].visible)rings[id].scale.set(pulse,pulse,1);}
     updateCam();
+    if(shadowDirty){renderer.shadowMap.needsUpdate=true;shadowDirty=false;}
     renderer.render(scene,cam);
     projectTags();
     dirty=false;
-    if(firstFrame){firstFrame=false;const l=$("loading");if(l)l.hidden=true;}
+    if(firstFrame){firstFrame=false;window.__tFirst=performance.now();const l=$("loading");if(l)l.hidden=true;}
   }
 }
 
