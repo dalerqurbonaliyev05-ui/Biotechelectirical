@@ -8,8 +8,10 @@ import { getScenario } from "../data/scenarios";
 import { summarize } from "../engine/scoring";
 import { applyAction, createSession, type SimContext } from "../engine/simulator";
 import type { Action, GameMode, Penalty, Severity, SimState } from "../engine/types";
+import { leaderboard, type LeaderboardEntry } from "../lib/leaderboard";
 import { useAchievements } from "./achievements";
 import { useProgress } from "./progress";
+import { useSettings } from "./settings";
 
 export interface Feedback {
   id: number;
@@ -38,6 +40,8 @@ interface SessionStore {
   recorded: boolean;
   /** Megger bilan o'lchangan o'ramlar (protokol asbobida ko'rsatkich ochiladi) */
   meggerDone: string[];
+  /** Shu urinishning reytingdagi yozuvi (yakunlangandan keyin) */
+  lbEntry: LeaderboardEntry | null;
   markMegger: (winding: string) => void;
   start: (scenarioId: string, mode: GameMode) => boolean;
   restart: () => void;
@@ -62,6 +66,7 @@ export const useSession = create<SessionStore>()((set, get) => ({
   endedAt: null,
   recorded: false,
   meggerDone: [],
+  lbEntry: null,
 
   start: (scenarioId, mode) => {
     // Har urinishda yangi urug': o'lchov natijalari va smena hodisalari har safar boshqacha
@@ -69,7 +74,7 @@ export const useSession = create<SessionStore>()((set, get) => ({
     const scenario = getScenario(scenarioId, seed);
     if (!scenario) return false;
     const ctx: SimContext = { topology: topologyFor(scenario.topology).topology, scenario, mode };
-    set({ ctx, sim: createSession(ctx, seed), feedback: [], dismissed: [], focusRequest: null, selected: null, briefingOpen: true, startedAt: Date.now(), endedAt: null, recorded: false, meggerDone: [] });
+    set({ ctx, sim: createSession(ctx, seed), feedback: [], dismissed: [], focusRequest: null, selected: null, briefingOpen: true, startedAt: Date.now(), endedAt: null, recorded: false, meggerDone: [], lbEntry: null });
     return true;
   },
 
@@ -109,6 +114,15 @@ export const useSession = create<SessionStore>()((set, get) => ({
       const timeSec = Math.round((Date.now() - get().startedAt) / 1000);
       const completed = out.state.status === "completed" && sum.stars > 0;
       useProgress.getState().recordAttempt({ scenarioId: ctx.scenario.id, score: sum.score, stars: sum.stars, timeSec, completed, mode: ctx.mode });
+      if (completed) {
+        const startedAt = get().startedAt;
+        void leaderboard
+          .submit({ scenarioId: ctx.scenario.id, name: useSettings.getState().playerName, score: sum.score, stars: sum.stars, timeSec, mode: ctx.mode })
+          .then((entry) => {
+            // Shu vaqtda boshqa stsenariy boshlangan bo'lsa — eski urinishga tegishli
+            if (get().startedAt === startedAt) set({ lbEntry: entry });
+          });
+      }
       useAchievements.getState().report({
         type: "scenario",
         scenarioId: ctx.scenario.id,
