@@ -7,6 +7,9 @@ import { getModel } from "../data/transformers";
 import { evaluateSwitch, maxSeverity, type InterlockIssue } from "./interlocks";
 import { checkJournalEntry, parseTime, type JournalOp } from "./journal";
 import { computeNetwork, isNodeEnergized, type NetworkState } from "./network";
+import { checkBlank, nextBlankStep } from "./blank";
+import { checkPermit, withinPermitTime, workplaceGaps } from "./permit";
+import { checkProtocol } from "./protocol";
 import { checkTap, lvVoltage, nextTap } from "./rpn";
 import { matchStep, missingRequired } from "./sequence";
 import { createInitialState } from "./state";
@@ -227,33 +230,29 @@ export function applyAction(ctx: SimContext, prev: SimState, action: Action): Ac
       break;
     }
     case "permitIssue": {
-      const req = scenario.permit;
-      if (req) {
-        const required: Array<(typeof action.permit.measures)[number]> = ["switchedOff", "verifiedDead", "earthed", "posters"];
-        const missing = required.filter((m) => !action.permit.measures.includes(m));
-        if (missing.length || !action.permit.leader.trim() || action.permit.brigadeSize < 2) {
-          issues.push({ code: "permitIncomplete", severity: SEVERITY.permitIncomplete, params: { missing: missing.join(", ") } });
-        }
-        const lp = new Set(action.permit.liveParts);
-        if (req.liveParts.some((p) => !lp.has(p)) || action.permit.liveParts.some((p) => !req.liveParts.includes(p))) {
-          issues.push({ code: "permitLivePartsWrong", severity: SEVERITY.permitLivePartsWrong });
-        }
+      if (scenario.permit) {
+        for (const pi of checkPermit(action.permit, scenario.permit)) issues.push({ code: pi.code, severity: SEVERITY[pi.code], params: pi.params });
       }
       break;
     }
     case "admit": {
       if (!s.permit) issues.push({ code: "admitWithoutPermit", severity: SEVERITY.admitWithoutPermit });
-      else if (scenario.permit) {
-        const z = scenario.permit.workZone;
-        const notEarthed = z.earthSwitches.filter((e) => s.devices[e] !== "closed");
-        const noPoster = z.posters.filter((p) => !(s.posters[p.targetId] ?? []).includes(p.poster));
-        if (notEarthed.length || noPoster.length) {
-          issues.push({
-            code: "admitNotPrepared",
-            severity: SEVERITY.admitNotPrepared,
-            params: { missing: [...notEarthed, ...noPoster.map((p) => p.targetId)].join(", ") },
-          });
-        }
+      else {
+        const gaps = workplaceGaps(s, s.permit, scenario.permit);
+        if (gaps.length) issues.push({ code: "admitNotPrepared", severity: SEVERITY.admitNotPrepared, params: { missing: gaps.join(", ") } });
+        if (!withinPermitTime(s.permit, s.time)) issues.push({ code: "admitOutsideTime", severity: SEVERITY.admitOutsideTime });
+      }
+      break;
+    }
+    case "blankSubmit": {
+      if (scenario.blank) {
+        for (const bi of checkBlank(action.order, scenario.blank, scenario.steps)) issues.push({ code: bi.code, severity: SEVERITY[bi.code], params: bi.params });
+      }
+      break;
+    }
+    case "protocol": {
+      if (scenario.protocol) {
+        for (const pi of checkProtocol(action.form, scenario.protocol)) issues.push({ code: pi.code, severity: SEVERITY[pi.code], params: pi.params });
       }
       break;
     }
@@ -289,6 +288,15 @@ export function applyAction(ctx: SimContext, prev: SimState, action: Action): Ac
   }
   if (!infoCode && !m.step && !m.repeat && action.type === "switch" && issues.every((i) => i.severity !== "critical")) {
     issues.push({ code: "extraneous", severity: SEVERITY.extraneous, params });
+  }
+  // Kommutatsiya blankasi: blankasiz yoki blankadagi tartibdan chetga chiqib bajarish
+  const bs = scenario.blank;
+  if (bs && m.step && !m.step.optional && bs.stepIds.includes(m.step.id)) {
+    if (!s.blank) {
+      if (bs.required) issues.push({ code: "blankNotReady", severity: SEVERITY.blankNotReady });
+    } else if (nextBlankStep(s.blank.order, s.doneSteps, bs) !== m.step.id) {
+      issues.push({ code: "blankDeviation", severity: SEVERITY.blankDeviation, params: { step: m.step.label } });
+    }
   }
 
   // ---- 3. Jiddiylik va rejim bo'yicha to'sish ----
@@ -340,10 +348,19 @@ export function applyAction(ctx: SimContext, prev: SimState, action: Action): Ac
       case "admit":
         s.admitted = true;
         s.workFinished = false;
+        s.permitLog.push({ kind: "admit", t: s.time });
         break;
       case "finishWork":
         s.workFinished = true;
         s.admitted = false;
+        s.permitLog.push({ kind: "finish", t: s.time });
+        break;
+      case "blankSubmit":
+        // Imtihon/sinov rejimida xatoli blanka ham yoziladi (jarimasi bilan) — talaba unga amal qiladi
+        s.blank = { order: [...action.order], approved: issues.length === 0 };
+        break;
+      case "protocol":
+        s.protocols.push(action.form);
         break;
       case "journal": {
         const jIssues = checkJournalEntry(action.entry, opsSinceLastJournal(ctx, s), allLabels(topology), s.time);

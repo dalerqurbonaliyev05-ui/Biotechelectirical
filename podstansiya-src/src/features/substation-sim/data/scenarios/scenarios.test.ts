@@ -1,10 +1,10 @@
 // Har bir stsenariy uchun: ma'lumot to'g'riligi, kamida bitta "to'g'ri yo'l" va bitta "kritik xato" testi.
 import { describe, expect, it } from "vitest";
 import { TOPOLOGY } from "../equipment";
-import { journalNow, run, sw, type ActionOrFn } from "../../engine/testkit";
+import { journalNow, run, sw, withBlank, type ActionOrFn } from "../../engine/testkit";
 import { validateSteps } from "../../engine/sequence";
 import { summarize } from "../../engine/scoring";
-import type { Action } from "../../engine/types";
+import type { Action, PermitForm } from "../../engine/types";
 import { SCENARIOS } from "./index";
 import { SCENARIO_CATALOG } from "./catalog";
 
@@ -53,17 +53,25 @@ describe("S01 — tanishuv", () => {
 });
 
 // ---------- S02 ----------
-const PERMIT_OK: Action = {
-  type: "permitIssue",
-  permit: {
-    workName: "T-1 ta'mirlash",
-    leader: "Rahimov A.",
-    brigadeSize: 3,
-    liveParts: ["B110-1", "B35-1", "B10-1"],
-    measures: ["switchedOff", "verifiedDead", "earthed", "posters", "fenced"],
-  },
+const T1_OFF = ["Q-T1-110", "Q-T1-35", "Q-T1-10", "QS-T1-110T", "QS-T1-110B", "QS-T1-35T", "QS-T1-35B", "QS-T1-10T", "QS-T1-10B"];
+const PERMIT_FORM: PermitForm = {
+  number: "12",
+  workName: "T-1 ta'mirlash",
+  place: "T-1",
+  startTime: "09:00",
+  endTime: "17:00",
+  issuer: { name: "Xolmatov B.", group: 5 },
+  admitter: { name: "Navbatchi", group: 4 },
+  leader: { name: "Rahimov A.", group: 5 },
+  producer: { name: "Saidov J.", group: 4 },
+  members: [{ name: "Tursunov D.", group: 3 }],
+  switchedOff: T1_OFF,
+  earthing: ["QSG-T1-110", "QSG-T1-35", "QSG-T1-10"],
+  posters: ["QS-T1-110B", "QS-T1-35B", "QS-T1-10B"],
+  liveParts: ["B110-1", "B35-1", "B10-1"],
 };
-const S02_PATH: ActionOrFn[] = [
+const PERMIT_OK: Action = { type: "permitIssue", permit: PERMIT_FORM };
+const S02_BASE: ActionOrFn[] = [
   rb("m1"),
   PERMIT_OK,
   sw("Q-SV10", "closed"),
@@ -92,6 +100,7 @@ const S02_PATH: ActionOrFn[] = [
   { type: "admit" },
   report("m1"),
 ];
+const S02_PATH = withBlank(S02_BASE, 2);
 
 describe("S02 — transformatorni ta'mirga chiqarish", () => {
   it("to'g'ri yo'l — 100 ball, 3 yulduz, iste'molchilar uzilmagan", () => {
@@ -102,34 +111,34 @@ describe("S02 — transformatorni ta'mirga chiqarish", () => {
   });
 
   it("boshqa to'g'ri tartib (35 kV avval, so'ng 10 kV) ham qabul qilinadi", () => {
-    const path = [...S02_PATH];
+    const path = [...S02_BASE];
     const i10 = path.findIndex((a) => typeof a === "object" && a.type === "switch" && a.deviceId === "Q-T1-10");
     [path[i10], path[i10 + 1]] = [path[i10 + 1], path[i10]];
-    const r = run(SCENARIOS.S02, path);
+    const r = run(SCENARIOS.S02, withBlank(path, 2));
     expect(r.state.penalties).toEqual([]);
   });
 
   it("kritik xato: o'chirgichdan oldin ajratkichni ochish (imtihon rejimi)", () => {
-    const r = run(SCENARIOS.S02, [rb("m1"), sw("Q-SV10", "closed"), sw("QS-T1-10B", "open")]);
+    const r = run(SCENARIOS.S02, [rb("m1"), S02_PATH[2], sw("Q-SV10", "closed"), sw("QS-T1-10B", "open")]);
     expect(r.state.status).toBe("failed");
     expect(r.state.failure?.code).toBe("disconnectorUnderLoad");
   });
 
   it("kritik xato: kuchlanish yo'qligini tekshirmay yerlash", () => {
-    const upToDisconnectors = S02_PATH.slice(0, 17);
+    const upToDisconnectors = S02_PATH.slice(0, 18);
     const r = run(SCENARIOS.S02, [...upToDisconnectors, sw("QSG-T1-110", "closed")]);
     expect(r.state.failure?.code).toBe("earthWithoutVerify");
   });
 
   it("yuklamani o'tkazmay o'chirish — iste'molchilar uzilishi jarimasi va tartib xatosi", () => {
-    const r = run(SCENARIOS.S02, [rb("m1"), sw("Q-T1-10", "open")], "practice");
+    const r = run(SCENARIOS.S02, [rb("m1"), S02_PATH[2], sw("Q-T1-10", "open")], "practice");
     const codes = r.state.penalties.map((p) => p.code);
     expect(codes).toContain("wrongOrder");
     expect(codes).toContain("consumerLost");
   });
 
   it("o'qitish rejimida noto'g'ri tartib to'siladi", () => {
-    const r = run(SCENARIOS.S02, [rb("m1"), sw("Q-SV10", "closed"), sw("Q-SV35", "closed"), sw("Q-T1-110", "open")], "training");
+    const r = run(SCENARIOS.S02, [rb("m1"), S02_PATH[2], sw("Q-SV10", "closed"), sw("Q-SV35", "closed"), sw("Q-T1-110", "open")], "training");
     expect(r.last.applied).toBe(false);
     expect(r.last.code).toBe("wrongOrder");
     expect(r.state.devices["Q-T1-110"]).toBe("closed");
@@ -142,9 +151,23 @@ describe("S02 — transformatorni ta'mirga chiqarish", () => {
 });
 
 // ---------- S03 ----------
-const S03_PATH: ActionOrFn[] = [
+const PROTOCOL_OK: Action = {
+  type: "protocol",
+  form: {
+    kind: "insulation",
+    tempC: 22,
+    rows: [
+      { winding: "hv", r15: 2400, r60: 3600 },
+      { winding: "mv", r15: 1600, r60: 2300 },
+      { winding: "lv", r15: 900, r60: 1250 },
+    ],
+    conclusion: "fit",
+  },
+};
+const S03_BASE: ActionOrFn[] = [
   rb("m1"),
   { type: "finishWork" },
+  PROTOCOL_OK,
   { type: "poster", targetId: "T-1", poster: "workHere", on: false },
   sw("QSG-T1-110", "open"),
   sw("QSG-T1-35", "open"),
@@ -166,6 +189,7 @@ const S03_PATH: ActionOrFn[] = [
   journalNow("T-1 ni ishga tushirish"),
   report("m1"),
 ];
+const S03_PATH = withBlank(S03_BASE, 1);
 
 describe("S03 — ishga tushirish", () => {
   it("to'g'ri yo'l", () => {

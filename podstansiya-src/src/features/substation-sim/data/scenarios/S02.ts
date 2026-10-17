@@ -1,5 +1,7 @@
 import type { ScenarioDef, StepDef } from "../../engine/scenario";
-import { transformerOutageSteps } from "../procedures";
+import { blankStepIds, transformerBayDevices, transformerOutageSteps } from "../procedures";
+
+const T1 = transformerBayDevices("T-1");
 
 const ORDER = "m1";
 
@@ -18,10 +20,18 @@ const steps: StepDef[] = [
     explain: "Transformatordagi ish naryad-ruxsatnoma bo'yicha bajariladi: unda xavfsizlik choralari va kuchlanish ostida qoladigan qismlar aniq yoziladi.",
   },
   {
+    id: "blank",
+    label: "Kommutatsiya blankasini tuzish (amallar tartibi)",
+    match: { type: "blankSubmit" },
+    after: ["readback"],
+    explain: "Murakkab kommutatsiya oldindan blankada tartib bilan yoziladi va tekshiriladi — bajarish paytida xatoga yo'l qo'yilmaydi.",
+    hint: "«Hujjatlar» → «Blanka»: kartalarni to'g'ri tartibda joylang, ortiqchasini qo'shmang.",
+  },
+  {
     id: "sv10",
     label: "Q-SV10 ni ulash — 10 kV yuklamani T-2 ga o'tkazish",
     match: { type: "switch", deviceId: "Q-SV10", to: "closed" },
-    after: ["readback"],
+    after: ["readback", "blank"],
     explain: "Iste'molchilar uzilmasligi uchun yuklama oldindan zaxiraga (T-2) o'tkaziladi. SV ulangach T-1 ning 10 kV o'chirgichi yuklamasiz uziladi.",
     hint: "Seksiya o'chirgichi 10 kV shinalar orasida.",
   },
@@ -29,7 +39,7 @@ const steps: StepDef[] = [
     id: "sv35",
     label: "Q-SV35 ni ulash — 35 kV yuklamani T-2 ga o'tkazish",
     match: { type: "switch", deviceId: "Q-SV35", to: "closed" },
-    after: ["readback"],
+    after: ["readback", "blank"],
     explain: "35 kV iste'molchilar ham uzilmasligi uchun SV-35 ulanadi.",
     hint: "35 kV SV sxemaning eng pastida.",
   },
@@ -112,16 +122,28 @@ export const S02: ScenarioDef = {
   journal: { required: true },
   permit: {
     workName: "T-1 transformatorini rejali ta'mirlash",
-    workZone: {
-      earthSwitches: ["QSG-T1-110", "QSG-T1-35", "QSG-T1-10"],
-      posters: [
-        { targetId: "QS-T1-110B", poster: "doNotSwitch" },
-        { targetId: "QS-T1-35B", poster: "doNotSwitch" },
-        { targetId: "QS-T1-10B", poster: "doNotSwitch" },
-        { targetId: "T-1", poster: "workHere" },
-      ],
+    place: "T-1",
+    required: {
+      switchedOff: [...T1.breakers, ...T1.disconnectors],
+      earthing: T1.earthing,
+      posters: [...T1.busDisconnectors.map((targetId) => ({ targetId, poster: "doNotSwitch" as const })), { targetId: "T-1", poster: "workHere" }],
+      liveParts: ["B110-1", "B35-1", "B10-1"],
     },
-    liveParts: ["B110-1", "B35-1", "B10-1"],
+    candidates: {
+      switchedOff: [...T1.breakers, ...T1.disconnectors, "Q-SV10", "Q-SV35", "Q-T2-10"],
+      earthing: [...T1.earthing, "QSG-T2-10", "QSG-W1L"],
+      posters: [...T1.busDisconnectors, "QS-T1-110T", "QS-T1-35T", "QS-T1-10T"],
+      liveParts: ["B110-1", "B35-1", "B10-1", "T1:H", "T1:L", "B10-2", "B110-2"],
+    },
+  },
+  blank: {
+    required: true,
+    stepIds: blankStepIds(steps),
+    distractors: [
+      { id: "x-q-t2-110", label: "Q-T2-110 o'chirgichini o'chirish (110 kV)" },
+      { id: "x-sv110", label: "Q-SV110 ni ulash — 110 kV seksiyalarni birlashtirish" },
+      { id: "x-qsg-t2", label: "QSG-T2-10 yerlagichini ulash" },
+    ],
   },
   analysis:
     "To'g'ri tartib: buyruqni qaytarib o'qish → yuklamani zaxiraga o'tkazish (SV) → o'chirgichlar (avval 10 va 35 kV, keyin 110 kV) → ajratkichlar (har tomonda avval transformator, keyin shina tomoni) → kuchlanish yo'qligini tekshirish → uch tomondan yerlash → plakatlar → naryad va dopusk → jurnal → hisobot. Ajratkichni o'chirgichdan oldin ochish — yuklama ostida yoy va avariya; kuchlanishni tekshirmay yerlash — qisqa tutashuv xavfi.",
