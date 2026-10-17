@@ -23,6 +23,7 @@ import Icon from "./Icon";
 import PlanView from "./PlanView";
 import ResultScreen from "./ResultScreen";
 import SingleLineDiagram, { Legend } from "./SingleLineDiagram";
+import SoundEffects from "./SoundEffects";
 import TaskCard from "./TaskCard";
 import { useDerived } from "./useDerived";
 
@@ -93,6 +94,7 @@ export default function GameScreen({ scenarioId }: { scenarioId: string }) {
     <div className="flex flex-col lg:h-[calc(100dvh-3.5rem-2.75rem)]">
       <BriefingModal />
       <PrintArea />
+      <SoundEffects />
       {/* Yuqori panel */}
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-line/60 px-3 py-2 text-sm">
         <Link href="/stsenariylar/" className="btn-ghost px-2.5 py-1.5" aria-label={G.exit}>

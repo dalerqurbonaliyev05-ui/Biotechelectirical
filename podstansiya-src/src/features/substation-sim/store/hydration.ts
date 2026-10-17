@@ -1,6 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import { useAchievements } from "./achievements";
 import { useProgress } from "./progress";
 import { useSettings } from "./settings";
 
@@ -12,7 +13,7 @@ const listeners = new Set<() => void>();
 function startHydration(): void {
   if (started) return;
   started = true;
-  void Promise.all([useSettings.persist.rehydrate(), useProgress.persist.rehydrate()]).then(() => {
+  void Promise.all([useSettings.persist.rehydrate(), useProgress.persist.rehydrate(), useAchievements.persist.rehydrate()]).then(() => {
     hydrated = true;
     listeners.forEach((l) => l());
   });

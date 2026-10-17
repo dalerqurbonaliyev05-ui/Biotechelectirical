@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import AchievementToast from "@/features/substation-sim/ui/AchievementToast";
 import AppHeader from "@/features/substation-sim/ui/AppHeader";
 import Disclaimer from "@/features/substation-sim/ui/Disclaimer";
 import { uz } from "@/features/substation-sim/i18n/uz";
@@ -41,6 +42,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
         </main>
         <Disclaimer />
+        <AchievementToast />
       </body>
     </html>
   );

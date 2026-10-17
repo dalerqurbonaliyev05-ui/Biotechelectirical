@@ -16,6 +16,7 @@ import { useSession } from "../store/session";
 import MiniGameModal from "./minigames/MiniGameModal";
 import { miniGameFor, type MiniGameKind } from "./minigames";
 import { codeText } from "./text";
+import Transformer3DButton from "./Transformer3DButton";
 import { useDerived } from "./useDerived";
 
 type MiniOpen = { kind: MiniGameKind; def?: MeasurementDef; props: Record<string, unknown> };
@@ -256,6 +257,7 @@ export default function EquipmentPanel() {
           🌡 {uz.mini.thermoBtn}
         </button>
       )}
+      {k.kind === "transformer" && <Transformer3DButton />}
       <button type="button" className="btn-ghost text-xs" disabled={!running} onClick={() => dispatch({ type: "inspect", targetId: selected })}>
         👁 {O.inspect}
       </button>
