@@ -1,0 +1,21 @@
+{
+  "nomi": "Susambil palitra",
+  "figma_fayl": "https://www.figma.com/design/95y1kKJ0CQnn0EhpFmtyld",
+  "qoida": "Faqat shu 10 rang. Soya = toq 22% shaffof, yorug'lik = qaymoq 45% shaffof.",
+  "ranglar": {
+    "qaymoq":    "#FFF4DE",
+    "qum":       "#F2C46D",
+    "olov":      "#E8833A",
+    "qizil":     "#C8433A",
+    "jigarrang": "#8A5A3B",
+    "eshakrang": "#A89585",
+    "kulrang":   "#7D7A80",
+    "yashil":    "#7FB25A",
+    "kok":       "#5AA6C8",
+    "toq":       "#3B2F3A"
+  },
+  "shaffof": {
+    "soya":    { "rang": "toq",    "shaffoflik": 0.22 },
+    "yorugik": { "rang": "qaymoq", "shaffoflik": 0.45 }
+  }
+}
