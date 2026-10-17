@@ -1,0 +1,423 @@
+{
+ "_izoh": "Topshiriqlar va favqulodda chaqiruvlar. Yangi topshiriq shu yerga yoziladi (alomati faults.json da).",
+ "tasks": [
+  {
+   "id": "T0",
+   "title": "Tutorial: sog'lom dvigatelni o'lchash",
+   "ws": "mech",
+   "location": "mech",
+   "equipment": "mech_m1",
+   "kind": "tutorial",
+   "symptom": "T0",
+   "risk": 0,
+   "impact": 0,
+   "budget": 60,
+   "safety": false,
+   "tutorial": true,
+   "briefing": "Bosh energetik: Xush kelibsiz, yangi muhandis! Birinchi vazifa — mashq: Mexanika sexiga boring, 1-dvigatel (frezer stanogi) ni tok qisqichi bilan o'lchang, natijani jurnalda ko'ring va dvigatel sog'lom yoki yo'qligini xulosa qiling.",
+   "hints": [
+    "Xaritada «Mexanika sexi» ni bosing.",
+    "1-dvigatel kartochkasini oching va «Tok qisqichi» tugmasini bosing.",
+    "Toklar bir xil va nominaldan oshmasa, dvigatel sog'lom."
+   ],
+   "steps": [
+    {
+     "id": "walk",
+     "text": "1-qadam: xaritadagi «Mexanika sexi» binosini bosing (yoki klaviaturada ←↑→↓ va Enter). Yurish o'yin vaqtini sarflaydi."
+    },
+    {
+     "id": "open",
+     "text": "2-qadam: sexdagi «1-dvigatel — frezer stanogi» kartochkasini oching."
+    },
+    {
+     "id": "tool",
+     "text": "3-qadam: asboblar paneli ostidagi «Tok qisqichi» tugmasini bosing. Har bir o'lchov vaqt sarflaydi!"
+    },
+    {
+     "id": "log",
+     "text": "4-qadam: pastdagi «O'lchov jurnali» ga qarang va fazalar toklarini nominal tok (shildikda) bilan solishtiring."
+    },
+    {
+     "id": "hyp",
+     "text": "5-qadam: «Tashxis qo'yish» tugmasini bosib, xulosani tanlang."
+    }
+   ]
+  },
+  {
+   "id": "M1",
+   "title": "3-dvigatel (55 kW) qizib ketmoqda",
+   "ws": "mech",
+   "location": "mech",
+   "equipment": "mech_m3",
+   "kind": "fault",
+   "symptom": "M1",
+   "risk": 3,
+   "impact": 3,
+   "budget": 60,
+   "safety": true,
+   "briefing": "Bosh energetik: Mexanika sexida 3-dvigatel (55 kW, asosiy shpindel) qizib ketmoqda — operator korpusni ushlab bo'lmaydi deydi. Sababini aniqlang va asoslangan qaror qabul qiling. Shoshiling: vaqtida chora ko'rilmasa dvigatel kuyib ketishi mumkin.",
+   "hints": [
+    "Avval dvigatel nima uchun qizishini ajratib oling: tok, harorat va ko'zdan kechirish ma'lumotlarini solishtiring.",
+    "Tok nominaldan oshganmi? Oshmagan bo'lsa, sovitish yoki izolyatsiyani o'ylang. Izolyatsiyani faqat o'chirilgan va kuchlanishi tekshirilgan dvigatelda megger bilan o'lchash mumkin.",
+    "Agar tok me'yorda, harorat baland va ventilyator iflos bo'lsa — sabab sovitish. Agar tok 25 % ga yuqori bo'lsa — mexanik yuklama. Megger < 0,5 MΩ bo'lsa — izolyatsiya."
+   ]
+  },
+  {
+   "id": "M2",
+   "title": "Stanok dvigateli ishga tushganda avtomat uzilyapti",
+   "ws": "mech",
+   "location": "mech",
+   "equipment": "mech_m2",
+   "kind": "fault",
+   "symptom": "M2",
+   "risk": 1,
+   "impact": 3,
+   "budget": 70,
+   "safety": true,
+   "briefing": "Bosh energetik: 2-dvigatel (30 kW, press stanogi, Y/Δ) ishga tushirilganda avtomat uzilib qoladi. Stanok to'xtab turibdi. Sababini toping va tuzating.",
+   "hints": [
+    "Ishga tushirish tokini o'lchab ko'ring (tok qisqichi — ishga tushirish rejimi) va uni avtomat sozlamasi bilan solishtiring.",
+    "Y/Δ da ishga tushirish toki taxminan 2–2,5×I_nom bo'lishi kerak. Qanchaligini o'lchang.",
+    "Agar ishga tushirish toki me'yorda va sozlama past bo'lsa — sozlama. Agar ≈6–7×I_nom bo'lsa — Y/Δ ishlamayapti. Agar ikkalasi ham me'yorda bo'lsa — klemma haroratiga qarang."
+   ]
+  },
+  {
+   "id": "M3",
+   "title": "Mexanika sexi shchitida kuchlanish pasaygan",
+   "ws": "mech",
+   "location": "mech",
+   "equipment": "mech_sch",
+   "kind": "fault",
+   "symptom": "M3",
+   "risk": 2,
+   "impact": 2,
+   "budget": 85,
+   "safety": true,
+   "briefing": "Bosh energetik: Mexanika sexi shchitida kuchlanish normadan past, stanoklar sekin yurmoqda. Kuchlanish yo'qolishi qayerda sodir bo'layotganini aniqlang va tegishli chorani ko'ring.",
+   "hints": [
+    "Shchitdagi kuchlanishni RU-0,4 dagi shu liniya kuchlanishi bilan solishtiring — farq qayerda yo'qolayotganini ko'rsatadi.",
+    "Termovizor bilan ajratkich klemmasi va kabel haroratini, tok qisqichi bilan shchit tokini (avtomat nominali 250 A) tekshiring.",
+    "Klemma issiq — kontakt; kabel issiq va kesimi kichik — kabel; tok 250 A dan yuqori — ortiqcha yuklama."
+   ]
+  },
+  {
+   "id": "M4",
+   "title": "Kranbalka dvigateli to'xtab qoldi",
+   "ws": "mech",
+   "location": "mech",
+   "equipment": "mech_m4",
+   "kind": "fault",
+   "symptom": "M4",
+   "risk": 1,
+   "impact": 2,
+   "budget": 65,
+   "safety": true,
+   "briefing": "Bosh energetik: kranbalka dvigateli (15 kW) yuk ko'tarish paytida to'xtab qoldi, qayta yurmayapti. Sababini aniqlang.",
+   "hints": [
+    "Dvigatel klemmasidagi kuchlanishni (multimetr) va tormoz g'altagi kuchlanishini tekshiring.",
+    "Releni shildikdagi I_nom bilan solishtiring va tormoz holatiga ko'z tashlang.",
+    "Bitta faza yo'q bo'lsa — kontaktor; releda I_nom dan past qiymat — rele sozlamasi; tormozga kuchlanish bor, lekin ochilmaydi — g'altak."
+   ]
+  },
+  {
+   "id": "P1",
+   "title": "Payvandlash sexi: yuklama yuqori, fazalar nosimmetrik",
+   "ws": "weld",
+   "location": "weld",
+   "equipment": "weld_sch",
+   "kind": "fault",
+   "symptom": "P1",
+   "risk": 2,
+   "impact": 2,
+   "budget": 90,
+   "safety": true,
+   "briefing": "Bosh energetik: Payvandlash sexida yuklama yuqori, fazalar toki o'zaro farq qiladi (nosimmetrik). Sababni aniqlang va chora ko'ring.",
+   "hints": [
+    "Quvvat analizatori sex shchitida fazalar toki va kuchlanish nosimmetrikligini ko'rsatadi.",
+    "Kuchlanish ham nosimmetrikmi, yoki faqat tok? Shchit ko'zdan kechirishda apparatlarning faza juftlari bo'yicha taqsimoti ko'rinadi. Shubhali apparatni alohida o'lchang.",
+    "Faqat tok nosimmetrik va apparatlar notekis ulangan — qayta taqsimlash; bitta apparat qizigan — ta'mir; kuchlanishning o'zi nosimmetrik (RU da ham) — dispetcher."
+   ]
+  },
+  {
+   "id": "P2",
+   "title": "Payvandlash sexi: cosφ past (≈0,62), jarima xavfi",
+   "ws": "weld",
+   "location": "weld",
+   "equipment": "weld_sch",
+   "related": [
+    "weld_bank"
+   ],
+   "safetyEq": "weld_bank",
+   "kind": "fault",
+   "symptom": "P2",
+   "risk": 2,
+   "impact": 2,
+   "budget": 90,
+   "safety": true,
+   "briefing": "Bosh energetik: energiya hisoblagich cosφ ≈ 0,62–0,75 ko'rsatmoqda, jarima xavfi bor, TM-1 ham ortiqcha yuklanyapti. Sababni aniqlab, to'g'ri qaror qabul qiling (kerak bo'lsa kondensator quvvatini hisoblang).",
+   "hints": [
+    "Sex shchitidagi analizator P, Q va cosφ ni ko'rsatadi. Kompensatsiya yacheykasini (kondensator batareyasi) ko'zdan kechiring.",
+    "Batareya bormi? Regulyator qaysi holatda? Nechta bosqich ulangan?",
+    "Batareya yo'q — yangisini hisoblang (Qc = P·(tgφ₁ − tgφ₂)); regulyator o'chiq — AVTO; bosqichlar ishdan chiqqan — ularni almashtiring."
+   ]
+  },
+  {
+   "id": "P3",
+   "title": "Payvandlash sexi: kabel ulanish nuqtasi qizigan",
+   "ws": "weld",
+   "location": "weld",
+   "equipment": "weld_cab3",
+   "kind": "fault",
+   "symptom": "P3",
+   "risk": 3,
+   "impact": 1,
+   "budget": 65,
+   "safety": true,
+   "briefing": "Bosh energetik: 3-payvand apparati kabelining ulanish nuqtasi qizib ketgan, izolyatsiya qorayyapti — yong'in xavfi! Sababini toping.",
+   "hints": [
+    "Termovizor bilan ulanish nuqtasi va kabelning o'rta qismini alohida o'lchang.",
+    "Kabel tokini tok qisqichi bilan o'lchab, shildikdagi kesim uchun ruxsat etilgan tok bilan solishtiring.",
+    "Faqat ulanish nuqtasi issiq va tok ruxsat etilgandan past — kontakt; kabel ham issiq va tok ruxsat etilgandan yuqori — kesim kichik."
+   ]
+  },
+  {
+   "id": "N1",
+   "title": "Nasoslar sexi: 2-nasos ishlamayapti",
+   "ws": "pump",
+   "location": "pump",
+   "equipment": "pump_p2",
+   "kind": "fault",
+   "symptom": "N1",
+   "risk": 1,
+   "impact": 3,
+   "budget": 80,
+   "safety": true,
+   "briefing": "Bosh energetik: Nasoslar sexida 2-nasos (22 kW) ishlamayapti, suv ta'minoti uzilishi xavfi bor. Sababini toping va tezroq ishga tushiring.",
+   "hints": [
+    "Dvigatel klemmasida uch fazada ham kuchlanish bormi? (multimetr) Relening holatiga qarang.",
+    "Ko'zdan kechirish tez ma'lumot beradi: rele indikatori, saqlagich indikatori, klapan holati.",
+    "Kuchlanish to'liq va rele ishlagan — rele/klapan; bitta faza yo'q — saqlagich; ishga tushirishda ≈7×I_nom va podshipnik issiq — rotor; megger < 0,5 MΩ — izolyatsiya."
+   ]
+  },
+  {
+   "id": "N2",
+   "title": "Nasoslar sexi: nasos tez-tez yoqilib o'chyapti",
+   "ws": "pump",
+   "location": "pump",
+   "equipment": "pump_p1",
+   "kind": "fault",
+   "symptom": "N2",
+   "risk": 2,
+   "impact": 2,
+   "budget": 60,
+   "safety": true,
+   "briefing": "Bosh energetik: 1-nasos (bosim rezervuari nasosi) soatiga o'ttiz martadan ko'p yoqilib-o'chyapti. Kontaktor va dvigatel tez yeyilishi mumkin. Sababini aniqlang.",
+   "hints": [
+    "Ko'zdan kechirishda yoqilishlar hisoblagichi, bosim relesi sozlamasi va rezervuar manometri ko'rinadi.",
+    "Bosim relesi farqi (ΔP) me'yorda (≈1 bar) bo'lsa, kontaktor klemmasi va rezervuar manometrini solishtiring.",
+    "ΔP kichik — rele sozlamasi; kontaktor klemmasi issiq, kontaktlari kuygan — kontaktor; manometr keskin sakraydi — membrana."
+   ]
+  },
+  {
+   "id": "N3",
+   "title": "Nasoslar sexi: 3-nasos drossel bilan boshqarilmoqda",
+   "ws": "pump",
+   "location": "pump",
+   "equipment": "pump_p3",
+   "kind": "fault",
+   "symptom": "N3",
+   "risk": 1,
+   "impact": 1,
+   "budget": 85,
+   "safety": true,
+   "briefing": "Bosh energetik: 3-nasos (30 kW) doim to'liq tezlikda, sarf esa drossel klapani bilan boshqarilmoqda. Chastota o'zgartirgich (VFD) kerakmi? Iqtisodiy hisob bilan qaror qiling — tejash qoplanmasa, qilmang.",
+   "hints": [
+    "Drossel ochilish darajasi, haqiqiy sarf va yillik ish soati ko'zdan kechirishda ko'rinadi.",
+    "Tejash = talab past × ish soati ko'p. Ish soati kam bo'lsa, tejash kapitalni qoplamaydi.",
+    "Sarf past va ish soati ko'p — VFD; sarf doimiy — kurak kesish; ish soati juda kam — hech narsa qilmaslik."
+   ]
+  },
+  {
+   "id": "V1",
+   "title": "Ventilyatsiya sexi: dvigatelda vibratsiya yuqori",
+   "ws": "vent",
+   "location": "vent",
+   "equipment": "vent_f1",
+   "kind": "fault",
+   "symptom": "V1",
+   "risk": 2,
+   "impact": 2,
+   "budget": 80,
+   "safety": true,
+   "briefing": "Bosh energetik: Ventilyatsiya sexida 1-ventilyator dvigatelida vibratsiya yuqori. Sababini aniqlang: faqat chastota tarkibi sababni ochib beradi.",
+   "hints": [
+    "Vibratsiya o'lchagich mm/s bilan birga dominant chastotani ham ko'rsatadi.",
+    "Chastota turini ko'zdan kechirish bilan solishtiring: parraklar, mufta, poydevor boltlari.",
+    "Yuqori chastota (podshipnik) — podshipnik; 1× — disbalans; 2× — markazlashmaslik; past chastotali garmonikalar — bolt bo'shashgan."
+   ]
+  },
+  {
+   "id": "V2",
+   "title": "Ventilyatsiya sexi: shovqin va podshipnik harorati yuqori",
+   "ws": "vent",
+   "location": "vent",
+   "equipment": "vent_f2",
+   "kind": "fault",
+   "symptom": "V2",
+   "risk": 2,
+   "impact": 2,
+   "budget": 80,
+   "safety": true,
+   "briefing": "Bosh energetik: 2-ventilyator dvigatelidan shovqin chiqmoqda, podshipnik harorati baland. Moylash yetarlimi yoki podshipnik shikastlanganmi?",
+   "hints": [
+    "Vibratsiya darajasi va chastotasini, podshipnik haroratini o'lchang, moy holatiga qarang.",
+    "Vibratsiya 7,1 mm/s dan oshganmi? Oshmagan bo'lsa, oddiy moylash yetarli bo'lishi mumkin.",
+    "Vibratsiya o'rtacha, moy quruq — moylash; vibratsiya > 7,1, podshipnik chastotasi, moy qora — podshipnikni almashtirish."
+   ]
+  },
+  {
+   "id": "V3",
+   "title": "Ventilyatsiya sexi: 3-ventilyator doim 100 % ishlayapti",
+   "ws": "vent",
+   "location": "vent",
+   "equipment": "vent_f3",
+   "kind": "fault",
+   "symptom": "V3",
+   "risk": 1,
+   "impact": 1,
+   "budget": 85,
+   "safety": true,
+   "briefing": "Bosh energetik: 3-ventilyator (18,5 kW) doim to'liq tezlikda ishlayapti. VFD yoki taymer bilan tejash mumkinmi? Hisob bilan qaror qiling.",
+   "hints": [
+    "Havo sarfi talabi qanday o'zgaradi va sex qachon bo'sh? Ko'zdan kechirish ma'lumot beradi.",
+    "Bo'sh vaqt ko'p bo'lsa — taymer arzon; talab o'zgaruvchan, nol emas — VFD; doim to'liq talab — hech narsa.",
+    "Variantlarning 5 yillik sof foydasini solishtiring."
+   ]
+  },
+  {
+   "id": "E1",
+   "title": "Kunlik yuklama grafigi tahlili va tejash takliflari",
+   "ws": "general",
+   "location": "ru",
+   "equipment": null,
+   "kind": "energy",
+   "symptom": "E1",
+   "risk": 1,
+   "impact": 2,
+   "budget": 70,
+   "safety": false,
+   "briefing": "Bosh energetik: zavodning kunlik yuklama grafigini tahlil qiling: cho'qqi soatlarini toping, isrofning asosiy manbasini aniqlang va byudjet doirasida eng foydali taklif to'plamini tanlang. RU-0,4 dagi analizatordan 24 soatlik trendni yuklab oling.",
+   "hints": [
+    "RU-0,4 xonasida «Energiya tahlili» orqali 24 soatlik trendni oching.",
+    "Cho'qqilar qaysi soatlarda va qaysi sexdan? Tun yuklamasi nega baland? cosφ qancha?",
+    "Takliflarni qoplanish muddati va byudjet (60 mln so'm) bo'yicha solishtiring."
+   ]
+  },
+  {
+   "id": "E2",
+   "title": "TM ta'mirga chiqarilsa, ikkinchisi yuklamani ko'taradimi?",
+   "ws": "general",
+   "location": "tp",
+   "equipment": "tp_tm1",
+   "kind": "energy",
+   "symptom": "E2",
+   "risk": 2,
+   "impact": 2,
+   "budget": 60,
+   "safety": false,
+   "briefing": "Bosh energetik: TM-1 ni profilaktik ta'mirga chiqarishni rejalashtiryapmiz — {window_text} oralig'ida. Barcha yuklama TM-2 (400 kVA) ga o'tadi. U ko'taradimi? Yuklamani qanday boshqarish kerak?",
+   "hints": [
+    "TP da transformator analizatori va RU-0,4 dagi 24 soatlik trendni ko'ring.",
+    "Oyna ichidagi eng katta S ni toping va K = S/400 ni hisoblang.",
+    "K ≤ 0,8 — hech narsa kerak emas; 0,8–0,95 — ogohlantirish; > 0,95 — yuklamani kamaytirish choralari kerak (eng arzon to'plam)."
+   ]
+  }
+ ],
+ "emergencies": [
+  {
+   "id": "voltage_dip",
+   "title": "Favqulodda chaqiruv: kuchlanish tushishi",
+   "message": "Dispetcher (radio): RU-0,4 shinasida kuchlanish 342 V ga tushdi (−10 %). Sexlarda dvigatellar sekinlashmoqda, avtomatlar uzilishi mumkin. Nima qilasiz?",
+   "timeCost": 12,
+   "effect": {
+    "panel": "mech_sch",
+    "extraKW": 0
+   },
+   "options": [
+    {
+     "text": "Kechiktirilishi mumkin bo'lgan yuklamalarni (isitgichlar, payvandlashning bir qismi) vaqtincha uzib, shina kuchlanishini kuzatish",
+     "score": 1
+    },
+    {
+     "text": "Barcha sexlarni to'liq o'chirish",
+     "score": 0.2
+    },
+    {
+     "text": "Kutish: kuchlanish o'z-o'zidan tiklanadi",
+     "score": 0
+    },
+    {
+     "text": "TM shoxobchasini (kuchlanishni rostlash) tekshirish va dispetcherga hisobot berish",
+     "score": 0.6
+    }
+   ],
+   "explain": "Kuchlanish tushganda birinchi navbatda yuklamani kamaytiriladi (kechiktiriladigan iste'molchilar uziladi): shu bilan dvigatellar va himoya qurilmalari xavfdan chiqadi. Hamma narsani o'chirish ortiqcha, kutish esa xavfli."
+  },
+  {
+   "id": "load_surge",
+   "title": "Favqulodda chaqiruv: yuklama keskin oshdi",
+   "message": "Dispetcher (radio): TM-1 yuklamasi keskin oshdi (K ≈ 1,12), transformator qiziyapti. Tezkor chora kerak!",
+   "timeCost": 10,
+   "effect": {
+    "panel": "weld_sch",
+    "extraKW": 40,
+    "durationMin": 60
+   },
+   "options": [
+    {
+     "text": "Muhim bo'lmagan yuklamalarni (payvandlash postlarining bir qismini) uzish va K ni kuzatish",
+     "score": 1
+    },
+    {
+     "text": "Shina bog'lagichini ulab, yuklamani TM-2 ga bo'lish",
+     "score": 0.7
+    },
+    {
+     "text": "Hech narsa qilmaslik — transformator 1 soat ko'taradi",
+     "score": 0
+    },
+    {
+     "text": "Barcha kompressorlarni ishga tushirish",
+     "score": 0
+    }
+   ],
+   "explain": "K > 1 bo'lsa transformatorni tezda yuklamadan bo'shatish kerak: avval muhim bo'lmagan iste'molchilarni uzing. Shina bog'lagichi bilan bo'lish ham mumkin, lekin TM-2 ham yuklanadi."
+  },
+  {
+   "id": "breaker_trip",
+   "title": "Favqulodda chaqiruv: avtomat uzildi",
+   "message": "Dispetcher (radio): Nasoslar sexi kirish avtomati uzildi, sex qorong'u. Operatorlar «shchit yonidan qisqa tutashuv hidi keladi» deyapti.",
+   "timeCost": 15,
+   "effect": null,
+   "options": [
+    {
+     "text": "Avtomatni darrov qayta yoqish",
+     "score": 0
+    },
+    {
+     "text": "Avval shchitni ko'zdan kechirish, qisqa tutashuv belgilarini va izolyatsiyani (xavfsiz ajratishdan keyin) tekshirish, so'ng yoqish",
+     "score": 1
+    },
+    {
+     "text": "Avtomatni almashtirib, yangisini yoqish",
+     "score": 0.2
+    },
+    {
+     "text": "Sexdagi operatorlarga o'zi yoqib ko'rishni aytish",
+     "score": 0
+    }
+   ],
+   "explain": "Avtomat sababsiz uzilmaydi: qisqa tutashuv belgisi bo'lsa, qayta yoqish yong'in va portlashga olib kelishi mumkin. Avval sabab topiladi, so'ng yoqiladi."
+  }
+ ]
+}

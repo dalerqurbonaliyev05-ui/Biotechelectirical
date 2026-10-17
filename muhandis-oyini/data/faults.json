@@ -1,0 +1,2433 @@
+{
+ "_izoh": "Nosozliklar: har bir alomatning yashirin sabablari, ular uskuna holatiga yozadigan o'zgarishlar (patches), kerakli asboblar (decisive/useful), to'g'ri qarorlar (fixedBy/alsoWorks) va izohlar. Yangi nosozlik shu yerga qo'shiladi — kod o'zgarmaydi.",
+ "actions": {
+  "clean_cooling": {
+   "label": "Sovitish tizimini tozalash (ventilyator qanotlari, qoplama panjara)",
+   "kind": "repair",
+   "cost": {
+    "fixed": 180000
+   },
+   "hours": 3,
+   "loto": true,
+   "workMin": 20
+  },
+  "adjust_machine": {
+   "label": "Stanok rejimini sozlash / yuklamani kamaytirish",
+   "kind": "adjust",
+   "cost": {
+    "fixed": 0
+   },
+   "hours": 1,
+   "loto": false,
+   "workMin": 8
+  },
+  "rewind": {
+   "label": "Dvigatelni qayta o'rash (ta'mirxonada)",
+   "kind": "repair",
+   "cost": {
+    "fracNew": 0.45
+   },
+   "days": 5,
+   "loto": true,
+   "fixesBurned": true,
+   "workMin": 15,
+   "rewind": true
+  },
+  "replace": {
+   "label": "Dvigatelni almashtirish (yangisini tanlash)",
+   "kind": "replace",
+   "ui": "replace",
+   "loto": true,
+   "fixesBurned": true,
+   "workMin": 30
+  },
+  "monitor": {
+   "label": "Kuzatuvda qoldirish (hech narsa qilmaslik)",
+   "kind": "monitor",
+   "cost": {
+    "fixed": 0
+   },
+   "hours": 0,
+   "loto": false,
+   "workMin": 2
+  },
+  "raise_protection": {
+   "label": "Himoya sozlamasini oshirish (uzilmasligi uchun)",
+   "kind": "trap",
+   "cost": {
+    "fixed": 0
+   },
+   "hours": 0.2,
+   "loto": false,
+   "workMin": 5
+  },
+  "set_breaker": {
+   "label": "Avtomat magnit uzgichini me'yorga (5×In) sozlash",
+   "kind": "adjust",
+   "cost": {
+    "fixed": 0
+   },
+   "hours": 0.5,
+   "loto": true,
+   "workMin": 15
+  },
+  "repair_yd": {
+   "label": "Y/Δ kontaktorlari va taymer relesini ta'mirlash",
+   "kind": "repair",
+   "cost": {
+    "fixed": 650000
+   },
+   "hours": 4,
+   "loto": true,
+   "workMin": 25
+  },
+  "retighten_contact": {
+   "label": "Kontaktni tozalab, qayta qisish",
+   "kind": "repair",
+   "cost": {
+    "fixed": 120000
+   },
+   "hours": 1,
+   "loto": true,
+   "workMin": 15
+  },
+  "replace_feeder_cable": {
+   "label": "Sex liniyasi kabelini 120 mm² ga almashtirish",
+   "kind": "repair",
+   "cost": {
+    "perMeter": 118000,
+    "section": 120
+   },
+   "hours": 8,
+   "loto": true,
+   "workMin": 40
+  },
+  "clean_contact": {
+   "label": "Oksidlangan kontaktlarni tozalash yoki almashtirish",
+   "kind": "repair",
+   "cost": {
+    "fixed": 250000
+   },
+   "hours": 2,
+   "loto": true,
+   "workMin": 20
+  },
+  "shed_load": {
+   "label": "Vaqtinchalik yuklamani uzish / sexlar bo'yicha taqsimlash",
+   "kind": "adjust",
+   "cost": {
+    "fixed": 0
+   },
+   "hours": 0.5,
+   "loto": false,
+   "workMin": 8
+  },
+  "second_feeder": {
+   "label": "Qo'shimcha kabel liniyasi tortish",
+   "kind": "repair",
+   "cost": {
+    "fixed": 30000000
+   },
+   "hours": 16,
+   "loto": true,
+   "workMin": 45
+  },
+  "replace_brake_coil": {
+   "label": "Tormoz g'altagini almashtirish",
+   "kind": "repair",
+   "cost": {
+    "fixed": 900000
+   },
+   "hours": 3,
+   "loto": true,
+   "workMin": 25
+  },
+  "set_relay": {
+   "label": "Issiqlik relesini dvigatel I_nom ga sozlash va qaytarish",
+   "kind": "adjust",
+   "cost": {
+    "fixed": 0
+   },
+   "hours": 0.5,
+   "loto": true,
+   "workMin": 12
+  },
+  "replace_contactor": {
+   "label": "Kontaktorni almashtirish",
+   "kind": "repair",
+   "cost": {
+    "fixed": 900000
+   },
+   "hours": 2,
+   "loto": true,
+   "workMin": 20
+  },
+  "rebalance": {
+   "label": "Apparatlarni fazalar bo'yicha qayta taqsimlash",
+   "kind": "adjust",
+   "ui": "assign",
+   "cost": {
+    "perMoved": 150000
+   },
+   "hours": 0.5,
+   "loto": true,
+   "workMin": 25
+  },
+  "repair_welder": {
+   "label": "Nosoz payvand apparatini ta'mirlash",
+   "kind": "repair",
+   "cost": {
+    "fixed": 6000000
+   },
+   "hours": 8,
+   "loto": true,
+   "workMin": 30
+  },
+  "replace_welder": {
+   "label": "Payvand apparatini yangisiga almashtirish",
+   "kind": "repair",
+   "cost": {
+    "fixed": 28000000
+   },
+   "hours": 8,
+   "loto": true,
+   "fixesBurned": true,
+   "workMin": 30
+  },
+  "notify_dispatcher": {
+   "label": "Dispetcherga xabar berib, TP / yuqori tomon tarmog'ini tekshirtirish",
+   "kind": "adjust",
+   "cost": {
+    "fixed": 0
+   },
+   "hours": 0,
+   "loto": false,
+   "workMin": 6
+  },
+  "capacitor": {
+   "label": "Yangi kondensator batareyasini hisoblash va o'rnatish",
+   "kind": "repair",
+   "ui": "capacitor",
+   "hours": 8,
+   "loto": true,
+   "workMin": 35
+  },
+  "repair_bank": {
+   "label": "Shikastlangan kondensator bosqichlarini almashtirish",
+   "kind": "repair",
+   "cost": {
+    "fixed": 9000000
+   },
+   "hours": 6,
+   "loto": true,
+   "workMin": 25
+  },
+  "enable_controller": {
+   "label": "Kompensatsiya regulyatorini AVTO rejimiga o'tkazish",
+   "kind": "adjust",
+   "cost": {
+    "fixed": 0
+   },
+   "hours": 0.2,
+   "loto": false,
+   "workMin": 5
+  },
+  "replace_cable_small": {
+   "label": "Kabelni kattaroq kesimga (25 mm²) almashtirish",
+   "kind": "repair",
+   "cost": {
+    "fixed": 700000
+   },
+   "hours": 2,
+   "loto": true,
+   "workMin": 20
+  },
+  "reset_relay_valve": {
+   "label": "Chiqish klapanini ochish, relesini qaytarish, quruq yurishdan himoya o'rnatish",
+   "kind": "adjust",
+   "cost": {
+    "fixed": 0
+   },
+   "hours": 0.5,
+   "loto": true,
+   "workMin": 12
+  },
+  "replace_fuse": {
+   "label": "Kuygan saqlagichni almashtirish",
+   "kind": "repair",
+   "cost": {
+    "fixed": 80000
+   },
+   "hours": 1,
+   "loto": true,
+   "workMin": 12
+  },
+  "replace_bearings": {
+   "label": "Podshipniklarni almashtirish",
+   "kind": "repair",
+   "cost": {
+    "fixed": 1200000
+   },
+   "hours": 8,
+   "loto": true,
+   "workMin": 30
+  },
+  "set_pressure_switch": {
+   "label": "Bosim relesi farqini (ΔP) me'yorga sozlash",
+   "kind": "adjust",
+   "cost": {
+    "fixed": 0
+   },
+   "hours": 0.5,
+   "loto": true,
+   "workMin": 12
+  },
+  "service_tank": {
+   "label": "Rezervuar membranasini almashtirish va oldindan bosimni sozlash",
+   "kind": "repair",
+   "cost": {
+    "fixed": 1500000
+   },
+   "hours": 4,
+   "loto": true,
+   "workMin": 20
+  },
+  "vfd": {
+   "label": "Chastota o'zgartirgich (VFD) o'rnatish",
+   "kind": "improve",
+   "cost": {
+    "vfd": true
+   },
+   "hours": 12,
+   "loto": true,
+   "workMin": 40
+  },
+  "trim_impeller": {
+   "label": "Ishchi g'ildirak diametrini kesish (kurak kesish)",
+   "kind": "improve",
+   "cost": {
+    "fixed": 8000000
+   },
+   "hours": 8,
+   "loto": true,
+   "workMin": 30
+  },
+  "timer": {
+   "label": "Taymer / jadval bo'yicha o'chirish (kontaktor + taymer)",
+   "kind": "improve",
+   "cost": {
+    "fixed": 1200000
+   },
+   "hours": 2,
+   "loto": true,
+   "workMin": 15
+  },
+  "align_coupling": {
+   "label": "Valni markazlashtirish (muftani sozlash)",
+   "kind": "repair",
+   "cost": {
+    "fixed": 400000
+   },
+   "hours": 4,
+   "loto": true,
+   "workMin": 25
+  },
+  "balance_clean": {
+   "label": "Parraklarni tozalash va balanslash",
+   "kind": "repair",
+   "cost": {
+    "fixed": 350000
+   },
+   "hours": 4,
+   "loto": true,
+   "workMin": 25
+  },
+  "tighten_bolts": {
+   "label": "Poydevor boltlarini tortish",
+   "kind": "repair",
+   "cost": {
+    "fixed": 30000
+   },
+   "hours": 1,
+   "loto": true,
+   "workMin": 12
+  },
+  "lubricate": {
+   "label": "Podshipniklarni moylash",
+   "kind": "repair",
+   "cost": {
+    "fixed": 50000
+   },
+   "hours": 0.5,
+   "loto": true,
+   "workMin": 10
+  }
+ },
+ "symptoms": {
+  "T0": {
+   "question": "Bu dvigatel holati qanday?",
+   "economy": "cost",
+   "tutorial": true,
+   "options": [],
+   "causes": [
+    {
+     "id": "healthy",
+     "label": "Dvigatel sog'lom, ish rejimi me'yorda",
+     "weight": 1,
+     "patches": [],
+     "decisive": [
+      "clamp"
+     ],
+     "useful": [
+      "thermal",
+      "multimeter",
+      "visual",
+      "vibration"
+     ],
+     "signs": "Fazalar toki bir xil, nominaldan oshmaydi; harorat 70 °C dan past.",
+     "explain": "Tok qisqichi har uch fazada deyarli bir xil tok (≈ nominalning 70–90 %) ko'rsatdi, nosimmetriklik 10 % dan kam — dvigatel sog'lom. Har doim avval «normal» holatni bilib oling: nosozlikni faqat u bilan solishtirib topasiz."
+    },
+    {
+     "id": "overload_t",
+     "label": "Dvigatel ortiqcha yuklangan (tok nominaldan 20 % dan ko'p yuqori)",
+     "weight": 0,
+     "patches": [],
+     "decisive": [],
+     "useful": [],
+     "signs": "Tok nominaldan 20 % va undan ko'p oshadi.",
+     "explain": ""
+    },
+    {
+     "id": "phase_t",
+     "label": "Bitta faza uzilgan (toklar nosimmetrik)",
+     "weight": 0,
+     "patches": [],
+     "decisive": [],
+     "useful": [],
+     "signs": "Bitta fazada tok yo'q yoki juda kam; boshqalarida oshgan.",
+     "explain": ""
+    },
+    {
+     "id": "insul_t",
+     "label": "Izolyatsiya buzilgan",
+     "weight": 0,
+     "patches": [],
+     "decisive": [],
+     "useful": [],
+     "signs": "Megger < 0,5 MΩ ko'rsatadi; faqat dvigatel o'chirilganda tekshiriladi.",
+     "explain": ""
+    }
+   ]
+  },
+  "M1": {
+   "question": "3-dvigatel nima uchun qizib ketmoqda?",
+   "economy": "cost",
+   "options": [
+    "clean_cooling",
+    "adjust_machine",
+    "rewind",
+    "replace",
+    "raise_protection",
+    "monitor"
+   ],
+   "causes": [
+    {
+     "id": "cooling_blocked",
+     "label": "Sovitish tizimi tiqilgan (ventilyator va panjara ifloslangan)",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "cooling": 0.42
+       },
+       "visual": [
+        {
+         "text": "Ventilyator qanotlari va qoplama panjara chang-moy aralashmasi bilan tiqilib qolgan.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "hazardPerMin": 0.0015,
+     "decisive": [
+      "thermal",
+      "visual"
+     ],
+     "useful": [
+      "clamp",
+      "vibration"
+     ],
+     "fixedBy": [
+      "clean_cooling"
+     ],
+     "alsoWorks": [
+      "replace"
+     ],
+     "signs": "Tok normal, korpus harorati yuqori, vibratsiya va izolyatsiya normal; ventilyator ifloslangan.",
+     "explain": "Sovitish tiqilgan: tok nominaldan oshmagan, megger yaxshi — demak, dvigatelning o'zi sog'lom. Hal qiluvchi o'lchovlar: termovizor (korpus >90 °C) va ko'zdan kechirish (iflos ventilyator). To'g'ri qaror — tozalash. Almashtirish shart emas: yangi dvigatel ham shu iflos muhitda yana qiziydi.",
+     "invalid": {
+      "adjust_machine": "Tok nominal ichida edi — yuklama sababchi emas, stanokni sozlash qizishni kamaytirmaydi."
+     }
+    },
+    {
+     "id": "mech_overload",
+     "label": "Ortiqcha mexanik yuklama (stanok rejimi me'yordan og'ir)",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "load": 1.25
+       },
+       "visual": [
+        {
+         "text": "Stanok boshqaruv panelida kesish chuqurligi va surish tezligi me'yordan ≈30 % ortiq o'rnatilgan.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "hazardPerMin": 0.001,
+     "decisive": [
+      "clamp",
+      "visual"
+     ],
+     "useful": [
+      "thermal",
+      "vibration"
+     ],
+     "fixedBy": [
+      "adjust_machine"
+     ],
+     "alsoWorks": [
+      "replace"
+     ],
+     "replaceNeedsBigger": true,
+     "signs": "Tok nominaldan ≈25 % yuqori, fazalar simmetrik, izolyatsiya va vibratsiya normal.",
+     "explain": "Tok nominaldan ≈25 % yuqori, fazalar simmetrik, megger yaxshi, ventilyator toza — sabab mexanik yuklama. To'g'ri qaror — stanok rejimini (kesish chuqurligi, surish) sozlash: bepul va tez. Shu quvvatli yangi dvigatel ham xuddi shunday ortiqcha yuklanardi; faqat katta quvvatli dvigatel yordam beradi, lekin u ortiqcha xarajat.",
+     "invalid": {
+      "clean_cooling": "Ventilyator toza edi — tozalash tokning oshishini kamaytirmaydi."
+     }
+    },
+    {
+     "id": "insulation_fail",
+     "label": "O'ramlar izolyatsiyasi buzilgan",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "insMOhm": 0.18,
+        "phaseMult": [
+         1.12,
+         0.96,
+         0.92
+        ],
+        "heatWinding": 55
+       },
+       "nameplate": {
+        "age": {
+         "rand": [
+          8,
+          19
+         ],
+         "int": true
+        },
+        "rewinds": {
+         "rand": [
+          0,
+          3
+         ],
+         "int": true
+        }
+       },
+       "visual": [
+        {
+         "text": "Dvigatel korpusidan kuygan lak hidi kelmoqda.",
+         "iso": false
+        },
+        {
+         "text": "Klemma qutisi ichida o'ram simlari izolyatsiyasi qorayib, qatlanib ketgan.",
+         "iso": true
+        }
+       ]
+      }
+     ],
+     "hazardPerMin": 0.004,
+     "spareChance": 0.5,
+     "decisive": [
+      "megger",
+      "thermal"
+     ],
+     "useful": [
+      "clamp",
+      "visual",
+      "vibration"
+     ],
+     "fixedBy": [
+      "rewind",
+      "replace"
+     ],
+     "signs": "Megger < 0,5 MΩ; toklar biroz nosimmetrik; korpusda lokal qizish; kuygan hid.",
+     "explain": "Megger 0,5 MΩ dan past — izolyatsiya buzilgan, shuning uchun toklar nosimmetrik va korpus lokal qizigan. Bu yerda qayta o'rash yoki almashtirish kerak; qaysi biri arzonroq — yoshi, necha marta o'ralgani, zaxira dvigatel bor-yo'qligi va to'xtash narxiga bog'liq. Zaxira bor va dvigatel eskirgan bo'lsa — almashtirish; zaxira yo'q bo'lsa — qayta o'rash ko'pincha arzon.",
+     "invalid": {
+      "clean_cooling": "Izolyatsiya buzilgan — tozalash uni tiklamaydi.",
+      "adjust_machine": "Yuklama emas, izolyatsiya muammosi."
+     }
+    }
+   ]
+  },
+  "M2": {
+   "question": "Nima uchun dvigatel ishga tushganda avtomat uzilyapti?",
+   "economy": "cost",
+   "options": [
+    "set_breaker",
+    "repair_yd",
+    "retighten_contact",
+    "raise_protection",
+    "replace",
+    "monitor"
+   ],
+   "causes": [
+    {
+     "id": "breaker_setting",
+     "label": "Avtomat magnit uzgichi sozlamasi noto'g'ri (juda past)",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "trip": "magnetic"
+       },
+       "nameplate": {
+        "protection.magMult": 2
+       },
+       "visual": [
+        {
+         "text": "Avtomat uzilgan holatda; stanok ishga tushirilayotgan paytda uzilgan.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "clampStart"
+     ],
+     "useful": [
+      "clamp",
+      "multimeter",
+      "thermal",
+      "visual"
+     ],
+     "fixedBy": [
+      "set_breaker"
+     ],
+     "signs": "Ishga tushirish toki Y/Δ uchun me'yorda (≈2,4×I_nom), lekin avtomat magnit uzgichi 2×In ga qo'yilgan.",
+     "explain": "Ishga tushirish toki me'yoriy (Y/Δ da ≈2,4×I_nom ≈ 135 A), lekin avtomatning magnit uzgichi 2×In = 126 A ga qo'yilgan — shuning uchun har safar uzilyapti. Shildikdagi himoya sozlamasini ishga tushirish toki bilan solishtirish hal qiluvchi. To'g'ri qaror — sozlamani 5×In ga to'g'rilash. Himoyani yanada oshirish yoki dvigatelni almashtirish kerak emas.",
+     "invalid": {
+      "raise_protection": "Sozlamani «istalgancha» oshirish himoyani yo'qotadi; to'g'ri qiymatga (5×In) sozlash kerak."
+     }
+    },
+    {
+     "id": "star_delta_fail",
+     "label": "Yulduz-uchburchak ishlamayapti (to'g'ridan-to'g'ri ishga tushyapti)",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "trip": "magnetic",
+        "startMult": 6.6
+       },
+       "visual": [
+        {
+         "text": "Yulduz kontaktori (K2) ulanmayapti; taymer relesi 0 s ga qo'yilgan — dvigatel uchburchakda to'g'ridan-to'g'ri ishga tushyapti.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "clampStart",
+      "visual"
+     ],
+     "useful": [
+      "clamp",
+      "multimeter",
+      "thermal"
+     ],
+     "fixedBy": [
+      "repair_yd"
+     ],
+     "signs": "Ishga tushirish toki ≈6–7×I_nom (Y/Δ da bunday bo'lmasligi kerak); avtomat sozlamasi me'yorda.",
+     "explain": "Ishga tushirish toki ≈6,6×I_nom — Y/Δ ishlaganda u 2–2,5× bo'lardi. Demak, yulduz bosqichi o'tkazib yuborilyapti (K2 kontaktori / taymer). Avtomat sozlamasi me'yorda — uni o'zgartirmaslik kerak. To'g'ri qaror — Y/Δ kontaktorlari va taymerni ta'mirlash.",
+     "invalid": {
+      "set_breaker": "Avtomat sozlamasi to'g'ri edi; asl sabab — Y/Δ sxemasi ishlamayapti.",
+      "raise_protection": "Himoyani oshirish ishga tushirish tokini kamaytirmaydi va qurilmani xavfsiz qoldirmaydi."
+     }
+    },
+    {
+     "id": "loose_contact",
+     "label": "Kabel kontakti bo'shashgan (avtomat klemmasida)",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "contactR": 0.12,
+        "heatTerminal": 55,
+        "startTrips": true
+       },
+       "visual": [
+        {
+         "text": "Avtomat klemmasi atrofida qorayish, ishqalangan rang o'zgarishi.",
+         "iso": true
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "thermal",
+      "visual"
+     ],
+     "useful": [
+      "clamp",
+      "clampStart",
+      "multimeter"
+     ],
+     "fixedBy": [
+      "retighten_contact"
+     ],
+     "signs": "Klemma harorati juda yuqori (>85 °C), tok va ishga tushirish toki me'yorda; kontakt qorayib ketgan.",
+     "explain": "Tok va ishga tushirish toki me'yorda, sozlama to'g'ri — lekin klemma harorati 85 °C dan yuqori: kontakt qarshiligi katta, u isib, avtomatning issiqlik elementini ishlatyapti. To'g'ri qaror — kontaktni tozalab qayta qisish (kam xarajat).",
+     "invalid": {
+      "set_breaker": "Sozlama to'g'ri edi; kontakt sifatsiz.",
+      "raise_protection": "Qizigan kontaktda himoyani oshirish yong'in xavfini kuchaytiradi."
+     }
+    }
+   ]
+  },
+  "M3": {
+   "question": "Sex shchitida kuchlanish nima uchun pasaygan?",
+   "economy": "cost",
+   "options": [
+    "replace_feeder_cable",
+    "clean_contact",
+    "shed_load",
+    "second_feeder",
+    "raise_protection",
+    "monitor"
+   ],
+   "causes": [
+    {
+     "id": "feeder_cable_small",
+     "label": "Sex kirish kabelining kesimi kichik va uzun (kabelda kuchlanish yo'qolishi)",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "$eq",
+       "nameplate": {
+        "cable.section": 50,
+        "cable.length": 160
+       },
+       "visual": [
+        {
+         "text": "Kirish kabeli markasi 3×50 mm², uzunligi ≈160 m; kabel qobig'i qizigan.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "multimeter",
+      "clamp"
+     ],
+     "useful": [
+      "multimeter@ru_mech",
+      "thermal",
+      "analyzer",
+      "visual"
+     ],
+     "fixedBy": [
+      "replace_feeder_cable"
+     ],
+     "alsoWorks": [
+      "second_feeder"
+     ],
+     "signs": "RU shinasida kuchlanish normal, shchitda pasaygan; kabel kesimi tokka nisbatan kichik, kabel qizigan.",
+     "explain": "RU shinasida kuchlanish normal, shchitda esa ≈8 % past; yuklama tokiga nisbatan kabel kesimi (50 mm²) kichik va uzun (160 m) — ΔU = √3·I·(R·cosφ + X·sinφ) katta. Kontakt oksidlangani yo'q (klemma sovuq), yuklama ham avtomat nominalidan oshmagan. To'g'ri qaror — kabelni kattaroq kesimga almashtirish.",
+     "invalid": {
+      "clean_contact": "Kontaktlar toza edi (klemma sovuq) — tozalash kabeldagi pasayishni kamaytirmaydi.",
+      "shed_load": "Yuklama avtomat nominalidan oshmagan; muammo kabel kesimida."
+     }
+    },
+    {
+     "id": "contact_oxidized",
+     "label": "Kirish ajratkichi kontaktlari oksidlangan (o'tish qarshiligi katta)",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "contactR": 0.045
+       },
+       "visual": [
+        {
+         "text": "Asosiy ajratkich kontaktlari qorayib, oksid qatlami bilan qoplangan.",
+         "iso": true
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "multimeter",
+      "thermal"
+     ],
+     "useful": [
+      "clamp",
+      "multimeter@ru_mech",
+      "analyzer",
+      "visual"
+     ],
+     "fixedBy": [
+      "clean_contact"
+     ],
+     "signs": "Shchit klemmasi juda issiq (>85 °C), kabel normal, yuklama tokni oshirmagan.",
+     "explain": "Shchit kontaktlari juda issiq (termovizor), kabel esa normal haroratda — kuchlanishning yo'qolishi kontaktdagi o'tish qarshiligida (ΔU = √3·I·R). To'g'ri qaror — kontaktlarni tozalash/almashtirish. Kabel yoki yuklamaga tegish shart emas.",
+     "invalid": {
+      "replace_feeder_cable": "Kabel normal haroratda edi, kontaktlar muammo — kabel almashtirish ortiqcha.",
+      "shed_load": "Yuklama me'yorda edi."
+     }
+    },
+    {
+     "id": "shop_overload",
+     "label": "Sexda ortiqcha yuklama (vaqtinchalik isitgichlar, qo'shimcha post)",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "extraKW": 55
+       },
+       "visual": [
+        {
+         "text": "Sex ichida vaqtinchalik elektr isitgichlar va qo'shimcha payvand posti ulangan (≈55 kW qo'shimcha).",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "clamp",
+      "multimeter"
+     ],
+     "useful": [
+      "analyzer",
+      "multimeter@ru_mech",
+      "thermal",
+      "visual"
+     ],
+     "fixedBy": [
+      "shed_load"
+     ],
+     "alsoWorks": [
+      "second_feeder"
+     ],
+     "signs": "Shchit toki avtomat nominalidan (250 A) yuqori, kontaktlar va kabel issiq emas.",
+     "explain": "Shchit toki avtomat nominalidan oshgan (≈130 %), kontakt va kabel normal harorat — sabab sexdagi ortiqcha yuklama (vaqtinchalik 55 kW). To'g'ri qaror — vaqtinchalik yuklamani uzish yoki boshqa vaqtga o'tkazish (bepul). Yangi kabel tortish ishlaydi, lekin juda qimmat.",
+     "invalid": {
+      "clean_contact": "Kontaktlar sog'lom; yuklama muammo.",
+      "replace_feeder_cable": "Kabel me'yoriy loyiha bo'yicha yetarli edi; ortiqcha yuklama olib tashlanadi."
+     }
+    }
+   ]
+  },
+  "M4": {
+   "question": "Kranbalka dvigateli nima uchun to'xtab qoldi?",
+   "economy": "cost",
+   "options": [
+    "replace_brake_coil",
+    "set_relay",
+    "replace_contactor",
+    "raise_protection",
+    "replace",
+    "monitor"
+   ],
+   "causes": [
+    {
+     "id": "brake_coil_open",
+     "label": "Tormoz g'altagi ishlamayapti (tormoz ochilmayapti)",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "trip": "relay",
+        "brakeCoilV": 380
+       },
+       "visual": [
+        {
+         "text": "Tormoz kolodkalari g'ildirakka siqilgan; g'altak kuchlanish olyapti, lekin tormozni ochmayapti.",
+         "iso": false
+        },
+        {
+         "text": "Tormoz g'altagi o'rami uzilgan (klemma qutisida ko'rinadi).",
+         "iso": true
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "multimeter",
+      "visual"
+     ],
+     "useful": [
+      "clamp",
+      "thermal",
+      "megger"
+     ],
+     "fixedBy": [
+      "replace_brake_coil"
+     ],
+     "signs": "Tormoz g'altagiga kuchlanish keladi, lekin tormoz ochilmaydi; dvigatel yopiq tormozga qarshi tortgani uchun issiqlik relesi ishlagan.",
+     "explain": "Tormoz g'altagi kuchlanish olyapti, lekin ochmayapti: g'altak o'rami uzilgan. Dvigatel yopiq tormozni yenga olmay, issiqlik relesini ishlatgan. Dvigatelning o'zi sog'lom — almashtirish shart emas. To'g'ri qaror — tormoz g'altagini almashtirish.",
+     "invalid": {
+      "set_relay": "Rele sozlamasi to'g'ri edi; ishlagani — tormoz ochilmagani oqibati.",
+      "replace": "Dvigatel sog'lom — uni almashtirishning ma'nosi yo'q.",
+      "raise_protection": "Relening sozlamasini oshirish yopiq tormozli dvigatelni kuydiradi."
+     }
+    },
+    {
+     "id": "relay_misset",
+     "label": "Issiqlik relesi noto'g'ri (juda past) sozlangan",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "trip": "relay"
+       },
+       "nameplate": {
+        "protection.relayA": 20
+       },
+       "visual": [
+        {
+         "text": "Issiqlik relesi indikatori ishlagan; tormoz ochilgan, kran yuk ko'targanda to'xtagan.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "multimeter",
+      "visual"
+     ],
+     "useful": [
+      "clamp",
+      "thermal"
+     ],
+     "fixedBy": [
+      "set_relay"
+     ],
+     "signs": "Kuchlanish normal, tormoz ochiladi; releda 20 A, dvigatel I_nom ≈ 30 A.",
+     "explain": "Kuchlanish to'liq, tormoz ochiladi, lekin releda 20 A qo'yilgan, dvigatelning nominal toki ≈ 30 A — rele me'yoriy ish tokida ham ishlayapti. To'g'ri qaror — releni I_nom ga sozlash. Dvigatel ham, tormoz ham sog'lom.",
+     "invalid": {
+      "replace_brake_coil": "Tormoz ochilayotgan edi — g'altak sog'lom.",
+      "raise_protection": "Sozlamani «istalgancha» oshirmang — aynan I_nom (30 A) ga sozlang."
+     }
+    },
+    {
+     "id": "phase_missing_m4",
+     "label": "Bitta faza yo'q (kontaktor kontakti kuygan)",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "phaseMissing": "B"
+       },
+       "visual": [
+        {
+         "text": "Kontaktorning B fazasi kontakti kuygan, yoy izlari bor.",
+         "iso": true
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "multimeter"
+     ],
+     "useful": [
+      "clamp",
+      "visual",
+      "thermal"
+     ],
+     "fixedBy": [
+      "replace_contactor"
+     ],
+     "signs": "Dvigatel klemmasida B faza kuchlanishi yo'q (liniyalararo kuchlanishlardan ikkitasi past); tormoz normal.",
+     "explain": "Multimetr dvigatel klemmasida bitta faza yo'qligini ko'rsatdi (ikkita liniyalararo kuchlanish yarmiga tushgan), ta'minot kirishida esa to'liq. Sabab — kontaktorning kuygan kontakti. To'g'ri qaror — kontaktorni almashtirish. Dvigatel va tormoz sog'lom.",
+     "invalid": {
+      "replace_brake_coil": "Tormoz sog'lom; faza yo'qligi sababli dvigatel yurmayapti.",
+      "set_relay": "Rele sozlamasi to'g'ri; muammo — faza yo'qligi."
+     }
+    }
+   ]
+  },
+  "P1": {
+   "question": "Payvandlash sexida faza yuklamalari nima uchun nosimmetrik?",
+   "economy": "cost",
+   "options": [
+    "rebalance",
+    "repair_welder",
+    "replace_welder",
+    "notify_dispatcher",
+    "monitor"
+   ],
+   "causes": [
+    {
+     "id": "uneven_distribution",
+     "label": "Apparatlar fazalar bo'yicha notekis ulangan",
+     "weight": 1,
+     "patches": [],
+     "variants": [
+      {
+       "patches": [
+        {
+         "special": {
+          "welderPairs": [
+           "AB",
+           "AB",
+           "AB",
+           "AB",
+           "AB",
+           "CA",
+           "CA",
+           "BC",
+           "AB"
+          ]
+         }
+        }
+       ]
+      },
+      {
+       "patches": [
+        {
+         "special": {
+          "welderPairs": [
+           "AB",
+           "AB",
+           "AB",
+           "AB",
+           "AB",
+           "CA",
+           "CA",
+           "CA",
+           "CA"
+          ]
+         }
+        }
+       ]
+      },
+      {
+       "patches": [
+        {
+         "special": {
+          "welderPairs": [
+           "AB",
+           "AB",
+           "AB",
+           "BC",
+           "AB",
+           "CA",
+           "AB",
+           "BC",
+           "CA"
+          ]
+         }
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "analyzer",
+      "visual"
+     ],
+     "useful": [
+      "clamp",
+      "multimeter",
+      "thermal"
+     ],
+     "fixedBy": [
+      "rebalance"
+     ],
+     "signs": "Kuchlanish simmetrik, apparatlar tokida nuqson yo'q, lekin fazalar toki farq qiladi; ayrim faza juftlarida apparatlar ko'p.",
+     "explain": "Analizator fazalar tokida katta farq (nosimmetriklik > 10 %) ko'rsatdi, kuchlanish esa simmetrik; ko'zdan kechirishda apparatlar faza juftlari bo'yicha notekis taqsimlangani ko'rindi. Bu tarmoq yoki apparat nuqsoni emas — taqsimot muammosi. To'g'ri qaror — apparatlarni AB/BC/CA juftlari bo'yicha 3-3-3 ga yaqin qayta taqsimlash (deyarli bepul), hech narsani almashtirmasdan.",
+     "invalid": {
+      "repair_welder": "Apparatlar sog'lom edi — ta'mir kerak emas.",
+      "notify_dispatcher": "Kuchlanish simmetrik edi: muammo sexning o'zida."
+     }
+    },
+    {
+     "id": "welder_fault",
+     "label": "Bitta payvand apparati nosoz (transformator o'ramida nuqson)",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "id:weld_w5",
+       "state": {
+        "faulty": 2,
+        "heatWinding": 40,
+        "insMOhm": 0.3,
+        "hazardPerMin": 0.004
+       },
+       "visual": [
+        {
+         "text": "5-apparat korpusi juda issiq, ventilyatori sekin aylanadi.",
+         "iso": false
+        },
+        {
+         "text": "5-apparat transformatori o'ramlari qizib qorayib ketgan, kuygan hid.",
+         "iso": true
+        }
+       ]
+      },
+      {
+       "target": "$eq",
+       "visual": [
+        {
+         "text": "Sexda 5-apparatdan g'ayritabiiy shovqin va kuygan hid kelmoqda.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "analyzer",
+      "thermal@weld_w5",
+      "clamp@weld_w5"
+     ],
+     "useful": [
+      "clamp",
+      "multimeter",
+      "visual",
+      "visual@weld_w5",
+      "thermal"
+     ],
+     "safetyEq": "weld_w5",
+     "fixedBy": [
+      "repair_welder"
+     ],
+     "alsoWorks": [
+      "replace_welder"
+     ],
+     "signs": "Bitta apparatning toki va harorati me'yordan oshgan; kuchlanish simmetrik.",
+     "explain": "Analizator nosimmetriklikni ko'rsatdi; kuchlanish simmetrik, shuning uchun sabab yuklamada. Apparatlarni tokqisqich va termovizor bilan tekshirish 5-apparatda ortiqcha tok va yuqori haroratni topdi. Qayta taqsimlash yordam bermaydi — nosoz apparatni ta'mirlash kerak (to'liq almashtirish ham ishlaydi, lekin qimmat).",
+     "invalid": {
+      "rebalance": "Nosoz apparatni boshqa faza juftiga ko'chirish nosimmetriklikni faqat siljitadi, nosozlikni yo'qotmaydi.",
+      "notify_dispatcher": "Kuchlanish simmetrik edi."
+     }
+    },
+    {
+     "id": "supply_unbalance",
+     "label": "Ta'minot kuchlanishi nosimmetrik (yuqori tomondan)",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "voltageSkew": [
+         10,
+         0,
+         -11
+        ]
+       }
+      }
+     ],
+     "decisive": [
+      "multimeter",
+      "multimeter@ru_weld"
+     ],
+     "useful": [
+      "analyzer",
+      "clamp"
+     ],
+     "fixedBy": [
+      "notify_dispatcher"
+     ],
+     "signs": "Liniyalararo kuchlanishlar o'zaro farq qiladi (hatto RU shinasida ham); apparatlar sog'lom.",
+     "explain": "Liniyalararo kuchlanishlar sexdagi shchitda ham, RU shinasida ham o'zaro farq qiladi — sabab sexdan tashqarida (TP / yuqori tomon). Sexdagi apparatlarni qayta taqsimlash yoki ta'mirlash yordam bermaydi. To'g'ri qaror — dispetcher orqali TP va yuqori tomonni tekshirtirish.",
+     "invalid": {
+      "rebalance": "Kuchlanish nosimmetrikligi sexdan tashqarida — qayta taqsimlash uni tuzatmaydi.",
+      "repair_welder": "Apparatlar sog'lom edi.",
+      "monitor": "Nosimmetrik kuchlanish dvigatellarni qizdiradi — uni kuzatuvda qoldirish yetarli emas, dispetcherga xabar berish kerak."
+     }
+    }
+   ]
+  },
+  "P2": {
+   "question": "Payvandlash sexida cosφ nima uchun past?",
+   "economy": "cost",
+   "options": [
+    "capacitor",
+    "repair_bank",
+    "enable_controller",
+    "monitor"
+   ],
+   "related": [
+    "weld_bank"
+   ],
+   "causes": [
+    {
+     "id": "no_compensation",
+     "label": "Reaktiv quvvat kompensatsiyasi yo'q (batareya o'rnatilmagan)",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "id:weld_bank",
+       "state": {
+        "installed": false
+       },
+       "visual": [
+        {
+         "text": "Kompensatsiya yacheykasi bo'sh: kondensator batareyasi o'rnatilmagan (faqat joy va kabel tayyor).",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "analyzer",
+      "visual@weld_bank"
+     ],
+     "useful": [
+      "clamp@weld_bank",
+      "thermal@weld_bank",
+      "multimeter",
+      "clamp",
+      "visual"
+     ],
+     "fixedBy": [
+      "capacitor"
+     ],
+     "signs": "cosφ ≈ 0,6; kompensatsiya yacheykasida batareya yo'q, kondensator toki nol.",
+     "explain": "cosφ ≈ 0,64, kompensatsiya yacheykasi bo'sh — batareya umuman yo'q. Kerakli quvvat Qc = P·(tgφ₁ − tgφ₂) formulasi bilan hisoblanadi (P ≈ 180 kW, cosφ 0,64 → 0,96–0,97), standart pog'onaga yaxlitlanadi. Bu cosφ jarimasini va transformator yuklanishini kamaytiradi.",
+     "invalid": {}
+    },
+    {
+     "id": "bank_stage_failed",
+     "label": "Batareyaning bosqichlari ishdan chiqqan (kondensatorlar/saqlagichlar)",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "id:weld_bank",
+       "state": {
+        "stagesOk": 2
+       },
+       "visual": [
+        {
+         "text": "Regulyator 6 ta bosqichdan faqat 2 tasini ulayapti; qolganlari «XATO» ko'rsatmoqda.",
+         "iso": false
+        },
+        {
+         "text": "4 ta bosqichdagi kondensatorlar shishgan, saqlagichlari kuygan.",
+         "iso": true
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "analyzer",
+      "visual@weld_bank"
+     ],
+     "useful": [
+      "clamp@weld_bank",
+      "thermal@weld_bank",
+      "multimeter",
+      "clamp",
+      "visual"
+     ],
+     "fixedBy": [
+      "repair_bank"
+     ],
+     "alsoWorks": [
+      "capacitor"
+     ],
+     "signs": "Batareya bor, lekin faqat 1–2 bosqich ulangan; regulyator xato ko'rsatadi; kondensator toki kam.",
+     "explain": "Batareya o'rnatilgan, lekin 6 bosqichdan faqat 2 tasi ishlayapti (shishgan kondensatorlar va kuygan saqlagichlar). Yangi batareya o'rnatish ishlaydi, lekin qimmat: faqat shikastlangan bosqichlarni almashtirish yetarli.",
+     "invalid": {}
+    },
+    {
+     "id": "bank_controller_off",
+     "label": "Kompensatsiya regulyatori o'chiq / qo'l rejimida",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "id:weld_bank",
+       "state": {
+        "controller": "off"
+       },
+       "visual": [
+        {
+         "text": "Kompensatsiya regulyatori «O'CHIQ / qo'lda» rejimida; hech bir bosqich ulanmagan.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "analyzer",
+      "visual@weld_bank"
+     ],
+     "useful": [
+      "clamp@weld_bank",
+      "thermal@weld_bank",
+      "multimeter",
+      "clamp",
+      "visual"
+     ],
+     "fixedBy": [
+      "enable_controller"
+     ],
+     "alsoWorks": [
+      "capacitor"
+     ],
+     "signs": "Batareya sog'lom, lekin regulyator o'chiq; kondensator toki nol; bosqichlar xatosiz.",
+     "explain": "Batareya butun va sog'lom, faqat regulyator «O'CHIQ» holatda — bosqichlar ulanmayapti. To'g'ri qaror — regulyatorni AVTO rejimiga o'tkazish (bepul). Yangi batareya yoki ta'mir kerak emas.",
+     "invalid": {}
+    }
+   ]
+  },
+  "P3": {
+   "question": "Kabel ulanish nuqtasi nima uchun qizigan?",
+   "economy": "cost",
+   "options": [
+    "retighten_contact",
+    "replace_cable_small",
+    "raise_protection",
+    "monitor"
+   ],
+   "causes": [
+    {
+     "id": "loose_contact_p3",
+     "label": "Kontakt bo'shashgan (ulanish nuqtasida qarshilik katta)",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "contactR": 0.3
+       },
+       "visual": [
+        {
+         "text": "Ulanish joyi atrofidagi izolyatsiya qorayib, deformatsiyalangan.",
+         "iso": false
+        },
+        {
+         "text": "Klemma boltlari bo'shashgan, mis ulanish joyi qorayib erib boshlagan.",
+         "iso": true
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "thermal",
+      "clamp"
+     ],
+     "useful": [
+      "visual",
+      "multimeter"
+     ],
+     "fixedBy": [
+      "retighten_contact"
+     ],
+     "signs": "Faqat ulanish nuqtasi qizigan, kabelning o'zi iliq; tok kabel ruxsat etilgan tokidan past.",
+     "explain": "Termovizor ulanish nuqtasi juda issiq (≈90 °C), kabelning o'zi esa iliq ekanini ko'rsatdi; tok kabel ruxsat etilgan tokidan past. Demak, kabel yetarli — muammo kontaktda. To'g'ri qaror — kontaktni tozalab qayta qisish. Kabelni almashtirish kerak emas.",
+     "invalid": {
+      "replace_cable_small": "Kabel kesimi yetarli edi — qizigan faqat ulanish nuqtasi."
+     }
+    },
+    {
+     "id": "cable_undersized",
+     "label": "Kabel kesimi tok uchun yetarli emas",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "$eq",
+       "nameplate": {
+        "cable.section": 10
+       },
+       "visual": [
+        {
+         "text": "Kabel markasi 3×10 mm² — apparat toki uchun kichik; kabel butun uzunligi bo'ylab issiq.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "thermal",
+      "clamp"
+     ],
+     "useful": [
+      "visual",
+      "multimeter"
+     ],
+     "fixedBy": [
+      "replace_cable_small"
+     ],
+     "signs": "Kabel butun uzunligi bo'ylab va ulanish nuqtasi birdek issiq; tok kabel ruxsat etilgan tokidan yuqori.",
+     "explain": "Tok (≈75 A) 10 mm² kabelning ruxsat etilgan tokidan (≈55 A) katta; kabelning o'zi ham, ulanish nuqtasi ham issiq. Kontaktni qayta qisish yordam bermaydi. To'g'ri qaror — kabelni kattaroq kesimga (25 mm²) almashtirish.",
+     "invalid": {
+      "retighten_contact": "Kontakt sog'lom; issiqlik kabelning kichik kesimidan."
+     }
+    }
+   ]
+  },
+  "N1": {
+   "question": "2-nasos dvigateli nima uchun ishlamayapti?",
+   "economy": "cost",
+   "options": [
+    "reset_relay_valve",
+    "replace_fuse",
+    "replace_bearings",
+    "rewind",
+    "replace",
+    "raise_protection",
+    "monitor"
+   ],
+   "causes": [
+    {
+     "id": "relay_tripped",
+     "label": "Issiqlik relesi ishlagan (quruq yurish / yopiq klapan)",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "trip": "relay"
+       },
+       "visual": [
+        {
+         "text": "Chiqish klapani yopiq, manometr bosimi keskin ko'tarilgan (nasos yopiq klapanga qarshi ishlagan).",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "multimeter",
+      "visual"
+     ],
+     "useful": [
+      "clamp",
+      "thermal"
+     ],
+     "fixedBy": [
+      "reset_relay_valve"
+     ],
+     "signs": "Uch fazada ham kuchlanish bor, issiqlik relesi ishlagan, klapan yopiq; izolyatsiya yaxshi.",
+     "explain": "Ta'minot kuchlanishi to'liq, issiqlik relesi ishlagan va chiqish klapani yopiq: nasos yopiq klapanga qarshi ishlab, ortiqcha yuklangan va rele uni o'chirgan. To'g'ri qaror — klapanni ochish, releni qaytarish va quruq yurishdan himoya o'rnatish. Dvigatelni almashtirish shart emas.",
+     "invalid": {
+      "replace_fuse": "Saqlagichlar butun edi, uch fazada ham kuchlanish bor.",
+      "replace": "Dvigatel sog'lom edi.",
+      "rewind": "Izolyatsiya bu yerda sabab emas."
+     }
+    },
+    {
+     "id": "fuse_blown",
+     "label": "Saqlagich kuygan (faza uzilishi)",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "phaseMissing": "C"
+       },
+       "visual": [
+        {
+         "text": "Starter shkafida C faza saqlagichining indikatori tushgan (kuygan).",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "multimeter",
+      "visual"
+     ],
+     "useful": [
+      "clamp",
+      "thermal"
+     ],
+     "fixedBy": [
+      "replace_fuse"
+     ],
+     "signs": "Dvigatel klemmasida bitta faza kuchlanishi yo'q; saqlagich indikatori tushgan.",
+     "explain": "Multimetr dvigatel klemmasida bitta faza yo'qligini ko'rsatdi, saqlagichning indikatori tushgan. To'g'ri qaror — saqlagichni almashtirish (arzon). Dvigatel sog'lom.",
+     "invalid": {
+      "reset_relay_valve": "Rele ishlamagan edi — sabab faza yo'qligi.",
+      "replace": "Dvigatel sog'lom edi."
+     }
+    },
+    {
+     "id": "rotor_jam",
+     "label": "Rotor qisilgan (podshipnik buzilgan)",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "trip": "relay",
+        "stalled": true,
+        "heatBearing": 40
+       },
+       "T": {
+        "bearing": 110,
+        "case": 60
+       },
+       "visual": [
+        {
+         "text": "Podshipnik qopqog'i atrofida moy sachragan, qora; metall hidi.",
+         "iso": false
+        },
+        {
+         "text": "Nasos vali qo'l bilan aylanmayapti (qisilgan).",
+         "iso": true
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "clampStart",
+      "thermal"
+     ],
+     "useful": [
+      "multimeter",
+      "visual",
+      "clamp"
+     ],
+     "fixedBy": [
+      "replace_bearings"
+     ],
+     "alsoWorks": [
+      "replace"
+     ],
+     "signs": "Ishga tushirishda tok ≈7×I_nom va avtomat uzadi; podshipnik juda issiq; val aylanmaydi.",
+     "explain": "Ishga tushirishda tok qisilgan rotorga xos ≈7×I_nom ni tashkil etib, himoya uzildi; podshipnik juda issiq va val qo'l bilan aylanmaydi. To'g'ri qaror — podshipniklarni almashtirish. Butun dvigatelni almashtirish ham ishlaydi, lekin ancha qimmat.",
+     "invalid": {
+      "reset_relay_valve": "Releni qaytarishning foydasi yo'q — rotor qisilgan, yana uziladi.",
+      "replace_fuse": "Saqlagichlar butun."
+     }
+    },
+    {
+     "id": "insulation_fail_n",
+     "label": "O'ramlar izolyatsiyasi teshilgan (yerga tutashuv)",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "trip": "earth",
+        "insMOhm": 0.08
+       },
+       "nameplate": {
+        "age": {
+         "rand": [
+          9,
+          20
+         ],
+         "int": true
+        },
+        "rewinds": {
+         "rand": [
+          0,
+          3
+         ],
+         "int": true
+        }
+       },
+       "visual": [
+        {
+         "text": "Yer bilan tutashuv himoyasi ishlagan; klemma qutisidan kuygan hid.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "megger",
+      "visual"
+     ],
+     "useful": [
+      "multimeter",
+      "clamp",
+      "thermal"
+     ],
+     "spareChance": 0.5,
+     "fixedBy": [
+      "rewind",
+      "replace"
+     ],
+     "signs": "Himoya yerga tutashuvdan ishlagan; megger < 0,5 MΩ; kuygan hid.",
+     "explain": "Yerga tutashuv himoyasi ishlagan, megger 0,5 MΩ dan ancha past (kuchlanish yo'qligi tekshirilgandan keyin o'lchanadi) — izolyatsiya teshilgan. Qayta o'rash yoki almashtirish kerak; tanlov yosh, qayta o'ralganlar soni, zaxira va to'xtash narxiga bog'liq.",
+     "invalid": {
+      "reset_relay_valve": "Himoya bekorga ishlamagan — izolyatsiya teshilgan.",
+      "replace_fuse": "Saqlagich butun."
+     }
+    }
+   ]
+  },
+  "N2": {
+   "question": "Nasos nima uchun tez-tez yoqilib o'chyapti (qisqa tsikl)?",
+   "economy": "cost",
+   "options": [
+    "set_pressure_switch",
+    "replace_contactor",
+    "service_tank",
+    "raise_protection",
+    "monitor"
+   ],
+   "causes": [
+    {
+     "id": "pressure_switch",
+     "label": "Bosim relesi sozlamasi noto'g'ri (farq ΔP juda kichik)",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "$eq",
+       "visual": [
+        {
+         "text": "Hisoblagich: soatiga 36 marta yoqilib-o'chadi. Bosim relesi: yoqish 2,8 bar / o'chirish 3,0 bar (farq 0,2 bar).",
+         "iso": false
+        },
+        {
+         "text": "Rezervuar manometri barqaror, oldindan bosim me'yorda.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "visual"
+     ],
+     "useful": [
+      "clamp",
+      "thermal",
+      "multimeter"
+     ],
+     "fixedBy": [
+      "set_pressure_switch"
+     ],
+     "signs": "Bosim relesi farqi 0,2 bar; rezervuar normal; kontaktor sovuq.",
+     "explain": "Bosim relesida yoqish/o'chirish farqi atigi 0,2 bar — rezervuar bir necha soniyada to'lib, nasos darrov o'chadi. Kontaktor va rezervuar sog'lom. To'g'ri qaror — farqni (ΔP) ≈1 bar ga sozlash.",
+     "invalid": {
+      "replace_contactor": "Kontaktor sovuq va sog'lom edi.",
+      "service_tank": "Rezervuar manometri barqaror edi."
+     }
+    },
+    {
+     "id": "contactor_worn",
+     "label": "Kontaktor kontaktlari yeyilgan (chaqnashlar, titrash)",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "contactR": 0.05,
+        "heatTerminal": 40
+       },
+       "visual": [
+        {
+         "text": "Hisoblagich: soatiga 34 marta yoqilib-o'chadi. Bosim relesi: yoqish 2,5 / o'chirish 3,5 bar (farq 1,0 bar — me'yorda).",
+         "iso": false
+        },
+        {
+         "text": "Kontaktor kontaktlari kuygan, oksidlangan va cho'kkan (ochilgan holatda ko'rinadi).",
+         "iso": true
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "thermal",
+      "visual"
+     ],
+     "useful": [
+      "clamp",
+      "multimeter"
+     ],
+     "fixedBy": [
+      "replace_contactor"
+     ],
+     "signs": "Bosim relesi va rezervuar me'yorda; kontaktor klemmasi issiq; kontaktlar kuygan.",
+     "explain": "Bosim relesi sozlamasi (ΔP = 1 bar) va rezervuar me'yorda, lekin kontaktor klemmasi issiq va kontaktlari kuygan — g'altak titrab, nasos ketma-ket yoqilib o'chyapti. To'g'ri qaror — kontaktorni almashtirish.",
+     "invalid": {
+      "set_pressure_switch": "Bosim relesi sozlamasi me'yorda edi.",
+      "service_tank": "Rezervuar sog'lom edi."
+     }
+    },
+    {
+     "id": "tank_membrane",
+     "label": "Bosim rezervuari muammosi (membrana shikastlangan, oldindan bosim yo'q)",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "$eq",
+       "visual": [
+        {
+         "text": "Hisoblagich: soatiga 40 marta yoqilib-o'chadi. Bosim relesi sozlamasi me'yorda (farq 1,0 bar).",
+         "iso": false
+        },
+        {
+         "text": "Rezervuar manometri har yoqilishda keskin sakraydi; oldindan bosim deyarli nol — membrana shikastlangan.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "visual"
+     ],
+     "useful": [
+      "clamp",
+      "thermal",
+      "multimeter"
+     ],
+     "fixedBy": [
+      "service_tank"
+     ],
+     "signs": "Bosim relesi va kontaktor me'yorda; rezervuar manometri keskin sakraydi.",
+     "explain": "Rele sozlamasi me'yorda, kontaktor sovuq, lekin rezervuarning manometri har yoqilishda keskin sakraydi: membrana yorilgan va rezervuar «havo yostig'i»ni yo'qotgan. To'g'ri qaror — membranani almashtirish va oldindan bosimni sozlash.",
+     "invalid": {
+      "set_pressure_switch": "Bosim relesi sozlamasi me'yorda edi.",
+      "replace_contactor": "Kontaktor sovuq edi."
+     }
+    }
+   ]
+  },
+  "N3": {
+   "question": "3-nasosning drossel bilan boshqarilishi uchun qanday qaror samarali?",
+   "economy": "benefit",
+   "options": [
+    "vfd",
+    "trim_impeller",
+    "monitor"
+   ],
+   "causes": [
+    {
+     "id": "low_demand",
+     "label": "Talab past va uzoq vaqt (≈60 % sarf, yiliga ≈6500 soat) — VFD samarali",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "load": 0.82,
+        "process": {
+         "kind": "pump",
+         "q": 0.6,
+         "hours": 6500,
+         "trimFactor": 0.55
+        }
+       },
+       "visual": [
+        {
+         "text": "Drossel klapani ≈40 % ochiq; haqiqiy sarf nominalning ≈60 % i.",
+         "iso": false
+        },
+        {
+         "text": "Ish soati hisoblagichi: ≈6500 soat/yil.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "clamp",
+      "visual"
+     ],
+     "useful": [
+      "thermal",
+      "multimeter"
+     ],
+     "bestOption": "vfd",
+     "signs": "Sarf nominalning ≈60 %, ish soati ko'p; nasos esa to'liq tezlikda, drossel bilan boshqarilmoqda.",
+     "explain": "Sarf ≈60 % va nasos yiliga ≈6500 soat ishlaydi: affinlik qonuniga ko'ra quvvat tezlikning kubiga bog'liq, drossel esa quvvatni deyarli kamaytirmaydi. VFD yillik o'nlab mln so'm tejaydi va bir necha oyda o'zini qoplaydi. Kurak kesish ham tejaydi, lekin kamroq.",
+     "invalid": {}
+    },
+    {
+     "id": "constant_duty",
+     "label": "Doimiy bir me'yordagi sarf (≈80 %) — kurak kesish yetarli",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "load": 0.91,
+        "process": {
+         "kind": "pump",
+         "q": 0.8,
+         "hours": 4000,
+         "trimFactor": 0.95
+        }
+       },
+       "visual": [
+        {
+         "text": "Drossel klapani ≈70 % ochiq; sarf nominalning ≈80 % da doimiy, talab jadvali o'zgarmaydi.",
+         "iso": false
+        },
+        {
+         "text": "Ish soati hisoblagichi: ≈4000 soat/yil.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "clamp",
+      "visual"
+     ],
+     "useful": [
+      "thermal",
+      "multimeter"
+     ],
+     "bestOption": "trim_impeller",
+     "signs": "Sarf doimiy (o'zgarmaydi); tezlikni rostlash kerak emas.",
+     "explain": "Sarf doimiy ≈80 %: o'zgaruvchan tezlik kerak emas — ishchi g'ildirak diametrini bir marta kesish deyarli VFD kabi tejaydi, ammo ancha arzon. VFD ham foyda keltiradi, lekin sof foyda kamroq.",
+     "invalid": {}
+    },
+    {
+     "id": "standby_use",
+     "label": "Nasos deyarli ishlatilmaydi (zaxira, yiliga ≈150 soat) — hech narsa qilish shart emas",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "load": 0.82,
+        "process": {
+         "kind": "pump",
+         "q": 0.6,
+         "hours": 150,
+         "trimFactor": 0.55
+        }
+       },
+       "visual": [
+        {
+         "text": "Drossel ≈40 % ochiq; bu zaxira nasos, faqat cho'qqi paytlarda yoqiladi.",
+         "iso": false
+        },
+        {
+         "text": "Ish soati hisoblagichi: yiliga ≈150 soat.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "clamp",
+      "visual"
+     ],
+     "useful": [
+      "thermal",
+      "multimeter"
+     ],
+     "bestOption": "monitor",
+     "signs": "Ish soati juda kam; tejash ahamiyatsiz.",
+     "explain": "Nasos yiliga atigi ≈150 soat ishlaydi: VFD yoki kurak kesishning tejashi kapital xarajatni 5 yilda ham qoplamaydi. To'g'ri qaror — hech narsa qilmaslik. Tejash taklifi har doim hisob-kitob bilan tasdiqlanadi.",
+     "invalid": {}
+    }
+   ]
+  },
+  "V1": {
+   "question": "Ventilyator dvigatelida vibratsiya nima uchun yuqori?",
+   "economy": "cost",
+   "options": [
+    "replace_bearings",
+    "align_coupling",
+    "balance_clean",
+    "tighten_bolts",
+    "replace",
+    "monitor"
+   ],
+   "causes": [
+    {
+     "id": "bearing_worn",
+     "label": "Podshipnik yeyilgan",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "vib": 6.8,
+        "vibKind": "bearing",
+        "heatBearing": 38,
+        "hazardPerMin": 0.002
+       },
+       "visual": [
+        {
+         "text": "Podshipnik tomonidan bir tekis bo'lmagan shovqin va yuqori chastotali g'ichirlash.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "vibration",
+      "thermal"
+     ],
+     "useful": [
+      "clamp",
+      "visual",
+      "megger"
+     ],
+     "fixedBy": [
+      "replace_bearings"
+     ],
+     "alsoWorks": [
+      "replace"
+     ],
+     "signs": "Yuqori chastotali vibratsiya va yuqori podshipnik harorati; tok va izolyatsiya normal.",
+     "explain": "Vibratsiya spektrida yuqori chastotali (podshipnik) komponenta va podshipnik harorati baland — podshipnik yeyilgan. Tok va izolyatsiya normal, dvigatel sog'lom. To'g'ri qaror — podshipniklarni almashtirish.",
+     "invalid": {
+      "tighten_bolts": "Bo'shashgan bolt past chastotali vibratsiya beradi; bu yerda podshipnik chastotasi.",
+      "balance_clean": "Disbalans 1× chastotada bo'ladi; bu yerda podshipnik chastotasi."
+     }
+    },
+    {
+     "id": "misalignment",
+     "label": "Markazlashmaslik (val muftasi)",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "vib": 5.2,
+        "vibKind": "2x",
+        "heatBearing": 12
+       },
+       "visual": [
+        {
+         "text": "Muftada ko'zga ko'rinadigan siljish; rezina elementlar yeyilgan.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "vibration",
+      "visual"
+     ],
+     "useful": [
+      "clamp",
+      "thermal"
+     ],
+     "fixedBy": [
+      "align_coupling"
+     ],
+     "signs": "Vibratsiya aylanish chastotasining 2× komponentasi ustun; mufta elementlari yeyilgan.",
+     "explain": "Vibratsiya 2× aylanish chastotasida ustun, mufta yeyilgan va siljigan — markazlashmaslik. To'g'ri qaror — valni markazlashtirish. Podshipnik yoki dvigatelni almashtirish shart emas.",
+     "invalid": {
+      "replace_bearings": "Podshipnik chastotasi kuzatilmadi — podshipnik sog'lom.",
+      "balance_clean": "Disbalans 1× da bo'ladi, bu yerda 2×."
+     }
+    },
+    {
+     "id": "unbalance",
+     "label": "Disbalans (parraklarda chang qatlami / yuk tushib ketgan)",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "vib": 5.9,
+        "vibKind": "1x"
+       },
+       "visual": [
+        {
+         "text": "Ventilyator parraklarida bir tomonlama chang qatlami; bitta balans yuki tushib ketgan.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "vibration",
+      "visual"
+     ],
+     "useful": [
+      "clamp",
+      "thermal"
+     ],
+     "fixedBy": [
+      "balance_clean"
+     ],
+     "signs": "Vibratsiya 1× aylanish chastotasida ustun (radial); parraklar iflos.",
+     "explain": "Vibratsiya 1× aylanish chastotasida ustun va parraklar bir tomonlama iflos — disbalans. To'g'ri qaror — parraklarni tozalash va balanslash. Podshipnik/dvigatel sog'lom.",
+     "invalid": {
+      "replace_bearings": "Podshipnik chastotasi yo'q.",
+      "align_coupling": "2× chastotasi yo'q; disbalans 1× da."
+     }
+    },
+    {
+     "id": "loose_bolts",
+     "label": "Poydevor boltlari bo'shashgan",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "vib": 4.6,
+        "vibKind": "loose"
+       },
+       "visual": [
+        {
+         "text": "Poydevor boltlari (2 tasi) bo'shashgan, gaykalar aylanib ketgan.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "vibration",
+      "visual"
+     ],
+     "useful": [
+      "clamp",
+      "thermal"
+     ],
+     "fixedBy": [
+      "tighten_bolts"
+     ],
+     "signs": "Bo'shashishga xos past chastotali garmonikalar; poydevor boltlari qo'l bilan siljiydi.",
+     "explain": "Vibratsiya bo'shashishga xos ko'p garmonikali, poydevor boltlari qo'l bilan siljiydi. Eng arzon chora — boltlarni tortish. Boshqa sabablarni «ta'mirlash» kerak emas edi.",
+     "invalid": {
+      "replace_bearings": "Podshipnik tovushi yo'q.",
+      "balance_clean": "Disbalansga xos 1× chastota yo'q."
+     }
+    }
+   ]
+  },
+  "V2": {
+   "question": "Ventilyator podshipnigining harorati va shovqini nima uchun yuqori?",
+   "economy": "cost",
+   "options": [
+    "lubricate",
+    "replace_bearings",
+    "replace",
+    "monitor"
+   ],
+   "causes": [
+    {
+     "id": "lack_of_grease",
+     "label": "Moy yetishmaydi (podshipnik moylanmagan)",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "vib": 3.6,
+        "vibKind": "normal",
+        "heatBearing": 45,
+        "hazardPerMin": 0.0015
+       },
+       "visual": [
+        {
+         "text": "Moylash nippeli quruq, eski moy qotib qolgan; metall ishqalanish ovozi.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "vibration",
+      "visual"
+     ],
+     "useful": [
+      "thermal",
+      "clamp"
+     ],
+     "fixedBy": [
+      "lubricate"
+     ],
+     "alsoWorks": [
+      "replace_bearings",
+      "replace"
+     ],
+     "signs": "Vibratsiya ortiqcha emas (≈3,6 mm/s), podshipnik iliq-issiq; moy qotgan.",
+     "explain": "Vibratsiya biroz baland (≈3,6 mm/s), podshipnikda zarbali tovush yo'q, moy esa quruq — moy yetishmaydi. To'g'ri qaror — oddiy moylash (arzon). Podshipnikni almashtirish ishlaydi, lekin ortiqcha.",
+     "invalid": {}
+    },
+    {
+     "id": "bearing_damaged",
+     "label": "Podshipnik shikastlangan",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "vib": 7.8,
+        "vibKind": "bearing",
+        "heatBearing": 55,
+        "hazardPerMin": 0.003
+       },
+       "visual": [
+        {
+         "text": "Podshipnikdan qo'pol taqillash; moy qora va kukunsimon, metall zarralari bor.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "vibration",
+      "visual"
+     ],
+     "useful": [
+      "thermal",
+      "clamp"
+     ],
+     "fixedBy": [
+      "replace_bearings"
+     ],
+     "alsoWorks": [
+      "replace"
+     ],
+     "signs": "Vibratsiya > 7,1 mm/s, podshipnik chastotasi; harorat > 90 °C; moy qora.",
+     "explain": "Vibratsiya 7,1 mm/s chegarasidan oshgan, podshipnik chastotasi aniq, moy qora va zarrali — podshipnik shikastlangan. Moylash yordam bermaydi. To'g'ri qaror — podshipniklarni almashtirish. Butun dvigatelni almashtirish shart emas.",
+     "invalid": {
+      "lubricate": "Shikastlangan podshipnikni moylash yordam bermaydi: u almashtirilishi kerak."
+     }
+    }
+   ]
+  },
+  "V3": {
+   "question": "3-ventilyator doim 100 % ishlashi uchun qanday qaror samarali?",
+   "economy": "benefit",
+   "options": [
+    "vfd",
+    "timer",
+    "monitor"
+   ],
+   "causes": [
+    {
+     "id": "variable_demand",
+     "label": "Talab smenalar bo'yicha o'zgaradi (100 / 60 / 35 %) — VFD samarali",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "load": 0.85,
+        "process": {
+         "kind": "fan",
+         "segments": [
+          {
+           "h": 2500,
+           "q": 1
+          },
+          {
+           "h": 2500,
+           "q": 0.6
+          },
+          {
+           "h": 1500,
+           "q": 0.35
+          }
+         ]
+        }
+       },
+       "visual": [
+        {
+         "text": "Havo sarfi talabi o'zgaruvchan: kunduzi 100 %, kechqurun ≈60 %, tunda ≈35 %. Ventilyator esa doim to'liq tezlikda.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "clamp",
+      "visual"
+     ],
+     "useful": [
+      "thermal",
+      "vibration"
+     ],
+     "bestOption": "vfd",
+     "signs": "Talab o'zgaradi, nol emas; taymer yordam bermaydi.",
+     "explain": "Talab hech qachon nolga tushmaydi, lekin kechqurun va tunda ancha kam: ventilyator quvvati tezlikning kubiga bog'liq, shuning uchun VFD katta tejaydi. Taymer bu yerda hech narsa tejamaydi (ventilyatorni o'chirib bo'lmaydi).",
+     "invalid": {}
+    },
+    {
+     "id": "scheduled_off",
+     "label": "Sex kechasi/dam olishda bo'sh — taymer eng yaxshi",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "load": 0.85,
+        "process": {
+         "kind": "fan",
+         "segments": [
+          {
+           "h": 3000,
+           "q": 1
+          },
+          {
+           "h": 3500,
+           "q": 0
+          }
+         ]
+        }
+       },
+       "visual": [
+        {
+         "text": "Sex kechasi va dam olish kunlari bo'sh (ishchilar yo'q), ammo ventilyator to'xtamaydi.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "clamp",
+      "visual"
+     ],
+     "useful": [
+      "thermal",
+      "vibration"
+     ],
+     "bestOption": "timer",
+     "signs": "Bo'sh vaqtlarda talab nol; ish vaqtida to'liq quvvat kerak.",
+     "explain": "Yiliga ≈3500 soat sex bo'sh: bu vaqtda ventilyatorni o'chirish eng ko'p tejaydi va taymer atigi ≈1 mln so'm turadi. VFD ham tejaydi, lekin ancha qimmat — sof foyda kamroq.",
+     "invalid": {}
+    },
+    {
+     "id": "constant_demand",
+     "label": "Doimiy to'liq talab (sanitariya talabi) — hech narsa qilmaslik",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "load": 0.85,
+        "process": {
+         "kind": "fan",
+         "segments": [
+          {
+           "h": 6500,
+           "q": 1
+          }
+         ]
+        }
+       },
+       "visual": [
+        {
+         "text": "Sexda doimiy changli ishlab chiqarish: havo almashinuvi har doim to'liq kerak (sanitariya talabi).",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "clamp",
+      "visual"
+     ],
+     "useful": [
+      "thermal",
+      "vibration"
+     ],
+     "bestOption": "monitor",
+     "signs": "Talab doim to'liq; o'chirish yoki sekinlatish mumkin emas.",
+     "explain": "Havo almashinuvi doim to'liq kerak: VFD yoki taymer tejamaydi (VFD hatto o'z isrofi bilan biroz ko'p sarflaydi). To'g'ri qaror — hech narsa qilmaslik.",
+     "invalid": {}
+    }
+   ]
+  },
+  "E1": {
+   "question": "Zavod energiya sarfida asosiy isrof qayerda?",
+   "economy": "portfolio",
+   "options": [],
+   "causes": [
+    {
+     "id": "weld_peak",
+     "label": "Tarif cho'qqisida payvandlash yuklamasi (soat 08–11)",
+     "weight": 1,
+     "patches": [],
+     "params": {
+      "energyVariant": "weld_peak"
+     },
+     "decisive": [
+      "trend@plant"
+     ],
+     "useful": [
+      "analyzer@ru_weld",
+      "analyzer@ru_mech",
+      "analyzer@ru_pump",
+      "analyzer@ru_vent",
+      "analyzer@tp_tm1",
+      "analyzer@tp_tm2",
+      "analyzer@mech_sch"
+     ],
+     "signs": "Sutkalik grafikda eng baland cho'qqilar tarif cho'qqisida va payvandlash tufayli.",
+     "explain": "Grafikda eng baland cho'qqilar 08–11 va 13–16 soatlarda, ular qimmat tarif zonasiga tushadi va asosan payvandlash sexidan. Yuklamani siljitish tejaydi, lekin kechki smena xarajati bor; cosφ ni ko'tarish (kondensator) va VFD ko'pincha ko'proq foyda beradi. Eng yaxshi to'plam byudjet va qoplanish muddatiga qarab tanlanadi.",
+     "invalid": {}
+    },
+    {
+     "id": "night_base",
+     "label": "Tunda bo'sh yurish va ortiqcha yoritish (tungi bazaviy yuklama baland)",
+     "weight": 1,
+     "patches": [],
+     "params": {
+      "energyVariant": "night_base"
+     },
+     "decisive": [
+      "trend@plant"
+     ],
+     "useful": [
+      "analyzer@ru_weld",
+      "analyzer@ru_mech",
+      "analyzer@ru_pump",
+      "analyzer@ru_vent",
+      "analyzer@tp_tm1",
+      "analyzer@tp_tm2"
+     ],
+     "signs": "Tungi soatlarda yuklama kutilganidan ancha baland (ish bo'lmasa ham).",
+     "explain": "Grafikda tungi soatlarda yuklama ish kunining yarmiga yaqin — ishlamayotgan uskunalar va yoritish yoqilgan holda qolgan. Bo'sh yurishni o'chirish deyarli bepul va tez qoplanadi; undan keyin VFD va kondensator.",
+     "invalid": {}
+    },
+    {
+     "id": "low_cos_e1",
+     "label": "Past cosφ tufayli jarima (reaktiv quvvat kompensatsiyasi ishlamayapti)",
+     "weight": 1,
+     "patches": [
+      {
+       "target": "id:weld_bank",
+       "state": {
+        "controller": "off"
+       }
+      }
+     ],
+     "params": {
+      "energyVariant": "low_cos"
+     },
+     "decisive": [
+      "trend@plant",
+      "analyzer@ru_weld"
+     ],
+     "useful": [
+      "analyzer@ru_mech",
+      "analyzer@ru_pump",
+      "analyzer@ru_vent",
+      "analyzer@tp_tm1",
+      "analyzer@tp_tm2",
+      "visual@weld_bank"
+     ],
+     "signs": "Zavod cosφ ≈ 0,8 dan past, jarima koeffitsiyenti katta; payvandlash sexida kompensatsiya ishlamayapti.",
+     "explain": "Zavod cosφ si ≈ 0,8 — jarima koeffitsiyenti yillik hisobni sezilarli oshiradi. Kondensator batareyasi (yoki mavjudini ishga tushirish) eng tez qoplanadigan taklif. Qolgan takliflar byudjet doirasida qo'shiladi.",
+     "invalid": {}
+    }
+   ]
+  },
+  "E2": {
+   "question": "Bitta transformator ta'mirga chiqarilsa, ikkinchisi yuklamani ko'taradimi?",
+   "economy": "plan",
+   "options": [],
+   "causes": [
+    {
+     "id": "out_ok",
+     "label": "Ha, ko'taradi — K ≤ 0,8, qo'shimcha chora kerak emas",
+     "weight": 1,
+     "patches": [],
+     "params": {
+      "window": [
+       "night",
+       "evening"
+      ]
+     },
+     "decisive": [
+      "trend@plant",
+      "analyzer@tp_tm1"
+     ],
+     "useful": [
+      "analyzer@tp_tm2",
+      "analyzer@ru_weld",
+      "analyzer@ru_mech",
+      "analyzer@ru_pump",
+      "analyzer@ru_vent",
+      "clamp@tp_tm1",
+      "clamp@tp_tm2",
+      "thermal@tp_tm1",
+      "thermal@tp_tm2"
+     ],
+     "outcome": "ok",
+     "signs": "Berilgan oynada umumiy S transformator nominalining 80 % idan kam.",
+     "explain": "Ta'mir oynasida zavod yuklamasi past (S ≈ 90–230 kVA), ikkinchi transformator (400 kVA) K ≤ 0,8 bilan oson ko'taradi. Qo'shimcha chora kerak emas — ortiqcha xarajat qilmang.",
+     "invalid": {}
+    },
+    {
+     "id": "out_warn",
+     "label": "Ko'taradi, lekin ogohlantirish zonasida (0,8 < K ≤ 0,95) — kuzatish",
+     "weight": 1,
+     "patches": [],
+     "params": {
+      "window": [
+       "lunch"
+      ]
+     },
+     "decisive": [
+      "trend@plant",
+      "analyzer@tp_tm1"
+     ],
+     "useful": [
+      "analyzer@tp_tm2",
+      "analyzer@ru_weld",
+      "analyzer@ru_mech",
+      "analyzer@ru_pump",
+      "analyzer@ru_vent",
+      "clamp@tp_tm1",
+      "clamp@tp_tm2",
+      "thermal@tp_tm1",
+      "thermal@tp_tm2"
+     ],
+     "outcome": "warn",
+     "signs": "Oynada K 0,8–0,95 oralig'ida: transformator ko'taradi, lekin zaxira kam.",
+     "explain": "Tushlik oynasida K ≈ 0,8–0,95: transformator ko'taradi, lekin ogohlantirish zonasida. Qo'shimcha choralar shart emas, faqat yuklamani kuzatib turish kerak. Ortiqcha xarajat qilish noto'g'ri.",
+     "invalid": {}
+    },
+    {
+     "id": "out_overload",
+     "label": "Yo'q — ortiqcha yuklanadi (K > 0,95), yuklamani boshqarish shart",
+     "weight": 1,
+     "patches": [],
+     "params": {
+      "window": [
+       "day"
+      ]
+     },
+     "decisive": [
+      "trend@plant",
+      "analyzer@tp_tm1"
+     ],
+     "useful": [
+      "analyzer@tp_tm2",
+      "analyzer@ru_weld",
+      "analyzer@ru_mech",
+      "analyzer@ru_pump",
+      "analyzer@ru_vent",
+      "clamp@tp_tm1",
+      "clamp@tp_tm2",
+      "thermal@tp_tm1",
+      "thermal@tp_tm2"
+     ],
+     "outcome": "overload",
+     "signs": "Kunduzgi cho'qqi paytida umumiy S > 400 kVA.",
+     "explain": "Kunduzgi oynada (10–14 soat) umumiy yuklama S ≈ 440 kVA — bitta TM-400 uchun K > 1. Ta'mir shu oynada xavfsiz emas yoki yuklamani kamaytirish kerak: eng arzon to'plam (kechiktiriladigan yuklamalarni siljitish/uzish) K ni 0,95 dan pastga tushiradi.",
+     "invalid": {}
+    }
+   ]
+  }
+ }
+}

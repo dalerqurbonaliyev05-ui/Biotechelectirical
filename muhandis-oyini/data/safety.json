@@ -1,0 +1,84 @@
+{
+  "_izoh": "Xavfsizlik ketma-ketligi (soddalashtirilgan o'quv varianti). Haqiqiy me'yoriy hujjatlar (PUE, PTE, PTB) o'rnini bosmaydi.",
+  "steps": [
+    {
+      "id": "permit",
+      "label": "Naryad-ruxsatnoma olish / dispetcherdan ruxsat so'rash",
+      "requires": [],
+      "criticalIfMissing": [],
+      "severity": "major",
+      "why": "Elektr qurilmasida ishni faqat naryad-ruxsatnoma yoki dispetcher ruxsati bilan boshlash mumkin. Hamma narsa shundan boshlanadi."
+    },
+    {
+      "id": "ppe",
+      "label": "Shaxsiy himoya vositalarini kiyish (dielektrik qo'lqop, kaska, himoya ko'zoynagi, dielektrik poyabzal)",
+      "requires": ["permit"],
+      "criticalIfMissing": [],
+      "severity": "major",
+      "why": "Uskunaga yaqinlashishdan oldin PPE kiyiladi. Himoya vositalarisiz kommutatsiya qilish hayot uchun xavfli."
+    },
+    {
+      "id": "disconnect",
+      "label": "Dvigatelni o'chirish va ko'rinadigan uzilish hosil qilish",
+      "requires": ["permit", "ppe"],
+      "criticalIfMissing": ["ppe"],
+      "severity": "major",
+      "why": "Kuchlanishni olib tashlash uchun ajratkichni o'chirib, ko'rinadigan uzilish hosil qilinadi. PPE kiymasdan kommutatsiya apparatiga tegish — kritik buzish.",
+      "whyIfMissing": {
+        "permit": "Ruxsatsiz o'chirish ishlab chiqarish jarayonini kutilmaganda to'xtatadi: avval naryad/dispetcher ruxsati.",
+        "ppe": "PPE kiymasdan kommutatsiya apparatiga tegish mumkin emas: yoy chaqnashi va tok urishi xavfi bor."
+      }
+    },
+    {
+      "id": "lock",
+      "label": "«Ishga tushirmang! Odamlar ishlayapti» plakatini osish va blokirovka (qulf) qo'yish",
+      "requires": ["disconnect"],
+      "criticalIfMissing": [],
+      "severity": "major",
+      "why": "Plakat va qulf boshqa xodim uskunani kutilmaganda ulab yubormasligini ta'minlaydi."
+    },
+    {
+      "id": "verify",
+      "label": "Kuchlanish yo'qligini tekshirish",
+      "requires": ["lock"],
+      "criticalIfMissing": [],
+      "severity": "major",
+      "why": "Ko'rinadigan uzilishning o'zi yetarli emas: kuchlanish yo'qligi indikator/multimetr bilan tekshiriladi. Bu eng muhim qadam — undan keyingina yerga ulanadi va ishlanadi.",
+      "whyIfMissing": {
+        "lock": "Avval ishga tushirishni taqiqlovchi plakat va blokirovka qo'yilishi kerak, so'ng kuchlanish tekshiriladi."
+      }
+    },
+    {
+      "id": "ground",
+      "label": "Ko'chma yerga ulashni o'rnatish",
+      "requires": ["verify"],
+      "criticalIfMissing": [],
+      "severity": "serious",
+      "why": "Yerga ulash faqat kuchlanish yo'qligi tekshirilgandan keyin o'rnatiladi. Kuchlanish ostida yerga ulash — qisqa tutashuv va yoy xavfi.",
+      "whyIfMissing": {
+        "verify": "Kuchlanish yo'qligini tekshirmasdan yerga ulash qisqa tutashuv hosil qiladi. Avval kuchlanish tekshiriladi!"
+      }
+    },
+    {
+      "id": "fence",
+      "label": "Ish joyini to'sish va ogohlantiruvchi belgilar osish",
+      "requires": ["ground"],
+      "criticalIfMissing": [],
+      "severity": "minor",
+      "why": "Ish joyi to'siladi, qo'shni kuchlanish ostidagi qismlar belgilanadi."
+    },
+    {
+      "id": "work",
+      "label": "Ishga ruxsat (brigada ruxsat oladi, ish boshlanadi)",
+      "requires": ["permit", "ppe", "disconnect", "lock", "verify", "ground", "fence"],
+      "criticalIfMissing": ["verify", "ppe", "disconnect"],
+      "severity": "serious",
+      "why": "Ishga faqat barcha tayyorgarlik qadamlari bajarilgandan keyin ruxsat beriladi.",
+      "whyIfMissing": {
+        "verify": "Kuchlanish yo'qligi tekshirilmagan uskunada ishga kirishish — kuchlanish ostida ishlash, hayot uchun xavfli!",
+        "ppe": "PPE'siz ishga kirishish mumkin emas.",
+        "disconnect": "Uskuna o'chirilmagan: kuchlanish ostida ishlash mumkin emas."
+      }
+    }
+  ]
+}
