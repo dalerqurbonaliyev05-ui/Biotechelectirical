@@ -1,0 +1,45 @@
+{
+  "_izoh": "Namunaviy 24 soatlik yuklama profillari (soatma-soat, 1,0 = sexning to'liq ish rejimidagi yuklamasi), takliflar va E2 choralari. Haqiqiy ma'lumotlar bilan almashtiring.",
+  "profiles": {
+    "mech": [0.15, 0.12, 0.12, 0.12, 0.15, 0.30, 0.70, 0.95, 1.00, 1.00, 0.98, 0.80, 0.60, 0.92, 1.00, 0.98, 0.90, 0.70, 0.65, 0.60, 0.50, 0.35, 0.22, 0.17],
+    "weld": [0.05, 0.04, 0.04, 0.04, 0.05, 0.10, 0.45, 0.85, 1.00, 1.00, 0.95, 0.55, 0.35, 0.85, 1.00, 0.95, 0.80, 0.45, 0.25, 0.15, 0.10, 0.08, 0.06, 0.05],
+    "pump": [0.60, 0.58, 0.55, 0.55, 0.58, 0.65, 0.80, 0.95, 1.00, 1.00, 0.98, 0.95, 0.90, 0.98, 1.00, 0.98, 0.95, 0.90, 0.85, 0.80, 0.75, 0.70, 0.65, 0.62],
+    "vent": [0.40, 0.40, 0.40, 0.40, 0.40, 0.45, 0.70, 1.00, 1.00, 1.00, 1.00, 0.95, 0.90, 1.00, 1.00, 1.00, 0.95, 0.80, 0.60, 0.50, 0.45, 0.42, 0.40, 0.40]
+  },
+  "variants": {
+    "weld_peak": { "label": "Payvandlash cho'qqisi", "idleKw": 12 },
+    "night_base": {
+      "label": "Tungi bo'sh yurish",
+      "idleKw": 55,
+      "profiles": {
+        "mech": [0.45, 0.45, 0.45, 0.45, 0.45, 0.50, 0.75, 0.95, 1.00, 1.00, 0.98, 0.80, 0.60, 0.92, 1.00, 0.98, 0.90, 0.75, 0.70, 0.65, 0.60, 0.50, 0.45, 0.45],
+        "pump": [0.80, 0.80, 0.78, 0.78, 0.78, 0.80, 0.85, 0.95, 1.00, 1.00, 0.98, 0.95, 0.90, 0.98, 1.00, 0.98, 0.95, 0.92, 0.90, 0.88, 0.85, 0.82, 0.80, 0.80],
+        "vent": [0.85, 0.85, 0.85, 0.85, 0.85, 0.85, 0.90, 1.00, 1.00, 1.00, 1.00, 0.95, 0.90, 1.00, 1.00, 1.00, 0.95, 0.90, 0.88, 0.86, 0.85, 0.85, 0.85, 0.85]
+      }
+    },
+    "low_cos": { "label": "Past cosφ", "idleKw": 12 }
+  },
+  "peakThreshold": 0.9,
+  "proposals": [
+    { "id": "cap_bank", "kind": "capacitor" },
+    { "id": "vfd", "kind": "vfd" },
+    { "id": "shift_load", "kind": "shift", "ws": "weld", "fraction": 0.3, "fromHours": [8, 9, 10, 13, 14, 15], "toHours": [0, 1, 2, 3, 4, 5], "nightOpexSom": 18000000 },
+    { "id": "ie3_swap", "kind": "ie3" },
+    { "id": "idle_off", "kind": "idle", "hours": [22, 23, 0, 1, 2, 3, 4, 5], "capex": 3000000 }
+  ],
+  "e2": {
+    "windows": {
+      "night": { "from": 2, "to": 6 },
+      "lunch": { "from": 11, "to": 13 },
+      "day": { "from": 10, "to": 14 },
+      "evening": { "from": 18, "to": 22 }
+    },
+    "measures": [
+      { "id": "shift_weld", "kw": { "weld": 60 }, "costSom": 2500000 },
+      { "id": "shed_vent", "kw": { "vent": 20 }, "costSom": 500000 },
+      { "id": "stagger_mech", "kw": { "mech": 25 }, "costSom": 1000000 },
+      { "id": "stop_pumps", "kw": { "pump": 15 }, "costSom": 200000 },
+      { "id": "full_bank", "cosTo": 0.97, "costSom": 300000 }
+    ]
+  }
+}

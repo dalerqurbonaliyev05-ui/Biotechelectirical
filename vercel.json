@@ -161,6 +161,11 @@
       "permanent": true
     },
     {
+      "source": "/muhandis-oyini",
+      "destination": "/muhandis-oyini/",
+      "permanent": true
+    },
+    {
       "source": "/podstansiya-simulyatori",
       "destination": "/podstansiya-simulyatori/",
       "permanent": true

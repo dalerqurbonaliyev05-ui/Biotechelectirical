@@ -1,0 +1,1585 @@
+{
+ "_izoh": "Uskunalar va nominal ma'lumotlar (namunaviy). Yangi uskuna qo'shish uchun shu faylga yozuv qo'shing.",
+ "locations": [
+  {
+   "id": "dispatch",
+   "kind": "dispatch",
+   "name": "Dispetcher xonasi",
+   "short": "Dispetcher xonasi",
+   "mini": "Dispetcher",
+   "x": 130,
+   "y": 100,
+   "w": 190,
+   "h": 100
+  },
+  {
+   "id": "tp",
+   "kind": "tp",
+   "name": "Transformator podstansiyasi (TP)",
+   "short": "Podstansiya (TP)",
+   "mini": "TP",
+   "x": 500,
+   "y": 90,
+   "w": 220,
+   "h": 110
+  },
+  {
+   "id": "ru",
+   "kind": "ru",
+   "name": "RU-0,4 kV taqsimlash qurilmasi",
+   "short": "RU-0,4 kV",
+   "mini": "RU-0,4",
+   "x": 500,
+   "y": 290,
+   "w": 220,
+   "h": 100
+  },
+  {
+   "id": "mech",
+   "kind": "workshop",
+   "ws": "mech",
+   "name": "Mexanika sexi",
+   "short": "Mexanika sexi",
+   "mini": "Mexanika",
+   "x": 130,
+   "y": 320,
+   "w": 200,
+   "h": 130
+  },
+  {
+   "id": "weld",
+   "kind": "workshop",
+   "ws": "weld",
+   "name": "Payvandlash sexi",
+   "short": "Payvandlash sexi",
+   "mini": "Payvandlash",
+   "x": 880,
+   "y": 320,
+   "w": 200,
+   "h": 130
+  },
+  {
+   "id": "pump",
+   "kind": "workshop",
+   "ws": "pump",
+   "name": "Nasoslar sexi",
+   "short": "Nasoslar sexi",
+   "mini": "Nasoslar",
+   "x": 270,
+   "y": 520,
+   "w": 200,
+   "h": 100
+  },
+  {
+   "id": "vent",
+   "kind": "workshop",
+   "ws": "vent",
+   "name": "Ventilyatsiya sexi",
+   "short": "Ventilyatsiya sexi",
+   "mini": "Ventilyatsiya",
+   "x": 740,
+   "y": 520,
+   "w": 200,
+   "h": 100
+  }
+ ],
+ "workshops": {
+  "mech": {
+   "name": "Mexanika sexi",
+   "short": "Mexanika",
+   "panel": "mech_sch",
+   "feeder": "ru_mech",
+   "tm": "TM1",
+   "background": {
+    "P": 14,
+    "cosphi": 0.9,
+    "label": "Yoritish va yordamchi yuklamalar"
+   }
+  },
+  "weld": {
+   "name": "Payvandlash sexi",
+   "short": "Payvandlash",
+   "panel": "weld_sch",
+   "feeder": "ru_weld",
+   "tm": "TM1",
+   "background": {
+    "P": 28,
+    "cosphi": 0.88,
+    "label": "Kompressor, yoritish, yordamchi yuklamalar"
+   }
+  },
+  "pump": {
+   "name": "Nasoslar sexi",
+   "short": "Nasoslar",
+   "panel": "pump_sch",
+   "feeder": "ru_pump",
+   "tm": "TM2",
+   "background": {
+    "P": 6,
+    "cosphi": 0.9,
+    "label": "Yoritish"
+   }
+  },
+  "vent": {
+   "name": "Ventilyatsiya sexi",
+   "short": "Ventilyatsiya",
+   "panel": "vent_sch",
+   "feeder": "ru_vent",
+   "tm": "TM2",
+   "background": {
+    "P": 0,
+    "cosphi": 0.9,
+    "label": "—"
+   }
+  }
+ },
+ "equipment": [
+  {
+   "id": "mech_m1",
+   "workshop": "mech",
+   "type": "motor",
+   "role": "stanok",
+   "name": "1-dvigatel — frezer stanogi",
+   "parent": "mech_sch",
+   "nameplate": {
+    "P": 18.5,
+    "U": 380,
+    "cosphi": 0.87,
+    "eta": 0.91,
+    "rpm": 1470,
+    "poles": 4,
+    "insClass": "F",
+    "maxCaseC": 90,
+    "age": 6,
+    "rewinds": 0,
+    "effClass": "IE2",
+    "protection": {
+     "breakerIn": 40,
+     "magMult": 10,
+     "relayA": 36
+    },
+    "cable": {
+     "section": 10,
+     "length": 25
+    },
+    "starter": "To'g'ridan-to'g'ri (DOL)"
+   },
+   "typical": {
+    "load": 0.7,
+    "hours": 4000,
+    "startMult": 6.5,
+    "intermittent": false
+   },
+   "lossPerHour": 250000,
+   "hasBrake": false,
+   "tools": [
+    "clamp",
+    "clampStart",
+    "multimeter",
+    "megger",
+    "thermal",
+    "vibration",
+    "visual"
+   ]
+  },
+  {
+   "id": "mech_m2",
+   "workshop": "mech",
+   "type": "motor",
+   "role": "stanok",
+   "name": "2-dvigatel — press stanogi (Y/Δ)",
+   "parent": "mech_sch",
+   "nameplate": {
+    "P": 30,
+    "U": 380,
+    "cosphi": 0.88,
+    "eta": 0.92,
+    "rpm": 1470,
+    "poles": 4,
+    "insClass": "F",
+    "maxCaseC": 90,
+    "age": 9,
+    "rewinds": 1,
+    "effClass": "IE2",
+    "protection": {
+     "breakerIn": 63,
+     "magMult": 5,
+     "relayA": 57
+    },
+    "cable": {
+     "section": 25,
+     "length": 30
+    },
+    "starter": "Yulduz-uchburchak (Y/Δ)"
+   },
+   "typical": {
+    "load": 0.75,
+    "hours": 4000,
+    "startMult": 2.4,
+    "intermittent": false
+   },
+   "lossPerHour": 300000,
+   "hasBrake": false,
+   "tools": [
+    "clamp",
+    "clampStart",
+    "multimeter",
+    "megger",
+    "thermal",
+    "vibration",
+    "visual"
+   ]
+  },
+  {
+   "id": "mech_m3",
+   "workshop": "mech",
+   "type": "motor",
+   "role": "stanok",
+   "name": "3-dvigatel — asosiy shpindel",
+   "parent": "mech_sch",
+   "nameplate": {
+    "P": 55,
+    "U": 380,
+    "cosphi": 0.89,
+    "eta": 0.92,
+    "rpm": 1480,
+    "poles": 4,
+    "insClass": "F",
+    "maxCaseC": 90,
+    "age": 12,
+    "rewinds": 1,
+    "effClass": "IE2",
+    "protection": {
+     "breakerIn": 125,
+     "magMult": 8,
+     "relayA": 102
+    },
+    "cable": {
+     "section": 70,
+     "length": 40
+    },
+    "starter": "To'g'ridan-to'g'ri (DOL)"
+   },
+   "typical": {
+    "load": 0.82,
+    "hours": 4000,
+    "startMult": 6.5,
+    "intermittent": false
+   },
+   "lossPerHour": 450000,
+   "hasBrake": false,
+   "tools": [
+    "clamp",
+    "clampStart",
+    "multimeter",
+    "megger",
+    "thermal",
+    "vibration",
+    "visual"
+   ]
+  },
+  {
+   "id": "mech_m4",
+   "workshop": "mech",
+   "type": "motor",
+   "role": "kran",
+   "name": "4-dvigatel — kranbalka",
+   "parent": "mech_sch",
+   "nameplate": {
+    "P": 15,
+    "U": 380,
+    "cosphi": 0.84,
+    "eta": 0.895,
+    "rpm": 1460,
+    "poles": 4,
+    "insClass": "F",
+    "maxCaseC": 90,
+    "age": 14,
+    "rewinds": 2,
+    "effClass": "IE1",
+    "protection": {
+     "breakerIn": 40,
+     "magMult": 10,
+     "relayA": 30
+    },
+    "cable": {
+     "section": 10,
+     "length": 45
+    },
+    "starter": "To'g'ridan-to'g'ri (DOL)"
+   },
+   "typical": {
+    "load": 0.35,
+    "hours": 4000,
+    "startMult": 5.5,
+    "intermittent": true
+   },
+   "lossPerHour": 200000,
+   "hasBrake": true,
+   "tools": [
+    "clamp",
+    "clampStart",
+    "multimeter",
+    "megger",
+    "thermal",
+    "vibration",
+    "visual"
+   ]
+  },
+  {
+   "id": "mech_m5",
+   "workshop": "mech",
+   "type": "motor",
+   "role": "ventilyator",
+   "name": "5-dvigatel — qirindi so'rgich ventilyatori",
+   "parent": "mech_sch",
+   "nameplate": {
+    "P": 11,
+    "U": 380,
+    "cosphi": 0.86,
+    "eta": 0.89,
+    "rpm": 1450,
+    "poles": 4,
+    "insClass": "F",
+    "maxCaseC": 90,
+    "age": 11,
+    "rewinds": 0,
+    "effClass": "IE1",
+    "protection": {
+     "breakerIn": 25,
+     "magMult": 10,
+     "relayA": 22
+    },
+    "cable": {
+     "section": 6,
+     "length": 20
+    },
+    "starter": "To'g'ridan-to'g'ri (DOL)"
+   },
+   "typical": {
+    "load": 0.6,
+    "hours": 4000,
+    "startMult": 6.5,
+    "intermittent": false
+   },
+   "lossPerHour": 120000,
+   "hasBrake": false,
+   "tools": [
+    "clamp",
+    "clampStart",
+    "multimeter",
+    "megger",
+    "thermal",
+    "vibration",
+    "visual"
+   ]
+  },
+  {
+   "id": "mech_m6",
+   "workshop": "mech",
+   "type": "motor",
+   "role": "nasos",
+   "name": "6-dvigatel — moy nasosi",
+   "parent": "mech_sch",
+   "nameplate": {
+    "P": 7.5,
+    "U": 380,
+    "cosphi": 0.85,
+    "eta": 0.88,
+    "rpm": 1440,
+    "poles": 4,
+    "insClass": "F",
+    "maxCaseC": 90,
+    "age": 15,
+    "rewinds": 1,
+    "effClass": "IE1",
+    "protection": {
+     "breakerIn": 20,
+     "magMult": 10,
+     "relayA": 15
+    },
+    "cable": {
+     "section": 4,
+     "length": 15
+    },
+    "starter": "To'g'ridan-to'g'ri (DOL)"
+   },
+   "typical": {
+    "load": 0.5,
+    "hours": 4000,
+    "startMult": 6.5,
+    "intermittent": false
+   },
+   "lossPerHour": 80000,
+   "hasBrake": false,
+   "tools": [
+    "clamp",
+    "clampStart",
+    "multimeter",
+    "megger",
+    "thermal",
+    "vibration",
+    "visual"
+   ]
+  },
+  {
+   "id": "weld_w1",
+   "workshop": "weld",
+   "type": "welder",
+   "role": "payvand",
+   "name": "1-payvand apparati",
+   "parent": "weld_sch",
+   "nameplate": {
+    "S": 40,
+    "U": 380,
+    "cosphi": 0.6,
+    "eta": 0.85,
+    "insClass": "F",
+    "maxCaseC": 90,
+    "age": 4,
+    "rewinds": 0,
+    "duty": "PV 60 %",
+    "protection": {
+     "breakerIn": 63,
+     "magMult": 10
+    },
+    "cable": {
+     "section": 25,
+     "length": 20
+    }
+   },
+   "typical": {
+    "P": 18,
+    "pair": "AB",
+    "hours": 3500
+   },
+   "lossPerHour": 300000,
+   "tools": [
+    "clamp",
+    "multimeter",
+    "megger",
+    "thermal",
+    "visual"
+   ]
+  },
+  {
+   "id": "weld_w2",
+   "workshop": "weld",
+   "type": "welder",
+   "role": "payvand",
+   "name": "2-payvand apparati",
+   "parent": "weld_sch",
+   "nameplate": {
+    "S": 40,
+    "U": 380,
+    "cosphi": 0.6,
+    "eta": 0.85,
+    "insClass": "F",
+    "maxCaseC": 90,
+    "age": 5,
+    "rewinds": 0,
+    "duty": "PV 60 %",
+    "protection": {
+     "breakerIn": 63,
+     "magMult": 10
+    },
+    "cable": {
+     "section": 25,
+     "length": 20
+    }
+   },
+   "typical": {
+    "P": 16,
+    "pair": "BC",
+    "hours": 3500
+   },
+   "lossPerHour": 300000,
+   "tools": [
+    "clamp",
+    "multimeter",
+    "megger",
+    "thermal",
+    "visual"
+   ]
+  },
+  {
+   "id": "weld_w3",
+   "workshop": "weld",
+   "type": "welder",
+   "role": "payvand",
+   "name": "3-payvand apparati",
+   "parent": "weld_sch",
+   "nameplate": {
+    "S": 40,
+    "U": 380,
+    "cosphi": 0.6,
+    "eta": 0.85,
+    "insClass": "F",
+    "maxCaseC": 90,
+    "age": 6,
+    "rewinds": 0,
+    "duty": "PV 60 %",
+    "protection": {
+     "breakerIn": 63,
+     "magMult": 10
+    },
+    "cable": {
+     "section": 25,
+     "length": 20
+    }
+   },
+   "typical": {
+    "P": 17,
+    "pair": "CA",
+    "hours": 3500
+   },
+   "lossPerHour": 300000,
+   "tools": [
+    "clamp",
+    "multimeter",
+    "megger",
+    "thermal",
+    "visual"
+   ]
+  },
+  {
+   "id": "weld_w4",
+   "workshop": "weld",
+   "type": "welder",
+   "role": "payvand",
+   "name": "4-payvand apparati",
+   "parent": "weld_sch",
+   "nameplate": {
+    "S": 40,
+    "U": 380,
+    "cosphi": 0.6,
+    "eta": 0.85,
+    "insClass": "F",
+    "maxCaseC": 90,
+    "age": 3,
+    "rewinds": 0,
+    "duty": "PV 60 %",
+    "protection": {
+     "breakerIn": 63,
+     "magMult": 10
+    },
+    "cable": {
+     "section": 25,
+     "length": 20
+    }
+   },
+   "typical": {
+    "P": 17,
+    "pair": "AB",
+    "hours": 3500
+   },
+   "lossPerHour": 300000,
+   "tools": [
+    "clamp",
+    "multimeter",
+    "megger",
+    "thermal",
+    "visual"
+   ]
+  },
+  {
+   "id": "weld_w5",
+   "workshop": "weld",
+   "type": "welder",
+   "role": "payvand",
+   "name": "5-payvand apparati",
+   "parent": "weld_sch",
+   "nameplate": {
+    "S": 40,
+    "U": 380,
+    "cosphi": 0.6,
+    "eta": 0.85,
+    "insClass": "F",
+    "maxCaseC": 90,
+    "age": 4,
+    "rewinds": 0,
+    "duty": "PV 60 %",
+    "protection": {
+     "breakerIn": 63,
+     "magMult": 10
+    },
+    "cable": {
+     "section": 25,
+     "length": 20
+    }
+   },
+   "typical": {
+    "P": 18,
+    "pair": "BC",
+    "hours": 3500
+   },
+   "lossPerHour": 300000,
+   "tools": [
+    "clamp",
+    "multimeter",
+    "megger",
+    "thermal",
+    "visual"
+   ]
+  },
+  {
+   "id": "weld_w6",
+   "workshop": "weld",
+   "type": "welder",
+   "role": "payvand",
+   "name": "6-payvand apparati",
+   "parent": "weld_sch",
+   "nameplate": {
+    "S": 40,
+    "U": 380,
+    "cosphi": 0.6,
+    "eta": 0.85,
+    "insClass": "F",
+    "maxCaseC": 90,
+    "age": 5,
+    "rewinds": 0,
+    "duty": "PV 60 %",
+    "protection": {
+     "breakerIn": 63,
+     "magMult": 10
+    },
+    "cable": {
+     "section": 25,
+     "length": 20
+    }
+   },
+   "typical": {
+    "P": 16,
+    "pair": "CA",
+    "hours": 3500
+   },
+   "lossPerHour": 300000,
+   "tools": [
+    "clamp",
+    "multimeter",
+    "megger",
+    "thermal",
+    "visual"
+   ]
+  },
+  {
+   "id": "weld_w7",
+   "workshop": "weld",
+   "type": "welder",
+   "role": "payvand",
+   "name": "7-payvand apparati",
+   "parent": "weld_sch",
+   "nameplate": {
+    "S": 40,
+    "U": 380,
+    "cosphi": 0.6,
+    "eta": 0.85,
+    "insClass": "F",
+    "maxCaseC": 90,
+    "age": 6,
+    "rewinds": 0,
+    "duty": "PV 60 %",
+    "protection": {
+     "breakerIn": 63,
+     "magMult": 10
+    },
+    "cable": {
+     "section": 25,
+     "length": 20
+    }
+   },
+   "typical": {
+    "P": 17,
+    "pair": "AB",
+    "hours": 3500
+   },
+   "lossPerHour": 300000,
+   "tools": [
+    "clamp",
+    "multimeter",
+    "megger",
+    "thermal",
+    "visual"
+   ]
+  },
+  {
+   "id": "weld_w8",
+   "workshop": "weld",
+   "type": "welder",
+   "role": "payvand",
+   "name": "8-payvand apparati",
+   "parent": "weld_sch",
+   "nameplate": {
+    "S": 40,
+    "U": 380,
+    "cosphi": 0.6,
+    "eta": 0.85,
+    "insClass": "F",
+    "maxCaseC": 90,
+    "age": 3,
+    "rewinds": 0,
+    "duty": "PV 60 %",
+    "protection": {
+     "breakerIn": 63,
+     "magMult": 10
+    },
+    "cable": {
+     "section": 25,
+     "length": 20
+    }
+   },
+   "typical": {
+    "P": 17,
+    "pair": "BC",
+    "hours": 3500
+   },
+   "lossPerHour": 300000,
+   "tools": [
+    "clamp",
+    "multimeter",
+    "megger",
+    "thermal",
+    "visual"
+   ]
+  },
+  {
+   "id": "weld_w9",
+   "workshop": "weld",
+   "type": "welder",
+   "role": "payvand",
+   "name": "9-payvand apparati",
+   "parent": "weld_sch",
+   "nameplate": {
+    "S": 40,
+    "U": 380,
+    "cosphi": 0.6,
+    "eta": 0.85,
+    "insClass": "F",
+    "maxCaseC": 90,
+    "age": 4,
+    "rewinds": 0,
+    "duty": "PV 60 %",
+    "protection": {
+     "breakerIn": 63,
+     "magMult": 10
+    },
+    "cable": {
+     "section": 25,
+     "length": 20
+    }
+   },
+   "typical": {
+    "P": 16,
+    "pair": "CA",
+    "hours": 3500
+   },
+   "lossPerHour": 300000,
+   "tools": [
+    "clamp",
+    "multimeter",
+    "megger",
+    "thermal",
+    "visual"
+   ]
+  },
+  {
+   "id": "weld_cab3",
+   "workshop": "weld",
+   "type": "cable",
+   "role": "kabel",
+   "name": "3-payvand apparati ta'minot kabeli (ulanish nuqtasi)",
+   "parent": "weld_sch",
+   "feeds": "weld_w3",
+   "nameplate": {
+    "U": 380,
+    "insClass": "PVC 70 °C",
+    "maxCaseC": 70,
+    "age": 5,
+    "rewinds": 0,
+    "protection": {
+     "breakerIn": 63,
+     "magMult": 10
+    },
+    "cable": {
+     "section": 25,
+     "length": 20
+    }
+   },
+   "typical": {},
+   "lossPerHour": 300000,
+   "tools": [
+    "clamp",
+    "multimeter",
+    "megger",
+    "thermal",
+    "visual"
+   ]
+  },
+  {
+   "id": "weld_bank",
+   "workshop": "weld",
+   "type": "capbank",
+   "role": "kondensator",
+   "name": "Kompensatsiya qurilmasi (kondensator batareyasi, 6 × 30 kvar)",
+   "parent": "weld_sch",
+   "nameplate": {
+    "U": 400,
+    "insClass": "MKP",
+    "maxCaseC": 60,
+    "age": 4,
+    "rewinds": 0,
+    "stages": 6,
+    "kvarStage": 30,
+    "protection": {
+     "breakerIn": 250,
+     "magMult": 10
+    },
+    "cable": {
+     "section": 70,
+     "length": 15
+    }
+   },
+   "typical": {
+    "stagesOk": 6,
+    "installed": true,
+    "controller": "auto"
+   },
+   "lossPerHour": 0,
+   "tools": [
+    "clamp",
+    "multimeter",
+    "thermal",
+    "visual"
+   ]
+  },
+  {
+   "id": "pump_p1",
+   "workshop": "pump",
+   "type": "motor",
+   "role": "nasos",
+   "name": "1-nasos — bosim rezervuari nasosi",
+   "parent": "pump_sch",
+   "nameplate": {
+    "P": 18.5,
+    "U": 380,
+    "cosphi": 0.85,
+    "eta": 0.91,
+    "rpm": 1460,
+    "poles": 4,
+    "insClass": "F",
+    "maxCaseC": 90,
+    "age": 7,
+    "rewinds": 0,
+    "effClass": "IE2",
+    "protection": {
+     "breakerIn": 40,
+     "magMult": 10,
+     "relayA": 36
+    },
+    "cable": {
+     "section": 10,
+     "length": 30
+    },
+    "starter": "To'g'ridan-to'g'ri (DOL)"
+   },
+   "typical": {
+    "load": 0.7,
+    "hours": 5000,
+    "startMult": 6.5,
+    "intermittent": false
+   },
+   "lossPerHour": 350000,
+   "hasBrake": false,
+   "tools": [
+    "clamp",
+    "clampStart",
+    "multimeter",
+    "megger",
+    "thermal",
+    "vibration",
+    "visual"
+   ]
+  },
+  {
+   "id": "pump_p2",
+   "workshop": "pump",
+   "type": "motor",
+   "role": "nasos",
+   "name": "2-nasos — ta'minot nasosi",
+   "parent": "pump_sch",
+   "nameplate": {
+    "P": 22,
+    "U": 380,
+    "cosphi": 0.86,
+    "eta": 0.915,
+    "rpm": 1460,
+    "poles": 4,
+    "insClass": "F",
+    "maxCaseC": 90,
+    "age": 10,
+    "rewinds": 1,
+    "effClass": "IE2",
+    "protection": {
+     "breakerIn": 50,
+     "magMult": 10,
+     "relayA": 43,
+     "fuseA": 63
+    },
+    "cable": {
+     "section": 16,
+     "length": 35
+    },
+    "starter": "To'g'ridan-to'g'ri (DOL)"
+   },
+   "typical": {
+    "load": 0.8,
+    "hours": 5500,
+    "startMult": 6.5,
+    "intermittent": false
+   },
+   "lossPerHour": 600000,
+   "hasBrake": false,
+   "tools": [
+    "clamp",
+    "clampStart",
+    "multimeter",
+    "megger",
+    "thermal",
+    "vibration",
+    "visual"
+   ]
+  },
+  {
+   "id": "pump_p3",
+   "workshop": "pump",
+   "type": "motor",
+   "role": "nasos",
+   "name": "3-nasos — sovitish suvi nasosi (drossel)",
+   "parent": "pump_sch",
+   "nameplate": {
+    "P": 30,
+    "U": 380,
+    "cosphi": 0.87,
+    "eta": 0.92,
+    "rpm": 1470,
+    "poles": 4,
+    "insClass": "F",
+    "maxCaseC": 90,
+    "age": 8,
+    "rewinds": 0,
+    "effClass": "IE2",
+    "protection": {
+     "breakerIn": 63,
+     "magMult": 10,
+     "relayA": 57
+    },
+    "cable": {
+     "section": 25,
+     "length": 40
+    },
+    "starter": "To'g'ridan-to'g'ri (DOL)"
+   },
+   "typical": {
+    "load": 0.88,
+    "hours": 6000,
+    "startMult": 6.5,
+    "intermittent": false
+   },
+   "lossPerHour": 400000,
+   "hasBrake": false,
+   "tools": [
+    "clamp",
+    "clampStart",
+    "multimeter",
+    "megger",
+    "thermal",
+    "vibration",
+    "visual"
+   ],
+   "process": {
+    "kind": "pump",
+    "q": 0.7,
+    "hours": 6000,
+    "valvePct": 70,
+    "throttled": true
+   }
+  },
+  {
+   "id": "pump_p4",
+   "workshop": "pump",
+   "type": "motor",
+   "role": "nasos",
+   "name": "4-nasos — drenaj nasosi",
+   "parent": "pump_sch",
+   "nameplate": {
+    "P": 11,
+    "U": 380,
+    "cosphi": 0.85,
+    "eta": 0.89,
+    "rpm": 1450,
+    "poles": 4,
+    "insClass": "F",
+    "maxCaseC": 90,
+    "age": 12,
+    "rewinds": 0,
+    "effClass": "IE1",
+    "protection": {
+     "breakerIn": 25,
+     "magMult": 10,
+     "relayA": 22
+    },
+    "cable": {
+     "section": 6,
+     "length": 25
+    },
+    "starter": "To'g'ridan-to'g'ri (DOL)"
+   },
+   "typical": {
+    "load": 0.5,
+    "hours": 2000,
+    "startMult": 6.5,
+    "intermittent": false
+   },
+   "lossPerHour": 100000,
+   "hasBrake": false,
+   "tools": [
+    "clamp",
+    "clampStart",
+    "multimeter",
+    "megger",
+    "thermal",
+    "vibration",
+    "visual"
+   ]
+  },
+  {
+   "id": "vent_f1",
+   "workshop": "vent",
+   "type": "motor",
+   "role": "ventilyator",
+   "name": "1-ventilyator — asosiy so'rish ventilyatori",
+   "parent": "vent_sch",
+   "nameplate": {
+    "P": 15,
+    "U": 380,
+    "cosphi": 0.86,
+    "eta": 0.905,
+    "rpm": 1460,
+    "poles": 4,
+    "insClass": "F",
+    "maxCaseC": 90,
+    "age": 9,
+    "rewinds": 0,
+    "effClass": "IE2",
+    "protection": {
+     "breakerIn": 40,
+     "magMult": 10,
+     "relayA": 29
+    },
+    "cable": {
+     "section": 10,
+     "length": 25
+    },
+    "starter": "To'g'ridan-to'g'ri (DOL)"
+   },
+   "typical": {
+    "load": 0.8,
+    "hours": 5000,
+    "startMult": 6.5,
+    "intermittent": false
+   },
+   "lossPerHour": 300000,
+   "hasBrake": false,
+   "tools": [
+    "clamp",
+    "clampStart",
+    "multimeter",
+    "megger",
+    "thermal",
+    "vibration",
+    "visual"
+   ]
+  },
+  {
+   "id": "vent_f2",
+   "workshop": "vent",
+   "type": "motor",
+   "role": "ventilyator",
+   "name": "2-ventilyator — yetkazib berish ventilyatori",
+   "parent": "vent_sch",
+   "nameplate": {
+    "P": 11,
+    "U": 380,
+    "cosphi": 0.85,
+    "eta": 0.89,
+    "rpm": 1450,
+    "poles": 4,
+    "insClass": "F",
+    "maxCaseC": 90,
+    "age": 6,
+    "rewinds": 0,
+    "effClass": "IE2",
+    "protection": {
+     "breakerIn": 25,
+     "magMult": 10,
+     "relayA": 22
+    },
+    "cable": {
+     "section": 6,
+     "length": 25
+    },
+    "starter": "To'g'ridan-to'g'ri (DOL)"
+   },
+   "typical": {
+    "load": 0.8,
+    "hours": 5000,
+    "startMult": 6.5,
+    "intermittent": false
+   },
+   "lossPerHour": 250000,
+   "hasBrake": false,
+   "tools": [
+    "clamp",
+    "clampStart",
+    "multimeter",
+    "megger",
+    "thermal",
+    "vibration",
+    "visual"
+   ]
+  },
+  {
+   "id": "vent_f3",
+   "workshop": "vent",
+   "type": "motor",
+   "role": "ventilyator",
+   "name": "3-ventilyator — sex havo almashtirgichi",
+   "parent": "vent_sch",
+   "nameplate": {
+    "P": 18.5,
+    "U": 380,
+    "cosphi": 0.87,
+    "eta": 0.91,
+    "rpm": 1465,
+    "poles": 4,
+    "insClass": "F",
+    "maxCaseC": 90,
+    "age": 10,
+    "rewinds": 1,
+    "effClass": "IE2",
+    "protection": {
+     "breakerIn": 40,
+     "magMult": 10,
+     "relayA": 36
+    },
+    "cable": {
+     "section": 10,
+     "length": 30
+    },
+    "starter": "To'g'ridan-to'g'ri (DOL)"
+   },
+   "typical": {
+    "load": 0.85,
+    "hours": 6500,
+    "startMult": 6.5,
+    "intermittent": false
+   },
+   "lossPerHour": 300000,
+   "hasBrake": false,
+   "tools": [
+    "clamp",
+    "clampStart",
+    "multimeter",
+    "megger",
+    "thermal",
+    "vibration",
+    "visual"
+   ],
+   "process": {
+    "kind": "fan",
+    "segments": [
+     {
+      "h": 3500,
+      "q": 1
+     },
+     {
+      "h": 3000,
+      "q": 0.6
+     }
+    ]
+   }
+  },
+  {
+   "id": "vent_f4",
+   "workshop": "vent",
+   "type": "motor",
+   "role": "ventilyator",
+   "name": "4-ventilyator — qo'shimcha so'rgich",
+   "parent": "vent_sch",
+   "nameplate": {
+    "P": 5.5,
+    "U": 380,
+    "cosphi": 0.82,
+    "eta": 0.86,
+    "rpm": 1430,
+    "poles": 4,
+    "insClass": "F",
+    "maxCaseC": 90,
+    "age": 13,
+    "rewinds": 0,
+    "effClass": "IE1",
+    "protection": {
+     "breakerIn": 16,
+     "magMult": 10,
+     "relayA": 12
+    },
+    "cable": {
+     "section": 4,
+     "length": 20
+    },
+    "starter": "To'g'ridan-to'g'ri (DOL)"
+   },
+   "typical": {
+    "load": 0.7,
+    "hours": 3000,
+    "startMult": 6.5,
+    "intermittent": false
+   },
+   "lossPerHour": 60000,
+   "hasBrake": false,
+   "tools": [
+    "clamp",
+    "clampStart",
+    "multimeter",
+    "megger",
+    "thermal",
+    "vibration",
+    "visual"
+   ]
+  },
+  {
+   "id": "mech_sch",
+   "workshop": "mech",
+   "type": "panel",
+   "role": "shchit",
+   "name": "Mexanika sexi shchiti (ShCh-M)",
+   "nameplate": {
+    "U": 380,
+    "insClass": "—",
+    "maxCaseC": 70,
+    "age": 10,
+    "rewinds": 0,
+    "protection": {
+     "breakerIn": 250,
+     "magMult": 10
+    },
+    "cable": {
+     "section": 185,
+     "length": 80
+    }
+   },
+   "typical": {},
+   "lossPerHour": 1200000,
+   "tools": [
+    "clamp",
+    "multimeter",
+    "thermal",
+    "visual",
+    "analyzer"
+   ]
+  },
+  {
+   "id": "weld_sch",
+   "workshop": "weld",
+   "type": "panel",
+   "role": "shchit",
+   "name": "Payvandlash sexi shchiti (ShCh-P)",
+   "nameplate": {
+    "U": 380,
+    "insClass": "—",
+    "maxCaseC": 70,
+    "age": 10,
+    "rewinds": 0,
+    "protection": {
+     "breakerIn": 630,
+     "magMult": 10
+    },
+    "cable": {
+     "section": 400,
+     "length": 50
+    }
+   },
+   "typical": {},
+   "lossPerHour": 2000000,
+   "tools": [
+    "clamp",
+    "multimeter",
+    "thermal",
+    "visual",
+    "analyzer"
+   ]
+  },
+  {
+   "id": "pump_sch",
+   "workshop": "pump",
+   "type": "panel",
+   "role": "shchit",
+   "name": "Nasoslar sexi shchiti (ShCh-N)",
+   "nameplate": {
+    "U": 380,
+    "insClass": "—",
+    "maxCaseC": 70,
+    "age": 10,
+    "rewinds": 0,
+    "protection": {
+     "breakerIn": 160,
+     "magMult": 10
+    },
+    "cable": {
+     "section": 70,
+     "length": 60
+    }
+   },
+   "typical": {},
+   "lossPerHour": 1200000,
+   "tools": [
+    "clamp",
+    "multimeter",
+    "thermal",
+    "visual",
+    "analyzer"
+   ]
+  },
+  {
+   "id": "vent_sch",
+   "workshop": "vent",
+   "type": "panel",
+   "role": "shchit",
+   "name": "Ventilyatsiya sexi shchiti (ShCh-V)",
+   "nameplate": {
+    "U": 380,
+    "insClass": "—",
+    "maxCaseC": 70,
+    "age": 10,
+    "rewinds": 0,
+    "protection": {
+     "breakerIn": 100,
+     "magMult": 10
+    },
+    "cable": {
+     "section": 35,
+     "length": 70
+    }
+   },
+   "typical": {},
+   "lossPerHour": 600000,
+   "tools": [
+    "clamp",
+    "multimeter",
+    "thermal",
+    "visual",
+    "analyzer"
+   ]
+  },
+  {
+   "id": "ru_mech",
+   "workshop": "ru",
+   "serves": "mech",
+   "type": "ruFeeder",
+   "role": "liniya",
+   "name": "RU-0,4: Mexanika sexi liniyasi",
+   "nameplate": {
+    "U": 380,
+    "insClass": "—",
+    "maxCaseC": 70,
+    "age": 10,
+    "rewinds": 0,
+    "protection": {
+     "breakerIn": 250,
+     "magMult": 10
+    },
+    "cable": {
+     "section": 0,
+     "length": 0
+    }
+   },
+   "typical": {},
+   "lossPerHour": 0,
+   "tools": [
+    "clamp",
+    "multimeter",
+    "thermal",
+    "visual",
+    "analyzer"
+   ]
+  },
+  {
+   "id": "ru_weld",
+   "workshop": "ru",
+   "serves": "weld",
+   "type": "ruFeeder",
+   "role": "liniya",
+   "name": "RU-0,4: Payvandlash sexi liniyasi",
+   "nameplate": {
+    "U": 380,
+    "insClass": "—",
+    "maxCaseC": 70,
+    "age": 10,
+    "rewinds": 0,
+    "protection": {
+     "breakerIn": 630,
+     "magMult": 10
+    },
+    "cable": {
+     "section": 0,
+     "length": 0
+    }
+   },
+   "typical": {},
+   "lossPerHour": 0,
+   "tools": [
+    "clamp",
+    "multimeter",
+    "thermal",
+    "visual",
+    "analyzer"
+   ]
+  },
+  {
+   "id": "ru_pump",
+   "workshop": "ru",
+   "serves": "pump",
+   "type": "ruFeeder",
+   "role": "liniya",
+   "name": "RU-0,4: Nasoslar sexi liniyasi",
+   "nameplate": {
+    "U": 380,
+    "insClass": "—",
+    "maxCaseC": 70,
+    "age": 10,
+    "rewinds": 0,
+    "protection": {
+     "breakerIn": 160,
+     "magMult": 10
+    },
+    "cable": {
+     "section": 0,
+     "length": 0
+    }
+   },
+   "typical": {},
+   "lossPerHour": 0,
+   "tools": [
+    "clamp",
+    "multimeter",
+    "thermal",
+    "visual",
+    "analyzer"
+   ]
+  },
+  {
+   "id": "ru_vent",
+   "workshop": "ru",
+   "serves": "vent",
+   "type": "ruFeeder",
+   "role": "liniya",
+   "name": "RU-0,4: Ventilyatsiya sexi liniyasi",
+   "nameplate": {
+    "U": 380,
+    "insClass": "—",
+    "maxCaseC": 70,
+    "age": 10,
+    "rewinds": 0,
+    "protection": {
+     "breakerIn": 100,
+     "magMult": 10
+    },
+    "cable": {
+     "section": 0,
+     "length": 0
+    }
+   },
+   "typical": {},
+   "lossPerHour": 0,
+   "tools": [
+    "clamp",
+    "multimeter",
+    "thermal",
+    "visual",
+    "analyzer"
+   ]
+  },
+  {
+   "id": "tp_tm1",
+   "workshop": "tp",
+   "type": "transformer",
+   "role": "transformator",
+   "name": "TM-1 (10/0,4 kV, 400 kVA)",
+   "nameplate": {
+    "S": 400,
+    "Uhv": 10,
+    "Ulv": 0.4,
+    "uk": 4.5,
+    "group": "Y/Yn-0",
+    "U": 400,
+    "insClass": "A (moy)",
+    "maxCaseC": 95,
+    "age": 15,
+    "rewinds": 0,
+    "protection": {
+     "breakerIn": 630,
+     "magMult": 10
+    },
+    "cable": {
+     "section": 0,
+     "length": 0
+    }
+   },
+   "typical": {},
+   "lossPerHour": 0,
+   "tools": [
+    "clamp",
+    "multimeter",
+    "thermal",
+    "visual",
+    "analyzer"
+   ]
+  },
+  {
+   "id": "tp_tm2",
+   "workshop": "tp",
+   "type": "transformer",
+   "role": "transformator",
+   "name": "TM-2 (10/0,4 kV, 400 kVA)",
+   "nameplate": {
+    "S": 400,
+    "Uhv": 10,
+    "Ulv": 0.4,
+    "uk": 4.5,
+    "group": "Y/Yn-0",
+    "U": 400,
+    "insClass": "A (moy)",
+    "maxCaseC": 95,
+    "age": 12,
+    "rewinds": 0,
+    "protection": {
+     "breakerIn": 630,
+     "magMult": 10
+    },
+    "cable": {
+     "section": 0,
+     "length": 0
+    }
+   },
+   "typical": {},
+   "lossPerHour": 0,
+   "tools": [
+    "clamp",
+    "multimeter",
+    "thermal",
+    "visual",
+    "analyzer"
+   ]
+  }
+ ]
+}

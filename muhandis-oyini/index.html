@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0e1620">
+  <meta name="description" content="Elektr muhandisi: bir ish kuni — elektr ta'minoti yo'nalishi talabalari uchun ta'limiy o'yin">
+  <title>Elektr muhandisi: bir ish kuni</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23ffb454' d='M13 2 4 14h7l-1 8 9-12h-7z'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="app"></div>
+  <div id="boot" class="boot">
+    <div class="spin"></div>
+    <p>Yuklanmoqda…</p>
+    <noscript><p>Bu o'yin JavaScript talab qiladi.</p></noscript>
+  </div>
+  <script>
+    // file:// da ES modullari va fetch ishlamaydi — foydalanuvchiga tushunarli xabar
+    if (location.protocol === 'file:') {
+      var b = document.getElementById('boot');
+      b.innerHTML = '<div class="bootfail"><h1>Elektr muhandisi: bir ish kuni</h1><p>Brauzer xavfsizligi tufayli <code>index.html</code> ni to\'g\'ridan-to\'g\'ri ochib bo\'lmaydi.</p><p>Mahalliy serverda oching:</p><pre>cd muhandis-oyini\npython3 -m http.server 8080</pre><p>so\'ng <code>http://localhost:8080</code> manzilini oching, yoki Vercel / GitHub Pages ga joylashtiring (README ga qarang).</p></div>';
+    }
+  </script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

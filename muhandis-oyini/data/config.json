@@ -1,0 +1,167 @@
+{
+  "_izoh": "DIQQAT: bu fayldagi barcha raqamlar, narxlar, tariflar va chegaralar o'quv maqsadidagi NAMUNAVIY (soddalashtirilgan) qiymatlar. Haqiqiy qiymatlar bilan almashtiring va fan o'qituvchisi bilan tekshiring.",
+  "version": 1,
+
+  "plant": {
+    "name": "«Texnomash» mashinasozlik zavodi",
+    "uNom": 380,
+    "ambientC": 25,
+    "busNoLoad": 1.02,
+    "trDropPerK": 0.06,
+    "branchDropPct": 0.4,
+    "xPerKm": 0.08,
+    "rhoCuOhmMm2PerKm": 22.5
+  },
+
+  "transformers": {
+    "TM1": { "sNom": 400, "feeds": ["mech", "weld"] },
+    "TM2": { "sNom": 400, "feeds": ["pump", "vent"] }
+  },
+
+  "limits": {
+    "_izoh": "soddalashtirilgan o'quv chegaralari",
+    "voltageDevWarnPct": 5,
+    "voltageDevBadPct": 10,
+    "unbalanceOkPct": 10,
+    "caseTempWarnC": 70,
+    "caseTempBadC": 90,
+    "vibGoodMms": 2.8,
+    "vibBadMms": 7.1,
+    "insGoodMOhm": 1.0,
+    "insBadMOhm": 0.5,
+    "cosphiTarget": 0.95,
+    "trOkK": 0.8,
+    "trMaxK": 1.0,
+    "trPlanK": 0.95,
+    "currentRatioWarn": 1.05,
+    "currentRatioBad": 1.2,
+    "bearingWarnC": 75,
+    "bearingBadC": 90,
+    "terminalWarnC": 70,
+    "terminalBadC": 90
+  },
+
+  "thermal": {
+    "tauMin": 25,
+    "deltaCaseNomC": 40,
+    "terminalFrac": 0.6,
+    "bearingFrac": 0.45,
+    "contactHeatCPerW": 0.03,
+    "stalledBearingBonusC": 20,
+    "cableDeltaNomC": 45
+  },
+
+  "hazard": {
+    "tempStartC": 70,
+    "tempScale": 6000
+  },
+
+  "motor": {
+    "q0Frac": 0.26,
+    "lowLoadEtaDrop": 0.2,
+    "noisePct": 0.02
+  },
+
+  "tools": {
+    "_izoh": "minutes — o'yin daqiqasi; ortiqcha o'lchov jarimasi scoring.diagnosis.extraPenalty",
+    "clamp": { "minutes": 5 },
+    "clampStart": { "minutes": 8 },
+    "multimeter": { "minutes": 5 },
+    "megger": { "minutes": 10 },
+    "thermal": { "minutes": 4 },
+    "vibration": { "minutes": 6 },
+    "visual": { "minutes": 4 },
+    "analyzer": { "minutes": 8 },
+    "trend": { "minutes": 10 }
+  },
+
+  "clock": {
+    "startHour": 8,
+    "endHour": 17,
+    "walkMinPerUnit": 0.012,
+    "walkMinMinutes": 2,
+    "ppeMinutes": 1,
+    "safetyStepMinutes": 1,
+    "hintMinutes": 3,
+    "stepMaxMin": 5
+  },
+
+  "economy": {
+    "TARIF_SOM_KWH": 1000,
+    "tariffZones": [
+      { "from": 0, "to": 6, "mult": 0.7 },
+      { "from": 6, "to": 8, "mult": 1.0 },
+      { "from": 8, "to": 11, "mult": 1.3 },
+      { "from": 11, "to": 18, "mult": 1.0 },
+      { "from": 18, "to": 22, "mult": 1.3 },
+      { "from": 22, "to": 24, "mult": 0.7 }
+    ],
+    "workDays": 300,
+    "hoursPerWorkDay": 16,
+    "annualHoursDefault": 4000,
+    "horizonYears": 5,
+    "etaLossPerRewind": 0.007,
+    "rewindCostFracNew": 0.45,
+    "rewindDays": 5,
+    "replaceStockHours": 8,
+    "replaceLeadDays": 10,
+    "installFixed": 1200000,
+    "penaltyPerCosPoint": 1.5,
+    "costFloorSom": 1000000,
+    "qualityFloor": 0.25,
+    "capacitor": { "pricePerKvar": 320000, "install": 3000000, "stepKvar": 25, "maxKvar": 400, "target": 0.97 },
+    "vfd": { "perKw": 900000, "fixed": 6000000, "minSpeed": 0.3 },
+    "pumpModel": { "throttleBase": 0.55, "throttleSlope": 0.45, "vfdStatic": 0.15 },
+    "fanModel": { "vfdFixedLoss": 0.03 },
+    "cable": { "perMeter": { "35": 45000, "50": 60000, "70": 75000, "95": 95000, "120": 118000, "150": 140000, "185": 170000, "240": 220000, "10": 14000, "16": 20000, "25": 30000 } },
+    "e1Budget": 100000000,
+    "lossAccrual": { "down": 1.0, "degraded": 0.25 },
+    "motorTable": {
+      "_izoh": "4 qutbli dvigatellar; narx so'mda (IE2); IE3 narxi = IE2 × ie3PriceFactor. Namunaviy.",
+      "ie3PriceFactor": 1.18,
+      "rows": [
+        { "P": 5.5, "eta2": 0.867, "eta3": 0.885, "price2": 5000000 },
+        { "P": 7.5, "eta2": 0.887, "eta3": 0.904, "price2": 6500000 },
+        { "P": 11, "eta2": 0.898, "eta3": 0.914, "price2": 8500000 },
+        { "P": 15, "eta2": 0.906, "eta3": 0.921, "price2": 11000000 },
+        { "P": 18.5, "eta2": 0.912, "eta3": 0.926, "price2": 13000000 },
+        { "P": 22, "eta2": 0.916, "eta3": 0.93, "price2": 15000000 },
+        { "P": 30, "eta2": 0.923, "eta3": 0.936, "price2": 20000000 },
+        { "P": 37, "eta2": 0.927, "eta3": 0.939, "price2": 25000000 },
+        { "P": 45, "eta2": 0.931, "eta3": 0.942, "price2": 30000000 },
+        { "P": 55, "eta2": 0.935, "eta3": 0.946, "price2": 37000000 },
+        { "P": 75, "eta2": 0.94, "eta3": 0.95, "price2": 49000000 },
+        { "P": 90, "eta2": 0.942, "eta3": 0.952, "price2": 60000000 }
+      ]
+    }
+  },
+
+  "scoring": {
+    "weights": { "diagnosis": 35, "safety": 30, "time": 15, "cost": 20 },
+    "diagnosis": { "hypMax": 20, "hypWrong": 7, "measMax": 15, "extraPenalty": 2, "maxWrong": 3, "minMeasurementsForHypothesis": 1 },
+    "safety": { "minor": 4, "major": 8, "serious": 12, "ppeLive": 5 },
+    "time": { "zeroAtFactor": 2.0 },
+    "shift": { "accidentPenalty": 15, "priorityBonusMax": 5, "emergencyMissed": 3, "emergencyWrong": 1.5 },
+    "ranks": [
+      { "id": "stajyor", "min": 0 },
+      { "id": "elektrik", "min": 50 },
+      { "id": "muhandis", "min": 70 },
+      { "id": "katta", "min": 85 }
+    ]
+  },
+
+  "difficulty": {
+    "easy": { "tasks": 6, "hazardScale": 0.5, "realtimeMinPerSec": 0, "hintCost": 2, "firstHintFree": true, "hintsAllowed": true, "statusColors": true, "limitsTable": true, "budgetScale": 1.3, "emergencies": 1 },
+    "normal": { "tasks": 8, "hazardScale": 1.0, "realtimeMinPerSec": 0.1, "hintCost": 4, "firstHintFree": false, "hintsAllowed": true, "statusColors": false, "limitsTable": true, "budgetScale": 1.0, "emergencies": 2 },
+    "hard": { "tasks": 10, "hazardScale": 1.5, "realtimeMinPerSec": 0.18, "hintCost": 0, "firstHintFree": false, "hintsAllowed": false, "statusColors": false, "limitsTable": false, "budgetScale": 0.8, "emergencies": 3 }
+  },
+
+  "modes": {
+    "day": { "shiftMinutes": 540 },
+    "practice": { "shiftMinutes": 1620, "hazardScale": 0.4, "emergenciesScale": 0 }
+  },
+
+  "alwaysIncluded": ["M1", "P1", "N1", "V1"],
+
+  "emergency": { "firstAfterMin": 90, "lastBeforeMin": 440, "deadlineMin": 45 }
+}

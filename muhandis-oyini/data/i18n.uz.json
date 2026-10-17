@@ -1,0 +1,227 @@
+{
+  "_izoh": "Barcha interfeys matnlari (o'zbek tili, lotin yozuvi). {x} — o'zgaruvchi o'rni.",
+  "app": {
+    "title": "Elektr muhandisi: bir ish kuni",
+    "tagline": "Sanoat korxonasida elektr ta'minoti bo'yicha bir kunlik amaliyot: o'lchang, sababni toping, xavfsiz ta'mirlang, asoslangan qaror qiling.",
+    "disclaimer": "Bu o'quv o'yini. Barcha raqamlar, narxlar va chegaralar namunaviy (soddalashtirilgan) va PUE, PTE, PTB kabi haqiqiy me'yoriy hujjatlar o'rnini bosmaydi. Fan o'qituvchisi bilan tekshirib chiqing.",
+    "footer": "«Texnomash» — xayoliy korxona. O'yin brauzerda ishlaydi, jarayon qurilmangizda (localStorage) saqlanadi."
+  },
+  "common": { "close": "Yopish", "ok": "Tushunarli", "cancel": "Bekor qilish", "continue": "Davom etish", "error": "Xatolik yuz berdi", "min": "daq", "hour": "soat", "day": "kun" },
+  "menu": {
+    "new": "Yangi smena boshlash", "continue": "Davom ettirish", "how": "Qanday o'ynaladi", "settings": "Sozlamalar", "noSave": "Saqlangan o'yin topilmadi.",
+    "confirmNew": "Saqlangan o'yin bor. Yangi smena boshlansa, eskisi o'chadi. Davom etasizmi?", "map": "Korxona xaritasi", "toMain": "Bosh menyu"
+  },
+  "setup": {
+    "difficulty": "Qiyinlik", "mode": "Smena turi", "tutorial": "Birinchi mashq (tutorial) bilan boshlash", "seed": "Smena kodi (ixtiyoriy):", "seedPh": "bir xil holatni takrorlash uchun raqam", "go": "Smenani boshlash",
+    "d": {
+      "easy": "Oson", "easyDesc": "Maslahatlar bor, o'lchov natijalari rangda ko'rsatiladi, vaqt sekin, 6 ta topshiriq.",
+      "normal": "Oddiy", "normalDesc": "Maslahat ball evaziga, chegaralar jadvali bor, 8 ta topshiriq.",
+      "hard": "Qiyin", "hardDesc": "Maslahat yo'q, chegaralar jadvali yo'q, vaqt qisqa va nosozlik tez oshadi, 10 ta topshiriq."
+    },
+    "m": {
+      "day": "Kunlik smena (08:00–17:00)", "dayDesc": "Tasodifiy topshiriqlar to'plami: avval qaysi muammodan boshlashni o'zingiz tanlaysiz.",
+      "practice": "Mashq rejimi: barcha 15 topshiriq", "practiceDesc": "Barcha topshiriqlar, vaqt cheklovi yumshoq (3 kunlik soat), favqulodda chaqiruvlarsiz."
+    }
+  },
+  "brief": {
+    "from": "Bosh energetik (radio)",
+    "msg1": "Xayrli tong! {name}ga xush kelibsiz. Bugungi smenada {n} ta topshiriq bor. Ish kuni 08:00 dan 17:00 gacha.",
+    "msg2": "Tartib: sexni aylanib chiqing, asboblar bilan o'lchang, sababni aniqlang, xavfsizlik qoidalariga rioya qilib ta'mirlang va iqtisodiy jihatdan oqilona qaror qabul qiling. Yuqori tok yoki qizish har doim almashtirish kerakligini bildirmaydi!",
+    "msg3": "Bir vaqtda hammasiga ulgurmaysiz: xavfliroq va ishlab chiqarishga ta'siri kattasidan boshlang. Smena davomida favqulodda chaqiruvlar bo'lishi mumkin.",
+    "start": "Smenani boshlash", "tutorial": "Mashq topshirig'i", "at": "Joyi: {place}"
+  },
+  "top": {
+    "menu": "Menyu", "clock": "O'yin soati", "day": "{n}-kun", "over": "Smena tugadi", "score": "Ball", "scoreHint": "Bajarilgan topshiriqlar bo'yicha joriy o'rtacha ball", "load": "Yuklama",
+    "cosHint": "Zavod cosφ si (maqsad ≥ 0,95)", "kHint": "Transformator yuklanish koeffitsiyenti K = S/S_nom", "loss": "To'xtash zarari", "lossHint": "To'xtab turgan uskunalar tufayli yig'ilgan yo'qotish (namunaviy)",
+    "tasks": "Topshiriqlar", "radio": "Radio (dispetcher)", "help": "Yordam", "pts": "ball", "taskTime": "{m} / {b} daq"
+  },
+  "tut": {
+    "title": "Mashq {i}/{n}:", "understood": "Tushundim", "doneTitle": "Mashq tugadi",
+    "done": "Zo'r! Siz asboblar bilan o'lchash, jurnalni o'qish va xulosa chiqarishni o'rgandingiz. Endi haqiqiy topshiriqlarga o'ting: xaritada muammoli sexni tanlang."
+  },
+  "task": {
+    "details": "Tafsilot", "hint": "Maslahat", "none": "Hozircha topshiriq tanlanmagan.", "choose": "Tanlash", "priority": "Muhimlik", "priorityHint": "Xavf × ishlab chiqarishga ta'siri",
+    "p": { "high": "yuqori", "mid": "o'rta", "low": "past" }, "burned": "Kuygan!", "current": "Joriy", "select": "Shuni bajarish", "budget": "Vaqt byudjeti: {m} daq",
+    "easyHint": "Bosh energetik maslahati: {hint}",
+    "status": { "new": "Yangi", "active": "Jarayonda", "diagnosed": "Sabab aniqlandi", "done": "Bajarildi", "failed": "Muvaffaqiyatsiz" }
+  },
+  "em": {
+    "incoming": "Dispetcher: favqulodda chaqiruv!", "answer": "Chaqiruv", "dispatcher": "Dispetcher (radio)", "deadline": "Javob muddati: yana {m} daq. Javob berish {cost} daq vaqt oladi.",
+    "later": "Keyinroq", "send": "Yuborish", "result": { "good": "To'g'ri chora!", "part": "Qisman to'g'ri", "bad": "Noto'g'ri chora" }
+  },
+  "map": {
+    "title": "Korxona xaritasi", "help": "Binoni bosing (yoki ←↑→↓ bilan tanlab Enter bosing). Yurish o'yin vaqtini sarflaydi.", "you": "Siz", "here": "Siz shu yerdasiz", "walk": "yurish ≈ {m} daq",
+    "keys": "Klaviatura: ←↑→↓ tanlash, Enter kirish, M xarita, T topshiriqlar",
+    "kind": { "dispatch": "Dispetcher", "tp": "Podstansiya", "ru": "Taqsimlash qurilmasi", "workshop": "Sex" }
+  },
+  "loc": { "back": "Xaritaga", "back2": "Orqaga", "tasksHere": "Bu yerdagi topshiriqlar:", "tpNote": "Transformator podstansiyasi: ikkita 10/0,4 kV, 400 kVA transformator. Yuklanishni analizator bilan o'lchang.", "ruNote": "RU-0,4 kV: sex liniyalari. Quvvat analizatori har bir liniyada kW, kVA, cosφ va nosimmetriklikni ko'rsatadi." },
+  "disp": { "finishTitle": "Smenani yakunlash", "finishOpen": "Hali {n} ta topshiriq bajarilmagan — ular nol ball oladi.", "finishAll": "Hamma topshiriq bajarildi. Smenani yakunlashingiz mumkin.", "finish": "Smenani yakunlash" },
+  "tp": { "title": "Transformatorlar", "feeds": "Ta'minlaydi", "hidden": "Yuklanishni ko'rish uchun TM kartochkasini oching va analizatordan foydalaning." },
+  "ru": { "energyTitle": "Energiya tahlili", "energyNote": "24 soatlik yuklama trendi, tarif zonalari va tejash takliflari." },
+  "energy": {
+    "open": "Energiya tahlili", "title": "Energiya tahlili", "goRu": "Trend RU-0,4 xonasidagi analizatordan olinadi.",
+    "trendNote": "24 soatlik yuklama trendini analizatordan yuklab olish kerak.", "download": "Trendni yuklab olish ({m} daq)", "chartLabel": "Kunlik yuklama grafigi",
+    "tip": "Grafik ustiga olib boring — soatlik qiymatlar chiqadi. Cho'qqi soatlarini tanlash uchun grafikni yoki soat tugmalarini bosing.", "chartTitle": "Kunlik yuklama (kW)", "total": "Jami", "after": "Takliflardan keyin",
+    "zoneHi": "qimmat tarif", "zoneLo": "arzon tarif", "peakKw": "Eng katta quvvat", "dayKwh": "Sutkalik energiya", "bill": "Yillik hisob (namunaviy)", "penalty": "cosφ jarimasi", "saving": "Yillik sof tejash",
+    "peakTitle": "Cho'qqi soatlari", "peakNote": "Eng katta yuklama (maksimumning ≥ 90 %) bo'lgan soatlarni belgilang.", "peakConfirm": "Cho'qqi soatlarini tasdiqlash",
+    "peakResult": "Cho'qqi soatlari aniqligi: {pct} %. Haqiqiy cho'qqi soatlari: {hours}.", "proposals": "Tejash takliflari", "budget": "Byudjet: {b}. Takliflarni tanlang va natijani ko'ring.", "viewOnly": "Hozircha ko'rish rejimi (E1 topshirig'i yo'q): takliflar ta'sirini ko'rishingiz mumkin.", "submit": "Tanlangan to'plamni topshirish"
+  },
+  "prop": {
+    "capex": "Kapital", "net": "Yillik sof tejash", "payback": "Qoplanish", "years": "yil", "sumCapex": "Jami kapital", "sumNet": "Yillik sof tejash", "sumPayback": "Qoplanish", "sumCos": "cosφ",
+    "cap_bank": { "name": "Reaktiv quvvat kompensatsiyasi (kondensator batareyasi)", "desc": "cosφ ni 0,97 ga ko'taradi, jarima kamayadi." },
+    "vfd": { "name": "Nasos va ventilyatorlarga chastota o'zgartirgich (VFD)", "desc": "O'zgaruvchan talabli nasos/ventilyatorlarda quvvat tezlik kubiga bog'liq." },
+    "shift_load": { "name": "Payvandlash yuklamasining bir qismini tungi smenaga siljitish", "desc": "Cho'qqidagi yuklamaning 30 % i arzon tarifga o'tadi; kechki smena xarajati bor." },
+    "ie3_swap": { "name": "Past FIKli (IE1) dvigatellarni IE3 ga almashtirish", "desc": "Yillik tejash = P·L·(1/η_eski − 1/η_yangi)·soat·tarif." },
+    "idle_off": { "name": "Bo'sh yurish va ortiqcha yoritishni o'chirish (taymer / datchik)", "desc": "Ish bo'lmagan tungi soatlarda bekorga ishlayotgan yuklamani o'chiradi." }
+  },
+  "e2": {
+    "plan": "Yuklamani boshqarish rejasi", "title": "TM ta'miri", "intro": "TM-1 ta'mirga chiqarilgandan keyin barcha yuklama TM-2 (400 kVA) ga o'tadi. Oyna: {window}.", "k": "K =", "limit": "Maqsad: K ≤ {k}. Eng arzon yetarli chorani tanlang. Choralar shart bo'lmasa — hech narsa tanlamang.", "submit": "Rejani topshirish", "noMeasures": "chorasiz"
+  },
+  "e2m": {
+    "shift_weld": "Payvandlashning bir qismini boshqa vaqtga siljitish (−60 kW)", "shift_weldD": "Payvand postlaridan 60 kW ni oynadan tashqariga o'tkazish.",
+    "shed_vent": "Muhim bo'lmagan ventilyatorlarni to'xtatish (−20 kW)", "shed_ventD": "Qo'shimcha so'rgichlar vaqtincha o'chiriladi.",
+    "stagger_mech": "Stanoklar ishga tushirishni navbatlash (−25 kW)", "stagger_mechD": "Mexanika sexi cho'qqi quvvatini kamaytiradi.",
+    "stop_pumps": "Drenaj / aylantirish nasoslarini to'xtatish (−15 kW)", "stop_pumpsD": "Kechiktirish mumkin bo'lgan nasoslar.",
+    "full_bank": "Kondensator batareyasini to'liq ulash (cosφ → 0,97)", "full_bankD": "Hamma bosqichlarni ulab, jami quvvatni kamaytirish."
+  },
+  "eq": {
+    "notHere": "Bu uskuna {place} da. O'lchash uchun o'sha yerga borishingiz kerak.", "goThere": "Borish", "ppeOn": "PPE kiyilgan", "ppeOff": "PPE kiyilmagan", "isolated": "Ajratilgan (blokirovka)", "live": "Kuchlanish ostida", "permit": "Ishga ruxsat berilgan",
+    "nameplate": "Shildik (nominal ma'lumot)", "tools": "Asboblar", "safety": "Xavfsizlik: ish joyini tayyorlash", "safetyView": "Xavfsizlik ketma-ketligi", "wearPpe": "PPE kiyish", "ppeDone": "PPE kiyildi.", "release": "Blokirovkani yechish",
+    "released": "Blokirovka yechildi, kuchlanish berildi.", "tasksTitle": "Bu uskunaga tegishli topshiriqlar", "decide": "Qaror qabul qilish", "diagnose": "Tashxis qo'yish", "noTask": "Bu uskuna uchun faol topshiriq yo'q. Siz uni «sog'lom» holat bilan solishtirish uchun o'lchashingiz mumkin.",
+    "log": "O'lchov jurnali", "logEmpty": "Hali o'lchov yo'q.", "burned": "KUYGAN", "running": "Ishlayapti", "stopped": "To'xtagan", "ready": "Tayyor",
+    "trip": { "relay": "Issiqlik relesi ishlagan", "magnetic": "Avtomat uzilgan", "earth": "Yerga tutashuv himoyasi ishlagan" }
+  },
+  "status": { "ok": "Normal", "warn": "Ogohlantirish", "bad": "Xavfli", "down": "To'xtagan", "off": "Ajratilgan" },
+  "tool": {
+    "clamp": { "name": "Tok qisqichi", "hint": "Faza toklari (A, B, C). Kuchlanish ostida." },
+    "clampStart": { "name": "Tok qisqichi: ishga tushirish", "hint": "Ishga tushirish toki; himoya uzilishi mumkin." },
+    "multimeter": { "name": "Multimetr", "hint": "Kuchlanish, faza yo'qligi." },
+    "megger": { "name": "Megommetr", "hint": "Izolyatsiya qarshiligi. Faqat o'chirilgan va kuchlanishi tekshirilgan uskunada!" },
+    "thermal": { "name": "Termovizor", "hint": "Korpus, podshipnik, klemma harorati." },
+    "vibration": { "name": "Vibratsiya o'lchagich", "hint": "mm/s va dominant chastota." },
+    "visual": { "name": "Ko'zdan kechirish", "hint": "Iflos, rang, moy, boltlar, rele holati." },
+    "analyzer": { "name": "Quvvat analizatori", "hint": "kW, kvar, kVA, cosφ, nosimmetriklik." },
+    "trend": { "name": "24 soatlik trend", "hint": "Analizator trendi." },
+    "blocked": { "title": "O'lchash rad etildi", "notRotating": "Vibratsiyani faqat aylanayotgan dvigatelda o'lchash mumkin." }
+  },
+  "meas": {
+    "I_A": "Tok, A faza", "I_B": "Tok, B faza", "I_C": "Tok, C faza", "ratio": "I / I_nom", "unbal": "Nosimmetriklik", "I_line": "Apparat toki", "pair": "Ulangan juft", "I_cap": "Kondensator toki (har faza)", "kvar_active": "Ulangan quvvat",
+    "ratio_breaker": "I / avtomat nominali", "K": "K = S/S_nom", "I_start": "Ishga tushirish toki", "start_ratio": "I_ishga / I_nom", "Uin_AB": "Kirishda U_AB", "Uin_BC": "Kirishda U_BC", "Uin_CA": "Kirishda U_CA",
+    "U_AB": "U_AB", "U_BC": "U_BC", "U_CA": "U_CA", "dev": "Nominaldan og'ish", "U_brake": "Tormoz g'altagiga kuchlanish", "uunbal": "Kuchlanish nosimmetrikligi", "R_ins": "Izolyatsiya qarshiligi",
+    "T_case": "Korpus harorati", "T_bearing": "Podshipnik harorati", "T_terminal": "Klemma / ulanish nuqtasi", "T_cable": "Kabel harorati", "T_oil": "Moy harorati", "v_mms": "Vibratsiya tezligi", "freq": "Dominant chastota",
+    "P": "Aktiv quvvat P", "Q": "Reaktiv quvvat Q", "S": "To'la quvvat S", "cos": "cosφ", "U_avg": "O'rtacha kuchlanish", "bank_kvar": "Kompensatsiya (ulangan)"
+  },
+  "note": {
+    "clamp": { "noCurrent": "Tok yo'q: dvigatel ishlamayapti yoki kuchlanish olmayapti." },
+    "start": { "cannot": "Ishga tushirib bo'lmadi: himoya ishlagan, faza yo'q yoki uskuna ajratilgan.", "tripped": "Ishga tushirishda himoya (avtomat) uzildi.", "ok": "Dvigatel ishga tushdi, himoya uzilmadi." },
+    "mm": { "isolated": "Uskuna ajratilgan: kuchlanish yo'q." }
+  },
+  "freq": { "normal": "oddiy", "1x": "1× aylanish chastotasi", "2x": "2× aylanish chastotasi", "bearing": "yuqori chastota (podshipnik)", "loose": "past chastotali garmonikalar (bo'shashish)" },
+  "vis": {
+    "isolated": "Uskuna o'chirilgan va blokirovka qilingan.", "burned": "Dvigatel kuygan: o'ramlar qorayib ketgan, kuchli kuygan hid.", "relayTripped": "Issiqlik relesi ishlagan (indikator tushgan).",
+    "breakerTripped": "Avtomat uzilgan holatda (himoya ishlagan).", "earthTripped": "Yerga tutashuv himoyasi ishlagan.", "nothing": "Ko'zdan ko'rinadigan nuqson yo'q.", "weldPairs": "Payvand apparatlari faza juftlari bo'yicha: AB — {AB} ta, BC — {BC} ta, CA — {CA} ta.",
+    "hidden": "Yashirin qismlar ({n} ta): ochib ko'rish uchun avval uskunani o'chirib, blokirovka qilish va kuchlanishni tekshirish kerak.", "burnedText": "Dvigatel kuygan: kuchli kuygan hid, o'ramlar qorayib ketgan."
+  },
+  "np": {
+    "P": "Nominal quvvat P_nom", "U": "Nominal kuchlanish U_nom", "I": "Nominal tok I_nom (hisoblangan)", "cos": "cosφ", "eta": "FIK (η)", "rpm": "Aylanish tezligi", "rpmU": "ayl/daq", "ins": "Izolyatsiya klassi / turi",
+    "maxT": "Ruxsat etilgan harorat", "age": "Yoshi", "yearsU": "yil", "rewinds": "Qayta o'ralganlar soni", "prot": "Himoya apparati va sozlamasi", "cable": "Kabel", "starter": "Ishga tushirish usuli", "S": "To'la quvvat S", "duty": "Ish rejimi",
+    "pair": "Ulangan fazalar", "pairNote": "ikki liniya orasiga", "feeder": "Sex liniyasi kabeli", "bank": "Batareya", "hvlv": "Kuchlanish YuK/PK", "uk": "Qisqa tutashuv kuchlanishi u_k", "group": "Sxema guruhi", "oil": "moy", "ampacity": "ruxsat etilgan tok",
+    "breaker": "avtomat {In} A, magnit uzgich {mag}×In ({trip} A)", "relay": "issiqlik relesi {A} A", "fuse": "saqlagich {A} A"
+  },
+  "limits": {
+    "title": "Chegaralar jadvali (soddalashtirilgan)", "voltage": "Kuchlanish og'ishi", "voltageV": "≤ ±{a} % normal; ±{b} % gacha ogohlantirish; undan ortiq xavfli", "unbalance": "Faza toki nosimmetrikligi",
+    "temp": "Korpus harorati", "vib": "Vibratsiya", "ins": "Izolyatsiya", "trK": "Transformator K", "current": "Tok / nominal", "currentV": "{a} % gacha normal; {b} % gacha ogohlantirish; undan ortiq xavfli",
+    "note": "O'quv maqsadidagi soddalashtirilgan qiymatlar; haqiqiy me'yorlar boshqacha bo'lishi mumkin."
+  },
+  "hyp": {
+    "title": "Tashxis", "needMeasure": "Avval hech bo'lmasa bitta o'lchov bajaring — o'lchovsiz taxmin qilish mumkin emas.", "needTrend": "Avval RU-0,4 dagi analizatordan 24 soatlik trendni yuklab oling.", "needPeak": "Avval energiya tahlili ekranida cho'qqi soatlarini belgilab tasdiqlang.",
+    "evidence": "Bajarilgan o'lchovlar: {n} ta", "rejected": "rad etilgan", "confirm": "Taxminni tasdiqlash",
+    "wrong": "Noto'g'ri: «{label}» emas.", "signs": "Bu sabab uchun xarakterli alomatlar: {signs} O'lchovlaringizni shu bilan solishtiring.", "left": "Qolgan urinishlar: {n}. Har bir noto'g'ri taxmin −{pen} ball.",
+    "revealed": "Urinishlar tugadi. To'g'ri sabab: «{label}».", "okTitle": "To'g'ri sabab aniqlandi!", "okNext": "Endi qaror qabul qiling: ta'mirlash, almashtirish, yuklamani kamaytirish yoki kuzatuvda qoldirish. Qarorni iqtisodiy jihatdan asoslang.",
+    "okE1": "To'g'ri! Endi byudjet doirasida eng foydali takliflar to'plamini tanlang."
+  },
+  "hint": {
+    "title": "Bosh energetikdan maslahat", "askFree": "Birinchi maslahat bepul (Oson rejim).", "ask": "Maslahat {cost} ball va {m} daq turadi.", "n": "Maslahat {n}:", "get": "Maslahat olish", "more": "Yana maslahat (−{cost} ball)", "none": "Boshqa maslahat yo'q.",
+    "hard": "Qiyin rejimda maslahat berilmaydi."
+  },
+  "sf": {
+    "title": "Xavfsizlik ketma-ketligi", "intro": "«{eq}» da ishlashdan oldin ish joyini tayyorlang. Qadamlarni to'g'ri tartibda tanlang.", "done": "Bajarilgan tartib", "none": "Hali hech narsa bajarilmagan.", "choose": "Keyingi qadamni tanlang", "complete": "Ishga ruxsat berildi: ta'mir tugmalari ochildi.",
+    "disc": "Bu o'quv o'yini: haqiqiy me'yoriy hujjatlar (PUE, PTE, PTB) o'rnini bosmaydi.", "toDecision": "Qarorni bajarishga o'tish", "wrong": "Tartib buzildi ({sev}): −{pts} ball", "start": "Xavfsizlik ketma-ketligini boshlash",
+    "sev": { "minor": "yengil", "major": "jiddiy", "serious": "og'ir", "critical": "KRITIK" }
+  },
+  "acc": { "title": "BAXTSIZ HODISA", "note": "Topshiriq muvaffaqiyatsiz tugadi, smena balli keskin tushdi. Haqiqiy hayotda bunday xato hayotga xavf soladi. Xavfsizlik qadamlarini hech qachon o'tkazib yubormang." },
+  "dec": {
+    "title": "Qaror", "cause": "Aniqlangan sabab:", "burned": "Dvigatel kuyib ketdi! Endi faqat qayta o'rash yoki almashtirish mumkin, zarar va to'xtash ko'proq; qaror balli 25 % ga kamayadi.",
+    "facts": "Iqtisodiy ma'lumotlar paneli", "choose": "Qaror variantlari", "cost": "Narx", "costFrom": "Narx (dan)", "downtime": "To'xtash", "downLoss": "To'xtash zarari", "saving": "Yillik tejash", "payback": "Qoplanish",
+    "etaAfter": "FIK (qayta o'rashdan keyin)", "needsLoto": "xavfsizlik ketma-ketligi kerak", "execute": "Qarorni bajarish",
+    "f": { "age": "Dvigatel yoshi", "rewinds": "Necha marta qayta o'ralgan", "eta": "Joriy FIK", "spare": "Omborda zaxira dvigatel", "spareYes": "bor (almashtirish tez)", "spareNo": "yo'q (buyurtma ≈ {d} kun)", "loss": "To'xtash narxi", "tariff": "Elektr tarifi", "tariffU": "so'm/kWh", "horizon": "Hisob ufqi", "hours": "Yillik ish soati", "hoursU": "soat" },
+    "replaceNote": "Almashtirish: quvvat ≥ {P} kW va tezlik ≈ {rpm} ayl/daq bo'lgan dvigatelni tanlang. FIK sinfi (IE2/IE3) narx va yillik energiya xarajatiga ta'sir qiladi.",
+    "c": { "rpm": "ayl/daq", "class": "Sinf", "stock": "Omborda", "save": "Yillik tejash*", "payback": "Qoplanish*", "inStock": "bor", "order": "buyurtma ≈ {d} kun" },
+    "paybackNote": "* Hozirgi (qayta o'ralgan) dvigatelga nisbatan: tejash = P·L·(1/η_eski − 1/η_yangi)·soat·tarif; qoplanish = (yangi narx − qayta o'rash narxi) / tejash.",
+    "cap": { "cosNo": "Kompensatsiyasiz cosφ", "cosTarget": "Maqsadli cosφ", "formula": "Formula: Qc = P·(tgφ₁ − tgφ₂). Hisoblangan qiymatni standart pog'onaga yaxlitlang; juda kichik quvvat cosφ ni yetarlicha ko'tarmaydi, juda katta — ortiqcha xarajat va ortiqcha kompensatsiya." },
+    "assign": { "note": "Har bir payvand apparatining ulangan faza juftini (AB, BC, CA) tanlang. Maqsad: nosimmetriklik ≤ 10 %, kam apparatni ko'chirgan holda.", "unbal": "Nosimmetriklik", "moved": "Ko'chirilgan apparat" },
+    "safetyFirst": "Bu ish uchun avval xavfsizlik ketma-ketligini bajarish shart: ish joyini tayyorlang.", "safetyFirstGo": "Xavfsizlik ketma-ketligi uskuna yonida bajariladi: {place} ga boring.",
+    "replaceRow": "{label} — {P} kW, {cls}, {rpm} ayl/daq", "capacitorRow": "Kondensator batareyasi {kvar} kvar", "assignRow": "Qayta taqsimlash ({moved} ta apparat ko'chiriladi)",
+    "why": {
+      "speed": "Tanlangan dvigatelning aylanish tezligi mos kelmaydi (2 yoki 6 qutbli) — mexanizm ishlamaydi.", "power": "Tanlangan dvigatel quvvati yetarli emas — u ortiqcha yuklanadi.",
+      "under": "Bu variant kutilgan natijani bermaydi (cosφ yoki nosimmetriklik talabga yetmaydi).", "over": "Ortiqcha kompensatsiya: cosφ ≈ 1 dan oshib ketdi, kondensatorlar ortiqcha.",
+      "burned": "Dvigatel kuyib bo'lgan: bu chora endi yetarli emas — faqat qayta o'rash yoki almashtirish.", "generic": "Bu chora aniqlangan sababni bartaraf etmaydi. To'g'ri yondashuv: {right}."
+    }
+  },
+  "res": {
+    "title": "Natija", "verdict": { "ok": "Zo'r qaror!", "warn": "Qaror ishlaydi, lekin optimal emas.", "bad": "Qaror sababni bartaraf etmadi." }, "wasteful": "Bu variant ishlaydi, ammo ortiqcha qimmat yoki ortiqcha.",
+    "of100": "/ 100", "safetyNA": "bu yo'lda xavfsizlik ishlari bo'lmadi (og'irlik boshqalarga taqsimlandi)", "learn": "Nima to'g'ri edi va nega?", "decisive": "Hal qiluvchi o'lchovlar: {list}.",
+    "extras": "Ortiqcha yoki takroriy o'lchovlar: {n} ta (−{pts} ball).", "burned": "Dvigatel vaqtida chora ko'rilmagani uchun kuygan — qo'shimcha zarar.", "compare": "Variantlar taqqoslash (5 yillik hisob)",
+    "c": { "option": "Variant", "net": "5 yillik sof foyda", "tco": "Jami xarajat (TCO)", "fit": "Mosligi", "invalid": "sababni tuzatmaydi" }, "best": "Eng yaxshi", "yours": "Sizniki", "portfolio": "Takliflar to'plami", "overBudget": "byudjetdan oshdi",
+    "net5": "{n} yillik sof foyda", "outage": "TM ta'miri rejasi"
+  },
+  "cat": { "diagnosis": "Tashxis", "safety": "Xavfsizlik", "time": "Vaqt", "cost": "Xarajat va qaror" },
+  "fin": {
+    "title": "Smena yakuni — hisobot", "confirmOpen": "Hali {n} ta topshiriq bajarilmagan va ular nol ball oladi. Smenani yakunlaysizmi?", "confirmAll": "Smenani yakunlaysizmi?", "overTitle": "Ish kuni tugadi", "over": "Soat 17:00 — ish kuni tugadi. Natijalarni ko'rib chiqamiz.", "report": "Hisobotni ko'rish",
+    "strongWeak": "Eng kuchli tomoningiz: {s}. Eng zaif tomoningiz: {w}.", "weighted": "Topshiriqlar o'rtachasi (muhimlik bo'yicha)", "priority": "Prioritet bonusi", "emerg": "Favqulodda chaqiruvlar jarimasi", "accidents": "Baxtsiz hodisalar", "loss": "To'xtash zarari", "spent": "Sarflangan mablag'",
+    "tasks": "Topshiriqlar", "task": "Topshiriq", "status": "Holat", "min": "Daqiqa", "score": "Ball", "mistakes": "Xatolar tahlili", "noMistakes": "Jiddiy xato yo'q. Barakalla!", "achievements": "Yutuqlar", "noAch": "Bu safar yutuq yo'q — keyingi smenada urinib ko'ring.",
+    "print": "Hisobotni chop etish", "download": "Hisobotni yuklab olish (.html)", "toMenu": "Bosh menyu", "category": "Toifa", "points": "Ball"
+  },
+  "rank": {
+    "stajyor": "Stajyor", "stajyorD": "Asoslarni o'rganmoqdasiz: o'lchash tartibi, xavfsizlik va qaror asoslash ustida ishlang.",
+    "elektrik": "Elektrik", "elektrikD": "Amaliy ko'nikmalar bor. Iqtisodiy asoslash va xavfsizlik qadamlarini mustahkamlang.",
+    "muhandis": "Muhandis", "muhandisD": "Yaxshi natija: sababni aniq topasiz va oqilona qaror qabul qilasiz.",
+    "katta": "Katta muhandis", "kattaD": "A'lo natija: tez, xavfsiz va iqtisodiy jihatdan puxta ishladingiz."
+  },
+  "ach": {
+    "no_extra": { "n": "Hech qachon ortiqcha o'lchamadi", "d": "Hamma topshiriqda faqat kerakli o'lchovlar." },
+    "safety_100": { "n": "Xavfsizlik 100 %", "d": "Xavfsizlik ishlarida birorta ham jarima yo'q." },
+    "cheapest": { "n": "Eng arzon yechim", "d": "Kamida 3 topshiriqda eng yaxshi iqtisodiy qaror." },
+    "no_hints": { "n": "Maslahatsiz", "d": "Hech qanday maslahat so'ramadingiz." },
+    "no_accident": { "n": "Baxtsiz hodisasiz smena", "d": "Hech qanday kritik xavfsizlik buzilishi bo'lmadi." },
+    "fast": { "n": "Tezkor muhandis", "d": "Kamida 3 topshiriq vaqt byudjetida." },
+    "no_burn": { "n": "Hech narsa kuymadi", "d": "Vaqtida chora ko'rib, dvigatelni kuyishdan saqladingiz." },
+    "first_try": { "n": "Bir zarbada", "d": "Kamida 4 topshiriqda birinchi taxminingiz to'g'ri edi." },
+    "energy_pro": { "n": "Energiya tejash ustasi", "d": "E1 da deyarli eng yaxshi takliflar to'plami." },
+    "all_done": { "n": "To'liq smena", "d": "Barcha topshiriqlar bajarildi." }
+  },
+  "rep": {
+    "unfinished": "Bajarilmadi: {title}", "unfinishedTip": "Vaqtni muhimlik bo'yicha taqsimlang: xavfliroq va ishlab chiqarishga ta'siri kattasidan boshlang.", "wrongHyp": "Noto'g'ri taxmin: «{label}»", "signsTip": "Xarakterli alomatlar: {signs}",
+    "extraMeas": "Ortiqcha yoki takroriy o'lchovlar: {n} ta", "extraTip": "Har bir o'lchov vaqt sarflaydi: avval gipoteza tuzing, so'ng uni tasdiqlaydigan yoki rad etadigan o'lchovni tanlang.", "safetyTip": "Xavfsizlik ketma-ketligi: ruxsat → PPE → o'chirish → plakat va blokirovka → kuchlanish yo'qligini tekshirish → yerga ulash → to'sish → ishga ruxsat.",
+    "hint": "Maslahatlar ishlatildi: {n} ta", "burned": "Dvigatel kuyib ketdi (vaqtida chora ko'rilmadi)", "burnedTip": "Qizish va vibratsiya tez rivojlanadi: xavfli nosozlikka birinchi navbatda e'tibor bering.", "wrongDecision": "Sababni bartaraf etmaydigan qaror: {label}",
+    "costlier": "Qaror ishladi, lekin eng yaxshisiga nisbatan {pct} % mosligi", "costlierTip": "Variantlarni 5 yillik jami xarajat (narx + to'xtash + energiya) bo'yicha solishtiring: yosh, qayta o'ralganlar soni, zaxira va to'xtash narxini hisobga oling.",
+    "slow": "Vaqt byudjeti oshib ketdi: {min} daq (byudjet {budget} daq)", "docTitle": "Ish kuni dalolatnomasi", "result": "Natija", "sigEng": "Elektr muhandisi imzosi", "sigChief": "Bosh energetik imzosi", "popup": "Brauzer yangi oynani blokladi — hisobot yuklab olinmoqda."
+  },
+  "msg": {
+    "intro": "Bosh energetik: smena boshlandi. Xaritadan kerakli sexni tanlang. Omad!", "shiftOver": "Dispetcher: soat 17:00 — ish kuni tugadi.",
+    "warnDamage": "Dispetcher: «{eq}» holati yomonlashmoqda — tezroq chora ko'ring!", "burn": "Dispetcher: «{eq}» kuyib ketdi! Ishlab chiqarish to'xtadi.",
+    "accidentStep": "Xavfsizlik buzildi: {why}", "accidentMegger": "Megommetr kuchlanish ostidagi uskunaga ulandi — bu kuchlanish ostida ishlash, baxtsiz hodisa!",
+    "meggerUnverified": "Megommetr faqat o'chirilgan, blokirovka qilingan va kuchlanishi yo'qligi tekshirilgan uskunada ishlatiladi. Avval xavfsizlik ketma-ketligini (kuchlanish yo'qligini tekshirishgacha) bajaring.",
+    "ppeLive": "Kuchlanish ostidagi uskunada PPE'siz o'lchash xavfli! (−jarima)", "emMissed": "Dispetcher: «{title}» — javob berilmadi, zarar yuz berdi.", "taskDone": "{id} topshirig'i bajarildi — {total} ball.", "tutorialDone": "Mashq tugadi."
+  },
+  "help": {
+    "goal": { "t": "Maqsad", "p": "Siz «Texnomash» zavodining elektr muhandisisiz. Bir ish kunida (08:00–17:00) topshiriqlarni bajarasiz: sabab topasiz, xavfsiz ta'mirlaysiz, iqtisodiy jihatdan oqilona qaror qilasiz." },
+    "flow": { "t": "Qanday ishlanadi", "p": "1) Xaritada sexni tanlang → 2) uskunani oching → 3) asboblar bilan o'lchang (har biri vaqt sarflaydi) → 4) «Tashxis qo'yish»: sababni tanlang → 5) «Qaror»: ta'mir, almashtirish, yuklamani kamaytirish yoki kuzatuv → 6) xavfsizlik ketma-ketligi → natija va izoh." },
+    "tools": { "t": "Asboblar", "p": "Tok qisqichi, multimetr, megommetr (faqat o'chirilgan va kuchlanishi tekshirilgan uskunada!), termovizor, vibratsiya o'lchagich, ko'zdan kechirish va quvvat analizatori. Hamma narsani o'lchab chiqish foydasiz: ortiqcha o'lchov vaqt va ball oladi." },
+    "safety": { "t": "Xavfsizlik", "p": "Ta'mirdan oldin tartibni to'g'ri bajaring: ruxsat → PPE → o'chirish → plakat va blokirovka → kuchlanish yo'qligini tekshirish → yerga ulash → to'sish → ishga ruxsat. Kritik buzish baxtsiz hodisaga olib keladi." },
+    "decision": { "t": "Qaror", "p": "Yuqori tok yoki qizish har doim almashtirishni bildirmaydi. Sababga mos, eng arzon va xavfsiz yechimni tanlang: ta'mir narxi, to'xtash, dvigatel yoshi, zaxira va yillik energiya tejash hisobga olinadi." },
+    "score": { "t": "Baholash", "p": "Har topshiriq 100 ball: tashxis 35, xavfsizlik 30, vaqt 15, xarajat va qaror asoslanishi 20. Smena oxirida daraja: Stajyor, Elektrik, Muhandis, Katta muhandis." },
+    "keys": { "t": "Boshqaruv", "p": "Sichqoncha yoki teginish. Klaviatura: ←↑→↓ xaritada tanlash, Enter kirish, M xarita, T topshiriqlar, Esc oynani yopish." }
+  },
+  "set": { "sound": "Ovoz (standart: o'chiq)", "textLabel": "Matn o'lchami", "text": { "small": "Kichik", "normal": "O'rtacha", "large": "Katta" }, "note": "Sozlamalar shu qurilmada saqlanadi." }
+}
