@@ -1,0 +1,32 @@
+1:"$Sreact.fragment"
+2:"/fizika-tarixi/_next/static/chunks/2kw-zohfpr91t.js"
+3:I[87832,["$2"],"default"]
+4:I[39756,["$2"],"default"]
+5:I[37457,["$2"],"default"]
+6:"/fizika-tarixi/_next/static/chunks/2xfd1fflf_ok-.js"
+7:I[52594,["$2","$6"],"default"]
+8:I[24561,["$2"],"default"]
+9:I[92330,["$2"],"default"]
+f:I[97367,["$2"],"OutletBoundary"]
+10:"$Sreact.suspense"
+12:"ViewportBoundary"
+13:I[97367,["$2"],"$12"]
+15:"MetadataBoundary"
+16:I[97367,["$2"],"$15"]
+18:I[68027,["$2"],"default",1]
+:HL["/fizika-tarixi/_next/static/chunks/28kchxbeq3o3t.css","style"]
+:HL["https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap","style"]
+b:X
+d:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":["$Le",[["$","script","script-0",{"src":"/fizika-tarixi/_next/static/chunks/3qgry7w0p6rk6.js","async":true,"nonce":"$undefined"}],["$","script","script-1",{"src":"/fizika-tarixi/_next/static/chunks/3t852whobf4u4.js","async":true,"nonce":"$undefined"}]],["$","$Lf",null,{"children":["$","$10",null,{"name":"Next.MetadataOutlet","children":"$@11"}]}]]}],"p":false,"v":null}}]]
+c:[["children",{"s":{"n":"slug","t":"d","k":"faradey","s":[]},"h":66048,"d":{"r":["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$b"},"c":"$Qd"}]]
+a:[["children",{"s":"olimlar","h":131584,"d":{"r":["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$b"},"c":"$Qc"}]]
+0:{"P":null,"c":["","olimlar","faradey",""],"q":"","i":false,"t":{"t":{"s":"","h":131600,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/fizika-tarixi/_next/static/chunks/28kchxbeq3o3t.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/fizika-tarixi/_next/static/chunks/2kw-zohfpr91t.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"uz","children":[["$","head",null,{"children":[["$","link",null,{"rel":"preconnect","href":"https://fonts.googleapis.com"}],["$","link",null,{"rel":"preconnect","href":"https://fonts.gstatic.com","crossOrigin":""}],["$","link",null,{"rel":"stylesheet","href":"https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap"}]]}],["$","body",null,{"children":[["$","a",null,{"className":"ft-skip","href":"#main","children":"Asosiy mazmunga o‘tish"}],["$","$L3",null,{}],["$","main",null,{"id":"main","className":"ft-main","children":["$","$L4",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","$L7",null,{}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]}],["$","$L8",null,{}],["$","$L9",null,{}]]}]]}]]}],"p":false,"v":null},"c":"$Qa"},"h":{"r":["$","$1","h",{"children":[null,["$","$L13",null,{"children":"$L14"}],["$","$L16",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$10",null,{"name":"Next.Metadata","children":"$L17"}]}],null]}],null]}],"p":false,"v":null}},"m":"$undefined","G":["$18",[["$","link","0",{"rel":"stylesheet","href":"/fizika-tarixi/_next/static/chunks/28kchxbeq3o3t.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"J70U4yQNsSEiPUtikLP6m"}
+19:"/fizika-tarixi/_next/static/chunks/3qgry7w0p6rk6.js"
+1a:"/fizika-tarixi/_next/static/chunks/3t852whobf4u4.js"
+1b:I[65043,["$2","$19","$1a"],"default"]
+b:C
+e:["$","$L1b",null,{"slug":"faradey"}]
+14:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","2",{"name":"theme-color","content":"#0b1426","media":"(prefers-color-scheme: light)"}],["$","meta","3",{"name":"theme-color","content":"#0b1426","media":"(prefers-color-scheme: dark)"}]]
+1c:I[27201,["$2"],"IconMark"]
+11:null
+17:[["$","title","0",{"children":"Maykl Faradey — Fizika tarixi | EnergyVibe"}],["$","meta","1",{"name":"description","content":"Elektromagnit induksiya hodisasini kashf etgan tajribachi olim."}],["$","link","2",{"rel":"canonical","href":"https://www.energyvibe.uz/fizika-tarixi/olimlar/faradey/"}],["$","meta","3",{"property":"og:title","content":"Maykl Faradey — Fizika tarixi"}],["$","meta","4",{"property":"og:description","content":"Elektromagnit induksiya hodisasini kashf etgan tajribachi olim."}],["$","meta","5",{"property":"og:url","content":"https://www.energyvibe.uz/fizika-tarixi/olimlar/faradey/"}],["$","meta","6",{"property":"og:site_name","content":"EnergyVibe — Fizika tarixi"}],["$","meta","7",{"property":"og:locale","content":"uz_UZ"}],["$","meta","8",{"property":"og:type","content":"website"}],["$","meta","9",{"name":"twitter:card","content":"summary"}],["$","meta","10",{"name":"twitter:title","content":"Maykl Faradey — Fizika tarixi"}],["$","meta","11",{"name":"twitter:description","content":"Elektromagnit induksiya hodisasini kashf etgan tajribachi olim."}],["$","link","12",{"rel":"icon","href":"/fizika-tarixi/icon.svg"}],["$","$L1c","13",{}]]

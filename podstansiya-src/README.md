@@ -21,6 +21,7 @@ npm run dev        # http://localhost:3000/podstansiya-simulyatori/
 npm run lint       # ESLint
 npm run typecheck  # tsc --noEmit
 npm test           # Vitest: engine, stsenariylar, sxema chizmasi, tekshiruv ro'yxati
+npm run docs:tekshiruv  # docs/TEKSHIRUV-RO'YXATI.md jadvallarini data/ dan qayta yozish
 npm run deploy     # next build + out/ -> ../podstansiya-simulyatori/ (shu papkani commit qiling)
 ```
 
@@ -46,6 +47,9 @@ src/features/substation-sim/
     faults.ts        6–35 kV yerga tutashuv, 110 kV QT + APV
     events.ts        seed'li RNG, ob-havo, kunlik yuklama grafigi
     journal.ts       operativ jurnal yozuvini tekshirish
+    permit.ts        naryad-ruxsatnoma va ish joyi tayyorligi
+    blank.ts         kommutatsiya blankasi
+    protocol.ts      izolyatsiya sinov protokoli
     scoring.ts       ball, yulduzlar
     scenario.ts      stsenariy sxemasi (turlar)
   data/          BARCHA texnik ma'lumot shu yerda (kodda emas)
@@ -82,7 +86,9 @@ Engine kodini o'zgartirish shart emas.
      (`correct`, `why`), `isOrder`, `expectsReport`, ixtiyoriy `at` (soatni surish);
    - `steps` — qadamlar: `match` (amal yoki `anyOf` massivi), `after` (oldingi qadamlar — DAG),
      `optional`, `explain`, `hint`. Tipik kommutatsiyalar uchun `data/procedures.ts` quruvchilaridan foydalaning;
-   - `goals` (yakuniy holat), `journal`, `permit`, `allowedOutages`, `analysis`.
+   - `goals` (yakuniy holat), `journal`, `allowedOutages`, `analysis`;
+   - hujjatlar (ixtiyoriy): `permit` (`PermitSpec`: talab qilinadigan va formadagi variantlar), `blank`
+     (`BlankSpec`: `blankStepIds(steps)` + chalg'ituvchi kartalar), `protocol` (`ProtocolSpec`: asbob ko'rsatkichlari).
 2. `scenarios/index.ts` dagi `SCENARIOS` ga qo'shing va `catalog.ts` da `playable: true` qiling.
 3. `scenarios.test.ts` ga kamida bitta "to'g'ri yo'l" va bitta "kritik xato" testini yozing
    (`engine/testkit.ts`: `run`, `sw`, `journalNow`).
@@ -108,9 +114,10 @@ Bajarildi (1–3-bosqichlar):
       soddalashtirilgan naryad va operativ jurnal, natija va ball; S01–S05 to'liq o'ynaladi
 
 Qoldi:
-- [ ] **4-bosqich — hujjatlar**: to'liq naryad-ruxsatnoma (ishlarni boshlovchi, ruxsat beruvchi, kuzatuvchi,
-      muddatlar, kundalik ruxsat/yakun), kommutatsiya blankasi (surib-tartiblash, oldindan tekshirish,
-      blanka bo'yicha bajarish), jurnal shabloni va chop etish, dalolatnoma/protokol
+- [x] **4-bosqich — hujjatlar**: to'liq naryad-ruxsatnoma (mas'ul shaxslar va guruhlari, brigada, o'chiriladigan
+      apparatlar, yerlagichlar, plakatlar, kuchlanish ostidagi qismlar, muddat, dopusk/yakun qaydlari), kommutatsiya
+      blankasi (surib-tartiblash, DAG bo'yicha tekshiruv, blanka bo'yicha bajarish), izolyatsiya sinov protokoli,
+      hujjatlarni chop etish
 - [ ] **5-bosqich**: S06–S21 (2–4-daraja), tasodifiy hodisalar oqimi (`events.ts` asosi tayyor), ob-havo
       ta'siri, yuklama grafigi bo'yicha vaqt, smena rejimi, dispetcher kechikkan hisobotga qo'ng'iroq qilishi,
       ABR avtomatikasi, himoyalar (differensial, MTZ, gaz relesi, moy sathi, RPN himoyasi) `data/` da

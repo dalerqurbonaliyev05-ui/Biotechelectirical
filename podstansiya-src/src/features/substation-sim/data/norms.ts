@@ -138,17 +138,30 @@ export const NORMS = {
   // ---- APV (110 kV) ----
   apvSuccessProbability: n(0.7, "ehtimollik", "APV muvaffaqiyatli bo'lish ehtimoli — o'yin modeli parametri (statistik ma'lumot emas)", "model"),
 
+  // ---- Naryad-ruxsatnoma (1000 V dan yuqori elektr qurilmalari) ----
+  permitIssuerMinGroup: n(5, "guruh", "Naryad beruvchining elektr xavfsizligi guruhi — mehnat muhofazasi qoidalari bo'yicha tekshirilsin"),
+  permitAdmitterMinGroup: n(4, "guruh", "Ruxsat beruvchi (operativ xodim) guruhi, 1000 V dan yuqori — tekshirilsin"),
+  permitLeaderMinGroup: n(5, "guruh", "Ishlar rahbari guruhi — tekshirilsin"),
+  permitProducerMinGroup: n(4, "guruh", "Ishlarni bajaruvchi guruhi, 1000 V dan yuqori — tekshirilsin"),
+  permitMemberMinGroup: n(3, "guruh", "Brigada a'zosining eng past guruhi (simulyatorda; qoidalarda II guruhli a'zo ham ruxsat etiladigan holatlar bor) — tekshirilsin"),
+  permitBrigadeMinSize: n(2, "kishi", "Brigada tarkibi: bajaruvchi bilan birga kamida — tekshirilsin"),
+
+  // ---- Izolyatsiya o'lchovi (megger) ----
+  absorptionMin: n(1.3, "R60/R15", "Absorbsiya koeffitsientining eng kichik qiymati (moyli transformator o'ramlari, ~10–30 °C) — sinov me'yorlari bo'yicha tekshirilsin"),
+  insulationFactoryRatioMin: n(0.7, "× zavod R60", "R60 zavod (pasport) qiymatining kamida shu ulushi bo'lishi (bir xil haroratga keltirilgan) — sinov me'yorlari bo'yicha tekshirilsin"),
+
   // ---- Favqulodda xizmatlar ----
   fireServiceNumber: n("101", "tel.", "O'zbekistonda yong'in xizmati raqami"),
 
   // ---- O'yin vaqt modeli (simulyatsiya soati) ----
   actionDurationSec: n(
-    { switch: 60, verifyDead: 120, checkPosition: 60, poster: 60, permitIssue: 600, admit: 300, finishWork: 300, journal: 120, report: 60, readback: 30, inspect: 30, tap: 0, fans: 30 },
+    { switch: 60, verifyDead: 120, checkPosition: 60, poster: 60, permitIssue: 600, admit: 300, finishWork: 300, journal: 120, report: 60, readback: 30, inspect: 30, tap: 0, fans: 30, blankSubmit: 300, protocol: 900 },
     "s",
     "Har amal simulyatsiya soatini qancha oldinga suradi — o'yin modeli",
     "model",
     false,
   ),
+  protocolValueTolerancePct: n(2, "%", "Protokolga yozilgan qiymat va asbob ko'rsatkichi farqiga ruxsat — o'yin qoidasi", "model", false),
   journalTimeToleranceMin: n(10, "daq", "Jurnal yozuvidagi vaqt va amal vaqti farqiga ruxsat — o'yin qoidasi", "model", false),
 } as const;
 

@@ -118,7 +118,8 @@ export function transformerOutageSteps(t: string, after: Partial<Record<Side, st
  * Ta'mirdan keyin ishga tushirish (teskari tartib): naryad yopiladi, plakatlar va yerlagichlar olinadi,
  * ajratkichlar (avval shina tomoni) yopiladi, keyin manba (YK) o'chirgichi — salt yurish, keyin yuklama tomonlari.
  */
-export function transformerEnergizeSteps(t: string, first: string): StepDef[] {
+export function transformerEnergizeSteps(t: string, first: string | string[], beforeEnergize: string[] = []): StepDef[] {
+  const firstDeps = Array.isArray(first) ? first : [first];
   const T = shortT(t);
   const e = SWITCHING_ORDER.energize;
   const steps: StepDef[] = [];
@@ -126,7 +127,7 @@ export function transformerEnergizeSteps(t: string, first: string): StepDef[] {
     id: "poster-work-off",
     label: `${t} dagi «Shu yerda ishlang» plakatini olish`,
     match: { type: "poster", targetId: t, poster: "workHere", on: false },
-    after: [first],
+    after: firstDeps,
     explain: "Brigada olib chiqilgach va naryad yopilgach plakatlar olinadi.",
   });
   for (const side of SIDES) {
@@ -134,14 +135,14 @@ export function transformerEnergizeSteps(t: string, first: string): StepDef[] {
       id: `unearth-${side}`,
       label: `QSG-${T}-${side} yerlagichini olish`,
       match: { type: "switch", deviceId: `QSG-${T}-${side}`, to: "open" },
-      after: [first],
+      after: firstDeps,
       explain: "Yerlagichlar faqat ish tugab, brigada olib chiqilgandan keyin olinadi. Yerlagich ulangan holda kuchlanish berish — qisqa tutashuv.",
     });
     steps.push({
       id: `poster-off-${side}`,
       label: `QS-${T}-${side}B dagi «Ulamang» plakatini olish`,
       match: { type: "poster", targetId: `QS-${T}-${side}B`, poster: "doNotSwitch", on: false },
-      after: [first],
+      after: firstDeps,
       explain: "Plakat olinmaguncha bu ajratkichni ulash taqiqlanadi.",
     });
   }
@@ -166,7 +167,7 @@ export function transformerEnergizeSteps(t: string, first: string): StepDef[] {
   }
   const allDisc = SIDES.flatMap((side) => [`close-QS-${T}-${side}B`, `close-QS-${T}-${side}T`]);
   e.breakers.forEach((group, gi) => {
-    const prev = gi === 0 ? allDisc : e.breakers.slice(0, gi).flat().map((x) => `on-Q-${x}`);
+    const prev = gi === 0 ? [...allDisc, ...beforeEnergize] : e.breakers.slice(0, gi).flat().map((x) => `on-Q-${x}`);
     for (const side of group) {
       steps.push({
         id: `on-Q-${side}`,
@@ -184,4 +185,23 @@ export function transformerEnergizeSteps(t: string, first: string): StepDef[] {
     }
   });
   return steps;
+}
+
+/** Kommutatsiya blankasiga kiradigan qadamlar: majburiy kommutatsiya, kuchlanishni tekshirish va plakatlar. */
+export function blankStepIds(steps: StepDef[]): string[] {
+  return steps
+    .filter((s) => !s.optional)
+    .filter((s) => (Array.isArray(s.match) ? s.match : [s.match]).some((m) => m.type === "switch" || m.type === "verifyDead" || m.type === "poster"))
+    .map((s) => s.id);
+}
+
+/** Transformator yacheykalari apparatlari (naryad shakli uchun). */
+export function transformerBayDevices(t: string) {
+  const T = shortT(t);
+  return {
+    breakers: SIDES.map((side) => `Q-${T}-${side}`),
+    disconnectors: SIDES.flatMap((side) => [`QS-${T}-${side}T`, `QS-${T}-${side}B`]),
+    busDisconnectors: SIDES.map((side) => `QS-${T}-${side}B`),
+    earthing: SIDES.map((side) => `QSG-${T}-${side}`),
+  };
 }

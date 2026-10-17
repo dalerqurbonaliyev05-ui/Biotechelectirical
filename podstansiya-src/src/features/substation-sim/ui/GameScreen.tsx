@@ -12,6 +12,7 @@ import { useSettings } from "../store/settings";
 import BriefingModal from "./BriefingModal";
 import DispatcherPhone, { usePendingCalls } from "./DispatcherPhone";
 import DocumentsPanel from "./DocumentsPanel";
+import PrintArea from "./docs/PrintArea";
 import EquipmentPanel from "./EquipmentPanel";
 import FeedbackStack from "./FeedbackStack";
 import { formatDuration } from "./format";
@@ -84,6 +85,7 @@ export default function GameScreen({ scenarioId }: { scenarioId: string }) {
   return (
     <div className="flex flex-col lg:h-[calc(100dvh-3.5rem-2.75rem)]">
       <BriefingModal />
+      <PrintArea />
       {/* Yuqori panel */}
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-line/60 px-3 py-2 text-sm">
         <Link href="/stsenariylar/" className="btn-ghost px-2.5 py-1.5" aria-label={G.exit}>

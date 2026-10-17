@@ -1,5 +1,7 @@
 import type { ScenarioDef, StepDef } from "../../engine/scenario";
-import { transformerEnergizeSteps } from "../procedures";
+import { blankStepIds, transformerBayDevices, transformerEnergizeSteps } from "../procedures";
+
+const T1 = transformerBayDevices("T-1");
 
 const ORDER = "m1";
 
@@ -17,7 +19,23 @@ const steps: StepDef[] = [
     after: ["readback"],
     explain: "Brigada ish joyidan olib chiqilmaguncha va naryad yopilmaguncha yerlagich va plakatlar olinmaydi.",
   },
-  ...transformerEnergizeSteps("T-1", "finishWork"),
+  {
+    id: "blank",
+    label: "Kommutatsiya blankasini tuzish (ishga tushirish tartibi)",
+    match: { type: "blankSubmit" },
+    after: ["readback"],
+    explain: "Ishga tushirish ham murakkab kommutatsiya — tartib oldindan blankada tuziladi.",
+    hint: "«Hujjatlar» → «Blanka».",
+  },
+  {
+    id: "protocol",
+    label: "Izolyatsiya qarshiligini o'lchash natijalarini protokolga yozish va xulosa berish",
+    match: { type: "protocol" },
+    after: ["finishWork"],
+    explain: "Ta'mirdan keyin kuchlanish berishdan oldin o'ramlar izolyatsiyasi megger bilan o'lchanadi: R60/R15 va zavod qiymatiga nisbat me'yordan past bo'lsa transformator ishga tushirilmaydi.",
+    hint: "«Hujjatlar» → «Protokol»: asbob ko'rsatkichlarini yozing, R60/R15 ni hisoblang.",
+  },
+  ...transformerEnergizeSteps("T-1", ["finishWork", "blank"], ["protocol"]),
   {
     id: "sv10-off",
     label: "Q-SV10 ni o'chirish — normal sxemaga qaytish",
@@ -80,6 +98,43 @@ export const S03: ScenarioDef = {
     devices: { ...initialDevices },
     posters: { "QS-T1-110B": ["doNotSwitch"], "QS-T1-35B": ["doNotSwitch"], "QS-T1-10B": ["doNotSwitch"], "T-1": ["workHere"] },
     admitted: true,
+    permit: {
+      number: "12",
+      workName: "T-1 transformatorini rejali ta'mirlash",
+      place: "T-1",
+      startTime: "09:00",
+      endTime: "17:00",
+      issuer: { name: "Xolmatov B. (bosh muhandis)", group: 5 },
+      admitter: { name: "Navbatchi elektromonter", group: 4 },
+      leader: { name: "Rahimov A.", group: 5 },
+      producer: { name: "Saidov J.", group: 4 },
+      members: [
+        { name: "Tursunov D.", group: 3 },
+        { name: "Qodirov S.", group: 3 },
+      ],
+      switchedOff: [...T1.breakers, ...T1.disconnectors],
+      earthing: T1.earthing,
+      posters: T1.busDisconnectors,
+      liveParts: ["B110-1", "B35-1", "B10-1"],
+    },
+  },
+  blank: {
+    required: true,
+    stepIds: blankStepIds(steps),
+    distractors: [
+      { id: "x-qsg-t2", label: "QSG-T2-110 yerlagichini olish" },
+      { id: "x-sv110", label: "Q-SV110 ni ulash" },
+      { id: "x-t2-10", label: "Q-T2-10 ni o'chirish" },
+    ],
+  },
+  protocol: {
+    kind: "insulation",
+    tempC: 22,
+    readings: [
+      { winding: "hv", label: "YuK (110 kV) — korpus", r15: 2400, r60: 3600, factoryR60: 4200 },
+      { winding: "mv", label: "O'K (35 kV) — korpus", r15: 1600, r60: 2300, factoryR60: 2600 },
+      { winding: "lv", label: "PK (10 kV) — korpus", r15: 900, r60: 1250, factoryR60: 1500 },
+    ],
   },
   messages: [
     {

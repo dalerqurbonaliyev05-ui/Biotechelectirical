@@ -1,0 +1,56 @@
+# Fizika tarixi (fizika-tarixi-src): lint, typecheck va production build tekshiruvi.
+# Sayt statik: tayyor natija fizika-tarixi/ ga yoziladi. Bu yerda `claude/**` shoxlariga push bo'lganda
+# package-lock.json va tayyor natija avtomatik commit qilinadi ([skip ci]); main'ga faqat PR orqali tushadi.
+name: Fizika tarixi
+
+on:
+  push:
+    branches: [main, 'claude/**']
+    paths:
+      - 'fizika-tarixi-src/**'
+      - '.github/workflows/fizika-tarixi.yml'
+  pull_request:
+    paths:
+      - 'fizika-tarixi-src/**'
+      - '.github/workflows/fizika-tarixi.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: fizika-tarixi-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Lint, typecheck, build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    defaults:
+      run:
+        working-directory: fizika-tarixi-src
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install (package-lock.json bo'lsa npm ci)
+        run: |
+          if [ -f package-lock.json ]; then npm ci; else npm install; fi
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run build
+      - name: Tayyor natijani fizika-tarixi/ ga yozish va commit qilish (faqat claude/** push)
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/claude/')
+        run: |
+          node scripts/deploy.mjs
+          cd "$GITHUB_WORKSPACE"
+          git add fizika-tarixi fizika-tarixi-src/package-lock.json
+          if git diff --cached --quiet; then
+            echo "O'zgarish yo'q"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "fizika-tarixi: build natijasi va package-lock.json [skip ci]"
+            git push
+          fi

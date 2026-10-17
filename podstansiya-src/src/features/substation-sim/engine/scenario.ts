@@ -1,7 +1,7 @@
 // Stsenariy sxemasi. Stsenariylar data/scenarios/ da shu turdagi ma'lumot sifatida yoziladi —
 // yangi stsenariy qo'shish uchun engine kodini o'zgartirish shart emas.
 
-import type { PosterKind, SwitchPos } from "./types";
+import type { PermitForm, PosterKind, SwitchPos } from "./types";
 
 export type ActionMatcher =
   | { type: "switch"; deviceId: string; to: SwitchPos }
@@ -13,6 +13,8 @@ export type ActionMatcher =
   | { type: "permitIssue" }
   | { type: "admit" }
   | { type: "finishWork" }
+  | { type: "blankSubmit" }
+  | { type: "protocol" }
   | { type: "journal" }
   | { type: "inspect"; targetId: string }
   | { type: "tap"; transformerId: string; dir?: 1 | -1 };
@@ -83,7 +85,8 @@ export interface ScenarioDef {
     devices?: Record<string, SwitchPos>;
     posters?: Record<string, PosterKind[]>;
     taps?: Record<string, number>;
-    permitIssued?: boolean;
+    /** Oldindan rasmiylashtirilgan naryad (masalan, ish davom etayotgan stsenariy) */
+    permit?: PermitForm;
     admitted?: boolean;
   };
   /** Kommutatsiya faqat dispetcher buyrug'i bilan */
@@ -94,18 +97,46 @@ export interface ScenarioDef {
   steps: StepDef[];
   goals?: Goal[];
   journal?: { required: boolean };
-  /** Naryad-ruxsatnoma kerak bo'lgan ish (S02) */
-  permit?: {
-    workName: string;
-    /** Ish joyi — tayyorlanganini tekshirish uchun */
-    workZone: { earthSwitches: string[]; posters: Array<{ targetId: string; poster: PosterKind }> };
-    /** To'g'ri belgilanishi kerak bo'lgan kuchlanish ostida qoladigan qismlar */
-    liveParts: string[];
-  };
+  /** Naryad-ruxsatnoma kerak bo'lgan ish */
+  permit?: PermitSpec;
+  /** Kommutatsiya blankasi */
+  blank?: BlankSpec;
+  /** Sinov protokoli (izolyatsiya o'lchovi) */
+  protocol?: ProtocolSpec;
   /** Ekskursiya uchun ko'rib chiqiladigan uskunalar */
   tour?: { targets: string[] };
   /** RPN stsenariysi */
   rpn?: { transformerId: string; targetMin: number; targetMax: number };
   /** Yakuniy tahlil matni */
   analysis: string;
+}
+
+export interface PermitSpec {
+  workName: string;
+  place: string;
+  /** To'g'ri naryadda bo'lishi shart bo'lgan ro'yxatlar (ish joyini tayyorlash) */
+  required: {
+    switchedOff: string[];
+    earthing: string[];
+    posters: Array<{ targetId: string; poster: PosterKind }>;
+    liveParts: string[];
+  };
+  /** Formadagi tanlov variantlari (to'g'rilari + chalg'ituvchilar) */
+  candidates: { switchedOff: string[]; earthing: string[]; posters: string[]; liveParts: string[] };
+}
+
+export interface BlankSpec {
+  /** Blankasiz kommutatsiya qoidabuzarlikmi */
+  required: boolean;
+  /** Blankaga kiradigan qadamlar (stsenariy qadamlari id'lari) */
+  stepIds: string[];
+  /** Chalg'ituvchi (noto'g'ri) amallar kartalari */
+  distractors: Array<{ id: string; label: string }>;
+}
+
+export interface ProtocolSpec {
+  kind: "insulation";
+  tempC: number;
+  /** O'lchov asbobi ko'rsatkichlari, MOm; factoryR60 — zavod qiymati (shu haroratga keltirilgan) */
+  readings: Array<{ winding: string; label: string; r15: number; r60: number; factoryR60: number }>;
 }
