@@ -1324,21 +1324,22 @@ function pathPoints(curve){
 }
 const _q=new THREE.Quaternion(),_t0=new THREE.Vector3(),_t1=new THREE.Vector3();
 function lightTube(P,r,R){
-  R=R||7;const n=P.length,pos=new Float32Array(n*R*3),nor=new Float32Array(n*R*3),idx=[];
+  R=R||7;const W=R+1,n=P.length,pos=new Float32Array(n*W*3),nor=new Float32Array(n*W*3),uv=new Float32Array(n*W*2),idx=[];let acc=0;
   const T=P.map((p,i)=>{const a=P[Math.max(0,i-1)],b=P[Math.min(n-1,i+1)];return b.clone().sub(a).normalize();});
   let N=Math.abs(T[0].z)<.9?V3(0,0,1):V3(1,0,0);N=N.sub(T[0].clone().multiplyScalar(N.dot(T[0]))).normalize();
   for(let i=0;i<n;i++){
-    if(i>0){_q.setFromUnitVectors(T[i-1],T[i]);N.applyQuaternion(_q);N.sub(T[i].clone().multiplyScalar(N.dot(T[i]))).normalize();}
+    if(i>0){_q.setFromUnitVectors(T[i-1],T[i]);N.applyQuaternion(_q);N.sub(T[i].clone().multiplyScalar(N.dot(T[i]))).normalize();acc+=P[i].distanceTo(P[i-1]);}
     const B=T[i].clone().cross(N);
-    for(let j=0;j<R;j++){
+    for(let j=0;j<W;j++){
       const a=j/R*Math.PI*2,cx=Math.cos(a),sx=Math.sin(a);
-      const nx=N.x*cx+B.x*sx,ny=N.y*cx+B.y*sx,nz=N.z*cx+B.z*sx,k=(i*R+j)*3;
+      const nx=N.x*cx+B.x*sx,ny=N.y*cx+B.y*sx,nz=N.z*cx+B.z*sx,k=(i*W+j)*3,q=(i*W+j)*2;
       nor[k]=nx;nor[k+1]=ny;nor[k+2]=nz;pos[k]=P[i].x+nx*r;pos[k+1]=P[i].y+ny*r;pos[k+2]=P[i].z+nz*r;
+      uv[q]=acc/20;uv[q+1]=j/R;
     }
-    if(i<n-1)for(let j=0;j<R;j++){const a=i*R+j,b=i*R+(j+1)%R,c=a+R,d=b+R;idx.push(a,b,c,b,d,c);}
+    if(i<n-1)for(let j=0;j<R;j++){const a=i*W+j,b=a+1,c=a+W,d=b+W;idx.push(a,b,c,b,d,c);}
   }
   const g=new THREE.BufferGeometry();
-  g.setAttribute("position",new THREE.BufferAttribute(pos,3));g.setAttribute("normal",new THREE.BufferAttribute(nor,3));
+  g.setAttribute("position",new THREE.BufferAttribute(pos,3));g.setAttribute("normal",new THREE.BufferAttribute(nor,3));g.setAttribute("uv",new THREE.BufferAttribute(uv,2));
   g.setIndex(idx);g.computeBoundingSphere();return g;
 }
 function tubeMesh(curve,radius,mat){
