@@ -3,7 +3,7 @@
 > Suhbat uzilsa, shu fayldan davom ettiriladi. Har bosqichdan keyin yangilanadi.
 
 **Oxirgi yangilanish:** 2026-10-17
-**Hozirgi bosqich:** 1-bosqich (Figma fayli va uslub) — **palitra tasdiq kutmoqda**
+**Hozirgi bosqich:** 2-bosqich (qahramonlar) — **Eshak tasdiq kutmoqda**
 
 ## Asosiy havolalar
 
@@ -25,6 +25,16 @@
 
 **Eslatma:** Figma serveridan rasmni `curl` bilan yuklab olish tarmoqda bloklangan (figma.com). Skrinshotlar Figma ichidan olinadi; eksport (4-bosqich) SVG matni orqali qilinadi.
 
+## Qahramonlarni chizish usuli
+
+1. Qahramon `manba/qahramonlar/<nom>.mjs` faylida SVG qatlamlar sifatida yoziladi (palitra nomlari bilan).
+2. Tekshirish: `node manba/vosita/render.mjs <nom>` → `chiqish/<nom>/` (PNG, git'ga kirmaydi).
+3. Figma kodi: `node manba/vosita/figma_kod.mjs <nom> yon|old|ifodalar` → `use_figma` orqali joylanadi.
+4. Qatlamlar ro'yxati va aylanish nuqtalari: `node manba/vosita/manifest.mjs <nom>` → `qatlamlar/<nom>.json`.
+5. Figma'da: bo'lim (Section) `<Nom>` ichida `<nom>_yon`, `<nom>_old` (shaffof kadr) va `<nom>_ifodalar` varag'i. Har kadrda yashirin `_pivotlar` guruhi bor.
+
+**Muhim texnik eslatma:** Figma'da rangni o'zgaruvchiga bog'laganda shaffoflik 100% ga qaytadi — `figma_kod.mjs` buni avtomatik tiklaydi.
+
 ## Uslub qoidalari
 
 - Yassi (flat) vektor, yumshoq yumaloq shakllar, qalin konturlarsiz, issiq ranglar.
@@ -35,8 +45,8 @@
 
 | # | Bosqich | Holat |
 |---|---|---|
-| 1 | Figma fayli, sahifalar, palitra | 🟡 palitra tasdiq kutmoqda |
-| 2 | Qahramonlar (9 ta, birma-bir) | ⏳ |
+| 1 | Figma fayli, sahifalar, palitra | ✅ tasdiqlandi |
+| 2 | Qahramonlar (9 ta, birma-bir) | 🟡 jarayonda |
 | 3 | Fonlar F1–F8 va buyumlar | ⏳ |
 | 4 | Animatsiya (Remotion), 34 klip | ⏳ |
 | 5 | Ovoz (ElevenLabs sinovi) | ⏳ |
@@ -47,7 +57,7 @@
 
 | # | Qahramon | Holat |
 |---|---|---|
-| 1 | Eshak | ⏳ |
+| 1 | Eshak | 🟡 tasdiq kutmoqda (Figma bo'limi `Eshak`, 3:2) |
 | 2 | Ho'kiz | ⏳ |
 | 3 | Xo'roz | ⏳ |
 | 4 | Kalamush 1 va 2 | ⏳ |

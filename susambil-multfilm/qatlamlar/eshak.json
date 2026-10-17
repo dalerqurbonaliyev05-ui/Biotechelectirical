@@ -1,0 +1,292 @@
+{
+  "qahramon": "eshak",
+  "izoh": "Qatlamlar pastdan yuqoriga tartibda. pivot — aylanish nuqtasi (ko'rinish kadri koordinatasida, piksel).",
+  "korinishlar": {
+    "yon": {
+      "figma_kadr": "eshak_yon",
+      "olcham": [
+        900,
+        760
+      ],
+      "qatlamlar": [
+        {
+          "nom": "eshak_soya",
+          "pivot": null,
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "eshak_dum",
+          "pivot": [
+            258,
+            370
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "eshak_oyoq_4",
+          "pivot": [
+            360,
+            470
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "eshak_oyoq_2",
+          "pivot": [
+            564,
+            470
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "eshak_oyoq_3",
+          "pivot": [
+            316,
+            470
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "eshak_oyoq_1",
+          "pivot": [
+            522,
+            470
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "eshak_quloq_ong",
+          "pivot": [
+            712,
+            152
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "eshak_tana",
+          "pivot": null,
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "eshak_bosh",
+          "pivot": [
+            560,
+            400
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "eshak_quloq_chap",
+          "pivot": [
+            662,
+            152
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "eshak_koz_ochiq",
+          "pivot": null,
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "eshak_koz_yumuq",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "eshak_koz_xursand",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "eshak_koz_qorqqan",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "eshak_qosh_qorqqan",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "eshak_qosh_jahldor",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "eshak_ogiz_1",
+          "pivot": null,
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "eshak_ogiz_2",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "eshak_ogiz_3",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "eshak_ogiz_xafa",
+          "pivot": null,
+          "boshida_yashirin": true
+        }
+      ]
+    },
+    "old": {
+      "figma_kadr": "eshak_old",
+      "olcham": [
+        900,
+        760
+      ],
+      "qatlamlar": [
+        {
+          "nom": "eshak_soya",
+          "pivot": null,
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "eshak_dum",
+          "pivot": [
+            600,
+            430
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "eshak_oyoq_4",
+          "pivot": [
+            339,
+            500
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "eshak_oyoq_3",
+          "pivot": [
+            561,
+            500
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "eshak_oyoq_2",
+          "pivot": [
+            396,
+            520
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "eshak_oyoq_1",
+          "pivot": [
+            504,
+            520
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "eshak_tana",
+          "pivot": null,
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "eshak_quloq_chap",
+          "pivot": [
+            506,
+            192
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "eshak_quloq_ong",
+          "pivot": [
+            394,
+            192
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "eshak_bosh",
+          "pivot": [
+            450,
+            420
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "eshak_koz_ochiq",
+          "pivot": null,
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "eshak_koz_yumuq",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "eshak_koz_xursand",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "eshak_koz_qorqqan",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "eshak_qosh_qorqqan",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "eshak_qosh_jahldor",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "eshak_ogiz_1",
+          "pivot": null,
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "eshak_ogiz_2",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "eshak_ogiz_3",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "eshak_ogiz_xafa",
+          "pivot": null,
+          "boshida_yashirin": true
+        }
+      ]
+    }
+  },
+  "ifodalar": {
+    "xursand": {
+      "eshak_koz_ochiq": false,
+      "eshak_koz_xursand": true,
+      "eshak_ogiz_1": false,
+      "eshak_ogiz_3": true
+    },
+    "qorqqan": {
+      "eshak_koz_ochiq": false,
+      "eshak_koz_qorqqan": true,
+      "eshak_qosh_qorqqan": true,
+      "eshak_ogiz_1": false,
+      "eshak_ogiz_2": true
+    },
+    "jahldor": {
+      "eshak_qosh_jahldor": true,
+      "eshak_ogiz_1": false,
+      "eshak_ogiz_xafa": true
+    }
+  }
+}
