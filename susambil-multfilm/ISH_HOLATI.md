@@ -3,7 +3,7 @@
 > Suhbat uzilsa, shu fayldan davom ettiriladi. Har bosqichdan keyin yangilanadi.
 
 **Oxirgi yangilanish:** 2026-10-17
-**Hozirgi bosqich:** 2-bosqich (qahramonlar) — **Ari tasdiq kutmoqda**
+**Hozirgi bosqich:** 2-bosqich (qahramonlar) — **Boy tasdiq kutmoqda**
 
 ## Asosiy havolalar
 
@@ -37,7 +37,7 @@
 
 ## Masshtab
 
-Barcha qahramonlar bitta masshtabda chiziladi (animatsiyada o'lchamini o'zgartirmasdan joylanadi). Kadr o'lchami qahramonga qarab: eshak/ho'kiz 900x760 (yer y=700), xo'roz 520x520 (yer y=480), kalamush 420x360 (yer y=330), ari 260x220 (uchadi, yer yo'q; ifodasi ko'rinishi uchun ataylab kattaroq — sahnada kichraytiriladi).
+Barcha qahramonlar bitta masshtabda chiziladi (animatsiyada o'lchamini o'zgartirmasdan joylanadi). Kadr o'lchami qahramonga qarab: eshak/ho'kiz 900x760 (yer y=700), xo'roz 520x520 (yer y=480), kalamush 420x360 (yer y=330), ari 260x220 (uchadi, yer yo'q; ifodasi ko'rinishi uchun ataylab kattaroq — sahnada kichraytiriladi), odamlar 640x760 (yer y=700).
 
 Kalamushlar: umumiy shakl `kalamush_asos.mjs`; Figma'da 2-kalamush 1-kalamushdan nusxalanib, `kulrang` → `jigarrang` va `kalamush1_` → `kalamush2_` qilingan.
 
@@ -45,6 +45,7 @@ Kalamushlar: umumiy shakl `kalamush_asos.mjs`; Figma'da 2-kalamush 1-kalamushdan
 
 - Yassi (flat) vektor, yumshoq yumaloq shakllar, qalin konturlarsiz, issiq ranglar.
 - Faqat palitradagi 10 rang. Soya = `toq` 22% shaffof, yorug'lik = `qaymoq` 45% shaffof.
+- Odam terisi: `olov` ustiga `qaymoq` 45% (yorug'lik qoidasi) — shaftoli tus, yangi rang qo'shilmaydi.
 - Qatlam nomlari: kichik harflar, bo'sh joysiz (`eshak_bosh`, `eshak_quloq_chap` ...).
 
 ## Bosqichlar
@@ -67,8 +68,8 @@ Kalamushlar: umumiy shakl `kalamush_asos.mjs`; Figma'da 2-kalamush 1-kalamushdan
 | 2 | Ho'kiz | ✅ tasdiqlandi (Figma bo'limi `Ho'kiz`, 7:2) — uslub namunasi |
 | 3 | Xo'roz | ✅ tasdiqlandi (Figma bo'limi `Xo'roz`, 9:2) |
 | 4 | Kalamush 1 va 2 | ✅ tasdiqlandi (Figma bo'limi `Kalamushlar`, 11:2; 1 — kulrang, 2 — jigarrang) |
-| 5 | Ari | 🟡 tasdiq kutmoqda (Figma bo'limi `Ari`, 12:2) |
-| 6 | Boy | ⏳ |
+| 5 | Ari | ✅ tasdiqlandi (Figma bo'limi `Ari`, 12:2) |
+| 6 | Boy | 🟡 tasdiq kutmoqda (Figma bo'limi `Boy`, 13:2) |
 | 7 | Qo'shni xotin | ⏳ |
 | 8 | Bo'rilar podshosi | ⏳ |
 | 9 | Hovliqma bo'ri 1 va 2 | ⏳ |
