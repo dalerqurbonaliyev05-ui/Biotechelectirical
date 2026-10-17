@@ -3,7 +3,7 @@
 > Suhbat uzilsa, shu fayldan davom ettiriladi. Har bosqichdan keyin yangilanadi.
 
 **Oxirgi yangilanish:** 2026-10-17
-**Hozirgi bosqich:** 2-bosqich (qahramonlar) — **Kalamushlar tasdiq kutmoqda**
+**Hozirgi bosqich:** 2-bosqich (qahramonlar) — **Ari tasdiq kutmoqda**
 
 ## Asosiy havolalar
 
@@ -29,7 +29,7 @@
 
 1. Qahramon `manba/qahramonlar/<nom>.mjs` faylida SVG qatlamlar sifatida yoziladi (palitra nomlari bilan).
 2. Tekshirish: `node manba/vosita/render.mjs <nom>` → `chiqish/<nom>/` (PNG, git'ga kirmaydi).
-3. Figma kodi: `node manba/vosita/figma_kod.mjs <nom> yon|old|ifodalar` → `use_figma` orqali joylanadi.
+3. Figma kodi: `node manba/vosita/figma_kod.mjs <nom> ikkala|yon|old|ifodalar` (`ikkala` — barcha ko'rinishlar bitta chaqiruvda) → `use_figma` orqali joylanadi.
 4. Qatlamlar ro'yxati va aylanish nuqtalari: `node manba/vosita/manifest.mjs <nom>` → `qatlamlar/<nom>.json`.
 5. Figma'da: bo'lim (Section) `<Nom>` ichida `<nom>_yon`, `<nom>_old` (shaffof kadr) va `<nom>_ifodalar` varag'i. Har kadrda yashirin `_pivotlar` guruhi bor.
 
@@ -37,7 +37,7 @@
 
 ## Masshtab
 
-Barcha qahramonlar bitta masshtabda chiziladi (animatsiyada o'lchamini o'zgartirmasdan joylanadi). Kadr o'lchami qahramonga qarab: eshak/ho'kiz 900x760 (yer y=700), xo'roz 520x520 (yer y=480), kalamush 420x360 (yer y=330).
+Barcha qahramonlar bitta masshtabda chiziladi (animatsiyada o'lchamini o'zgartirmasdan joylanadi). Kadr o'lchami qahramonga qarab: eshak/ho'kiz 900x760 (yer y=700), xo'roz 520x520 (yer y=480), kalamush 420x360 (yer y=330), ari 260x220 (uchadi, yer yo'q; ifodasi ko'rinishi uchun ataylab kattaroq — sahnada kichraytiriladi).
 
 Kalamushlar: umumiy shakl `kalamush_asos.mjs`; Figma'da 2-kalamush 1-kalamushdan nusxalanib, `kulrang` → `jigarrang` va `kalamush1_` → `kalamush2_` qilingan.
 
@@ -66,8 +66,8 @@ Kalamushlar: umumiy shakl `kalamush_asos.mjs`; Figma'da 2-kalamush 1-kalamushdan
 | 1 | Eshak | ✅ tasdiqlandi (Figma bo'limi `Eshak`, 3:2) — uslub namunasi |
 | 2 | Ho'kiz | ✅ tasdiqlandi (Figma bo'limi `Ho'kiz`, 7:2) — uslub namunasi |
 | 3 | Xo'roz | ✅ tasdiqlandi (Figma bo'limi `Xo'roz`, 9:2) |
-| 4 | Kalamush 1 va 2 | 🟡 tasdiq kutmoqda (Figma bo'limi `Kalamushlar`, 11:2; 1 — kulrang, 2 — jigarrang) |
-| 5 | Ari | ⏳ |
+| 4 | Kalamush 1 va 2 | ✅ tasdiqlandi (Figma bo'limi `Kalamushlar`, 11:2; 1 — kulrang, 2 — jigarrang) |
+| 5 | Ari | 🟡 tasdiq kutmoqda (Figma bo'limi `Ari`, 12:2) |
 | 6 | Boy | ⏳ |
 | 7 | Qo'shni xotin | ⏳ |
 | 8 | Bo'rilar podshosi | ⏳ |

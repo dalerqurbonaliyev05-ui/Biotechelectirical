@@ -40,7 +40,45 @@ let section = figma.currentPage.findChild((n) => n.type === "SECTION" && n.name 
 `;
 
 let code;
-if (viewNames.includes(qism)) {
+if (qism === "ikkala") {
+  const VIEWS = Object.fromEntries(
+    viewNames.map((v) => [v, { w: q.views[v].w, h: q.views[v].h, layers: q.views[v].layers.map((l) => ({ name: l.name, hidden: l.hidden, pivot: l.pivot, svg: l.svg })) }])
+  );
+  code = `${umumiy}
+if (!section) {
+  const right = Math.max(0, ...figma.currentPage.children.filter((n) => n.type === "SECTION").map((n) => n.x + n.width));
+  section = figma.createSection();
+  section.name = ${JSON.stringify(Nom)};
+  section.x = right > 0 ? right + 200 : 0;
+  section.y = 0;
+}
+const VIEWS = ${JSON.stringify(VIEWS)};
+const out = {};
+let fx = 80;
+for (const [vn, V] of Object.entries(VIEWS)) {
+  const name = ${JSON.stringify(nom)} + "_" + vn;
+  const prev = section.findChild((n) => n.name === name); if (prev) prev.remove();
+  const frame = figma.createFrame(); frame.name = name; frame.resize(V.w, V.h); frame.fills = []; frame.clipsContent = false;
+  section.appendChild(frame); frame.x = fx; frame.y = Y0; fx += V.w + 80;
+  for (const L of V.layers) {
+    const tmp = figma.createNodeFromSvg('<svg xmlns="http://www.w3.org/2000/svg" width="' + V.w + '" height="' + V.h + '" viewBox="0 0 ' + V.w + ' ' + V.h + '">' + L.svg + '</svg>');
+    frame.appendChild(tmp); tmp.x = 0; tmp.y = 0;
+    const g = figma.group([...tmp.children], frame); tmp.remove();
+    g.name = L.name; g.visible = !L.hidden; bindAll(g);
+  }
+  const dots = [];
+  for (const L of V.layers.filter((l) => l.pivot)) {
+    const d = figma.createEllipse(); d.resize(12, 12); frame.appendChild(d);
+    d.x = L.pivot[0] - 6; d.y = L.pivot[1] - 6; d.name = "pivot_" + L.name;
+    d.fills = bindPaints([{ type: "SOLID", color: { r: 0.784, g: 0.263, b: 0.227 } }]); dots.push(d);
+  }
+  if (dots.length) { const pg = figma.group(dots, frame); pg.name = "_pivotlar"; pg.visible = false; pg.locked = true; }
+  out[vn] = { id: frame.id, layers: V.layers.length };
+  section.resizeWithoutConstraints(Math.max(section.width, frame.x + V.w + 80), Math.max(section.height, frame.y + V.h + 80));
+}
+return { sectionId: section.id, out, begonaRanglar: [...new Set(begona)] };
+`;
+} else if (viewNames.includes(qism)) {
   const view = q.views[qism];
   const idx = viewNames.indexOf(qism);
   const layers = view.layers.map((l) => ({ name: l.name, hidden: l.hidden, pivot: l.pivot, svg: l.svg }));
