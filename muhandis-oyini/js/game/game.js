@@ -337,9 +337,12 @@ export class Game {
   taskFor(eqId) {
     const s = this.state;
     const cur = s.current && s.tasks[s.current];
+    const live = (tk) => tk && ['active', 'diagnosed', 'new'].includes(tk.status);
     const owns = (tk) => tk && (tk.equipment === eqId || tk.related.includes(eqId) || tk.affected.includes(eqId));
-    if (cur && ['active', 'diagnosed'].includes(cur.status)) return cur;
-    return Object.values(s.tasks).find((tk) => ['active', 'diagnosed', 'new'].includes(tk.status) && owns(tk)) || null;
+    if (live(cur) && owns(cur)) return cur;
+    const owner = Object.values(s.tasks).find((tk) => live(tk) && owns(tk));
+    if (owner) return owner;
+    return live(cur) && cur.status !== 'new' ? cur : null;
   }
 
   // ---------- PPE va xavfsizlik ----------
