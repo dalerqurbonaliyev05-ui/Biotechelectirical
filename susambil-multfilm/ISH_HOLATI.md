@@ -3,7 +3,7 @@
 > Suhbat uzilsa, shu fayldan davom ettiriladi. Har bosqichdan keyin yangilanadi.
 
 **Oxirgi yangilanish:** 2026-10-17
-**Hozirgi bosqich:** 2-bosqich (qahramonlar) — **Ho'kiz tasdiq kutmoqda**
+**Hozirgi bosqich:** 2-bosqich (qahramonlar) — **Xo'roz tasdiq kutmoqda**
 
 ## Asosiy havolalar
 
@@ -35,6 +35,10 @@
 
 **Muhim texnik eslatma:** Figma'da rangni o'zgaruvchiga bog'laganda shaffoflik 100% ga qaytadi — `figma_kod.mjs` buni avtomatik tiklaydi.
 
+## Masshtab
+
+Barcha qahramonlar bitta masshtabda chiziladi (animatsiyada o'lchamini o'zgartirmasdan joylanadi). Kadr o'lchami qahramonga qarab: eshak/ho'kiz 900x760 (yer y=700), xo'roz 520x520 (yer y=480).
+
 ## Uslub qoidalari
 
 - Yassi (flat) vektor, yumshoq yumaloq shakllar, qalin konturlarsiz, issiq ranglar.
@@ -58,8 +62,8 @@
 | # | Qahramon | Holat |
 |---|---|---|
 | 1 | Eshak | ✅ tasdiqlandi (Figma bo'limi `Eshak`, 3:2) — uslub namunasi |
-| 2 | Ho'kiz | 🟡 tasdiq kutmoqda (Figma bo'limi `Ho'kiz`, 7:2) |
-| 3 | Xo'roz | ⏳ |
+| 2 | Ho'kiz | ✅ tasdiqlandi (Figma bo'limi `Ho'kiz`, 7:2) — uslub namunasi |
+| 3 | Xo'roz | 🟡 tasdiq kutmoqda (Figma bo'limi `Xo'roz`, 9:2) |
 | 4 | Kalamush 1 va 2 | ⏳ |
 | 5 | Ari | ⏳ |
 | 6 | Boy | ⏳ |

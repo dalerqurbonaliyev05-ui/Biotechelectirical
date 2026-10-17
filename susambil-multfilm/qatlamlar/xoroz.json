@@ -1,0 +1,246 @@
+{
+  "qahramon": "xoroz",
+  "izoh": "Qatlamlar pastdan yuqoriga tartibda. pivot — aylanish nuqtasi (ko'rinish kadri koordinatasida, piksel).",
+  "korinishlar": {
+    "yon": {
+      "figma_kadr": "xoroz_yon",
+      "olcham": [
+        520,
+        520
+      ],
+      "qatlamlar": [
+        {
+          "nom": "xoroz_soya",
+          "pivot": null,
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "xoroz_dum_patlari",
+          "pivot": [
+            206,
+            312
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "xoroz_oyoq_2",
+          "pivot": [
+            286,
+            386
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "xoroz_oyoq_1",
+          "pivot": [
+            242,
+            386
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "xoroz_tana",
+          "pivot": null,
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "xoroz_bosh",
+          "pivot": [
+            310,
+            270
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "xoroz_toj",
+          "pivot": [
+            336,
+            160
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "xoroz_qanot_chap",
+          "pivot": [
+            292,
+            296
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "xoroz_koz_ochiq",
+          "pivot": null,
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "xoroz_koz_yumuq",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "xoroz_koz_xursand",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "xoroz_koz_qorqqan",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "xoroz_qosh_qorqqan",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "xoroz_qosh_jahldor",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "xoroz_tumshuq_1",
+          "pivot": null,
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "xoroz_tumshuq_2",
+          "pivot": null,
+          "boshida_yashirin": true
+        }
+      ]
+    },
+    "old": {
+      "figma_kadr": "xoroz_old",
+      "olcham": [
+        520,
+        520
+      ],
+      "qatlamlar": [
+        {
+          "nom": "xoroz_soya",
+          "pivot": null,
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "xoroz_dum_patlari",
+          "pivot": [
+            306,
+            318
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "xoroz_oyoq_2",
+          "pivot": [
+            240,
+            402
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "xoroz_oyoq_1",
+          "pivot": [
+            280,
+            402
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "xoroz_tana",
+          "pivot": null,
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "xoroz_qanot_chap",
+          "pivot": [
+            332,
+            296
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "xoroz_qanot_ong",
+          "pivot": [
+            188,
+            296
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "xoroz_bosh",
+          "pivot": [
+            260,
+            270
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "xoroz_toj",
+          "pivot": [
+            264,
+            156
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "xoroz_koz_ochiq",
+          "pivot": null,
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "xoroz_koz_yumuq",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "xoroz_koz_xursand",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "xoroz_koz_qorqqan",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "xoroz_qosh_qorqqan",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "xoroz_qosh_jahldor",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "xoroz_tumshuq_1",
+          "pivot": null,
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "xoroz_tumshuq_2",
+          "pivot": null,
+          "boshida_yashirin": true
+        }
+      ]
+    }
+  },
+  "ifodalar": {
+    "xursand": {
+      "xoroz_koz_ochiq": false,
+      "xoroz_koz_xursand": true,
+      "xoroz_tumshuq_1": false,
+      "xoroz_tumshuq_2": true
+    },
+    "qorqqan": {
+      "xoroz_koz_ochiq": false,
+      "xoroz_koz_qorqqan": true,
+      "xoroz_qosh_qorqqan": true,
+      "xoroz_tumshuq_1": false,
+      "xoroz_tumshuq_2": true
+    },
+    "jahldor": {
+      "xoroz_qosh_jahldor": true
+    }
+  }
+}

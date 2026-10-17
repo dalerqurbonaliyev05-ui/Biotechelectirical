@@ -99,6 +99,7 @@ const SETS = ${JSON.stringify(sets)};
 const KESIM = ${JSON.stringify(q.boshKesim)};
 const EXTRA = ${JSON.stringify(q.holatlar || {})};
 const nomi = ${JSON.stringify(nom)};
+const S = ${q.kesimMasshtab || 1}; // kichik qahramonlar kesimini kattalashtirish
 const prev = section.findChild((n) => n.name === nomi + "_ifodalar");
 if (prev) prev.remove();
 const sheet = figma.createAutoLayout("VERTICAL", { name: nomi + "_ifodalar", itemSpacing: 40, paddingLeft: 48, paddingRight: 48, paddingTop: 48, paddingBottom: 48 });
@@ -113,13 +114,14 @@ const crop = (viewName, label, show) => {
   card.fills = [];
   const box = figma.createFrame();
   box.name = "kesim";
-  box.resize(w, h);
+  box.resize(w * S, h * S);
   box.clipsContent = true;
   box.cornerRadius = 24;
   box.fills = bindPaints([{ type: "SOLID", color: { r: 0.937, g: 0.902, b: 0.839 } }]);
   const c = src.clone();
   box.appendChild(c);
-  c.x = -x; c.y = -y;
+  c.rescale(S);
+  c.x = -x * S; c.y = -y * S;
   for (const ch of c.children) if (ch.name in show) ch.visible = show[ch.name];
   card.appendChild(box);
   const t = figma.createText();
