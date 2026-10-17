@@ -1,6 +1,6 @@
-:HL["/podstansiya-simulyatori/_next/static/chunks/06cgklcur_0qe.css","style"]
+:HL["/podstansiya-simulyatori/_next/static/chunks/2mkrdorhpek3t.css","style"]
 :HL["https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600&display=swap","style"]
 3:[["children",{"s":"__PAGE__","h":160}]]
 2:[["children",{"s":{"n":"id","t":"d","k":"S06","s":[]},"h":65632,"c":"$Q3"}]]
 1:[["children",{"s":"oyin","h":131168,"c":"$Q2"}]]
-0:{"b":"43WRAHQAZAXicsxSkNQCN","t":{"t":{"s":"","h":131152,"c":"$Q1"}}}
+0:{"b":"VwvwXlt7cBSRl16DmGzBk","t":{"t":{"s":"","h":131152,"c":"$Q1"}}}

@@ -7,13 +7,18 @@ import { THERMAL } from "../data/norms";
 import { MODE_RULES } from "../data/rules";
 import { deviceCarriesCurrent, evaluateSwitch } from "../engine/interlocks";
 import { isNodeEnergized, isNodeGrounded } from "../engine/network";
-import { loadFactorOf, nodeVoltageKv, transformerLvKv } from "../engine/simulator";
+import type { MeasurementDef } from "../engine/scenario";
+import { loadFactorOf, nodeVoltageKv, pickVariant, transformerLvKv } from "../engine/simulator";
 import { thermalStatus } from "../engine/thermal";
 import type { PosterKind, SwitchPos, Topology } from "../engine/types";
 import { uz } from "../i18n/uz";
 import { useSession } from "../store/session";
+import MiniGameModal from "./minigames/MiniGameModal";
+import { miniGameFor, type MiniGameKind } from "./minigames";
 import { codeText } from "./text";
 import { useDerived } from "./useDerived";
+
+type MiniOpen = { kind: MiniGameKind; def?: MeasurementDef; props: Record<string, unknown> };
 
 const E = uz.equipment;
 
@@ -45,6 +50,7 @@ export default function EquipmentPanel() {
   const selected = useSession((s) => s.selected);
   const dispatch = useSession((s) => s.dispatch);
   const [showGloss, setShowGloss] = useState(false);
+  const [mini, setMini] = useState<MiniOpen | null>(null);
   if (!ctx || !sim || !net) return null;
   if (!selected) return <p className="text-sm text-muted">{E.selectHint}</p>;
   const TOPOLOGY = ctx.topology;
@@ -215,7 +221,18 @@ export default function EquipmentPanel() {
         const r = sim.measurements[m.id];
         return (
           <div key={m.id} className="rounded-xl border border-line/60 p-2">
-            <button type="button" className="btn-ghost w-full" disabled={!running || !!r} onClick={() => dispatch({ type: "measure", measurementId: m.id })}>
+            <button
+              type="button"
+              className="btn-ghost w-full"
+              disabled={!running || !!r}
+              onClick={() => {
+                // Mini-o'yin bo'lsa — natija o'yin orqali olinadi (qiymatlar engine tanlagan variantdan)
+                const v = pickVariant(m, sim.seed);
+                const kind = miniGameFor(m, v.category);
+                if (kind) setMini({ kind, def: m, props: { values: v.values, category: v.category } });
+                else dispatch({ type: "measure", measurementId: m.id });
+              }}
+            >
               🔬 {m.label}
             </button>
             {r && <MeasurementValues values={r.values} />}
@@ -227,9 +244,34 @@ export default function EquipmentPanel() {
           ⚡ {O.phasingWith.replace("{t}", t.id)}
         </button>
       ))}
+      {k.kind === "transformer" && (
+        <button
+          type="button"
+          className="btn-ghost"
+          onClick={() => {
+            const model = getModel(TOPOLOGY.transformers.find((t) => t.id === selected)!.model);
+            setMini({ kind: "thermo", props: { tempC: sim.oilTemp[selected], cooling: model.cooling.value } });
+          }}
+        >
+          🌡 {uz.mini.thermoBtn}
+        </button>
+      )}
       <button type="button" className="btn-ghost text-xs" disabled={!running} onClick={() => dispatch({ type: "inspect", targetId: selected })}>
         👁 {O.inspect}
       </button>
+      {mini && (
+        <MiniGameModal
+          kind={mini.kind}
+          title={mini.def?.label}
+          props={mini.props}
+          allowSkip={!!mini.def}
+          onClose={() => setMini(null)}
+          onDone={() => {
+            if (mini.def) dispatch({ type: "measure", measurementId: mini.def.id });
+            setMini(null);
+          }}
+        />
+      )}
     </div>
   );
 

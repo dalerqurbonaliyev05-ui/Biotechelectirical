@@ -7,6 +7,7 @@ import { absorption } from "../../engine/protocol";
 import type { InsulationProtocolForm } from "../../engine/types";
 import { uz } from "../../i18n/uz";
 import { useSession } from "../../store/session";
+import MiniGameModal from "../minigames/MiniGameModal";
 import { fmt } from "../text";
 import { useDerived } from "../useDerived";
 import { PrintButton, field } from "./common";
@@ -20,6 +21,9 @@ export default function ProtocolPanel() {
   const [rows, setRows] = useState<Record<string, { r15: string; r60: string }>>({});
   const [temp, setTemp] = useState("");
   const [conclusion, setConclusion] = useState<"fit" | "unfit" | "">("");
+  const [megger, setMegger] = useState(false);
+  const meggerDone = useSession((s) => s.meggerDone);
+  const markMegger = useSession((s) => s.markMegger);
   if (!ctx || !sim) return null;
   if (!spec) return <p className="text-sm text-muted">{D.protocolNotNeeded}</p>;
   const running = sim.status === "running";
@@ -65,15 +69,40 @@ export default function ProtocolPanel() {
             {spec.readings.map((r) => (
               <tr key={r.winding}>
                 <td className="py-0.5 pr-2 font-sans">{r.label}</td>
-                <td className="text-right text-ok">{r.r15}</td>
-                <td className="text-right text-ok">{r.r60}</td>
+                {meggerDone.includes(r.winding) || saved ? (
+                  <>
+                    <td className="text-right text-ok">{r.r15}</td>
+                    <td className="text-right text-ok">{r.r60}</td>
+                  </>
+                ) : (
+                  <td colSpan={2} className="text-right font-sans text-muted">
+                    {uz.mini.notMeasured}
+                  </td>
+                )}
                 <td className="text-right text-muted">{r.factoryR60}</td>
               </tr>
             ))}
           </tbody>
         </table>
         <p className="mt-1 font-sans text-[11px] text-muted">{D.MOhm}</p>
+        {!saved && spec.readings.some((r) => !meggerDone.includes(r.winding)) && (
+          <button type="button" className="btn-primary mt-2 font-sans" disabled={!running} onClick={() => setMegger(true)}>
+            📟 {uz.mini.meggerBtn}
+          </button>
+        )}
       </div>
+      {megger && (
+        <MiniGameModal
+          kind="megger"
+          props={{ readings: spec.readings.filter((r) => !meggerDone.includes(r.winding)), onMeasured: markMegger }}
+          onClose={() => setMegger(false)}
+          onDone={(r) => {
+            // O'tkazib yuborilsa — barcha ko'rsatkichlar ochiladi
+            if (r.score === null) spec.readings.forEach((x) => markMegger(x.winding));
+            setMegger(false);
+          }}
+        />
+      )}
 
       {saved ? (
         <p className="rounded-lg bg-ok/10 p-2 text-sm text-ok">

@@ -68,5 +68,5 @@ export const S09: ScenarioDef = {
     reportStep("report", "m1", ["q1", "q2", "q3", "q4"], "Javobni yuborish"),
   ],
   analysis:
-    "Transformator quvvati yuklama va ishonchlilik toifasiga qarab tanlanadi: ikki transformatorli podstansiyada biri o'chganda ikkinchisi avariyaviy ortiqcha yuklanish bilan butun yuklamani olishi kerak; ortiqcha zaxira salt yurish isroflari va narx tufayli iqtisodiy emas. Marka: Т — uch fazali, Р — ikki parchali o'ram, М/Д/ДЦ/Ц — sovutish, Н — RPN, Г — germetik; raqamlar — quvvat (kVA) va YK kuchlanishi (kV). Batafsil — markalar ensiklopediyasida (6-bosqich).",
+    "Transformator quvvati yuklama va ishonchlilik toifasiga qarab tanlanadi: ikki transformatorli podstansiyada biri o'chganda ikkinchisi avariyaviy ortiqcha yuklanish bilan butun yuklamani olishi kerak; ortiqcha zaxira salt yurish isroflari va narx tufayli iqtisodiy emas. Marka: Т — uch fazali, Р — ikki parchali o'ram, М/Д/ДЦ/Ц — sovutish, Н — RPN, Г — germetik; raqamlar — quvvat (kVA) va YK kuchlanishi (kV). Batafsil va viktorina — «Markalar ensiklopediyasi» bo'limida.",
 };

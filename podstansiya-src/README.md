@@ -32,7 +32,7 @@ CI: `.github/workflows/podstansiya.yml` (lint, typecheck, test, build).
 ## Tuzilma
 
 ```
-app/                                   marshrutlar: / (menyu), /stsenariylar, /oyin/[id], /sozlamalar, /natijalar
+app/                                   marshrutlar: / (menyu), /stsenariylar, /oyin/[id], /mashqlar, /ensiklopediya, /sozlamalar, /natijalar
 src/features/substation-sim/
   engine/        sof TypeScript, UI'ga bog'liq emas, to'liq testlangan
     types.ts         topologiya, holat, amal turlari
@@ -55,6 +55,9 @@ src/features/substation-sim/
     protection.ts    himoyalar: ortiqcha yuklanish, moy harorati, yerga tutashuv, muddatlar
     automation.ts    ABR (zaxirani avtomatik ulash)
     scoring.ts       ball, yulduzlar, uzilish zarari
+    markDecoder.ts   transformator markasini o'qish
+    quiz.ts          markalar viktorinasi
+    minigames.ts     mini-o'yinlar mantig'i (gaz turi, moy xulosasi, ko'rik, termometr, megger)
     scenario.ts      stsenariy sxemasi (turlar)
   data/          BARCHA texnik ma'lumot shu yerda (kodda emas)
     equipment.ts     podstansiya topologiyasi (uskunalar va bog'lanishlar)
@@ -67,9 +70,11 @@ src/features/substation-sim/
     transformers.ts  transformator modellari (pasport)
     loadCurves.ts    yuklama grafiklari, ob-havo ehtimollari
     glossary.ts      atamalar
+    markLetters.ts   marka harflari ma'nosi
+    minigames.ts     mini-o'yinlar ma'lumoti (gaz turlari, ko'rik nuqtalari)
     scenarios/       SXX.ts — har bir stsenariy, index.ts (reyestr), catalog.ts (S01–S21 ro'yxati)
   store/         Zustand: settings (persist), progress (persist), session (o'yin)
-  ui/            sxema, panellar, telefon, hujjatlar, natija, menyu
+  ui/            sxema, panellar, telefon, hujjatlar, natija, menyu, minigames/ (kechiktirib yuklanadi)
   i18n/uz.ts     barcha interfeys matnlari (o'zbekcha, lotin)
 docs/TEKSHIRUV-RO'YXATI.md   tekshirilishi kerak bo'lgan raqam va qoidalar
 ```
@@ -129,8 +134,11 @@ Qoldi:
       nosozliklari, parallel ishlash tekshiruvi, yuklamani toifa bo'yicha cheklash, uzilish va shartli zarar hisobi,
       35 kV podstansiya varianti (`equipment35.ts`, `layout35.ts`, `topologies.ts`), S21 — urug' bo'yicha smena;
       UI: signal paneli, qaror kartalari, o'lchov natijalari, moy harorati trendi, «Keyingi voqeagacha»
-- [ ] **6-bosqich**: mini-o'yinlar (obxod, megger R60/R15, moy sinovi, gaz relesi, termometr) — kechiktirib
-      yuklanadigan bo'laklar; transformator markalari ensiklopediyasi va viktorina (`transformers.ts` kengaytiriladi)
+- [x] **6-bosqich — mini-o'yinlar va ensiklopediya**: obxod (SVG transformator ko'rigi), megger (ulanish, kuchlanish,
+      R15/R60, razryadlash — S03 protokoliga ulangan), moy sinovi (namuna, probiv apparati, baholash), gaz relesi
+      (rang, yonuvchanlik, xulosa), termometr — `next/dynamic` bilan alohida bo'laklar; stsenariy o'lchovlari
+      (S08, S10, S12, S13, S18, S21) mini-o'yin orqali, `/mashqlar` sahifasida mustaqil mashq; `/ensiklopediya` —
+      marka dekoderi (`engine/markDecoder.ts`), harflar jadvali, modellar katalogi, viktorina (`engine/quiz.ts`)
 - [ ] **7-bosqich**: yutuqlar, ovoz effektlari (sozlama tayyor), glossariy sahifasi (`glossary.ts` tayyor),
       3D transformator (Three.js, ixtiyoriy)
 - [ ] **8-bosqich (ixtiyoriy)**: reyting va hisoblar (Supabase yoki Vercel KV)
