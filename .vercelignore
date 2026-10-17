@@ -6,3 +6,5 @@
 /oyinlar-src
 # Hamyon (shaxsiy mablag'lar APK) manba kodi — saytga joylanmaydi, APK faqat Actions artifact sifatida
 /hamyon-src
+# Fizika tarixi manba kodi (Next.js) — saytga joylanmaydi; tayyor statik natija /fizika-tarixi/ da
+/fizika-tarixi-src

@@ -295,6 +295,12 @@ ul, ol { list-style: none; }
 @media (prefers-reduced-motion: reduce) { .mr-w, .mr-car, .mr-led.a, .mr-led.b { animation: none; } }
 .t11 { grid-column: span 4; color: #fff; background: linear-gradient(120deg, #3a0f1c 0%, #6a1a33 55%, #a8304f 100%); }
 .t11 .tile-body { max-width: 46%; }
+.t12 { grid-column: span 4; color: #fff; background: linear-gradient(120deg, #0a1328 0%, #14213b 55%, #2b3f6b 100%); }
+.t12 .tile-body { max-width: 46%; }
+.mini-ft { position: absolute; right: 40px; top: 14px; bottom: 14px; height: calc(100% - 28px); width: auto; max-width: 50%; }
+.mf-orb { fill: none; stroke: #c99a45; stroke-width: 2; opacity: .75; }
+.mf-core { fill: #f0c36a; }
+.mf-e { fill: #f5ecd7; stroke: #c99a45; stroke-width: 2; }
 .mini-uy { position: absolute; right: 40px; top: 14px; bottom: 14px; height: calc(100% - 28px); width: auto; max-width: 50%; }
 .mu-meter { fill: #24272b; stroke: #140509; stroke-width: 2; }
 .mu-face { fill: #f2f1ea; }
@@ -421,7 +427,7 @@ ul, ol { list-style: none; }
     .bento { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 200px; }
     .t1 { grid-column: span 2; grid-row: span 2; }
     .t2, .t3 { grid-column: span 1; }
-    .t4, .t5, .t6, .t7, .t8, .t9, .t10, .t11 { grid-column: span 2; }
+    .t4, .t5, .t6, .t7, .t8, .t9, .t10, .t11, .t12 { grid-column: span 2; }
     .skills-grid { grid-template-columns: 1fr; }
     .skill-category h3 { min-height: 0; }
     .fb { display: none; }
@@ -493,8 +499,10 @@ ul, ol { list-style: none; }
     .hero-waves { height: 130px; }
     .marquee-track { font-size: .85rem; gap: 20px; }
     .bento { grid-template-columns: 1fr; grid-auto-rows: auto; }
-    .t1, .t2, .t3, .t4, .t5, .t6, .t7, .t8, .t9, .t10, .t11 { grid-column: span 1; grid-row: span 1; min-height: 200px; }
-    .t7, .t8, .t9, .t10, .t11 { min-height: 350px; }
+    .t1, .t2, .t3, .t4, .t5, .t6, .t7, .t8, .t9, .t10, .t11, .t12 { grid-column: span 1; grid-row: span 1; min-height: 200px; }
+    .t7, .t8, .t9, .t10, .t11, .t12 { min-height: 350px; }
+    .t12 .tile-body { max-width: none; }
+    .mini-ft { left: 50%; right: auto; transform: translateX(-50%); top: 12px; bottom: auto; height: 112px; max-width: none; }
     .t11 .tile-body { max-width: none; }
     .mini-uy { left: 50%; right: auto; transform: translateX(-50%); top: 12px; bottom: auto; height: 112px; max-width: none; }
     .t10 .tile-body { max-width: none; }
