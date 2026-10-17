@@ -1,0 +1,34 @@
+1:"$Sreact.fragment"
+2:"/podstansiya-simulyatori/_next/static/chunks/3l0c7amwd_jwv.js"
+3:I[22016,["$2"],""]
+4:I[39756,["$2"],"default"]
+5:I[37457,["$2"],"default"]
+9:"/podstansiya-simulyatori/_next/static/chunks/1ycffg2_o51sp.js"
+a:"/podstansiya-simulyatori/_next/static/chunks/1o91xyfbfo9co.js"
+b:I[42580,["$2","$9","$a"],"default"]
+c:I[97367,["$2"],"OutletBoundary"]
+d:"$Sreact.suspense"
+10:"ViewportBoundary"
+11:I[97367,["$2"],"$10"]
+12:"MetadataBoundary"
+13:I[97367,["$2"],"$12"]
+:HL["/podstansiya-simulyatori/_next/static/chunks/1mwlr_geus379.css","style"]
+:HL["https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600&display=swap","style"]
+7:X
+8:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","$Lb",null,{}],[["$","script","script-0",{"src":"/podstansiya-simulyatori/_next/static/chunks/1ycffg2_o51sp.js","async":true}],["$","script","script-1",{"src":"/podstansiya-simulyatori/_next/static/chunks/1o91xyfbfo9co.js","async":true}]],["$","$Lc",null,{"children":["$","$d",null,{"name":"Next.MetadataOutlet","children":"$@e"}]}]]}],"p":"$@f","v":null,"s":"$7"}}]]
+0:{"t":{"t":{"s":"","h":80,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/podstansiya-simulyatori/_next/static/chunks/1mwlr_geus379.css","precedence":"next"}],["$","script","script-0",{"src":"/podstansiya-simulyatori/_next/static/chunks/3l0c7amwd_jwv.js","async":true}]],["$","html",null,{"lang":"uz","children":[["$","head",null,{"children":[["$","link",null,{"rel":"preconnect","href":"https://fonts.googleapis.com"}],["$","link",null,{"rel":"preconnect","href":"https://fonts.gstatic.com","crossOrigin":""}],["$","link",null,{"rel":"stylesheet","href":"https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600&display=swap"}]]}],["$","body",null,{"className":"flex min-h-dvh flex-col","children":[["$","a",null,{"className":"skip-link","href":"#main","children":"Asosiy mazmunga o'tish"}],["$","header",null,{"className":"sticky top-0 z-30 border-b border-line/60 bg-ink-950/80 backdrop-blur","children":["$","div",null,{"className":"mx-auto flex h-14 max-w-7xl items-center justify-between gap-3 px-4","children":[["$","$L3",null,{"href":"/","className":"flex min-w-0 items-center gap-2.5 font-bold","children":[["$","span",null,{"className":"grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-accent/15 text-accent","aria-hidden":"true","children":["$","svg",null,{"viewBox":"0 0 24 24","className":"h-5 w-5","fill":"currentColor","children":["$","path",null,{"d":"M13 2 4 14h7l-1 8 9-12h-7z"}]}]}],["$","span",null,{"className":"truncate text-sm sm:text-base","children":"Podstansiya simulyatori"}]]}],["$","a",null,{"href":"/","className":"shrink-0 text-xs font-semibold text-muted hover:text-text","children":["energyvibe.uz"," ↗"]}]]}]}],["$","main",null,{"id":"main","className":"flex-1","children":["$","$L4",null,{"parallelRouterKey":"children","template":["$","$L5",null,{}],"notFound":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],[]]}]}],["$","footer",null,{"className":"border-t border-line/50 px-4 py-3 text-center text-xs text-muted","children":[["$","span",null,{"aria-hidden":"true","children":"ⓘ "}],"O'quv simulyatori. Aniq me'yorlar uchun amaldagi qoidalar va yo'riqnomalarga qarang."]}]]}]]}]]}],"p":"$@6","v":null,"s":"$7"},"c":"$Q8"},"h":{"r":["$","$1","h",{"children":[null,["$","$L11",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","2",{"name":"theme-color","content":"#081430"}]]}],["$","$L13",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$d",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Elektr energetika podstansiyasi simulyatori"}],["$","meta","1",{"name":"description","content":"Podstansiyada ishlashni o'rganish uchun interaktiv o'quv simulyatori: dispetcher buyrug'i, kommutatsiya, blokirovkalar, xavfsizlik va hujjatlar."}],["$","meta","2",{"property":"og:title","content":"Elektr energetika podstansiyasi simulyatori"}],["$","meta","3",{"property":"og:description","content":"Podstansiyada ishlashni o'rganish uchun interaktiv o'quv simulyatori: dispetcher buyrug'i, kommutatsiya, blokirovkalar, xavfsizlik va hujjatlar."}],["$","meta","4",{"property":"og:site_name","content":"EnergyVibe"}],["$","meta","5",{"property":"og:locale","content":"uz_UZ"}],"$L14","$L15","$L16","$L17","$L18","$L19"]}]}],null]}],null]}],"p":"$@1a","v":null,"s":"$7"}},"a":"$@1b","u":"$@1c","b":"Oqr4OUwxJW4u61q-IUnI2"}
+1d:I[27201,["$2"],"IconMark"]
+e:null
+14:["$","meta","6",{"property":"og:type","content":"website"}]
+15:["$","meta","7",{"name":"twitter:card","content":"summary"}]
+16:["$","meta","8",{"name":"twitter:title","content":"Elektr energetika podstansiyasi simulyatori"}]
+17:["$","meta","9",{"name":"twitter:description","content":"Podstansiyada ishlashni o'rganish uchun interaktiv o'quv simulyatori: dispetcher buyrug'i, kommutatsiya, blokirovkalar, xavfsizlik va hujjatlar."}]
+18:["$","link","10",{"rel":"icon","href":"/podstansiya-simulyatori/icon.svg"}]
+19:["$","$L1d","11",{}]
+7:300
+1c:true
+7:C
+1b:0
+6:"$undefined"
+1a:"$undefined"
+f:"$undefined"

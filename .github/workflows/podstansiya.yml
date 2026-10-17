@@ -1,0 +1,42 @@
+# Podstansiya simulyatori (podstansiya-src): lint, typecheck, unit testlar va production build.
+# Sayt statik: tayyor natija `npm run deploy` bilan podstansiya-simulyatori/ ga yoziladi va commit qilinadi.
+name: Podstansiya simulyatori
+
+on:
+  push:
+    branches: [main, 'claude/**']
+    paths:
+      - 'podstansiya-src/**'
+      - '.github/workflows/podstansiya.yml'
+  pull_request:
+    paths:
+      - 'podstansiya-src/**'
+      - '.github/workflows/podstansiya.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: podstansiya-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Lint, typecheck, test, build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: podstansiya-src
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: podstansiya-src/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build

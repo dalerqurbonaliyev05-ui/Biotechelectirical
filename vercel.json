@@ -139,6 +139,21 @@
       "source": "/uy-elektr-shiti",
       "destination": "/uy-elektr-shiti/",
       "permanent": true
+    },
+    {
+      "source": "/podstansiya-simulyatori",
+      "destination": "/podstansiya-simulyatori/",
+      "permanent": true
+    },
+    {
+      "source": "/podstansiya-simulyatori/:slug([a-z-]+)",
+      "destination": "/podstansiya-simulyatori/:slug/",
+      "permanent": true
+    },
+    {
+      "source": "/podstansiya-src/:path*",
+      "destination": "/podstansiya-simulyatori/",
+      "permanent": false
     }
   ],
   "rewrites": [

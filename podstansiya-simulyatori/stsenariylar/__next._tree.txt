@@ -1,0 +1,5 @@
+:HL["/podstansiya-simulyatori/_next/static/chunks/1mwlr_geus379.css","style"]
+:HL["https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600&display=swap","style"]
+2:[["children",{"s":"__PAGE__","h":160}]]
+1:[["children",{"s":"stsenariylar","h":96,"c":"$Q2"}]]
+0:{"b":"Oqr4OUwxJW4u61q-IUnI2","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
