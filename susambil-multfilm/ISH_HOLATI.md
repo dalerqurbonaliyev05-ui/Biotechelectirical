@@ -3,7 +3,7 @@
 > Suhbat uzilsa, shu fayldan davom ettiriladi. Har bosqichdan keyin yangilanadi.
 
 **Oxirgi yangilanish:** 2026-10-17
-**Hozirgi bosqich:** 2-bosqich (qahramonlar) — **Eshak tasdiq kutmoqda**
+**Hozirgi bosqich:** 2-bosqich (qahramonlar) — **Ho'kiz tasdiq kutmoqda**
 
 ## Asosiy havolalar
 
@@ -57,8 +57,8 @@
 
 | # | Qahramon | Holat |
 |---|---|---|
-| 1 | Eshak | 🟡 tasdiq kutmoqda (Figma bo'limi `Eshak`, 3:2) |
-| 2 | Ho'kiz | ⏳ |
+| 1 | Eshak | ✅ tasdiqlandi (Figma bo'limi `Eshak`, 3:2) — uslub namunasi |
+| 2 | Ho'kiz | 🟡 tasdiq kutmoqda (Figma bo'limi `Ho'kiz`, 7:2) |
 | 3 | Xo'roz | ⏳ |
 | 4 | Kalamush 1 va 2 | ⏳ |
 | 5 | Ari | ⏳ |

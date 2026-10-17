@@ -1,0 +1,324 @@
+{
+  "qahramon": "hokiz",
+  "izoh": "Qatlamlar pastdan yuqoriga tartibda. pivot — aylanish nuqtasi (ko'rinish kadri koordinatasida, piksel).",
+  "korinishlar": {
+    "yon": {
+      "figma_kadr": "hokiz_yon",
+      "olcham": [
+        900,
+        760
+      ],
+      "qatlamlar": [
+        {
+          "nom": "hokiz_soya",
+          "pivot": null,
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "hokiz_dum",
+          "pivot": [
+            228,
+            352
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "hokiz_oyoq_4",
+          "pivot": [
+            348,
+            490
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "hokiz_oyoq_2",
+          "pivot": [
+            598,
+            490
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "hokiz_oyoq_3",
+          "pivot": [
+            294,
+            490
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "hokiz_oyoq_1",
+          "pivot": [
+            546,
+            490
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "hokiz_shox_ong",
+          "pivot": [
+            768,
+            284
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "hokiz_shox_chap",
+          "pivot": [
+            722,
+            292
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "hokiz_quloq_ong",
+          "pivot": [
+            728,
+            304
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "hokiz_tana",
+          "pivot": null,
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "hokiz_bosh",
+          "pivot": [
+            620,
+            410
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "hokiz_quloq_chap",
+          "pivot": [
+            704,
+            330
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "hokiz_koz_ochiq",
+          "pivot": null,
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "hokiz_koz_yumuq",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "hokiz_koz_xursand",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "hokiz_koz_qorqqan",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "hokiz_qosh_qorqqan",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "hokiz_qosh_jahldor",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "hokiz_ogiz_1",
+          "pivot": null,
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "hokiz_ogiz_2",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "hokiz_ogiz_3",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "hokiz_ogiz_xafa",
+          "pivot": null,
+          "boshida_yashirin": true
+        }
+      ]
+    },
+    "old": {
+      "figma_kadr": "hokiz_old",
+      "olcham": [
+        900,
+        760
+      ],
+      "qatlamlar": [
+        {
+          "nom": "hokiz_soya",
+          "pivot": null,
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "hokiz_dum",
+          "pivot": [
+            624,
+            410
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "hokiz_oyoq_4",
+          "pivot": [
+            321,
+            520
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "hokiz_oyoq_3",
+          "pivot": [
+            579,
+            520
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "hokiz_oyoq_2",
+          "pivot": [
+            386,
+            540
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "hokiz_oyoq_1",
+          "pivot": [
+            514,
+            540
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "hokiz_tana",
+          "pivot": null,
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "hokiz_shox_chap",
+          "pivot": [
+            538,
+            230
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "hokiz_shox_ong",
+          "pivot": [
+            362,
+            230
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "hokiz_quloq_chap",
+          "pivot": [
+            560,
+            266
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "hokiz_quloq_ong",
+          "pivot": [
+            340,
+            266
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "hokiz_bosh",
+          "pivot": [
+            450,
+            440
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "hokiz_koz_ochiq",
+          "pivot": null,
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "hokiz_koz_yumuq",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "hokiz_koz_xursand",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "hokiz_koz_qorqqan",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "hokiz_qosh_qorqqan",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "hokiz_qosh_jahldor",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "hokiz_ogiz_1",
+          "pivot": null,
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "hokiz_ogiz_2",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "hokiz_ogiz_3",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "hokiz_ogiz_xafa",
+          "pivot": null,
+          "boshida_yashirin": true
+        }
+      ]
+    }
+  },
+  "ifodalar": {
+    "xursand": {
+      "hokiz_koz_ochiq": false,
+      "hokiz_koz_xursand": true,
+      "hokiz_ogiz_1": false,
+      "hokiz_ogiz_3": true
+    },
+    "qorqqan": {
+      "hokiz_koz_ochiq": false,
+      "hokiz_koz_qorqqan": true,
+      "hokiz_qosh_qorqqan": true,
+      "hokiz_ogiz_1": false,
+      "hokiz_ogiz_2": true
+    },
+    "jahldor": {
+      "hokiz_qosh_jahldor": true,
+      "hokiz_ogiz_1": false,
+      "hokiz_ogiz_xafa": true
+    }
+  }
+}

@@ -171,6 +171,7 @@ const ifoda = {
 
 export default {
   nom: "eshak",
+  bolim: "Eshak",
   views: { yon, old },
   ifodalar: { yon: ifoda, old: ifoda },
   // Animatsiya holatlari (ifodalar varag'ining pastki qatori)

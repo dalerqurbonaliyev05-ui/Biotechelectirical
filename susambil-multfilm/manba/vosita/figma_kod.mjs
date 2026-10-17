@@ -6,7 +6,8 @@ import { readFileSync } from "node:fs";
 const [nom, qism] = process.argv.slice(2);
 const q = (await import(`../qahramonlar/${nom}.mjs`)).default;
 const palitra = JSON.parse(readFileSync(new URL("../../palitra.json", import.meta.url))).ranglar;
-const Nom = nom[0].toUpperCase() + nom.slice(1);
+// Figma bo'limi nomi (o'zbekcha imlo bilan), masalan "Ho'kiz"
+const Nom = q.bolim || nom[0].toUpperCase() + nom.slice(1);
 const viewNames = Object.keys(q.views);
 
 // Figma'dagi palitra o'zgaruvchilari: hex -> o'zgaruvchi nomi bo'yicha bog'lanadi

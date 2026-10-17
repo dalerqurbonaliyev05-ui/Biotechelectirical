@@ -50,3 +50,18 @@ for (const [vnom, view] of Object.entries(q.views)) {
 }
 await browser.close();
 console.log("tayyor:", out, sheet);
+
+// Tekshiruv varag'i: ko'rinishlar yonma-yon + ifodalar (bosh kesimi) — ImageMagick bilan
+const im = (args) => execSync(`convert ${args}`);
+const views = Object.keys(q.views);
+im(`${views.map((v) => `${out}${nom}_${v}.png`).join(" ")} +append ${out}_korinishlar.png`);
+const rows = [];
+for (const v of views) {
+  const [x, y, w, h] = q.boshKesim[v];
+  const names = Object.keys(q.ifodalar?.[v] || {});
+  if (!names.length) continue;
+  im(`${names.map((i) => `\\( ${out}${nom}_${v}_${i}.png -crop ${w}x${h}+${x}+${y} +repage -bordercolor "#efe6d6" -border 10 \\)`).join(" ")} +append ${out}_qator_${v}.png`);
+  rows.push(`${out}_qator_${v}.png`);
+}
+if (rows.length) im(`${rows.join(" ")} -background "#efe6d6" -gravity west -append ${out}_ifodalar.png`);
+console.log("varaq:", `${out}_korinishlar.png`, `${out}_ifodalar.png`);
