@@ -138,7 +138,7 @@ Izoh: bu o'quv o'yini; haqiqiy me'yoriy hujjatlar (PUE, PTE, PTB) o'rnini bosmay
   Qayta o'rash har safar η ni 0,7 punktga pasaytiradi; zaxira dvigatel bo'lsa almashtirish 8 soat, bo'lmasa 10 kun.
 - **Baholash:** yaroqli variantlar orasida eng arzoni (TCO) = 100 % xarajat balli; qolgani `1 − (TCO − TCO_eng)/max(TCO_eng, taglik)` (kamida 25 %, agar ishlasa).
   Sababni **tuzatmaydigan** yechim = 0.
-- Tejash topshiriqlari (N3, V3, E1) — «foyda» rejimi: `foyda = 5·yillik_tejash − kapital`; eng yaxshi variantga nisbat; foyda ≤ 0 bo'lsa «hech narsa qilmaslik» eng yaxshi.
+- Tejash topshiriqlari (N3, V3) — «foyda» rejimi; E1 — byudjet (100 mln so'm) ichidagi to'plamlar bo'yicha 5 yillik sof foyda; E2 — eng arzon yetarli chora to'plami (K ≤ 0,95): `foyda = 5·yillik_tejash − kapital`; eng yaxshi variantga nisbat; foyda ≤ 0 bo'lsa «hech narsa qilmaslik» eng yaxshi.
 - Almashtirishda dvigatel **quvvat, aylanish tezligi va FIK sinfi (IE2/IE3)** bo'yicha tanlanadi: kichik quvvat / noto'g'ri tezlik — yaroqsiz.
 
 ## 9. Energiya samaradorligi
@@ -183,3 +183,7 @@ Matnlar: `i18n.uz.json`. Chegaralar, tariflar, ball og'irliklari: `config.json`.
 7. Tarif 1000 so'm/kWh va zonalar koeffitsiyentlari, dvigatel/VFD/kabel narxlari — namunaviy; haqiqiy qiymatlar bilan almashtiring.
 8. Tutorial ballga kirmaydi.
 9. Ovoz standart bo'yicha o'chiq; faqat oddiy WebAudio signallari (tashqi fayl yo'q).
+10. E1 takliflar byudjeti 100 mln so'm; E2 da oyna ichidagi eng katta S bitta TM-400 ga to'liq tushadi deb olinadi.
+11. Tutorial (T0): PPE kiyish, tok qisqichi, jurnal, xulosa; ballga kirmaydi. Shaxsiy hisobot — «Ish kuni dalolatnomasi» (chop etishga mos HTML).
+12. Qaror noto'g'ri bo'lsa ham nosozlik «keyingi brigada» tomonidan to'g'ri bartaraf etiladi (zavod holati izchil qoladi); ball esa noto'g'ri qarorga ko'ra hisoblanadi.
+13. Tekshiruv: `npm test` — 39 ta test (formulalar, iqtisod, xavfsizlik, ball, barcha sabablarning yechilishi, saqlash, i18n).

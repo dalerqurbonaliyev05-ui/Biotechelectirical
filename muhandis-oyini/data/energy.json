@@ -23,7 +23,7 @@
   "proposals": [
     { "id": "cap_bank", "kind": "capacitor" },
     { "id": "vfd", "kind": "vfd" },
-    { "id": "shift_load", "kind": "shift", "ws": "weld", "fraction": 0.3, "fromHours": [8, 9, 10], "toHours": [0, 1, 2, 3, 4, 5], "nightOpexSom": 18000000 },
+    { "id": "shift_load", "kind": "shift", "ws": "weld", "fraction": 0.3, "fromHours": [8, 9, 10, 13, 14, 15], "toHours": [0, 1, 2, 3, 4, 5], "nightOpexSom": 18000000 },
     { "id": "ie3_swap", "kind": "ie3" },
     { "id": "idle_off", "kind": "idle", "hours": [22, 23, 0, 1, 2, 3, 4, 5], "capex": 3000000 }
   ],

@@ -110,7 +110,7 @@ export function fmtClock(minutes, startHour = 8, dayMinutes = 540) {
   return { day: day + 1, text: `${hh}:${mm}` };
 }
 
-/** i18n tarjimon: t('a.b', {x:1}) — {x} o'rniga qiymat qo'yadi */
+/** i18n tarjimon: kalit va o'zgaruvchilar beriladi — {x} o'rniga qiymat qo'yadi */
 export function makeT(dict) {
   const t = (key, vars) => {
     const v = getPath(dict, key);

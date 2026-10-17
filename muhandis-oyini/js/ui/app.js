@@ -325,6 +325,7 @@ export class App {
 
   toast(text, kind = 'info', ms = 5000) {
     const el = h('div.toast', { class: kind, role: 'status' }, text);
+    while (this.elToasts.children.length >= 3) this.elToasts.firstChild.remove();
     this.elToasts.append(el);
     setTimeout(() => el.classList.add('out'), ms);
     setTimeout(() => el.remove(), ms + 400);
