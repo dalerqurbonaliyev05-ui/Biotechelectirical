@@ -1,5 +1,7 @@
 "use client";
 
+import { useAchievements } from "../store/achievements";
+import { playSound } from "../lib/sound";
 import { useState } from "react";
 import ScreenHeader from "./ScreenHeader";
 import { uz } from "../i18n/uz";
@@ -95,7 +97,10 @@ export default function SettingsScreen() {
                 <span className="mt-1 block text-xs text-muted">{uz.settings.languageSoon}</span>
               </span>
             </div>
-            <Toggle label={uz.settings.sound} hint={uz.settings.soundHint} value={s.sound} onChange={s.setSound} />
+            <Toggle label={uz.settings.sound} hint={uz.settings.soundHint} value={s.sound} onChange={(v) => {
+                s.setSound(v);
+                if (v) playSound("ok");
+              }} />
             <Toggle label={uz.settings.animations} hint={uz.settings.animationsHint} value={s.animations} onChange={s.setAnimations} />
             <Toggle label={uz.settings.hints} hint="" value={s.showLabels} onChange={s.setShowLabels} />
           </section>
@@ -120,6 +125,7 @@ export default function SettingsScreen() {
                 onClick={() => {
                   if (window.confirm(uz.settings.resetConfirm)) {
                     resetProgress();
+                    useAchievements.getState().reset();
                     setMsg(uz.settings.resetDone);
                   }
                 }}

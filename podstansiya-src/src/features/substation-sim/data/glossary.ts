@@ -78,6 +78,46 @@ export const GLOSSARY: Record<string, GlossaryEntry> = {
     short: "Himoya o'chirgan liniyani avtomatik qayta ulaydi.",
     text: "Havo liniyalaridagi ko'p nosozliklar o'tkinchi (shox, qush, chaqmoq). APV liniyani qisqa pauzadan keyin qayta ulaydi. APV muvaffaqiyatsiz bo'lsa — liniya ko'rigisiz «ko'r-ko'rona» qayta ulash taqiqlanadi.",
   },
+  gasRelay: {
+    term: "Gaz relesi (Buxgolts relesi)",
+    short: "Transformator ichida gaz ajralishi va moy oqimini sezadi.",
+    text: "Gaz relesi bak bilan kengaytirgich orasidagi quvurga o'rnatiladi. Ichki nosozlikda izolyatsiya va moy parchalanib gaz hosil bo'ladi: oz gaz to'plansa rele signal beradi, kuchli moy oqimi yoki ko'p gazda transformatorni o'chiradi. Signal bo'yicha ko'rish oynasidagi gaz namunasi olinadi: rangi va yonuvchanligi nosozlik turini ko'rsatadi (havo, qog'oz, karton yoki moy parchalanishi).",
+  },
+  megger: {
+    term: "Megaommetr va absorbsiya koeffitsienti",
+    short: "Izolyatsiya qarshiligini o'lchaydi; R60/R15 — namlik ko'rsatkichi.",
+    text: "Megaommetr (megger) o'ram va korpus orasidagi izolyatsiya qarshiligini o'lchaydi. O'lchash boshlanganidan 15 va 60 soniyadan keyingi ko'rsatkichlar yozib olinadi. Quruq izolyatsiyada qarshilik vaqt o'tishi bilan sezilarli oshadi, nam izolyatsiyada deyarli o'zgarmaydi — shuning uchun R60/R15 nisbati (absorbsiya koeffitsienti) namlikni baholashga yordam beradi. O'lchashdan keyin o'ram yerga ulab razryadlanadi.",
+  },
+  oilTest: {
+    term: "Transformator moyi sinovi",
+    short: "Probiv kuchlanishi, namlik va kislota soni moy holatini ko'rsatadi.",
+    text: "Moy namunasi maxsus krandan, birinchi portsiya to'kib tashlangandan keyin toza quruq idishga olinadi. Probiv apparatida elektrodlar orasidagi kuchlanish bir tekis oshiriladi va moy teshilgan kuchlanish qayd etiladi. Namlik va kislota soni laboratoriyada aniqlanadi. Ko'rsatkichlar me'yordan chiqsa moy quritiladi, tozalanadi yoki almashtiriladi.",
+  },
+  earthFault: {
+    term: "Yerga tutashuv (6–35 kV)",
+    short: "Izolyatsiyalangan neytralli tarmoqda bir faza yerga ulanishi.",
+    text: "6–35 kV tarmoqlarda neytral izolyatsiyalangan yoki kompensatsiyalangan bo'ladi, shuning uchun bir fazaning yerga ulanishi qisqa tutashuv emas: iste'molchilar ishlashda davom etadi, lekin shikastlangan faza kuchlanishi pasayadi, qolgan fazalarniki oshadi. Shikastlangan liniya fiderlarni navbat bilan qisqa vaqtga uzib topiladi va iloji boricha tezroq o'chiriladi.",
+  },
+  phasing: {
+    term: "Fazirovka",
+    short: "Parallel ulashdan oldin fazalar mosligini tekshirish.",
+    text: "Ikki manba yoki transformatorni parallel ulashdan oldin bir nomli fazalar orasidagi kuchlanish o'lchanadi: mos fazalar orasida kuchlanish deyarli nolga teng bo'lishi kerak. Ulanish guruhlari yoki fazalar tartibi mos kelmasa, parallel ulash qisqa tutashuvga olib keladi.",
+  },
+  blank: {
+    term: "Kommutatsiya blankasi",
+    short: "Murakkab kommutatsiyalarning oldindan tuzilgan ketma-ketligi.",
+    text: "Blankada barcha amallar (o'chirgich va ajratkichlar, kuchlanish yo'qligini tekshirish, yerlash, plakatlar) bajarilish tartibida yoziladi va tekshiriladi. Kommutatsiya blanka bo'yicha, har bir amal bajarilgach belgilab boriladi; blankadan chetga chiqish taqiqlanadi.",
+  },
+  journal: {
+    term: "Operativ jurnal",
+    short: "Navbatchi barcha buyruq va amallarni vaqti bilan yozadigan hujjat.",
+    text: "Operativ jurnalga dispetcher buyruqlari, bajarilgan kommutatsiyalar, yerlagichlar, naryad bo'yicha dopusk va ish yakuni, signallar va nosozliklar vaqti bilan yoziladi. Jurnal smenani topshirishda va avariyani tahlil qilishda asosiy manba hisoblanadi.",
+  },
+  cooling: {
+    term: "Transformator sovutish turlari",
+    short: "M — tabiiy, D — havo puflash, DC — majburiy moy aylanishi.",
+    text: "M turida moy va havo tabiiy aylanadi. D turida radiatorlarni ventilyatorlar puflaydi — ventilyatorlar o'chsa ruxsat etilgan yuklama kamayadi. DC (ДЦ) turida moy nasoslar bilan haydaladi va havo bilan puflanadi. Sovutish turi transformator markasidagi harf bilan belgilanadi.",
+  },
 };
 
 /** Uskuna turi bo'yicha glossariy kaliti. */

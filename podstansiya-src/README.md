@@ -4,7 +4,7 @@
 o'quv o'yini: dispetcher buyrug'ini qabul qilish, bir chiziqli sxemani tahlil qilish, kommutatsiyani
 to'g'ri tartibda bajarish, blokirovkalar, yerlash, plakatlar, naryad-ruxsatnoma va operativ jurnal.
 
-Next.js 16 (App Router) + TypeScript (strict) + Tailwind CSS 4 + Zustand + Framer Motion + Vitest.
+Next.js 16 (App Router) + TypeScript (strict) + Tailwind CSS 4 + Zustand + Framer Motion + Three.js (3D, kechiktirib) + Vitest.
 **Serversiz**: hamma narsa brauzerda, progress `localStorage` da. Asosiy sayt build bosqichisiz statik
 HTML bo'lgani uchun loyiha `output: "export"` + `basePath: "/podstansiya-simulyatori"` bilan statik
 fayllarga yig'iladi va `../podstansiya-simulyatori/` ga ko'chiriladi (`oyinlar-src` → `oyinlar` kabi).
@@ -32,7 +32,7 @@ CI: `.github/workflows/podstansiya.yml` (lint, typecheck, test, build).
 ## Tuzilma
 
 ```
-app/                                   marshrutlar: / (menyu), /stsenariylar, /oyin/[id], /mashqlar, /ensiklopediya, /sozlamalar, /natijalar
+app/                                   marshrutlar: / (menyu), /stsenariylar, /oyin/[id], /mashqlar, /ensiklopediya, /yutuqlar, /glossariy, /sozlamalar, /natijalar
 src/features/substation-sim/
   engine/        sof TypeScript, UI'ga bog'liq emas, to'liq testlangan
     types.ts         topologiya, holat, amal turlari
@@ -57,6 +57,7 @@ src/features/substation-sim/
     scoring.ts       ball, yulduzlar, uzilish zarari
     markDecoder.ts   transformator markasini o'qish
     quiz.ts          markalar viktorinasi
+    achievements.ts  yutuqlar shartlari
     minigames.ts     mini-o'yinlar mantig'i (gaz turi, moy xulosasi, ko'rik, termometr, megger)
     scenario.ts      stsenariy sxemasi (turlar)
   data/          BARCHA texnik ma'lumot shu yerda (kodda emas)
@@ -139,7 +140,9 @@ Qoldi:
       (rang, yonuvchanlik, xulosa), termometr — `next/dynamic` bilan alohida bo'laklar; stsenariy o'lchovlari
       (S08, S10, S12, S13, S18, S21) mini-o'yin orqali, `/mashqlar` sahifasida mustaqil mashq; `/ensiklopediya` —
       marka dekoderi (`engine/markDecoder.ts`), harflar jadvali, modellar katalogi, viktorina (`engine/quiz.ts`)
-- [ ] **7-bosqich**: yutuqlar, ovoz effektlari (sozlama tayyor), glossariy sahifasi (`glossary.ts` tayyor),
-      3D transformator (Three.js, ixtiyoriy)
+- [x] **7-bosqich — yutuqlar, ovoz, glossariy, 3D**: 14 ta yutuq (`data/achievements.ts`, `engine/achievements.ts`,
+      `store/achievements.ts`, `/yutuqlar`, ochilganda bildirishnoma), WebAudio ovoz effektlari (`lib/sound.ts`, fayllarsiz,
+      sozlamadagi «Ovoz» bilan), `/glossariy` sahifasi (qidiruv bilan), 3D transformator (Three.js, oyna ochilganda
+      yuklanadi; uskuna kartasi va ensiklopediyadan)
 - [ ] **8-bosqich (ixtiyoriy)**: reyting va hisoblar (Supabase yoki Vercel KV)
 - [ ] Boshqa tillar (ru/en) — hozir faqat `uz.ts`

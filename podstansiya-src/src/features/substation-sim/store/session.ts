@@ -8,6 +8,7 @@ import { getScenario } from "../data/scenarios";
 import { summarize } from "../engine/scoring";
 import { applyAction, createSession, type SimContext } from "../engine/simulator";
 import type { Action, GameMode, Penalty, Severity, SimState } from "../engine/types";
+import { useAchievements } from "./achievements";
 import { useProgress } from "./progress";
 
 export interface Feedback {
@@ -105,13 +106,19 @@ export const useSession = create<SessionStore>()((set, get) => ({
     set((s) => ({ sim: out.state, feedback: [...s.feedback, fb], endedAt: ended ? Date.now() : s.endedAt }));
     if (ended && !get().recorded) {
       const sum = summarize(out.state);
-      useProgress.getState().recordAttempt({
+      const timeSec = Math.round((Date.now() - get().startedAt) / 1000);
+      const completed = out.state.status === "completed" && sum.stars > 0;
+      useProgress.getState().recordAttempt({ scenarioId: ctx.scenario.id, score: sum.score, stars: sum.stars, timeSec, completed, mode: ctx.mode });
+      useAchievements.getState().report({
+        type: "scenario",
         scenarioId: ctx.scenario.id,
+        mode: ctx.mode,
         score: sum.score,
         stars: sum.stars,
-        timeSec: Math.round((Date.now() - get().startedAt) / 1000),
-        completed: out.state.status === "completed" && sum.stars > 0,
-        mode: ctx.mode,
+        completed,
+        timeSec,
+        penaltyCodes: out.state.penalties.map((p) => p.code),
+        journalRequired: !!ctx.scenario.journal?.required,
       });
       set({ recorded: true });
     }

@@ -8,7 +8,9 @@ import { TRANSFORMER_MODELS } from "../data/transformers";
 import { decodeMark } from "../engine/markDecoder";
 import { makeQuiz, type QuizQuestion } from "../engine/quiz";
 import { uz } from "../i18n/uz";
+import { useAchievements } from "../store/achievements";
 import ScreenHeader from "./ScreenHeader";
+import Transformer3DButton from "./Transformer3DButton";
 import { fmt } from "./text";
 
 const E = uz.enc;
@@ -137,6 +139,7 @@ function Quiz() {
             type="button"
             className="btn-primary mt-2"
             onClick={() => {
+              if (i + 1 === qs.length) useAchievements.getState().report({ type: "quiz", right, total: qs.length });
               setI((x) => x + 1);
               setPicked(null);
             }}
@@ -156,6 +159,9 @@ export default function EncyclopediaScreen() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-6">
       <ScreenHeader title={E.title} subtitle={E.subtitle} />
+      <div className="mb-4">
+        <Transformer3DButton className="btn-primary" />
+      </div>
       <div className="grid gap-4 lg:grid-cols-2">
         <Decoder mark={mark} setMark={setMark} />
         <section className="card p-4" aria-labelledby="quiz-h">
