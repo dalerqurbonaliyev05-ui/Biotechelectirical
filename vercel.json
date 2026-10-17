@@ -116,6 +116,26 @@
       "permanent": false
     },
     {
+      "source": "/fizika-tarixi",
+      "destination": "/fizika-tarixi/",
+      "permanent": true
+    },
+    {
+      "source": "/fizika-tarixi/:section(xronologiya|olimlar|tajribalar)",
+      "destination": "/fizika-tarixi/:section/",
+      "permanent": true
+    },
+    {
+      "source": "/fizika-tarixi/:section(olimlar|tajribalar)/:slug([a-z-]+)",
+      "destination": "/fizika-tarixi/:section/:slug/",
+      "permanent": true
+    },
+    {
+      "source": "/fizika-tarixi-src/:path*",
+      "destination": "/fizika-tarixi/",
+      "permanent": false
+    },
+    {
       "source": "/shit-montaji",
       "destination": "/shit-montaji/",
       "permanent": true
@@ -525,6 +545,15 @@
     },
     {
       "source": "/oyinlar/_next/static/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/fizika-tarixi/_next/static/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
