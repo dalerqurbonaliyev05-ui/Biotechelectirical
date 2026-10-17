@@ -349,6 +349,7 @@ export class Game {
     if (s.player.ppe) return false;
     this.advance(this.cfg.clock.ppeMinutes);
     s.player.ppe = true;
+    this.tutorialAdvance('ppe');
     this.emit('change');
     return true;
   }
@@ -598,7 +599,7 @@ export class Game {
     const steps = this.taskDef('T0')?.steps;
     if (!steps || !s.tasks.T0 || s.tasks.T0.status === 'done') return;
     const idx = steps.findIndex((x) => x.id === stepId);
-    if (idx === s.tutorialStep) {
+    if (idx >= 0 && s.tutorialStep <= idx) {
       s.tutorialStep = Math.min(steps.length - 1, idx + 1);
       this.emit('change');
     }

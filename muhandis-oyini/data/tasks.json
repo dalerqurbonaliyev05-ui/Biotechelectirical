@@ -30,16 +30,20 @@
      "text": "2-qadam: sexdagi «1-dvigatel — frezer stanogi» kartochkasini oching."
     },
     {
+     "id": "ppe",
+     "text": "3-qadam: kuchlanish ostidagi uskunani o'lchashdan oldin «PPE kiyish» tugmasini bosing (dielektrik qo'lqop, kaska, ko'zoynak). PPE'siz o'lchash — ball jarimasi."
+    },
+    {
      "id": "tool",
-     "text": "3-qadam: asboblar paneli ostidagi «Tok qisqichi» tugmasini bosing. Har bir o'lchov vaqt sarflaydi!"
+     "text": "4-qadam: asboblar panelidagi «Tok qisqichi» tugmasini bosing. Har bir o'lchov vaqt sarflaydi!"
     },
     {
      "id": "log",
-     "text": "4-qadam: pastdagi «O'lchov jurnali» ga qarang va fazalar toklarini nominal tok (shildikda) bilan solishtiring."
+     "text": "5-qadam: pastdagi «O'lchov jurnali» ga qarang va fazalar toklarini nominal tok (shildikda) bilan solishtiring."
     },
     {
      "id": "hyp",
-     "text": "5-qadam: «Tashxis qo'yish» tugmasini bosib, xulosani tanlang."
+     "text": "6-qadam: «Tashxis qo'yish» tugmasini bosib, xulosani tanlang: dvigatel sog'lommi?"
     }
    ]
   },
@@ -310,7 +314,7 @@
    "hints": [
     "RU-0,4 xonasida «Energiya tahlili» orqali 24 soatlik trendni oching.",
     "Cho'qqilar qaysi soatlarda va qaysi sexdan? Tun yuklamasi nega baland? cosφ qancha?",
-    "Takliflarni qoplanish muddati va byudjet (60 mln so'm) bo'yicha solishtiring."
+    "Takliflarni qoplanish muddati va byudjet (100 mln so'm) bo'yicha solishtiring."
    ]
   },
   {

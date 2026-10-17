@@ -16,6 +16,22 @@ const ACHIEVEMENTS = [
 ];
 
 export const reportMethods = {
+  /** Joriy smena bahosi (bajarilgan topshiriqlar bo'yicha vaznli o'rtacha) */
+  liveScore() {
+    const s = this.state;
+    let sw = 0, sum = 0;
+    for (const id of s.order) {
+      if (id === 'T0') continue;
+      const tk = s.tasks[id];
+      if (tk.status === 'done' || tk.status === 'failed') {
+        const w = this.taskWeight(id);
+        sw += w;
+        sum += w * (tk.score?.total ?? 0);
+      }
+    }
+    return sw ? sum / sw : null;
+  },
+
   /** Smenani yakunlash va natijani hisoblash */
   finishShift() {
     const s = this.state;

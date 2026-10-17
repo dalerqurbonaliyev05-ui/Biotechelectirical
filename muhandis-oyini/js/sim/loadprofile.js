@@ -104,7 +104,7 @@ export function evaluatePortfolio(world, plant, energy, variantId, ids) {
     items.idle_off = { capex: p.capex, kw };
   }
   if (set.has('ie3_swap')) {
-    const cands = ie3Candidates(world).filter((c) => c.saving * eco.horizonYears > c.capex);
+    const cands = ie3Candidates(world);
     const c = cands.reduce((a, x) => ({ saving: a.saving + x.saving, capex: a.capex + x.capex, kwh: a.kwh + x.kwh }), { saving: 0, capex: 0, kwh: 0 });
     spread(c.kwh);
     capex += c.capex;

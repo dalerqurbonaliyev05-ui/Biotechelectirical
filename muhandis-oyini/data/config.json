@@ -114,7 +114,7 @@
     "pumpModel": { "throttleBase": 0.55, "throttleSlope": 0.45, "vfdStatic": 0.15 },
     "fanModel": { "vfdFixedLoss": 0.03 },
     "cable": { "perMeter": { "35": 45000, "50": 60000, "70": 75000, "95": 95000, "120": 118000, "150": 140000, "185": 170000, "240": 220000, "10": 14000, "16": 20000, "25": 30000 } },
-    "e1Budget": 60000000,
+    "e1Budget": 100000000,
     "lossAccrual": { "down": 1.0, "degraded": 0.25 },
     "motorTable": {
       "_izoh": "4 qutbli dvigatellar; narx so'mda (IE2); IE3 narxi = IE2 × ie3PriceFactor. Namunaviy.",
