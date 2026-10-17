@@ -26,7 +26,11 @@ export function createInitialState(topology: Topology, scenario?: ScenarioDef): 
     const model = getModel(t.model);
     const k = net.transformerMva[t.id] / model.ratedMva.value;
     taps[t.id] = scenario?.initial?.taps?.[t.id] ?? 0;
-    fans[t.id] = k >= NORMS.fanAutoOnLoadFactor.value;
+    // Ventilyatorlar avtomatikasi: yuklama yoki (ventilyatorlar bilan) barqaror moy harorati chegaradan yuqori bo'lsa yoqiq
+    const withFans = effectiveCooling(model.cooling.value, true);
+    fans[t.id] =
+      model.cooling.value === "D" &&
+      (k >= NORMS.fanAutoOnLoadFactor.value || steadyTopOil(ambientC, k / withFans.ratingFactor, withFans.params) >= NORMS.fanAutoOnOilC.value);
     const eff = effectiveCooling(model.cooling.value, fans[t.id]);
     oilTemp[t.id] = net.transformerEnergized[t.id] ? steadyTopOil(ambientC, k / eff.ratingFactor, eff.params) : ambientC;
     agingHours[t.id] = 0;
@@ -65,5 +69,26 @@ export function createInitialState(topology: Topology, scenario?: ScenarioDef): 
     loadFactor,
     ambientC,
     sourceKv: scenario?.situation.sourceKv ?? 110,
+    seed: 1,
+    weather: scenario?.situation.weather ?? "clear",
+    alarms: [],
+    firedEvents: [],
+    earthFault: null,
+    faultNodes: [],
+    abr: { enabled: scenario?.automation?.abr ?? true, failed: false },
+    rpnStuck: {},
+    fansFailed: {},
+    trFaults: {},
+    measurements: {},
+    decisions: {},
+    tasksDone: [],
+    calls: [],
+    phasing: {},
+    oilHistory: {},
+    overloadSince: {},
+    outageMin: {},
+    flags: [],
+    stepAvailableAt: {},
+    timeScale: scenario?.timeScale ?? 1,
   };
 }

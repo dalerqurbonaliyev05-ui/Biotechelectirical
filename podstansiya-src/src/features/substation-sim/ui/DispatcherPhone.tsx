@@ -77,9 +77,28 @@ export default function DispatcherPhone() {
           );
         })}
       </ul>
+
+      {running && (
+        <section className="mt-5 border-t border-line/50 pt-3" aria-label={uz.ops.calls}>
+          <h4 className="text-sm font-bold">{uz.ops.calls}</h4>
+          <div className="mt-2 grid grid-cols-1 gap-1.5 sm:grid-cols-2">
+            {CALLS.map((to) => {
+              const called = sim.calls.includes(to);
+              return (
+                <button key={to} type="button" className="btn-ghost justify-start px-3 py-1.5 text-left text-sm font-normal" onClick={() => dispatch({ type: "call", to })}>
+                  📞 {uz.ops.call[to]}
+                  {called && <span className="ml-auto text-xs text-ok">✓ {uz.ops.called}</span>}
+                </button>
+              );
+            })}
+          </div>
+        </section>
+      )}
     </div>
   );
 }
+
+const CALLS = ["fire", "ambulance", "master"] as const;
 
 /** Javob kutayotgan xabarlar soni (tab belgisi uchun). */
 export function usePendingCalls(): number {

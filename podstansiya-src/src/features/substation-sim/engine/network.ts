@@ -21,6 +21,8 @@ export interface NetworkState {
   loadSupplied: Record<string, boolean>;
   /** Transformator yuklamasi, MVA (iste'molchilar teng taqsimlanadi) */
   transformerMva: Record<string, number>;
+  /** Transformator YK tomondan (manbadan) ta'minlanyaptimi */
+  transformerFedFromHv: Record<string, boolean>;
   /** Kuchlanish ostidagi va bir vaqtda yerlangan seksiya bormi — qisqa tutashuv */
   shortCircuit: boolean;
 }
@@ -141,6 +143,7 @@ export function computeNetwork(topology: Topology, input: NetworkInput): Network
     transformerEnergized,
     loadSupplied,
     transformerMva,
+    transformerFedFromHv: fedFromHv,
     shortCircuit: sections.some((s) => s.energized && s.grounded),
   };
 }
@@ -158,5 +161,25 @@ export function suppliedObjects(topology: Topology, net: NetworkState): Set<stri
   const out = new Set<string>();
   for (const l of topology.loads) if (net.loadSupplied[l.id]) out.add(l.id);
   for (const t of topology.transformers) if (net.transformerEnergized[t.id]) out.add(t.id);
+  return out;
+}
+
+/** O'rta/past kuchlanish seksiyasini parallel ta'minlayotgan transformatorlar juftliklari ("T-1|T-2"). */
+export function parallelPairs(topology: Topology, net: NetworkState): Set<string> {
+  const out = new Set<string>();
+  const bySection = new Map<number, string[]>();
+  for (const t of topology.transformers) {
+    if (!net.transformerFedFromHv[t.id]) continue;
+    for (const w of [t.mv, t.lv]) {
+      if (!w) continue;
+      const sec = net.sectionOf[w];
+      if (!net.sections[sec].energized) continue;
+      bySection.set(sec, [...(bySection.get(sec) ?? []), t.id]);
+    }
+  }
+  for (const ids of bySection.values()) {
+    const u = [...new Set(ids)].sort();
+    for (let i = 0; i < u.length; i++) for (let j = i + 1; j < u.length; j++) out.add(`${u[i]}|${u[j]}`);
+  }
   return out;
 }

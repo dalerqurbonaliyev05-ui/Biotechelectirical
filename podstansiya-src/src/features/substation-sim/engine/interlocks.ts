@@ -86,6 +86,10 @@ export function evaluateSwitch(
   } else {
     // Yerlangan uchastkaga kuchlanish berish — qisqa tutashuv
     if (after.shortCircuit && !before.shortCircuit) issues.push(issue("energizeEarthed", { device: label }));
+    // Barqaror qisqa tutashuvli joyga (liniya, transformator) kuchlanish berish — "ko'r-ko'rona" ulash
+    if (to === "closed" && (state.faultNodes ?? []).some((n) => isNodeEnergized(after, n) && !isNodeEnergized(before, n))) {
+      issues.push(issue("closeOntoFault", { device: label }));
+    }
 
     if (to === "closed" && workInProgress) {
       const newlyEnergized = after.sections.some(

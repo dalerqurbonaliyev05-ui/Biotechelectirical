@@ -1,6 +1,7 @@
 // Har bir stsenariy uchun: ma'lumot to'g'riligi, kamida bitta "to'g'ri yo'l" va bitta "kritik xato" testi.
 import { describe, expect, it } from "vitest";
-import { TOPOLOGY } from "../equipment";
+import { topologyFor } from "../topologies";
+import type { ScenarioDef } from "../../engine/scenario";
 import { journalNow, run, sw, withBlank, type ActionOrFn } from "../../engine/testkit";
 import { validateSteps } from "../../engine/sequence";
 import { summarize } from "../../engine/scoring";
@@ -8,14 +9,17 @@ import type { Action, PermitForm } from "../../engine/types";
 import { SCENARIOS } from "./index";
 import { SCENARIO_CATALOG } from "./catalog";
 
-const ALL_IDS = new Set<string>([
-  ...TOPOLOGY.switches.map((s) => s.id),
-  ...TOPOLOGY.earthSwitches.map((e) => e.id),
-  ...TOPOLOGY.transformers.map((t) => t.id),
-  ...TOPOLOGY.loads.map((l) => l.id),
-  ...TOPOLOGY.instruments.map((i) => i.id),
-  ...TOPOLOGY.nodes.map((n) => n.id),
-]);
+function allIds(sc: ScenarioDef): Set<string> {
+  const T = topologyFor(sc.topology).topology;
+  return new Set<string>([
+    ...T.switches.map((s) => s.id),
+    ...T.earthSwitches.map((e) => e.id),
+    ...T.transformers.map((t) => t.id),
+    ...T.loads.map((l) => l.id),
+    ...T.instruments.map((i) => i.id),
+    ...T.nodes.map((n) => n.id),
+  ]);
+}
 
 const tick = (dtSec: number): Action => ({ type: "tick", dtSec });
 const rb = (messageId: string, optionId = "ok"): Action => ({ type: "readback", messageId, optionId });
@@ -24,12 +28,18 @@ const report = (messageId: string): Action => ({ type: "report", messageId });
 describe("stsenariy ma'lumotlari", () => {
   for (const sc of Object.values(SCENARIOS)) {
     it(`${sc.id}: qadamlar DAG'i to'g'ri va uskuna id'lari mavjud`, () => {
+      const ALL_IDS = allIds(sc);
       expect(validateSteps(sc.steps)).toEqual([]);
+      for (const m of sc.measurements ?? []) expect(ALL_IDS.has(m.targetId), `${sc.id}/measure ${m.id}`).toBe(true);
+      for (const d of sc.decisions ?? []) if (d.after) expect(sc.steps.some((x) => x.id === d.after), `${sc.id}/decision ${d.id}`).toBe(true);
       for (const step of sc.steps) {
         for (const m of Array.isArray(step.match) ? step.match : [step.match]) {
           const ids = "deviceId" in m ? [m.deviceId] : "targetId" in m ? [m.targetId] : "nodeIds" in m ? m.nodeIds : "transformerId" in m ? [m.transformerId] : [];
           for (const id of ids) expect(ALL_IDS.has(id), `${sc.id}/${step.id}: ${id}`).toBe(true);
           if (m.type === "readback" || m.type === "report") expect(sc.messages.some((x) => x.id === m.messageId)).toBe(true);
+          if (m.type === "choice") expect(sc.decisions?.some((x) => x.id === m.decisionId), `${sc.id}/${step.id}`).toBe(true);
+          if (m.type === "measure") expect(sc.measurements?.some((x) => x.id === m.measurementId), `${sc.id}/${step.id}`).toBe(true);
+          if (m.type === "task") expect(sc.tasks?.some((x) => x.id === m.taskId), `${sc.id}/${step.id}`).toBe(true);
         }
       }
       expect(SCENARIO_CATALOG.find((c) => c.id === sc.id)?.playable).toBe(true);

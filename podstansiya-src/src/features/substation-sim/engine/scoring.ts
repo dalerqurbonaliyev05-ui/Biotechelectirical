@@ -1,7 +1,8 @@
 // Ball hisobi: 100 dan boshlanadi, jarimalar ayiriladi, 0 dan past tushmaydi.
 
+import { NORMS } from "../data/norms";
 import { STAR_THRESHOLDS } from "../data/rules";
-import type { Penalty, SimState } from "./types";
+import type { Penalty, SimState, Topology } from "./types";
 
 export const START_SCORE = 100;
 
@@ -42,4 +43,27 @@ export function summarize(state: SimState): ScoreSummary {
     critical: failed,
     byCode,
   };
+}
+
+export interface OutageRow {
+  loadId: string;
+  label: string;
+  category: 1 | 2 | 3;
+  minutes: number;
+  /** Zarar, shartli birlik: daqiqa × MVt × toifa narxi (NORMS.outageCostPerMwMin — o'yin modeli) */
+  cost: number;
+  /** Rejali (stsenariyda ruxsat etilgan) uzilish */
+  planned: boolean;
+}
+
+/** Iste'molchilar uzilishi va shartli iqtisodiy zarar. */
+export function outageSummary(topology: Topology, state: SimState, allowed: readonly string[] = []): { rows: OutageRow[]; totalCost: number } {
+  const price = NORMS.outageCostPerMwMin.value as Record<number, number>;
+  const rows: OutageRow[] = [];
+  for (const l of topology.loads) {
+    const minutes = state.outageMin[l.id] ?? 0;
+    if (minutes <= 0) continue;
+    rows.push({ loadId: l.id, label: l.label, category: l.category, minutes, cost: minutes * l.mw * (price[l.category] ?? 0), planned: allowed.includes(l.id) });
+  }
+  return { rows, totalCost: rows.filter((r) => !r.planned).reduce((a, r) => a + r.cost, 0) };
 }

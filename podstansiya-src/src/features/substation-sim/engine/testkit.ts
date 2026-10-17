@@ -1,5 +1,5 @@
 // Testlar uchun yordamchilar (faqat *.test.ts da ishlatiladi).
-import { TOPOLOGY } from "../data/equipment";
+import { topologyFor } from "../data/topologies";
 import type { ScenarioDef } from "./scenario";
 import { formatClock } from "./journal";
 import { matchStep } from "./sequence";
@@ -25,9 +25,9 @@ export function bareScenario(over: Partial<ScenarioDef> = {}): ScenarioDef {
 
 export type ActionOrFn = Action | ((s: SimState, ctx: SimContext) => Action);
 
-export function run(scenario: ScenarioDef, actions: ActionOrFn[], mode: GameMode = "exam") {
-  const ctx: SimContext = { topology: TOPOLOGY, scenario, mode };
-  let state: SimState = createSession(ctx);
+export function run(scenario: ScenarioDef, actions: ActionOrFn[], mode: GameMode = "exam", seed = 1) {
+  const ctx: SimContext = { topology: topologyFor(scenario.topology).topology, scenario, mode };
+  let state: SimState = createSession(ctx, seed);
   const outcomes: ActionOutcome[] = [];
   for (const a of actions) {
     const o = applyAction(ctx, state, typeof a === "function" ? a(state, ctx) : a);

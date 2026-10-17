@@ -1,5 +1,6 @@
 import { TOPOLOGY } from "../../data/equipment";
 import { usePrint, type PrintDoc } from "../../store/print";
+import { useSession } from "../../store/session";
 import { uz } from "../../i18n/uz";
 
 export const field =
@@ -7,7 +8,9 @@ export const field =
 
 /** Uskuna yoki tugunning o'qiladigan nomi. */
 export function itemLabel(id: string): string {
-  return TOPOLOGY.nodes.find((n) => n.id === id)?.label ?? id;
+  // Joriy stsenariy topologiyasi (35 kV variantda ham to'g'ri nom)
+  const topology = useSession.getState().ctx?.topology ?? TOPOLOGY;
+  return topology.nodes.find((n) => n.id === id)?.label ?? id;
 }
 
 export function PrintButton({ doc }: { doc: PrintDoc }) {

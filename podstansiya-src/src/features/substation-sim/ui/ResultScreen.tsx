@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { SCENARIO_CATALOG } from "../data/scenarios/catalog";
-import { summarize } from "../engine/scoring";
+import { outageSummary, summarize } from "../engine/scoring";
 import { uz } from "../i18n/uz";
 import { useSession } from "../store/session";
 import { useSettings } from "../store/settings";
@@ -32,6 +32,7 @@ export default function ResultScreen() {
   const mistakes = feedback.filter((f) => f.severity === "violation" || f.severity === "critical");
   const finalPenalties = sim.penalties.filter((p) => ["missingStep", "goalUnmet", "journalMissing"].includes(p.code));
   const secs = Math.round(((endedAt ?? startedAt) - startedAt) / 1000);
+  const outage = outageSummary(ctx.topology, sim, ctx.scenario.allowedOutages);
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-6">
@@ -117,6 +118,37 @@ export default function ResultScreen() {
           </div>
         )}
       </section>
+
+      {outage.rows.length > 0 && (
+        <section className="card mt-5 p-5">
+          <h3 className="font-bold">{uz.ops.damage}</h3>
+          <table className="mt-2 w-full text-left text-sm">
+            <thead className="text-xs text-muted">
+              <tr>
+                <th className="py-1 font-normal">{uz.ops.consumer}</th>
+                <th className="py-1 font-normal">{uz.ops.outageMin}</th>
+                <th className="py-1 text-right font-normal">{uz.ops.damageCost}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {outage.rows.map((r) => (
+                <tr key={r.loadId} className={`border-t border-line/40 ${r.planned ? "text-muted" : ""}`}>
+                  <td className="py-1">
+                    {r.label} <span className="text-xs text-muted">({r.category}-{uz.ops.categoryShort})</span>
+                    {r.planned && <span className="ml-1 text-xs">· {uz.ops.planned}</span>}
+                  </td>
+                  <td className="py-1 font-mono">{Math.round(r.minutes)} daq</td>
+                  <td className="py-1 text-right font-mono">{r.planned ? "—" : Math.round(r.cost)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p className="mt-2 text-right text-sm">
+            {uz.ops.damageCost}: <b className="font-mono">{Math.round(outage.totalCost)}</b>
+          </p>
+          <p className="mt-1 text-xs text-muted">{uz.ops.damageNote}</p>
+        </section>
+      )}
 
       <section className="card mt-5 p-5">
         <h3 className="font-bold">{R.correctSequence}</h3>

@@ -58,7 +58,7 @@ function buildTables(doc: string): Record<string, string> {
     const n = norm as Norm<unknown>;
     return `| \`${key}\` | ${val(n.value)} | ${n.unit} | ${n.kind} | ${n.verify ? "✅" : "—"} | ${n.note} | ${usedIn(key, files)} | ${status(key)} |`;
   });
-  const fields = ["ratedMva", "hvKv", "mvKv", "lvKv", "vectorGroup", "ukPct", "noLoadLossKw", "loadLossKw", "noLoadCurrentPct", "cooling", "rpn"] as const;
+  const fields = ["ratedMva", "hvKv", "mvKv", "lvKv", "vectorGroup", "ukPct", "noLoadLossKw", "loadLossKw", "noLoadCurrentPct", "cooling", "rpn", "regulation"] as const;
   const tr: string[] = [];
   for (const [k, m] of Object.entries(TRANSFORMER_MODELS)) {
     for (const f of fields) {

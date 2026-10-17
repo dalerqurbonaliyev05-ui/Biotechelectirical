@@ -20,7 +20,7 @@ Holat ustuni — o'qituvchi bilan tekshirgach belgilash uchun: ☐ tekshirilmaga
 <!-- AUTO:NORMS:START -->
 | Kalit | Qiymat | Birlik | Tur | verify | Izoh / manba | Qayerda ishlatiladi | Holat |
 |---|---|---|---|---|---|---|---|
-| `NORMS.fanAutoOnOilC` | 55 | °C | norm | ✅ | D sovutishli transformatorda ventilyatorlar avtomatik yoqiladigan moy harorati (yo'riqnomalarda tipik qiymat) | `engine/thermal.ts` | ☐ |
+| `NORMS.fanAutoOnOilC` | 55 | °C | norm | ✅ | D sovutishli transformatorda ventilyatorlar avtomatik yoqiladigan moy harorati (yo'riqnomalarda tipik qiymat) | `engine/state.ts`, `engine/thermal.ts` | ☐ |
 | `NORMS.fanAutoOnLoadFactor` | 1 | × Inom | norm | ✅ | D sovutishda ventilyatorlar avtomatik yoqiladigan yuklama (nominal tok) — tipik qiymat | `engine/state.ts`, `engine/thermal.ts` | ☐ |
 | `NORMS.fanOffRatingFactor` | 0.6 | × Snom | model | ✅ | Ventilyatorlar o'chiq bo'lganda D transformatorning issiqlik jihatidan ekvivalent quvvati. TAXMINIY — pasport/ishlab chiqaruvchi ma'lumoti bo'yicha aniqlansin | `engine/thermal.ts` | ☐ |
 | `NORMS.agingRefHotSpotC` | 98 | °C | norm | ✅ | Termik yaxshilanmagan qog'oz uchun nisbiy eskirish tezligi 1 bo'lgan harorat (IEC 60076-7) | `engine/thermal.ts` | ☐ |
@@ -48,8 +48,18 @@ Holat ustuni — o'qituvchi bilan tekshirgach belgilash uchun: ☐ tekshirilmaga
 | `NORMS.permitBrigadeMinSize` | 2 | kishi | norm | ✅ | Brigada tarkibi: bajaruvchi bilan birga kamida — tekshirilsin | `engine/permit.ts` | ☐ |
 | `NORMS.absorptionMin` | 1.3 | R60/R15 | norm | ✅ | Absorbsiya koeffitsientining eng kichik qiymati (moyli transformator o'ramlari, ~10–30 °C) — sinov me'yorlari bo'yicha tekshirilsin | `engine/protocol.ts`, `ui/docs/ProtocolPanel.tsx` | ☐ |
 | `NORMS.insulationFactoryRatioMin` | 0.7 | × zavod R60 | norm | ✅ | R60 zavod (pasport) qiymatining kamida shu ulushi bo'lishi (bir xil haroratga keltirilgan) — sinov me'yorlari bo'yicha tekshirilsin | `engine/protocol.ts`, `ui/docs/ProtocolPanel.tsx` | ☐ |
+| `NORMS.emergencyOverloadTable` | [[object Object], [object Object], [object Object], [object Object], [object Object]] | K → daq | norm | ✅ | Moyli transformatorlarning avariyaviy ortiqcha yuklanishi (PTE dagi jadvalga o'xshash tipik qiymatlar: 30% — 120 daq, 45% — 80, 60% — 45, 75% — 20, 100% — 10). ALBATTA tekshirilsin | `engine/protection.ts` | ☐ |
+| `NORMS.overloadAlarmFactor` | 1 | × Snom | model | ✅ | Ortiqcha yuklanish signali (nominaldan yuqori) | `engine/protection.ts` | ☐ |
+| `NORMS.overheatFailMarginK` | 10 | K | model | ✅ | Yuqori qatlam moyi ruxsat etilgan chegaradan shuncha oshsa — simulyatorda avariya (izolyatsiya shikastlanishi). Model parametri | `engine/protection.ts` | ☐ |
+| `NORMS.transformerSelectionOverload` | 1.4 | × Snom | norm | ✅ | Ikki transformatorli podstansiyada bittasi o'chganda ikkinchisining ruxsat etilgan ortiqcha yuklanishi (marka tanlashda) — tekshirilsin | `data/scenarios/S09.ts` | ☐ |
+| `NORMS.oilBreakdownMinKv` | 35 | kV | norm | ✅ | Ishlayotgan transformator moyining probiv kuchlanishi chegarasi (110 kV sinf) — moy sinovi me'yorlari bo'yicha tekshirilsin | — | ☐ |
+| `NORMS.oilMoistureMaxPpm` | 25 | g/t | norm | ✅ | Ishlayotgan moydagi namlik chegarasi (110 kV sinf) — tekshirilsin | — | ☐ |
+| `NORMS.oilAcidMax` | 0.25 | mg KOH/g | norm | ✅ | Kislota soni chegarasi (ishlayotgan moy) — tekshirilsin | — | ☐ |
+| `NORMS.energizeShocks` | 3 | marta | norm | ✅ | Yangi transformatorni nominal kuchlanishga zarba bilan ulash soni (manbalarda 3–5 marta) — tekshirilsin | `data/scenarios/S18.ts` | ☐ |
+| `NORMS.noLoadObservationMin` | 30 | daq | norm | ✅ | Birinchi ulashdan keyin salt yurishda kuzatish davomiyligi — tekshirilsin | `data/scenarios/S18.ts` | ☐ |
+| `NORMS.outageCostPerMwMin` | 1: 50, 2: 20, 3: 5 | shartli birlik / (MVt·daq) | model | — | Iste'molchi toifasi bo'yicha uzilish zarari — o'yin modeli (haqiqiy tarif emas) | `engine/scoring.ts` | ☐ |
 | `NORMS.fireServiceNumber` | 101 | tel. | norm | ✅ | O'zbekistonda yong'in xizmati raqami | — | ☐ |
-| `NORMS.actionDurationSec` | switch: 60, verifyDead: 120, checkPosition: 60, poster: 60, permitIssue: 600, admit: 300, finishWork: 300, journal: 120, report: 60, readback: 30, inspect: 30, tap: 0, fans: 30, blankSubmit: 300, protocol: 900 | s | model | — | Har amal simulyatsiya soatini qancha oldinga suradi — o'yin modeli | `engine/simulator.ts` | ☐ |
+| `NORMS.actionDurationSec` | switch: 60, verifyDead: 120, checkPosition: 60, poster: 60, permitIssue: 600, admit: 300, finishWork: 300, journal: 120, report: 60, readback: 30, inspect: 30, tap: 0, fans: 30, blankSubmit: 300, protocol: 900, choice: 30, measure: 600, task: 0, call: 60, phasing: 600, wait: 0 | s | model | — | Har amal simulyatsiya soatini qancha oldinga suradi — o'yin modeli | `engine/simulator.ts` | ☐ |
 | `NORMS.protocolValueTolerancePct` | 2 | % | model | — | Protokolga yozilgan qiymat va asbob ko'rsatkichi farqiga ruxsat — o'yin qoidasi | `engine/protocol.ts` | ☐ |
 | `NORMS.journalTimeToleranceMin` | 10 | daq | model | — | Jurnal yozuvidagi vaqt va amal vaqti farqiga ruxsat — o'yin qoidasi | `engine/journal.ts` | ☐ |
 | `THERMAL.M.R` | 6 | — | model | ✅ | IEC 60076-7 (moyli transformatorlar yuklanish qo'llanmasi) tipik qiymatlariga yaqin; aniq transformator pasporti bo'yicha tekshirilsin | `engine/thermal.ts` | ☐ |
@@ -102,6 +112,106 @@ Holat ustuni — o'qituvchi bilan tekshirgach belgilash uchun: ☐ tekshirilmaga
 | `TDTN-25000/110.noLoadCurrentPct` | 0.7 | % | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
 | `TDTN-25000/110.cooling` | D | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
 | `TDTN-25000/110.rpn` | winding: hv, steps: 9, stepPct: 1.78 | — | ✅ | 110 kV o'ramda RPN ±9×1,78% (NORMS.rpn110*) | ☐ |
+| `TDTN-25000/110.regulation` | RPN | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMN-6300/35.ratedMva` | 6.3 | MVA | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMN-6300/35.hvKv` | 35 | kV | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMN-6300/35.lvKv` | 11 | kV | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMN-6300/35.vectorGroup` | Y/Δ-11 | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMN-6300/35.ukPct` | hv-lv: 7.5 | % | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMN-6300/35.noLoadLossKw` | 8 | kVt | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMN-6300/35.loadLossKw` | 46.5 | kVt | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMN-6300/35.noLoadCurrentPct` | 0.8 | % | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMN-6300/35.cooling` | M | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMN-6300/35.rpn` | winding: hv, steps: 6, stepPct: 1.5 | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMN-6300/35.regulation` | RPN | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMN-4000/35.ratedMva` | 4 | MVA | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMN-4000/35.hvKv` | 35 | kV | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMN-4000/35.lvKv` | 11 | kV | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMN-4000/35.vectorGroup` | Y/Δ-11 | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMN-4000/35.ukPct` | hv-lv: 7.5 | % | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMN-4000/35.noLoadLossKw` | 5.6 | kVt | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMN-4000/35.loadLossKw` | 33.5 | kVt | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMN-4000/35.noLoadCurrentPct` | 0.9 | % | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMN-4000/35.cooling` | M | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMN-4000/35.rpn` | winding: hv, steps: 6, stepPct: 1.5 | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMN-4000/35.regulation` | RPN | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMN-2500/35.ratedMva` | 2.5 | MVA | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMN-2500/35.hvKv` | 35 | kV | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMN-2500/35.lvKv` | 11 | kV | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMN-2500/35.vectorGroup` | Y/Δ-11 | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMN-2500/35.ukPct` | hv-lv: 6.5 | % | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMN-2500/35.noLoadLossKw` | 4.1 | kVt | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMN-2500/35.loadLossKw` | 23.5 | kVt | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMN-2500/35.noLoadCurrentPct` | 1 | % | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMN-2500/35.cooling` | M | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMN-2500/35.rpn` | winding: hv, steps: 6, stepPct: 1.5 | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMN-2500/35.regulation` | RPN | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TDN-10000/110.ratedMva` | 10 | MVA | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TDN-10000/110.hvKv` | 115 | kV | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TDN-10000/110.lvKv` | 11 | kV | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TDN-10000/110.vectorGroup` | Yn/Δ-11 | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TDN-10000/110.ukPct` | hv-lv: 10.5 | % | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TDN-10000/110.noLoadLossKw` | 14 | kVt | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TDN-10000/110.loadLossKw` | 58 | kVt | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TDN-10000/110.noLoadCurrentPct` | 0.9 | % | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TDN-10000/110.cooling` | D | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TDN-10000/110.rpn` | winding: hv, steps: 9, stepPct: 1.78 | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TDN-10000/110.regulation` | RPN | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TDN-16000/110.ratedMva` | 16 | MVA | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TDN-16000/110.hvKv` | 115 | kV | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TDN-16000/110.lvKv` | 11 | kV | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TDN-16000/110.vectorGroup` | Yn/Δ-11 | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TDN-16000/110.ukPct` | hv-lv: 10.5 | % | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TDN-16000/110.noLoadLossKw` | 18 | kVt | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TDN-16000/110.loadLossKw` | 85 | kVt | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TDN-16000/110.noLoadCurrentPct` | 0.7 | % | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TDN-16000/110.cooling` | D | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TDN-16000/110.rpn` | winding: hv, steps: 9, stepPct: 1.78 | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TDN-16000/110.regulation` | RPN | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TRDN-25000/110.ratedMva` | 25 | MVA | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TRDN-25000/110.hvKv` | 115 | kV | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TRDN-25000/110.lvKv` | 10.5 | kV | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TRDN-25000/110.vectorGroup` | Yn/Δ-Δ-11-11 | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TRDN-25000/110.ukPct` | hv-lv: 10.5 | % | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TRDN-25000/110.noLoadLossKw` | 25 | kVt | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TRDN-25000/110.loadLossKw` | 120 | kVt | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TRDN-25000/110.noLoadCurrentPct` | 0.65 | % | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TRDN-25000/110.cooling` | D | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TRDN-25000/110.rpn` | winding: hv, steps: 9, stepPct: 1.78 | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TRDN-25000/110.regulation` | RPN | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TM-1600/10.ratedMva` | 1.6 | MVA | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TM-1600/10.hvKv` | 10 | kV | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TM-1600/10.lvKv` | 0.4 | kV | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TM-1600/10.vectorGroup` | Δ/Yn-11 | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TM-1600/10.ukPct` | hv-lv: 6 | % | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TM-1600/10.noLoadLossKw` | 2.65 | kVt | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TM-1600/10.loadLossKw` | 16.5 | kVt | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TM-1600/10.noLoadCurrentPct` | 1.3 | % | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TM-1600/10.cooling` | M | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TM-1600/10.rpn` | winding: hv, steps: 2, stepPct: 2.5 | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TM-1600/10.regulation` | PBV | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMG-1000/10.ratedMva` | 1 | MVA | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMG-1000/10.hvKv` | 10 | kV | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMG-1000/10.lvKv` | 0.4 | kV | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMG-1000/10.vectorGroup` | Δ/Yn-11 | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMG-1000/10.ukPct` | hv-lv: 5.5 | % | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMG-1000/10.noLoadLossKw` | 1.6 | kVt | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMG-1000/10.loadLossKw` | 10.8 | kVt | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMG-1000/10.noLoadCurrentPct` | 1.2 | % | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMG-1000/10.cooling` | M | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMG-1000/10.rpn` | winding: hv, steps: 2, stepPct: 2.5 | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMG-1000/10.regulation` | PBV | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMG-630/10.ratedMva` | 0.63 | MVA | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMG-630/10.hvKv` | 10 | kV | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMG-630/10.lvKv` | 0.4 | kV | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMG-630/10.vectorGroup` | Δ/Yn-11 | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMG-630/10.ukPct` | hv-lv: 5.5 | % | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMG-630/10.noLoadLossKw` | 1.05 | kVt | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMG-630/10.loadLossKw` | 7.6 | kVt | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMG-630/10.noLoadCurrentPct` | 1.4 | % | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMG-630/10.cooling` | M | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMG-630/10.rpn` | winding: hv, steps: 2, stepPct: 2.5 | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
+| `TMG-630/10.regulation` | PBV | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
 <!-- AUTO:TRANSFORMERS:END -->
 
 ## 3. Yuklama grafiklari va ob-havo (`data/loadCurves.ts`)
@@ -138,6 +248,16 @@ Ob-havo ehtimollari (`WEATHER_WEIGHTS`) — o'yin modeli, me'yor emas.
 | `blankNotReady`, `blankDeviation` | violation | Blankasiz kommutatsiya (blanka talab qilinsa) yoki blankadagi navbatdan chetga chiqish | `engine/simulator.ts` | ☐ |
 | `protocolIncomplete`, `protocolValues`, `protocolConclusion` | violation | Sinov protokoli: barcha o'ramlar, asbob ko'rsatkichiga mos qiymatlar (`protocolValueTolerancePct`), xulosa `absorptionMin` va `insulationFactoryRatioMin` bo'yicha | `engine/protocol.ts` | ☐ |
 | `reportEarly`, `readbackWrong`, `wrongOrder`, `extraneous` | violation | Tashkiliy qoidalar | `engine/simulator.ts` | ☐ |
+| `closeOntoFault` | critical | Barqaror QT bo'lgan uchastkaga (APV muvaffaqiyatsiz, transformator ichki nosozligi) o'chirgich bilan kuchlanish berish | `engine/interlocks.ts` | ☐ |
+| `transformerOverheat` | critical | Moy harorati chegaradan (`THERMAL.*.max`) `overheatFailMarginK` dan ko'proq oshdi | `engine/protection.ts` | ☐ |
+| `fireSpread` | critical | Yong'in signalidan keyin transformator belgilangan muddatda (`deadlineSec`, `deadlineCritical`) o'chirilmadi | `engine/protection.ts` | ☐ |
+| `parallelVectorMismatch` | critical | Ulanish guruhi turli transformatorlar parallel ulandi | `engine/simulator.ts` | ☐ |
+| `parallelRatio`, `parallelWithoutPhasing` | violation | Parallel ulashda RPN pog'onalari (koeffitsient) farqi yoki fazirovka qilinmagan (`phasingRequired`) | `engine/simulator.ts` | ☐ |
+| `overloadTooLong`, `oilOverLimit` | violation | Ortiqcha yuklanish `emergencyOverloadTable` dagi ruxsat etilgan vaqtdan uzoq; moy harorati chegaradan yuqori | `engine/protection.ts` | ☐ |
+| `earthFaultTimeout` | violation | 6–35 kV yerga tutashuv `earthFaultMaxDurationMin` ichida bartaraf etilmadi | `engine/protection.ts` | ☐ |
+| `stepLate` | violation | Muddatli qadam (`deadlineSec`) kechikdi | `engine/protection.ts` | ☐ |
+| `wrongDecision`, `decisionWithoutData` | violation | Qaror kartasida noto'g'ri variant yoki o'lchov natijasisiz qaror (`correctWhen`) | `engine/simulator.ts` | ☐ |
+| `shedPriority` | violation | Yuklamani cheklashda kam muhim (yuqori raqamli toifa) iste'molchi qolgan holda muhimrog'ini uzish | `engine/simulator.ts` | ☐ |
 
 Jarima ballari (`PENALTY`), yulduz chegaralari (`STAR_THRESHOLDS`) va rejimlar (`MODE_RULES`) — o'yin qoidalari, me'yor emas.
 
@@ -173,3 +293,10 @@ Jarima ballari (`PENALTY`), yulduz chegaralari (`STAR_THRESHOLDS`) va rejimlar (
 - S05 dagi 10,3–10,6 kV oralig'i — dispetcher buyrug'idagi shartli qiymat (me'yor emas); 110 kV manba kuchlanishi 106 kV — stsenariy sharti.
 - Kuchlanish pasayishi modeli: `U2 = U1·U2nom/U1tap·(1 − K·ΔU%)` — soddalashtirilgan.
 - Issiqlik modeli: o'ram vaqt doimiysi va k11, k21, k22 koeffitsientlari e'tiborsiz (IEC 60076-7 ning soddalashtirilgan ko'rinishi).
+- **ABR** (`data/automation.ts`) faqat himoya/avtomatika o'chirgan kirishdan keyin ishlaydi (operator o'zi o'chirsa — ishlamaydi); seksiyalash o'chirgichi va kirishlar ro'yxati shartli. Rad etish — stsenariy hodisasi (`abrFail`).
+- **Ortiqcha yuklanish jadvali** (`emergencyOverloadTable`) — chiziqli interpolyatsiya bilan; oraliq qiymatlar va moy harorati bilan bog'liqligi soddalashtirilgan.
+- **Gaz relesi talqini** (S10, S21): rangsiz/yonmaydi — havo; sariq/yonadi — qog'oz-yog'och izolyatsiya; kulrang-oq — karton; qora — moy parchalanishi (yoy). Soddalashtirilgan o'quv qoidasi — yo'riqnoma bo'yicha tekshirilsin.
+- **O'lchov natijalari** (moy sinovi, gaz namunasi, megger va h.k.) — stsenariydagi shartli variantlar; urug' (seed) bo'yicha tanlanadi, me'yor emas.
+- **S21 smena** — 5 ta moduldan (fider ta'miri, kuchlanish, yerga tutashuv, ventilyator nosozligi, gaz signali) urug' bo'yicha 4 tasi 09:00, 10:40, 12:30, 14:20 da keladi.
+- **Iqtisodiy zarar** (`outageCostPerMwMin`) — o'yin modeli: daqiqa × MVt × toifa koeffitsienti, shartli birlikda; rejali (buyruq bo'yicha) uzilish hisoblanmaydi.
+- **35 kV «Yangi hayot» podstansiyasi** (S18) — shartli o'quv sxemasi; yangi transformatorni ishga tushirish ishlari (montaj, sinovlar, zarbalar soni, salt kuzatuv) soddalashtirilgan.

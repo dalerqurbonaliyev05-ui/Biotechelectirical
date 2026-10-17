@@ -55,7 +55,9 @@ export function checkJournalEntry(entry: JournalEntry, ops: JournalOp[], knownLa
   const t = parseTime(entry.time);
   const refTime = ops.length ? ops[ops.length - 1].t : nowSec;
   const tol = NORMS.journalTimeToleranceMin.value * 60;
-  if (t === null || Math.abs(t - refTime) > tol) {
+  // Sutka almashishini hisobga olgan farq (masalan 23:55 va 00:05)
+  const diff = t === null ? Infinity : Math.abs(((((t - refTime) % 86400) + 129600) % 86400) - 43200);
+  if (diff > tol) {
     issues.push({ code: "journalTime", params: { expected: formatClock(refTime), got: entry.time || "—" } });
   }
 

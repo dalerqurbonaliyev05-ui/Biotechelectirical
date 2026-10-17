@@ -195,6 +195,57 @@ export interface SimState {
   ambientC: number;
   /** 110 kV manba kuchlanishi, kV (RPN stsenariylari uchun). */
   sourceKv: number;
+
+  // ---- 5-bosqich: hodisalar, himoya va avtomatika ----
+  /** Takrorlanuvchi tasodifiylik uchun urug' (o'lchov natijalari, smena hodisalari) */
+  seed: number;
+  weather: string;
+  /** Signal paneli */
+  alarms: Alarm[];
+  /** Bajarilgan vaqt chizig'i hodisalari */
+  firedEvents: string[];
+  /** 6–35 kV bir fazali yerga tutashuv */
+  earthFault: { nodeId: string; phase: "A" | "B" | "C"; severity: number; since: number; hazard: boolean } | null;
+  /** Barqaror qisqa tutashuv bor tugunlar (unga kuchlanish berish — avariya) */
+  faultNodes: string[];
+  abr: { enabled: boolean; failed: boolean };
+  rpnStuck: Record<string, boolean>;
+  fansFailed: Record<string, boolean>;
+  /** Transformatordagi nosozlik (yong'in va h.k.) */
+  trFaults: Record<string, string>;
+  measurements: Record<string, MeasurementResult>;
+  decisions: Record<string, string>;
+  tasksDone: string[];
+  calls: string[];
+  /** Fazirovka natijalari: "T-1|T-2" → mos/yo'q */
+  phasing: Record<string, boolean>;
+  /** Moy harorati tarixi (grafik uchun): [vaqt, °C] */
+  oilHistory: Record<string, Array<[number, number]>>;
+  overloadSince: Record<string, number | null>;
+  /** Iste'molchilar uzilish davomiyligi, daqiqa */
+  outageMin: Record<string, number>;
+  /** Bir martalik jarima/ogohlantirish belgilari */
+  flags: string[];
+  /** Qadam qachon bajarilishi mumkin bo'lgan (muddat nazorati uchun) */
+  stepAvailableAt: Record<string, number>;
+  /** Har bir real soniyada simulyatsiya necha soniya yuradi */
+  timeScale: number;
+}
+
+export interface Alarm {
+  id: string;
+  code: string;
+  t: number;
+  active: boolean;
+  params?: Record<string, string>;
+}
+
+export interface MeasurementResult {
+  /** Natija toifasi (qaror to'g'riligini baholash uchun) */
+  category: string;
+  /** Ko'rsatiladigan qiymatlar: "Probiv kuchlanishi" → "38 kV" */
+  values: Record<string, string>;
+  t: number;
 }
 
 // ---------- Amallar ----------
@@ -216,6 +267,12 @@ export type Action =
   | { type: "tap"; transformerId: string; dir: 1 | -1 }
   | { type: "fans"; transformerId: string; on: boolean }
   | { type: "tick"; dtSec: number }
+  | { type: "wait"; sec: number }
+  | { type: "choice"; decisionId: string; optionId: string }
+  | { type: "measure"; measurementId: string }
+  | { type: "task"; taskId: string }
+  | { type: "call"; to: "fire" | "ambulance" | "dispatcher" | "master" }
+  | { type: "phasing"; a: string; b: string }
   | { type: "finish" };
 
 export interface ActionOutcome {

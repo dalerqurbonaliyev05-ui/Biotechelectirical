@@ -4,11 +4,11 @@
 // (to'ldirilgan/ochiq kvadrat, to'g'ri/qiyshiq pichoq), shuning uchun faqat rangga tayanilmaydi.
 // Zoom/pan: g'ildirak, sichqoncha bilan sudrash, mobilda ikki barmoq; klaviatura: Tab + Enter.
 
-import { useCallback, useEffect, useRef, useState, type KeyboardEvent, type PointerEvent as RPointerEvent } from "react";
-import { SLD, type Pt } from "../data/layout";
-import { TOPOLOGY } from "../data/equipment";
+import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent, type PointerEvent as RPointerEvent } from "react";
+import type { Pt, SldLayout } from "../data/layout";
+import { topologyFor } from "../data/topologies";
 import { isNodeEnergized, isNodeGrounded, type NetworkState } from "../engine/network";
-import type { SimState } from "../engine/types";
+import type { SimState, Topology } from "../engine/types";
 import { uz } from "../i18n/uz";
 import { useSession } from "../store/session";
 import { useSettings } from "../store/settings";
@@ -16,12 +16,9 @@ import { DEAD, EARTH, kvColor } from "./colors";
 import Icon from "./Icon";
 import { useDerived } from "./useDerived";
 
-const NODE_KV = new Map(TOPOLOGY.nodes.map((n) => [n.id, n.kv]));
-const SWITCH = new Map(TOPOLOGY.switches.map((s) => [s.id, s]));
-const LOADS = new Map(TOPOLOGY.loads.map((l) => [l.id, l]));
-const FULL = { x: -20, y: -10, w: SLD.width + 40, h: SLD.height + 20 };
+type View = { x: number; y: number; w: number; h: number };
 
-function wireStyle(net: NetworkState, node: string) {
+function wireStyle(net: NetworkState, node: string, NODE_KV: Map<string, number>) {
   if (isNodeGrounded(net, node) && !isNodeEnergized(net, node)) return { stroke: EARTH, dash: "7 5", width: 3 };
   if (isNodeEnergized(net, node)) return { stroke: kvColor(NODE_KV.get(node) ?? 10), dash: undefined, width: 3.2 };
   return { stroke: DEAD, dash: undefined, width: 2.4 };
@@ -93,7 +90,19 @@ function Hit({ id, label, selected, failed, box, onPick, children }: HitProps) {
   );
 }
 
+/** Stsenariy topologiyasiga mos sxema (topologiya almashganda ichki holat qayta yaratiladi). */
 export default function SingleLineDiagram() {
+  const { ctx } = useDerived();
+  const key = ctx?.scenario.topology ?? "yangiobod";
+  const t = topologyFor(key);
+  return <Diagram key={key} layout={t.layout} topology={t.topology} />;
+}
+
+function Diagram({ layout: SLD, topology: TOPOLOGY }: { layout: SldLayout; topology: Topology }) {
+  const NODE_KV = useMemo(() => new Map(TOPOLOGY.nodes.map((n) => [n.id, n.kv])), [TOPOLOGY]);
+  const SWITCH = useMemo(() => new Map(TOPOLOGY.switches.map((s) => [s.id, s])), [TOPOLOGY]);
+  const LOADS = useMemo(() => new Map(TOPOLOGY.loads.map((l) => [l.id, l])), [TOPOLOGY]);
+  const FULL: View = useMemo(() => ({ x: -20, y: -10, w: SLD.width + 40, h: SLD.height + 20 }), [SLD]);
   const { sim, net } = useDerived();
   const selected = useSession((s) => s.selected);
   const select = useSession((s) => s.select);
@@ -106,14 +115,14 @@ export default function SingleLineDiagram() {
     vbRef.current = vb;
   }, [vb]);
   const pointers = useRef(new Map<number, { x: number; y: number }>());
-  const gesture = useRef<{ x: number; y: number; vb: typeof FULL; moved: boolean; dist?: number } | null>(null);
+  const gesture = useRef<{ x: number; y: number; vb: View; moved: boolean; dist?: number } | null>(null);
   const suppressClick = useRef(false);
 
-  const clampVb = useCallback((v: typeof FULL) => {
+  const clampVb = useCallback((v: View) => {
     const w = Math.min(Math.max(v.w, 220), FULL.w * 1.4);
     const h = (w * v.h) / v.w;
     return { x: Math.min(Math.max(v.x, FULL.x - w * 0.5), FULL.x + FULL.w - w * 0.5), y: Math.min(Math.max(v.y, FULL.y - h * 0.5), FULL.y + FULL.h - h * 0.5), w, h };
-  }, []);
+  }, [FULL]);
 
   const toSvg = useCallback((cx: number, cy: number) => {
     const svg = svgRef.current;
@@ -146,7 +155,7 @@ export default function SingleLineDiagram() {
       const w = (h * r.width) / r.height;
       setVb(clampVb({ x: SLD.width / 2 - w / 2, y: FULL.y, w, h }));
     }
-  }, [clampVb]);
+  }, [clampVb, FULL, SLD]);
 
   // G'ildirak bilan zoom (passive: false — sahifa aylanmasligi uchun)
   useEffect(() => {
@@ -171,7 +180,7 @@ export default function SingleLineDiagram() {
     const h = (w * FULL.h) / FULL.w;
     // eslint-disable-next-line react-hooks/set-state-in-effect -- tashqi so'rovga javoban ko'rinishni bir marta o'zgartirish
     setVb(clampVb({ x: c.x - w / 2, y: c.y - h / 2, w, h }));
-  }, [focusRequest, clampVb]);
+  }, [focusRequest, clampVb, FULL, SLD]);
 
   const onPointerDown = (e: RPointerEvent<SVGSVGElement>) => {
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
@@ -249,13 +258,13 @@ export default function SingleLineDiagram() {
 
         {/* Simlar */}
         {SLD.wires.map((w, i) => {
-          const st = wireStyle(net, w.node);
+          const st = wireStyle(net, w.node, NODE_KV);
           return <polyline key={i} points={pts(w.points)} fill="none" stroke={st.stroke} strokeWidth={st.width} strokeDasharray={st.dash} strokeLinejoin="round" />;
         })}
 
         {/* Kirish liniyalari */}
         {SLD.lines.map((l) => {
-          const st = wireStyle(net, l.node);
+          const st = wireStyle(net, l.node, NODE_KV);
           return (
             <Hit key={l.node} id={l.node} label={`${l.label}: ${isNodeEnergized(net, l.node) ? uz.equipment.live : uz.equipment.dead}`} selected={selected === l.node} failed={false} box={{ x: l.x - 50, y: l.y - 22, w: 100, h: 34 }} onPick={pick}>
               <path d={`M${l.x - 7} ${l.y - 2} L${l.x} ${l.y + 8} L${l.x + 7} ${l.y - 2}`} fill="none" stroke={st.stroke} strokeWidth={2.5} />
@@ -268,7 +277,7 @@ export default function SingleLineDiagram() {
 
         {/* Shinalar */}
         {SLD.buses.map((b) => {
-          const st = wireStyle(net, b.node);
+          const st = wireStyle(net, b.node, NODE_KV);
           return (
             <Hit key={b.node} id={b.node} label={`${b.label}: ${isNodeEnergized(net, b.node) ? uz.equipment.live : uz.equipment.dead}`} selected={selected === b.node} failed={false} box={{ x: b.x1 - 4, y: b.y - 9, w: b.x2 - b.x1 + 8, h: 18 }} onPick={pick}>
               <line x1={b.x1} y1={b.y} x2={b.x2} y2={b.y} stroke={st.stroke} strokeWidth={7} strokeLinecap="round" strokeDasharray={st.dash} />
@@ -282,13 +291,24 @@ export default function SingleLineDiagram() {
         {/* Transformatorlar */}
         {SLD.transformers.map((t) => {
           const def = TOPOLOGY.transformers.find((x) => x.id === t.id)!;
-          const s = t.mvSide === "left" ? -1 : 1;
+          const s = t.mvSide === "left" ? -1 : t.mvSide === "none" ? -0.6 : 1;
           const c = (node: string, kv: number) => (isNodeEnergized(net, node) ? kvColor(kv) : isNodeGrounded(net, node) ? EARTH : DEAD);
           return (
             <Hit key={t.id} id={t.id} label={`${t.id}, ${uz.equipment.kinds.transformer}, ${net.transformerEnergized[t.id] ? uz.equipment.live : uz.equipment.dead}`} selected={selected === t.id} failed={failedLabel === t.id} box={{ x: t.x - 50, y: t.y - 28, w: 100, h: 94 }} onPick={pick}>
-              <circle cx={t.x} cy={t.y} r={24} fill="var(--color-ink-950)" fillOpacity={0.6} stroke={c(def.hv, 110)} strokeWidth={3} />
-              <circle cx={t.x + 22 * s} cy={t.y + 38} r={24} fill="none" stroke={c(def.mv!, 35)} strokeWidth={3} />
-              <circle cx={t.x - 22 * s} cy={t.y + 38} r={24} fill="none" stroke={c(def.lv, 10)} strokeWidth={3} />
+              <circle cx={t.x} cy={t.y} r={24} fill="var(--color-ink-950)" fillOpacity={0.6} stroke={c(def.hv, NODE_KV.get(def.hv) ?? 110)} strokeWidth={3} />
+              {t.mvSide === "none" || !def.mv ? (
+                <circle cx={t.x} cy={t.y + 36} r={24} fill="none" stroke={c(def.lv, NODE_KV.get(def.lv) ?? 10)} strokeWidth={3} />
+              ) : (
+                <>
+                  <circle cx={t.x + 22 * s} cy={t.y + 38} r={24} fill="none" stroke={c(def.mv, 35)} strokeWidth={3} />
+                  <circle cx={t.x - 22 * s} cy={t.y + 38} r={24} fill="none" stroke={c(def.lv, 10)} strokeWidth={3} />
+                </>
+              )}
+              {sim.trFaults[t.id] === "fire" && (
+                <text x={t.x} y={t.y + 26} textAnchor="middle" fontSize={34} className="animate-pulse" aria-hidden="true">
+                  🔥
+                </text>
+              )}
               <text x={t.x - 80 * s} y={t.y - 2} textAnchor={s < 0 ? "start" : "end"} fontSize={15} fontWeight={800} fill="var(--color-text)">
                 {t.id}
               </text>
@@ -307,7 +327,7 @@ export default function SingleLineDiagram() {
 
         {/* O'lchov transformatorlari va OPN */}
         {SLD.instruments.map((i) => {
-          const st = wireStyle(net, i.node);
+          const st = wireStyle(net, i.node, NODE_KV);
           return (
             <Hit key={i.id} id={i.id} label={`${i.id}, ${uz.equipment.kinds[i.kind]}`} selected={selected === i.id} failed={false} box={{ x: i.x - 13, y: i.y - 13, w: 26, h: 26 }} onPick={pick}>
               {i.from && <polyline points={pts([i.from, [i.x, i.from[1]], [i.x, i.y]])} fill="none" stroke={st.stroke} strokeWidth={1.6} />}
@@ -398,7 +418,7 @@ export default function SingleLineDiagram() {
         {/* Yerlagichlar */}
         {SLD.earths.map((e) => {
           const closed = sim.devices[e.id] === "closed";
-          const nodeSt = wireStyle(net, e.node);
+          const nodeSt = wireStyle(net, e.node, NODE_KV);
           const color = closed ? EARTH : DEAD;
           return (
             <Hit key={e.id} id={e.id} label={`${e.id}, ${uz.equipment.kinds.earthSwitch}, ${stateWord(closed)}`} selected={selected === e.id} failed={failedLabel === e.id} box={{ x: e.x - 15, y: e.y - 17, w: 30, h: 44 }} onPick={pick}>
