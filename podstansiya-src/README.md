@@ -32,7 +32,7 @@ CI: `.github/workflows/podstansiya.yml` (lint, typecheck, test, build).
 ## Tuzilma
 
 ```
-app/                                   marshrutlar: / (menyu), /stsenariylar, /oyin/[id], /mashqlar, /ensiklopediya, /yutuqlar, /glossariy, /sozlamalar, /natijalar
+app/                                   marshrutlar: / (menyu), /stsenariylar, /oyin/[id], /mashqlar, /ensiklopediya, /yutuqlar, /glossariy, /reyting, /sozlamalar, /natijalar
 src/features/substation-sim/
   engine/        sof TypeScript, UI'ga bog'liq emas, to'liq testlangan
     types.ts         topologiya, holat, amal turlari
@@ -74,7 +74,8 @@ src/features/substation-sim/
     markLetters.ts   marka harflari ma'nosi
     minigames.ts     mini-o'yinlar ma'lumoti (gaz turlari, ko'rik nuqtalari)
     scenarios/       SXX.ts — har bir stsenariy, index.ts (reyestr), catalog.ts (S01–S21 ro'yxati)
-  store/         Zustand: settings (persist), progress (persist), session (o'yin)
+  store/         Zustand: settings (persist), progress (persist), achievements (persist), session (o'yin)
+  lib/           localStorage o'ramasi, ovoz (WebAudio), reyting (leaderboard.ts)
   ui/            sxema, panellar, telefon, hujjatlar, natija, menyu, minigames/ (kechiktirib yuklanadi)
   i18n/uz.ts     barcha interfeys matnlari (o'zbekcha, lotin)
 docs/TEKSHIRUV-RO'YXATI.md   tekshirilishi kerak bo'lgan raqam va qoidalar
@@ -125,7 +126,7 @@ Bajarildi (1–3-bosqichlar):
 - [x] Interaktiv sxema (zoom/pan, pinch), reja, uskuna paneli, dispetcher telefoni, topshiriq kartasi,
       soddalashtirilgan naryad va operativ jurnal, natija va ball; S01–S05 to'liq o'ynaladi
 
-Qoldi:
+Keyingi bosqichlar (4–8):
 - [x] **4-bosqich — hujjatlar**: to'liq naryad-ruxsatnoma (mas'ul shaxslar va guruhlari, brigada, o'chiriladigan
       apparatlar, yerlagichlar, plakatlar, kuchlanish ostidagi qismlar, muddat, dopusk/yakun qaydlari), kommutatsiya
       blankasi (surib-tartiblash, DAG bo'yicha tekshiruv, blanka bo'yicha bajarish), izolyatsiya sinov protokoli,
@@ -144,5 +145,9 @@ Qoldi:
       `store/achievements.ts`, `/yutuqlar`, ochilganda bildirishnoma), WebAudio ovoz effektlari (`lib/sound.ts`, fayllarsiz,
       sozlamadagi «Ovoz» bilan), `/glossariy` sahifasi (qidiruv bilan), 3D transformator (Three.js, oyna ochilganda
       yuklanadi; uskuna kartasi va ensiklopediyadan)
-- [ ] **8-bosqich (ixtiyoriy)**: reyting va hisoblar (Supabase yoki Vercel KV)
+- [x] **8-bosqich — lokal reyting**: `lib/leaderboard.ts` — `Leaderboard` interfeysi va `LocalLeaderboard` (localStorage,
+      testlar bilan); yakunlangan urinish avtomatik yoziladi, natija ekranida o'rin va ism; sozlamalarda o'yinchi ismi;
+      `/reyting` — umumiy (stsenariylar bo'yicha eng yaxshi ballar yig'indisi) va stsenariy bo'yicha, davr (bugun / 7 kun /
+      hammasi) va rejim filtrlari. Server reytingi uchun `SupabaseLeaderboard` shu interfeysni amalga oshirib,
+      `leaderboard` eksportini almashtirishi kifoya
 - [ ] Boshqa tillar (ru/en) — hozir faqat `uz.ts`

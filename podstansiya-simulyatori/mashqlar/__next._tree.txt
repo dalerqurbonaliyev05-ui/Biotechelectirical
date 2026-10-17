@@ -1,5 +1,5 @@
-:HL["/podstansiya-simulyatori/_next/static/chunks/2tr8_x9pekqh8.css","style"]
+:HL["/podstansiya-simulyatori/_next/static/chunks/2bc0btr9pas5u.css","style"]
 :HL["https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600&display=swap","style"]
 2:[["children",{"s":"__PAGE__","h":160}]]
 1:[["children",{"s":"mashqlar","h":96,"c":"$Q2"}]]
-0:{"b":"4vplt94MYnKFRFx2aTHzP","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
+0:{"b":"YDzZ3A_UnViaaBL57tgnb","t":{"t":{"s":"","h":80,"c":"$Q1"}}}

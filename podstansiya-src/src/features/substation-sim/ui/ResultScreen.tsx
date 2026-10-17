@@ -8,6 +8,7 @@ import { uz } from "../i18n/uz";
 import { useSession } from "../store/session";
 import { useSettings } from "../store/settings";
 import { FeedbackCard } from "./FeedbackStack";
+import LeaderboardPlace from "./LeaderboardPlace";
 import { formatDuration } from "./format";
 import Stars from "./Stars";
 import { codeText } from "./text";
@@ -85,6 +86,8 @@ export default function ResultScreen() {
             <dd className="h-display text-2xl font-bold">{sum.errors}</dd>
           </div>
         </dl>
+
+        <LeaderboardPlace />
 
         <div className="mt-5 flex flex-wrap gap-3">
           <button type="button" className="btn-primary" onClick={restart}>

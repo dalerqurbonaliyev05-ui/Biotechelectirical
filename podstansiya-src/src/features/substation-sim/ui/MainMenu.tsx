@@ -15,6 +15,7 @@ const ITEMS = [
   { href: "/mashqlar/", icon: "task", title: uz.menu.minigames, hint: uz.menu.minigamesHint },
   { href: "/ensiklopediya/", icon: "book", title: uz.menu.encyclopedia, hint: uz.menu.encyclopediaHint },
   { href: "/natijalar/", icon: "trophy", title: uz.menu.results, hint: uz.menu.resultsHint },
+  { href: "/reyting/", icon: "trophy", title: uz.menu.leaderboard, hint: uz.menu.leaderboardHint },
   { href: "/yutuqlar/", icon: "star", title: uz.menu.achievements, hint: uz.menu.achievementsHint },
   { href: "/glossariy/", icon: "info", title: uz.menu.glossary, hint: uz.menu.glossaryHint },
   { href: "/sozlamalar/", icon: "settings", title: uz.menu.settings, hint: uz.menu.settingsHint },

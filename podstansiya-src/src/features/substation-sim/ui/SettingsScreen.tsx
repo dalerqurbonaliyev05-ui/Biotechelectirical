@@ -1,5 +1,6 @@
 "use client";
 
+import { DEFAULT_NAME } from "../lib/leaderboard";
 import { useAchievements } from "../store/achievements";
 import { playSound } from "../lib/sound";
 import { useState } from "react";
@@ -88,6 +89,20 @@ export default function SettingsScreen() {
           </section>
 
           <section className="card divide-y divide-line/60 px-5 py-2">
+            <label className="flex flex-wrap items-center justify-between gap-2 py-3">
+              <span>
+                <span className="block font-semibold">{uz.settings.playerName}</span>
+                <span className="block text-xs text-muted">{uz.settings.playerNameHint}</span>
+              </span>
+              <input
+                className="w-full rounded-lg border border-line bg-ink-800 px-3 py-1.5 text-sm sm:w-56"
+                value={s.playerName}
+                maxLength={24}
+                placeholder={DEFAULT_NAME}
+                onChange={(e) => s.setPlayerName(e.target.value)}
+                autoComplete="nickname"
+              />
+            </label>
             <div className="flex items-center justify-between gap-4 py-3">
               <span className="font-semibold">{uz.settings.language}</span>
               <span className="text-right">
