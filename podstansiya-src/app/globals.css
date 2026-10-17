@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+/* Dizayn tizimi: to'q ko'k gradiyent fon, yorqin ko'k aksent, yashil/qizil holat ranglari. */
+@theme {
+  --color-ink-950: #040a18;
+  --color-ink-900: #081430;
+  --color-ink-850: #0b1a3c;
+  --color-ink-800: #0f2148;
+  --color-ink-700: #162c5c;
+  --color-line: #233d74;
+  --color-muted: #94a8d0;
+  --color-text: #e8efff;
+  --color-accent: #2f9bff;
+  --color-accent-strong: #1677e0;
+  --color-ok: #22c55e;
+  --color-danger: #f04444;
+  --color-warn: #f5b301;
+  /* Kuchlanish darajasi ranglari — sxemalardagi keng tarqalgan an'ana (me'yor emas) */
+  --color-v110: #38bdf8;
+  --color-v35: #eab308;
+  --color-v10: #c084fc;
+  --color-dead: #64748b;
+  --color-earth: #84cc16;
+  --font-sans: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Unbounded", "Manrope", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  min-height: 100dvh;
+  color: var(--color-text);
+  background-color: var(--color-ink-950);
+  background-image:
+    radial-gradient(1200px 600px at 10% -10%, #1a3d8a55, transparent 60%),
+    radial-gradient(900px 500px at 110% 10%, #0e5fb033, transparent 60%),
+    linear-gradient(180deg, var(--color-ink-900), var(--color-ink-950));
+  background-attachment: fixed;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 8px;
+  z-index: 100;
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: var(--color-accent);
+  color: #fff;
+}
+.skip-link:focus {
+  left: 12px;
+}
+
+/* Komponent sinflari (Tailwind 4: @utility — boshqa sinflar ichida @apply qilish mumkin) */
+@utility card {
+  @apply rounded-2xl border border-line/70 bg-ink-850/80 shadow-[0_10px_30px_-12px_#000a] backdrop-blur;
+}
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-45;
+}
+@utility btn-primary {
+  @apply btn bg-accent text-white hover:bg-accent-strong;
+}
+@utility btn-ghost {
+  @apply btn border border-line bg-ink-800/60 text-text hover:border-accent/70 hover:bg-ink-700/70;
+}
+@utility btn-danger {
+  @apply btn bg-danger/90 text-white hover:bg-danger;
+}
+@utility chip {
+  @apply inline-flex items-center gap-1 rounded-full border border-line px-2.5 py-0.5 text-xs font-semibold;
+}
+@utility h-display {
+  @apply font-[family-name:var(--font-display)] tracking-tight;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
