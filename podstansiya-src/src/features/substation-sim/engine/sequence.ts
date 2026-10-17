@@ -24,6 +24,10 @@ export function matcherMatches(m: ActionMatcher, a: Action): boolean {
       return a.type === "admit";
     case "finishWork":
       return a.type === "finishWork";
+    case "blankSubmit":
+      return a.type === "blankSubmit";
+    case "protocol":
+      return a.type === "protocol";
     case "journal":
       return a.type === "journal";
     case "inspect":

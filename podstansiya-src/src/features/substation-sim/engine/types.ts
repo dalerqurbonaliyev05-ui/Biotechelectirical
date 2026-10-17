@@ -82,14 +82,49 @@ export interface Topology {
 
 export type PosterKind = "doNotSwitch" | "workHere" | "earthed" | "stopVoltage";
 
+/** Elektr xavfsizligi bo'yicha guruh (II–V). */
+export type SafetyGroup = 2 | 3 | 4 | 5;
+
+export interface PermitPerson {
+  name: string;
+  group: SafetyGroup;
+}
+
+/** Naryad-ruxsatnoma (to'liq). Talaba to'ldiradi, engine/permit.ts tekshiradi. */
 export interface PermitForm {
+  number: string;
   workName: string;
-  leader: string;
-  brigadeSize: number;
-  /** Kuchlanish ostida qoladigan qismlar (talaba tanlagan uskuna id'lari). */
+  /** Ish joyi (uskuna id, masalan "T-1") */
+  place: string;
+  /** "HH:MM" */
+  startTime: string;
+  endTime: string;
+  /** Naryad beruvchi */
+  issuer: PermitPerson;
+  /** Ruxsat beruvchi (dopusk beradigan operativ xodim) */
+  admitter: PermitPerson;
+  /** Ishlar rahbari */
+  leader: PermitPerson;
+  /** Ishlarni bajaruvchi (brigada boshlig'i) */
+  producer: PermitPerson;
+  /** Brigada a'zolari (bajaruvchidan tashqari) */
+  members: PermitPerson[];
+  /** O'chiriladigan (ochiq turishi kerak) apparatlar */
+  switchedOff: string[];
+  /** Ulanadigan yerlagichlar */
+  earthing: string[];
+  /** "Ulamang" plakati osiladigan apparatlar */
+  posters: string[];
+  /** Kuchlanish ostida qoladigan qismlar */
   liveParts: string[];
-  /** Xavfsizlik choralari (talaba belgilagan). */
-  measures: Array<"switchedOff" | "earthed" | "posters" | "fenced" | "verifiedDead">;
+}
+
+/** Izolyatsiya o'lchovi protokoli (sinov dalolatnomasi). */
+export interface InsulationProtocolForm {
+  kind: "insulation";
+  tempC: number;
+  rows: Array<{ winding: string; r15: number; r60: number }>;
+  conclusion: "fit" | "unfit";
 }
 
 export interface JournalEntry {
@@ -136,6 +171,11 @@ export interface SimState {
   agingHours: Record<string, number>;
   sourcesAvailable: Record<string, boolean>;
   permit: PermitForm | null;
+  /** Kundalik dopusk va ish yakuni qaydlari */
+  permitLog: Array<{ kind: "admit" | "finish"; t: number }>;
+  /** Kommutatsiya blankasi: talaba tuzgan tartib (qadam id'lari) */
+  blank: { order: string[]; approved: boolean } | null;
+  protocols: InsulationProtocolForm[];
   admitted: boolean;
   workFinished: boolean;
   journal: JournalEntry[];
@@ -169,6 +209,8 @@ export type Action =
   | { type: "permitIssue"; permit: PermitForm }
   | { type: "admit" }
   | { type: "finishWork" }
+  | { type: "blankSubmit"; order: string[] }
+  | { type: "protocol"; form: InsulationProtocolForm }
   | { type: "journal"; entry: JournalEntry }
   | { type: "inspect"; targetId: string }
   | { type: "tap"; transformerId: string; dir: 1 | -1 }

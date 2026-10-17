@@ -11,12 +11,13 @@ solishtirilishi kerak. Har bir qiymat kodda faqat `data/` papkasida saqlanadi va
 
 Qiymatni o'zgartirish: tegishli `data/*.ts` faylida `value` ni tuzating, `note` ga manbani yozing
 (masalan: "PTE 5.3.x, 2025-yil tahriri"), tekshirilgan bo'lsa `verify: false` qiling va shu jadvalni yangilang.
-`npm test` jadval va `data/norms.ts` mosligini tekshiradi (har bir `NORMS.*` kaliti shu faylda bo'lishi shart).
+1–3-bo'lim jadvallari avtomatik: `npm run docs:tekshiruv` ularni `data/` fayllaridan qayta yozadi ("Holat" ustunidagi belgilaringiz saqlanadi). `npm test` har bir kalit shu faylda borligini tekshiradi.
 
 Holat ustuni — o'qituvchi bilan tekshirgach belgilash uchun: ☐ tekshirilmagan · ☑ tasdiqlandi · ✎ tuzatildi.
 
 ## 1. Raqamli me'yorlar va model parametrlari (`src/features/substation-sim/data/norms.ts`)
 
+<!-- AUTO:NORMS:START -->
 | Kalit | Qiymat | Birlik | Tur | verify | Izoh / manba | Qayerda ishlatiladi | Holat |
 |---|---|---|---|---|---|---|---|
 | `NORMS.fanAutoOnOilC` | 55 | °C | norm | ✅ | D sovutishli transformatorda ventilyatorlar avtomatik yoqiladigan moy harorati (yo'riqnomalarda tipik qiymat) | `engine/thermal.ts` | ☐ |
@@ -39,8 +40,17 @@ Holat ustuni — o'qituvchi bilan tekshirgach belgilash uchun: ☐ tekshirilmaga
 | `NORMS.voltageDeviationPct` | 10 | % | norm | ✅ | Iste'molchi qisqichlarida ruxsat etilgan kuchlanish og'ishi (O'z DSt / GOST 32144 tipidagi standartlar) — amaldagi standart bo'yicha tekshirilsin | — | ☐ |
 | `NORMS.earthFaultMaxDurationMin` | 120 | daq | norm | ✅ | Izolyatsiyalangan neytralli 6–35 kV tarmoqda bir fazali yerga tutashuv bilan ishlash muddati. Manbalarda va mahalliy yo'riqnomalarda turlicha — ALBATTA tekshirilsin | `engine/faults.ts` | ☐ |
 | `NORMS.apvSuccessProbability` | 0.7 | ehtimollik | model | ✅ | APV muvaffaqiyatli bo'lish ehtimoli — o'yin modeli parametri (statistik ma'lumot emas) | `engine/faults.ts` | ☐ |
+| `NORMS.permitIssuerMinGroup` | 5 | guruh | norm | ✅ | Naryad beruvchining elektr xavfsizligi guruhi — mehnat muhofazasi qoidalari bo'yicha tekshirilsin | `engine/permit.ts` | ☐ |
+| `NORMS.permitAdmitterMinGroup` | 4 | guruh | norm | ✅ | Ruxsat beruvchi (operativ xodim) guruhi, 1000 V dan yuqori — tekshirilsin | `engine/permit.ts` | ☐ |
+| `NORMS.permitLeaderMinGroup` | 5 | guruh | norm | ✅ | Ishlar rahbari guruhi — tekshirilsin | `engine/permit.ts` | ☐ |
+| `NORMS.permitProducerMinGroup` | 4 | guruh | norm | ✅ | Ishlarni bajaruvchi guruhi, 1000 V dan yuqori — tekshirilsin | `engine/permit.ts` | ☐ |
+| `NORMS.permitMemberMinGroup` | 3 | guruh | norm | ✅ | Brigada a'zosining eng past guruhi (simulyatorda; qoidalarda II guruhli a'zo ham ruxsat etiladigan holatlar bor) — tekshirilsin | `engine/permit.ts` | ☐ |
+| `NORMS.permitBrigadeMinSize` | 2 | kishi | norm | ✅ | Brigada tarkibi: bajaruvchi bilan birga kamida — tekshirilsin | `engine/permit.ts` | ☐ |
+| `NORMS.absorptionMin` | 1.3 | R60/R15 | norm | ✅ | Absorbsiya koeffitsientining eng kichik qiymati (moyli transformator o'ramlari, ~10–30 °C) — sinov me'yorlari bo'yicha tekshirilsin | `engine/protocol.ts`, `ui/docs/ProtocolPanel.tsx` | ☐ |
+| `NORMS.insulationFactoryRatioMin` | 0.7 | × zavod R60 | norm | ✅ | R60 zavod (pasport) qiymatining kamida shu ulushi bo'lishi (bir xil haroratga keltirilgan) — sinov me'yorlari bo'yicha tekshirilsin | `engine/protocol.ts`, `ui/docs/ProtocolPanel.tsx` | ☐ |
 | `NORMS.fireServiceNumber` | 101 | tel. | norm | ✅ | O'zbekistonda yong'in xizmati raqami | — | ☐ |
-| `NORMS.actionDurationSec` | switch: 60, verifyDead: 120, checkPosition: 60, poster: 60, permitIssue: 600, admit: 300, finishWork: 300, journal: 120, report: 60, readback: 30, inspect: 30, tap: 0, fans: 30 | s | model | — | Har amal simulyatsiya soatini qancha oldinga suradi — o'yin modeli | `engine/simulator.ts` | ☐ |
+| `NORMS.actionDurationSec` | switch: 60, verifyDead: 120, checkPosition: 60, poster: 60, permitIssue: 600, admit: 300, finishWork: 300, journal: 120, report: 60, readback: 30, inspect: 30, tap: 0, fans: 30, blankSubmit: 300, protocol: 900 | s | model | — | Har amal simulyatsiya soatini qancha oldinga suradi — o'yin modeli | `engine/simulator.ts` | ☐ |
+| `NORMS.protocolValueTolerancePct` | 2 | % | model | — | Protokolga yozilgan qiymat va asbob ko'rsatkichi farqiga ruxsat — o'yin qoidasi | `engine/protocol.ts` | ☐ |
 | `NORMS.journalTimeToleranceMin` | 10 | daq | model | — | Jurnal yozuvidagi vaqt va amal vaqti farqiga ruxsat — o'yin qoidasi | `engine/journal.ts` | ☐ |
 | `THERMAL.M.R` | 6 | — | model | ✅ | IEC 60076-7 (moyli transformatorlar yuklanish qo'llanmasi) tipik qiymatlariga yaqin; aniq transformator pasporti bo'yicha tekshirilsin | `engine/thermal.ts` | ☐ |
 | `THERMAL.M.x` | 0.8 | — | model | ✅ | IEC 60076-7 (moyli transformatorlar yuklanish qo'llanmasi) tipik qiymatlariga yaqin; aniq transformator pasporti bo'yicha tekshirilsin | `engine/thermal.ts` | ☐ |
@@ -74,9 +84,11 @@ Holat ustuni — o'qituvchi bilan tekshirgach belgilash uchun: ☐ tekshirilmaga
 | `THERMAL.Ts.tauOilMin` | 90 | daq | model | ✅ | IEC 60076-7 (moyli transformatorlar yuklanish qo'llanmasi) tipik qiymatlariga yaqin; aniq transformator pasporti bo'yicha tekshirilsin | `engine/thermal.ts` | ☐ |
 | `THERMAL.Ts.topOilMaxC` | 70 | °C | norm | ✅ | Transformatorlarni ekspluatatsiya qilish yo'riqnomalarida (masalan, RD 34.46.501) keltirilgan yuqori qatlam moy harorati chegarasi (Ts — sovutgichga kirishdagi moy) | `engine/thermal.ts` | ☐ |
 | `THERMAL.Ts.topOilAlarmC` | 65 | °C | model | ✅ | Signal sozlamasi — o'quv uchun tanlangan | `engine/thermal.ts` | ☐ |
+<!-- AUTO:NORMS:END -->
 
 ## 2. Transformator pasport ma'lumotlari (`data/transformers.ts`)
 
+<!-- AUTO:TRANSFORMERS:START -->
 | Kalit | Qiymat | Birlik | verify | Izoh | Holat |
 |---|---|---|---|---|---|
 | `TDTN-25000/110.ratedMva` | 25 | MVA | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
@@ -90,13 +102,16 @@ Holat ustuni — o'qituvchi bilan tekshirgach belgilash uchun: ☐ tekshirilmaga
 | `TDTN-25000/110.noLoadCurrentPct` | 0.7 | % | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
 | `TDTN-25000/110.cooling` | D | — | ✅ | Ma'lumotnoma/katalogdagi tipik qiymat — aniq transformator pasporti bo'yicha tekshirilsin | ☐ |
 | `TDTN-25000/110.rpn` | winding: hv, steps: 9, stepPct: 1.78 | — | ✅ | 110 kV o'ramda RPN ±9×1,78% (NORMS.rpn110*) | ☐ |
+<!-- AUTO:TRANSFORMERS:END -->
 
 ## 3. Yuklama grafiklari va ob-havo (`data/loadCurves.ts`)
 
+<!-- AUTO:CURVES:START -->
 | Kalit | Qiymat | Birlik | verify | Izoh | Holat |
 |---|---|---|---|---|---|
 | `LOAD_CURVES.winter` | [0.55, 0.52, 0.5, 0.5, 0.52, 0.6, 0.75, 0.88, 0.92, 0.9, 0.86, 0.84, 0.82, 0.8, 0.8, 0.82, 0.88, 0.97, 1, 0.98, 0.92, 0.82, 0.7, 0.6] | × Pmax | ✅ | Qishki sutkalik grafik — tipik shakl (namuna) | ☐ |
 | `LOAD_CURVES.summer` | [0.6, 0.56, 0.53, 0.52, 0.53, 0.58, 0.66, 0.74, 0.8, 0.86, 0.92, 0.97, 1, 1, 0.99, 0.97, 0.94, 0.9, 0.88, 0.9, 0.88, 0.8, 0.72, 0.65] | × Pmax | ✅ | Yozgi sutkalik grafik — tipik shakl (namuna) | ☐ |
+<!-- AUTO:CURVES:END -->
 
 Ob-havo ehtimollari (`WEATHER_WEIGHTS`) — o'yin modeli, me'yor emas.
 
@@ -116,7 +131,12 @@ Ob-havo ehtimollari (`WEATHER_WEIGHTS`) — o'yin modeli, me'yor emas.
 | `switchDuringWork` / `removeEarthDuringWork` | critical | Brigada ish joyida (dopuskdan keyin, naryad yopilmagan) | `engine/interlocks.ts` | ☐ |
 | `switchPostered` | violation | "Ulamang" plakati osilgan apparatni ulash | `engine/interlocks.ts` | ☐ |
 | `switchWithoutOrder` | violation | Dispetcher buyrug'i qabul qilinmagan (favqulodda stsenariylarda `orderRequired: false`) | `engine/interlocks.ts` | ☐ |
-| `admitWithoutPermit`, `admitNotPrepared`, `permitIncomplete`, `permitLivePartsWrong` | violation | Naryad/dopusk talablari (soddalashtirilgan: brigada ≥ 2 kishi, 4 ta asosiy chora) | `engine/simulator.ts` | ☐ |
+| `permitIncomplete`, `permitGroupLow`, `permitBrigadeSmall`, `permitTimeInvalid` | violation | Naryad: raqam, ish nomi/joyi, 4 mas'ul shaxs, guruhlar (`NORMS.permit*MinGroup`), brigada soni, muddat. **Rollarni birlashtirish qoidalari (masalan ruxsat beruvchi = bajaruvchi) hozircha tekshirilmaydi** | `engine/permit.ts` | ☐ |
+| `permitSwitchingWrong`, `permitEarthingWrong`, `permitPostersMissing`, `permitLivePartsWrong` | violation | Naryaddagi o'chiriladigan apparatlar, yerlagichlar, plakatlar va kuchlanish ostidagi qismlar stsenariy talabiga mosligi | `engine/permit.ts` | ☐ |
+| `admitWithoutPermit`, `admitNotPrepared`, `admitOutsideTime` | violation | Dopusk: naryad bor, undagi apparatlar ochiq, yerlagichlar ulangan, plakatlar osilgan, vaqt naryad muddatida | `engine/permit.ts`, `engine/simulator.ts` | ☐ |
+| `blankExtra`, `blankMissing`, `blankOrder` | violation | Kommutatsiya blankasi: ortiqcha/yetishmagan amal, qadamlar DAG'iga zid tartib | `engine/blank.ts` | ☐ |
+| `blankNotReady`, `blankDeviation` | violation | Blankasiz kommutatsiya (blanka talab qilinsa) yoki blankadagi navbatdan chetga chiqish | `engine/simulator.ts` | ☐ |
+| `protocolIncomplete`, `protocolValues`, `protocolConclusion` | violation | Sinov protokoli: barcha o'ramlar, asbob ko'rsatkichiga mos qiymatlar (`protocolValueTolerancePct`), xulosa `absorptionMin` va `insulationFactoryRatioMin` bo'yicha | `engine/protocol.ts` | ☐ |
 | `reportEarly`, `readbackWrong`, `wrongOrder`, `extraneous` | violation | Tashkiliy qoidalar | `engine/simulator.ts` | ☐ |
 
 Jarima ballari (`PENALTY`), yulduz chegaralari (`STAR_THRESHOLDS`) va rejimlar (`MODE_RULES`) — o'yin qoidalari, me'yor emas.
@@ -126,7 +146,7 @@ Jarima ballari (`PENALTY`), yulduz chegaralari (`STAR_THRESHOLDS`) va rejimlar (
 | Jarayon | Simulyatordagi tartib | Holat |
 |---|---|---|
 | Ta'mirga chiqarish | Buyruq va qaytarib o'qish → yuklamani SV orqali zaxiraga o'tkazish → o'chirgichlar: avval 10 va 35 kV (o'zaro ixtiyoriy), keyin 110 kV → (tavsiya) o'chirgich holatini joyida tekshirish → ajratkichlar: har tomonda avval transformator tomoni, keyin shina tomoni → shina tomonidagi ajratkich yuritmalariga "Ulamang — odamlar ishlamoqda" → barcha tomonlar uzilgach kuchlanish yo'qligini tekshirish → har tomondan yerlash → "Shu yerda ishlang" → naryad, dopusk → jurnal → hisobot | ☐ |
-| Ishga tushirish | Brigadani olib chiqish, naryadni yopish → plakat va yerlagichlarni olish → ajratkichlar: avval shina tomoni, keyin transformator tomoni → 110 kV o'chirgichi (salt yurish) → 35 va 10 kV o'chirgichlari → SV ni o'chirish → jurnal → hisobot. Izolyatsiyani o'lchash (kerak bo'lsa) — 6-bosqichdagi megger mini-o'yinida | ☐ |
+| Ishga tushirish | Brigadani olib chiqish, naryadni yopish → plakat va yerlagichlarni olish → ajratkichlar: avval shina tomoni, keyin transformator tomoni → 110 kV o'chirgichi (salt yurish) → 35 va 10 kV o'chirgichlari → SV ni o'chirish → jurnal → hisobot. S03 da ishga tushirishdan oldin izolyatsiya o'lchovi protokoli majburiy (110 kV o'chirgichidan oldin); megger mini-o'yini — 6-bosqichda | ☐ |
 | 10 kV fider (KRU) | O'chirgich → aravacha (QS-…B). Ulash teskari | ☐ |
 | 35 kV liniya | O'chirgich → liniya ajratkichi (L) → shina ajratkichi (B) | ☐ |
 | RPN | Pog'ona bir-bir; keyingi buyruq `rpnStepTimeSec` dan keyin; K > `rpnBlockLoadFactor` da blokirovka. Pog'ona raqamlash: `tap > 0` — YK o'ramida o'ramlar ko'p (10 kV pasayadi). **Amalda raqamlash ishlab chiqaruvchiga qarab farq qiladi** | ☐ |
@@ -147,7 +167,9 @@ Jarima ballari (`PENALTY`), yulduz chegaralari (`STAR_THRESHOLDS`) va rejimlar (
 - 10 kV KRU da ajratkich vazifasini o'chirgich aravachasi bajaradi (sxemada `QS-F10-xB`, `QS-Tn-10B/T`).
 - Kuchlanish yo'qligini tekshirish butun galvanik seksiya uchun hisoblanadi (amalda — har bir fazada, ish joyida).
 - Plakatlar soddalashtirilgan: shina tomonidagi ajratkich yuritmalariga "Ulamang" va transformatorga "Shu yerda ishlang". Amalda o'chirgich boshqaruv kalitlariga ham plakat osiladi.
-- Naryad: brigada kamida 2 kishi; kuchlanish ostida qoladigan qismlar sifatida ish joyiga yaqin shinalar talab qilinadi.
+- Naryad: brigada kamida 2 kishi; kuchlanish ostida qoladigan qismlar sifatida ish joyiga yaqin shinalar talab qilinadi. Rollarni birlashtirish, kuzatuvchi (nablyudayushchiy), kundalik dopusk/yakun imzolari soddalashtirilgan.
+- Kommutatsiya blankasiga kommutatsiya, kuchlanishni tekshirish va plakat amallari kiradi; "joyida tekshirish" (tavsiya) qadami blankaga kirmaydi.
+- S03 dagi megger ko'rsatkichlari va zavod qiymatlari — shartli o'quv ma'lumoti (me'yor emas).
 - S05 dagi 10,3–10,6 kV oralig'i — dispetcher buyrug'idagi shartli qiymat (me'yor emas); 110 kV manba kuchlanishi 106 kV — stsenariy sharti.
 - Kuchlanish pasayishi modeli: `U2 = U1·U2nom/U1tap·(1 − K·ΔU%)` — soddalashtirilgan.
 - Issiqlik modeli: o'ram vaqt doimiysi va k11, k21, k22 koeffitsientlari e'tiborsiz (IEC 60076-7 ning soddalashtirilgan ko'rinishi).

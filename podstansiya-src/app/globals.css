@@ -94,3 +94,27 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Hujjatni chop etish: faqat .print-area ko'rinadi, oq fon va qora matn */
+.print-area {
+  display: none;
+}
+@media print {
+  body.printing > *:not(.print-area) {
+    display: none !important;
+  }
+  body.printing {
+    background: #fff !important;
+  }
+  body.printing .print-area {
+    display: block;
+    padding: 12mm;
+    color: #000;
+    background: #fff;
+    font-family: var(--font-sans);
+  }
+  body.printing .print-area * {
+    color: #000 !important;
+    border-color: #000 !important;
+  }
+}

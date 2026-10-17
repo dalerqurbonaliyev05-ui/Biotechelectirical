@@ -10,7 +10,8 @@
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "deploy": "npm run build && node scripts/deploy.mjs"
+    "deploy": "npm run build && node scripts/deploy.mjs",
+    "docs:tekshiruv": "TEKSHIRUV_WRITE=1 vitest run src/features/substation-sim/data/tekshiruv.test.ts"
   },
   "dependencies": {
     "framer-motion": "12.43.0",

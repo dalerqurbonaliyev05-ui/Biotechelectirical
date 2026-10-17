@@ -2,6 +2,7 @@
 import { TOPOLOGY } from "../data/equipment";
 import type { ScenarioDef } from "./scenario";
 import { formatClock } from "./journal";
+import { matchStep } from "./sequence";
 import { applyAction, createSession, opsSinceLastJournal, type SimContext } from "./simulator";
 import type { Action, ActionOutcome, GameMode, SimState } from "./types";
 
@@ -48,4 +49,26 @@ export function journalNow(order = "Dispetcher buyrug'i"): ActionOrFn {
       entry: { time: formatClock(t), from: "Dispetcher", orderText: order, doneText: ops.map((o) => o.label).join(", "), executor: "Talaba" },
     };
   };
+}
+
+/**
+ * Yo'lga (index joyiga) blanka topshirish amalini qo'shadi: blanka tartibi yo'ldagi keyingi
+ * amallarning qaysi qadamlarga mos kelishidan hisoblanadi — ya'ni talaba aynan shu tartibni rejalashtirgan.
+ */
+export function withBlank(path: ActionOrFn[], index: number): ActionOrFn[] {
+  const blankAction: ActionOrFn = (s, ctx) => {
+    const spec = ctx.scenario.blank;
+    const done = [...s.doneSteps];
+    const order: string[] = [];
+    for (const a of path.slice(index)) {
+      if (typeof a === "function") continue;
+      const m = matchStep(ctx.scenario.steps, done, a);
+      if (m.step) {
+        done.push(m.step.id);
+        if (spec?.stepIds.includes(m.step.id)) order.push(m.step.id);
+      }
+    }
+    return { type: "blankSubmit", order };
+  };
+  return [...path.slice(0, index), blankAction, ...path.slice(index)];
 }
