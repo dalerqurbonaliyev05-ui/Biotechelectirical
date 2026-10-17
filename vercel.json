@@ -134,6 +134,11 @@
       "source": "/reversiv-yuritma",
       "destination": "/reversiv-yuritma/",
       "permanent": true
+    },
+    {
+      "source": "/uy-elektr-shiti",
+      "destination": "/uy-elektr-shiti/",
+      "permanent": true
     }
   ],
   "rewrites": [

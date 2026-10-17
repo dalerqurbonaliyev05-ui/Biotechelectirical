@@ -293,6 +293,24 @@ ul, ol { list-style: none; }
 @keyframes mrA { 0% { fill: #ff4a3a; } 50% { fill: #3a3f44; } }
 @keyframes mrB { 0% { fill: #3a3f44; } 50% { fill: #ff4a3a; } }
 @media (prefers-reduced-motion: reduce) { .mr-w, .mr-car, .mr-led.a, .mr-led.b { animation: none; } }
+.t11 { grid-column: span 4; color: #fff; background: linear-gradient(120deg, #3a0f1c 0%, #6a1a33 55%, #a8304f 100%); }
+.t11 .tile-body { max-width: 46%; }
+.mini-uy { position: absolute; right: 40px; top: 14px; bottom: 14px; height: calc(100% - 28px); width: auto; max-width: 50%; }
+.mu-meter { fill: #24272b; stroke: #140509; stroke-width: 2; }
+.mu-face { fill: #f2f1ea; }
+.mu-disc { fill: #c9ced3; }
+.mu-mark { fill: #c41e1e; animation: mudisc 2.4s linear infinite; }
+.mu-mcb { fill: #eef0f1; stroke: #140509; stroke-width: 2; }
+.mu-kv { fill: #e3e6e8; stroke: #140509; stroke-width: 2; }
+.mu-num { fill: #ff3a26; font: 700 9px "IBM Plex Mono", monospace; }
+.mu-t { fill: #f2c200; }
+.mu-w { fill: none; stroke: #ffb020; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 5 7; animation: flow 1.1s linear infinite; }
+.mu-sock { fill: #f4f4f1; stroke: #140509; stroke-width: 2; }
+.mu-bulb { fill: #ffe7a3; animation: mubulb 3s ease-in-out infinite; }
+.mu-cap { fill: #c9ced3; }
+@keyframes mudisc { from { transform: translateX(0); } to { transform: translateX(28px); } }
+@keyframes mubulb { 0%, 100% { fill: #ffe7a3; } 50% { fill: #fff6d6; } }
+@media (prefers-reduced-motion: reduce) { .mu-mark, .mu-w, .mu-bulb { animation: none; } }
 .mb-wire { fill: none; stroke: #ffb020; stroke-width: 3.2; stroke-linecap: round; stroke-dasharray: 5 7; animation: flow 1.1s linear infinite; }
 @keyframes mbblink { 50% { opacity: .15; } }
 @media (prefers-reduced-motion: reduce) { .mb-led, .mb-wire { animation: none; } }
@@ -403,7 +421,7 @@ ul, ol { list-style: none; }
     .bento { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 200px; }
     .t1 { grid-column: span 2; grid-row: span 2; }
     .t2, .t3 { grid-column: span 1; }
-    .t4, .t5, .t6, .t7, .t8, .t9, .t10 { grid-column: span 2; }
+    .t4, .t5, .t6, .t7, .t8, .t9, .t10, .t11 { grid-column: span 2; }
     .skills-grid { grid-template-columns: 1fr; }
     .skill-category h3 { min-height: 0; }
     .fb { display: none; }
@@ -475,8 +493,10 @@ ul, ol { list-style: none; }
     .hero-waves { height: 130px; }
     .marquee-track { font-size: .85rem; gap: 20px; }
     .bento { grid-template-columns: 1fr; grid-auto-rows: auto; }
-    .t1, .t2, .t3, .t4, .t5, .t6, .t7, .t8, .t9, .t10 { grid-column: span 1; grid-row: span 1; min-height: 200px; }
-    .t7, .t8, .t9, .t10 { min-height: 350px; }
+    .t1, .t2, .t3, .t4, .t5, .t6, .t7, .t8, .t9, .t10, .t11 { grid-column: span 1; grid-row: span 1; min-height: 200px; }
+    .t7, .t8, .t9, .t10, .t11 { min-height: 350px; }
+    .t11 .tile-body { max-width: none; }
+    .mini-uy { left: 50%; right: auto; transform: translateX(-50%); top: 12px; bottom: auto; height: 112px; max-width: none; }
     .t10 .tile-body { max-width: none; }
     .mini-rev { left: 50%; right: auto; transform: translateX(-50%); top: 12px; bottom: auto; height: 112px; max-width: none; }
     .t9 .tile-body { max-width: none; }

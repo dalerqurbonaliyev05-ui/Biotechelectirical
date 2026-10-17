@@ -1,0 +1,2084 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Uy elektr shiti 3D | EnergyVibe</title>
+<meta name="description" content="Uy elektr shitini 3D stendda o‘zingiz yig‘ing: hisoblagich, kirish avtomati, kuchlanish relesi, difavtomatlar, rozetkalar, kalit va lampa. So‘ng maishiy asboblar bilan himoyalar qanday ishlashini sinang.">
+<link rel="icon" type="image/png" href="/rasmlar1/rasm5/rasm4.png">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans+Condensed:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+<style>
+/* Layout: sticky status bar over a two-column workspace. Left: a real-scale 3D lab stand (WebGL) with orbit, zoom and a fullscreen mode. Right: progress, controls, checklist. Stacks on phones. */
+:root{
+  --bg:#E4E9ED; --surface:#F3F6F8; --ink:#15222D; --ink-2:#51626F; --line:#C5CED6;
+  --accent:#E39B00; --accent-ink:#1B1400;
+    --ok:#1B7F46; --bad:#C62828;
+  --f-ui:'IBM Plex Sans Condensed','Arial Narrow',system-ui,sans-serif;
+  --f-mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F161D; --surface:#17212A; --ink:#E7EDF2; --ink-2:#9AABB9; --line:#2B3944;
+    --accent:#F2B21B; --accent-ink:#1B1400;
+    --wire-l:#F0584B; --wire-n:#4C97F0; --wire-pe:#3DBE6A;
+    --ok:#4CC585; --bad:#FF6B6B;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F161D; --surface:#17212A; --ink:#E7EDF2; --ink-2:#9AABB9; --line:#2B3944;
+  --accent:#F2B21B; --accent-ink:#1B1400;
+  --wire-l:#F0584B; --wire-n:#4C97F0; --wire-pe:#3DBE6A;
+  --ok:#4CC585; --bad:#FF6B6B;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-ui);font-size:15px;line-height:1.4;padding-inline:16px;padding-block:22px 48px}
+.wrap{max-width:1100px;margin-inline:auto;display:flex;flex-direction:column;gap:14px}
+.head{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between}
+h1{margin:0;font-weight:700;font-size:clamp(26px,5vw,38px);letter-spacing:.03em;text-transform:uppercase;line-height:1.05;text-wrap:balance}
+.sub{margin:6px 0 0;color:var(--ink-2);max-width:52ch}
+.seg{display:inline-flex;border:1.5px solid var(--ink);border-radius:3px;overflow:hidden}
+.seg button{font:inherit;font-weight:600;padding:8px 16px;background:transparent;color:var(--ink);border:0;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--surface);border:1px solid var(--line);border-radius:4px;box-shadow:0 8px 16px -12px rgba(0,0,0,.45)}
+.dot{flex:none;width:10px;height:10px;border-radius:50%;background:var(--ink-2)}
+.dot.ok{background:var(--ok)}
+.dot.bad{background:var(--bad)}
+#status{margin:0;flex:1;min-width:0;font-size:15px;font-weight:500}
+.btn{font:inherit;font-weight:600;font-size:14px;padding:8px 14px;border:1.5px solid var(--ink);border-radius:3px;background:transparent;color:var(--ink);cursor:pointer}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);flex:none}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+
+.main{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:18px;align-items:start}
+.board{margin:0;min-width:0}
+.stage{position:relative;height:clamp(540px,86vh,900px);background:#10161b;border:1px solid var(--line);border-radius:4px;overflow:hidden;touch-action:pan-y}
+.stage canvas{position:absolute;left:0;top:0;width:100%;height:100%;display:block;touch-action:pan-y;outline:none}
+.stage.full{position:fixed;inset:0;z-index:60;height:auto;border:0;border-radius:0}
+.stage.full canvas{touch-action:none}
+#tags{position:absolute;left:0;top:0;right:0;bottom:0;pointer-events:none;overflow:hidden}
+.tag{position:absolute;left:0;top:0;white-space:nowrap;font-size:12px;font-weight:600;line-height:1.2;padding:3px 8px;background:rgba(10,15,19,.8);color:#E7EDF2;border:1px solid rgba(255,255,255,.2);border-radius:3px;will-change:transform}
+.ctrls{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:6px;z-index:3}
+.cbtn{width:38px;height:38px;display:grid;place-items:center;font:inherit;font-weight:700;font-size:18px;line-height:1;color:#E7EDF2;background:rgba(10,15,19,.8);border:1px solid rgba(255,255,255,.28);border-radius:3px;cursor:pointer}
+.cbtn.wide{width:auto;padding-inline:12px;font-size:14px;font-weight:600}
+.cbtn[aria-pressed="false"]{opacity:.6}
+.cbtn:disabled{opacity:.4;cursor:not-allowed}
+.cbtn:focus-visible{outline:2px solid #F2B21B;outline-offset:2px}
+.fsbar{display:none}
+.stage.full .fsbar{display:flex;position:absolute;left:0;right:0;top:0;z-index:4;align-items:center;gap:8px;padding:calc(env(safe-area-inset-top,0px) + 8px) 10px 8px;background:rgba(10,15,19,.92);color:#E7EDF2}
+.fsbar p{margin:0;flex:1;min-width:0;font-size:14px;font-weight:500}
+.fsbar p.ok{color:#7BE3A5}
+.fsbar p.bad{color:#FF8A80}
+.stage.full .ctrls{top:calc(env(safe-area-inset-top,0px) + 74px)}
+.loading{position:absolute;left:0;right:0;top:50%;margin:0;text-align:center;color:#9AABB9;font-size:14px}
+.how{margin:8px 2px 0;font-size:13px;color:var(--ink-2)}
+.panel{min-width:0;display:flex;flex-direction:column;gap:16px}
+.prog .pn{font-family:var(--f-mono);font-weight:500;font-size:30px;line-height:1;font-variant-numeric:tabular-nums}
+.prog .pl{font-size:13px;color:var(--ink-2);margin-top:4px}
+.track{height:6px;background:var(--line);margin-top:8px}
+.track i{display:block;height:100%;width:0;background:var(--ok);transition:width .35s ease}
+.acts{display:flex;flex-wrap:wrap;gap:8px}
+.steps{list-style:none;margin:0;padding:0}
+.steps li{display:grid;grid-template-columns:18px minmax(0,1fr) auto;gap:10px;align-items:start;padding:9px 0;border-top:1px solid var(--line);font-size:14px}
+.steps li:last-child{border-bottom:1px solid var(--line)}
+.mk{width:16px;height:16px;margin-top:1px;border:2px solid var(--ink-2);position:relative}
+.part .mk{background:linear-gradient(to top,var(--accent) 50%,transparent 50%);border-color:var(--accent)}
+.done .mk{background:var(--ok);border-color:var(--ok)}
+.done .mk::after{content:"";position:absolute;left:3px;top:0;width:4px;height:8px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+.done .tx{color:var(--ink-2)}
+.ct{font-family:var(--f-mono);font-size:12px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.exam p{margin:0 0 10px;font-size:14px}
+.report{margin:0;padding-left:18px;font-size:14px;display:flex;flex-direction:column;gap:8px}
+.lg-t{margin:0 0 6px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);font-weight:600}
+.legend{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:14px}
+.legend li{display:flex;align-items:center;gap:10px}
+.sw{flex:none;width:20px;height:20px;border-radius:50%;border:4px solid}
+.sw.l{border-color:var(--wire-l)}
+.sw.n{border-color:var(--wire-n)}
+.sw.pe{border-color:var(--wire-pe)}
+
+.faults{border:1px solid var(--line);background:var(--surface);border-radius:4px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.faults[hidden]{display:none}
+.faults .lg-t{margin:0}
+.sel{font:inherit;font-size:14px;font-weight:500;padding:8px 10px;border:1.5px solid var(--ink);border-radius:3px;background:var(--bg);color:var(--ink);width:100%}
+.fnote{margin:0;font-size:13px;color:var(--ink-2)}
+.snd{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2)}
+@media (max-width:860px){
+  .main{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:520px){
+  body{padding-block:16px 40px}
+  #status{font-size:14px}
+  .btn.pri{padding-inline:10px}
+  .stage{height:clamp(520px,80vh,760px)}
+  .tag{font-size:11px;padding:2px 6px}
+}
+@media (prefers-reduced-motion: reduce){
+  .track i{transition:none}
+}
+
+.sw{flex:none;width:18px;height:18px;border-radius:50%;border:5px solid var(--c,#999);background:transparent}
+.sw.pe{border-color:#2E9E4F;border-top-color:#E3B800;border-bottom-color:#E3B800}
+.legend{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;font-size:13px}
+.legend li{display:flex;align-items:center;gap:8px}
+.ctl{border:1px solid var(--line);background:var(--surface);border-radius:4px;padding:12px;display:flex;flex-direction:column;gap:12px}
+.ctl[hidden]{display:none}
+.ctl .lg-t{margin:0}
+.runb{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.big{font:inherit;font-weight:700;font-size:16px;letter-spacing:.04em;padding:14px 10px;border:2px solid var(--ink);border-radius:4px;cursor:pointer;color:#fff;user-select:none;touch-action:none;-webkit-user-select:none}
+.big.go{background:#14a24a;border-color:#0d7a35}
+.big.stp{background:#cf1b1b;border-color:#9c1010}
+.big:active,.big.on{transform:translateY(2px);filter:brightness(.9)}
+.big:disabled{opacity:.4;cursor:not-allowed}
+.rng{display:flex;flex-direction:column;gap:6px;font-size:14px}
+.rng input{width:100%;accent-color:var(--accent)}
+.rd{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;margin:0}
+.rd div{display:flex;flex-direction:column;border-top:1px solid var(--line);padding-top:4px}
+.rd dt{font-size:12px;color:var(--ink-2)}
+.rd dd{margin:0;font-family:var(--f-mono);font-size:16px;font-variant-numeric:tabular-nums}
+.rd dd.bad{color:var(--bad)}
+.rd dd.on{color:var(--ok)}
+.rng select{font:inherit;font-size:14px;padding:6px 8px;border:1.5px solid var(--line);border-radius:3px;background:var(--surface);color:var(--ink);width:100%}
+.acts.brk .btn{padding:7px 10px}
+.btn[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.back{display:inline-block;margin-bottom:10px;font-size:13px;font-weight:600;color:var(--ink-2);text-decoration:none;border-bottom:1.5px solid var(--line)}
+.back:hover{color:var(--ink);border-color:var(--ink)}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="head">
+    <div>
+      <a class="back" href="/#tools">← EnergyVibe · Vositalar</a>
+      <h1>Uy elektr shiti: hisoblagich, rele va difavtomatlar</h1>
+      <p class="sub">3D stendda hisoblagich, kirish avtomati, kuchlanish relesi, uchta difavtomat, yoritish avtomati, rozetkalar, kalit va lampani o'zingiz ulang. So'ng rozetkalarga maishiy asboblarni ulab, himoyalar qanday ishlashini sinang.</p>
+    </div>
+    <div class="seg" role="group" aria-label="Rejim">
+      <button type="button" id="m-learn" aria-pressed="true">O'rganish</button>
+      <button type="button" id="m-exam" aria-pressed="false">Imtihon</button>
+    </div>
+  </header>
+
+  <div class="bar">
+    <span class="dot" id="dot"></span>
+    <p id="status" role="status" aria-live="polite"></p>
+    <button type="button" class="btn pri" id="power" disabled>Kuchlanish berish</button>
+  </div>
+
+  <div class="main">
+    <section class="board">
+      <div class="stage" id="stage">
+        <canvas id="cv" aria-label="Uy elektr shiti stendining 3D ko'rinishi"></canvas>
+        <div id="tags"></div>
+        <div class="fsbar">
+          <p id="status2" role="status"></p>
+          <button type="button" class="cbtn wide" id="power2" disabled>Kuchlanish berish</button>
+          <button type="button" class="cbtn wide" id="close">Yopish</button>
+        </div>
+        <div class="ctrls">
+          <button type="button" class="cbtn" id="zin" aria-label="Yaqinlashtirish">+</button>
+          <button type="button" class="cbtn" id="zout" aria-label="Uzoqlashtirish">&minus;</button>
+          <button type="button" class="cbtn" id="zreset" aria-label="Asl ko'rinish"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 0 2.6-5.9M4 4v4.5h4.5"/></svg></button>
+          <button type="button" class="cbtn" id="tg" aria-pressed="true" aria-label="Nomlarni ko'rsatish yoki yashirish">Aa</button>
+          <button type="button" class="cbtn" id="fs" aria-label="To'liq ekran"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+        </div>
+        <p class="loading" id="loading">3D sahna tayyorlanmoqda...</p>
+      </div>
+      <p class="how">Klemma halqasini bosib boshqasiga sudrang yoki ikkita klemmani ketma-ket bosing. Simni bosib olib tashlang. Bo'sh joydan sudrab aylantiring. Kuchlanishdan keyin avtomat dastalarini bosib yoqing, difavtomatdagi sariq T tugmasi bilan sinang, rozetkani bosib asbob almashtiring, kalitni bosib lampani yoqing (telefonda &laquo;To'liq ekran&raquo; ni oching).</p>
+    </section>
+
+    <aside class="panel">
+      <div class="prog" id="prog">
+        <div class="pn"><span id="pdone">0</span> / 12</div>
+        <div class="pl">bosqich to'g'ri bajarilgan</div>
+        <div class="track"><i id="pfill"></i></div>
+      </div>
+
+      <div class="acts">
+        <button type="button" class="btn" id="undo">Orqaga</button>
+        <button type="button" class="btn" id="clear">Tozalash</button>
+        <button type="button" class="btn" id="hint">Maslahat</button>
+        <button type="button" class="btn" id="check" hidden>Tekshirish</button>
+      </div>
+
+      <ol class="steps" id="steps"></ol>
+
+      <div class="exam" id="exam" hidden>
+        <p>Imtihon rejimi: maslahatsiz ulang, tayyor bo'lgach <b>Tekshirish</b> ni bosing. Ulangan simlar: <b id="wcount">0</b></p>
+        <ul class="report" id="report"></ul>
+      </div>
+
+      <div class="ctl" id="ctl" hidden>
+        <p class="lg-t">Boshqaruv</p>
+        <label class="rng">Manba kuchlanishi (LATR): <b id="uv">230 V</b>
+          <input type="range" id="u" min="160" max="280" step="5" value="230" aria-label="Manba kuchlanishi">
+        </label>
+        <div class="acts brk">
+          <button type="button" class="btn" id="b-qf1" aria-pressed="false">QF1</button>
+          <button type="button" class="btn" id="b-d1" aria-pressed="false">D1</button>
+          <button type="button" class="btn" id="b-d2" aria-pressed="false">D2</button>
+          <button type="button" class="btn" id="b-d3" aria-pressed="false">D3</button>
+          <button type="button" class="btn" id="b-qf2" aria-pressed="false">QF2</button>
+          <button type="button" class="btn" id="b-sw" aria-pressed="false">Kalit</button>
+        </div>
+        <div class="acts brk">
+          <button type="button" class="btn" id="t-d1">D1 · T</button>
+          <button type="button" class="btn" id="t-d2">D2 · T</button>
+          <button type="button" class="btn" id="t-d3">D3 · T</button>
+        </div>
+        <dl class="rd">
+          <div><dt>Manba</dt><dd id="r-u">-</dd></div>
+          <div><dt>Kuchlanish relesi</dt><dd id="r-kv">-</dd></div>
+          <div><dt>Shinadagi kuchlanish</dt><dd id="r-ub">-</dd></div>
+          <div><dt>Umumiy tok / quvvat</dt><dd><span id="r-i">-</span> · <span id="r-p">-</span></dd></div>
+          <div><dt>X1</dt><dd id="r-x1">-</dd></div>
+          <div><dt>X2</dt><dd id="r-x2">-</dd></div>
+          <div><dt>X3</dt><dd id="r-x3">-</dd></div>
+        </dl>
+        <p class="lg-t">Rozetkalarga ulangan asboblar</p>
+        <label class="rng">X1 <select id="a-x1"></select></label>
+        <label class="rng">X2 <select id="a-x2"></select></label>
+        <label class="rng">X3 <select id="a-x3"></select></label>
+        <p class="fnote">Sinab ko'ring: uchala rozetkaga duxovka ulang (QF1 o'chadi), uzaytirgichni ulang (difavtomat o'chadi), kuchlanishni 260 V yoki 170 V qiling (rele uzadi), nosoz asbobni ulang.</p>
+        <label class="snd"><input type="checkbox" id="snd" checked> Ovoz</label>
+      </div>
+
+      <div>
+        <p class="lg-t">Klemma halqasining rangi</p>
+        <ul class="legend">
+          <li><i class="sw" style="--c:#c62828"></i>L — faza</li>
+          <li><i class="sw" style="--c:#2f7fe0"></i>N — nol</li>
+          <li><i class="sw pe"></i>PE — himoya yerlash</li>
+          <li><i class="sw" style="--c:#8a8f96"></i>Ishlatilmaydi</li>
+        </ul>
+        <p class="fnote">Sim kesimi: kirish va shina sakrovchilari 6 mm², rozetkalar 2,5 mm², yoritish 1,5 mm². Har bir sim uchida raqamli markirovka va NShVI vtulkasi bor; simlar kabel kanallaridan o'tadi.</p>
+        
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const stage=$("stage"),cv=$("cv");
+function setStatus(t,tone){
+  $("status").textContent=t;
+  $("status2").textContent=t;
+  $("status2").className=tone||"";
+  $("dot").className="dot "+(tone||"");
+}
+function fail(m){setStatus(m,"bad");const l=$("loading");if(l)l.hidden=true;}
+
+if(!window.THREE){fail("3D kutubxonasi yuklanmadi. Internetni tekshirib, sahifani qayta oching.");return;}
+let renderer;
+try{
+  renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,powerPreference:"high-performance"});
+}catch(err){
+  fail("Brauzer 3D grafikani (WebGL) ishga tushira olmadi. Chrome yoki Safari da oching.");
+  return;
+}
+// let the page and the loading note paint first, then build the 3D scene
+requestAnimationFrame(()=>setTimeout(()=>{try{main();}catch(err){console.error(err);fail("Sahna xatosi: "+(err&&err.message?err.message:err));}},0));
+
+function main(){
+/* =====================================================================
+   RENDERER, CAMERA, LIGHTS
+   ===================================================================== */
+const COARSE=!!(window.matchMedia&&window.matchMedia("(pointer: coarse)").matches);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,COARSE?1.5:1.75));
+renderer.outputEncoding=THREE.sRGBEncoding;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure=0.8;
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFShadowMap;
+renderer.shadowMap.autoUpdate=false;   // shadows are re-rendered only when something that casts them changes
+let shadowDirty=true;
+const MAXA=Math.max(1,Math.min(8,renderer.capabilities.getMaxAnisotropy()));
+const REDUCED=!!(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0x10161b);
+const cam=new THREE.PerspectiveCamera(28,1,20,6000);
+const view={yaw:.12,pitch:.1,zoom:1,tx:0,ty:0,fitD:2000};
+const FOV_T=Math.tan(THREE.MathUtils.degToRad(14));
+const BOUND={w:990,h:1080,cy:0};
+let dirty=true;
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+
+function resize(){
+  const w=Math.max(200,stage.clientWidth),h=Math.max(200,stage.clientHeight);
+  renderer.setSize(w,h,false);
+  cam.aspect=w/h;cam.updateProjectionMatrix();
+  const dH=(BOUND.h/2)/FOV_T,dW=(BOUND.w/2)/(FOV_T*cam.aspect);
+  view.fitD=Math.max(dH,dW)+120;
+  dirty=true;
+}
+function updateCam(){
+  const D=view.fitD/view.zoom,cx=view.tx,cy=BOUND.cy+view.ty,cp=Math.cos(view.pitch);
+  cam.position.set(cx+Math.sin(view.yaw)*cp*D,cy+Math.sin(view.pitch)*D,60+Math.cos(view.yaw)*cp*D);
+  cam.lookAt(cx,cy,60);
+}
+function perPx(){return 2*(view.fitD/view.zoom)*FOV_T/Math.max(1,stage.clientHeight);}
+
+try{
+  const es=new THREE.Scene();
+  const gc=document.createElement("canvas");gc.width=4;gc.height=256;
+  const gg=gc.getContext("2d"),gr=gg.createLinearGradient(0,0,0,256);
+  gr.addColorStop(0,"#f2f6fb");gr.addColorStop(.45,"#9aa4ad");gr.addColorStop(.5,"#59616a");gr.addColorStop(1,"#1b2025");
+  gg.fillStyle=gr;gg.fillRect(0,0,4,256);
+  const gt=new THREE.CanvasTexture(gc);gt.encoding=THREE.sRGBEncoding;
+  es.add(new THREE.Mesh(new THREE.SphereGeometry(50,32,16),new THREE.MeshBasicMaterial({map:gt,side:THREE.BackSide})));
+  const bm=new THREE.MeshBasicMaterial({color:new THREE.Color(5,5,5),side:THREE.DoubleSide});
+  const b1=new THREE.Mesh(new THREE.PlaneGeometry(26,14),bm);b1.position.set(-18,20,30);b1.lookAt(0,0,0);es.add(b1);
+  const b2=new THREE.Mesh(new THREE.PlaneGeometry(12,26),bm);b2.position.set(30,5,26);b2.lookAt(0,0,0);es.add(b2);
+  const pm=new THREE.PMREMGenerator(renderer);
+  scene.environment=pm.fromScene(es,0.035).texture;
+  pm.dispose();
+}catch(e){console.warn("environment",e);}
+
+const key=new THREE.DirectionalLight(0xfff3e4,1.15);
+key.position.set(-420,760,1100);key.target.position.set(0,0,0);
+key.castShadow=true;key.shadow.mapSize.set(COARSE?1024:2048,COARSE?1024:2048);
+const sc=key.shadow.camera;sc.left=-560;sc.right=560;sc.top=620;sc.bottom=-620;sc.near=300;sc.far=2800;
+key.shadow.bias=-0.0003;key.shadow.normalBias=1.2;
+scene.add(key);scene.add(key.target);
+scene.add(new THREE.HemisphereLight(0xdfe9f5,0x30363d,0.26));
+const fillL=new THREE.DirectionalLight(0xcfe0ff,0.25);fillL.position.set(520,-200,700);scene.add(fillL);
+
+/* =====================================================================
+   MATERIALS, TEXTURES, HELPERS
+   ===================================================================== */
+function std(o,phys){
+  if(o.envMapIntensity==null)o.envMapIntensity=.45;
+  if(phys&&!o.transparent){if(o.clearcoat){o.roughness=Math.max(.12,(o.roughness||.4)*.8);}delete o.clearcoat;delete o.clearcoatRoughness;phys=false;}
+  return phys?new THREE.MeshPhysicalMaterial(o):new THREE.MeshStandardMaterial(o);
+}
+function noiseTex(w,h,base,amp,rep){
+  const c=document.createElement("canvas");c.width=w;c.height=h;const g=c.getContext("2d");
+  const id=g.createImageData(w,h);
+  for(let i=0;i<w*h;i++){const v=base+(Math.random()-.5)*amp;id.data[i*4]=v;id.data[i*4+1]=v;id.data[i*4+2]=v;id.data[i*4+3]=255;}
+  g.putImageData(id,0,0);
+  const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;if(rep)t.repeat.set(rep[0],rep[1]);t.anisotropy=MAXA;return t;
+}
+const boardBump=noiseTex(256,256,128,60,[6,7]);
+/* hot-dip galvanised mounting plate: soft crystalline spangle */
+function spangleTex(){
+  // Voronoi cells with random brightness = the crystalline "spangle" of hot-dip zinc; pure pixel maths, no canvas read-back
+  const S=256,G=12,cs=S/G,c=document.createElement("canvas");c.width=c.height=S;const g=c.getContext("2d");
+  const pts=[],val=[];
+  for(let j=0;j<G;j++)for(let i=0;i<G;i++){pts.push([(i+Math.random())*cs,(j+Math.random())*cs]);val.push(178+Math.random()*44);}
+  const id=g.createImageData(S,S),d=id.data;
+  for(let y=0;y<S;y++)for(let x=0;x<S;x++){
+    const ci=Math.floor(x/cs),cj=Math.floor(y/cs);let best=1e9,bv=190;
+    for(let dj=-1;dj<=1;dj++)for(let di=-1;di<=1;di++){
+      const ii=(ci+di+G)%G,jj=(cj+dj+G)%G,p=pts[jj*G+ii];
+      let dx=p[0]-x,dy=p[1]-y;if(dx>S/2)dx-=S;if(dx<-S/2)dx+=S;if(dy>S/2)dy-=S;if(dy<-S/2)dy+=S;
+      const dd=dx*dx+dy*dy;if(dd<best){best=dd;bv=val[jj*G+ii];}
+    }
+    const v=bv+(Math.random()-.5)*8,k=(y*S+x)*4;
+    d[k]=v;d[k+1]=v+4;d[k+2]=v+8;d[k+3]=255;
+  }
+  g.putImageData(id,0,0);
+  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(3,3.2);t.anisotropy=MAXA;return t;
+}
+const MAT={
+  board:std({color:0xffffff,map:spangleTex(),roughness:.5,metalness:.55,bumpMap:boardBump,bumpScale:.12,envMapIntensity:.6}),
+  duct:std({color:0x9ba2a8,roughness:.72,metalness:0}),
+  ductDk:std({color:0x8a9197,roughness:.75}),
+  boardEdge:std({color:0x8f979d,roughness:.5,metalness:.2}),
+  console:std({color:0x1a1e22,roughness:.55,metalness:.05,envMapIntensity:.3}),
+  consoleTop:std({color:0x30363c,roughness:.45}),
+  vfd:std({color:0x1f2327,roughness:.5,metalness:.04,clearcoat:.2,clearcoatRoughness:.55,envMapIntensity:.3},true),
+  vfdFas:std({color:0x15181b,roughness:.45,metalness:.05,clearcoat:.4,clearcoatRoughness:.35,envMapIntensity:.3},true),
+  vfdLight:std({color:0xa9afb4,roughness:.55}),
+  vfdBlk:std({color:0x15171a,roughness:.6}),
+  black:std({color:0x101214,roughness:.55}),
+  dark:std({color:0x1b1e21,roughness:.6}),
+  rubber:std({color:0x0d0e0f,roughness:.85}),
+  steel:std({color:0xb4bbc2,roughness:.28,metalness:1}),
+  steelDark:std({color:0x6b7178,roughness:.4,metalness:1}),
+  brass:std({color:0xc79a4a,roughness:.3,metalness:1}),
+  copper:std({color:0xc4743c,roughness:.3,metalness:1}),
+  nickel:std({color:0xd4d8dc,roughness:.18,metalness:1}),
+  alu:std({color:0xc7ccd1,roughness:.34,metalness:.85}),
+  aluDark:std({color:0x5d646b,roughness:.4,metalness:.85}),
+  white:std({color:0xe8eaec,roughness:.45}),
+  grey:std({color:0x9ea4a9,roughness:.5}),
+  motor:std({color:0x0f6aa6,roughness:.45,metalness:.1,clearcoat:.45,clearcoatRoughness:.4,envMapIntensity:.3},true),
+  motorDk:std({color:0x0b4f7c,roughness:.55,metalness:.1,clearcoat:.25,envMapIntensity:.3},true),
+  cast:std({color:0x8c939a,roughness:.55,metalness:.5}),
+  bake:std({color:0x2b201a,roughness:.7}),
+  pbRed:std({color:0xcf1b1b,roughness:.2,clearcoat:1,clearcoatRoughness:.12},true),
+  pbGreen:std({color:0x14a24a,roughness:.2,clearcoat:1,clearcoatRoughness:.12},true),
+  pbBody:std({color:0x1c1e20,roughness:.5}),
+  block:std({color:0xdcdfe1,roughness:.5}),
+  knob:std({color:0x0c0d0e,roughness:.3,clearcoat:.8,clearcoatRoughness:.25},true),
+  plate:std({color:0x2a2f34,roughness:.55,metalness:.1}),
+  resAl:std({color:0xb9bec4,roughness:.38,metalness:.9}),
+  lampOff:std({color:0x3a1010,roughness:.3,emissive:0x000000}),
+  mcb:std({color:0xeef0f1,roughness:.42}),
+  km:std({color:0x2b3036,roughness:.5,envMapIntensity:.35}),
+  kmFront:std({color:0x8d949b,roughness:.48}),
+  kmAux:std({color:0x9aa1a8,roughness:.5}),
+  socket:std({color:0x1b1d20,roughness:.6}),
+  relayClear:std({color:0xdfe8ee,roughness:.08,metalness:0,transparent:true,opacity:.28,depthWrite:false,clearcoat:1,clearcoatRoughness:.05},true),
+  relayBase:std({color:0x2a2c30,roughness:.5}),
+  coil:std({color:0xb8662c,roughness:.35,metalness:.6}),
+  psu:std({color:0xb5bcc3,roughness:.36,metalness:.8}),
+  strip:std({color:0x8e959c,roughness:.5}),
+  pur:std({color:0x8b9197,roughness:.55}),
+  sensFace:std({color:0xe77a1a,roughness:.45}),
+  rail:std({color:0xc6ccd2,roughness:.3,metalness:.9}),
+  sock:std({color:0xf4f4f1,roughness:.38}),
+  sockDk:std({color:0xdcdcd6,roughness:.45}),
+  meterBody:std({color:0x1c1e21,roughness:.5}),
+  meterCover:std({color:0x2a2d31,roughness:.42}),
+  alu2:std({color:0xd9dde1,roughness:.22,metalness:.95}),
+  bulbGlass:std({color:0xfff6dd,roughness:.05,metalness:0,transparent:true,opacity:.35,depthWrite:false},true),
+  glass:std({color:0x0b0f12,roughness:.08,metalness:0,clearcoat:1,clearcoatRoughness:.05},true)
+};
+function makeStripeTex(){
+  const c=document.createElement("canvas");c.width=8;c.height=64;const g=c.getContext("2d");
+  for(let k=0;k<8;k++){g.fillStyle=k%2?"#f1cd1c":"#2f9e44";g.fillRect(0,k*8,8,8);}
+  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;return t;
+}
+const stripeTex=makeStripeTex();
+/* signal kinds: ring colour on the terminals and colour of the wire */
+const KC={L6:0xc62828,N6:0x2f7fe0,L:0xc62828,N:0x2f7fe0,LL:0xc62828,NL:0x2f7fe0,PE:0x2f9e44,GR:0x8a8f96};
+const WM={};
+for(const k in KC){
+  WM[k]=std({color:KC[k],roughness:.4,clearcoat:.35,clearcoatRoughness:.4},true);
+}
+WM.PE=std({color:0xffffff,map:stripeTex,roughness:.4,clearcoat:.35,clearcoatRoughness:.4},true);
+WM.M24=std({color:0xffffff,map:(()=>{const c=document.createElement("canvas");c.width=8;c.height=64;const g=c.getContext("2d");
+  for(let k=0;k<8;k++){g.fillStyle=k%4===3?"#e9edf2":"#1d2f96";g.fillRect(0,k*8,8,8);}
+  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;return t;})(),roughness:.4,clearcoat:.35,clearcoatRoughness:.4},true);
+/* conductor size: input 6 mm2, sockets 2.5 mm2, lighting 1.5 mm2 */
+const WR={L6:3.0,N6:3.0,L:2.5,N:2.5,LL:2.0,NL:2.0,PE:2.5,GR:2.0,bad:2.2,hover:2.2};
+/* ferrule collar colours (DIN 46228-4): 6 yellow, 2.5 blue, 1.5 black */
+const FER={L6:0xf2c200,N6:0xf2c200,L:0x1e5bd8,N:0x1e5bd8,PE:0x1e5bd8,LL:0x202326,NL:0x202326,GR:0x9aa1a8,bad:0xc8202a};
+const FERM={};for(const k in FER)FERM[k]=std({color:FER[k],roughness:.45});
+WM.hover=std({color:0xff7a4d,emissive:0x8a2a10,roughness:.4},true);
+WM.bad=std({color:0xff2d2d,emissive:0xaa1010,roughness:.4},true);
+function rrShape(w,h,r){
+  const s=new THREE.Shape(),x=-w/2,y=-h/2;
+  s.moveTo(x+r,y);s.lineTo(x+w-r,y);s.quadraticCurveTo(x+w,y,x+w,y+r);
+  s.lineTo(x+w,y+h-r);s.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  s.lineTo(x+r,y+h);s.quadraticCurveTo(x,y+h,x,y+h-r);
+  s.lineTo(x,y+r);s.quadraticCurveTo(x,y,x+r,y);
+  return s;
+}
+const slabCache={};
+function slabGeo(w,h,d,r,b){
+  const key=[w,h,d,r,b].join("_");
+  if(slabCache[key])return slabCache[key];
+  const inner=d-2*b;
+  const g=new THREE.ExtrudeGeometry(rrShape(w-2*b,h-2*b,Math.max(.1,r-b)),{depth:inner,bevelEnabled:b>0,bevelThickness:b,bevelSize:b,bevelSegments:2,curveSegments:5});
+  g.translate(0,0,-inner/2);
+  slabCache[key]=g;return g;
+}
+function slab(parent,w,h,d,r,mat,x,y,zFront,b){
+  b=b==null?.6:b;r=Math.max(r,b+.05);
+  const m=new THREE.Mesh(slabGeo(w,h,d,r,b),mat);
+  m.position.set(x,y,zFront-d/2);
+  m.castShadow=true;m.receiveShadow=true;
+  parent.add(m);return m;
+}
+
+/* bake a list of meshes (world matrices up to date) into one mesh per material */
+function bakeMerge(list){
+  const byMat=new Map(),out=[];
+  list.forEach(o=>{const k=o.material.uuid;if(!byMat.has(k))byMat.set(k,[]);byMat.get(k).push(o);});
+  byMat.forEach(arr=>{
+    let n=0;const parts=arr.map(o=>{const g=o.geometry.index?o.geometry.toNonIndexed():o.geometry.clone();g.applyMatrix4(o.matrixWorld);n+=g.attributes.position.count;return g;});
+    const pos=new Float32Array(n*3),nor=new Float32Array(n*3),uv=new Float32Array(n*2);let off=0;
+    parts.forEach(g=>{const c=g.attributes.position.count;pos.set(g.attributes.position.array,off*3);
+      if(g.attributes.normal)nor.set(g.attributes.normal.array,off*3);if(g.attributes.uv)uv.set(g.attributes.uv.array,off*2);off+=c;g.dispose();});
+    const geo=new THREE.BufferGeometry();
+    geo.setAttribute("position",new THREE.BufferAttribute(pos,3));geo.setAttribute("normal",new THREE.BufferAttribute(nor,3));geo.setAttribute("uv",new THREE.BufferAttribute(uv,2));
+    geo.computeBoundingSphere();
+    const m=new THREE.Mesh(geo,arr[0].material);m.castShadow=arr.some(o=>o.castShadow);out.push(m);
+  });
+  return out;
+}
+/* canvas decals: all drawing helpers work in millimetres through k = px per mm */
+function decal(parent,wmm,hmm,x,y,z,k,draw){
+  k=Math.min(k,Math.sqrt(1.1e6/(wmm*hmm)));
+  const c=document.createElement("canvas");
+  c.width=Math.max(8,Math.round(wmm*k));c.height=Math.max(8,Math.round(hmm*k));
+  const g=c.getContext("2d");
+  draw(g,wmm,hmm,k);
+  const tex=new THREE.CanvasTexture(c);tex.encoding=THREE.sRGBEncoding;tex.anisotropy=MAXA;
+  const mat=new THREE.MeshStandardMaterial({map:tex,transparent:true,roughness:.6,metalness:0,envMapIntensity:.5,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-3,polygonOffsetUnits:-3});
+  const m=new THREE.Mesh(new THREE.PlaneGeometry(wmm,hmm),mat);
+  m.position.set(x,y,z);m.receiveShadow=true;parent.add(m);
+  return {mesh:m,tex:tex,canvas:c,ctx:g};
+}
+function tx(g,k,s,x,y,size,color,weight,align){
+  g.font=(weight||"600")+" "+Math.round(size*k)+"px Arial, Helvetica, sans-serif";
+  g.fillStyle=color||"#262b2f";g.textAlign=align||"center";g.textBaseline="middle";
+  g.fillText(s,x*k,y*k);
+}
+function rc(g,k,x,y,w,h,color,r){
+  g.fillStyle=color;
+  if(r&&g.roundRect){g.beginPath();g.roundRect(x*k,y*k,w*k,h*k,r*k);g.fill();}
+  else g.fillRect(x*k,y*k,w*k,h*k);
+}
+
+const aoCache={};
+function aoPlane(x,y,w,h){
+  const key=w+"x"+h;
+  let tex=aoCache[key];
+  if(!tex){
+    const k=3,pad=26,c=document.createElement("canvas");
+    c.width=Math.round((w+pad*2)*k);c.height=Math.round((h+pad*2)*k);
+    const g=c.getContext("2d");
+    g.shadowColor="rgba(0,0,0,.6)";g.shadowBlur=11*k;g.shadowOffsetX=2000;g.shadowOffsetY=0;
+    g.fillStyle="#000";g.fillRect(pad*k-2000,pad*k,w*k,h*k);
+    tex=new THREE.CanvasTexture(c);tex.encoding=THREE.sRGBEncoding;aoCache[key]=tex;
+  }
+  const m=new THREE.Mesh(new THREE.PlaneGeometry(w+52,h+52),new THREE.MeshBasicMaterial({map:tex,transparent:true,depthWrite:false,opacity:.85}));
+  m.position.set(x+4,y-5,1.4);scene.add(m);
+}
+
+/* shared small geometries */
+const G={
+  head:new THREE.CylinderGeometry(3.2,3.6,2.2,28).rotateX(Math.PI/2),
+  rec:new THREE.CylinderGeometry(4.7,4.7,.6,28).rotateX(Math.PI/2),
+  slotA:new THREE.BoxGeometry(5.4,1,.7),
+  slotB:new THREE.BoxGeometry(1,5.4,.7),
+  ferrule:new THREE.CylinderGeometry(1.8,1.8,9.5,12)
+};
+function screw(parent,x,y,zs,ang){
+  const rec=new THREE.Mesh(G.rec,MAT.dark);rec.position.set(x,y,zs+.15);parent.add(rec);
+  const head=new THREE.Mesh(G.head,MAT.steel);head.position.set(x,y,zs+1.3);parent.add(head);
+  const a=new THREE.Mesh(G.slotA,MAT.dark),b=new THREE.Mesh(G.slotB,MAT.dark);
+  a.position.set(x,y,zs+2.4);b.position.set(x,y,zs+2.4);
+  a.rotation.z=ang||0;b.rotation.z=ang||0;
+  parent.add(a);parent.add(b);
+}
+/* =====================================================================
+   TERMINAL REGISTRY AND HARDWARE (screws, jacks, studs, wire ends)
+   ===================================================================== */
+const V3=(x,y,z)=>new THREE.Vector3(x,y,z);
+const T={};
+const ringPETex=(()=>{
+  const c=document.createElement("canvas");c.width=64;c.height=8;const g=c.getContext("2d");
+  for(let k=0;k<8;k++){g.fillStyle=k%2?"#f1cd1c":"#2f9e44";g.fillRect(k*8,0,8,8);}
+  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.wrapS=THREE.RepeatWrapping;t.repeat.set(3,1);return t;
+})();
+const ringMats={};
+for(const k in KC)ringMats[k]=std({color:KC[k],roughness:.35,clearcoat:.5},true);
+ringMats.PE=std({color:0xffffff,map:ringPETex,roughness:.35,clearcoat:.5},true);
+const TG={
+  ring:new THREE.TorusGeometry(8.2,.6,6,32),
+  well:new THREE.CylinderGeometry(7.2,7.2,1,28).rotateX(Math.PI/2),
+  head:new THREE.CylinderGeometry(4.6,5,2.8,26).rotateX(Math.PI/2),
+  slotA:new THREE.BoxGeometry(7.4,1.3,1),
+  slotB:new THREE.BoxGeometry(1.3,7.4,1),
+  jack:new THREE.CylinderGeometry(9.5,10.5,8,32).rotateX(Math.PI/2),
+  jackCol:new THREE.CylinderGeometry(12.2,12.2,2.4,32).rotateX(Math.PI/2),
+  jackHole:new THREE.CylinderGeometry(3.7,3.7,1,20).rotateX(Math.PI/2),
+  stud:new THREE.CylinderGeometry(2.7,2.7,17,16).rotateX(Math.PI/2),
+  nut:new THREE.CylinderGeometry(5.3,5.3,4.4,6).rotateX(Math.PI/2),
+  washer:new THREE.CylinderGeometry(6.6,6.6,.9,24).rotateX(Math.PI/2),
+  plugPin:new THREE.CylinderGeometry(2.1,2.1,22,14).rotateX(Math.PI/2),
+  plugBody:new THREE.CylinderGeometry(6.3,6.3,20,24).rotateX(Math.PI/2),
+  plugCap:new THREE.CylinderGeometry(7.2,7.2,3,24).rotateX(Math.PI/2),
+  sleeve:new THREE.CylinderGeometry(3,3,1,14),
+  fSleeve:new THREE.CylinderGeometry(1.55,1.55,8,12),
+  fCollar:new THREE.CylinderGeometry(3.1,2.5,6.5,16)
+};
+const lugGeo=(()=>{
+  const s=new THREE.Shape();s.absarc(0,0,5.4,0,Math.PI*2,false);
+  const h=new THREE.Path();h.absarc(0,0,2.4,0,Math.PI*2,true);s.holes.push(h);
+  return new THREE.ExtrudeGeometry(s,{depth:.9,bevelEnabled:false,curveSegments:20}).translate(0,0,-.45);
+})();
+function addT(id,o){
+  const plug=o.type==="plug",stud=o.type==="stud";
+  const d=o.dir||[0,1];
+  const az=o.az!=null?o.az:(plug?o.z+26:stud?o.z+8:o.z+3.6);
+  T[id]={id:id,x:o.x,y:o.y,z0:o.z,kind:o.kind,desc:o.desc,dom:o.dom,sig:o.sig||null,dev:id.split(".")[0],type:o.type||"lug",
+    dir:V3(d[0],d[1],0).normalize(),
+    pos:V3(o.x,o.y,o.z+(plug?11:stud?10:5)),
+    anchor:V3(o.x,o.y,az),
+    lead:plug?6.5:13};
+  return T[id];
+}
+function hwScrew(parent,id){
+  const t=T[id],x=t.x,y=t.y,z=t.z0;
+  const well=new THREE.Mesh(TG.well,MAT.black);well.position.set(x,y,z+.5);parent.add(well);
+  const head=new THREE.Mesh(TG.head,MAT.steel);head.position.set(x,y,z+1.6);head.castShadow=true;parent.add(head);
+  const a=new THREE.Mesh(TG.slotA,MAT.dark),b=new THREE.Mesh(TG.slotB,MAT.dark);
+  const ang=((Math.abs(x*13+y*7))%10)/10*1.2;a.rotation.z=b.rotation.z=ang;
+  a.position.set(x,y,z+3.1);b.position.copy(a.position);parent.add(a);parent.add(b);
+  const r=new THREE.Mesh(TG.ring,ringMats[t.kind]||ringMats.GR);r.position.set(x,y,z+.7);parent.add(r);
+}
+function hwJack(parent,id){
+  const t=T[id],x=t.x,y=t.y,z=t.z0;
+  const col=new THREE.Mesh(TG.jackCol,MAT.black);col.position.set(x,y,z+1.2);parent.add(col);
+  const bz=new THREE.Mesh(TG.jack,ringMats[t.kind]||ringMats.GR);bz.position.set(x,y,z+4);bz.castShadow=true;bz.receiveShadow=true;parent.add(bz);
+  const hole=new THREE.Mesh(TG.jackHole,MAT.black);hole.position.set(x,y,z+8.05);parent.add(hole);
+  const pin=new THREE.Mesh(new THREE.TorusGeometry(3.7,.5,6,20),MAT.nickel);pin.position.set(x,y,z+8.1);parent.add(pin);
+}
+function hwStud(parent,id,nutToo){
+  const t=T[id],x=t.x,y=t.y,z=t.z0;
+  const st=new THREE.Mesh(TG.stud,MAT.steel);st.position.set(x,y,z+8.5);st.castShadow=true;parent.add(st);
+  const w=new THREE.Mesh(TG.washer,MAT.nickel);w.position.set(x,y,z+.5);parent.add(w);
+  const r=new THREE.Mesh(TG.ring,ringMats[t.kind]||ringMats.GR);r.position.set(x,y,z+.3);r.scale.set(.95,.95,1);parent.add(r);
+  if(nutToo!==false){
+    const n=new THREE.Mesh(TG.nut,MAT.nickel);n.position.set(x,y,z+t.anchor.z-z+3.2);n.castShadow=true;parent.add(n);
+  }
+}
+/* wire end fittings: ring lug + insulated sleeve, or a right-angle banana plug */
+function endMesh(id,key,idx){
+  const t=T[id],g=new THREE.Group(),km=WM[key]||WM.GR,off=(idx||0)*2.2;
+  g.userData.shared=true;
+  if(t.type==="plug"){
+    const z0=t.z0;
+    const pin=new THREE.Mesh(TG.plugPin,MAT.nickel);pin.position.set(t.x,t.y,z0+8+off*0);g.add(pin);
+    const body=new THREE.Mesh(TG.plugBody,km);body.position.set(t.x,t.y,z0+18+off);body.castShadow=true;g.add(body);
+    const cap=new THREE.Mesh(TG.plugCap,MAT.black);cap.position.set(t.x,t.y,z0+27.5+off);g.add(cap);
+    return g;
+  }
+  if(t.type!=="stud"){
+    // bootlace ferrule: tinned sleeve clamped under the screw, insulating collar at the clamp mouth
+    const ang=Math.atan2(-t.dir.x,t.dir.y),fz=t.anchor.z-1.4+off*.6;
+    const sl=new THREE.Mesh(TG.fSleeve,MAT.nickel);sl.rotation.z=ang;sl.position.set(t.x+t.dir.x*3.5,t.y+t.dir.y*3.5,fz);g.add(sl);
+    const col=new THREE.Mesh(TG.fCollar,FERM[key]||FERM.GR);col.rotation.z=ang;col.position.set(t.x+t.dir.x*9.6,t.y+t.dir.y*9.6,fz+.6);col.castShadow=true;g.add(col);
+    return g;
+  }
+  const lug=new THREE.Mesh(lugGeo,MAT.copper);lug.position.set(t.x,t.y,t.anchor.z+off);lug.castShadow=true;g.add(lug);
+  const ang=Math.atan2(-t.dir.x,t.dir.y);
+  const sl=new THREE.Mesh(TG.sleeve,km);
+  sl.scale.set(1,t.lead-4.5,1);
+  sl.position.set(t.x+t.dir.x*(4.5+(t.lead-4.5)/2),t.y+t.dir.y*(4.5+(t.lead-4.5)/2),t.anchor.z+off);
+  sl.rotation.z=ang;sl.castShadow=true;g.add(sl);
+  const br=new THREE.Mesh(TG.sleeve,MAT.nickel);
+  br.scale.set(.82,3.2,1);br.position.set(t.x+t.dir.x*5.5,t.y+t.dir.y*5.5,t.anchor.z+off);br.rotation.z=ang;g.add(br);
+  return g;
+}
+/* =====================================================================
+   SCENE A: mounting plate, cable ducts, source console, DIN devices
+   ===================================================================== */
+const BW=940,BH=1000;
+const tags=[];
+function addTag(text,x,y,z,mode){
+  const el=document.createElement("div");el.className="tag";el.textContent=text;
+  $("tags").appendChild(el);
+  tags.push({el:el,p:new THREE.Vector3(x,y,z),mode:mode||"top"});
+  return tags[tags.length-1];
+}
+const TAGT={top:"translate(-50%,-100%)",left:"translate(0,-50%)",right:"translate(-100%,-50%)",bottom:"translate(-50%,0)"};
+function mkBox(parent,w,h,d,mat,x,y,z0){
+  const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);m.position.set(x,y,z0+d/2);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m;
+}
+function mkCylZ(parent,r1,r2,len,mat,x,y,z0,seg){
+  const m=new THREE.Mesh(new THREE.CylinderGeometry(r1,r2,len,seg||28).rotateX(Math.PI/2),mat);
+  m.position.set(x,y,z0+len/2);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m;
+}
+function ledMat(off){return std({color:off||0x2a2a2a,roughness:.3,emissive:0x000000});}
+
+/* ---- seven-segment canvas helper ---- */
+const SEG7={"0":"abcdef","1":"bc","2":"abdeg","3":"abcdg","4":"bcfg","5":"acdfg","6":"acdefg","7":"abc","8":"abcdefg","9":"abcdfg",
+  "H":"bcefg","i":"c","L":"def","o":"cdeg","t":"defg","-":"g"," ":"","U":"bcdef","E":"adefg","r":"eg","P":"abefg","n":"ceg","^":"abf","v":"cde"};
+function draw7(g,text,x0,y0,dw,dh,th,gap,on,off,glow){
+  for(let i=0;i<text.length;i++){
+    const x=x0+i*(dw+gap),segs=SEG7[text[i]]||"";
+    const R={a:[x+th,y0,dw-2*th,th],g:[x+th,y0+(dh-th)/2,dw-2*th,th],d:[x+th,y0+dh-th,dw-2*th,th],
+             f:[x,y0+th,th,(dh-3*th)/2],b:[x+dw-th,y0+th,th,(dh-3*th)/2],e:[x,y0+(dh+th)/2,th,(dh-3*th)/2],c:[x+dw-th,y0+(dh+th)/2,th,(dh-3*th)/2]};
+    for(const n in R){
+      const r=R[n],lit=segs.indexOf(n)>=0;
+      g.fillStyle=lit?on:off;
+      if(lit&&glow){g.shadowColor=on;g.shadowBlur=glow;}else g.shadowBlur=0;
+      g.fillRect(r[0],r[1],r[2],r[3]);
+    }
+    g.shadowBlur=0;
+  }
+}
+
+/* ---- mounting plate ---- */
+function buildBoard(){
+  slab(scene,BW,BH,22,14,MAT.board,0,0,0,1.6);
+  [[-452,-482],[452,-482],[-452,482],[452,482]].forEach((p,i)=>{
+    const m=new THREE.Mesh(new THREE.CylinderGeometry(7,7,2.6,22).rotateX(Math.PI/2),MAT.steel);m.position.set(p[0],p[1],1.3);scene.add(m);
+    const a=new THREE.Mesh(new THREE.BoxGeometry(11,1.8,1),MAT.dark);a.position.set(p[0],p[1],2.8);a.rotation.z=i*.7+.3;scene.add(a);
+  });
+  decal(scene,BW,BH,0,0,.16,1.2,(g,w,h,k)=>{
+    const X=x=>(x+w/2)*k,Y=y=>(h/2-y)*k;
+    g.font="700 "+Math.round(8*k)+"px Arial, sans-serif";g.textAlign="left";g.textBaseline="middle";g.fillStyle="rgba(30,38,44,.7)";
+    g.fillText("ISTE'MOLCHILAR: ROZETKALAR VA YORITISH",X(-440),Y(-150));
+    g.fillText("MAISHIY ASBOBLAR (ROZETKAGA ULANADI)",X(-440),Y(-342));
+    g.strokeStyle="rgba(30,38,44,.3)";g.lineWidth=1.4;g.setLineDash([10,7]);
+    g.beginPath();g.moveTo(X(-440),Y(-354));g.lineTo(X(440),Y(-354));g.stroke();g.setLineDash([]);
+  });
+}
+
+/* ---- slotted PVC cable ducts (covers removed for wiring) ---- */
+const DUCTS={
+  H:[{id:"D0",y:384,w:34,h:36,x0:-452,x1:452,z0:3},{id:"D1",y:132,w:40,h:40,x0:-452,x1:452,z0:3},{id:"D2",y:-96,w:40,h:40,x0:-452,x1:452,z0:3}],
+  V:[{id:"VL",x:-436,w:32,h:40,y0:-116,y1:401,z0:3},{id:"VR",x:436,w:32,h:40,y0:-116,y1:401,z0:3}]
+};
+function buildDucts(){
+  const g=new THREE.Group();scene.add(g);
+  const fingers=[],P=9,FW=5.2,T2=2;
+  const inH=(y)=>DUCTS.H.some(d=>Math.abs(y-d.y)<d.w/2+3);
+  const inV=(x)=>DUCTS.V.some(d=>Math.abs(x-d.x)<d.w/2+3);
+  DUCTS.H.forEach(d=>{
+    const L=d.x1-d.x0,cx=(d.x0+d.x1)/2;
+    mkBox(g,L,d.w,2,MAT.ductDk,cx,d.y,0);
+    [-1,1].forEach(s=>{
+      const wy=d.y+s*(d.w/2-T2/2);
+      mkBox(g,L,T2,8,MAT.duct,cx,wy,0);
+      for(let x=d.x0+P/2;x<d.x1;x+=P){if(!inV(x))fingers.push([x,wy,FW,T2,d.h]);}
+    });
+  });
+  DUCTS.V.forEach(d=>{
+    const L=d.y1-d.y0,cy=(d.y0+d.y1)/2;
+    mkBox(g,d.w,L,2,MAT.ductDk,d.x,cy,0);
+    [-1,1].forEach(s=>{
+      const wx=d.x+s*(d.w/2-T2/2);
+      for(let y=d.y0+P/2;y<d.y1;y+=P){if(!inH(y))fingers.push([wx,y,T2,FW,d.h]);}
+      let ys=null;
+      for(let y=d.y0;y<=d.y1+1;y+=2){const free=!inH(y)&&y<d.y1;if(free&&ys===null)ys=y;if(!free&&ys!==null){mkBox(g,T2,y-ys,8,MAT.duct,wx,(y+ys)/2,0);ys=null;}}
+    });
+  });
+  const im=new THREE.InstancedMesh(new THREE.BoxGeometry(1,1,1),MAT.duct,fingers.length);
+  const m=new THREE.Matrix4(),q=new THREE.Quaternion(),sc=new THREE.Vector3(),ps=new THREE.Vector3();
+  fingers.forEach((f,i)=>{ps.set(f[0],f[1],f[4]/2);sc.set(f[2],f[3],f[4]);m.compose(ps,q,sc);im.setMatrixAt(i,m);});
+  im.castShadow=true;im.receiveShadow=true;g.add(im);
+}
+function buildRail(x0,x1,y){
+  const g=new THREE.Group();scene.add(g);
+  mkBox(g,x1-x0,35,1.2,MAT.rail,(x0+x1)/2,y,0);
+  mkBox(g,x1-x0,5,7.5,MAT.rail,(x0+x1)/2,y+15,0);
+  mkBox(g,x1-x0,5,7.5,MAT.rail,(x0+x1)/2,y-15,0);
+  for(let x=x0+20;x<x1-10;x+=50){const s=new THREE.Mesh(new THREE.BoxGeometry(15,5.2,1.4),MAT.dark);s.position.set(x,y,1);g.add(s);}
+}
+
+/* ---- source console: L, N, E sockets, variable transformer (LATR), voltmeter ---- */
+const CONS={x:-150,y:448,w:580,h:84,d:64};
+const SRC={lamp:null,knob:null,lcd:null};
+function buildConsole(){
+  const g=new THREE.Group();scene.add(g);
+  slab(g,CONS.w,CONS.h,CONS.d,9,MAT.console,CONS.x,CONS.y,CONS.d,1.8);
+  [["src.l",-390,"L6","Manba L (faza) rozetkasi"],["src.n",-320,"N6","Manba N (nol) rozetkasi"],["src.e",-250,"PE","Manba E (himoya yerlash) rozetkasi"]]
+    .forEach(s=>{addT(s[0],{x:s[1],y:440,z:CONS.d,dir:[0,-1],kind:s[2],desc:s[3],type:"plug"});hwJack(g,s[0]);});
+  // variable transformer knob
+  const kg=new THREE.Group();kg.position.set(-130,440,CONS.d);g.add(kg);SRC.knob=kg;
+  const kb=new THREE.Mesh(new THREE.CylinderGeometry(22,24,16,40).rotateX(Math.PI/2),MAT.knob);kb.position.z=8;kb.castShadow=true;kg.add(kb);
+  const kc=new THREE.Mesh(new THREE.CylinderGeometry(15,15,3,32).rotateX(Math.PI/2),MAT.dark);kc.position.z=17;kg.add(kc);
+  const ptr=new THREE.Mesh(new THREE.BoxGeometry(3,14,1.4),MAT.white);ptr.position.set(0,12,18.6);kg.add(ptr);
+  // voltmeter LCD
+  SRC.cv=document.createElement("canvas");SRC.cv.width=360;SRC.cv.height=150;SRC.ctx=SRC.cv.getContext("2d");
+  SRC.tex=new THREE.CanvasTexture(SRC.cv);SRC.tex.encoding=THREE.sRGBEncoding;
+  slab(g,96,46,4,4,MAT.black,-30,440,CONS.d+4,.6);
+  const lcd=new THREE.Mesh(new THREE.PlaneGeometry(80,33),new THREE.MeshBasicMaterial({map:SRC.tex,toneMapped:false}));lcd.position.set(-30,440,CONS.d+4.1);g.add(lcd);
+  // pilot lamp
+  mkCylZ(g,8,8,3,MAT.black,55,440,CONS.d,22);
+  const lm=std({color:0xff5a2a,roughness:.2,emissive:0x000000,transparent:true,opacity:.92},true);lm.userData.col=0xff5a2a;
+  const dome=new THREE.Mesh(new THREE.SphereGeometry(6.4,18,12,0,Math.PI*2,0,Math.PI/2).rotateX(Math.PI/2),lm);dome.position.set(55,440,CONS.d+3);g.add(dome);SRC.lamp=lm;
+  decal(g,CONS.w,CONS.h,CONS.x,CONS.y,CONS.d+.12,3.5,(c,w,h,k)=>{
+    const X=x=>(x-CONS.x+w/2)*k,Yf=y=>(h/2-(y-CONS.y))*k;
+    c.textAlign="center";c.textBaseline="middle";c.fillStyle="#e7ecef";c.font="700 "+Math.round(9*k)+"px Arial, sans-serif";
+    [["L",-390],["N",-320],["E",-250]].forEach(a=>c.fillText(a[0],X(a[1]),Yf(414)));
+    c.font="700 "+Math.round(6.4*k)+"px Arial, sans-serif";c.fillStyle="#9fb0bc";
+    c.fillText("MANBA  1~ 50 Hz",X(-320),Yf(478));c.fillText("KUCHLANISH (LATR)",X(-130),Yf(478));c.fillText("VOLTMETR",X(-30),Yf(478));c.fillText("TARMOQ",X(55),Yf(478));
+    c.fillText("160",X(-160),Yf(412));c.fillText("280",X(-100),Yf(412));
+    c.strokeStyle="#9fb0bc";c.lineWidth=.5*k;c.beginPath();c.arc(X(-130),Yf(440),30*k,Math.PI*.75,Math.PI*2.25);c.stroke();
+  });
+  aoPlane(CONS.x,CONS.y,CONS.w,CONS.h);
+  addTag("Manba · 220 V",-320,CONS.y+CONS.h/2+6,CONS.d,"top");
+  drawLCD(230,false);
+}
+function drawLCD(u,on){
+  const g=SRC.ctx;g.fillStyle=on?"#a9c49a":"#6d7a66";g.fillRect(0,0,360,150);
+  draw7(g,on?String(Math.round(u)).padStart(3," "):"   ",28,24,64,100,13,22,"#18221a",on?"rgba(24,34,26,.08)":"rgba(24,34,26,.05)",0);
+  g.fillStyle="#18221a";g.font="700 40px Arial, sans-serif";g.fillText("V",292,118);
+  SRC.tex.needsUpdate=true;
+}
+
+/* ---- modular DIN devices ---- */
+const M=36;            // one module width (17.5 mm real)
+const DEV={};
+function modBody(g,cx,cy,w,color){
+  const mat=color||MAT.mcb;
+  slab(g,w,150,52,3,mat,cx,cy,60,1);
+  slab(g,w,72,20,4,mat,cx,cy,80,1);
+  for(let x=cx-w/2+M;x<cx+w/2-1;x+=M){
+    const s=new THREE.Mesh(new THREE.BoxGeometry(.9,148,.8),MAT.grey);s.position.set(x,cy,60.3);g.add(s);
+    const s2=new THREE.Mesh(new THREE.BoxGeometry(.9,70,.8),MAT.grey);s2.position.set(x,cy,80.3);g.add(s2);
+  }
+}
+function modTerm(g,id,x,y,top,kind,desc){
+  addT(id,{x:x,y:y,z:60,dir:[0,top?1:-1],kind:kind,desc:desc});hwScrew(g,id);
+  const w=new THREE.Mesh(new THREE.BoxGeometry(11,6,1),MAT.black);w.position.set(x,y+(top?14:-14),60.2);g.add(w);
+}
+function lever(g,cx,cy,w,id){
+  const hg=new THREE.Group();hg.position.set(cx,cy+8,80);g.add(hg);
+  const hm=new THREE.Mesh(new THREE.BoxGeometry(w-8,11,26),MAT.black);hm.position.set(0,0,13);hm.castShadow=true;hg.add(hm);
+  if(w>M){const tie=new THREE.Mesh(new THREE.BoxGeometry(w-6,6,4),MAT.dark);tie.position.set(0,0,25);hg.add(tie);}
+  hg.traverse(o=>{if(o.isMesh)o.userData.brk=id;});
+  return hg;
+}
+function stateWin(g,x,y){
+  const m=std({color:0x1aa34a,roughness:.4,emissive:0x000000});
+  const w=new THREE.Mesh(new THREE.BoxGeometry(10,5,.8),m);w.position.set(x,y,80.3);g.add(w);return m;
+}
+/* MCB: 1 or 2 poles */
+function buildMCB(id,cx,cy,poles,rating,title,kinds){
+  const g=new THREE.Group();scene.add(g);
+  const w=poles*M;modBody(g,cx,cy,w);
+  const xs=poles===2?[-M/2,M/2]:[0];
+  const names=poles===2?[["1","L"],["3","N"]]:[["1","L"]];
+  const outn=poles===2?[["2","L"],["4","N"]]:[["2","L"]];
+  xs.forEach((dx,i)=>{
+    const kd=kinds[i];
+    modTerm(g,id+"."+(i?"n1":"l1"),cx+dx,cy+56,true,kd,title+": "+names[i][0]+" ("+names[i][1]+") kirish");
+    modTerm(g,id+"."+(i?"n2":"l2"),cx+dx,cy-56,false,kd,title+": "+outn[i][0]+" ("+outn[i][1]+") chiqish");
+  });
+  const hg=lever(g,cx,cy,w,id);
+  const win=stateWin(g,cx+(poles===2?14:0),cy-8);
+  decal(g,w,150,cx,cy,60.15,6,(c,ww,h,k)=>{
+    c.fillStyle="#2a3035";c.textAlign="center";c.textBaseline="middle";c.font="700 "+Math.round(3.8*k)+"px Arial, sans-serif";
+    xs.forEach((dx,i)=>{c.fillText(names[i].join(" "),(ww/2+dx)*k,(h/2-44)*k);c.fillText(outn[i].join(" "),(ww/2+dx)*k,(h/2+44)*k);});
+  });
+  decal(g,w,72,cx,cy,80.15,6,(c,ww,h,k)=>{
+    c.fillStyle="#2a3035";c.textAlign="center";c.textBaseline="middle";
+    c.font="700 "+Math.round(4*k)+"px Arial, sans-serif";c.fillText("I ON",(ww/2-(poles===2?16:0))*k,5.5*k);
+    c.font="800 "+Math.round(6*k)+"px Arial, sans-serif";c.fillText(rating,(ww/2-(poles===2?12:0))*k,56*k);
+    c.font="600 "+Math.round(3*k)+"px Arial, sans-serif";c.fillText("230/400V~  4500",(ww/2-(poles===2?12:0))*k,65*k);
+    if(poles===2){c.font="700 "+Math.round(4*k)+"px Arial, sans-serif";c.fillText("O OFF",(ww/2+14)*k,56*k);}
+  });
+  aoPlane(cx,cy,w,150);
+  DEV[id]={grp:hg,win:win,on:false,ang:.5,target:.5,kind:"mcb",title:title,rating:parseInt(rating.slice(1)),heat:0};
+  addTag(title,cx,cy+90,62,"top");
+}
+/* RCBO: residual-current breaker with overcurrent protection, 2 modules, test button */
+function buildRCBO(id,cx,cy,title){
+  const g=new THREE.Group();scene.add(g);
+  const w=2*M;modBody(g,cx,cy,w);
+  modTerm(g,id+".l1",cx-M/2,cy+56,true,"L",title+": L kirish");
+  modTerm(g,id+".n1",cx+M/2,cy+56,true,"N",title+": N kirish");
+  modTerm(g,id+".l2",cx-M/2,cy-56,false,"L",title+": L chiqish (rozetkaga)");
+  modTerm(g,id+".n2",cx+M/2,cy-56,false,"N",title+": N chiqish (rozetkaga)");
+  const hg=lever(g,cx-8,cy,M+4,id);
+  const win=stateWin(g,cx-8,cy-8);
+  // test button
+  const tb=new THREE.Group();tb.position.set(cx+17,cy+12,80);g.add(tb);
+  const bm=new THREE.Mesh(new THREE.CylinderGeometry(4.6,4.6,4,20).rotateX(Math.PI/2),std({color:0xf2c200,roughness:.35}));bm.position.z=2;tb.add(bm);
+  bm.userData.test=id;
+  decal(g,w,150,cx,cy,60.15,6,(c,ww,h,k)=>{
+    c.fillStyle="#2a3035";c.textAlign="center";c.textBaseline="middle";c.font="700 "+Math.round(3.8*k)+"px Arial, sans-serif";
+    c.fillText("1 L",(ww/2-M/2)*k,(h/2-44)*k);c.fillText("N",(ww/2+M/2)*k,(h/2-44)*k);
+    c.fillText("2 L",(ww/2-M/2)*k,(h/2+44)*k);c.fillText("N",(ww/2+M/2)*k,(h/2+44)*k);
+  });
+  decal(g,w,72,cx,cy,80.15,6,(c,ww,h,k)=>{
+    c.fillStyle="#2a3035";c.textAlign="center";c.textBaseline="middle";
+    c.font="800 "+Math.round(5.2*k)+"px Arial, sans-serif";c.fillText("C16",(ww/2-8)*k,56*k);
+    c.font="700 "+Math.round(3.4*k)+"px Arial, sans-serif";c.fillText("IΔn 30 mA",(ww/2-8)*k,64*k);
+    c.font="800 "+Math.round(4*k)+"px Arial, sans-serif";c.fillText("T",(ww/2+17)*k,(h/2-20)*k);
+    c.font="600 "+Math.round(3*k)+"px Arial, sans-serif";c.fillText("RCBO",(ww/2+17)*k,(h/2+2)*k);c.fillText("tip A",(ww/2+17)*k,(h/2+7)*k);
+  });
+  aoPlane(cx,cy,w,150);
+  DEV[id]={grp:hg,win:win,on:false,ang:.5,target:.5,kind:"rcbo",title:title,rating:16,heat:0,btn:tb};
+  addTag(title,cx,cy+90,62,"top");
+}
+/* voltage monitoring relay: IN at the bottom, OUT on top, 3-digit display */
+const KV={on:false,out:false,state:"off",timer:0,disp:"",led:null};
+function buildKV(cx,cy){
+  const g=new THREE.Group();scene.add(g);
+  const w=2*M;modBody(g,cx,cy,w,std({color:0xe9ebed,roughness:.45}));
+  modTerm(g,"kv.no",cx-M/2,cy+56,true,"N6","Kuchlanish relesi: OUT N (chiqish)");
+  modTerm(g,"kv.lo",cx+M/2,cy+56,true,"L6","Kuchlanish relesi: OUT L (chiqish)");
+  modTerm(g,"kv.ni",cx-M/2,cy-56,false,"N6","Kuchlanish relesi: IN N (kirish)");
+  modTerm(g,"kv.li",cx+M/2,cy-56,false,"L6","Kuchlanish relesi: IN L (kirish)");
+  // display
+  KV.cv=document.createElement("canvas");KV.cv.width=300;KV.cv.height=130;KV.ctx=KV.cv.getContext("2d");
+  KV.tex=new THREE.CanvasTexture(KV.cv);KV.tex.encoding=THREE.sRGBEncoding;
+  slab(g,46,24,1.6,2,MAT.black,cx,cy+12,81.6,.3);
+  const dm=new THREE.Mesh(new THREE.PlaneGeometry(42,18),new THREE.MeshBasicMaterial({map:KV.tex,toneMapped:false}));dm.position.set(cx,cy+12,81.7);g.add(dm);
+  KV.led=ledMat(0x0d3a18);
+  const led=new THREE.Mesh(new THREE.SphereGeometry(2.2,12,8),KV.led);led.position.set(cx-18,cy-10,80.4);g.add(led);
+  [[-3,"▲"],[14,"▼"]].forEach(b=>{const bt=new THREE.Mesh(new THREE.BoxGeometry(9,6,2.4),MAT.grey);bt.position.set(cx+b[0],cy-10,81);g.add(bt);});
+  decal(g,w,150,cx,cy,60.15,6,(c,ww,h,k)=>{
+    c.fillStyle="#2a3035";c.textAlign="center";c.textBaseline="middle";c.font="700 "+Math.round(3.8*k)+"px Arial, sans-serif";
+    c.fillText("N",(ww/2-M/2)*k,(h/2-44)*k);c.fillText("L",(ww/2+M/2)*k,(h/2-44)*k);
+    c.fillText("N",(ww/2-M/2)*k,(h/2+44)*k);c.fillText("L",(ww/2+M/2)*k,(h/2+44)*k);
+    c.font="800 "+Math.round(3.6*k)+"px Arial, sans-serif";c.fillText("OUT",(ww/2)*k,(h/2-44)*k);c.fillText("IN",(ww/2)*k,(h/2+44)*k);
+  });
+  decal(g,w,72,cx,cy,80.15,6,(c,ww,h,k)=>{
+    c.fillStyle="#2a3035";c.textAlign="center";c.textBaseline="middle";
+    c.font="700 "+Math.round(3.2*k)+"px Arial, sans-serif";c.fillText("RELE NAPRYAJENIYA  40 A",(ww/2)*k,4.5*k);
+    c.font="600 "+Math.round(3*k)+"px Arial, sans-serif";c.fillText("OUT",(ww/2-18)*k,(h/2+5)*k);
+    c.fillText("U max 250   U min 180",(ww/2)*k,(h-5)*k);
+  });
+  aoPlane(cx,cy,w,150);
+  addTag("KV rele",cx,cy+90,62,"top");
+  drawKV("   ",false);
+}
+function drawKV(text,lit){
+  const g=KV.ctx;g.fillStyle="#140606";g.fillRect(0,0,300,130);
+  draw7(g,text,26,18,66,94,13,22,lit?"#ff3a26":"#2a0d0a","#2a0d0a",lit?14:0);
+  KV.tex.needsUpdate=true;
+}
+/* =====================================================================
+   SCENE B: induction energy meter, sockets with appliances, switch, lamp
+   ===================================================================== */
+
+/* ---- single-phase induction meter (1 L in, 2 L out, 3 N in, 4 N out) ---- */
+const MTX=-330,MTY=262;
+const METER={disc:null,ang:0,kwh:1234.5,cv:null,tex:null,last:""};
+function buildMeter(){
+  const g=new THREE.Group();scene.add(g);
+  slab(g,150,190,40,8,MAT.meterBody,MTX,MTY,40,1.5);
+  { // cover frame with a window opening
+    const sh=rrShape(136,128,10),hole=rrShape(114,102,6);
+    hole.curves.forEach(c=>{if(c.v0)c.v0.y+=2;if(c.v1)c.v1.y+=2;if(c.v2)c.v2.y+=2;});
+    sh.holes.push(hole);
+    const cg=new THREE.ExtrudeGeometry(sh,{depth:20,bevelEnabled:true,bevelThickness:1.5,bevelSize:1.5,bevelSegments:2,curveSegments:6});
+    const cv=new THREE.Mesh(cg,MAT.meterCover);cv.position.set(MTX,MTY+22,40);cv.castShadow=true;cv.receiveShadow=true;g.add(cv);
+  }
+  // inner face behind the glass
+  const fz=50;
+  const discTex=(()=>{const c=document.createElement("canvas");c.width=256;c.height=8;const x=c.getContext("2d");
+    x.fillStyle="#cfd4d9";x.fillRect(0,0,256,8);x.fillStyle="#c41e1e";x.fillRect(0,0,22,8);x.fillStyle="#1a1a1a";x.fillRect(22,0,6,8);
+    const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;return t;})();
+  const dg=new THREE.Group();dg.position.set(MTX,MTY-1.5,6);g.add(dg);METER.disc=dg;
+  const disc=new THREE.Mesh(new THREE.CylinderGeometry(42,42,2.4,64),[std({color:0xffffff,map:discTex,roughness:.25,metalness:.8}),MAT.alu2,MAT.alu2]);dg.add(disc);
+  disc.userData.keep=true;
+  // counter drum
+  METER.cv=document.createElement("canvas");METER.cv.width=360;METER.cv.height=72;METER.ctx=METER.cv.getContext("2d");
+  METER.tex=new THREE.CanvasTexture(METER.cv);METER.tex.encoding=THREE.sRGBEncoding;
+  const cm=new THREE.Mesh(new THREE.PlaneGeometry(64,13),new THREE.MeshBasicMaterial({map:METER.tex,toneMapped:false}));cm.position.set(MTX,MTY+44,fz+.3);g.add(cm);
+  decal(g,120,110,MTX,MTY+24,fz,5,(c,w,h,k)=>{
+    c.fillStyle="#f2f1ea";c.fillRect(0,0,w*k,h*k);
+    c.clearRect(8*k,(h/2+12)*k,(w-16)*k,9*k);           // slot: the disc edge shows through it
+    c.strokeStyle="#333";c.lineWidth=.4*k;c.strokeRect(8*k,(h/2+12)*k,(w-16)*k,9*k);
+    c.fillStyle="#1b2227";c.textAlign="center";c.textBaseline="middle";
+    c.font="800 "+Math.round(5*k)+"px Arial, sans-serif";c.fillText("kWh",(w/2+44)*k,35*k);
+    c.font="700 "+Math.round(4.4*k)+"px Arial, sans-serif";c.fillText("ELEKTR ENERGIYASI HISOBLAGICHI",w/2*k,(h/2+2)*k);
+    c.font="600 "+Math.round(3.6*k)+"px Arial, sans-serif";
+    c.fillText("1~  220 V  10–40 A  50 Hz",w/2*k,(h/2+28)*k);
+    c.fillText("1 kVt·soat = 600 ayl.   kl. 2,0",w/2*k,(h/2+34)*k);
+    c.fillText("SO-I446M",w/2*k,(h-6)*k);
+    c.strokeStyle="#1b2227";c.lineWidth=.5*k;c.strokeRect((w/2-34)*k,(35-8.5)*k,68*k,17*k);
+  });
+  const glass=new THREE.Mesh(new THREE.PlaneGeometry(114,102),new THREE.MeshStandardMaterial({color:0xffffff,transparent:true,opacity:.1,roughness:.04,metalness:0,envMapIntensity:1.2,depthWrite:false}));glass.position.set(MTX,MTY+24,58);glass.renderOrder=4;g.add(glass);
+  // terminal block (cover removed)
+  slab(g,140,44,14,4,MAT.black,MTX,MTY-70,54,.8);
+  const tx=[-45,-15,15,45],ids=["mt.1","mt.2","mt.3","mt.4"],kd=["L6","L6","N6","N6"];
+  const ds=["Hisoblagich 1: faza kirishi (manbadan)","Hisoblagich 2: faza chiqishi (avtomatga)","Hisoblagich 3: nol kirishi (manbadan)","Hisoblagich 4: nol chiqishi (avtomatga)"];
+  ids.forEach((id,i)=>{addT(id,{x:MTX+tx[i],y:MTY-76,z:54,dir:[0,-1],kind:kd[i],desc:ds[i]});hwScrew(g,id);
+    const sep=new THREE.Mesh(new THREE.BoxGeometry(2,40,8),MAT.dark);if(i<3){sep.position.set(MTX+tx[i]+15,MTY-70,58);g.add(sep);}});
+  decal(g,140,44,MTX,MTY-70,54.12,6,(c,w,h,k)=>{
+    c.fillStyle="#e7ecef";c.textAlign="center";c.textBaseline="middle";c.font="800 "+Math.round(5*k)+"px Arial, sans-serif";
+    tx.forEach((x,i)=>c.fillText(String(i+1),(w/2+x)*k,7*k));
+  });
+  // seal screws
+  [[-60,80],[60,80]].forEach(p=>{const s=new THREE.Mesh(new THREE.CylinderGeometry(3,3,2,12).rotateX(Math.PI/2),MAT.steel);s.position.set(MTX+p[0],MTY+p[1],41);g.add(s);});
+  aoPlane(MTX,MTY,150,190);
+  addTag("Hisoblagich",MTX,MTY+100,42,"top");
+  drawCounter();
+}
+function drawCounter(){
+  const g=METER.ctx,v=METER.kwh,s=Math.floor(v*10).toString().padStart(6,"0").slice(-6);
+  const key=s;if(key===METER.last)return;METER.last=key;
+  g.fillStyle="#111";g.fillRect(0,0,360,72);
+  for(let i=0;i<6;i++){
+    g.fillStyle=i===5?"#b81d1d":"#1c1c1c";g.fillRect(4+i*59,4,55,64);
+    g.fillStyle="#f4f4f0";g.font="700 50px Arial, sans-serif";g.textAlign="center";g.textBaseline="middle";g.fillText(s[i],31.5+i*59,38);
+  }
+  METER.tex.needsUpdate=true;dirty=true;
+}
+
+/* ---- surface-mounted Schuko sockets with a small terminal block ---- */
+const SOCK={};
+const APPL=[
+  {id:"none",name:"Bo'sh",P:0},
+  {id:"kettle",name:"Choynak 2,0 kW",P:2000},
+  {id:"tv",name:"Televizor 0,15 kW",P:150},
+  {id:"oven",name:"Duxovka 3,5 kW",P:3500},
+  {id:"strip",name:"Uzaytirgich: choynak + isitgich 4,5 kW",P:4500},
+  {id:"leak",name:"Nosoz choynak: korpusga sizish 50 mA",P:2000,leak:.05},
+  {id:"short",name:"Shnuri shikastlangan fen: qisqa tutashuv",P:0,short:true}
+];
+function buildSocket(id,sx,sy,title){
+  const g=new THREE.Group();scene.add(g);
+  slab(g,86,86,26,10,MAT.sock,sx,sy,26,2);
+  slab(g,74,74,4,9,MAT.sockDk,sx,sy,30,1.2);
+  mkCylZ(g,22,22,1,MAT.dark,sx,sy,30.2,40);
+  const rec=new THREE.Mesh(new THREE.CylinderGeometry(20,20,12,40,1,true).rotateX(Math.PI/2),std({color:0xe9e9e4,roughness:.5,side:THREE.DoubleSide}));rec.position.set(sx,sy,25);g.add(rec);
+  const bot=new THREE.Mesh(new THREE.CircleGeometry(20,40),MAT.sockDk);bot.position.set(sx,sy,19.2);g.add(bot);
+  [-9.5,9.5].forEach(dx=>{const h=new THREE.Mesh(new THREE.CircleGeometry(2.6,16),MAT.black);h.position.set(sx+dx,sy,19.3);g.add(h);});
+  [1,-1].forEach(s=>{const c=new THREE.Mesh(new THREE.BoxGeometry(8,2.4,8),MAT.nickel);c.position.set(sx,sy+s*19,24);g.add(c);});
+  // terminal block above the socket
+  slab(g,84,30,20,3,MAT.strip,sx,sy+64,30,.6);
+  const tt=[["l",-26,"L",title+" rozetkasi: L (faza)"],["n",0,"N",title+" rozetkasi: N (nol)"],["pe",26,"PE",title+" rozetkasi: ⏚ yerlash"]];
+  tt.forEach(t=>{addT(id+"."+t[0],{x:sx+t[1],y:sy+66,z:30,dir:[0,1],kind:t[2],desc:t[3]});hwScrew(g,id+"."+t[0]);});
+  decal(g,84,30,sx,sy+64,30.12,6,(c,w,h,k)=>{
+    c.fillStyle="#1a2025";c.textAlign="center";c.textBaseline="middle";c.font="800 "+Math.round(3.6*k)+"px Arial, sans-serif";
+    [["L",-26],["N",0],["⏚",26]].forEach(a=>c.fillText(a[0],(w/2+a[1])*k,(h-4)*k));
+  });
+  g.traverse(o=>{if(o.isMesh)o.userData.sock=id;});
+  // plug + cable (shown when something is plugged in)
+  const pg=new THREE.Group();pg.visible=false;g.add(pg);
+  const pb=new THREE.Mesh(new THREE.CylinderGeometry(17,19,20,32).rotateX(Math.PI/2),MAT.white);pb.position.set(sx,sy,40);pb.castShadow=true;pg.add(pb);
+  const grip=new THREE.Mesh(new THREE.BoxGeometry(30,12,16),MAT.white);grip.position.set(sx,sy-14,48);pg.add(grip);
+  const cab=new THREE.CatmullRomCurve3([V3(sx,sy-20,48),V3(sx,sy-48,46),V3(sx+8,-330,40),V3(sx,-370,30)]);
+  const cm=new THREE.Mesh(new THREE.TubeGeometry(cab,40,3,8,false),MAT.white);cm.castShadow=true;pg.add(cm);
+  pg.traverse(o=>{if(o.isMesh){o.userData.sock=id;o.userData.keep=true;}});
+  aoPlane(sx,sy,86,86);
+  SOCK[id]={x:sx,y:sy,appl:"none",plug:pg,models:{},grp:g};
+  SOCK[id].tag=addTag(title,sx,sy+92,32,"top");
+  SOCK[id].atag=addTag("",sx,-460,30,"top");SOCK[id].atag.el.hidden=true;
+}
+
+/* ---- appliances below the sockets ---- */
+function applModel(id,kind){
+  const S=SOCK[id];if(S.models[kind])return S.models[kind];
+  const g=new THREE.Group();scene.add(g);const x=S.x,y=-410;
+  const glow=std({color:0x222222,roughness:.3,emissive:0x000000});
+  if(kind==="kettle"||kind==="leak"){
+    const prof=[[0,0],[30,0],[31,4],[28,48],[24,58],[0,60]].map(p=>new THREE.Vector2(p[0],p[1]));
+    const body=new THREE.Mesh(new THREE.LatheGeometry(prof,40),std({color:kind==="leak"?0xd9d4cc:0xeeeeea,roughness:.35}));body.position.set(x,y-32,40);g.add(body);
+    const base=new THREE.Mesh(new THREE.CylinderGeometry(33,34,8,40),MAT.dark);base.position.set(x,y-36,40);g.add(base);
+    const h=new THREE.Mesh(new THREE.TorusGeometry(18,4,10,24,Math.PI),MAT.dark);h.position.set(x+26,y-6,40);h.rotation.z=-Math.PI/2;g.add(h);
+    const sp=new THREE.Mesh(new THREE.CylinderGeometry(4,7,18,12),std({color:0xeeeeea,roughness:.35}));sp.position.set(x-30,y+14,40);sp.rotation.z=.9;g.add(sp);
+    const ring=new THREE.Mesh(new THREE.TorusGeometry(29,1.6,8,40),glow);ring.position.set(x,y-30,40);ring.rotation.x=Math.PI/2;g.add(ring);
+    if(kind==="leak"){const w=new THREE.Mesh(new THREE.CircleGeometry(7,3),std({color:0xf2c200,roughness:.4,emissive:0x3a2a00}));w.position.set(x,y,72);g.add(w);}
+  }else if(kind==="tv"){
+    const st=new THREE.Mesh(new THREE.BoxGeometry(40,6,30),MAT.dark);st.position.set(x,y-38,15);g.add(st);
+    const nk=new THREE.Mesh(new THREE.BoxGeometry(8,22,6),MAT.dark);nk.position.set(x,y-26,15);g.add(nk);
+    slab(g,118,72,7,3,MAT.black,x,y+10,24,.6);
+    const sc=new THREE.Mesh(new THREE.PlaneGeometry(110,64),glow);sc.position.set(x,y+10,24.1);g.add(sc);
+  }else if(kind==="oven"){
+    slab(g,110,78,60,5,std({color:0xd8dadc,roughness:.35,metalness:.6}),x,y-4,60,1.2);
+    slab(g,96,46,2,4,MAT.black,x,y-10,61,.4);
+    const win=new THREE.Mesh(new THREE.PlaneGeometry(80,32),glow);win.position.set(x,y-10,62.2);g.add(win);
+    const hd=new THREE.Mesh(new THREE.CylinderGeometry(2.2,2.2,80,10).rotateZ(Math.PI/2),MAT.steel);hd.position.set(x,y+18,66);g.add(hd);
+    [-30,-12,6,24].forEach(dx=>mkCylZ(g,5,5,6,MAT.black,x+dx,y+28,60,16));
+  }else if(kind==="strip"){
+    slab(g,90,22,16,5,MAT.white,x,y+18,16,1);
+    [-18,18].forEach(dx=>{mkCylZ(g,8,9,10,MAT.white,x+dx,y+18,16,20);});
+    for(let i=0;i<7;i++){slab(g,10,60,26,3,std({color:0xeeeeea,roughness:.4}),x-36+i*12,y-20,30,1);}
+    const pipe=new THREE.Mesh(new THREE.CylinderGeometry(3,3,84,8).rotateZ(Math.PI/2),MAT.grey);pipe.position.set(x,y-48,16);g.add(pipe);
+  }else if(kind==="short"){
+    const hd=new THREE.Mesh(new THREE.CylinderGeometry(16,18,60,24).rotateZ(Math.PI/2),std({color:0x9b2d6a,roughness:.4}));hd.position.set(x,y+6,26);g.add(hd);
+    const hn=new THREE.Mesh(new THREE.CylinderGeometry(9,9,40,16),std({color:0x9b2d6a,roughness:.4}));hn.position.set(x+12,y-22,26);g.add(hn);
+    const burn=new THREE.Mesh(new THREE.SphereGeometry(5,10,8),std({color:0x1a1a1a,roughness:.9}));burn.position.set(x+4,y+40,30);g.add(burn);
+  }
+  g.traverse(o=>{if(o.isMesh){o.castShadow=true;o.userData.keep=true;}});
+  g.visible=false;
+  S.models[kind]={grp:g,glow:glow};
+  return S.models[kind];
+}
+
+/* ---- surface-mounted one-key switch: terminals L, L1, L2 (change-over) ---- */
+const SW={on:false,rk:null};
+function buildSwitch(sx,sy){
+  const g=new THREE.Group();scene.add(g);
+  slab(g,86,86,26,10,MAT.sock,sx,sy,26,2);
+  slab(g,62,62,4,6,MAT.sockDk,sx,sy,30,1);
+  const rk=new THREE.Group();rk.position.set(sx,sy,31);g.add(rk);SW.rk=rk;
+  const r=new THREE.Mesh(slabGeo(54,54,8,6,1.2),MAT.white);r.position.z=4;r.castShadow=true;rk.add(r);
+  const mk=new THREE.Mesh(new THREE.BoxGeometry(10,3,1),std({color:0xd23030,roughness:.4}));mk.position.set(0,18,8.5);rk.add(mk);
+  rk.traverse(o=>{if(o.isMesh){o.userData.sw=true;}});
+  slab(g,84,30,20,3,MAT.strip,sx,sy+64,30,.6);
+  const tt=[["sw.l",-26,"LL","Kalit: L (faza kirishi)"],["sw.l1",0,"LL","Kalit: L1 (yoqilganda L bilan tutashadi)"],["sw.l2",26,"LL","Kalit: L2 (ikkinchi chiqish, bu sxemada ishlatilmaydi)"]];
+  tt.forEach(t=>{addT(t[0],{x:sx+t[1],y:sy+66,z:30,dir:[0,1],kind:t[2],desc:t[3]});hwScrew(g,t[0]);});
+  decal(g,84,30,sx,sy+64,30.12,6,(c,w,h,k)=>{
+    c.fillStyle="#1a2025";c.textAlign="center";c.textBaseline="middle";c.font="800 "+Math.round(3.6*k)+"px Arial, sans-serif";
+    [["L",-26],["L1",0],["L2",26]].forEach(a=>c.fillText(a[0],(w/2+a[1])*k,(h-4)*k));
+  });
+  aoPlane(sx,sy,86,86);
+  addTag("Kalit",sx,sy+92,32,"top");
+  setSwitch(false);
+}
+function setSwitch(on){SW.on=on;SW.rk.rotation.x=on?-.16:.16;dirty=true;if(typeof shadowDirty!=="undefined")shadowDirty=true;}
+
+/* ---- ceiling rose with an E27 lamp ---- */
+const LX=300,LY=262;
+const LAMP={glass:null,fil:null,halo:null,on:0};
+function buildLamp(){
+  const g=new THREE.Group();scene.add(g);
+  mkCylZ(g,52,54,14,MAT.sock,LX,LY,0,48);
+  slab(g,54,22,6,3,MAT.strip,LX,LY-30,20,.6);
+  [["lamp.l",-14,"LL","Lampa patroni: L (kalitdan keladigan faza)"],["lamp.n",14,"NL","Lampa patroni: N (nol)"]].forEach(t=>{
+    addT(t[0],{x:LX+t[1],y:LY-32,z:20,dir:[0,-1],kind:t[2],desc:t[3]});hwScrew(g,t[0]);});
+  decal(g,54,22,LX,LY-30,20.12,6,(c,w,h,k)=>{c.fillStyle="#1a2025";c.textAlign="center";c.textBaseline="middle";c.font="800 "+Math.round(3.6*k)+"px Arial, sans-serif";c.fillText("L",(w/2-14)*k,4*k);c.fillText("N",(w/2+14)*k,4*k);});
+  mkCylZ(g,17,15,34,MAT.white,LX,LY+8,14,32);
+  mkCylZ(g,12,12,10,MAT.alu2,LX,LY+8,48,24);
+  const neck=new THREE.Mesh(new THREE.CylinderGeometry(13,12,14,24).rotateX(Math.PI/2),MAT.bulbGlass);neck.position.set(LX,LY+8,64);g.add(neck);
+  const bulb=new THREE.Mesh(new THREE.SphereGeometry(30,32,22),MAT.bulbGlass);bulb.position.set(LX,LY+8,92);bulb.renderOrder=3;g.add(bulb);
+  LAMP.fil=std({color:0x6a5a40,roughness:.4,emissive:0x000000});
+  const fc=new THREE.CatmullRomCurve3([V3(LX-8,LY+8,86),V3(LX-4,LY+12,92),V3(LX,LY+8,94),V3(LX+4,LY+12,92),V3(LX+8,LY+8,86)]);
+  const fil=new THREE.Mesh(new THREE.TubeGeometry(fc,20,.9,6,false),LAMP.fil);g.add(fil);
+  [-8,8].forEach(dx=>{const w=new THREE.Mesh(new THREE.CylinderGeometry(.6,.6,26,6).rotateX(Math.PI/2),MAT.steel);w.position.set(LX+dx,LY+8,74);g.add(w);});
+  LAMP.halo=new THREE.Mesh(new THREE.PlaneGeometry(220,220),new THREE.MeshBasicMaterial({map:glowTex,transparent:true,opacity:0,blending:THREE.AdditiveBlending,depthWrite:false,toneMapped:false}));
+  LAMP.halo.position.set(LX,LY+8,96);LAMP.halo.renderOrder=6;g.add(LAMP.halo);
+  aoPlane(LX,LY,108,108);
+  addTag("Lampa (yoritish)",LX,LY+70,30,"top");
+}
+const glowTex=(()=>{
+  const c=document.createElement("canvas");c.width=c.height=128;const g=c.getContext("2d");
+  const r=g.createRadialGradient(64,64,0,64,64,64);
+  r.addColorStop(0,"rgba(255,232,170,1)");r.addColorStop(.3,"rgba(255,205,120,.45)");r.addColorStop(1,"rgba(255,180,80,0)");
+  g.fillStyle=r;g.fillRect(0,0,128,128);
+  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;return t;
+})();
+/* =====================================================================
+   BUILD THE SCENE, THEN THE CONNECTION RULES
+   ===================================================================== */
+const DIN_Y=20;
+buildBoard();buildDucts();
+buildRail(-340,100,DIN_Y);
+buildConsole();buildMeter();
+buildMCB("qf1",-294,DIN_Y,2,"C32","QF1",["L6","N6"]);
+buildKV(-218,DIN_Y);
+buildRCBO("d1",-142,DIN_Y,"D1");buildRCBO("d2",-66,DIN_Y,"D2");buildRCBO("d3",10,DIN_Y,"D3");
+buildMCB("qf2",68,DIN_Y,1,"C16","QF2",["L6"]);
+buildSocket("x1",-330,-250,"X1");buildSocket("x2",-195,-250,"X2");buildSocket("x3",-60,-250,"X3");
+buildSwitch(90,-250);buildLamp();
+(function shelf(){const g=new THREE.Group();scene.add(g);slab(g,470,8,96,2,std({color:0x8c6a4a,roughness:.7}),-185,-452,96,.8);
+  [-400,30].forEach(x=>{mkBox(g,6,30,60,MAT.steelDark,x,-470,0);});})();
+mergeStatic();
+
+/* Merge every static, opaque mesh that shares a material into one draw call.
+   Moving or clickable parts (levers, buttons, rocker, meter disc, plugs, appliances) stay separate. */
+function mergeStatic(){
+  const keepRoots=new Set([SRC.knob,METER.disc,SW.rk]);
+  for(const k in DEV){keepRoots.add(DEV[k].grp);if(DEV[k].btn)keepRoots.add(DEV[k].btn);}
+  scene.updateMatrixWorld(true);
+  const groups=new Map();
+  scene.traverse(o=>{
+    if(!o.isMesh||o.isInstancedMesh||!o.visible)return;
+    const m=o.material;if(!m||Array.isArray(m)||m.transparent)return;
+    const u=o.userData;if(u.keep||u.brk||u.test||u.sw||u.sock)return;
+    for(let p=o.parent;p;p=p.parent){if(keepRoots.has(p))return;if(p.visible===false)return;}
+    const k=m.uuid+"|"+(o.castShadow?1:0)+(o.receiveShadow?1:0);
+    if(!groups.has(k))groups.set(k,{list:[]});
+    groups.get(k).list.push(o);
+  });
+  groups.forEach(gr=>{
+    if(gr.list.length<2)return;
+    bakeMerge(gr.list).forEach(mm=>{mm.receiveShadow=true;mm.matrixAutoUpdate=false;scene.add(mm);});
+    gr.list.forEach(o=>{if(o.parent)o.parent.remove(o);});
+  });
+}
+
+/* Target nets: every terminal of a net must end up connected, and nothing else. */
+const NETS=[
+  {id:"L0",kind:"L6",t:["src.l","mt.1"],cls:"in",ph:"L",st:0},
+  {id:"N0",kind:"N6",t:["src.n","mt.3"],cls:"in",ph:"N",st:0},
+  {id:"L1",kind:"L6",t:["mt.2","qf1.l1"],cls:"in",ph:"L",st:1},
+  {id:"N1",kind:"N6",t:["mt.4","qf1.n1"],cls:"in",ph:"N",st:1},
+  {id:"L2",kind:"L6",t:["qf1.l2","kv.li"],cls:"in",ph:"L",st:2},
+  {id:"N2",kind:"N6",t:["qf1.n2","kv.ni"],cls:"in",ph:"N",st:2},
+  {id:"LB",kind:"L6",t:["kv.lo","d1.l1","d2.l1","d3.l1","qf2.l1"],cls:"in",ph:"L",st:3},
+  {id:"NB",kind:"N6",t:["kv.no","d1.n1","d2.n1","d3.n1","lamp.n"],cls:"in",ph:"N",st:3},
+  {id:"S1L",kind:"L",t:["d1.l2","x1.l"],cls:"s1",ph:"L",st:4},
+  {id:"S1N",kind:"N",t:["d1.n2","x1.n"],cls:"s1",ph:"N",st:4},
+  {id:"S2L",kind:"L",t:["d2.l2","x2.l"],cls:"s2",ph:"L",st:4},
+  {id:"S2N",kind:"N",t:["d2.n2","x2.n"],cls:"s2",ph:"N",st:4},
+  {id:"S3L",kind:"L",t:["d3.l2","x3.l"],cls:"s3",ph:"L",st:4},
+  {id:"S3N",kind:"N",t:["d3.n2","x3.n"],cls:"s3",ph:"N",st:4},
+  {id:"PE",kind:"PE",t:["src.e","x1.pe","x2.pe","x3.pe"],cls:"pe",ph:"PE",st:0},
+  {id:"SW",kind:"LL",t:["qf2.l2","sw.l"],cls:"lt",ph:"L",st:5},
+  {id:"LP",kind:"LL",t:["sw.l1","lamp.l"],cls:"lt",ph:"L",st:6}
+];
+const NETOF={};NETS.forEach(n=>n.t.forEach(id=>{NETOF[id]=n;}));
+const BUS=[];
+const pk=(a,b)=>a<b?a+"|"+b:b+"|"+a;
+const sameNet=(a,b)=>!!NETOF[a]&&NETOF[a]===NETOF[b];
+const LIGHT=new Set(["lamp","sw"]);
+
+const F2=(a,b)=>F=>F(a)===F(b);
+const REQ=[
+  {text:"Manba L → hisoblagich 1, manba N → hisoblagich 3",ids:["src.l","mt.1","src.n","mt.3"],parts:[F2("src.l","mt.1"),F2("src.n","mt.3")]},
+  {text:"Hisoblagich 2 → QF1 (1, L), hisoblagich 4 → QF1 (3, N)",ids:["mt.2","qf1.l1","mt.4","qf1.n1"],parts:[F2("mt.2","qf1.l1"),F2("mt.4","qf1.n1")]},
+  {text:"QF1 chiqishi → kuchlanish relesi IN: L → L, N → N",ids:["qf1.l2","kv.li","qf1.n2","kv.ni"],parts:[F2("qf1.l2","kv.li"),F2("qf1.n2","kv.ni")]},
+  {text:"Rele OUT L → D1, D2, D3 ning L kirishi va QF2 (faza shinasi)",ids:["kv.lo","d1.l1","d2.l1","d3.l1","qf2.l1"],parts:[F2("kv.lo","d1.l1"),F2("kv.lo","d2.l1"),F2("kv.lo","d3.l1"),F2("kv.lo","qf2.l1")]},
+  {text:"Rele OUT N → D1, D2, D3 ning N kirishi (nol shinasi)",ids:["kv.no","d1.n1","d2.n1","d3.n1"],parts:[F2("kv.no","d1.n1"),F2("kv.no","d2.n1"),F2("kv.no","d3.n1")]},
+  {text:"D1 chiqishi → X1 rozetka: L → L, N → N",ids:["d1.l2","x1.l","d1.n2","x1.n"],parts:[F2("d1.l2","x1.l"),F2("d1.n2","x1.n")]},
+  {text:"D2 chiqishi → X2 rozetka: L → L, N → N",ids:["d2.l2","x2.l","d2.n2","x2.n"],parts:[F2("d2.l2","x2.l"),F2("d2.n2","x2.n")]},
+  {text:"D3 chiqishi → X3 rozetka: L → L, N → N",ids:["d3.l2","x3.l","d3.n2","x3.n"],parts:[F2("d3.l2","x3.l"),F2("d3.n2","x3.n")]},
+  {text:"Himoya yerlash: manba E → X1, X2, X3 ning ⏚ qisqichi",ids:["src.e","x1.pe","x2.pe","x3.pe"],parts:[F2("src.e","x1.pe"),F2("src.e","x2.pe"),F2("src.e","x3.pe")]},
+  {text:"QF2 chiqishi (2) → kalit L",ids:["qf2.l2","sw.l"],parts:[F2("qf2.l2","sw.l")]},
+  {text:"Kalit L1 → lampa L",ids:["sw.l1","lamp.l"],parts:[F2("sw.l1","lamp.l")]},
+  {text:"Rele OUT N → lampa N",ids:["kv.no","lamp.n"],parts:[F2("kv.no","lamp.n")]}
+];
+const NET_COUNT=REQ.length;
+
+let mode="learn",wires=[],selected=null,wd=null,gest=null,pinch=null,powered=false,checked=false,examOK=false;
+let AN=null,hintTimer=null,hovT=null,hovW=-1;
+const DEFAULT="Klemma halqasini bosib boshqasiga sudrang yoki ikkita klemmani ketma-ket bosing.";
+const say=setStatus;
+
+function compute(extra){
+  const par={};for(const id in T)par[id]=id;
+  function find(x){while(par[x]!==x){par[x]=par[par[x]];x=par[x];}return x;}
+  function uni(a,b){a=find(a);b=find(b);if(a!==b)par[a]=b;}
+  BUS.forEach(b=>uni(b[0],b[1]));
+  const list=extra?wires.concat([extra]):wires;
+  list.forEach(w=>uni(w.from,w.to));
+  return {find:find};
+}
+/* conductor: 6 mm2 on the input and the busbar jumpers, 1.5 mm2 to the lamp and switch */
+function wireKind(a,b){
+  if(!sameNet(a,b))return "GR";
+  const n=NETOF[a],light=LIGHT.has(T[a].dev)||LIGHT.has(T[b].dev);
+  if(light)return n.ph==="N"?"NL":"LL";
+  return n.kind;
+}
+function addWire(a,b){wires.push({from:a,to:b,kind:wireKind(a,b)});}
+
+const ROLE={
+  "src.l":"Manba L hisoblagichning 1-qisqichiga (faza kirishi) ulanadi.","src.n":"Manba N hisoblagichning 3-qisqichiga (nol kirishi) ulanadi.",
+  "src.e":"Manba E (himoya yerlash) har bir rozetkaning ⏚ qisqichiga boradi.",
+  "mt.1":"Hisoblagich 1 — faza kirishi: manba L dan keladi.","mt.2":"Hisoblagich 2 — faza chiqishi: QF1 ning 1 (L) qisqichiga boradi.",
+  "mt.3":"Hisoblagich 3 — nol kirishi: manba N dan keladi.","mt.4":"Hisoblagich 4 — nol chiqishi: QF1 ning 3 (N) qisqichiga boradi.",
+  "qf1.l1":"QF1 1 (L) — hisoblagichning 2-qisqichidan keladi.","qf1.n1":"QF1 3 (N) — hisoblagichning 4-qisqichidan keladi.",
+  "qf1.l2":"QF1 2 (L) — kuchlanish relesining IN L qisqichiga boradi.","qf1.n2":"QF1 4 (N) — kuchlanish relesining IN N qisqichiga boradi.",
+  "kv.li":"Rele IN L (pastda) QF1 ning 2-chiqishidan keladi.","kv.ni":"Rele IN N (pastda) QF1 ning 4-chiqishidan keladi.",
+  "kv.lo":"Rele OUT L (tepada) — faza shinasi: D1, D2, D3 ning L kirishi va QF2 ga boradi.",
+  "kv.no":"Rele OUT N (tepada) — nol shinasi: D1, D2, D3 ning N kirishi va lampa N ga boradi.",
+  "d1.l1":"D1 L kirishi faza shinasidan (rele OUT L yoki qo'shni difavtomat L) keladi.","d2.l1":"D2 L kirishi faza shinasidan keladi.","d3.l1":"D3 L kirishi faza shinasidan keladi.",
+  "d1.n1":"D1 N kirishi nol shinasidan (rele OUT N) keladi.","d2.n1":"D2 N kirishi nol shinasidan keladi.","d3.n1":"D3 N kirishi nol shinasidan keladi.",
+  "d1.l2":"D1 L chiqishi faqat X1 rozetkaning L qisqichiga boradi.","d1.n2":"D1 N chiqishi faqat X1 rozetkaning N qisqichiga boradi.",
+  "d2.l2":"D2 L chiqishi faqat X2 rozetkaning L qisqichiga boradi.","d2.n2":"D2 N chiqishi faqat X2 rozetkaning N qisqichiga boradi.",
+  "d3.l2":"D3 L chiqishi faqat X3 rozetkaning L qisqichiga boradi.","d3.n2":"D3 N chiqishi faqat X3 rozetkaning N qisqichiga boradi.",
+  "qf2.l1":"QF2 kirishi faza shinasidan keladi.","qf2.l2":"QF2 chiqishi kalitning L qisqichiga boradi.",
+  "x1.l":"X1 L — D1 ning L chiqishidan.","x1.n":"X1 N — D1 ning N chiqishidan.","x1.pe":"X1 ⏚ — manba E dan.",
+  "x2.l":"X2 L — D2 ning L chiqishidan.","x2.n":"X2 N — D2 ning N chiqishidan.","x2.pe":"X2 ⏚ — manba E dan.",
+  "x3.l":"X3 L — D3 ning L chiqishidan.","x3.n":"X3 N — D3 ning N chiqishidan.","x3.pe":"X3 ⏚ — manba E dan.",
+  "sw.l":"Kalit L — QF2 chiqishidan keladigan faza.","sw.l1":"Kalit L1 — lampaning L qisqichiga boradi.",
+  "sw.l2":"Kalit L2 ikki joydan boshqarish (prohodnoy) sxemasi uchun; bu yerda ishlatilmaydi. Lampa L1 ga ulanadi.",
+  "lamp.l":"Lampa L — kalitning L1 qisqichidan keladi.","lamp.n":"Lampa N — nol shinasidan (rele OUT N) keladi."
+};
+function roleOf(id){return ROLE[id]||(T[id].desc+": bu sxemada ishlatilmaydi.");}
+function reason(a,b){
+  const A=T[a],B=T[b],na=NETOF[a],nb=NETOF[b];
+  if(!na||!nb){const u=!na?a:b;return roleOf(u);}
+  if(A.dev===B.dev)return "Bir qurilmaning ikki klemmasini o'zaro ulash tokni qurilmadan chetlab o'tkazadi. "+roleOf(a);
+  const pa=na.ph,pb=nb.ph;
+  if(pa==="PE"||pb==="PE")return "Himoya yerlash (PE) faza yoki nolga ulanmaydi: odamni tok urishidan himoya qiluvchi sim tok o'tkazmasligi kerak. E faqat rozetkalarning ⏚ qisqichiga boradi.";
+  const has=(d)=>A.dev===d||B.dev===d;
+  if(has("sw")&&(pa==="N"||pb==="N"))return "Kalit faqat fazani (L) uzadi. Nolni uzsangiz, lampa o'chgan bo'lsa ham patronda 220 V qoladi — lampani almashtirayotganda tok urishi mumkin.";
+  if(pa!==pb)return "Faza (L) va nol (N) bir nuqtaga tushib qoladi: bu qisqa tutashuv. "+roleOf(a);
+  if(has("mt"))return roleOf(A.dev==="mt"?a:b);
+  const isOut=x=>/^d\d\.(l2|n2)$/.test(x),isX=x=>/^x\d\./.test(x);
+  if(isOut(a)&&isOut(b))return "Difavtomatlarning chiqishlari bir-biriga ulanmaydi: har biri o'z rozetkasini himoya qiladi.";
+  if((isOut(a)&&isX(b))||(isOut(b)&&isX(a)))return "Har bir difavtomat o'z rozetkasiga ulanadi: D1 → X1, D2 → X2, D3 → X3.";
+  if((isOut(a)||isOut(b))&&(na.st===3||nb.st===3)){
+    if(pa==="N")return "RCBO chiqishidagi N faqat o'z rozetkasiga boradi. Agar uni umumiy nol shinasiga ulasangiz, RCBO kirgan va qaytgan tokni solishtira olmaydi va asossiz o'chadi.";
+    return "Difavtomat chiqishini kirish shinasiga ulash uni chetlab o'tadi: rozetka himoyasiz qoladi. "+roleOf(a);
+  }
+  if((isX(a)||isX(b))&&(na.st===3||nb.st===3))return "Rozetka umumiy shinaga to'g'ridan ulanmaydi: L va N difavtomatning pastki chiqishidan keladi, aks holda 30 mA sizish himoyasi ishlamaydi.";
+  if((a==="kv.lo"||b==="kv.lo"||a==="kv.no"||b==="kv.no")&&(na.st===1||nb.st===1||na.st===2||nb.st===2))return "Rele kuchlanishi: pastki IN qisqichlariga QF1 dan keladi, yuqori OUT qisqichlaridan iste'molchilarga ketadi.";
+  if(has("kv")&&(na.st===2||nb.st===2||na.st===3||nb.st===3))return "Rele kuchlanishi: pastki IN — kirish (QF1 dan), yuqori OUT — chiqish (difavtomatlar va yoritishga). "+roleOf(a);
+  if(has("lamp")&&(isOut(a)||isOut(b)||isX(a)||isX(b)))return "Lampa rozetka zanjiriga ulanmaydi: lampa N umumiy nol shinasidan, L esa kalit orqali QF2 dan keladi.";
+  if(has("lamp")&&pa==="L")return "Lampaga faza kalit orqali keladi: QF2 → kalit L, kalit L1 → lampa L. Kalitni chetlab o'tsangiz lampani o'chirib bo'lmaydi.";
+  if(has("qf1"))return roleOf(A.dev==="qf1"?a:b);
+  if(has("qf2"))return roleOf(A.dev==="qf2"?a:b);
+  return "Bu ikki klemma o'zaro ulanmaydi. "+roleOf(a);
+}
+function analyze(){
+  const c=compute(),F=c.find;
+  const states=REQ.map(r=>{
+    const ok=r.parts.map(f=>f(F)),have=ok.filter(Boolean).length;
+    return {req:r,done:have===r.parts.length,have:have,total:r.parts.length};
+  });
+  const bad=[];
+  wires.forEach((w,i)=>{if(!sameNet(w.from,w.to))bad.push(i);});
+  // two different target nets merged through a chain of otherwise allowed wires cannot happen (each wire stays in one net)
+  const doneCount=states.filter(s=>s.done).length;
+  return {states:states,bad:bad,doneCount:doneCount,find:F,solved:doneCount===NET_COUNT&&bad.length===0};
+}
+function canPower(){return AN.solved&&(mode==="learn"||examOK);}
+
+/* =====================================================================
+   WIRES IN 3D
+   ===================================================================== */
+const wireGroup=new THREE.Group();scene.add(wireGroup);
+const ghostGroup=new THREE.Group();scene.add(ghostGroup);
+const ringGroup=new THREE.Group();scene.add(ringGroup);
+let wireObjs=[];
+let previewMesh=null;
+function pathPoints(curve){
+  const P=[];
+  const push=p=>{if(!P.length||P[P.length-1].distanceToSquared(p)>.04)P.push(p);};
+  if(curve.curves){
+    curve.curves.forEach(c=>{
+      if(c.isLineCurve3)push(c.v1.clone());
+      else for(let k=0;k<5;k++)push(c.getPoint(k/5));
+    });
+    const last=curve.curves[curve.curves.length-1];push((last.v2||last.getPoint(1)).clone());
+  }else{const n=40;for(let k=0;k<=n;k++)push(curve.getPoint(k/n));}
+  return P;
+}
+const _q=new THREE.Quaternion(),_t0=new THREE.Vector3(),_t1=new THREE.Vector3();
+function lightTube(P,r,R){
+  R=R||7;const W=R+1,n=P.length,pos=new Float32Array(n*W*3),nor=new Float32Array(n*W*3),uv=new Float32Array(n*W*2),idx=[];let acc=0;
+  const T=P.map((p,i)=>{const a=P[Math.max(0,i-1)],b=P[Math.min(n-1,i+1)];return b.clone().sub(a).normalize();});
+  let N=Math.abs(T[0].z)<.9?V3(0,0,1):V3(1,0,0);N=N.sub(T[0].clone().multiplyScalar(N.dot(T[0]))).normalize();
+  for(let i=0;i<n;i++){
+    if(i>0){_q.setFromUnitVectors(T[i-1],T[i]);N.applyQuaternion(_q);N.sub(T[i].clone().multiplyScalar(N.dot(T[i]))).normalize();acc+=P[i].distanceTo(P[i-1]);}
+    const B=T[i].clone().cross(N);
+    for(let j=0;j<W;j++){
+      const a=j/R*Math.PI*2,cx=Math.cos(a),sx=Math.sin(a);
+      const nx=N.x*cx+B.x*sx,ny=N.y*cx+B.y*sx,nz=N.z*cx+B.z*sx,k=(i*W+j)*3,q=(i*W+j)*2;
+      nor[k]=nx;nor[k+1]=ny;nor[k+2]=nz;pos[k]=P[i].x+nx*r;pos[k+1]=P[i].y+ny*r;pos[k+2]=P[i].z+nz*r;
+      uv[q]=acc/20;uv[q+1]=j/R;
+    }
+    if(i<n-1)for(let j=0;j<R;j++){const a=i*W+j,b=a+1,c=a+W,d=b+W;idx.push(a,b,c,b,d,c);}
+  }
+  const g=new THREE.BufferGeometry();
+  g.setAttribute("position",new THREE.BufferAttribute(pos,3));g.setAttribute("normal",new THREE.BufferAttribute(nor,3));g.setAttribute("uv",new THREE.BufferAttribute(uv,2));
+  g.setIndex(idx);g.computeBoundingSphere();return g;
+}
+function tubeMesh(curve,radius,mat){
+  const m=new THREE.Mesh(lightTube(pathPoints(curve),radius),mat);
+  m.castShadow=true;m.receiveShadow=true;return m;
+}
+function disposeObj(o){o.traverse(n=>{if(n.geometry&&!n.userData.shared&&!(n.parent&&n.parent.userData.shared))n.geometry.dispose();});}
+function disposeChildren(grp){
+  while(grp.children.length){const o=grp.children[0];grp.remove(o);disposeObj(o);}
+}
+function endPt(id,s){
+  const t=T[id],p=t.anchor.clone().addScaledVector(t.dir,t.lead);
+  p.z+=s*2.2;if(t.type==="lug")p.z-=.8;
+  return p;
+}
+/* ---- orthogonal routing through the cable ducts ---- */
+function ductFor(t){
+  const up=t.dir.y>0||(t.dir.y===0&&t.type==="stud");
+  let best=null;
+  for(const d of DUCTS.H){
+    if(up?d.y>t.y:d.y<t.y){if(!best||Math.abs(d.y-t.y)<Math.abs(best.y-t.y))best=d;}
+  }
+  return best||DUCTS.H[0];
+}
+function roundPath(pts,r){
+  const P=[pts[0]];
+  for(let i=1;i<pts.length;i++)if(pts[i].distanceTo(P[P.length-1])>.6)P.push(pts[i]);
+  const path=new THREE.CurvePath();
+  if(P.length<2){path.add(new THREE.LineCurve3(P[0],P[0].clone().add(V3(0,.1,0))));return path;}
+  let prev=P[0];
+  for(let i=1;i<P.length-1;i++){
+    const c=P[i],a=c.clone().sub(prev),b=P[i+1].clone().sub(c),la=a.length(),lb=b.length();
+    const d1=Math.min(r,la*.5),d2=Math.min(r,lb*.5);
+    const p1=c.clone().addScaledVector(a.normalize(),-d1),p2=c.clone().addScaledVector(b.normalize(),d2);
+    if(p1.distanceTo(prev)>.05)path.add(new THREE.LineCurve3(prev,p1));
+    path.add(new THREE.QuadraticBezierCurve3(p1,c,p2));
+    prev=p2;
+  }
+  path.add(new THREE.LineCurve3(prev,P[P.length-1]));
+  return path;
+}
+function stubPts(id,s,D,dy,lz,rev){
+  const t=T[id],p0=endPt(id,s),sg=D.y>t.y?1:-1,edge=D.y-sg*D.w/2;
+  const run=Math.abs(edge-p0.y),zIn=D.z0+lz;
+  const pts=[p0];
+  if(run>70){
+    // long drop (e.g. the motor cable): fall back towards the plate first, then run straight to the duct
+    pts.push(V3(p0.x,p0.y+sg*Math.min(40,run*.3),Math.max(zIn+18,p0.z*.45)));
+    pts.push(V3(p0.x,edge-sg*10,zIn+16));
+  }else pts.push(V3(p0.x,edge-sg*Math.min(6,run*.3),Math.max(p0.z,zIn+12)));
+  pts.push(V3(p0.x,D.y+dy,zIn));
+  return rev?pts.reverse():pts;
+}
+function wireCurve(fromId,toId,i,sa,sb){
+  const A=T[fromId],B=T[toId],Da=ductFor(A),Db=ductFor(B);
+  const lane=k=>((k*7)%5-2),dyA=lane(i)*Da.w*.17,dyB=lane(i)*Db.w*.17,lz=3+((i*3)%4)*3.6;
+  const pa=stubPts(fromId,sa||0,Da,dyA,lz,false),pb=stubPts(toId,sb||0,Db,dyB,lz,true);
+  let mid=[];
+  if(Da!==Db){
+    const xa=A.x,xb=B.x;
+    let V=DUCTS.V[0],bc=1e9;
+    for(const v of DUCTS.V){const c=Math.abs(xa-v.x)+Math.abs(xb-v.x);if(c<bc){bc=c;V=v;}}
+    const dx=lane(i+2)*V.w*.17,zv=V.z0+lz;
+    mid=[V3(V.x+dx,Da.y+dyA,zv),V3(V.x+dx,Db.y+dyB,zv)];
+  }
+  return roundPath(pa.concat(mid,pb),7);
+}
+/* printed wire markers (heat-shrink sleeves) */
+const MARK={L0:"L",N0:"N",L1:"L1",N1:"N1",L2:"L2",N2:"N2",LB:"L3",NB:"N3",S1L:"L4",S1N:"N4",S2L:"L5",S2N:"N5",S3L:"L6",S3N:"N6",PE:"PE",SW:"L7",LP:"L8"};
+const markTex={};
+function markMat(txt){
+  if(markTex[txt])return markTex[txt];
+  const c=document.createElement("canvas");c.width=128;c.height=84;const g=c.getContext("2d");
+  g.fillStyle="#f4f3ee";g.fillRect(0,0,128,84);
+  g.fillStyle="#141618";g.font="800 "+(txt.length>3?18:25)+"px Arial, sans-serif";g.textAlign="center";g.textBaseline="middle";
+  [0,32,64,96,128].forEach(u=>{g.save();g.translate(u,42);g.rotate(-Math.PI/2);g.fillText(txt,0,2);g.restore();});
+  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=MAXA;
+  return markTex[txt]=std({color:0xffffff,map:t,roughness:.55});
+}
+const _Y=V3(0,1,0),markGeo={};
+function markerMesh(curve,u,txt,r){
+  const p=curve.getPointAt(u),tg=curve.getTangentAt(u).normalize();
+  const key="m"+r;if(!markGeo[key])markGeo[key]=new THREE.CylinderGeometry(r+.75,r+.75,13,14,1,true);
+  const m=new THREE.Mesh(markGeo[key],markMat(txt));m.userData.shared=true;
+  m.position.copy(p);m.quaternion.setFromUnitVectors(_Y,tg);
+  m.castShadow=true;return m;
+}
+function makeWireObj(fromId,toId,i,matKey,sa,sb){
+  const grp=new THREE.Group();
+  const curve=wireCurve(fromId,toId,i,sa,sb);
+  const r=WR[matKey]||1.75;
+  const tube=tubeMesh(curve,r,WM[matKey]||WM.GR);
+  tube.userData.wire=i;grp.add(tube);
+  // fittings and markers of one wire are baked into one mesh per material (fewer draw calls)
+  const parts=new THREE.Group();
+  parts.add(endMesh(fromId,matKey,sa));parts.add(endMesh(toId,matKey,sb));
+  const n=sameNet(fromId,toId)?NETOF[fromId]:null;
+  if(n&&MARK[n.id]){
+    const L=curve.getLength(),u=Math.min(.45,22/L);
+    parts.add(markerMesh(curve,u,MARK[n.id],r));parts.add(markerMesh(curve,1-u,MARK[n.id],r));
+  }
+  parts.updateMatrixWorld(true);
+  const list=[];parts.traverse(o=>{if(o.isMesh)list.push(o);});
+  bakeMerge(list).forEach(m=>grp.add(m));
+  return {grp:grp,tube:tube,curve:curve,kind:matKey};
+}
+/* incremental: a wire whose route parameters did not change keeps its geometry */
+let wireCache=new Map();
+function buildWires(){
+  while(wireGroup.children.length)wireGroup.remove(wireGroup.children[0]);
+  const next=new Map();wireObjs=[];
+  const cnt={};
+  wires.forEach((w,i)=>{
+    const bad=checked&&AN.bad.indexOf(i)>=0,kind=bad?"bad":w.kind;
+    const sa=cnt[w.from]||0,sb=cnt[w.to]||0;cnt[w.from]=sa+1;cnt[w.to]=sb+1;
+    const key=[w.from,w.to,i,kind,sa,sb].join("|");
+    let o=wireCache.get(key);
+    if(o)wireCache.delete(key);else o=makeWireObj(w.from,w.to,i,kind,sa,sb);
+    o.tube.material=WM[kind]||WM.GR;
+    next.set(key,o);wireGroup.add(o.grp);wireObjs.push(o);
+  });
+  wireCache.forEach(o=>disposeObj(o.grp));
+  wireCache=next;
+  hovW=-1;dirty=true;shadowDirty=true;
+}
+function flashBad(a,b){
+  const o=makeWireObj(a,b,wires.length,"bad");
+  ghostGroup.add(o.grp);dirty=true;
+  setTimeout(()=>{ghostGroup.remove(o.grp);o.grp.traverse(n=>{if(n.geometry&&!n.userData.shared&&!(n.parent&&n.parent.userData.shared))n.geometry.dispose();});dirty=true;},1500);
+}
+function setHoverWire(i){
+  if(i===hovW)return;
+  if(hovW>=0&&wireObjs[hovW]){
+    const bad=checked&&AN.bad.indexOf(hovW)>=0;
+    wireObjs[hovW].tube.material=WM[bad?"bad":wires[hovW].kind]||WM.GR;
+  }
+  hovW=i;
+  if(i>=0&&wireObjs[i]&&!powered)wireObjs[i].tube.material=WM.hover;
+  dirty=true;
+}
+
+/* halo rings on terminals */
+const ringGeo=new THREE.RingGeometry(10.2,12.6,40);
+const ringMats2={sel:new THREE.MeshBasicMaterial({color:0xffb400,transparent:true,depthTest:false,depthWrite:false,toneMapped:false}),
+                 hint:new THREE.MeshBasicMaterial({color:0x35e0ff,transparent:true,depthTest:false,depthWrite:false,toneMapped:false})};
+const rings={};
+for(const id in T){
+  const r=new THREE.Mesh(ringGeo,ringMats2.sel);
+  r.position.copy(T[id].pos);r.position.z+=2;r.visible=false;r.renderOrder=20;
+  ringGroup.add(r);rings[id]=r;
+}
+const hintSet=new Set();
+function paintRings(){
+  for(const id in rings){
+    const r=rings[id],isHint=hintSet.has(id),on=id===selected||id===hovT||isHint;
+    r.visible=on;r.material=isHint&&id!==selected?ringMats2.hint:ringMats2.sel;
+  }
+  dirty=true;
+}
+function paintSel(){paintRings();}
+
+/* live current dots: which wires carry current depends on the circuit state */
+const MAXDOTS=1200;
+const dotMesh=new THREE.InstancedMesh(new THREE.SphereGeometry(1.25,8,6),new THREE.MeshBasicMaterial({color:0xfff1a8,toneMapped:false}),MAXDOTS);
+const glowMesh=new THREE.InstancedMesh(new THREE.SphereGeometry(3.2,8,6),new THREE.MeshBasicMaterial({color:0xffc94a,transparent:true,opacity:.14,blending:THREE.AdditiveBlending,depthWrite:false,toneMapped:false}),MAXDOTS);
+dotMesh.count=0;glowMesh.count=0;dotMesh.frustumCulled=false;glowMesh.frustumCulled=false;
+scene.add(dotMesh);scene.add(glowMesh);
+let flows=[];
+function buildFlows(){
+  flows=[];
+  wireObjs.forEach((o,i)=>{
+    const n=NETOF[wires[i].from];if(!n||n.cls==="pe")return;
+    const len=o.curve.getLength();
+    flows.push({curve:o.curve,len:len,n:Math.max(2,Math.floor(len/30)),ph:(i*.173)%1,cls:n.cls});
+  });
+}
+const _m=new THREE.Matrix4(),FLOW_SPEED=84;
+function flowRate(cls){
+  if(!powered)return 0;
+  switch(cls){
+    case "in":return SIM.I>.05?Math.min(1.6,.25+SIM.I/14):0;
+    case "s1":return SIM.Is[0]>.05?Math.min(1.6,.25+SIM.Is[0]/10):0;
+    case "s2":return SIM.Is[1]>.05?Math.min(1.6,.25+SIM.Is[1]/10):0;
+    case "s3":return SIM.Is[2]>.05?Math.min(1.6,.25+SIM.Is[2]/10):0;
+    case "lt":return SIM.lamp?.4:0;
+  }
+  return 0;
+}
+function updateFlows(dt){
+  let c=0;
+  for(const f of flows){
+    const rate=flowRate(f.cls);if(rate<=0)continue;
+    if(!REDUCED)f.ph=(f.ph+dt*FLOW_SPEED*rate/f.len)%1;
+    for(let j=0;j<f.n&&c<MAXDOTS;j++){
+      const u=(f.ph+j/f.n)%1,p=f.curve.getPointAt(u);
+      _m.setPosition(p.x,p.y,p.z+3);
+      dotMesh.setMatrixAt(c,_m);glowMesh.setMatrixAt(c,_m);c++;
+    }
+  }
+  dotMesh.count=c;glowMesh.count=c;
+  dotMesh.instanceMatrix.needsUpdate=true;glowMesh.instanceMatrix.needsUpdate=true;
+}
+function drawPreview(id,p){
+  clearPreview();
+  const A=T[id],a0=endPt(id,0);
+  const dist=a0.distanceTo(p),k=Math.min(80,Math.max(20,dist*.35));
+  const a1=a0.clone().addScaledVector(A.dir,k);a1.z=a0.z+70;
+  const b=p.clone();b.z=a0.z+70;
+  const curve=new THREE.CubicBezierCurve3(a0,a1,b,b.clone());
+  previewMesh=new THREE.Mesh(new THREE.TubeGeometry(curve,32,1.7,6,false),new THREE.MeshBasicMaterial({color:0xffb400,toneMapped:false}));
+  scene.add(previewMesh);dirty=true;
+}
+function clearPreview(){
+  if(previewMesh){scene.remove(previewMesh);previewMesh.geometry.dispose();previewMesh.material.dispose();previewMesh=null;dirty=true;}
+}
+/* =====================================================================
+   SIMULATION STATE
+   ===================================================================== */
+const SIM={U:230,Uset:230,Ubus:0,I:0,P:0,Is:[0,0,0],lamp:false,lastCtl:"",lastMsg:"",kvShown:""};
+const KV_TON=3;            // switch-on delay of the voltage relay (real devices: 5…600 s, shortened here)
+const UMAX=250,UMIN=180,R_LAMP=230*230/100;
+const SOCKS=["x1","x2","x3"],RCB=["d1","d2","d3"];
+function applOf(sid){return APPL.find(a=>a.id===SOCK[sid].appl)||APPL[0];}
+
+/* =====================================================================
+   UI RENDERING
+   ===================================================================== */
+function renderSteps(){
+  $("steps").innerHTML=AN.states.map(s=>
+    `<li class="${s.done?"done":s.have?"part":""}"><span class="mk" aria-hidden="true"></span><span class="tx">${s.req.text}<span class="sr">${s.done?" (tayyor)":""}</span></span>${s.total>1?`<span class="ct">${s.have}/${s.total}</span>`:""}</li>`
+  ).join("");
+}
+function renderAll(){
+  AN=analyze();
+  buildWires();
+  const learn=mode==="learn";
+  $("prog").hidden=!learn;$("steps").hidden=!learn;$("exam").hidden=learn;
+  $("hint").hidden=!learn;$("check").hidden=learn;
+  if(learn){
+    $("pdone").textContent=AN.doneCount;
+    $("pfill").style.width=(AN.doneCount/NET_COUNT*100)+"%";
+    renderSteps();
+  }else $("wcount").textContent=wires.length;
+  $("undo").disabled=powered||!wires.length;
+  $("clear").disabled=powered||!wires.length;
+  $("hint").disabled=powered||AN.solved;
+  $("check").disabled=powered||!wires.length;
+  const dis=!powered&&!canPower(),label=powered?"O'chirish":"Kuchlanish berish";
+  ["power","power2"].forEach(id=>{const b=$(id);b.textContent=label;b.disabled=dis;b.title=dis?"Avval sxemani to'liq va to'g'ri yig'ing":"";});
+  $("ctl").hidden=!powered;
+  if(powered)buildFlows();else{flows=[];dotMesh.count=0;glowMesh.count=0;}
+  updateCtlUI(true);
+  dirty=true;
+}
+function changed(){checked=false;examOK=false;$("report").innerHTML="";renderAll();}
+
+/* =====================================================================
+   ACTIONS
+   ===================================================================== */
+function connect(a,b){
+  if(wires.some(w=>(w.from===a&&w.to===b)||(w.from===b&&w.to===a))){say("Bu ikki klemma allaqachon ulangan.","");return;}
+  if(mode==="learn"&&!sameNet(a,b)){flashBad(a,b);say(reason(a,b),"bad");return;}
+  addWire(a,b);changed();
+  if(mode==="learn"){
+    if(AN.solved)say("Sxema to'g'ri yig'ildi. Kuchlanish bering, so'ng avtomatlarni yoqing.","ok");
+    else say(`To'g'ri ulandi. ${AN.doneCount} / ${NET_COUNT} bosqich tayyor.`,"ok");
+  }else say(`Sim ulandi. Jami ${wires.length} ta.`,"");
+}
+function tap(id){
+  if(powered){say("Kuchlanish ostida sxemani o'zgartirib bo'lmaydi. Avval o'chiring.","bad");return;}
+  if(selected&&selected!==id){const a=selected;selected=null;paintSel();connect(a,id);}
+  else if(selected===id){selected=null;paintSel();say(DEFAULT,"");}
+  else{selected=id;paintSel();say(T[id].desc+". Ikkinchi klemmani tanlang.","");}
+}
+function removeWire(i){if(powered){say("Kuchlanish ostida simni olib bo'lmaydi.","bad");return;}wires.splice(i,1);changed();say("Sim olib tashlandi.","");}
+function runCheck(){
+  AN=analyze();checked=true;
+  const items=AN.bad.map(i=>{const w=wires[i];return `Xato sim: ${T[w.from].desc} va ${T[w.to].desc}. ${reason(w.from,w.to)}`;});
+  const missing=AN.states.filter(s=>!s.done);
+  missing.slice(0,6).forEach(s=>items.push("Bajarilmagan: "+s.req.text));
+  if(missing.length>6)items.push(`Yana ${missing.length-6} ta bosqich bajarilmagan.`);
+  examOK=AN.solved;
+  $("report").innerHTML=items.map(x=>`<li>${x}</li>`).join("");
+  renderAll();
+  if(AN.solved)say("Sxema to'g'ri va to'liq. Kuchlanish berishingiz mumkin.","ok");
+  else say(`Tekshiruv: ${AN.bad.length} ta xato sim, ${missing.length} ta bajarilmagan bosqich.`,"bad");
+}
+function hint(){
+  if(powered||mode!=="learn")return;
+  const s=AN.states.find(x=>!x.done);if(!s)return;
+  const F=AN.find;
+  let ids=s.req.ids.filter(id=>!s.req.ids.some(o=>o!==id&&F(o)===F(id)));
+  if(!ids.length)ids=s.req.ids.slice();
+  hintSet.clear();ids.forEach(id=>hintSet.add(id));paintRings();
+  clearTimeout(hintTimer);hintTimer=setTimeout(()=>{hintSet.clear();paintRings();},4200);
+  say("Maslahat: "+s.req.text,"");
+}
+function setBrk(id,on,instant){
+  const d=DEV[id];d.on=on;d.target=on?-.5:.5;if(instant){d.ang=d.target;d.grp.rotation.x=d.ang;}
+  d.win.color.setHex(on?0xd23030:0x1aa34a);d.heat=0;dirty=true;shadowDirty=true;
+}
+function setPower(on){
+  if(on&&!canPower())return;
+  powered=on;selected=null;paintSel();setHoverWire(-1);
+  KV.out=false;KV.timer=0;KV.state="off";SIM.lastMsg="";
+  if(!on){for(const k in DEV)setBrk(k,false);}
+  beep("contactor");renderAll();
+  say(on?"Kuchlanish berildi: hisoblagichga 220 V keldi. Endi QF1 ni yoqing — kuchlanish relesi tarmoqni tekshiradi.":"Kuchlanish o'chirildi. Sxemani o'zgartirishingiz mumkin.",on?"ok":"");
+}
+function setMode(m){
+  if(m===mode)return;
+  if(powered)setPower(false);
+  mode=m;wires.length=0;selected=null;paintSel();
+  $("m-learn").setAttribute("aria-pressed",String(m==="learn"));$("m-exam").setAttribute("aria-pressed",String(m==="exam"));
+  changed();
+  say(m==="learn"?"O'rganish rejimi: noto'g'ri ulanish darhol tushuntiriladi.":"Imtihon rejimi: xohlagan simni ulang, tayyor bo'lgach Tekshirish ni bosing.","");
+}
+function toggleBrk(id){
+  if(!powered){say("Avval «Kuchlanish berish» ni bosing.","");return;}
+  const d=DEV[id];setBrk(id,!d.on);beep("click");
+  say(d.title+(d.on?" yoqildi.":" o'chirildi."),"");
+  SIM.lastMsg="";updateCtlUI(true);
+}
+function testRCBO(id){
+  if(!powered)return;
+  const d=DEV[id];
+  if(!d.on||SIM.Ubus<50){say(d.title+": sinov tugmasi faqat difavtomat yoqilgan va kuchlanish bor paytda ishlaydi.","");return;}
+  trip(id,"T tugmasi ichki rezistor orqali 30 mA dan ortiq sun'iy sizish hosil qildi — "+d.title+" o'chdi. Bu tekshiruvni oyiga bir marta qilish tavsiya etiladi.","ok");
+}
+function toggleSwitch(){setSwitch(!SW.on);beep("click");if(powered)say(SW.on?"Kalit yoqildi: L va L1 tutashdi.":"Kalit o'chirildi: lampa fazadan uzildi.","");updateCtlUI(true);}
+function setAppl(sid,kind){
+  const S=SOCK[sid];
+  if(S.appl!=="none"&&S.models[S.appl])S.models[S.appl].grp.visible=false;
+  S.appl=kind;S.plug.visible=kind!=="none";
+  if(kind!=="none")applModel(sid,kind).grp.visible=true;
+  const a=applOf(sid);S.atag.el.hidden=kind==="none";S.atag.el.textContent=a.name;
+  const sel=$("a-"+sid);if(sel)sel.value=kind;
+  dirty=true;shadowDirty=true;SIM.lastMsg="";
+  if(kind!=="none")say(sid.toUpperCase()+" rozetkaga ulandi: "+a.name+".","");
+  updateCtlUI(true);
+}
+function cycleAppl(sid){const i=APPL.findIndex(a=>a.id===SOCK[sid].appl);setAppl(sid,APPL[(i+1)%APPL.length].id);}
+function setUset(v){SIM.Uset=v;SRC.knob.rotation.z=-((v-160)/120-.5)*4.2;dirty=true;updateCtlUI(true);}
+function trip(id,msg,tone){setBrk(id,false);beep("contactor");note(msg,tone||"bad");updateCtlUI(true);}
+function updateCtlUI(force){
+  const key=[powered,SIM.Uset,Math.round(SIM.U),Math.round(SIM.Ubus),SIM.I.toFixed(1),Math.round(SIM.P/10),KV.state,Math.ceil(KV_TON-KV.timer),KV.out,SW.on,Object.keys(DEV).map(k=>DEV[k].on).join(),SIM.Is.map(v=>v.toFixed(1)).join()].join("|");
+  if(!force&&key===SIM.lastCtl)return;SIM.lastCtl=key;
+  $("uv").textContent=SIM.Uset+" V";$("u").value=SIM.Uset;
+  $("r-u").textContent=Math.round(SIM.U)+" V";
+  $("r-ub").textContent=Math.round(SIM.Ubus)+" V";$("r-ub").className=SIM.Ubus>0?"on":"";
+  $("r-kv").textContent={off:"o'chiq",wait:"kutish "+Math.max(0,Math.ceil(KV_TON-KV.timer))+" s",ok:"ulangan",hi:"U yuqori!",lo:"U past!"}[KV.state]||"-";
+  $("r-kv").className=KV.state==="hi"||KV.state==="lo"?"bad":KV.state==="ok"?"on":"";
+  $("r-i").textContent=SIM.I.toFixed(1)+" A";$("r-p").textContent=(SIM.P/1000).toFixed(2)+" kW";
+  SOCKS.forEach((s,i)=>{$("r-"+s).textContent=SIM.Is[i].toFixed(1)+" A";});
+  ["qf1","d1","d2","d3","qf2"].forEach(k=>{const b=$("b-"+k);b.setAttribute("aria-pressed",String(DEV[k].on));b.disabled=!powered;});
+  ["d1","d2","d3"].forEach(k=>{$("t-"+k).disabled=!powered;});
+  $("b-sw").setAttribute("aria-pressed",String(SW.on));
+}
+
+/* =====================================================================
+   SIMULATION
+   ===================================================================== */
+function note(msg,tone){if(msg!==SIM.lastMsg){SIM.lastMsg=msg;say(msg,tone||"");}}
+function heatTrip(id,I,dt){
+  const d=DEV[id],r=I/d.rating;
+  if(r>1.13)d.heat+=dt*((r*r)-1)/8;else d.heat=Math.max(0,d.heat-dt*.2);
+  return d.heat>=1;
+}
+function simStep(dt){
+  const U=powered?SIM.Uset:0;SIM.U=U;
+  // voltage relay
+  const Uin=DEV.qf1.on?U:0;
+  const prevState=KV.state,prevOut=KV.out;
+  if(Uin<60){KV.state="off";KV.out=false;KV.timer=0;}
+  else if(Uin>UMAX){KV.state="hi";KV.out=false;KV.timer=0;}
+  else if(Uin<UMIN){KV.state="lo";KV.out=false;KV.timer=0;}
+  else if(!KV.out){KV.state="wait";KV.timer+=dt;if(KV.timer>=KV_TON){KV.out=true;KV.state="ok";}}
+  else KV.state="ok";
+  if(KV.out!==prevOut)beep("click");
+  if(KV.state!==prevState){
+    if(KV.state==="wait")note("Kuchlanish relesi tarmoqni tekshiryapti: U = "+Math.round(Uin)+" V me'yorda. "+KV_TON+" soniya kutib iste'molchilarni ulaydi (real relelarda bu vaqt 5–600 s qilib sozlanadi).","");
+    if(KV.state==="ok")note("Kuchlanish relesi ichki kontaktini yopdi: faza va nol shinalariga "+Math.round(Uin)+" V berildi. Endi difavtomatlar va QF2 ni yoqing.","ok");
+    if(KV.state==="hi")note("Kuchlanish "+Math.round(Uin)+" V — 250 V dan yuqori! Rele iste'molchilarni darhol uzdi: bunday kuchlanishda televizor, muzlatgich kabi asboblar kuyishi mumkin.","bad");
+    if(KV.state==="lo")note("Kuchlanish "+Math.round(Uin)+" V — 180 V dan past! Rele iste'molchilarni uzdi: past kuchlanishda dvigatelli asboblar (muzlatgich, nasos) qizib ishdan chiqadi.","bad");
+  }
+  const Ub=KV.out?Uin:0;SIM.Ubus=Ub;
+  // sockets
+  let Itot=0;
+  SOCKS.forEach((sid,i)=>{
+    const d=DEV[RCB[i]],a=applOf(sid),live=Ub>0&&d.on;let I=0;
+    if(live&&a.id!=="none"){
+      if(a.short){trip(RCB[i],sid.toUpperCase()+": shnurda qisqa tutashuv! Tok yuzlab amperga yetdi va "+d.title+" ning elektromagnit ajratgichi millisekundlarda o'chirdi.");startFx(SOCK[sid].x,SOCK[sid].y-40);}
+      else if(a.leak){trip(RCB[i],sid.toUpperCase()+": choynak korpusiga 50 mA tok sizyapti (PE orqali yerga). "+d.title+" kirgan va qaytgan tok farqini sezib o'chdi — odamni tok urishidan saqlaydi.");}
+      else I=a.P*Ub/(230*230);
+    }
+    if(I>0&&heatTrip(RCB[i],I,dt)){trip(RCB[i],sid.toUpperCase()+": "+I.toFixed(1)+" A — "+d.title+" (16 A) uchun ortiqcha yuk. Issiqlik ajratgichi (bimetall) qizib avtomatni o'chirdi. Vaqt namoyish uchun tezlashtirilgan.");I=0;}
+    SIM.Is[i]=d.on?I:0;Itot+=SIM.Is[i];
+  });
+  // lighting
+  SIM.lamp=Ub>0&&DEV.qf2.on&&SW.on;
+  if(SIM.lamp)Itot+=Ub/R_LAMP;
+  // input breaker
+  if(Itot>0&&heatTrip("qf1",Itot,dt)){
+    trip("qf1","Umumiy tok "+Itot.toFixed(1)+" A — kirish avtomati QF1 (32 A) uchun ortiqcha. U butun uyni uzdi: hamma kuchli asboblarni bir vaqtda yoqmang. Vaqt tezlashtirilgan.");
+    Itot=0;SIM.Is=[0,0,0];SIM.lamp=false;
+  }
+  SIM.I=Itot;SIM.P=Itot*(Ub||0);
+  // meter: 600 disc revolutions per kWh
+  if(SIM.P>1){METER.ang+=2*Math.PI*SIM.P/6000*dt;METER.kwh+=SIM.P*dt/3.6e6;}
+}
+
+/* =====================================================================
+   AUDIO AND SPARKS
+   ===================================================================== */
+let AC=null;
+function ac(){
+  const on=$("snd");if(on&&!on.checked)return null;
+  try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();return AC;}catch(e){return null;}
+}
+function beep(kind){
+  const a=ac();if(!a)return;
+  try{
+    const sr=a.sampleRate,len=kind==="bang"?.5:kind==="contactor"?.16:.09;
+    const buf=a.createBuffer(1,Math.ceil(sr*len),sr),d=buf.getChannelData(0);
+    const tau=kind==="click"?.012:kind==="bang"?.09:.035;
+    for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*Math.exp(-i/(sr*tau))*(kind==="click"?.55:.8);
+    const src=a.createBufferSource();src.buffer=buf;
+    const f=a.createBiquadFilter();f.type=kind==="click"||kind==="contactor"?"bandpass":"lowpass";
+    f.frequency.value=kind==="click"?2200:kind==="contactor"?900:1800;
+    const g=a.createGain();g.gain.value=.3;
+    src.connect(f);f.connect(g);g.connect(a.destination);src.start();
+  }catch(e){}
+}
+const NSP=36;
+const sparkMesh=new THREE.InstancedMesh(new THREE.SphereGeometry(1.3,6,4),new THREE.MeshBasicMaterial({color:0xffe9a8,toneMapped:false}),NSP);
+sparkMesh.count=0;sparkMesh.frustumCulled=false;scene.add(sparkMesh);
+const fxFlash=new THREE.Mesh(new THREE.PlaneGeometry(160,160),new THREE.MeshBasicMaterial({map:glowTex,transparent:true,opacity:0,blending:THREE.AdditiveBlending,depthWrite:false,toneMapped:false}));
+fxFlash.visible=false;scene.add(fxFlash);
+let sparks=[],fx=null;
+function startFx(x,y){
+  fx={t:0};fxFlash.position.set(x,y,60);fxFlash.visible=true;sparks=[];
+  for(let i=0;i<NSP;i++){const a=Math.random()*Math.PI*2,sp=200*(.35+Math.random());sparks.push({x:x,y:y,z:50,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp*.8+60,vz:Math.random()*sp*.6,life:.25+Math.random()*.5});}
+  beep("bang");dirty=true;
+}
+function updateFx(dt){
+  if(!fx)return false;
+  fx.t+=dt;const t=fx.t,a=Math.exp(-t*7);fxFlash.material.opacity=Math.min(1,1.2*a);
+  let c=0;
+  for(const s of sparks){if(t>s.life)continue;s.vy-=620*dt;s.x+=s.vx*dt;s.y+=s.vy*dt;s.z=Math.max(5,s.z+s.vz*dt);const f=1-t/s.life;_m.makeScale(f,f,f);_m.setPosition(s.x,s.y,s.z);sparkMesh.setMatrixAt(c++,_m);}
+  sparkMesh.count=c;sparkMesh.instanceMatrix.needsUpdate=true;
+  if(t>1){fx=null;fxFlash.visible=false;sparkMesh.count=0;}
+  return true;
+}
+/* =====================================================================
+   POINTER INTERACTION
+   ===================================================================== */
+const _v=new THREE.Vector3(),ray=new THREE.Raycaster(),ndc=new THREE.Vector2();
+function xy(e){const r=cv.getBoundingClientRect();return {x:e.clientX-r.left,y:e.clientY-r.top,w:r.width,h:r.height};}
+function nearestT(e){
+  const p=xy(e),rad=e.pointerType==="touch"?30:20;
+  let best=null,bd=rad;
+  for(const id in T){
+    _v.copy(T[id].pos).project(cam);
+    if(_v.z>1)continue;
+    const d=Math.hypot((_v.x*.5+.5)*p.w-p.x,(-_v.y*.5+.5)*p.h-p.y);
+    if(d<bd){bd=d;best=id;}
+  }
+  return best;
+}
+function worldAt(e,z){
+  const p=xy(e);ndc.set(p.x/p.w*2-1,-(p.y/p.h)*2+1);ray.setFromCamera(ndc,cam);
+  const out=new THREE.Vector3();
+  return ray.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0,0,1),-z),out)?out:null;
+}
+function wireAt(e){
+  if(!wireObjs.length)return -1;
+  const p=xy(e);ndc.set(p.x/p.w*2-1,-(p.y/p.h)*2+1);ray.setFromCamera(ndc,cam);
+  const hits=ray.intersectObjects(wireObjs.map(o=>o.tube),false);
+  return hits.length?hits[0].object.userData.wire:-1;
+}
+let pickList=null;
+function pickInteractive(e){
+  const p=xy(e);ndc.set(p.x/p.w*2-1,-(p.y/p.h)*2+1);ray.setFromCamera(ndc,cam);
+  if(!pickList){pickList=[];scene.traverse(o=>{const u=o.userData;if(o.isMesh&&(u.brk||u.test||u.sw||u.sock))pickList.push(o);});}
+  const hits=ray.intersectObjects(pickList.filter(o=>{for(let q=o;q;q=q.parent)if(q.visible===false)return false;return true;}),false);
+  if(!hits.length)return null;
+  const u=hits[0].object.userData;
+  if(u.test)return {type:"test",id:u.test};
+  if(u.brk)return {type:"brk",id:u.brk};
+  if(u.sw)return {type:"sw"};
+  if(u.sock)return {type:"sock",id:u.sock};
+  return null;
+}
+function isFull(){return stage.classList.contains("full");}
+const pointers=new Map();
+let act=null;
+function startPinch(){
+  const a=[...pointers.values()];
+  pinch={d:Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y)||1,z:view.zoom,mx:(a[0].x+a[1].x)/2,my:(a[0].y+a[1].y)/2,tx:view.tx,ty:view.ty};
+}
+function doPinch(){
+  const a=[...pointers.values()];
+  const d=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y)||1,mx=(a[0].x+a[1].x)/2,my=(a[0].y+a[1].y)/2,s=perPx();
+  view.zoom=clamp(pinch.z*d/pinch.d,.8,5);
+  view.tx=clamp(pinch.tx-(mx-pinch.mx)*s,-460,460);
+  view.ty=clamp(pinch.ty+(my-pinch.my)*s,-520,520);
+  dirty=true;
+}
+function cancelWireDrag(){if(wd){wd=null;clearPreview();}}
+function releaseAct(){act=null;}
+
+cv.addEventListener("contextmenu",e=>e.preventDefault());
+cv.addEventListener("pointerdown",e=>{
+  if(e.pointerType==="mouse"&&e.button>2)return;
+  pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  try{cv.setPointerCapture(e.pointerId);}catch(_){}
+  if(pointers.size===2){cancelWireDrag();releaseAct();gest=null;startPinch();return;}
+  if(pointers.size>2)return;
+  const primary=!(e.pointerType==="mouse"&&e.button!==0);
+  const id=primary?nearestT(e):null;
+  if(id){
+    e.preventDefault();
+    if(powered||(selected&&selected!==id)){tap(id);return;}
+    wd={from:id,moved:false,sx:e.clientX,sy:e.clientY,wasSel:selected===id};
+    selected=id;paintSel();
+    say(T[id].desc+". Boshqa klemmaga sudrang yoki ikkinchisini bosing.","");
+    return;
+  }
+  const it=primary?pickInteractive(e):null;
+  if(it){
+    e.preventDefault();act=it;
+    if(it.type==="brk")toggleBrk(it.id);
+    else if(it.type==="test")testRCBO(it.id);
+    else if(it.type==="sw")toggleSwitch();
+    else cycleAppl(it.id);
+    return;
+  }
+  let type=null;
+  if(e.pointerType==="mouse")type=(e.button===2||e.shiftKey)?"pan":"orbit";
+  else if(isFull())type="pan";
+  gest={type:type,sx:e.clientX,sy:e.clientY,yaw:view.yaw,pitch:view.pitch,tx:view.tx,ty:view.ty,moved:false};
+});
+cv.addEventListener("pointermove",e=>{
+  const p=pointers.get(e.pointerId);if(p){p.x=e.clientX;p.y=e.clientY;}
+  if(pointers.size===2&&pinch){doPinch();return;}
+  if(act)return;
+  if(wd){
+    if(!wd.moved&&Math.hypot(e.clientX-wd.sx,e.clientY-wd.sy)>8)wd.moved=true;
+    if(wd.moved){wd.last=e;if(!wd.q){wd.q=true;requestAnimationFrame(()=>{if(!wd)return;wd.q=false;const w=worldAt(wd.last,100);if(w)drawPreview(wd.from,w);});}}
+    const n=nearestT(e);if(n!==hovT){hovT=n;paintRings();}
+    return;
+  }
+  if(gest&&gest.type){
+    const dx=e.clientX-gest.sx,dy=e.clientY-gest.sy;
+    if(!gest.moved&&Math.hypot(dx,dy)>5)gest.moved=true;
+    if(gest.moved){
+      if(gest.type==="orbit"){
+        view.yaw=clamp(gest.yaw-dx*.006,-.8,.8);
+        view.pitch=clamp(gest.pitch+dy*.005,-.3,.5);
+      }else{
+        const s=perPx();
+        view.tx=clamp(gest.tx-dx*s,-420,420);
+        view.ty=clamp(gest.ty+dy*s,-520,520);
+      }
+      dirty=true;
+    }
+    return;
+  }
+  if(e.pointerType==="mouse"&&!pointers.size){
+    hoverEv=e;
+    if(!hoverQueued){hoverQueued=true;requestAnimationFrame(doHover);}
+  }
+});
+let hoverEv=null,hoverQueued=false;
+function doHover(){
+  hoverQueued=false;const e=hoverEv;if(!e||pointers.size||wd||gest)return;
+  const n=nearestT(e);
+  if(n!==hovT){hovT=n;paintRings();}
+  setHoverWire(n?-1:wireAt(e));
+  const it=n||hovW>=0?null:pickInteractive(e);
+  cv.style.cursor=n||hovW>=0||it?"pointer":"grab";
+}
+function endPointer(e,cancel){
+  pointers.delete(e.pointerId);
+  if(pinch){if(pointers.size<2)pinch=null;gest=null;return;}
+  if(act){releaseAct();return;}
+  if(wd){
+    const d=wd;wd=null;clearPreview();
+    if(cancel){selected=null;paintSel();return;}
+    if(d.moved){
+      const t=nearestT(e);
+      selected=null;paintSel();
+      if(t&&t!==d.from)connect(d.from,t);else say(DEFAULT,"");
+    }else if(d.wasSel){
+      selected=null;paintSel();say(DEFAULT,"");
+    }
+    return;
+  }
+  if(gest){
+    const g=gest;gest=null;
+    if(!g.moved&&!cancel){
+      const i=wireAt(e);
+      if(i>=0)removeWire(i);
+      else if(selected){selected=null;paintSel();say(DEFAULT,"");}
+    }
+  }
+}
+cv.addEventListener("pointerup",e=>endPointer(e,false));
+cv.addEventListener("pointercancel",e=>endPointer(e,true));
+cv.addEventListener("pointerleave",()=>{if(hovT){hovT=null;paintRings();}setHoverWire(-1);});
+cv.addEventListener("wheel",e=>{
+  if(!(isFull()||e.ctrlKey||e.metaKey))return;
+  e.preventDefault();
+  view.zoom=clamp(view.zoom*(e.deltaY<0?1.12:.89),.8,5);dirty=true;
+},{passive:false});
+
+/* camera buttons */
+$("zin").addEventListener("click",()=>{view.zoom=clamp(view.zoom*1.25,.8,5);dirty=true;});
+$("zout").addEventListener("click",()=>{view.zoom=clamp(view.zoom/1.25,.8,5);dirty=true;});
+$("zreset").addEventListener("click",()=>{view.yaw=.12;view.pitch=.1;view.zoom=1;view.tx=0;view.ty=0;dirty=true;});
+$("tg").addEventListener("click",()=>{
+  const on=$("tg").getAttribute("aria-pressed")!=="true";
+  $("tg").setAttribute("aria-pressed",String(on));$("tags").hidden=!on;
+});
+function setFull(on){
+  stage.classList.toggle("full",on);
+  document.body.style.overflow=on?"hidden":"";
+  resize();
+}
+$("fs").addEventListener("click",()=>setFull(!isFull()));
+$("close").addEventListener("click",()=>setFull(false));
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&isFull())setFull(false);});
+
+/* panel buttons */
+$("undo").addEventListener("click",()=>{
+  if(powered||!wires.length)return;
+  wires.pop();selected=null;paintSel();changed();say("Oxirgi sim olib tashlandi.","");
+});
+$("clear").addEventListener("click",()=>{
+  if(powered||!wires.length)return;
+  wires.length=0;selected=null;paintSel();changed();say("Sxema tozalandi. Manba simlaridan boshlang.","");
+});
+$("hint").addEventListener("click",hint);
+$("check").addEventListener("click",runCheck);
+$("power").addEventListener("click",()=>setPower(!powered));
+$("power2").addEventListener("click",()=>setPower(!powered));
+$("m-learn").addEventListener("click",()=>setMode("learn"));
+$("m-exam").addEventListener("click",()=>setMode("exam"));
+["qf1","d1","d2","d3","qf2"].forEach(k=>$("b-"+k).addEventListener("click",()=>toggleBrk(k)));
+["d1","d2","d3"].forEach(k=>$("t-"+k).addEventListener("click",()=>testRCBO(k)));
+$("b-sw").addEventListener("click",toggleSwitch);
+$("u").addEventListener("input",()=>setUset(+$("u").value));
+SOCKS.forEach(sid=>{const sel=$("a-"+sid);sel.innerHTML=APPL.map(a=>`<option value="${a.id}">${a.name}</option>`).join("");sel.addEventListener("change",()=>setAppl(sid,sel.value));});
+
+/* =====================================================================
+   ANIMATION LOOP
+   ===================================================================== */
+let pw=0,last=performance.now(),t0=last,firstFrame=true;
+function glow(m,on,hex){
+  const tgt=on?1:0,cur=m.userData.g||0;
+  if(Math.abs(cur-tgt)<.01){if(cur!==tgt){m.userData.g=tgt;m.emissive.setHex(on?hex:0);m.emissiveIntensity=tgt;return true;}return false;}
+  const v=cur+(tgt-cur)*.35;m.userData.g=v;m.emissive.setHex(hex);m.emissiveIntensity=v;return true;
+}
+function kvText(time){
+  if(!powered||KV.state==="off")return ["   ",false];
+  if(KV.state==="hi"||KV.state==="lo")return [Math.floor(time*2.5)%2?String(Math.round(SIM.U)).padStart(3," "):(KV.state==="hi"?"U^ ":"Uv "),true];
+  if(KV.state==="wait")return ["t "+Math.max(1,Math.ceil(KV_TON-KV.timer)),true];
+  return [String(Math.round(SIM.U)).padStart(3," "),true];
+}
+function animate(dt,time){
+  let busy=false;
+  if(updateFx(dt))busy=true;
+  simStep(dt);
+  // breaker handles
+  for(const k in DEV){const d=DEV[k];if(Math.abs(d.ang-d.target)>.002){d.ang+=(d.target-d.ang)*Math.min(1,dt*14);d.grp.rotation.x=d.ang;busy=true;shadowDirty=true;}}
+  // voltage relay display + LED
+  const kt=kvText(time),kk=kt.join();if(kk!==SIM.kvShown){SIM.kvShown=kk;drawKV(kt[0],kt[1]);dirty=true;}
+  if(glow(KV.led,KV.out,0x22ff55))busy=true;
+  // console voltmeter and lamp
+  const lk=powered+"|"+SIM.Uset;if(lk!==SRC.lk){SRC.lk=lk;drawLCD(SIM.Uset,powered);dirty=true;}
+  if(glow(SRC.lamp,powered,0xff5a2a))busy=true;
+  // meter
+  if(METER.disc.rotation.y!==METER.ang){METER.disc.rotation.y=METER.ang;busy=true;}
+  drawCounter();
+  // lamp
+  const lt=SIM.lamp?1:0;
+  if(Math.abs(LAMP.on-lt)>.01){LAMP.on+=(lt-LAMP.on)*Math.min(1,dt*10);busy=true;}else LAMP.on=lt;
+  LAMP.fil.emissive.setHex(0xffb347);LAMP.fil.emissiveIntensity=LAMP.on*3;LAMP.halo.material.opacity=LAMP.on*.9;
+  MAT.bulbGlass.emissive&&MAT.bulbGlass.emissive.setHex(LAMP.on>.01?0xffd38a:0);if(MAT.bulbGlass.emissive)MAT.bulbGlass.emissiveIntensity=LAMP.on*.8;
+  // appliances
+  SOCKS.forEach((sid,i)=>{const S=SOCK[sid],m=S.models[S.appl];if(m){const on=SIM.Is[i]>.05;const col=S.appl==="tv"?0x6aa8ff:S.appl==="oven"?0xff7a1a:0x3d8bff;if(glow(m.glow,on,col))busy=true;}
+    const a=applOf(sid);if(a.id!=="none"){const t=a.name+(SIM.Is[i]>.05?" · "+SIM.Is[i].toFixed(1)+" A":"");if(S.atag.el.textContent!==t)S.atag.el.textContent=t;}});
+  if(powered){updateCtlUI(false);updateFlows(dt);busy=true;}
+  return busy;
+}
+function projectTags(){
+  const w=stage.clientWidth,h=stage.clientHeight;
+  for(const t of tags){
+    _v.copy(t.p).project(cam);
+    if(_v.z>1||Math.abs(_v.x)>1.15||Math.abs(_v.y)>1.15){t.el.style.visibility="hidden";continue;}
+    t.el.style.visibility="visible";
+    t.el.style.transform="translate("+((_v.x*.5+.5)*w).toFixed(1)+"px,"+((-_v.y*.5+.5)*h).toFixed(1)+"px) "+TAGT[t.mode];
+  }
+}
+function frame(now){
+  requestAnimationFrame(frame);
+  const dt=Math.min(.06,(now-last)/1000);last=now;
+  const busy=animate(dt,(now-t0)/1000);
+  if(dirty||busy){
+    const pulse=1+.12*Math.sin(now/180);
+    for(const id in rings){if(rings[id].visible)rings[id].scale.set(pulse,pulse,1);}
+    updateCam();
+    if(shadowDirty){renderer.shadowMap.needsUpdate=true;shadowDirty=false;}
+    renderer.render(scene,cam);
+    projectTags();
+    dirty=false;
+    if(firstFrame){firstFrame=false;window.__tFirst=performance.now();const l=$("loading");if(l)l.hidden=true;}
+  }
+}
+
+/* =====================================================================
+   START
+   ===================================================================== */
+if(window.ResizeObserver)new ResizeObserver(resize).observe(stage);
+window.addEventListener("resize",resize);
+resize();
+addWire("src.l","mt.1");
+SOCKS.forEach(sid=>setAppl(sid,"none"));
+setAppl("x1","kettle");setAppl("x2","tv");
+renderAll();
+say("Namuna: manba L hisoblagichning 1-qisqichiga ulangan. Endi manba N ni 3-qisqichga ulang.","");
+requestAnimationFrame(frame);
+}
+})();
+</script>
+
+</body>
+</html>
