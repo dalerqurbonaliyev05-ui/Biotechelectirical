@@ -34,6 +34,20 @@ export function matcherMatches(m: ActionMatcher, a: Action): boolean {
       return a.type === "inspect" && a.targetId === m.targetId;
     case "tap":
       return a.type === "tap" && a.transformerId === m.transformerId && (m.dir === undefined || a.dir === m.dir);
+    case "choice":
+      return a.type === "choice" && a.decisionId === m.decisionId;
+    case "measure":
+      return a.type === "measure" && a.measurementId === m.measurementId;
+    case "task":
+      return a.type === "task" && a.taskId === m.taskId;
+    case "call":
+      return a.type === "call" && a.to === m.to;
+    case "phasing":
+      return a.type === "phasing";
+    case "wait":
+      return a.type === "wait" && a.sec >= m.minSec;
+    case "fans":
+      return a.type === "fans" && a.transformerId === m.transformerId && a.on === m.on;
   }
 }
 
@@ -53,7 +67,10 @@ export interface StepMatch {
 export function matchStep(steps: StepDef[], done: readonly string[], a: Action): StepMatch {
   const doneSet = new Set(done);
   const optional = new Set(steps.filter((s) => s.optional).map((s) => s.id));
-  const candidate = steps.find((s) => !doneSet.has(s.id) && stepMatches(s, a));
+  // Bir nechta mos qadam bo'lsa — shartlari bajarilganini afzal ko'ramiz (masalan bir nechta jurnal qadami)
+  const matching = steps.filter((s) => !doneSet.has(s.id) && stepMatches(s, a));
+  const ready = matching.find((s) => (s.after ?? []).every((id) => doneSet.has(id) || optional.has(id)));
+  const candidate = ready ?? matching[0];
   if (!candidate) {
     const repeat = steps.some((s) => doneSet.has(s.id) && stepMatches(s, a));
     return { step: null, repeat, missingBefore: [] };

@@ -150,12 +150,49 @@ export const NORMS = {
   absorptionMin: n(1.3, "R60/R15", "Absorbsiya koeffitsientining eng kichik qiymati (moyli transformator o'ramlari, ~10–30 °C) — sinov me'yorlari bo'yicha tekshirilsin"),
   insulationFactoryRatioMin: n(0.7, "× zavod R60", "R60 zavod (pasport) qiymatining kamida shu ulushi bo'lishi (bir xil haroratga keltirilgan) — sinov me'yorlari bo'yicha tekshirilsin"),
 
+  // ---- Ortiqcha yuklash va himoya ----
+  emergencyOverloadTable: n(
+    [
+      { k: 1.3, minutes: 120 },
+      { k: 1.45, minutes: 80 },
+      { k: 1.6, minutes: 45 },
+      { k: 1.75, minutes: 20 },
+      { k: 2.0, minutes: 10 },
+    ],
+    "K → daq",
+    "Moyli transformatorlarning avariyaviy ortiqcha yuklanishi (PTE dagi jadvalga o'xshash tipik qiymatlar: 30% — 120 daq, 45% — 80, 60% — 45, 75% — 20, 100% — 10). ALBATTA tekshirilsin",
+  ),
+  overloadAlarmFactor: n(1.0, "× Snom", "Ortiqcha yuklanish signali (nominaldan yuqori)", "model"),
+  overheatFailMarginK: n(
+    10,
+    "K",
+    "Yuqori qatlam moyi ruxsat etilgan chegaradan shuncha oshsa — simulyatorda avariya (izolyatsiya shikastlanishi). Model parametri",
+    "model",
+  ),
+  transformerSelectionOverload: n(
+    1.4,
+    "× Snom",
+    "Ikki transformatorli podstansiyada bittasi o'chganda ikkinchisining ruxsat etilgan ortiqcha yuklanishi (marka tanlashda) — tekshirilsin",
+  ),
+
+  // ---- Transformator moyi (ishlayotgan, 110 kV) ----
+  oilBreakdownMinKv: n(35, "kV", "Ishlayotgan transformator moyining probiv kuchlanishi chegarasi (110 kV sinf) — moy sinovi me'yorlari bo'yicha tekshirilsin"),
+  oilMoistureMaxPpm: n(25, "g/t", "Ishlayotgan moydagi namlik chegarasi (110 kV sinf) — tekshirilsin"),
+  oilAcidMax: n(0.25, "mg KOH/g", "Kislota soni chegarasi (ishlayotgan moy) — tekshirilsin"),
+
+  // ---- Yangi transformatorni ishga tushirish ----
+  energizeShocks: n(3, "marta", "Yangi transformatorni nominal kuchlanishga zarba bilan ulash soni (manbalarda 3–5 marta) — tekshirilsin"),
+  noLoadObservationMin: n(30, "daq", "Birinchi ulashdan keyin salt yurishda kuzatish davomiyligi — tekshirilsin"),
+
+  // ---- Iqtisodiy zarar (shartli) ----
+  outageCostPerMwMin: n({ 1: 50, 2: 20, 3: 5 }, "shartli birlik / (MVt·daq)", "Iste'molchi toifasi bo'yicha uzilish zarari — o'yin modeli (haqiqiy tarif emas)", "model", false),
+
   // ---- Favqulodda xizmatlar ----
   fireServiceNumber: n("101", "tel.", "O'zbekistonda yong'in xizmati raqami"),
 
   // ---- O'yin vaqt modeli (simulyatsiya soati) ----
   actionDurationSec: n(
-    { switch: 60, verifyDead: 120, checkPosition: 60, poster: 60, permitIssue: 600, admit: 300, finishWork: 300, journal: 120, report: 60, readback: 30, inspect: 30, tap: 0, fans: 30, blankSubmit: 300, protocol: 900 },
+    { switch: 60, verifyDead: 120, checkPosition: 60, poster: 60, permitIssue: 600, admit: 300, finishWork: 300, journal: 120, report: 60, readback: 30, inspect: 30, tap: 0, fans: 30, blankSubmit: 300, protocol: 900, choice: 30, measure: 600, task: 0, call: 60, phasing: 600, wait: 0 },
     "s",
     "Har amal simulyatsiya soatini qancha oldinga suradi — o'yin modeli",
     "model",

@@ -17,7 +17,14 @@ export type ActionMatcher =
   | { type: "protocol" }
   | { type: "journal" }
   | { type: "inspect"; targetId: string }
-  | { type: "tap"; transformerId: string; dir?: 1 | -1 };
+  | { type: "tap"; transformerId: string; dir?: 1 | -1 }
+  | { type: "choice"; decisionId: string }
+  | { type: "measure"; measurementId: string }
+  | { type: "task"; taskId: string }
+  | { type: "call"; to: "fire" | "ambulance" | "dispatcher" | "master" }
+  | { type: "phasing" }
+  | { type: "wait"; minSec: number }
+  | { type: "fans"; transformerId: string; on: boolean };
 
 export interface StepDef {
   id: string;
@@ -33,6 +40,12 @@ export interface StepDef {
   explain: string;
   /** Maslahat (o'qitish rejimida) */
   hint?: string;
+  /** Stsenariy boshidan shu soniyagacha bajarilmasa — jarima (yoki kritik oqibat) */
+  deadlineSec?: number;
+  /** Muddat o'tsa kritik oqibat kodi (masalan "fireSpread") */
+  deadlineCritical?: string;
+  /** Shu xabar kelmaguncha topshiriq kartasida ko'rsatilmaydi (smena rejimi) */
+  hiddenUntilMessage?: string;
 }
 
 export interface ReadbackOption {
@@ -46,7 +59,7 @@ export interface ReadbackOption {
 export interface DispatcherMessage {
   id: string;
   /** Qachon keladi: boshida yoki biror qadam bajarilgach */
-  trigger: "start" | { afterStep: string };
+  trigger: "start" | { afterStep: string } | { afterEvent: string };
   /** Xabar kelganda soat shu vaqtga suriladi ("HH:MM", kun davomidagi stsenariylar uchun) */
   at?: string;
   from: string;
@@ -60,6 +73,10 @@ export interface DispatcherMessage {
 
 export type Goal =
   | { type: "device"; deviceId: string; pos: SwitchPos }
+  | { type: "transformerLoadMax"; transformerId: string; k: number }
+  | { type: "oilBelow"; transformerId: string; c: number }
+  | { type: "noActiveAlarm"; code: string }
+  | { type: "tapsEqual"; a: string; b: string }
   | { type: "voltageInRange"; transformerId: string; winding: "lv"; min: number; max: number }
   | { type: "loadsSupplied"; loadIds: string[] }
   | { type: "inspected"; ids: string[] };
@@ -91,6 +108,26 @@ export interface ScenarioDef {
   };
   /** Kommutatsiya faqat dispetcher buyrug'i bilan */
   orderRequired: boolean;
+  /** Topologiya varianti (standart — "Yangiobod" 110/35/10 kV) */
+  topology?: "yangiobod" | "ps35";
+  /** Har bir real soniyada simulyatsiya soati necha soniya yuradi (standart 1) */
+  timeScale?: number;
+  /** Vaqt chizig'i hodisalari */
+  timeline?: TimelineEvent[];
+  /** Qaror kartalari */
+  decisions?: DecisionDef[];
+  /** O'lchovlar va namunalar */
+  measurements?: MeasurementDef[];
+  /** Protsedura ishlari (montaj, sinov va h.k.) */
+  tasks?: TaskDef[];
+  /** Avtomatika: ABR (standart yoqilgan) */
+  automation?: { abr?: boolean };
+  /** Yuklamani toifa bo'yicha uzish qoidasi nazorat qilinadi */
+  loadShedding?: boolean;
+  /** Ortiqcha deb hisoblanmaydigan kommutatsiyalar (masalan yerga tutashuvni qidirish) */
+  freeSwitching?: string[];
+  /** Parallel ulashdan oldin fazirovka shart bo'lgan transformatorlar */
+  phasingRequired?: string[];
   /** Dispetcher buyrug'i bilan ruxsat etilgan uzilishlar (jarima yo'q) */
   allowedOutages?: string[];
   messages: DispatcherMessage[];
@@ -139,4 +176,71 @@ export interface ProtocolSpec {
   tempC: number;
   /** O'lchov asbobi ko'rsatkichlari, MOm; factoryR60 — zavod qiymati (shu haroratga keltirilgan) */
   readings: Array<{ winding: string; label: string; r15: number; r60: number; factoryR60: number }>;
+}
+
+export type SimEvent =
+  | { kind: "setLoad"; factor: number }
+  | { kind: "alarm"; code: string; params?: Record<string, string> }
+  | { kind: "clearAlarm"; code: string }
+  | { kind: "earthFault"; nodeId: string; phase: "A" | "B" | "C"; severity: number; hazard?: boolean }
+  /** Liniyada QT: o'chirgich o'chadi, APV; barqaror bo'lsa — qarama-qarshi uch ham o'chadi */
+  | { kind: "lineFault"; breakerId: string; nodeId: string; sourceId: string; apv: "success" | "fail" }
+  /** Himoya o'chirgichlarni o'chiradi (keyin ABR) */
+  | { kind: "trip"; deviceIds: string[]; code: string }
+  | { kind: "transformerFault"; transformerId: string; fault: "fire" | "gas" | "internal"; trip: boolean; onlyIfEnergized?: boolean }
+  | { kind: "sourceKv"; kv: number }
+  | { kind: "rpnStuck"; transformerId: string }
+  | { kind: "fansFail"; transformerId: string }
+  | { kind: "abrFail" }
+  | { kind: "sourceLoss"; sourceId: string }
+  | { kind: "weather"; weather: Weather; ambientC?: number }
+  | { kind: "message"; messageId: string };
+
+export interface TimelineEvent {
+  id: string;
+  /** "start" — darhol; afterSec — boshlanishdan keyin; afterStep — qadamdan keyin; at — soat */
+  trigger: "start" | { afterSec: number } | { afterStep: string } | { at: string };
+  event: SimEvent;
+}
+
+export interface DecisionOption {
+  id: string;
+  text: string;
+  /** Doim to'g'ri/noto'g'ri */
+  correct?: boolean;
+  /** O'lchov natijasiga bog'liq to'g'rilik */
+  correctWhen?: { measurementId: string; categories: string[] };
+  why?: string;
+  /** Noto'g'ri tanlov jiddiyligi (standart — qoidabuzarlik) */
+  severity?: "violation" | "critical";
+  /** Kritik oqibat kodi */
+  failCode?: string;
+}
+
+export interface DecisionDef {
+  id: string;
+  prompt: string;
+  options: DecisionOption[];
+  /** Qaysi qadamdan keyin ko'rinadi (bo'lmasa — darhol) */
+  after?: string;
+}
+
+export interface MeasurementDef {
+  id: string;
+  label: string;
+  /** Qaysi uskunada bajariladi (uskuna kartasida tugma) */
+  targetId: string;
+  kind: "oilSample" | "gasSample" | "voltmeter" | "inspection" | "megger" | "windingResistance" | "ratio" | "vectorGroup" | "noLoad" | "counter" | "thermo" | "docs";
+  /** Natija variantlari; urug' bo'yicha tanlanadi (fixed — doim shu variant) */
+  variants: Array<{ category: string; values: Record<string, string>; weight?: number }>;
+  fixed?: number;
+  durationSec?: number;
+}
+
+export interface TaskDef {
+  id: string;
+  label: string;
+  durationSec: number;
+  /** Bajarilgach ko'rsatiladigan izoh */
+  result?: string;
 }

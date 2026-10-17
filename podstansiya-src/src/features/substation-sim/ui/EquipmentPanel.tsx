@@ -1,15 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { TOPOLOGY } from "../data/equipment";
 import { GLOSSARY, glossaryKeyFor } from "../data/glossary";
 import { getModel } from "../data/transformers";
+import { THERMAL } from "../data/norms";
 import { MODE_RULES } from "../data/rules";
 import { deviceCarriesCurrent, evaluateSwitch } from "../engine/interlocks";
 import { isNodeEnergized, isNodeGrounded } from "../engine/network";
 import { loadFactorOf, nodeVoltageKv, transformerLvKv } from "../engine/simulator";
 import { thermalStatus } from "../engine/thermal";
-import type { PosterKind, SwitchPos } from "../engine/types";
+import type { PosterKind, SwitchPos, Topology } from "../engine/types";
 import { uz } from "../i18n/uz";
 import { useSession } from "../store/session";
 import { codeText } from "./text";
@@ -27,7 +27,7 @@ function Row({ k, v, tone }: { k: string; v: React.ReactNode; tone?: "ok" | "bad
   );
 }
 
-function kindOf(id: string): { kind: string; kv?: number } | null {
+function kindOf(TOPOLOGY: Topology, id: string): { kind: string; kv?: number } | null {
   const sw = TOPOLOGY.switches.find((s) => s.id === id);
   if (sw) return { kind: sw.kind };
   if (TOPOLOGY.earthSwitches.some((e) => e.id === id)) return { kind: "earthSwitch" };
@@ -47,7 +47,8 @@ export default function EquipmentPanel() {
   const [showGloss, setShowGloss] = useState(false);
   if (!ctx || !sim || !net) return null;
   if (!selected) return <p className="text-sm text-muted">{E.selectHint}</p>;
-  const k = kindOf(selected);
+  const TOPOLOGY = ctx.topology;
+  const k = kindOf(TOPOLOGY, selected);
   if (!k) return <p className="text-sm text-muted">{E.selectHint}</p>;
 
   const running = sim.status === "running";
@@ -205,11 +206,43 @@ export default function EquipmentPanel() {
     );
   }
 
+  const O = uz.ops;
+  const measures = (ctx.scenario.measurements ?? []).filter((m) => m.targetId === selected);
+  const otherTransformers = k.kind === "transformer" ? TOPOLOGY.transformers.filter((t) => t.id !== selected && net.transformerEnergized[t.id]) : [];
+  const extras = (
+    <div className="mt-3 flex flex-col gap-2">
+      {measures.map((m) => {
+        const r = sim.measurements[m.id];
+        return (
+          <div key={m.id} className="rounded-xl border border-line/60 p-2">
+            <button type="button" className="btn-ghost w-full" disabled={!running || !!r} onClick={() => dispatch({ type: "measure", measurementId: m.id })}>
+              🔬 {m.label}
+            </button>
+            {r && <MeasurementValues values={r.values} />}
+          </div>
+        );
+      })}
+      {otherTransformers.map((t) => (
+        <button key={t.id} type="button" className="btn-ghost" disabled={!running} onClick={() => dispatch({ type: "phasing", a: selected, b: t.id })}>
+          ⚡ {O.phasingWith.replace("{t}", t.id)}
+        </button>
+      ))}
+      <button type="button" className="btn-ghost text-xs" disabled={!running} onClick={() => dispatch({ type: "inspect", targetId: selected })}>
+        👁 {O.inspect}
+      </button>
+    </div>
+  );
+
   return (
     <div>
       <p className="text-xs font-semibold uppercase tracking-wide text-accent">{E.kinds[k.kind] ?? k.kind}</p>
       <h3 className="h-display mb-2 text-lg font-bold">{title}</h3>
       {body}
+      {k.kind === "transformer" && (() => {
+        const lim = THERMAL[getModel(TOPOLOGY.transformers.find((t) => t.id === selected)!.model).cooling.value];
+        return <OilTrend points={sim.oilHistory[selected] ?? []} max={lim.topOilMaxC.value} alarm={lim.topOilAlarmC.value} />;
+      })()}
+      {extras}
       {gloss && (
         <div className="mt-4 rounded-xl border border-line/60 bg-ink-900/60 p-3 text-sm">
           <button type="button" className="flex w-full items-center justify-between font-semibold" aria-expanded={showGloss} onClick={() => setShowGloss((v) => !v)}>
@@ -220,5 +253,45 @@ export default function EquipmentPanel() {
         </div>
       )}
     </div>
+  );
+}
+
+export function MeasurementValues({ values }: { values: Record<string, string> }) {
+  return (
+    <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 rounded-lg bg-ink-950 p-2 font-mono text-xs">
+      {Object.entries(values).map(([k, v]) => (
+        <div key={k} className="contents">
+          <dt className="text-muted">{k}</dt>
+          <dd className="text-right text-ok">{v}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
+/** Moy harorati trendi — kichik SVG grafik (oxirgi ~4 soat). */
+function OilTrend({ points, max, alarm }: { points: Array<[number, number]>; max: number; alarm: number }) {
+  if (points.length < 2) return null;
+  const pts = points.slice(-240);
+  const t0 = pts[0][0];
+  const t1 = pts[pts.length - 1][0];
+  const vals = pts.map((p) => p[1]);
+  const lo = Math.min(...vals, 20);
+  const hi = Math.max(...vals, max + 5);
+  const W = 300;
+  const H = 70;
+  const x = (t: number) => ((t - t0) / Math.max(1, t1 - t0)) * W;
+  const y = (v: number) => H - ((v - lo) / Math.max(1, hi - lo)) * H;
+  const line = pts.map((p) => `${x(p[0]).toFixed(1)},${y(p[1]).toFixed(1)}`).join(" ");
+  return (
+    <figure className="mt-3">
+      <figcaption className="mb-1 text-xs text-muted">{uz.ops.trend}</figcaption>
+      <svg viewBox={`0 0 ${W} ${H}`} className="h-16 w-full rounded-lg bg-ink-950" role="img" aria-label={`${uz.ops.trend}: ${vals[vals.length - 1].toFixed(1)} °C`}>
+        {[max, alarm].map((lim) => (
+          <line key={lim} x1={0} x2={W} y1={y(lim)} y2={y(lim)} stroke={lim === max ? "var(--color-danger)" : "var(--color-warn)"} strokeDasharray="4 3" strokeWidth={1} />
+        ))}
+        <polyline points={line} fill="none" stroke="var(--color-accent)" strokeWidth={2} />
+      </svg>
+    </figure>
   );
 }

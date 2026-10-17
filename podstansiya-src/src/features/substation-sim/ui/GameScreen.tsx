@@ -3,12 +3,15 @@
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { MODE_RULES } from "../data/rules";
+import { topologyFor } from "../data/topologies";
 import { formatClock } from "../engine/journal";
+import { nextTimedEventIn } from "../engine/timeline";
 import { computeScore } from "../engine/scoring";
 import { uz } from "../i18n/uz";
 import { useHydrated } from "../store/hydration";
 import { useSession } from "../store/session";
 import { useSettings } from "../store/settings";
+import AlarmPanel from "./AlarmPanel";
 import BriefingModal from "./BriefingModal";
 import DispatcherPhone, { usePendingCalls } from "./DispatcherPhone";
 import DocumentsPanel from "./DocumentsPanel";
@@ -53,7 +56,8 @@ export default function GameScreen({ scenarioId }: { scenarioId: string }) {
   useEffect(() => {
     if (!running) return;
     const t = window.setInterval(() => {
-      if (document.visibilityState === "visible") dispatch({ type: "tick", dtSec: 1 });
+      // timeScale: tezlashtirilgan soat (masalan ortiqcha yuklanish yoki smena stsenariylarida)
+      if (document.visibilityState === "visible") dispatch({ type: "tick", dtSec: useSession.getState().sim?.timeScale ?? 1 });
       setNow(Date.now());
     }, 1000);
     return () => window.clearInterval(t);
@@ -73,6 +77,9 @@ export default function GameScreen({ scenarioId }: { scenarioId: string }) {
   if (sim.status !== "running") return <ResultScreen />;
 
   const rules = MODE_RULES[ctx.mode];
+  const hasPlan = topologyFor(ctx.scenario.topology).hasPlan;
+  const nextIn = nextTimedEventIn(ctx, sim);
+  const wait = (sec: number) => dispatch({ type: "wait", sec });
   const elapsed = briefingOpen || !now ? 0 : Math.max(0, Math.round((now - startedAt) / 1000));
   const tabs: Array<{ id: SideTab; label: string; icon: string; badge?: number }> = [
     { id: "phone", label: G.tabs.phone, icon: "phone", badge: pending },
@@ -97,7 +104,26 @@ export default function GameScreen({ scenarioId }: { scenarioId: string }) {
         <span className="chip" title={G.clock}>
           🕐 <b className="font-mono text-text">{formatClock(sim.time)}</b>
         </span>
-        <span className="chip">{uz.weather[ctx.scenario.situation.weather]}, {ctx.scenario.situation.ambientC} °C</span>
+        <span className="chip">
+          {uz.weather[sim.weather]}, {Math.round(sim.ambientC)} °C
+        </span>
+        {sim.timeScale > 1 && (
+          <span className="chip" title={uz.ops.speed}>
+            ×{sim.timeScale}
+          </span>
+        )}
+        <span className="flex items-center gap-1" role="group" aria-label={uz.ops.wait}>
+          {[5, 15, 30].map((m) => (
+            <button key={m} type="button" className="btn-ghost px-2 py-1 text-xs" title={uz.ops.wait} onClick={() => wait(m * 60)}>
+              {uz.ops[`wait${m}` as "wait5"]}
+            </button>
+          ))}
+          {nextIn !== null && (
+            <button type="button" className="btn-ghost px-2 py-1 text-xs" onClick={() => wait(nextIn)}>
+              {uz.ops.nextEvent}
+            </button>
+          )}
+        </span>
         <span className="chip" title={G.elapsed}>
           ⏱ <span className="font-mono">{formatDuration(elapsed)}</span>
         </span>
@@ -123,7 +149,7 @@ export default function GameScreen({ scenarioId }: { scenarioId: string }) {
         <section className="relative m-2 flex h-[62dvh] min-h-[340px] flex-col overflow-hidden rounded-2xl border border-line/60 bg-ink-950/60 lg:h-auto">
           <div className="flex flex-wrap items-center gap-1 border-b border-line/50 p-1.5">
             <div className="flex gap-1" role="tablist" aria-label={G.tabs.scheme}>
-            {(["scheme", "plan"] as const).map((v) => (
+            {(hasPlan ? (["scheme", "plan"] as const) : (["scheme"] as const)).map((v) => (
               <button
                 key={v}
                 type="button"
@@ -144,7 +170,7 @@ export default function GameScreen({ scenarioId }: { scenarioId: string }) {
             )}
           </div>
           <div className="relative min-h-0 flex-1">
-            {view === "scheme" ? (
+            {view === "scheme" || !hasPlan ? (
               <SingleLineDiagram />
             ) : (
               <PlanView
@@ -155,6 +181,9 @@ export default function GameScreen({ scenarioId }: { scenarioId: string }) {
                 }}
               />
             )}
+            <div className="absolute left-2 top-2 z-10 max-w-[min(22rem,70%)]">
+              <AlarmPanel compact />
+            </div>
             <FeedbackStack variant="overlay" />
           </div>
         </section>

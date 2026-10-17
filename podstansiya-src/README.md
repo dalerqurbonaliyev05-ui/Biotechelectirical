@@ -50,10 +50,16 @@ src/features/substation-sim/
     permit.ts        naryad-ruxsatnoma va ish joyi tayyorligi
     blank.ts         kommutatsiya blankasi
     protocol.ts      izolyatsiya sinov protokoli
-    scoring.ts       ball, yulduzlar
+    timeline.ts      stsenariy vaqt chizig'i (hodisalar, xabarlar)
+    alarms.ts        signal paneli holati
+    protection.ts    himoyalar: ortiqcha yuklanish, moy harorati, yerga tutashuv, muddatlar
+    automation.ts    ABR (zaxirani avtomatik ulash)
+    scoring.ts       ball, yulduzlar, uzilish zarari
     scenario.ts      stsenariy sxemasi (turlar)
   data/          BARCHA texnik ma'lumot shu yerda (kodda emas)
     equipment.ts     podstansiya topologiyasi (uskunalar va bog'lanishlar)
+    equipment35.ts   35/10 kV podstansiya (S18), layout35.ts — uning chizmasi, topologies.ts — reyestr
+    automation.ts    ABR sozlamalari
     layout.ts        sxema chizmasi koordinatalari
     norms.ts         raqamli me'yorlar {value, unit, verify, note, kind}
     rules.ts         qoidalar jiddiyligi, jarimalar, rejimlar, kommutatsiya tartibi
@@ -118,12 +124,14 @@ Qoldi:
       apparatlar, yerlagichlar, plakatlar, kuchlanish ostidagi qismlar, muddat, dopusk/yakun qaydlari), kommutatsiya
       blankasi (surib-tartiblash, DAG bo'yicha tekshiruv, blanka bo'yicha bajarish), izolyatsiya sinov protokoli,
       hujjatlarni chop etish
-- [ ] **5-bosqich**: S06–S21 (2–4-daraja), tasodifiy hodisalar oqimi (`events.ts` asosi tayyor), ob-havo
-      ta'siri, yuklama grafigi bo'yicha vaqt, smena rejimi, dispetcher kechikkan hisobotga qo'ng'iroq qilishi,
-      ABR avtomatikasi, himoyalar (differensial, MTZ, gaz relesi, moy sathi, RPN himoyasi) `data/` da
+- [x] **5-bosqich — S06–S21**: vaqt chizig'i hodisalari (`timeline.ts`), signallar (`alarms.ts`), himoyalar va muddatlar
+      (`protection.ts`), ABR (`automation.ts`), qaror/o'lchov/ish/qo'ng'iroq/fazirovka/kutish amallari, ventilyator va RPN
+      nosozliklari, parallel ishlash tekshiruvi, yuklamani toifa bo'yicha cheklash, uzilish va shartli zarar hisobi,
+      35 kV podstansiya varianti (`equipment35.ts`, `layout35.ts`, `topologies.ts`), S21 — urug' bo'yicha smena;
+      UI: signal paneli, qaror kartalari, o'lchov natijalari, moy harorati trendi, «Keyingi voqeagacha»
 - [ ] **6-bosqich**: mini-o'yinlar (obxod, megger R60/R15, moy sinovi, gaz relesi, termometr) — kechiktirib
       yuklanadigan bo'laklar; transformator markalari ensiklopediyasi va viktorina (`transformers.ts` kengaytiriladi)
 - [ ] **7-bosqich**: yutuqlar, ovoz effektlari (sozlama tayyor), glossariy sahifasi (`glossary.ts` tayyor),
-      3D transformator (Three.js, ixtiyoriy), 35 kV podstansiya varianti
+      3D transformator (Three.js, ixtiyoriy)
 - [ ] **8-bosqich (ixtiyoriy)**: reyting va hisoblar (Supabase yoki Vercel KV)
 - [ ] Boshqa tillar (ru/en) — hozir faqat `uz.ts`

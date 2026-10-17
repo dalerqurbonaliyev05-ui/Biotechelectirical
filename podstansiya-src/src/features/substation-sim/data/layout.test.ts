@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { TOPOLOGY } from "./equipment";
-import { SLD } from "./layout";
+import { TOPOLOGIES } from "./topologies";
 
-describe("sxema chizmasi topologiyaga mos", () => {
+for (const [key, { topology: TOPOLOGY, layout: SLD }] of Object.entries(TOPOLOGIES))
+describe(`sxema chizmasi topologiyaga mos: ${key}`, () => {
   const nodeIds = new Set(TOPOLOGY.nodes.map((n) => n.id));
   it("har bir apparat va yerlagich chizilgan", () => {
     const drawn = new Set([...SLD.devices.map((d) => d.id), ...SLD.earths.map((e) => e.id)]);

@@ -33,8 +33,8 @@ export interface TransformerGlyph {
   id: string;
   x: number;
   y: number;
-  /** O'rta kuchlanish (35 kV) o'rami qaysi tomonda */
-  mvSide: "left" | "right";
+  /** O'rta kuchlanish (35 kV) o'rami qaysi tomonda (ikki o'ramli transformatorda — "none") */
+  mvSide: "left" | "right" | "none";
 }
 export interface LoadGlyph {
   id: string;
@@ -204,7 +204,20 @@ for (const [bus, x, y, up] of [
   instruments.push({ id: `TN-${bus.slice(1)}`, kind: "VT", node: bus, from: [x, y], x, y: up ? y - 30 : y + 30 });
 }
 
-export const SLD = { width: W, height: H, buses, lines, wires, devices, earths, transformers, loads, instruments };
+export interface SldLayout {
+  width: number;
+  height: number;
+  buses: BusGlyph[];
+  lines: LineEntry[];
+  wires: WireDef[];
+  devices: DeviceGlyph[];
+  earths: EarthGlyph[];
+  transformers: TransformerGlyph[];
+  loads: LoadGlyph[];
+  instruments: InstrumentGlyph[];
+}
+
+export const SLD: SldLayout = { width: W, height: H, buses, lines, wires, devices, earths, transformers, loads, instruments };
 
 /** Uskunaning sxemadagi markazi (reja → sxema o'tishi va avtomatik markazlashtirish uchun). */
 export function glyphCenter(id: string): Pt | null {

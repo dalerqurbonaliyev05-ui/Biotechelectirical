@@ -6,8 +6,13 @@ import { NORMS } from "../data/norms";
 import { getModel } from "../data/transformers";
 import { evaluateSwitch, maxSeverity, type InterlockIssue } from "./interlocks";
 import { checkJournalEntry, parseTime, type JournalOp } from "./journal";
-import { computeNetwork, isNodeEnergized, type NetworkState } from "./network";
+import { computeNetwork, isNodeEnergized, parallelPairs, type NetworkState } from "./network";
+import { hasActiveAlarm } from "./alarms";
 import { checkBlank, nextBlankStep } from "./blank";
+import { createRng } from "./events";
+import { checkParallel } from "./parallel";
+import { runProtection } from "./protection";
+import { processTimeline } from "./timeline";
 import { checkPermit, withinPermitTime, workplaceGaps } from "./permit";
 import { checkProtocol } from "./protocol";
 import { checkTap, lvVoltage, nextTap } from "./rpn";
@@ -44,7 +49,8 @@ export function loadFactorOf(ctx: SimContext, state: SimState, net: NetworkState
 export function nodeVoltageKv(ctx: SimContext, state: SimState, net: NetworkState, nodeId: string): number {
   if (!isNodeEnergized(net, nodeId)) return 0;
   const node = ctx.topology.nodes.find((n) => n.id === nodeId);
-  if (!node || node.kv >= 110) return state.sourceKv;
+  const maxKv = Math.max(...ctx.topology.nodes.map((n) => n.kv));
+  if (!node || node.kv >= maxKv) return state.sourceKv;
   const sec = net.sectionOf[nodeId];
   const values: number[] = [];
   for (const t of ctx.topology.transformers) {
@@ -71,11 +77,36 @@ function messagesFor(scenario: ScenarioDef, trigger: (m: DispatcherMessage) => b
   return scenario.messages.filter(trigger).map((m) => m.id);
 }
 
-export function createSession(ctx: SimContext): SimState {
+export function createSession(ctx: SimContext, seed = 1): SimState {
   const s = createInitialState(ctx.topology, ctx.scenario);
+  s.seed = seed;
   s.deliveredMessages = messagesFor(ctx.scenario, (m) => m.trigger === "start");
   for (const id of s.deliveredMessages) s.messageTimes[id] = s.time;
+  processTimeline(ctx, s);
+  runProtection(ctx, s, networkOf(ctx, s));
+  updateAvailability(ctx, s);
   return s;
+}
+
+/** Qadamlar qachon bajarilishi mumkin bo'lganini qayd etadi (muddatlar va maslahatlar uchun). */
+function updateAvailability(ctx: SimContext, s: SimState): void {
+  for (const step of ctx.scenario.steps) {
+    if (s.stepAvailableAt[step.id] !== undefined) continue;
+    if ((step.after ?? []).every((a) => s.doneSteps.includes(a))) s.stepAvailableAt[step.id] = s.time;
+  }
+}
+
+/** Dunyoni dt soniyaga oldinga suradi: 60 s bo'laklar bilan harorat, hodisalar va himoya. */
+function stepWorld(ctx: SimContext, s: SimState, dtSec: number): void {
+  let left = dtSec;
+  while (left > 0 && s.status === "running") {
+    const chunk = Math.min(60, left);
+    advanceTime(ctx, s, chunk);
+    processTimeline(ctx, s);
+    runProtection(ctx, s, networkOf(ctx, s));
+    left -= chunk;
+  }
+  if (left > 0) s.time += left;
 }
 
 function penaltyPoints(code: string, severity: Severity, applied: boolean): number {
@@ -85,9 +116,52 @@ function penaltyPoints(code: string, severity: Severity, applied: boolean): numb
   return typeof specific === "number" ? specific : PENALTY.violation;
 }
 
-function durationOf(a: Action): number {
+function durationOf(ctx: SimContext, a: Action): number {
   const d = NORMS.actionDurationSec.value as Record<string, number>;
+  if (a.type === "wait") return a.sec;
+  if (a.type === "measure") return ctx.scenario.measurements?.find((x) => x.id === a.measurementId)?.durationSec ?? d.measure;
+  if (a.type === "task") return ctx.scenario.tasks?.find((x) => x.id === a.taskId)?.durationSec ?? 0;
   return d[a.type] ?? 0;
+}
+
+/** O'lchov natijasi: belgilangan yoki urug' bo'yicha tasodifiy variant. */
+export function pickVariant(def: NonNullable<ScenarioDef["measurements"]>[number], seed: number) {
+  if (def.fixed !== undefined) return { category: def.variants[def.fixed].category, values: def.variants[def.fixed].values };
+  let h = seed >>> 0;
+  for (const c of def.id) h = (Math.imul(h, 31) + c.charCodeAt(0)) >>> 0;
+  const rng = createRng(h);
+  const total = def.variants.reduce((a, v) => a + (v.weight ?? 1), 0);
+  let r = rng() * total;
+  for (const v of def.variants) {
+    r -= v.weight ?? 1;
+    if (r <= 0) return { category: v.category, values: v.values };
+  }
+  const v = def.variants[def.variants.length - 1];
+  return { category: v.category, values: v.values };
+}
+
+/** Kommutatsiya transformatorlarni parallel ishlashga ulaydimi — shartlar va fazirovka. */
+function parallelIssues(ctx: SimContext, s: SimState, before: NetworkState, deviceId: string): InterlockIssue[] {
+  const after = computeNetwork(ctx.topology, {
+    devices: { ...s.devices, [deviceId]: "closed" },
+    sourcesAvailable: s.sourcesAvailable,
+    loadFactor: s.loadFactor,
+    powerFactor: NORMS.powerFactor.value,
+  });
+  const was = parallelPairs(ctx.topology, before);
+  const out: InterlockIssue[] = [];
+  for (const pair of parallelPairs(ctx.topology, after)) {
+    if (was.has(pair)) continue;
+    const [a, b] = pair.split("|");
+    const ta = ctx.topology.transformers.find((x) => x.id === a)!;
+    const tb = ctx.topology.transformers.find((x) => x.id === b)!;
+    const r = checkParallel({ model: getModel(ta.model), tap: s.taps[a] }, { model: getModel(tb.model), tap: s.taps[b] });
+    if (r.issues.includes("vectorGroup")) out.push({ code: "parallelVectorMismatch", severity: SEVERITY.parallelVectorMismatch, params: { pair } });
+    else if (r.issues.includes("ratio")) out.push({ code: "parallelRatio", severity: SEVERITY.parallelRatio, params: { pair, circ: r.circulatingCurrentPct.toFixed(0) } });
+    const needs = (ctx.scenario.phasingRequired ?? []).some((t) => t === a || t === b);
+    if (needs && !s.phasing[pair]) out.push({ code: "parallelWithoutPhasing", severity: SEVERITY.parallelWithoutPhasing, params: { pair } });
+  }
+  return out;
 }
 
 function goalMet(ctx: SimContext, state: SimState, net: NetworkState, g: Goal): boolean {
@@ -98,6 +172,14 @@ function goalMet(ctx: SimContext, state: SimState, net: NetworkState, g: Goal): 
       return g.loadIds.every((id) => net.loadSupplied[id]);
     case "inspected":
       return g.ids.every((id) => state.inspected.includes(id));
+    case "transformerLoadMax":
+      return loadFactorOf(ctx, state, net, g.transformerId) <= g.k;
+    case "oilBelow":
+      return state.oilTemp[g.transformerId] < g.c;
+    case "noActiveAlarm":
+      return !hasActiveAlarm(state, g.code);
+    case "tapsEqual":
+      return state.taps[g.a] === state.taps[g.b];
     case "voltageInRange": {
       const u = transformerLvKv(ctx, state, net, g.transformerId);
       return u >= g.min && u <= g.max;
@@ -158,13 +240,22 @@ function advanceTime(ctx: SimContext, s: SimState, dtSec: number): void {
     const model = getModel(t.model);
     const energized = net.transformerEnergized[t.id];
     const k = loadFactorOf(ctx, s, net, t.id);
-    if (model.cooling.value === "D" && energized && fansShouldRun(s.oilTemp[t.id], k)) s.fans[t.id] = true;
+    if (model.cooling.value === "D" && energized && !s.fansFailed[t.id] && fansShouldRun(s.oilTemp[t.id], k)) s.fans[t.id] = true;
     const eff = effectiveCooling(model.cooling.value, s.fans[t.id]);
     const kEff = energized ? k / eff.ratingFactor : 0;
     // Kuchlanishsiz transformator atrof harorati tomon soviydi (salt yurish isrofi e'tiborsiz)
     s.oilTemp[t.id] = stepTopOil(s.oilTemp[t.id], s.ambientC, energized ? Math.max(kEff, 0) : 0, eff.params, dtSec);
     if (!energized) s.oilTemp[t.id] = Math.max(s.ambientC, s.oilTemp[t.id]);
     s.agingHours[t.id] += (agingRate(hotSpot(s.oilTemp[t.id], kEff, eff.params)) * dtSec) / 3600;
+    const hist = (s.oilHistory[t.id] ??= []);
+    const last = hist[hist.length - 1];
+    if (!last || s.time + dtSec - last[0] >= 60) {
+      hist.push([s.time + dtSec, Math.round(s.oilTemp[t.id] * 10) / 10]);
+      if (hist.length > 480) hist.shift();
+    }
+  }
+  for (const l of ctx.topology.loads) {
+    if (!net.loadSupplied[l.id]) s.outageMin[l.id] = (s.outageMin[l.id] ?? 0) + dtSec / 60;
   }
   s.time += dtSec;
 }
@@ -182,8 +273,12 @@ export function applyAction(ctx: SimContext, prev: SimState, action: Action): Ac
   const modeRules = MODE_RULES[ctx.mode];
 
   if (action.type === "tick") {
-    advanceTime(ctx, s, action.dtSec);
-    return { state: s, severity: "ok", code: "tick", applied: true, penalties: [] };
+    const before = s.penalties.length;
+    stepWorld(ctx, s, action.dtSec);
+    updateAvailability(ctx, s);
+    const pens = s.penalties.slice(before);
+    const failed = s.status === "failed";
+    return { state: s, severity: failed ? "critical" : pens.length ? "violation" : "ok", code: failed ? (s.failure?.code ?? "tick") : pens[0]?.code ?? "tick", applied: true, penalties: pens };
   }
 
   if (action.type === "finish") {
@@ -209,6 +304,7 @@ export function applyAction(ctx: SimContext, prev: SimState, action: Action): Ac
       params = r.params;
       if (r.code === "alreadyInPosition" || r.code === "unknownDevice") infoCode = r.code;
       issues.push(...r.issues);
+      if (!infoCode && action.to === "closed") issues.push(...parallelIssues(ctx, s, netBefore, action.deviceId));
       break;
     }
     case "verifyDead": {
@@ -260,10 +356,54 @@ export function applyAction(ctx: SimContext, prev: SimState, action: Action): Ac
       if (!s.admitted) infoCode = "finishWithoutAdmit";
       break;
     }
+    case "choice": {
+      const d = scenario.decisions?.find((x) => x.id === action.decisionId);
+      const opt = d?.options.find((o) => o.id === action.optionId);
+      if (!d || !opt) {
+        infoCode = "unknownDevice";
+        break;
+      }
+      params = { why: opt.why ?? "" };
+      let correct = opt.correct ?? false;
+      if (opt.correctWhen) {
+        const m = s.measurements[opt.correctWhen.measurementId];
+        if (!m) {
+          issues.push({ code: "decisionWithoutData", severity: SEVERITY.decisionWithoutData });
+          break;
+        }
+        correct = opt.correctWhen.categories.includes(m.category);
+      }
+      if (!correct) {
+        const code = opt.failCode ?? "wrongDecision";
+        issues.push({ code, severity: opt.severity ?? SEVERITY[code] ?? "violation", params: { why: opt.why ?? "" } });
+      }
+      break;
+    }
+    case "measure":
+    case "task":
+    case "call":
+    case "wait":
+      break;
+    case "phasing": {
+      const ta = topology.transformers.find((x) => x.id === action.a);
+      const tb = topology.transformers.find((x) => x.id === action.b);
+      if (!ta || !tb || !netBefore.transformerEnergized[ta.id] || !netBefore.transformerEnergized[tb.id]) {
+        infoCode = "phasingNotReady";
+        break;
+      }
+      const r = checkParallel({ model: getModel(ta.model), tap: s.taps[ta.id] }, { model: getModel(tb.model), tap: s.taps[tb.id] });
+      params = { issues: r.issues.join(", "), circ: Number.isFinite(r.circulatingCurrentPct) ? r.circulatingCurrentPct.toFixed(0) : "∞" };
+      if (!r.ok) infoCode = "phasingMismatch";
+      break;
+    }
     case "tap": {
       const t = topology.transformers.find((x) => x.id === action.transformerId);
       if (!t) {
         infoCode = "unknownDevice";
+        break;
+      }
+      if (s.rpnStuck[t.id]) {
+        infoCode = "rpnStuck";
         break;
       }
       const check = checkTap({
@@ -286,7 +426,8 @@ export function applyAction(ctx: SimContext, prev: SimState, action: Action): Ac
   if (m.step && m.missingBefore.length) {
     issues.push({ code: "wrongOrder", severity: SEVERITY.wrongOrder, params: { missing: m.missingBefore.join(",") } });
   }
-  if (!infoCode && !m.step && !m.repeat && action.type === "switch" && issues.every((i) => i.severity !== "critical")) {
+  const free = action.type === "switch" && (scenario.freeSwitching ?? []).includes(action.deviceId);
+  if (!infoCode && !m.step && !m.repeat && !free && action.type === "switch" && issues.every((i) => i.severity !== "critical")) {
     issues.push({ code: "extraneous", severity: SEVERITY.extraneous, params });
   }
   // Kommutatsiya blankasi: blankasiz yoki blankadagi tartibdan chetga chiqib bajarish
@@ -381,6 +522,25 @@ export function applyAction(ctx: SimContext, prev: SimState, action: Action): Ac
       case "fans":
         s.fans[action.transformerId] = action.on;
         break;
+      case "choice":
+        s.decisions[action.decisionId] = action.optionId;
+        break;
+      case "measure": {
+        const def = scenario.measurements?.find((x) => x.id === action.measurementId);
+        if (def && !s.measurements[def.id]) s.measurements[def.id] = { ...pickVariant(def, s.seed), t: s.time };
+        break;
+      }
+      case "task":
+        if (!s.tasksDone.includes(action.taskId)) s.tasksDone.push(action.taskId);
+        break;
+      case "call":
+        s.calls.push(action.to);
+        break;
+      case "phasing":
+        s.phasing[[action.a, action.b].sort().join("|")] = true;
+        break;
+      case "wait":
+        break;
     }
 
     if (m.step) s.doneSteps.push(m.step.id);
@@ -393,8 +553,16 @@ export function applyAction(ctx: SimContext, prev: SimState, action: Action): Ac
 
     // Iste'molchilar uzilishi
     for (const l of topology.loads) {
-      if (netBefore.loadSupplied[l.id] && !netAfter.loadSupplied[l.id] && !(scenario.allowedOutages ?? []).includes(l.id)) {
+      if (!netBefore.loadSupplied[l.id] || netAfter.loadSupplied[l.id]) continue;
+      if (!(scenario.allowedOutages ?? []).includes(l.id)) {
         penalties.push({ t: s.time, code: "consumerLost", points: PENALTY.lostConsumer[l.category], params: { load: l.label, category: String(l.category) } });
+      }
+      // Yuklamani cheklash: avval kam muhim (3-toifa) iste'molchilar uziladi
+      if (scenario.loadShedding && action.type === "switch") {
+        const lessImportant = topology.loads.filter((x) => x.category > l.category && netAfter.loadSupplied[x.id]);
+        if (lessImportant.length) {
+          penalties.push({ t: s.time, code: "shedPriority", points: PENALTY.shedPriority, params: { load: l.label, other: lessImportant.map((x) => x.label).join(", ") } });
+        }
       }
     }
 
@@ -402,10 +570,10 @@ export function applyAction(ctx: SimContext, prev: SimState, action: Action): Ac
     if (m.step) {
       const stepId = m.step.id;
       for (const msg of scenario.messages) {
-        if (typeof msg.trigger !== "object" || msg.trigger.afterStep !== stepId || s.deliveredMessages.includes(msg.id)) continue;
+        if (typeof msg.trigger !== "object" || !("afterStep" in msg.trigger) || msg.trigger.afterStep !== stepId || s.deliveredMessages.includes(msg.id)) continue;
         s.deliveredMessages.push(msg.id);
         const at = msg.at ? parseTime(msg.at) : null;
-        if (at !== null && at > s.time) advanceTime(ctx, s, at - s.time);
+        if (at !== null && at > s.time) stepWorld(ctx, s, at - s.time);
         s.messageTimes[msg.id] = s.time;
       }
     }
@@ -414,11 +582,18 @@ export function applyAction(ctx: SimContext, prev: SimState, action: Action): Ac
       s.status = "failed";
       s.failure = { code, params };
     }
+
+    // Qadamdan keyingi hodisalar, himoya va qadamlar mavjudligi
+    if (s.status === "running") {
+      processTimeline(ctx, s, m.step?.id);
+      runProtection(ctx, s, networkOf(ctx, s));
+      updateAvailability(ctx, s);
+    }
   }
 
   s.penalties.push(...penalties);
   s.log.push({ t: s.time, action, severity, code, applied, stepId: m.step?.id, params });
-  if (applied || blocked) advanceTime(ctx, s, durationOf(action));
+  if (applied || blocked) stepWorld(ctx, s, durationOf(ctx, action));
 
   if (s.status === "running" && applied && isComplete(ctx, s)) {
     s.penalties.push(...finalize(ctx, s));
