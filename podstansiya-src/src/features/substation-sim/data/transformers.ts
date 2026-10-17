@@ -1,5 +1,5 @@
 // Transformator modellari (pasport ma'lumotlari). Hammasi verify: true — katalog va pasport bo'yicha tekshirilsin.
-// Markalar ensiklopediyasi (6-bosqich) shu faylni kengaytiradi.
+// Markalar ensiklopediyasi (/ensiklopediya) va viktorina shu ma'lumotdan foydalanadi.
 
 import type { CoolingType, Norm } from "./norms";
 

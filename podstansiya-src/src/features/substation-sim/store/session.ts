@@ -35,6 +35,9 @@ interface SessionStore {
   startedAt: number;
   endedAt: number | null;
   recorded: boolean;
+  /** Megger bilan o'lchangan o'ramlar (protokol asbobida ko'rsatkich ochiladi) */
+  meggerDone: string[];
+  markMegger: (winding: string) => void;
   start: (scenarioId: string, mode: GameMode) => boolean;
   restart: () => void;
   beginShift: () => void;
@@ -57,6 +60,7 @@ export const useSession = create<SessionStore>()((set, get) => ({
   startedAt: 0,
   endedAt: null,
   recorded: false,
+  meggerDone: [],
 
   start: (scenarioId, mode) => {
     // Har urinishda yangi urug': o'lchov natijalari va smena hodisalari har safar boshqacha
@@ -64,7 +68,7 @@ export const useSession = create<SessionStore>()((set, get) => ({
     const scenario = getScenario(scenarioId, seed);
     if (!scenario) return false;
     const ctx: SimContext = { topology: topologyFor(scenario.topology).topology, scenario, mode };
-    set({ ctx, sim: createSession(ctx, seed), feedback: [], dismissed: [], focusRequest: null, selected: null, briefingOpen: true, startedAt: Date.now(), endedAt: null, recorded: false });
+    set({ ctx, sim: createSession(ctx, seed), feedback: [], dismissed: [], focusRequest: null, selected: null, briefingOpen: true, startedAt: Date.now(), endedAt: null, recorded: false, meggerDone: [] });
     return true;
   },
 
@@ -114,6 +118,7 @@ export const useSession = create<SessionStore>()((set, get) => ({
     return fb;
   },
 
+  markMegger: (w) => set((s) => (s.meggerDone.includes(w) ? s : { meggerDone: [...s.meggerDone, w] })),
   select: (id) => set({ selected: id }),
   focus: (id) => set((s) => ({ selected: id, focusRequest: { id, nonce: (s.focusRequest?.nonce ?? 0) + 1 } })),
   dismissFeedback: (id) => set((s) => ({ dismissed: [...s.dismissed, id] })),

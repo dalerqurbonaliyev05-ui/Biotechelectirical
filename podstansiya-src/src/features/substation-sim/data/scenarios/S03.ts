@@ -171,5 +171,5 @@ export const S03: ScenarioDef = {
   ],
   journal: { required: true },
   analysis:
-    "Ishga tushirish teskari tartibda: naryad yopiladi va brigada olib chiqiladi → plakatlar va yerlagichlar olinadi → ajratkichlar (avval shina tomoni) yopiladi → manba (110 kV) o'chirgichi ulanadi va transformator salt yurishda tekshiriladi → keyin 35 va 10 kV yuklama olinadi → seksiya o'chirgichlari o'chiriladi. Yerlagich ulangan transformatorga kuchlanish berish — kritik avariya. (Kerak bo'lsa, ishga tushirishdan oldin izolyatsiya o'lchanadi — 6-bosqichdagi megger mini-o'yinida.)",
+    "Ishga tushirish teskari tartibda: naryad yopiladi va brigada olib chiqiladi → plakatlar va yerlagichlar olinadi → ajratkichlar (avval shina tomoni) yopiladi → manba (110 kV) o'chirgichi ulanadi va transformator salt yurishda tekshiriladi → keyin 35 va 10 kV yuklama olinadi → seksiya o'chirgichlari o'chiriladi. Yerlagich ulangan transformatorga kuchlanish berish — kritik avariya. Ishga tushirishdan oldin izolyatsiya megaommetr bilan o'lchanadi va protokolga yoziladi.",
 };

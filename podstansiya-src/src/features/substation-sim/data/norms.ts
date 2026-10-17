@@ -179,6 +179,12 @@ export const NORMS = {
   oilBreakdownMinKv: n(35, "kV", "Ishlayotgan transformator moyining probiv kuchlanishi chegarasi (110 kV sinf) — moy sinovi me'yorlari bo'yicha tekshirilsin"),
   oilMoistureMaxPpm: n(25, "g/t", "Ishlayotgan moydagi namlik chegarasi (110 kV sinf) — tekshirilsin"),
   oilAcidMax: n(0.25, "mg KOH/g", "Kislota soni chegarasi (ishlayotgan moy) — tekshirilsin"),
+  oilBreakdownRampKvPerSec: n(2, "kV/s", "Probiv kuchlanishini aniqlashda kuchlanishni oshirish tezligi (IEC 60156) — tekshirilsin"),
+
+  // ---- Mini-o'yinlar (6-bosqich) ----
+  meggerVoltageV: n(2500, "V", "Kuch transformatori o'ramlari izolyatsiyasini o'lchashda megaommetr kuchlanishi (YuK 110 kV) — sinov me'yorlari bo'yicha tekshirilsin"),
+  meggerCaptureWindowSec: n(3, "s", "Mini-o'yinda R15/R60 ni yozib olish vaqtiga ruxsat (±) — o'yin qoidasi", "model", false),
+  thermoReadToleranceC: n(2, "°C", "Mini-o'yinda termometr ko'rsatkichini o'qishdagi ruxsat etilgan xato — o'yin qoidasi", "model", false),
 
   // ---- Yangi transformatorni ishga tushirish ----
   energizeShocks: n(3, "marta", "Yangi transformatorni nominal kuchlanishga zarba bilan ulash soni (manbalarda 3–5 marta) — tekshirilsin"),
