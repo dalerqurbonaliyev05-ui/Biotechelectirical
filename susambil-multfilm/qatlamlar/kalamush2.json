@@ -1,0 +1,292 @@
+{
+  "qahramon": "kalamush2",
+  "izoh": "Qatlamlar pastdan yuqoriga tartibda. pivot — aylanish nuqtasi (ko'rinish kadri koordinatasida, piksel).",
+  "korinishlar": {
+    "yon": {
+      "figma_kadr": "kalamush2_yon",
+      "olcham": [
+        420,
+        360
+      ],
+      "qatlamlar": [
+        {
+          "nom": "kalamush2_soya",
+          "pivot": null,
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "kalamush2_dum",
+          "pivot": [
+            118,
+            284
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "kalamush2_panja_4",
+          "pivot": [
+            168,
+            288
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "kalamush2_panja_2",
+          "pivot": [
+            268,
+            288
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "kalamush2_panja_3",
+          "pivot": [
+            146,
+            288
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "kalamush2_panja_1",
+          "pivot": [
+            246,
+            288
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "kalamush2_tana",
+          "pivot": null,
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "kalamush2_quloq_ong",
+          "pivot": [
+            288,
+            176
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "kalamush2_bosh",
+          "pivot": [
+            246,
+            220
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "kalamush2_quloq_chap",
+          "pivot": [
+            266,
+            186
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "kalamush2_koz_ochiq",
+          "pivot": null,
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "kalamush2_koz_yumuq",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "kalamush2_koz_xursand",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "kalamush2_koz_qorqqan",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "kalamush2_qosh_qorqqan",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "kalamush2_qosh_jahldor",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "kalamush2_ogiz_1",
+          "pivot": null,
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "kalamush2_ogiz_2",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "kalamush2_ogiz_3",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "kalamush2_ogiz_xafa",
+          "pivot": null,
+          "boshida_yashirin": true
+        }
+      ]
+    },
+    "old": {
+      "figma_kadr": "kalamush2_old",
+      "olcham": [
+        420,
+        360
+      ],
+      "qatlamlar": [
+        {
+          "nom": "kalamush2_soya",
+          "pivot": null,
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "kalamush2_dum",
+          "pivot": [
+            262,
+            300
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "kalamush2_panja_4",
+          "pivot": [
+            178,
+            292
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "kalamush2_panja_3",
+          "pivot": [
+            242,
+            292
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "kalamush2_tana",
+          "pivot": null,
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "kalamush2_panja_2",
+          "pivot": [
+            178,
+            244
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "kalamush2_panja_1",
+          "pivot": [
+            242,
+            244
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "kalamush2_quloq_chap",
+          "pivot": [
+            244,
+            144
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "kalamush2_quloq_ong",
+          "pivot": [
+            176,
+            144
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "kalamush2_bosh",
+          "pivot": [
+            210,
+            220
+          ],
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "kalamush2_koz_ochiq",
+          "pivot": null,
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "kalamush2_koz_yumuq",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "kalamush2_koz_xursand",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "kalamush2_koz_qorqqan",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "kalamush2_qosh_qorqqan",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "kalamush2_qosh_jahldor",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "kalamush2_ogiz_1",
+          "pivot": null,
+          "boshida_yashirin": false
+        },
+        {
+          "nom": "kalamush2_ogiz_2",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "kalamush2_ogiz_3",
+          "pivot": null,
+          "boshida_yashirin": true
+        },
+        {
+          "nom": "kalamush2_ogiz_xafa",
+          "pivot": null,
+          "boshida_yashirin": true
+        }
+      ]
+    }
+  },
+  "ifodalar": {
+    "xursand": {
+      "kalamush2_koz_ochiq": false,
+      "kalamush2_koz_xursand": true,
+      "kalamush2_ogiz_1": false,
+      "kalamush2_ogiz_3": true
+    },
+    "qorqqan": {
+      "kalamush2_koz_ochiq": false,
+      "kalamush2_koz_qorqqan": true,
+      "kalamush2_qosh_qorqqan": true,
+      "kalamush2_ogiz_1": false,
+      "kalamush2_ogiz_2": true
+    },
+    "jahldor": {
+      "kalamush2_qosh_jahldor": true,
+      "kalamush2_ogiz_1": false,
+      "kalamush2_ogiz_xafa": true
+    }
+  }
+}

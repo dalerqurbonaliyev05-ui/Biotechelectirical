@@ -35,6 +35,7 @@ const bindAll = (root) => {
     }
   }
 };
+const Y0 = 120 + ${q.qatorY || 0} * 1200; // bir bo'limdagi bir nechta qahramon uchun qator
 let section = figma.currentPage.findChild((n) => n.type === "SECTION" && n.name === ${JSON.stringify(Nom)});
 `;
 
@@ -61,7 +62,7 @@ frame.fills = [];
 frame.clipsContent = false;
 section.appendChild(frame);
 frame.x = 80 + ${idx} * (W + 80);
-frame.y = 120;
+frame.y = Y0;
 const LAYERS = ${JSON.stringify(layers)};
 const created = [];
 for (const L of LAYERS) {
@@ -147,9 +148,9 @@ for (const [viewName, list] of Object.entries(EXTRA)) {
   for (const [label, show] of Object.entries(list)) row.appendChild(crop(viewName, label, show));
   rows.push(row.id);
 }
-const last = section.children.filter((n) => n.type === "FRAME" && n.name !== nomi + "_ifodalar");
+const last = section.children.filter((n) => n.type === "FRAME" && n.name.startsWith(nomi + "_") && n.name !== nomi + "_ifodalar");
 sheet.x = Math.max(...last.map((n) => n.x + n.width)) + 80;
-sheet.y = 120;
+sheet.y = Y0;
 section.resizeWithoutConstraints(Math.max(section.width, sheet.x + sheet.width + 80), Math.max(section.height, sheet.y + sheet.height + 80));
 return { sheetId: sheet.id, rows, size: [sheet.width, sheet.height], begonaRanglar: [...new Set(begona)] };
 `;

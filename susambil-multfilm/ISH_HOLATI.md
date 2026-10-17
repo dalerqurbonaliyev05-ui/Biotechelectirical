@@ -3,7 +3,7 @@
 > Suhbat uzilsa, shu fayldan davom ettiriladi. Har bosqichdan keyin yangilanadi.
 
 **Oxirgi yangilanish:** 2026-10-17
-**Hozirgi bosqich:** 2-bosqich (qahramonlar) — **Xo'roz tasdiq kutmoqda**
+**Hozirgi bosqich:** 2-bosqich (qahramonlar) — **Kalamushlar tasdiq kutmoqda**
 
 ## Asosiy havolalar
 
@@ -37,7 +37,9 @@
 
 ## Masshtab
 
-Barcha qahramonlar bitta masshtabda chiziladi (animatsiyada o'lchamini o'zgartirmasdan joylanadi). Kadr o'lchami qahramonga qarab: eshak/ho'kiz 900x760 (yer y=700), xo'roz 520x520 (yer y=480).
+Barcha qahramonlar bitta masshtabda chiziladi (animatsiyada o'lchamini o'zgartirmasdan joylanadi). Kadr o'lchami qahramonga qarab: eshak/ho'kiz 900x760 (yer y=700), xo'roz 520x520 (yer y=480), kalamush 420x360 (yer y=330).
+
+Kalamushlar: umumiy shakl `kalamush_asos.mjs`; Figma'da 2-kalamush 1-kalamushdan nusxalanib, `kulrang` → `jigarrang` va `kalamush1_` → `kalamush2_` qilingan.
 
 ## Uslub qoidalari
 
@@ -63,8 +65,8 @@ Barcha qahramonlar bitta masshtabda chiziladi (animatsiyada o'lchamini o'zgartir
 |---|---|---|
 | 1 | Eshak | ✅ tasdiqlandi (Figma bo'limi `Eshak`, 3:2) — uslub namunasi |
 | 2 | Ho'kiz | ✅ tasdiqlandi (Figma bo'limi `Ho'kiz`, 7:2) — uslub namunasi |
-| 3 | Xo'roz | 🟡 tasdiq kutmoqda (Figma bo'limi `Xo'roz`, 9:2) |
-| 4 | Kalamush 1 va 2 | ⏳ |
+| 3 | Xo'roz | ✅ tasdiqlandi (Figma bo'limi `Xo'roz`, 9:2) |
+| 4 | Kalamush 1 va 2 | 🟡 tasdiq kutmoqda (Figma bo'limi `Kalamushlar`, 11:2; 1 — kulrang, 2 — jigarrang) |
 | 5 | Ari | ⏳ |
 | 6 | Boy | ⏳ |
 | 7 | Qo'shni xotin | ⏳ |
