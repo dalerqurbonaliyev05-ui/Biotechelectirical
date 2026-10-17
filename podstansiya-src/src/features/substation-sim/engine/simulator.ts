@@ -5,7 +5,7 @@ import { MODE_RULES, PENALTY, SEVERITY } from "../data/rules";
 import { NORMS } from "../data/norms";
 import { getModel } from "../data/transformers";
 import { evaluateSwitch, maxSeverity, type InterlockIssue } from "./interlocks";
-import { checkJournalEntry, type JournalOp } from "./journal";
+import { checkJournalEntry, parseTime, type JournalOp } from "./journal";
 import { computeNetwork, isNodeEnergized, type NetworkState } from "./network";
 import { checkTap, lvVoltage, nextTap } from "./rpn";
 import { matchStep, missingRequired } from "./sequence";
@@ -37,6 +37,26 @@ export function loadFactorOf(ctx: SimContext, state: SimState, net: NetworkState
   return net.transformerMva[transformerId] / getModel(t.model).ratedMva.value;
 }
 
+/** Tugundagi kuchlanish, kV: 110 kV — manba; 35/10 kV — ta'minlovchi transformator(lar) bo'yicha o'rtacha. */
+export function nodeVoltageKv(ctx: SimContext, state: SimState, net: NetworkState, nodeId: string): number {
+  if (!isNodeEnergized(net, nodeId)) return 0;
+  const node = ctx.topology.nodes.find((n) => n.id === nodeId);
+  if (!node || node.kv >= 110) return state.sourceKv;
+  const sec = net.sectionOf[nodeId];
+  const values: number[] = [];
+  for (const t of ctx.topology.transformers) {
+    if (!isNodeEnergized(net, t.hv)) continue;
+    const model = getModel(t.model);
+    const k = loadFactorOf(ctx, state, net, t.id);
+    if (node.kv === 10 && net.sectionOf[t.lv] === sec) values.push(transformerLvKv(ctx, state, net, t.id));
+    if (node.kv === 35 && t.mv && net.sectionOf[t.mv] === sec && model.mvKv) {
+      const hvTap = model.hvKv.value * (1 + (state.taps[t.id] * model.rpn.value.stepPct) / 100);
+      values.push(((state.sourceKv * model.mvKv.value) / hvTap) * (1 - (k * NORMS.loadDropAtNominalPct.value) / 100));
+    }
+  }
+  return values.length ? values.reduce((a, b) => a + b, 0) / values.length : node.kv;
+}
+
 /** Transformatorning past (10 kV) tomonidagi kuchlanish, kV (o'chiq bo'lsa 0). */
 export function transformerLvKv(ctx: SimContext, state: SimState, net: NetworkState, transformerId: string): number {
   const t = ctx.topology.transformers.find((x) => x.id === transformerId)!;
@@ -51,6 +71,7 @@ function messagesFor(scenario: ScenarioDef, trigger: (m: DispatcherMessage) => b
 export function createSession(ctx: SimContext): SimState {
   const s = createInitialState(ctx.topology, ctx.scenario);
   s.deliveredMessages = messagesFor(ctx.scenario, (m) => m.trigger === "start");
+  for (const id of s.deliveredMessages) s.messageTimes[id] = s.time;
   return s;
 }
 
@@ -201,7 +222,8 @@ export function applyAction(ctx: SimContext, prev: SimState, action: Action): Ac
     case "report": {
       const msg = scenario.messages.find((m) => m.id === action.messageId);
       const need = msg?.expectsReport?.afterStep;
-      if (need && !s.doneSteps.includes(need)) issues.push({ code: "reportEarly", severity: SEVERITY.reportEarly });
+      const goalsPending = msg?.expectsReport?.requireGoals && unmetGoals(ctx, s).length > 0;
+      if ((need && !s.doneSteps.includes(need)) || goalsPending) issues.push({ code: "reportEarly", severity: SEVERITY.reportEarly });
       break;
     }
     case "permitIssue": {
@@ -362,8 +384,12 @@ export function applyAction(ctx: SimContext, prev: SimState, action: Action): Ac
     // Qadamdan keyin keladigan dispetcher xabarlari
     if (m.step) {
       const stepId = m.step.id;
-      for (const id of messagesFor(scenario, (x) => typeof x.trigger === "object" && x.trigger.afterStep === stepId)) {
-        if (!s.deliveredMessages.includes(id)) s.deliveredMessages.push(id);
+      for (const msg of scenario.messages) {
+        if (typeof msg.trigger !== "object" || msg.trigger.afterStep !== stepId || s.deliveredMessages.includes(msg.id)) continue;
+        s.deliveredMessages.push(msg.id);
+        const at = msg.at ? parseTime(msg.at) : null;
+        if (at !== null && at > s.time) advanceTime(ctx, s, at - s.time);
+        s.messageTimes[msg.id] = s.time;
       }
     }
 

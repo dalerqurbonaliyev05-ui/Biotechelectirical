@@ -83,8 +83,8 @@ export const MODE_RULES: Record<GameMode, { block: Severity[]; hints: "full" | "
  */
 export const SWITCHING_ORDER = {
   outage: {
-    /** O'chirgichlar: avval past (yuklama) tomoni, keyin yuqori kuchlanish */
-    breakers: ["10", "35", "110"] as const,
+    /** O'chirgichlar guruhlar bo'yicha: avval past (yuklama) tomonlari (o'zaro ixtiyoriy tartibda), keyin yuqori kuchlanish */
+    breakers: [["10", "35"], ["110"]] as const,
     /** Ajratkichlar har tomonda: avval transformator tomoni, keyin shina tomoni */
     disconnectors: ["equipment", "bus"] as const,
     /** O'chirgichning ochiqligini joyida tekshirish — tavsiya etilgan qadam (ixtiyoriy) */
@@ -93,7 +93,7 @@ export const SWITCHING_ORDER = {
   energize: {
     /** Ajratkichlar: avval shina tomoni, keyin transformator tomoni */
     disconnectors: ["bus", "equipment"] as const,
-    /** O'chirgichlar: avval manba (yuqori kuchlanish) tomoni — salt yurish, keyin yuklama tomoni */
-    breakers: ["110", "35", "10"] as const,
+    /** O'chirgichlar guruhlar bo'yicha: avval manba (yuqori kuchlanish) tomoni — salt yurish, keyin yuklama tomonlari */
+    breakers: [["110"], ["35", "10"]] as const,
   },
 } as const;

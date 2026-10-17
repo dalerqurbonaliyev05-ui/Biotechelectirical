@@ -108,7 +108,11 @@ export function evaluateSwitch(
       const changed = to === "open" ? [...objBefore].filter((o) => !objAfter.has(o)) : [...objAfter].filter((o) => !objBefore.has(o));
       const consumers = changed.filter((o) => topology.loads.some((l) => l.id === o));
       const transformers = changed.filter((o) => topology.transformers.some((t) => t.id === o));
-      if (consumers.length > 0) {
+      // Parallel ishlayotgan transformatorlar orasida yuklama qayta taqsimlansa — ajratkich orqali yuklama toki o'tgan
+      const redistributed = topology.transformers.some(
+        (t) => Math.abs((before.transformerMva[t.id] ?? 0) - (after.transformerMva[t.id] ?? 0)) > 0.01,
+      );
+      if (consumers.length > 0 || (transformers.length === 0 && redistributed)) {
         issues.push(issue("disconnectorUnderLoad", { device: label }));
       } else if (transformers.length > 0) {
         issues.push(issue("disconnectorMagnetizing", { device: label, transformer: transformers.join(", ") }));
@@ -132,4 +136,16 @@ export function evaluateSwitch(
     params: top?.params ?? { device: label },
     issues,
   };
+}
+
+/** Yopiq apparat orqali tok o'tyaptimi (uni ochish yuklama yoki transformator ta'minotini o'zgartiradimi). */
+export function deviceCarriesCurrent(topology: Topology, state: SimState, deviceId: string): boolean {
+  const dev = topology.switches.find((s) => s.id === deviceId);
+  if (!dev || state.devices[deviceId] !== "closed") return false;
+  const before = net(topology, state, state.devices);
+  const after = net(topology, state, { ...state.devices, [deviceId]: "open" });
+  const objB = suppliedObjects(topology, before);
+  const objA = suppliedObjects(topology, after);
+  if ([...objB].some((o) => !objA.has(o))) return true;
+  return topology.transformers.some((t) => Math.abs((before.transformerMva[t.id] ?? 0) - (after.transformerMva[t.id] ?? 0)) > 0.01);
 }

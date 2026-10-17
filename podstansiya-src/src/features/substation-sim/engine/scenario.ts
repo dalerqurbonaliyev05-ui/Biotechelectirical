@@ -7,7 +7,7 @@ export type ActionMatcher =
   | { type: "switch"; deviceId: string; to: SwitchPos }
   | { type: "verifyDead"; nodeIds: string[] }
   | { type: "checkPosition"; deviceId: string }
-  | { type: "poster"; targetId: string; poster: PosterKind }
+  | { type: "poster"; targetId: string; poster: PosterKind; on?: boolean }
   | { type: "readback"; messageId: string }
   | { type: "report"; messageId: string }
   | { type: "permitIssue" }
@@ -45,13 +45,15 @@ export interface DispatcherMessage {
   id: string;
   /** Qachon keladi: boshida yoki biror qadam bajarilgach */
   trigger: "start" | { afterStep: string };
+  /** Xabar kelganda soat shu vaqtga suriladi ("HH:MM", kun davomidagi stsenariylar uchun) */
+  at?: string;
   from: string;
   text: string;
   readback?: { prompt: string; options: ReadbackOption[] };
   /** Bu buyruq qabul qilingach kommutatsiyaga ruxsat bor */
   isOrder?: boolean;
   /** Bajarilganidan keyin hisobot kutiladi */
-  expectsReport?: { afterStep: string; text: string };
+  expectsReport?: { afterStep: string; text: string; requireGoals?: boolean };
 }
 
 export type Goal =

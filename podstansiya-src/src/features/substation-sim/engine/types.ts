@@ -142,6 +142,8 @@ export interface SimState {
   acceptedOrders: string[];
   reports: string[];
   deliveredMessages: string[];
+  /** Xabar kelgan vaqt, sekund */
+  messageTimes: Record<string, number>;
   inspected: string[];
   doneSteps: string[];
   log: LogEntry[];

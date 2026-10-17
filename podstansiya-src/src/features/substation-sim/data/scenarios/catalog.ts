@@ -10,11 +10,11 @@ export interface ScenarioMeta {
 }
 
 export const SCENARIO_CATALOG: ScenarioMeta[] = [
-  { id: "S01", level: 1, title: "Podstansiya bilan tanishish", objective: "Har bir uskunaning vazifasi va sxemadagi belgisini o'rganish", playable: false },
-  { id: "S02", level: 1, title: "Transformatorni rejali ta'mirga chiqarish", objective: "To'g'ri kommutatsiya, yerlash, plakat, naryad-ruxsatnoma, jurnal", playable: false },
-  { id: "S03", level: 1, title: "Ta'mirdan so'ng transformatorni ishga tushirish", objective: "Teskari tartib: yerlagich va plakatlarni olish, ajratkich va o'chirgichlarni ulash", playable: false },
-  { id: "S04", level: 1, title: "Dispetcherlik jurnalini yuritish", objective: "Kun davomida bir nechta buyruqni bajarish va jurnalga to'g'ri yozish", playable: false },
-  { id: "S05", level: 1, title: "Kuchlanish past — RPN", objective: "RPN pog'onasini to'g'ri tanlab, kuchlanishni me'yorga keltirish", playable: false },
+  { id: "S01", level: 1, title: "Podstansiya bilan tanishish", objective: "Har bir uskunaning vazifasi va sxemadagi belgisini o'rganish", playable: true },
+  { id: "S02", level: 1, title: "Transformatorni rejali ta'mirga chiqarish", objective: "To'g'ri kommutatsiya, yerlash, plakat, naryad-ruxsatnoma, jurnal", playable: true },
+  { id: "S03", level: 1, title: "Ta'mirdan so'ng transformatorni ishga tushirish", objective: "Teskari tartib: yerlagich va plakatlarni olish, ajratkich va o'chirgichlarni ulash", playable: true },
+  { id: "S04", level: 1, title: "Dispetcherlik jurnalini yuritish", objective: "Kun davomida bir nechta buyruqni bajarish va jurnalga to'g'ri yozish", playable: true },
+  { id: "S05", level: 1, title: "Kuchlanish past — RPN", objective: "RPN pog'onasini to'g'ri tanlab, kuchlanishni me'yorga keltirish", playable: true },
   { id: "S06", level: 2, title: "Yuklama oshib ketdi", objective: "Harorat grafigi, ventilyatorlar, qisqa muddatli ortiqcha yuklash chegarasi", playable: false },
   { id: "S07", level: 2, title: "Quvvat yetishmayapti", objective: "Zaxira transformatorni parallel ulash, fazirovka; RPN yordam bermasligi", playable: false },
   { id: "S08", level: 2, title: "Moyni filtrlash yoki almashtirish", objective: "Moy sinovi natijalari bo'yicha qaror", playable: false },

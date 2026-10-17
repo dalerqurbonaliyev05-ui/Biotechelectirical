@@ -13,7 +13,7 @@ export function matcherMatches(m: ActionMatcher, a: Action): boolean {
     case "checkPosition":
       return a.type === "checkPosition" && a.deviceId === m.deviceId;
     case "poster":
-      return a.type === "poster" && a.on && a.targetId === m.targetId && a.poster === m.poster;
+      return a.type === "poster" && a.on === (m.on ?? true) && a.targetId === m.targetId && a.poster === m.poster;
     case "readback":
       return a.type === "readback" && a.messageId === m.messageId;
     case "report":

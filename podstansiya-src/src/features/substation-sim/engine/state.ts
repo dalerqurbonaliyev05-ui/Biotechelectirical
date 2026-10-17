@@ -52,6 +52,7 @@ export function createInitialState(topology: Topology, scenario?: ScenarioDef): 
     acceptedOrders: [],
     reports: [],
     deliveredMessages: [],
+    messageTimes: {},
     inspected: [],
     doneSteps: [],
     log: [],
