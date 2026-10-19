@@ -41,7 +41,8 @@ export function menuScreen(app) {
       h('div.logo', icon('bolt')),
       h('h1', t('app.title')),
       h('p.tag', t('app.tagline')),
-      h('p.disc', t('app.disclaimer'))
+      h('p.disc', t('app.disclaimer')),
+      h('p.shiftbanner', (app.settings.shiftsDone || 0) > 0 ? t('menu.shiftInfo', { done: app.settings.shiftsDone, next: app.settings.shiftsDone + 1 }) : t('menu.shiftFirst'))
     ),
     h('div.menu-btns',
       hasSave ? h('button.btn.primary.big', { onclick: () => { if (!app.continueGame()) app.toast(t('menu.noSave'), 'warn'); } }, icon('clock'), t('menu.continue')) : null,
@@ -77,7 +78,7 @@ export function briefingScreen(app) {
   if (g.state.tasks.T0 && g.state.current == null) g.selectTask('T0');
   return h('div.briefing',
     h('div.radio-card',
-      h('div.radio-h', icon('radio'), h('strong', t('brief.from'))),
+      h('div.radio-h', icon('radio'), h('strong', t('brief.from')), g.state.shiftNo ? h('span.pill', t('brief.shift', { n: g.state.shiftNo })) : null),
       h('p', t('brief.msg1', { name: g.cfg.plant.name, n: g.state.order.filter((x) => x !== 'T0').length })),
       h('p', t('brief.msg2')),
       rows,

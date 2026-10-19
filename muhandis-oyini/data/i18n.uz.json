@@ -9,7 +9,8 @@
   "common": { "close": "Yopish", "ok": "Tushunarli", "cancel": "Bekor qilish", "continue": "Davom etish", "error": "Xatolik yuz berdi", "min": "daq", "hour": "soat", "day": "kun" },
   "menu": {
     "new": "Yangi smena boshlash", "continue": "Davom ettirish", "how": "Qanday o'ynaladi", "settings": "Sozlamalar", "noSave": "Saqlangan o'yin topilmadi.",
-    "confirmNew": "Saqlangan o'yin bor. Yangi smena boshlansa, eskisi o'chadi. Davom etasizmi?", "map": "Korxona xaritasi", "toMain": "Bosh menyu"
+    "confirmNew": "Saqlangan o'yin bor. Yangi smena boshlansa, eskisi o'chadi. Davom etasizmi?", "map": "Korxona xaritasi", "toMain": "Bosh menyu",
+    "shiftFirst": "Bu sizning 1-smenangiz. Omad!", "shiftInfo": "Siz {done} ta smenani tugatgansiz. Keyingi — {next}-smena."
   },
   "setup": {
     "difficulty": "Qiyinlik", "mode": "Smena turi", "tutorial": "Birinchi mashq (tutorial) bilan boshlash", "seed": "Smena kodi (ixtiyoriy):", "seedPh": "bir xil holatni takrorlash uchun raqam", "go": "Smenani boshlash",
@@ -24,7 +25,7 @@
     }
   },
   "brief": {
-    "from": "Bosh energetik (radio)",
+    "from": "Bosh energetik (radio)", "shift": "{n}-smena",
     "msg1": "Xayrli tong! {name}ga xush kelibsiz. Bugungi smenada {n} ta topshiriq bor. Ish kuni 08:00 dan 17:00 gacha.",
     "msg2": "Tartib: sexni aylanib chiqing, asboblar bilan o'lchang, sababni aniqlang, xavfsizlik qoidalariga rioya qilib ta'mirlang va iqtisodiy jihatdan oqilona qaror qabul qiling. Yuqori tok yoki qizish har doim almashtirish kerakligini bildirmaydi!",
     "msg3": "Bir vaqtda hammasiga ulgurmaysiz: xavfliroq va ishlab chiqarishga ta'siri kattasidan boshlang. Smena davomida favqulodda chaqiruvlar bo'lishi mumkin.",
@@ -177,7 +178,7 @@
   },
   "cat": { "diagnosis": "Tashxis", "safety": "Xavfsizlik", "time": "Vaqt", "cost": "Xarajat va qaror" },
   "fin": {
-    "title": "Smena yakuni — hisobot", "confirmOpen": "Hali {n} ta topshiriq bajarilmagan va ular nol ball oladi. Smenani yakunlaysizmi?", "confirmAll": "Smenani yakunlaysizmi?", "overTitle": "Ish kuni tugadi", "over": "Soat 17:00 — ish kuni tugadi. Natijalarni ko'rib chiqamiz.", "report": "Hisobotni ko'rish",
+    "title": "Smena yakuni — hisobot", "shiftDone": "{n}-smena tugadi.", "shiftNext": "Keyingi smenada yangi topshiriqlar to'plami beriladi — bu {next}-smena bo'ladi.", "confirmOpen": "Hali {n} ta topshiriq bajarilmagan va ular nol ball oladi. Smenani yakunlaysizmi?", "confirmAll": "Smenani yakunlaysizmi?", "overTitle": "Ish kuni tugadi", "over": "Soat 17:00 — ish kuni tugadi. Natijalarni ko'rib chiqamiz.", "report": "Hisobotni ko'rish",
     "strongWeak": "Eng kuchli tomoningiz: {s}. Eng zaif tomoningiz: {w}.", "weighted": "Topshiriqlar o'rtachasi (muhimlik bo'yicha)", "priority": "Prioritet bonusi", "emerg": "Favqulodda chaqiruvlar jarimasi", "accidents": "Baxtsiz hodisalar", "loss": "To'xtash zarari", "spent": "Sarflangan mablag'",
     "tasks": "Topshiriqlar", "task": "Topshiriq", "status": "Holat", "min": "Daqiqa", "score": "Ball", "mistakes": "Xatolar tahlili", "noMistakes": "Jiddiy xato yo'q. Barakalla!", "achievements": "Yutuqlar", "noAch": "Bu safar yutuq yo'q — keyingi smenada urinib ko'ring.",
     "print": "Hisobotni chop etish", "download": "Hisobotni yuklab olish (.html)", "toMenu": "Bosh menyu", "category": "Toifa", "points": "Ball"
