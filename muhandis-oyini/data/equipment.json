@@ -831,11 +831,12 @@
     "stages": 6,
     "kvarStage": 30,
     "protection": {
-     "breakerIn": 250,
+     "breakerIn": 400,
      "magMult": 10
     },
     "cable": {
-     "section": 70,
+     "section": 95,
+     "parallel": 2,
      "length": 15
     }
    },
@@ -923,7 +924,7 @@
      "breakerIn": 50,
      "magMult": 10,
      "relayA": 43,
-     "fuseA": 63
+     "fuseA": 125
     },
     "cable": {
      "section": 16,
@@ -1305,7 +1306,8 @@
      "magMult": 10
     },
     "cable": {
-     "section": 400,
+     "section": 240,
+     "parallel": 2,
      "length": 50
     }
    },

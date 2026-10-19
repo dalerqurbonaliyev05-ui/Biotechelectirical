@@ -92,11 +92,11 @@
    "workMin": 15
   },
   "replace_feeder_cable": {
-   "label": "Sex liniyasi kabelini 120 mm² ga almashtirish",
+   "label": "Sex liniyasi kabelini 185 mm² ga almashtirish",
    "kind": "repair",
    "cost": {
     "perMeter": 118000,
-    "section": 120
+    "section": 185
    },
    "hours": 8,
    "loto": true,
@@ -733,7 +733,7 @@
        },
        "visual": [
         {
-         "text": "Kirish kabeli markasi 3×50 mm², uzunligi ≈160 m; kabel qobig'i qizigan.",
+         "text": "Kirish kabeli markasi 4×50 mm², uzunligi ≈160 m; kabel qobig'i qizigan.",
          "iso": false
         }
        ]

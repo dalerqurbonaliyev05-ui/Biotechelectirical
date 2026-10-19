@@ -4,7 +4,7 @@ import { SQRT3, motorPQ, tanOf, cableDropPct, cosFromPQ, busVoltage, unbalancePc
 import { getNp, nomCurrentOf, isPowered, isIsolated, PAIRS, stOf } from './world.js';
 import { classifyCaseTemp, classifyVibration, classifyCurrentRatio, classifyUnbalance, classifyBearingTemp, classifyTerminalTemp, worst } from './limits.js';
 import { motorSteadyTemps, welderSteadyTemps, cableSteadyTemps, stepTemp, hazardRate } from './thermal.js';
-import { cableAmpacity } from './electrical.js';
+import { cableAmpacityN } from './electrical.js';
 
 const LINE_OF = { AB: 0, BC: 1, CA: 2 };
 const zero = () => ({ P: 0, Q: 0, S: 0, I: [0, 0, 0], powered: false, Uavg: 0 });
@@ -136,7 +136,7 @@ function assemble(world, Uline) {
     const Ubus = w.tm ? tmOut[w.tm].Ubus : 0;
     const skew = panelSt.voltageSkew || [0, 0, 0];
     const busLines = skew.map((s) => Ubus * (1 + s / 100));
-    const dropCablePct = cableDropPct(w.Iavg, np.cable.section, np.cable.length, Math.max(w.cos, 0.5), cfg.plant.uNom, cfg.plant);
+    const dropCablePct = cableDropPct(w.Iavg, np.cable.section, np.cable.length, Math.max(w.cos, 0.5), cfg.plant.uNom, cfg.plant, np.cable.parallel ?? 1);
     const contactV = SQRT3 * w.Iavg * panelSt.contactR;
     const dropFactor = 1 - dropCablePct / 100;
     const schLines = busLines.map((u) => (w.alive ? u * dropFactor - contactV : 0));
@@ -263,12 +263,12 @@ function targetTemps(world, plant, id) {
   if (def.type === 'cable') {
     const feed = plant.eq[def.feeds];
     const np = getNp(def, st);
-    return cableSteadyTemps({ I: feed?.Iline ?? 0, section: np.cable.section, contactR: st.contactR, powered: powered && feed?.powered }, cfg.plant, cfg.thermal);
+    return cableSteadyTemps({ I: (feed?.Iline ?? 0) / (np.cable.parallel ?? 1), section: np.cable.section, contactR: st.contactR, powered: powered && feed?.powered }, cfg.plant, cfg.thermal);
   }
   if (def.type === 'panel') {
     const w = plant.ws[def.workshop];
     const np = getNp(def, st);
-    const r = w.Iavg / cableAmpacity(np.cable.section);
+    const r = w.Iavg / cableAmpacityN(np.cable.section, np.cable.parallel ?? 1);
     const amb = cfg.plant.ambientC;
     const cable = amb + Math.min(cfg.thermal.cableDeltaNomC * r * r, 85);
     return { cable, terminal: amb + 6 + Math.min(cfg.thermal.contactHeatCPerW * w.Iavg * w.Iavg * st.contactR, 90) };

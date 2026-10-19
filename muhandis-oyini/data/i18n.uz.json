@@ -96,7 +96,7 @@
     "clamp": { "name": "Tok qisqichi", "hint": "Faza toklari (A, B, C). Kuchlanish ostida." },
     "clampStart": { "name": "Tok qisqichi: ishga tushirish", "hint": "Ishga tushirish toki; himoya uzilishi mumkin." },
     "multimeter": { "name": "Multimetr", "hint": "Kuchlanish, faza yo'qligi." },
-    "megger": { "name": "Megommetr", "hint": "Izolyatsiya qarshiligi. Faqat o'chirilgan va kuchlanishi tekshirilgan uskunada!" },
+    "megger": { "name": "Megommetr", "hint": "Izolyatsiya qarshiligi. Faqat o'chirilgan va kuchlanishi tekshirilgan uskunada! 1 kV gacha dvigatel — 1000 V li megommetr, kuch kabeli — 2,5 kV. Me'yor: kamida 0,5 MΩ (10–30 °C da), EUTQ 1.8-bob." },
     "thermal": { "name": "Termovizor", "hint": "Korpus, podshipnik, klemma harorati." },
     "vibration": { "name": "Vibratsiya o'lchagich", "hint": "mm/s va dominant chastota." },
     "visual": { "name": "Ko'zdan kechirish", "hint": "Iflos, rang, moy, boltlar, rele holati." },

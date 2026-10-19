@@ -50,6 +50,11 @@ export function cableAmpacity(section) {
   return AMPACITY[AMPACITY.length - 1][1];
 }
 
+/** n ta parallel kabel: toklar yig'iladi (guruhlash koeffitsienti e'tiborga olinmaydi — soddalashtirilgan) */
+export function cableAmpacityN(section, n = 1) {
+  return cableAmpacity(section) * n;
+}
+
 /** Kabel qarshiligi (Ω): R = ρ/S · L/1000 (ρ — Ω·mm²/km) */
 export function cableR(section, length_m, rho = 22.5) {
   if (!section) return 0;
@@ -57,10 +62,10 @@ export function cableR(section, length_m, rho = 22.5) {
 }
 
 /** Kabeldagi chiziqli kuchlanish pasayishi (% U_nom): ΔU = √3·I·(R·cosφ + X·sinφ) */
-export function cableDropPct(I, section, length_m, cosphi, U, cfg = {}) {
+export function cableDropPct(I, section, length_m, cosphi, U, cfg = {}, n = 1) {
   if (!section || !I) return 0;
-  const R = cableR(section, length_m, cfg.rhoCuOhmMm2PerKm ?? 22.5);
-  const X = (cfg.xPerKm ?? 0.08) * (length_m / 1000);
+  const R = cableR(section, length_m, cfg.rhoCuOhmMm2PerKm ?? 22.5) / n;
+  const X = ((cfg.xPerKm ?? 0.08) * (length_m / 1000)) / n;
   const sin = Math.sqrt(1 - cosphi * cosphi);
   const dU = SQRT3 * I * (R * cosphi + X * sin);
   return (dU / U) * 100;
