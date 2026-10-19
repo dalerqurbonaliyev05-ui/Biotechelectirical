@@ -361,6 +361,147 @@
    "hours": 0.5,
    "loto": true,
    "workMin": 10
+  },
+  "clean_filter": {
+   "label": "Qirindi filtrini (qopini) tozalash va almashtirish",
+   "kind": "repair",
+   "cost": {
+    "fixed": 90000
+   },
+   "hours": 1,
+   "loto": true,
+   "workMin": 12
+  },
+  "replace_key": {
+   "label": "Ventilyator g'ildiragi shponkasini almashtirib, mahkamlash",
+   "kind": "repair",
+   "cost": {
+    "fixed": 250000
+   },
+   "hours": 3,
+   "loto": true,
+   "workMin": 25
+  },
+  "open_damper": {
+   "label": "Havo zaslonkasini to'liq ochib, qotirish",
+   "kind": "adjust",
+   "cost": {
+    "fixed": 0
+   },
+   "hours": 0.2,
+   "loto": true,
+   "workMin": 8
+  },
+  "replace_coil": {
+   "label": "Kontaktor g'altagini almashtirish",
+   "kind": "repair",
+   "cost": {
+    "fixed": 350000
+   },
+   "hours": 1.5,
+   "loto": true,
+   "workMin": 15
+  },
+  "flush_oil": {
+   "label": "Qotgan moyni to'kib, tizimni yuvish va yangi moy quyish",
+   "kind": "repair",
+   "cost": {
+    "fixed": 450000
+   },
+   "hours": 3,
+   "loto": true,
+   "workMin": 25
+  },
+  "clean_welder": {
+   "label": "Payvand apparatini ichidan puflab tozalash (sovitish tirqishlari)",
+   "kind": "repair",
+   "cost": {
+    "fixed": 150000
+   },
+   "hours": 2,
+   "loto": true,
+   "workMin": 20
+  },
+  "repair_primary_cable": {
+   "label": "Apparatning kirish kabelini shikastlangan joyidan ta'mirlash (muftalash)",
+   "kind": "repair",
+   "cost": {
+    "fixed": 650000
+   },
+   "hours": 3,
+   "loto": true,
+   "workMin": 25
+  },
+  "fix_earthing": {
+   "label": "Himoya yerga ulashini tiklash (vint va o'tkazgichni mahkamlash)",
+   "kind": "repair",
+   "cost": {
+    "fixed": 100000
+   },
+   "hours": 1,
+   "loto": true,
+   "workMin": 12
+  },
+  "dry_winding": {
+   "label": "Apparatni quritish (issiq havo bilan) va izolyatsiyani qayta sinash",
+   "kind": "repair",
+   "cost": {
+    "fixed": 200000
+   },
+   "hours": 6,
+   "loto": true,
+   "workMin": 20
+  },
+  "close_isolator": {
+   "label": "Ajratkichni yoqish (sababi aniqlanib, ruxsatdan keyin)",
+   "kind": "adjust",
+   "cost": {
+    "fixed": 0
+   },
+   "hours": 0.3,
+   "loto": true,
+   "workMin": 10
+  },
+  "clean_suction": {
+   "label": "So'rish panjarasini tozalash",
+   "kind": "repair",
+   "cost": {
+    "fixed": 100000
+   },
+   "hours": 1,
+   "loto": true,
+   "workMin": 12
+  },
+  "replace_coupling": {
+   "label": "Nasos va dvigatel muftasini (kauchuk elementi bilan) almashtirish",
+   "kind": "repair",
+   "cost": {
+    "fixed": 600000
+   },
+   "hours": 3,
+   "loto": true,
+   "workMin": 25
+  },
+  "replace_impeller": {
+   "label": "Nasosning yeyilgan ish g'ildiragini almashtirish",
+   "kind": "repair",
+   "cost": {
+    "fixed": 2800000
+   },
+   "hours": 6,
+   "loto": true,
+   "workMin": 30
+  },
+  "replace_vent_feeder": {
+   "label": "Sex liniyasi kabelini 35 mm² ga almashtirish",
+   "kind": "repair",
+   "cost": {
+    "perMeter": 45000,
+    "section": 35
+   },
+   "hours": 8,
+   "loto": true,
+   "workMin": 40
   }
  },
  "symptoms": {
@@ -2426,6 +2567,1366 @@
      "signs": "Kunduzgi cho'qqi paytida umumiy S > 400 kVA.",
      "explain": "Kunduzgi oynada (10–14 soat) umumiy yuklama S ≈ 440 kVA — bitta TM-400 uchun K > 1. Ta'mir shu oynada xavfsiz emas yoki yuklamani kamaytirish kerak: eng arzon to'plam (kechiktiriladigan yuklamalarni siljitish/uzish) K ni 0,95 dan pastga tushiradi.",
      "invalid": {}
+    }
+   ]
+  },
+  "M5": {
+   "question": "Qirindi so'rgich ventilyatori nima uchun havoni kuchsiz tortyapti?",
+   "economy": "cost",
+   "options": [
+    "clean_filter",
+    "replace_key",
+    "open_damper",
+    "raise_protection",
+    "replace",
+    "monitor"
+   ],
+   "causes": [
+    {
+     "weight": 1,
+     "id": "filter_clogged",
+     "label": "Qirindi filtri changdan va qirindidan to'lib qolgan",
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "load": 0.32
+       },
+       "visual": [
+        {
+         "text": "Filtr qopi qirindi va chang bilan to'lgan, so'rish quvuri qopga yopishib qolgan.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "clamp",
+      "visual"
+     ],
+     "useful": [
+      "vibration",
+      "thermal",
+      "multimeter"
+     ],
+     "fixedBy": [
+      "clean_filter"
+     ],
+     "signs": "Tok nominalning ≈40–45 % i; vibratsiya me'yorda; filtr to'lgan.",
+     "explain": "Dvigatel kam yuklangan (tok ≈ 40 % I_nom), vibratsiya me'yorda — mexanik nosozlik yo'q. Filtr to'lib qolgani havo oqimini to'sib, ventilyatorni «bo'sh» aylantiryapti. To'g'ri qaror — filtrni tozalash. Dvigatel sog'lom, almashtirish ortiqcha.",
+     "invalid": {
+      "replace_key": "Shponka butun; havo oqimi filtrda to'silgan.",
+      "open_damper": "Zaslonka ochiq turibdi.",
+      "raise_protection": "Tok past — himoya bilan bog'liq emas.",
+      "replace": "Dvigatel sog'lom — almashtirishning ma'nosi yo'q."
+     }
+    },
+    {
+     "weight": 1,
+     "id": "key_sheared",
+     "label": "Ventilyator g'ildiragi shponkasi kesilgan (g'ildirak o'qda erkin aylanadi)",
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "load": 0.2,
+        "vib": 3.4,
+        "vibKind": "loose"
+       },
+       "visual": [
+        {
+         "text": "Ventilyator g'ildiragi o'q bilan birga aylanmayapti: orqada qolib, urilish tovushi eshitiladi.",
+         "iso": false
+        },
+        {
+         "text": "Shponka kesilgan, shponka o'rni yeyilgan (korpus ochilganda ko'rinadi).",
+         "iso": true
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "clamp",
+      "vibration"
+     ],
+     "useful": [
+      "visual",
+      "thermal"
+     ],
+     "fixedBy": [
+      "replace_key"
+     ],
+     "signs": "Tok juda past (≈30 % I_nom); vibratsiya «bo'shashgan» turda; filtr toza.",
+     "explain": "Tok nominalning ≈30 % i — dvigatel deyarli salt ishlayapti; vibratsiya «bo'shashgan» turda (urilish). Filtr toza, zaslonka ochiq. G'ildirak o'qda erkin aylanyapti: shponka kesilgan. To'g'ri qaror — shponkani almashtirib mahkamlash. Dvigatel sog'lom.",
+     "invalid": {
+      "clean_filter": "Filtr toza edi.",
+      "open_damper": "Zaslonka ochiq turibdi.",
+      "raise_protection": "Tok past — himoya bilan bog'liq emas.",
+      "replace": "Dvigatel sog'lom — almashtirishning ma'nosi yo'q."
+     }
+    },
+    {
+     "weight": 1,
+     "id": "damper_closed",
+     "label": "Havo yo'li zaslonkasi yopiq qolgan",
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "load": 0.4
+       },
+       "visual": [
+        {
+         "text": "So'rish quvuridagi zaslonka dastagi «yopiq» holatda, havo deyarli o'tmayapti.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "clamp",
+      "visual"
+     ],
+     "useful": [
+      "vibration",
+      "thermal"
+     ],
+     "fixedBy": [
+      "open_damper"
+     ],
+     "signs": "Tok past (≈50 % I_nom), vibratsiya me'yorda; filtr toza, zaslonka yopiq.",
+     "explain": "Tok nominalning yarmidan past, vibratsiya me'yorda, filtr toza. Zaslonka dastagi yopiq holatda qolgan (ta'mirdan keyin qaytarilmagan) — shuning uchun havo o'tmayapti. To'g'ri qaror — zaslonkani ochib qotirish: bepul, tez.",
+     "invalid": {
+      "clean_filter": "Filtr toza edi.",
+      "replace_key": "Shponka butun.",
+      "raise_protection": "Tok past — himoya bilan bog'liq emas.",
+      "replace": "Dvigatel sog'lom — almashtirishning ma'nosi yo'q."
+     }
+    }
+   ]
+  },
+  "M6": {
+   "question": "Moy nasosi dvigateli nima uchun ishga tushmayapti?",
+   "economy": "cost",
+   "options": [
+    "replace_coil",
+    "flush_oil",
+    "rewind",
+    "replace",
+    "raise_protection",
+    "monitor"
+   ],
+   "causes": [
+    {
+     "weight": 1,
+     "id": "coil_open_m6",
+     "label": "Kontaktor g'altagi o'rami uzilgan (kontaktor tortilmaydi)",
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "on": false
+       },
+       "visual": [
+        {
+         "text": "«Start» bosilganda kontaktor tortilmayapti, g'altak tovushi yo'q.",
+         "iso": false
+        },
+        {
+         "text": "Kontaktor g'altagining o'rami uzilgan (ommetr cheksiz ko'rsatadi).",
+         "iso": true
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "multimeter",
+      "clampStart"
+     ],
+     "useful": [
+      "clamp",
+      "visual"
+     ],
+     "fixedBy": [
+      "replace_coil"
+     ],
+     "signs": "Kirishda kuchlanish bor, dvigatel klemmasida hamma liniyalar nol; ishga tushirish toki 0.",
+     "explain": "Kirishda kuchlanish to'liq, lekin dvigatel klemmasida uchala liniya nolga teng, ishga tushirish toki ham yo'q: kontaktor yopilmayapti — g'altak uzilgan. To'g'ri qaror — g'altakni almashtirish. Dvigatel sog'lom.",
+     "invalid": {
+      "flush_oil": "Moy me'yorda; dvigatelga kuchlanish umuman kelmayapti.",
+      "rewind": "Dvigatel sog'lom — o'rashning keragi yo'q.",
+      "replace": "Dvigatel sog'lom — almashtirishning ma'nosi yo'q.",
+      "raise_protection": "Himoya ishlagani yo'q."
+     }
+    },
+    {
+     "weight": 1,
+     "id": "oil_congealed",
+     "label": "Moy qotib qolgan: nasos vali siqilgan (rotor aylanmayapti)",
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "trip": "relay",
+        "stalled": true,
+        "heatBearing": 30
+       },
+       "visual": [
+        {
+         "text": "Moy bakidagi moy quyuq, qotgan; nasos vali qo'lda zo'rg'a aylanadi.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "clampStart",
+      "visual"
+     ],
+     "useful": [
+      "multimeter",
+      "thermal"
+     ],
+     "fixedBy": [
+      "flush_oil"
+     ],
+     "signs": "Kuchlanish to'liq; ishga tushirish toki ≈ 6,8×I_nom, issiqlik relesi uzadi; val aylanmaydi, moy quyuq.",
+     "explain": "Kuchlanish to'liq, lekin dvigatel aylana olmaydi: ishga tushirish toki juda katta, rele uzadi. Moy qotib, nasos valini siqib qo'ygan. To'g'ri qaror — moyni to'kib, tizimni yuvish va yangi moy quyish. Dvigatel sog'lom.",
+     "invalid": {
+      "replace_coil": "Kontaktor tortyapti — dvigatelga kuchlanish keladi.",
+      "rewind": "O'ramlar sog'lom.",
+      "replace": "Dvigatel sog'lom — almashtirishning ma'nosi yo'q.",
+      "raise_protection": "Releni oshirish siqilgan rotorli dvigatelni kuydiradi."
+     }
+    },
+    {
+     "weight": 1,
+     "id": "winding_earth_m6",
+     "label": "O'ramlar izolyatsiyasi teshilgan (yerga tutashuv)",
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "trip": "earth",
+        "insMOhm": 0.1
+       },
+       "nameplate": {
+        "age": {
+         "rand": [
+          8,
+          18
+         ],
+         "int": true
+        },
+        "rewinds": {
+         "rand": [
+          0,
+          2
+         ],
+         "int": true
+        }
+       },
+       "visual": [
+        {
+         "text": "Yer bilan tutashuv himoyasi ishlagan; klemma qutisidan kuygan hid.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "megger",
+      "visual"
+     ],
+     "useful": [
+      "multimeter",
+      "clamp",
+      "thermal"
+     ],
+     "spareChance": 0.5,
+     "fixedBy": [
+      "rewind",
+      "replace"
+     ],
+     "signs": "Himoya yerga tutashuvdan ishlagan; megger < 0,5 MΩ; kuygan hid.",
+     "explain": "Yerga tutashuv himoyasi ishlagan, megger 0,5 MΩ dan ancha past (kuchlanish yo'qligi tekshirilgandan keyin o'lchanadi) — izolyatsiya teshilgan. Qayta o'rash yoki almashtirish kerak; tanlov yosh, qayta o'ralganlar soni, zaxira va to'xtash narxiga bog'liq.",
+     "invalid": {
+      "replace_coil": "Kontaktor butun — himoya yerga tutashuvdan ishlagan.",
+      "flush_oil": "Moy me'yorda."
+     }
+    }
+   ]
+  },
+  "P4": {
+   "question": "1-payvand apparati nima uchun qizib ketyapti?",
+   "economy": "cost",
+   "options": [
+    "retighten_contact",
+    "clean_welder",
+    "repair_welder",
+    "replace_welder",
+    "raise_protection",
+    "monitor"
+   ],
+   "causes": [
+    {
+     "weight": 1,
+     "id": "loose_terminal_w1",
+     "label": "Kirish klemmasi kontakti bo'shab, qizib ketgan",
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "contactR": 0.35
+       },
+       "visual": [
+        {
+         "text": "Kirish klemmasidagi izolyatsiya qorayib, erigan; kontakt atrofi kuyik bilan qoplangan.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "thermal",
+      "visual"
+     ],
+     "useful": [
+      "clamp",
+      "multimeter"
+     ],
+     "fixedBy": [
+      "retighten_contact"
+     ],
+     "signs": "Klemma juda issiq, korpus normal; apparat toki me'yorda.",
+     "explain": "Klemma harorati juda baland, korpus esa normal; apparat toki me'yorda. Issiqlik kontaktning o'tish qarshiligidan: I²·R_kontakt. To'g'ri qaror — kontaktni tozalab qayta qisish. Apparatning o'zi sog'lom.",
+     "invalid": {
+      "clean_welder": "Korpus normal haroratda — sovitish yetarli.",
+      "repair_welder": "O'ramlar sog'lom, tok me'yorda.",
+      "replace_welder": "Apparat sog'lom — almashtirish ortiqcha.",
+      "raise_protection": "Himoyani oshirish qizigan kontaktda yong'in xavfini kuchaytiradi."
+     }
+    },
+    {
+     "weight": 1,
+     "id": "dusty_w1",
+     "label": "Sovitish tirqishlari chang va payvand ko'pigi bilan bekilgan",
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "heatWinding": 48
+       },
+       "visual": [
+        {
+         "text": "Apparat korpusidagi sovitish tirqishlari chang va payvand ko'pigi bilan bekilgan, ventilyator sekin aylanadi.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "thermal",
+      "visual"
+     ],
+     "useful": [
+      "clamp",
+      "megger"
+     ],
+     "fixedBy": [
+      "clean_welder"
+     ],
+     "signs": "Korpus juda issiq, klemma normal; tok me'yorda; megger me'yorda.",
+     "explain": "Korpus qizigan, klemma esa normal, tok me'yorda, izolyatsiya sog'lom — apparat sovitilmayapti: tirqishlar chang bilan bekilgan. To'g'ri qaror — apparatni ichidan puflab tozalash. Ta'mir shart emas.",
+     "invalid": {
+      "retighten_contact": "Klemma sovuq — kontakt yaxshi.",
+      "repair_welder": "O'ramlar sog'lom (megger me'yorda) — sovitish muammosi.",
+      "replace_welder": "Apparat sog'lom — almashtirish ortiqcha.",
+      "raise_protection": "Himoyani oshirish qizishni to'xtatmaydi."
+     }
+    },
+    {
+     "weight": 1,
+     "id": "turn_short_w1",
+     "label": "Transformator o'ramlarida o'ramlararo qisqa tutashuv",
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "faulty": 1.55,
+        "heatWinding": 30,
+        "insMOhm": 0.3,
+        "hazardPerMin": 0.003
+       },
+       "visual": [
+        {
+         "text": "Apparat korpusidan kuygan hid keladi, ish paytida «g'ichirlash» eshitiladi.",
+         "iso": false
+        },
+        {
+         "text": "Birlamchi o'ramning bir necha qatlami qorayib, erigan.",
+         "iso": true
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "clamp",
+      "megger"
+     ],
+     "useful": [
+      "thermal",
+      "multimeter",
+      "visual"
+     ],
+     "fixedBy": [
+      "repair_welder"
+     ],
+     "alsoWorks": [
+      "replace_welder"
+     ],
+     "signs": "Apparat toki nominaldan ancha yuqori; korpus issiq; megger < 0,5 MΩ; kuygan hid.",
+     "explain": "Tok apparatning nominal qiymatidan ancha oshgan, korpus qizigan, megger past — o'ramlararo qisqa tutashuv boshlangan. Vaqtida chora ko'rilmasa o'ram kuyadi. To'g'ri qaror — apparatni ta'mirlash (qayta o'rash); almashtirish ham ishlaydi, lekin qimmat.",
+     "invalid": {
+      "retighten_contact": "Muammo kontaktda emas — o'ramda.",
+      "clean_welder": "Tozalash qisqa tutashuvni yo'q qilmaydi.",
+      "raise_protection": "Himoyani oshirish o'ramni kuydiradi."
+     }
+    }
+   ]
+  },
+  "P5": {
+   "question": "2-payvand apparatining avtomati nima uchun uzilib qolyapti?",
+   "economy": "cost",
+   "options": [
+    "set_breaker",
+    "repair_primary_cable",
+    "repair_welder",
+    "replace_welder",
+    "raise_protection",
+    "monitor"
+   ],
+   "causes": [
+    {
+     "weight": 1,
+     "id": "breaker_low_w2",
+     "label": "Avtomatning magnit uzgichi juda past (2×In) sozlangan",
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "trip": "magnetic"
+       },
+       "nameplate": {
+        "protection.magMult": 2
+       },
+       "visual": [
+        {
+         "text": "Avtomatning magnit uzgich sozlama g'ildiragi eng pastki (2×In) holatda turibdi.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "visual",
+      "multimeter"
+     ],
+     "useful": [
+      "thermal",
+      "megger"
+     ],
+     "fixedBy": [
+      "set_breaker"
+     ],
+     "signs": "Avtomat magnit himoya bilan uzilgan; sozlama 2×In; izolyatsiya va kabel sog'lom.",
+     "explain": "Avtomat magnit himoya bilan uzilgan, sozlama g'ildiragi 2×In ga qo'yilgan: payvand yoyi yonganda tok zarbasi shu chegaradan oshadi. Izolyatsiya va kabel sog'lom. To'g'ri qaror — uzgichni me'yorga (5×In) sozlash.",
+     "invalid": {
+      "repair_primary_cable": "Kabel butun.",
+      "repair_welder": "Apparat sog'lom.",
+      "replace_welder": "Apparat sog'lom — almashtirish ortiqcha.",
+      "raise_protection": "Sozlamani «istalgancha» oshirmang — aynan me'yorga (5×In) sozlang."
+     }
+    },
+    {
+     "weight": 1,
+     "id": "cable_sheath_w2",
+     "label": "Kirish kabeli izolyatsiyasi shikastlangan (shlak tushgan joyda yerga tutashuv)",
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "trip": "earth",
+        "insMOhm": 0.15
+       },
+       "visual": [
+        {
+         "text": "Yer bilan tutashuv himoyasi ishlagan. Apparatga kirish kabeli qobig'ida shlak kuydirgan joy ko'rinib turibdi.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "megger",
+      "visual"
+     ],
+     "useful": [
+      "multimeter",
+      "clamp"
+     ],
+     "fixedBy": [
+      "repair_primary_cable"
+     ],
+     "signs": "Yerga tutashuv himoyasi ishlagan; megger < 0,5 MΩ; kabel qobig'i kuygan joyi ko'rinadi.",
+     "explain": "Yerga tutashuv himoyasi ishlagan, megger past, ammo kabel qobig'ida kuygan joy ko'rinib turibdi — izolyatsiya aynan kabelda shikastlangan. Apparatning o'ramlari sog'lom. To'g'ri qaror — kabelni shikastlangan joyidan ta'mirlash.",
+     "invalid": {
+      "set_breaker": "Avtomat sozlamasi to'g'ri — himoya yerga tutashuvdan ishlagan.",
+      "repair_welder": "Apparat o'ramlari sog'lom — shikast kabelda.",
+      "replace_welder": "Apparat sog'lom — almashtirish ortiqcha."
+     }
+    },
+    {
+     "weight": 1,
+     "id": "winding_ground_w2",
+     "label": "Transformator o'ramlarida yerga tutashuv",
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "trip": "earth",
+        "insMOhm": 0.04,
+        "heatWinding": 20
+       },
+       "visual": [
+        {
+         "text": "Yer bilan tutashuv himoyasi ishlagan; kirish kabeli butun. Apparat korpusidan kuygan hid keladi.",
+         "iso": false
+        },
+        {
+         "text": "Birlamchi o'ram izolyatsiyasi kuyib qorayib ketgan.",
+         "iso": true
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "megger",
+      "visual"
+     ],
+     "useful": [
+      "multimeter",
+      "clamp"
+     ],
+     "fixedBy": [
+      "repair_welder"
+     ],
+     "alsoWorks": [
+      "replace_welder"
+     ],
+     "signs": "Yerga tutashuv himoyasi ishlagan; megger juda past; kabel butun, korpusdan kuygan hid.",
+     "explain": "Yerga tutashuv himoyasi ishlagan, megger juda past, kirish kabeli esa butun — izolyatsiya apparatning ichida teshilgan. To'g'ri qaror — apparatni ta'mirlash (qayta o'rash); almashtirish ham ishlaydi, lekin qimmat.",
+     "invalid": {
+      "set_breaker": "Avtomat sozlamasi to'g'ri — himoya yerga tutashuvdan ishlagan.",
+      "repair_primary_cable": "Kabel butun edi.",
+      "raise_protection": "Himoyani oshirish yerga tutashuvli apparatda xavfli."
+     }
+    }
+   ]
+  },
+  "P6": {
+   "question": "7-apparat korpusida nima uchun tok seziladi?",
+   "economy": "cost",
+   "options": [
+    "fix_earthing",
+    "dry_winding",
+    "repair_welder",
+    "replace_welder",
+    "raise_protection",
+    "monitor"
+   ],
+   "causes": [
+    {
+     "weight": 1,
+     "id": "earth_loose_w7",
+     "label": "Korpusning himoya yerga ulashi uzilgan",
+     "patches": [
+      {
+       "target": "$eq",
+       "visual": [
+        {
+         "text": "Korpusning yerga ulash vinti bo'shab chiqib ketgan, o'tkazgich havoda osilib turibdi.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "megger",
+      "visual"
+     ],
+     "useful": [
+      "multimeter",
+      "thermal"
+     ],
+     "fixedBy": [
+      "fix_earthing"
+     ],
+     "signs": "Megger me'yorda (o'ram izolyatsiyasi sog'lom); yerga ulash vinti bo'sh.",
+     "explain": "O'ramlar izolyatsiyasi sog'lom (megger yuzlab MΩ), lekin korpusning yerga ulash o'tkazgichi bo'shab ketgan. Korpusga sizib o'tgan potensial yerga ketmay, odamga uriladi. To'g'ri qaror — yerga ulashni tiklash. Apparatni ta'mirlash shart emas.",
+     "invalid": {
+      "dry_winding": "Izolyatsiya quruq va sog'lom (megger me'yorda).",
+      "repair_welder": "O'ramlar sog'lom — muammo yerga ulashda.",
+      "replace_welder": "Apparat sog'lom — almashtirish ortiqcha.",
+      "raise_protection": "Himoya sozlamasi bu yerda yordam bermaydi."
+     }
+    },
+    {
+     "weight": 1,
+     "id": "wet_insulation_w7",
+     "label": "Izolyatsiya nam tortgan (apparat yomg'irda qolgan)",
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "insMOhm": 0.35
+       },
+       "visual": [
+        {
+         "text": "Apparat tomi ostidagi maydonda yomg'irda qolgan; korpus ichida kondensat izlari ko'rinadi.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "megger",
+      "visual"
+     ],
+     "useful": [
+      "multimeter",
+      "thermal"
+     ],
+     "fixedBy": [
+      "dry_winding"
+     ],
+     "signs": "Megger 0,5 MΩ dan past, lekin o'ram kuymagan; apparat nam.",
+     "explain": "Megger me'yordan past, lekin kuygan joy yo'q — apparat yomg'irda qolgan, izolyatsiya nam tortgan. To'g'ri qaror — apparatni quritib, izolyatsiyani qayta sinash. O'ramni ta'mirlash shart emas.",
+     "invalid": {
+      "fix_earthing": "Yerga ulash joyida; muammo — nam izolyatsiyada.",
+      "repair_welder": "O'ram kuymagan — quritish yetarli.",
+      "replace_welder": "Apparat sog'lom — almashtirish ortiqcha.",
+      "raise_protection": "Himoya sozlamasi bu yerda yordam bermaydi."
+     }
+    },
+    {
+     "weight": 1,
+     "id": "burnt_insulation_w7",
+     "label": "Ikkilamchi o'ram izolyatsiyasi kuygan",
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "insMOhm": 0.03,
+        "heatWinding": 22,
+        "faulty": 1.15
+       },
+       "visual": [
+        {
+         "text": "Apparat korpusidan kuygan hid keladi, ventilyator panjarasi atrofi qorayib ketgan.",
+         "iso": false
+        },
+        {
+         "text": "Ikkilamchi o'ram izolyatsiyasi kuyib, yupqalashib ketgan.",
+         "iso": true
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "megger",
+      "visual"
+     ],
+     "useful": [
+      "clamp",
+      "thermal"
+     ],
+     "fixedBy": [
+      "repair_welder"
+     ],
+     "alsoWorks": [
+      "replace_welder"
+     ],
+     "signs": "Megger juda past (< 0,1 MΩ); korpus issiq, kuygan hid.",
+     "explain": "Megger juda past, kuygan hid va qorayish bor — ikkilamchi o'ram izolyatsiyasi kuygan; quritish yordam bermaydi. To'g'ri qaror — apparatni ta'mirlash (qayta o'rash); almashtirish ham ishlaydi, lekin qimmat.",
+     "invalid": {
+      "fix_earthing": "Yerga ulash joyida — izolyatsiya kuygan.",
+      "dry_winding": "O'ram kuygan — quritish yordam bermaydi.",
+      "raise_protection": "Himoyani oshirish xavfni kuchaytiradi."
+     }
+    }
+   ]
+  },
+  "P7": {
+   "question": "3-payvand apparati nima uchun yoqilmayapti?",
+   "economy": "cost",
+   "options": [
+    "close_isolator",
+    "replace_coil",
+    "clean_welder",
+    "raise_protection",
+    "monitor"
+   ],
+   "causes": [
+    {
+     "weight": 1,
+     "id": "isolator_off_w3",
+     "label": "Ta'minot ajratkichi «o'chiq» holatda qolgan",
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "on": false
+       },
+       "visual": [
+        {
+         "text": "Apparatning ta'minot ajratkichi dastagi «O'» (o'chiq) holatda; yonida ogohlantiruvchi belgi yo'q.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "multimeter",
+      "visual"
+     ],
+     "useful": [
+      "clamp",
+      "thermal"
+     ],
+     "fixedBy": [
+      "close_isolator"
+     ],
+     "signs": "Kirishda kuchlanish bor, apparat klemmasida nol; ajratkich dastagi «O'» holatida.",
+     "explain": "Kirishda kuchlanish bor, apparat klemmasida esa yo'q; ajratkich dastagi o'chiq holatda. Kecha ta'mirdan keyin ajratkich yoqilmay qolgan. To'g'ri qaror — sababini aniqlab, ruxsatdan keyin ajratkichni yoqish. Hech narsa almashtirish shart emas.",
+     "invalid": {
+      "replace_coil": "Ajratkich o'chiq edi — g'altak sog'lom.",
+      "clean_welder": "Apparatda issiqlik himoyasi ishlagani yo'q.",
+      "raise_protection": "Himoya ishlagani yo'q."
+     }
+    },
+    {
+     "weight": 1,
+     "id": "coil_open_w3",
+     "label": "Kontaktor g'altagi uzilgan",
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "on": false
+       },
+       "visual": [
+        {
+         "text": "Ajratkich yoqilgan, lekin kontaktor tortilmayapti, g'altak tovushi yo'q.",
+         "iso": false
+        },
+        {
+         "text": "Kontaktor g'altagining o'rami uzilgan (ommetr cheksiz ko'rsatadi).",
+         "iso": true
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "multimeter",
+      "visual"
+     ],
+     "useful": [
+      "clamp",
+      "thermal"
+     ],
+     "fixedBy": [
+      "replace_coil"
+     ],
+     "signs": "Kirishda kuchlanish bor, apparat klemmasida nol; ajratkich yoqilgan, kontaktor tortmaydi.",
+     "explain": "Kirishda kuchlanish bor, ajratkich yoqilgan, lekin kontaktor tortilmayapti — g'altak uzilgan. To'g'ri qaror — g'altakni almashtirish. Apparatning o'zi sog'lom.",
+     "invalid": {
+      "close_isolator": "Ajratkich yoqilgan edi.",
+      "clean_welder": "Issiqlik himoyasi ishlagani yo'q.",
+      "raise_protection": "Himoya ishlagani yo'q."
+     }
+    },
+    {
+     "weight": 1,
+     "id": "thermal_trip_w3",
+     "label": "Issiqlik himoyasi ishlagan (sovitish tirqishlari bekilgan)",
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "trip": "relay",
+        "heatWinding": 25
+       },
+       "T": {
+        "case": 78
+       },
+       "visual": [
+        {
+         "text": "Issiqlik himoyasi indikatori yonib turibdi; korpus issiq, sovitish tirqishlari chang va payvand ko'pigi bilan bekilgan.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "visual",
+      "thermal"
+     ],
+     "useful": [
+      "multimeter",
+      "clamp"
+     ],
+     "fixedBy": [
+      "clean_welder"
+     ],
+     "signs": "Issiqlik himoyasi ishlagan; korpus issiq; sovitish tirqishlari bekilgan.",
+     "explain": "Issiqlik himoyasi apparatni o'chirgan: korpus issiq, sovitish tirqishlari bekilgan. Himoyani qayta ulashning o'zi yetmaydi — sabab sovitishda. To'g'ri qaror — apparatni ichidan puflab tozalash.",
+     "invalid": {
+      "close_isolator": "Ajratkich yoqilgan — himoya ishlagan.",
+      "replace_coil": "Kontaktor sog'lom.",
+      "raise_protection": "Himoyani oshirish apparatni kuydiradi."
+     }
+    }
+   ]
+  },
+  "N4": {
+   "question": "Drenaj nasosi nima uchun suv chiqarmayapti?",
+   "economy": "cost",
+   "options": [
+    "clean_suction",
+    "replace_coupling",
+    "replace_impeller",
+    "raise_protection",
+    "replace",
+    "monitor"
+   ],
+   "causes": [
+    {
+     "weight": 1,
+     "id": "suction_blocked",
+     "label": "So'rish panjarasi lattalar va loy bilan bekilgan",
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "load": 0.3
+       },
+       "visual": [
+        {
+         "text": "So'rish panjarasi lattalar va loy bilan bekilgan; nasos havo tortib shovqin qilmoqda.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "clamp",
+      "visual"
+     ],
+     "useful": [
+      "vibration",
+      "thermal"
+     ],
+     "fixedBy": [
+      "clean_suction"
+     ],
+     "signs": "Tok nominalning ≈40 % i; vibratsiya me'yorda; so'rish panjarasi bekilgan.",
+     "explain": "Tok past, vibratsiya me'yorda, mufta butun. So'rish panjarasi bekilgan — nasos suv tortolmay «quruq» aylanyapti. To'g'ri qaror — panjarani tozalash. Nasos va dvigatel sog'lom.",
+     "invalid": {
+      "replace_coupling": "Mufta butun — nasos valiga aylanish uzatilyapti.",
+      "replace_impeller": "G'ildirak butun; muammo — so'rish tomoni.",
+      "raise_protection": "Tok past — himoya bilan bog'liq emas.",
+      "replace": "Dvigatel sog'lom — almashtirishning ma'nosi yo'q."
+     }
+    },
+    {
+     "weight": 1,
+     "id": "coupling_broken",
+     "label": "Nasos va dvigatel muftasi sinib, nasos valiga aylanish uzatilmayapti",
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "load": 0.12,
+        "vib": 4.1,
+        "vibKind": "loose"
+       },
+       "visual": [
+        {
+         "text": "Dvigatel aylanyapti, lekin nasos tomoni qimirlamayapti; mufta joyidan bo'shab qolgan.",
+         "iso": false
+        },
+        {
+         "text": "Mufta kauchuk elementi parchalangan.",
+         "iso": true
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "clamp",
+      "vibration"
+     ],
+     "useful": [
+      "visual",
+      "thermal"
+     ],
+     "fixedBy": [
+      "replace_coupling"
+     ],
+     "signs": "Tok juda past (≈25 % I_nom); vibratsiya «bo'shashgan» turda; nasos tomoni aylanmaydi.",
+     "explain": "Dvigatel deyarli salt ishlayapti (tok juda past), vibratsiya «bo'shashgan» turda — mufta sinib, nasos valiga aylanish uzatilmayapti. To'g'ri qaror — muftani almashtirish. Dvigatel va nasos sog'lom.",
+     "invalid": {
+      "clean_suction": "So'rish panjarasi toza edi.",
+      "replace_impeller": "G'ildirak butun — aylanish unga yetib bormayapti.",
+      "raise_protection": "Tok past — himoya bilan bog'liq emas.",
+      "replace": "Dvigatel sog'lom — almashtirishning ma'nosi yo'q."
+     }
+    },
+    {
+     "weight": 1,
+     "id": "impeller_worn",
+     "label": "Nasosning ish g'ildiragi qum ta'sirida yeyilgan",
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "load": 0.4,
+        "vib": 3
+       },
+       "visual": [
+        {
+         "text": "Chiqish bosimi oldingidan ancha past; suv qum aralash chiqadi.",
+         "iso": false
+        },
+        {
+         "text": "Ish g'ildiragi pichoqlari qum ta'sirida yeyilgan.",
+         "iso": true
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "clamp",
+      "visual"
+     ],
+     "useful": [
+      "vibration",
+      "thermal"
+     ],
+     "fixedBy": [
+      "replace_impeller"
+     ],
+     "signs": "Tok biroz past (≈60 % I_nom), vibratsiya me'yorda; bosim past, suv qumli.",
+     "explain": "Tok biroz past, vibratsiya me'yorda, so'rish panjarasi toza, mufta butun, lekin bosim past va suv qum bilan chiqadi — ish g'ildiragi yeyilgan. To'g'ri qaror — g'ildirakni almashtirish. Dvigatel sog'lom.",
+     "invalid": {
+      "clean_suction": "So'rish panjarasi toza edi.",
+      "replace_coupling": "Mufta butun.",
+      "raise_protection": "Tok past — himoya bilan bog'liq emas.",
+      "replace": "Dvigatel sog'lom — almashtirishning ma'nosi yo'q."
+     }
+    }
+   ]
+  },
+  "N5": {
+   "question": "Nasoslar sexi shchitida kuchlanish nima uchun me'yordan chiqqan?",
+   "economy": "cost",
+   "options": [
+    "clean_contact",
+    "shed_load",
+    "notify_dispatcher",
+    "raise_protection",
+    "monitor"
+   ],
+   "causes": [
+    {
+     "weight": 1,
+     "id": "overload_n5",
+     "label": "Sexda ortiqcha yuklama (qo'shimcha nasos va isitgichlar ulangan)",
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "extraKW": 50
+       },
+       "visual": [
+        {
+         "text": "Nasoslar sexida vaqtinchalik qo'shimcha nasos va isitgichlar ulab qo'yilgan.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "clamp",
+      "multimeter"
+     ],
+     "useful": [
+      "analyzer",
+      "thermal",
+      "visual"
+     ],
+     "fixedBy": [
+      "shed_load"
+     ],
+     "signs": "Shchit toki avtomat nominalidan yuqori; kontaktlar va kabel issiq emas.",
+     "explain": "Shchit toki avtomat nominalidan oshgan, kontakt va kabel normal harorat — sabab sexdagi ortiqcha yuklama. To'g'ri qaror — vaqtinchalik yuklamani uzish yoki sexlar o'rtasida taqsimlash.",
+     "invalid": {
+      "clean_contact": "Kontaktlar sog'lom; yuklama muammo.",
+      "notify_dispatcher": "Tashqi ta'minot normal; muammo sexning ichida.",
+      "raise_protection": "Avtomatni oshirish ortiqcha yuklangan kabelni kuydiradi."
+     }
+    },
+    {
+     "weight": 1,
+     "id": "contact_n5",
+     "label": "Shchit kirish ajratkichi kontaktlari oksidlangan",
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "contactR": 0.2
+       },
+       "visual": [
+        {
+         "text": "Asosiy ajratkich kontaktlari qorayib, oksid qatlami bilan qoplangan.",
+         "iso": true
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "multimeter",
+      "thermal"
+     ],
+     "useful": [
+      "clamp",
+      "analyzer",
+      "visual"
+     ],
+     "fixedBy": [
+      "clean_contact"
+     ],
+     "signs": "Shchit klemmasi juda issiq; kabel normal; yuklama tokni oshirmagan.",
+     "explain": "Shchit klemmasi juda issiq, kabel esa normal haroratda, tok esa me'yorda — kuchlanish kontaktning o'tish qarshiligida yo'qolyapti. To'g'ri qaror — kontaktlarni tozalash yoki almashtirish.",
+     "invalid": {
+      "shed_load": "Yuklama me'yorda edi.",
+      "notify_dispatcher": "Tashqi ta'minot normal; muammo shchit kontaktida.",
+      "raise_protection": "Qizigan kontaktda himoyani oshirish yong'in xavfini kuchaytiradi."
+     }
+    },
+    {
+     "weight": 1,
+     "id": "supply_skew_n5",
+     "label": "Tashqi ta'minot kuchlanishi nosimmetrik (tarmoq tomonidagi muammo)",
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "voltageSkew": [
+         -9,
+         0,
+         10
+        ]
+       }
+      }
+     ],
+     "decisive": [
+      "multimeter",
+      "multimeter@ru_pump"
+     ],
+     "useful": [
+      "analyzer",
+      "clamp"
+     ],
+     "fixedBy": [
+      "notify_dispatcher"
+     ],
+     "signs": "RU-0,4 dagi nasoslar liniyasida ham liniyalararo kuchlanishlar teng emas; shchit toki me'yorda.",
+     "explain": "Kuchlanish nosimmetrikligi RU-0,4 dagi nasoslar liniyasida ham mavjud — muammo shchitdan oldin, tashqi ta'minotda. Tokni oshiruvchi yuklama yo'q, kontaktlar sovuq. To'g'ri qaror — dispetcherga xabar berib, TP tomonidagi tarmoqni tekshirtirish.",
+     "invalid": {
+      "clean_contact": "Kontaktlar sog'lom.",
+      "shed_load": "Yuklama me'yorda edi.",
+      "raise_protection": "Himoya bu yerda yordam bermaydi."
+     }
+    }
+   ]
+  },
+  "V4": {
+   "question": "4-ventilyator uchun qaysi tejash varianti iqtisodan oqlanadi?",
+   "economy": "benefit",
+   "options": [
+    "vfd",
+    "timer",
+    "monitor"
+   ],
+   "causes": [
+    {
+     "weight": 1,
+     "id": "scheduled_off_v4",
+     "label": "Talab jadval bo'yicha: kechqurun va tunda ventilyator kerak emas — taymer samarali",
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "load": 0.85,
+        "process": {
+         "kind": "fan",
+         "segments": [
+          {
+           "h": 2500,
+           "q": 1
+          },
+          {
+           "h": 6000,
+           "q": 0
+          }
+         ]
+        }
+       },
+       "visual": [
+        {
+         "text": "Ventilyator smenadan keyin ham, tunda ham ishlab turadi, havo olish nuqtalari esa yopiq: talab kechqurundan ertalabgacha nol.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "clamp",
+      "visual"
+     ],
+     "useful": [
+      "thermal",
+      "vibration"
+     ],
+     "bestOption": "timer",
+     "signs": "Talab nol bo'lgan soatlar ko'p; taymer arzon va tejaydi.",
+     "explain": "Ventilyator talab bo'lmagan soatlarda ham to'liq ishlaydi. Ish vaqtini jadvalga bog'lovchi taymer arzon va eng ko'p tejaydi; VFD talab nol bo'lganda ham dvigatelni to'xtatmaydi.",
+     "invalid": {}
+    },
+    {
+     "weight": 1,
+     "id": "variable_demand_v4",
+     "label": "Talab smenalar bo'yicha o'zgaradi (100 / 60 / 35 %) va hech qachon nol emas — VFD samarali",
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "load": 0.85,
+        "process": {
+         "kind": "fan",
+         "segments": [
+          {
+           "h": 3000,
+           "q": 1
+          },
+          {
+           "h": 3000,
+           "q": 0.6
+          },
+          {
+           "h": 2500,
+           "q": 0.35
+          }
+         ]
+        }
+       },
+       "visual": [
+        {
+         "text": "Havo talabi o'zgaruvchan: kunduzi 100 %, kechqurun ≈60 %, tunda ≈35 %. Ventilyator esa doim to'liq tezlikda.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "clamp",
+      "visual"
+     ],
+     "useful": [
+      "thermal",
+      "vibration"
+     ],
+     "bestOption": "vfd",
+     "signs": "Talab o'zgaradi, nol emas; taymer yordam bermaydi.",
+     "explain": "Talab hech qachon nolga tushmaydi, lekin kechqurun va tunda ancha kam: ventilyator quvvati tezlikning kubiga bog'liq, shuning uchun VFD tejaydi. Taymer bu yerda hech narsa tejamaydi.",
+     "invalid": {}
+    },
+    {
+     "weight": 1,
+     "id": "constant_demand_v4",
+     "label": "Talab doimiy (kam soat, 100 %) — tejash qoplanmaydi",
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "load": 0.85,
+        "process": {
+         "kind": "fan",
+         "segments": [
+          {
+           "h": 900,
+           "q": 1
+          }
+         ]
+        }
+       },
+       "visual": [
+        {
+         "text": "Ventilyator faqat qisqa vaqt, to'liq talab bilan ishlaydi; yuklama doimiy.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "clamp",
+      "visual"
+     ],
+     "useful": [
+      "thermal",
+      "vibration"
+     ],
+     "bestOption": "monitor",
+     "signs": "Ish soati juda kam va talab doimiy; tejash uskuna narxini qoplamaydi.",
+     "explain": "Ventilyator yiliga atigi ≈900 soat, to'liq talab bilan ishlaydi — VFD ham, taymer ham tejash bilan qoplanmaydi. To'g'ri qaror — hech narsa qilmaslik.",
+     "invalid": {}
+    }
+   ]
+  },
+  "V5": {
+   "question": "Ventilyatsiya sexi shchitida kuchlanish nima uchun pasaygan?",
+   "economy": "cost",
+   "options": [
+    "replace_vent_feeder",
+    "shed_load",
+    "notify_dispatcher",
+    "raise_protection",
+    "monitor"
+   ],
+   "causes": [
+    {
+     "weight": 1,
+     "id": "feeder_small_v5",
+     "label": "Sexga kirish kabelining kesimi kichik (kabelda kuchlanish yo'qolishi)",
+     "patches": [
+      {
+       "target": "$eq",
+       "nameplate": {
+        "cable.section": 10
+       },
+       "visual": [
+        {
+         "text": "Kirish kabeli markasi 4×10 mm², uzunligi ≈70 m; kabel qobig'i qizigan.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "multimeter",
+      "clamp"
+     ],
+     "useful": [
+      "multimeter@ru_vent",
+      "thermal",
+      "analyzer",
+      "visual"
+     ],
+     "fixedBy": [
+      "replace_vent_feeder"
+     ],
+     "signs": "RU shinasida kuchlanish normal, shchitda past; kabel kesimi tokka nisbatan kichik, kabel qizigan.",
+     "explain": "RU shinasida kuchlanish normal, shchitda esa pasaygan; yuklama tokiga nisbatan kabel kesimi kichik — ΔU = √3·I·(R·cosφ + X·sinφ) katta. Kontakt sovuq, tashqi ta'minot normal. To'g'ri qaror — kabelni loyihaviy kesimga (35 mm²) almashtirish.",
+     "invalid": {
+      "shed_load": "Yuklama me'yorda; kabel kesimi yetarli emas.",
+      "notify_dispatcher": "RU shinasida kuchlanish normal — tashqi ta'minot sog'lom.",
+      "raise_protection": "Himoyani oshirish kabelni kuydiradi."
+     }
+    },
+    {
+     "weight": 1,
+     "id": "overload_v5",
+     "label": "Sexda ortiqcha yuklama (qo'shimcha ventilyator va isitgichlar ulangan)",
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "extraKW": 20
+       },
+       "visual": [
+        {
+         "text": "Sexda vaqtinchalik isitgichlar va qo'shimcha ventilyatorlar ulab qo'yilgan.",
+         "iso": false
+        }
+       ]
+      }
+     ],
+     "decisive": [
+      "clamp",
+      "multimeter"
+     ],
+     "useful": [
+      "analyzer",
+      "thermal",
+      "visual"
+     ],
+     "fixedBy": [
+      "shed_load"
+     ],
+     "signs": "Shchit toki avtomat nominalidan yuqori, kontaktlar va kabel issiq emas.",
+     "explain": "Shchit toki avtomat nominalidan oshgan, kontakt va kabel normal harorat — sabab ortiqcha yuklama. To'g'ri qaror — vaqtinchalik yuklamani uzish yoki taqsimlash.",
+     "invalid": {
+      "replace_vent_feeder": "Kabel me'yoriy loyiha bo'yicha yetarli edi.",
+      "notify_dispatcher": "Tashqi ta'minot normal.",
+      "raise_protection": "Avtomatni oshirish ortiqcha yuklangan kabelni kuydiradi."
+     }
+    },
+    {
+     "weight": 1,
+     "id": "supply_skew_v5",
+     "label": "Tashqi ta'minot kuchlanishi nosimmetrik (tarmoq tomonidagi muammo)",
+     "patches": [
+      {
+       "target": "$eq",
+       "state": {
+        "voltageSkew": [
+         10,
+         0,
+         -9
+        ]
+       }
+      }
+     ],
+     "decisive": [
+      "multimeter",
+      "multimeter@ru_vent"
+     ],
+     "useful": [
+      "analyzer",
+      "clamp"
+     ],
+     "fixedBy": [
+      "notify_dispatcher"
+     ],
+     "signs": "RU-0,4 dagi ventilyatsiya liniyasida ham kuchlanishlar teng emas; tok me'yorda.",
+     "explain": "Kuchlanish nosimmetrikligi RU-0,4 da ham bor — muammo tashqi ta'minotda. Tokni oshiruvchi yuklama yo'q, kabel va kontaktlar sovuq. To'g'ri qaror — dispetcherga xabar berish.",
+     "invalid": {
+      "replace_vent_feeder": "Kabel sog'lom.",
+      "shed_load": "Yuklama me'yorda edi.",
+      "raise_protection": "Himoya bu yerda yordam bermaydi."
+     }
     }
    ]
   }

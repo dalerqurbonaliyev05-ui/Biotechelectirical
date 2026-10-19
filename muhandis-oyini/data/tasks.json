@@ -335,6 +335,196 @@
     "Oyna ichidagi eng katta S ni toping va K = S/400 ni hisoblang.",
     "K ≤ 0,8 — hech narsa kerak emas; 0,8–0,95 — ogohlantirish; > 0,95 — yuklamani kamaytirish choralari kerak (eng arzon to'plam)."
    ]
+  },
+  {
+   "id": "M5",
+   "title": "Mexanika sexi: qirindi so'rgich ventilyatori havoni kuchsiz tortmoqda",
+   "ws": "mech",
+   "location": "mech",
+   "equipment": "mech_m5",
+   "kind": "fault",
+   "symptom": "M5",
+   "risk": 1,
+   "impact": 2,
+   "budget": 70,
+   "safety": true,
+   "briefing": "Bosh energetik: 5-dvigatel (11 kW) — qirindi so'rgich ventilyatori. Stanoklar yonida qirindi to'planib qolyapti, so'rish kuchsiz. Dvigatel odatdagidek ishlayapti, lekin ish unumi sezilmaydi. Sababini toping.",
+   "hints": [
+    "Dvigatel tokini (qisqich) va vibratsiyasini o'lchang, so'rish qurilmasiga ko'z tashlang.",
+    "Tok nominaldan (≈21 A) ancha past bo'lsa, dvigatel yuklanmagan — ventilyator havo bermayapti. Vibratsiya turiga e'tibor bering.",
+    "Vibratsiya me'yorda, filtr to'lgan — filtrni tozalash; vibratsiya «bo'shashgan» turda va tok juda past — g'ildirak o'qda erkin aylanadi (shponka); filtr toza, zaslonka yopiq — zaslonkani oching."
+   ]
+  },
+  {
+   "id": "M6",
+   "title": "Mexanika sexi: moy nasosi ishga tushmayapti",
+   "ws": "mech",
+   "location": "mech",
+   "equipment": "mech_m6",
+   "kind": "fault",
+   "symptom": "M6",
+   "risk": 2,
+   "impact": 3,
+   "budget": 80,
+   "safety": true,
+   "briefing": "Bosh energetik: stanoklarga moy beruvchi 6-dvigatel (moy nasosi, 7,5 kW) ishga tushmayapti — «Start» bosilganda dvigatel yurmaydi. Stanoklar moysiz qolish arafasida. Sababini toping.",
+   "hints": [
+    "Kirishdagi va dvigatel klemmasidagi kuchlanishni (multimetr), ishga tushirish tokini (qisqich) o'lchang, ko'zdan kechiring.",
+    "Kirishda kuchlanish bor-yo'qligini va klemmada nima borligini solishtiring. Himoya (rele, yerga tutashuv) ishlaganmi?",
+    "Kirishda bor, klemmada hammasi nol — kontaktor g'altagi; kuchlanish to'liq, ishga tushirish toki katta va rele uzadi — moy qotgan; yerga tutashuv himoyasi ishlagan, megger < 0,5 MΩ — izolyatsiya."
+   ]
+  },
+  {
+   "id": "P4",
+   "title": "Payvandlash sexi: 1-payvand apparati qizib ketmoqda",
+   "ws": "weld",
+   "location": "weld",
+   "equipment": "weld_w1",
+   "kind": "fault",
+   "symptom": "P4",
+   "risk": 2,
+   "impact": 2,
+   "budget": 75,
+   "safety": true,
+   "briefing": "Bosh energetik: 1-payvand apparati ishlaganda tez qizib, korpusidan hid chiqmoqda; payvandchi ishini to'xtatishga majbur. Sababini toping: kontaktmi, sovitishmi yoki apparatning o'zi shikastlanganmi?",
+   "hints": [
+    "Korpus va klemma haroratini (termovizor), apparat tokini (qisqich) o'lchang, ko'zdan kechiring.",
+    "Qaysi nuqta issiq: klemma yoki korpus? Tok apparat quvvatiga mosmi yoki oshganmi?",
+    "Klemma juda issiq, korpus normal — kontakt; korpus issiq, tok me'yorda — sovitish tirqishlari chang; tok ancha yuqori va megger past — o'ramlararo qisqa tutashuv (ta'mir)."
+   ]
+  },
+  {
+   "id": "P5",
+   "title": "Payvandlash sexi: 2-payvand apparati yoqilganda avtomat uzilib qolmoqda",
+   "ws": "weld",
+   "location": "weld",
+   "equipment": "weld_w2",
+   "kind": "fault",
+   "symptom": "P5",
+   "risk": 2,
+   "impact": 2,
+   "budget": 80,
+   "safety": true,
+   "briefing": "Bosh energetik: 2-payvand apparati yoqilishi bilanoq avtomat uzilib qoladi; qayta ulaganda ham shunday. Sababini aniqlang.",
+   "hints": [
+    "Avtomat qaysi himoya turi bilan uzilganini (magnit yoki yerga tutashuv) ko'zdan kechiring va uning sozlamasiga qarang.",
+    "Yerga tutashuv himoyasi ishlagan bo'lsa — megger bilan izolyatsiyani o'lchang (avval xavfsizlik ketma-ketligi!) va kirish kabelini ko'rib chiqing.",
+    "Magnit himoya, sozlama 2×In — sozlamani to'g'rilang; yerga tutashuv, kabel qobig'i kuygan — kabelni ta'mirlang; yerga tutashuv, kabel butun — o'ramlar (ta'mir)."
+   ]
+  },
+  {
+   "id": "P6",
+   "title": "Payvandlash sexi: 7-apparat korpusida «tok urmoqda»",
+   "ws": "weld",
+   "location": "weld",
+   "equipment": "weld_w7",
+   "kind": "fault",
+   "symptom": "P6",
+   "risk": 3,
+   "impact": 2,
+   "budget": 80,
+   "safety": true,
+   "briefing": "Bosh energetik: payvandchi 7-apparat korpusiga tekkanda «tok urmoqda» deydi. Apparat hozircha o'chirilgan. Sababini toping — bu hayotga xavfli nosozlik.",
+   "hints": [
+    "Izolyatsiyani megger bilan o'lchang (faqat xavfsizlik ketma-ketligidan, kuchlanish yo'qligi tekshirilgandan keyin!) va yerga ulashni ko'zdan kechiring.",
+    "Izolyatsiya qarshiligi 0,5 MΩ dan pastmi? Past bo'lsa — nega? Yerga ulash o'tkazgichi joyidami?",
+    "Megger me'yorda (yuzlab MΩ), yerga ulash vinti bo'sh — yerga ulashni tiklang; megger 0,5 MΩ atrofida va apparat nam — quriting; megger juda past, o'ram kuygan — ta'mir."
+   ]
+  },
+  {
+   "id": "P7",
+   "title": "Payvandlash sexi: 3-payvand apparati umuman yoqilmayapti",
+   "ws": "weld",
+   "location": "weld",
+   "equipment": "weld_w3",
+   "kind": "fault",
+   "symptom": "P7",
+   "risk": 1,
+   "impact": 2,
+   "budget": 75,
+   "safety": true,
+   "briefing": "Bosh energetik: 3-payvand apparati yoqilmayapti — indikator chiroqlari o'chiq. Payvandchi navbatda turibdi. Sababini toping.",
+   "hints": [
+    "Kirishdagi va apparat klemmasidagi kuchlanishni (multimetr) o'lchang, ajratkich va himoya indikatorlarini ko'zdan kechiring.",
+    "Kirishda kuchlanish bormi? Ajratkich dastagi qaysi holatda? Himoya indikatori yonganmi?",
+    "Ajratkich «O'» holatida — uni yoqing (ruxsat bilan); ajratkich yoqilgan, kontaktor tortmayapti — g'altak; issiqlik himoyasi ishlagan, tirqishlar bekilgan — tozalash."
+   ]
+  },
+  {
+   "id": "N4",
+   "title": "Nasoslar sexi: drenaj nasosi suv chiqarmayapti",
+   "ws": "pump",
+   "location": "pump",
+   "equipment": "pump_p4",
+   "kind": "fault",
+   "symptom": "N4",
+   "risk": 2,
+   "impact": 2,
+   "budget": 75,
+   "safety": true,
+   "briefing": "Bosh energetik: 4-nasos (drenaj, 11 kW) ishlayapti, lekin chuqurdan suv chiqarilmayapti — chuqur to'lib bormoqda. Sababini toping.",
+   "hints": [
+    "Dvigatel tokini (qisqich) va vibratsiyasini o'lchang, nasosni ko'zdan kechiring.",
+    "Tok nominalning qanchasi? Vibratsiya qanday turda? So'rish tomoni va mufta holatiga qarang.",
+    "Tok juda past (≈20 %), vibratsiya «bo'shashgan» — mufta; tok past, so'rish panjarasi bekilgan — tozalash; tok biroz past, vibratsiya me'yorda, bosim past — ish g'ildiragi yeyilgan."
+   ]
+  },
+  {
+   "id": "N5",
+   "title": "Nasoslar sexi: shchitda kuchlanish me'yordan chiqqan",
+   "ws": "pump",
+   "location": "pump",
+   "equipment": "pump_sch",
+   "kind": "fault",
+   "symptom": "N5",
+   "risk": 2,
+   "impact": 3,
+   "budget": 85,
+   "safety": true,
+   "briefing": "Bosh energetik: nasoslar sexi shchitida kuchlanish me'yordan chiqqan, nasoslar notekis ishlayapti. Sabab sexning o'zidami yoki tashqi ta'minotdami? Aniqlang.",
+   "hints": [
+    "Shchit klemmasidagi liniyalararo kuchlanishlarni (multimetr), shchit tokini (qisqich) va klemma haroratini (termovizor) o'lchang.",
+    "RU-0,4 dagi nasoslar liniyasida kuchlanish qanday? Shchit toki avtomat nominalidan oshganmi? Klemma issiqmi?",
+    "Klemma juda issiq — kontakt; tok avtomat nominalidan yuqori — ortiqcha yuklama; RU dan boshlab ham liniyalar kuchlanishi teng emas — tashqi ta'minot (dispetcherga xabar)."
+   ]
+  },
+  {
+   "id": "V4",
+   "title": "Ventilyatsiya sexi: 4-ventilyator doim ishlab turibdi — tejash mumkinmi?",
+   "ws": "vent",
+   "location": "vent",
+   "equipment": "vent_f4",
+   "kind": "fault",
+   "symptom": "V4",
+   "risk": 1,
+   "impact": 1,
+   "budget": 85,
+   "safety": true,
+   "briefing": "Bosh energetik: 4-ventilyator (qo'shimcha so'rgich, 5,5 kW) kecha-yu kunduz to'xtovsiz ishlaydi. Tejash imkoniyati bormi? Iqtisodiy hisob bilan qaror qiling: chastota o'zgartirgich (VFD), taymer yoki hech narsa. Tejash qoplanmasa — qilmang.",
+   "hints": [
+    "Ko'zdan kechirish orqali ventilyatorning ish tartibini (soatlar va havo talabi) aniqlang, tokini o'lchang.",
+    "Tejash = talab past (yoki nol) × ish soati ko'p. Kam quvvatli dvigatelda uskuna narxi tejashni qoplamasligi mumkin.",
+    "Talab uzoq vaqt nol bo'lsa — taymer; talab o'zgaruvchan va nol emas — VFD; talab doimiy yoki ish soati kam — hech narsa qilmaslik."
+   ]
+  },
+  {
+   "id": "V5",
+   "title": "Ventilyatsiya sexi: shchitda kuchlanish tushgan, ventilyatorlar sekinlashgan",
+   "ws": "vent",
+   "location": "vent",
+   "equipment": "vent_sch",
+   "kind": "fault",
+   "symptom": "V5",
+   "risk": 2,
+   "impact": 2,
+   "budget": 85,
+   "safety": true,
+   "briefing": "Bosh energetik: ventilyatsiya sexi shchitida kuchlanish pasaygan, ventilyatorlar sekin aylanyapti. Sabab sex kirish kabelidami, yuklamadami yoki tashqi ta'minotdami? Aniqlang.",
+   "hints": [
+    "Shchit va RU-0,4 dagi kuchlanishni (multimetr), shchit tokini (qisqich), kabel haroratini (termovizor) o'lchang.",
+    "RU shinasida kuchlanish normalmi, shchitda pastmi? Kabel qizigani yoki tok oshganmi?",
+    "RU normal, shchitda past, kabel issiq — kabel kesimi kichik; tok avtomat nominalidan yuqori — ortiqcha yuklama; RU dan boshlab liniyalar teng emas — tashqi ta'minot."
+   ]
   }
  ],
  "emergencies": [

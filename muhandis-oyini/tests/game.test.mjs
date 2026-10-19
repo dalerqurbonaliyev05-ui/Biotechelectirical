@@ -10,10 +10,10 @@ import { measure, TOOLS } from '../js/sim/measure.js';
 const data = await loadTestData();
 const mk = (opts = {}) => Game.create(data, { seed: 3, difficulty: 'normal', mode: 'practice', tutorial: false, ...opts });
 
-test('ma\'lumotlar: 1 tutorial + 15 topshiriq, har birida maslahatlar va bir nechta yashirin sabab', () => {
+test('ma\'lumotlar: 1 tutorial + 25 topshiriq, har birida maslahatlar va bir nechta yashirin sabab', () => {
   const tasks = data.tasks.tasks;
   assert.equal(tasks.filter((t) => t.tutorial).length, 1);
-  assert.equal(tasks.filter((t) => !t.tutorial).length, 15);
+  assert.equal(tasks.filter((t) => !t.tutorial).length, 25);
   for (const t of tasks) {
     assert.equal(t.hints.length, 3, t.id);
     const sym = data.faults.symptoms[t.symptom];
