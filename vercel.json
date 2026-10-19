@@ -161,6 +161,11 @@
       "permanent": true
     },
     {
+      "source": "/rele-himoya-kurs",
+      "destination": "/rele-himoya-kurs/",
+      "permanent": true
+    },
+    {
       "source": "/muhandis-oyini",
       "destination": "/muhandis-oyini/",
       "permanent": true
