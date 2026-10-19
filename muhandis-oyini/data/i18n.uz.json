@@ -53,7 +53,8 @@
   "map": {
     "title": "Korxona xaritasi", "help": "Binoni bosing (yoki ←↑→↓ bilan tanlab Enter bosing). Yurish o'yin vaqtini sarflaydi.", "you": "Siz", "here": "Siz shu yerdasiz", "walk": "yurish ≈ {m} daq",
     "keys": "Klaviatura: ←↑→↓ tanlash, Enter kirish, M xarita, T topshiriqlar",
-    "kind": { "dispatch": "Dispetcher", "tp": "Podstansiya", "ru": "Taqsimlash qurilmasi", "workshop": "Sex" }
+    "kind": { "dispatch": "Dispetcher", "tp": "Podstansiya", "ru": "Taqsimlash qurilmasi", "workshop": "Sex" },
+    "side": { "active": "Faol topshiriq", "next": "Keyingi topshiriqlar", "events": "So'nggi voqealar", "go": "Joyga borish", "empty": "Boshqa ochiq topshiriq yo'q." }
   },
   "loc": { "back": "Xaritaga", "back2": "Orqaga", "tasksHere": "Bu yerdagi topshiriqlar:", "tpNote": "Transformator podstansiyasi: ikkita 10/0,4 kV, 400 kVA transformator. Yuklanishni analizator bilan o'lchang.", "ruNote": "RU-0,4 kV: sex liniyalari. Quvvat analizatori har bir liniyada kW, kVA, cosφ va nosimmetriklikni ko'rsatadi." },
   "disp": { "finishTitle": "Smenani yakunlash", "finishOpen": "Hali {n} ta topshiriq bajarilmagan — ular nol ball oladi.", "finishAll": "Hamma topshiriq bajarildi. Smenani yakunlashingiz mumkin.", "finish": "Smenani yakunlash" },

@@ -1,5 +1,5 @@
 // Ekranlar: menyu, smena boshlanishi, xarita, joy, uskuna paneli, energiya tahlili.
-import { h, clear, icon, eqIcon } from './dom.js';
+import { h, clear, icon, iconPath, eqIcon } from './dom.js';
 import { fmtNum, fmtSom, fmtClock } from '../util.js';
 import { cableAmpacity, cableAmpacityN, nominalCurrent } from '../sim/electrical.js';
 import { mountChart } from './charts.js';
@@ -106,6 +106,61 @@ function statusOfLoc(app, loc) {
   return 'ok';
 }
 
+/** Xarita binosining ikonasi: sex turi yoki joy turi bo'yicha */
+function locIcon(l) {
+  if (l.kind === 'workshop') return { mech: 'gear', weld: 'welder', pump: 'pump', vent: 'fan' }[l.ws] || 'motor';
+  return { dispatch: 'radio', tp: 'transformer', ru: 'ru' }[l.kind] || 'bolt';
+}
+
+function mapGradients() {
+  const grad = (id, c1, c2) => h('linearGradient', { id, x1: '0', y1: '0', x2: '0', y2: '1' }, h('stop', { offset: '0', 'stop-color': c1 }), h('stop', { offset: '1', 'stop-color': c2 }));
+  return h('defs', null,
+    grad('gBld', '#17365a', '#0d1f3a'), grad('gDispatch', '#11414a', '#0b2530'), grad('gTp', '#3d3216', '#231a0a'), grad('gRu', '#2a2d66', '#171a40'),
+    h('pattern', { id: 'gGrid', width: '40', height: '40', patternUnits: 'userSpaceOnUse' }, h('path', { d: 'M40 0H0V40', fill: 'none', stroke: 'rgba(120,170,230,.07)', 'stroke-width': '1' }))
+  );
+}
+
+/** Xaritaning o'ng ustuni: faol topshiriq, keyingi topshiriqlar, so'nggi voqealar (faqat ko'rsatish) */
+function mapSide(app) {
+  const g = app.game;
+  const t = app.t;
+  const s = g.state;
+  const Dlg = Dialogs;
+  const cur = s.current && s.tasks[s.current] && !['done', 'failed'].includes(s.tasks[s.current].status) ? s.current : null;
+  const prio = (id) => { const w = g.taskWeight(id); return w >= 6 ? 'high' : w >= 3 ? 'mid' : 'low'; };
+  const active = h('section.card.sidecard.activecard');
+  if (cur) {
+    const def = g.taskDef(cur);
+    active.append(
+      h('div.sidehead', icon('warn'), h('strong', t('map.side.active')), h('span.sidecnt', `${s.order.filter((x) => ['done', 'failed'].includes(s.tasks[x].status)).length}/${s.order.length}`)),
+      h('h3.sidetitle', h('span.code', cur), ' ', def.title),
+      h('div.chips', h('span.pill', { class: s.tasks[cur].status === 'new' ? '' : 'warn' }, t('task.status.' + s.tasks[cur].status)),
+        def.tutorial ? null : h('span.pill', { class: prio(cur) === 'high' ? 'bad' : prio(cur) === 'mid' ? 'warn' : '' }, t('task.priority') + ': ' + t('task.p.' + prio(cur)))),
+      h('p.sidetext', g.taskText(cur)),
+      h('div.btnrow', h('button.btn.primary', { onclick: () => app.walkTo(def.location) }, icon('pin'), t('map.side.go')),
+        h('button.btn', { onclick: () => Dlg.openBriefing(app, cur) }, t('task.details')))
+    );
+  } else {
+    active.append(h('div.sidehead', icon('tasks'), h('strong', t('map.side.active'))), h('p.sidetext', t('task.none')),
+      h('div.btnrow', h('button.btn.primary', { onclick: () => app.toggleDrawer(true) }, t('task.choose'))));
+  }
+  const next = h('section.card.sidecard');
+  next.append(h('div.sidehead', icon('tasks'), h('strong', t('map.side.next'))));
+  const others = s.order.filter((id) => id !== cur && !['done', 'failed'].includes(s.tasks[id].status));
+  if (!others.length) next.append(h('p.note', t('map.side.empty')));
+  others.forEach((id, i) => {
+    next.append(h('button.nextrow', { onclick: () => { g.selectTask(id); } },
+      h('span.nextn', String(i + (cur ? 2 : 1))), h('span.nextt', g.taskDef(id).title), h('span.code', id)));
+  });
+  const ev = h('section.card.sidecard');
+  ev.append(h('div.sidehead', icon('radio'), h('strong', t('map.side.events'))));
+  for (const e of s.log.slice(-5).reverse()) {
+    const c = fmtClock(e.t, app.cfg.clock.startHour);
+    ev.append(h('div.evrow', { class: e.kind }, h('span.logt', c.text), h('span', e.text)));
+  }
+  return h('aside.mapside', active, next, ev);
+}
+
 export function mapScreen(app) {
   const g = app.game;
   const t = app.t;
@@ -114,11 +169,14 @@ export function mapScreen(app) {
   mapFocus = mapFocus && g.locs[mapFocus] ? mapFocus : here.id;
   const ru = g.locs.ru;
   const svg = h('svg.map', { viewBox: '0 0 1000 640', role: 'group', 'aria-label': t('map.title') });
-  svg.append(h('defs', null));
-  // yo'llar
+  svg.append(mapGradients(), h('rect.gridbg', { x: 0, y: 0, width: 1000, height: 640, fill: 'url(#gGrid)' }));
+  // elektr liniyalari (holatga qarab rangi o'zgaradi)
   const roads = h('g.roads');
-  for (const l of locs) if (l.id !== 'ru') roads.append(h('line', { x1: ru.x, y1: ru.y, x2: l.x, y2: l.y }));
+  for (const l of locs) if (l.id !== 'ru') roads.append(h('line', { class: statusOfLoc(app, l.id), x1: ru.x, y1: ru.y, x2: l.x, y2: l.y }));
   svg.append(roads);
+  const flow = h('g.flow');
+  for (const l of locs) if (l.id !== 'ru') flow.append(h('line', { class: statusOfLoc(app, l.id), x1: ru.x, y1: ru.y, x2: l.x, y2: l.y }));
+  svg.append(flow);
   const openByLoc = {};
   for (const id of g.openTasks()) {
     const def = g.taskDef(id);
@@ -128,6 +186,10 @@ export function mapScreen(app) {
   const tutLoc = g.state.tasks.T0 && g.state.tasks.T0.status !== 'done' ? 'mech' : null;
   for (const l of locs) {
     const st = statusOfLoc(app, l.id);
+    const ic = h('g.bico', { transform: 'translate(10, 8) scale(1.05)' });
+    const stLabel = t('status.' + st);
+    const bw = Math.round(32 + stLabel.length * 6.4);
+    ic.innerHTML = iconPath(locIcon(l));
     const grp = h('g.bld', {
       class: `${l.kind} ${st} ${mapFocus === l.id ? 'focus' : ''} ${tutLoc === l.id ? 'tut' : ''}`,
       tabindex: '0', role: 'button', 'aria-label': `${l.name}: ${t('status.' + st)}`,
@@ -136,11 +198,12 @@ export function mapScreen(app) {
       onkeydown: (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); app.walkTo(l.id); } },
       onfocus: () => { mapFocus = l.id; }
     },
-      h('rect', { width: l.w, height: l.h, rx: 10 }),
-      h('text.lbl.full', { x: l.w / 2, y: l.h / 2 - 4, 'text-anchor': 'middle' }, l.short || l.name),
-      h('text.lbl.mini', { x: l.w / 2, y: l.h / 2 + 8, 'text-anchor': 'middle' }, l.mini || l.short || l.name),
-      h('text.sub', { x: l.w / 2, y: l.h / 2 + 18, 'text-anchor': 'middle' }, t('map.kind.' + l.kind)),
-      h('circle.dot', { cx: l.w - 16, cy: 16, r: 8 }),
+      h('rect', { width: l.w, height: l.h, rx: 14 }),
+      ic,
+      h('text.lbl.full', { x: l.w / 2, y: l.h / 2 + 4, 'text-anchor': 'middle' }, l.short || l.name),
+      h('text.lbl.mini', { x: l.w / 2, y: l.h / 2 + 12, 'text-anchor': 'middle' }, l.mini || l.short || l.name),
+      h('text.sub', { x: l.w / 2, y: l.h / 2 + 21, 'text-anchor': 'middle' }, t('map.kind.' + l.kind)),
+      h('g.stbadge', { transform: `translate(${l.w - bw - 8}, 8)` }, h('rect', { width: bw, height: 22, rx: 11 }), h('circle.dot', { cx: 12, cy: 11, r: 4.5 }), h('text', { x: 23, y: 15.5, 'text-anchor': 'start' }, stLabel)),
       h('title', `${l.name} — ${t('status.' + st)}`)
     );
     (openByLoc[l.id] || []).slice(0, 5).forEach((id, i) => {
@@ -160,10 +223,15 @@ export function mapScreen(app) {
       h('span.dotc', { class: st }), h('strong', l.name), h('small', l.id === g.state.player.loc ? t('map.here') : t('map.walk', { m: Math.round(mins) }))));
   }
   return h('div.mapwrap',
-    h('div.maphead', h('h2', t('map.title')), h('p', t('map.help'))),
-    svg,
-    h('div.legend', h('span', h('i.d.ok'), t('status.ok')), h('span', h('i.d.warn'), t('status.warn')), h('span', h('i.d.bad'), t('status.bad')), h('span.k', t('map.keys'))),
-    list
+    h('div.mapgrid2',
+      h('div.mapmain',
+        h('div.maphead', h('h2', icon('pin'), t('map.title')), h('p', t('map.help'))),
+        svg,
+        h('div.legend', h('span', h('i.d.ok'), t('status.ok')), h('span', h('i.d.warn'), t('status.warn')), h('span', h('i.d.bad'), t('status.bad')), h('span.k', t('map.keys'))),
+        list
+      ),
+      mapSide(app)
+    )
   );
 }
 
@@ -571,9 +639,9 @@ export function energyScreen(app) {
   const canvas = h('canvas.chart', { 'aria-label': t('energy.chartLabel') });
   const tip = h('div.charttip', t('energy.tip'));
   const series = () => [
-    { key: 'total', label: t('energy.total'), values: base.total, color: '#ffb454', width: 3 },
-    ...(showAfter ? [{ key: 'after', label: t('energy.after'), values: ev.profile, color: '#5ad1a0', dashed: true, width: 3 }] : []),
-    ...Object.entries(base.byWs).map(([ws, vals]) => ({ key: ws, label: g.data.equipment.workshops[ws].short, values: vals, color: { mech: '#7aa2ff', weld: '#ff7a6b', pump: '#46c6d6', vent: '#b58cff' }[ws], width: 1.3 }))
+    { key: 'total', label: t('energy.total'), values: base.total, color: '#e9f2ff', width: 3 },
+    ...(showAfter ? [{ key: 'after', label: t('energy.after'), values: ev.profile, color: '#34d399', dashed: true, width: 3 }] : []),
+    ...Object.entries(base.byWs).map(([ws, vals]) => ({ key: ws, label: g.data.equipment.workshops[ws].short, values: vals, color: { mech: '#60a5fa', weld: '#f472b6', pump: '#22d3ee', vent: '#a78bfa' }[ws], width: 1.3 }))
   ];
   const chartOpts = () => ({ series: series(), zones, selected: [...selectedHours], peaks: e1 && e1.peak ? e1.peak.actual : [], yUnit: 'kW' });
   const chartBox = h('div.chartbox', canvas);

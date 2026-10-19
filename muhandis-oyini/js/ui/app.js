@@ -182,18 +182,19 @@ export class App {
     const live = g.liveScore();
     const costK = (K) => (K > this.cfg.limits.trMaxK ? 'bad' : K > this.cfg.limits.trOkK ? 'warn' : 'ok');
     const cosK = tot.cos >= this.cfg.limits.cosphiTarget ? 'ok' : tot.cos >= 0.85 ? 'warn' : 'bad';
-    const kpi = (label, value, cls = '', title = '') => h('div.kpi', { class: cls, title }, h('span.kpi-l', label), h('span.kpi-v', value));
+    const kpi = (label, value, cls = '', title = '', ic = null) => h('div.kpi', { class: cls, title }, ic ? h('span.kpi-i', icon(ic)) : null, h('span.kpi-t', h('span.kpi-l', label), h('span.kpi-v', value)));
     const emActive = g.activeEmergencies();
     this.elTop.append(
       h('button.iconbtn', { onclick: () => Dialogs.openMenu(this), title: t('top.menu'), 'aria-label': t('top.menu') }, icon('menu')),
+      h('div.brand', h('span.brand-i', icon('bolt')), h('span.brand-t', t('app.title'))),
       h('div.clock', { title: t('top.clock') }, icon('clock'), h('span', t('top.day', { n: clk.day }) + ' · ' + clk.text), s.over ? h('span.pill.bad', t('top.over')) : null),
       h('div.kpis',
-        kpi(t('top.score'), live == null ? '—' : fmtNum(live, 0), '', t('top.scoreHint')),
-        kpi(t('top.load'), fmtNum(tot.P, 0) + ' kW', ''),
-        kpi('cosφ', fmtNum(tot.cos, 2), cosK, t('top.cosHint')),
-        kpi('TM-1', 'K ' + fmtNum(tot.tm1.K, 2), costK(tot.tm1.K), t('top.kHint')),
-        kpi('TM-2', 'K ' + fmtNum(tot.tm2.K, 2), costK(tot.tm2.K), t('top.kHint')),
-        kpi(t('top.loss'), fmtSom(tot.loss), tot.loss > 2e7 ? 'warn' : '', t('top.lossHint'))
+        kpi(t('top.score'), live == null ? '—' : fmtNum(live, 0), '', t('top.scoreHint'), 'star'),
+        kpi(t('top.load'), fmtNum(tot.P, 0) + ' kW', '', '', 'bolt'),
+        kpi('cosφ', fmtNum(tot.cos, 2), cosK, t('top.cosHint'), 'gauge'),
+        kpi('TM-1', 'K ' + fmtNum(tot.tm1.K, 2), costK(tot.tm1.K), t('top.kHint'), 'transformer'),
+        kpi('TM-2', 'K ' + fmtNum(tot.tm2.K, 2), costK(tot.tm2.K), t('top.kHint'), 'transformer'),
+        kpi(t('top.loss'), fmtSom(tot.loss), tot.loss > 2e7 ? 'warn' : '', t('top.lossHint'), 'coin')
       ),
       h('div.topbtns',
         emActive.length ? h('button.btn.bad.pulse', { onclick: () => Dialogs.openEmergency(this, emActive[0].id) }, icon('radio'), t('em.answer')) : null,

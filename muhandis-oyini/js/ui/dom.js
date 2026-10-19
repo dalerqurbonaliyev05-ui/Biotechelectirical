@@ -22,7 +22,7 @@ export function h(tag, attrs, ...children) {
       else id = part.slice(1);
     }
   }
-  const svgNs = ['svg', 'g', 'rect', 'circle', 'path', 'text', 'line', 'polyline', 'polygon', 'defs', 'title', 'use', 'ellipse'];
+  const svgNs = ['svg', 'g', 'rect', 'circle', 'path', 'text', 'line', 'polyline', 'polygon', 'defs', 'title', 'use', 'ellipse', 'linearGradient', 'radialGradient', 'stop', 'pattern', 'filter', 'feGaussianBlur', 'feMerge', 'feMergeNode', 'clipPath'];
   const el = svgNs.includes(name) ? document.createElementNS('http://www.w3.org/2000/svg', name) : document.createElement(name);
   if (cls) el.setAttribute('class', cls);
   if (id) el.id = id;
@@ -56,8 +56,7 @@ export function clear(el) {
   return el;
 }
 
-export function icon(name) {
-  const paths = {
+const ICON_PATHS = {
     motor: '<circle cx="12" cy="12" r="6"/><path d="M2 12h4M18 12h4M12 6V2M12 18v4"/>',
     panel: '<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/>',
     welder: '<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>',
@@ -80,10 +79,24 @@ export function icon(name) {
     back: '<path d="M15 5l-7 7 7 7"/>',
     bolt: '<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>',
     ppe: '<path d="M4 14a8 8 0 0 1 16 0v2H4zM2 18h20"/>',
-    hint: '<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/>'
-  };
+    hint: '<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/>',
+  gear: '<circle cx="12" cy="12" r="3"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M5.6 18.4l1.8-1.8M16.6 7.4l1.8-1.8"/>',
+    star: '<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',
+    gauge: '<path d="M4 16a8 8 0 1 1 16 0"/><path d="m12 16 4-5"/>',
+    coin: '<ellipse cx="12" cy="7" rx="7" ry="3"/><path d="M5 7v5c0 1.7 3.1 3 7 3s7-1.3 7-3V7M5 12v5c0 1.7 3.1 3 7 3s7-1.3 7-3v-5"/>',
+    chart: '<path d="M4 20V4M4 20h16M8 16l4-5 3 3 5-7"/>',
+    flag: '<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',
+    pin: '<path d="M12 21s-6-5.5-6-10a6 6 0 0 1 12 0c0 4.5-6 10-6 10z"/><circle cx="12" cy="11" r="2"/>'
+};
+
+/** Ikonaning ichki SVG qismi (xaritada ham ishlatiladi) */
+export function iconPath(name) {
+  return ICON_PATHS[name] || ICON_PATHS.bolt;
+}
+
+export function icon(name) {
   const s = h('svg', { viewBox: '0 0 24 24', class: 'ico', 'aria-hidden': 'true', fill: 'none', stroke: 'currentColor', 'stroke-width': '1.8', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' });
-  s.innerHTML = paths[name] || paths.bolt;
+  s.innerHTML = iconPath(name);
   return s;
 }
 

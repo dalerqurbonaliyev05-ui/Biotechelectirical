@@ -1,6 +1,6 @@
 // Canvas yuklama grafigi (kutubxonasiz). Soatlar bo'yicha kW egri chiziqlari, tarif zonalari, soat tanlash.
 
-const COL = { axis: '#8aa0b4', grid: 'rgba(138,160,180,0.18)', text: '#c9d6e2', hover: 'rgba(255,255,255,0.6)', sel: 'rgba(255,180,84,0.28)', peak: 'rgba(255,107,107,0.22)' };
+const COL = { axis: '#8fb0d6', grid: 'rgba(120,170,230,0.16)', text: '#d6e6fa', hover: 'rgba(255,255,255,0.6)', sel: 'rgba(34,211,238,0.28)', peak: 'rgba(251,113,133,0.22)' };
 
 /**
  * opts: {series:[{key,label,values:number[24],color,dashed,width}], zones:[{from,to,mult}], selected:number[], peaks:number[], yUnit:'kW', selectable}
@@ -72,7 +72,7 @@ function render(canvas, opts, hover) {
   for (const hr of opts.selected || []) {
     ctx.fillStyle = COL.sel;
     ctx.fillRect(X(hr) - W / 46, pad.t, W / 23, H);
-    ctx.strokeStyle = 'rgba(255,180,84,0.9)';
+    ctx.strokeStyle = 'rgba(34,211,238,0.95)';
     ctx.strokeRect(X(hr) - W / 46 + 0.5, pad.t + 0.5, W / 23 - 1, H - 1);
   }
   // to'r
@@ -116,7 +116,7 @@ function render(canvas, opts, hover) {
     const bw = 150;
     const bh = 8 + lines.length * 14;
     const bx = X(hover) + 8 + bw > cssW ? X(hover) - 8 - bw : X(hover) + 8;
-    ctx.fillStyle = 'rgba(14,22,32,0.92)';
+    ctx.fillStyle = 'rgba(7,18,38,0.94)';
     ctx.fillRect(bx, pad.t + 4, bw, bh);
     ctx.fillStyle = COL.text;
     lines.forEach((l, i) => ctx.fillText(l, bx + 6, pad.t + 18 + i * 14));
