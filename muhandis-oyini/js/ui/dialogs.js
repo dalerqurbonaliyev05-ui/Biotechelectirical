@@ -557,6 +557,11 @@ export function openShiftEnd(app) {
   const t = app.t;
   const r = g.finishShift();
   clearSave();
+  const shiftNo = g.state.shiftNo;
+  if (shiftNo) {
+    app.settings.shiftsDone = Math.max(app.settings.shiftsDone || 0, shiftNo);
+    app.saveSettings();
+  }
   app.closeAllModals();
   const body = h('div.shiftend');
   const cats = ['diagnosis', 'safety', 'time', 'cost'];
@@ -564,6 +569,7 @@ export function openShiftEnd(app) {
   const strongest = withPct.slice().sort((a, b) => r.cats[b].pct - r.cats[a].pct)[0];
   const weakest = withPct.slice().sort((a, b) => r.cats[a].pct - r.cats[b].pct)[0];
   body.append(
+    shiftNo ? h('p.shiftbanner', h('strong', t('fin.shiftDone', { n: shiftNo })), ' ', t('fin.shiftNext', { next: shiftNo + 1 })) : null,
     h('div.rankbox', h('div.bigscore', h('strong', fmtNum(r.total, 0)), h('small', t('res.of100'))), h('div', h('h2', t('rank.' + r.rank)), h('p', t('rank.' + r.rank + 'D')))),
     h('div.bars', ...cats.map((c) => (r.cats[c].pct == null ? h('div.sbar', h('span.sl', t('cat.' + c)), h('span.note', '—')) : bar(t('cat.' + c) + (c === strongest ? ' ★' : c === weakest ? ' ▼' : ''), r.cats[c].value, r.cats[c].max || 1, r.cats[c].pct >= 85 ? 'ok' : r.cats[c].pct >= 60 ? 'warn' : 'bad')))),
     withPct.length ? h('p.note', t('fin.strongWeak', { s: t('cat.' + strongest), w: t('cat.' + weakest) })) : null,

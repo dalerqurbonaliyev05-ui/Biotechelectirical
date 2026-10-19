@@ -82,6 +82,7 @@ export class App {
   newGame(opts) {
     clearSave();
     const game = Game.create(this.data, opts);
+    game.state.shiftNo = opts.mode === 'practice' ? null : (this.settings.shiftsDone || 0) + 1;
     this.attach(game);
     this.settings.difficulty = opts.difficulty;
     this.settings.mode = opts.mode;

@@ -28,7 +28,7 @@ table{border-collapse:collapse;width:100%;margin:6px 0}td,th{border:1px solid #b
 </style></head><body>
 <button onclick="window.print()">${esc(t('fin.print'))}</button>
 <h1>${esc(t('rep.docTitle'))}</h1>
-<div class="meta">${esc(g.cfg.plant.name)} · ${esc(date)} · ${esc(t('top.day', { n: r.day }))} ${clk.text} · ${esc(t('setup.d.' + g.state.difficulty))} · ${esc(t('setup.m.' + g.state.mode))}</div>
+<div class="meta">${esc(g.cfg.plant.name)} · ${esc(date)} · ${g.state.shiftNo ? esc(t('brief.shift', { n: g.state.shiftNo })) + ' · ' : ''}${esc(t('top.day', { n: r.day }))} ${clk.text} · ${esc(t('setup.d.' + g.state.difficulty))} · ${esc(t('setup.m.' + g.state.mode))}</div>
 <h2>${esc(t('rep.result'))}</h2>
 <div><span class="big">${fmtNum(r.total, 0)}</span> / 100 — <b>${esc(t('rank.' + r.rank))}</b></div>
 <table><tr><th>${esc(t('fin.category'))}</th><th>${esc(t('fin.points'))}</th><th>%</th></tr>${catRows}</table>

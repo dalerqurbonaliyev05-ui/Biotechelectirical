@@ -25,7 +25,7 @@ export function clearSave() {
     /* e'tiborsiz */
   }
 }
-export const DEFAULT_SETTINGS = { sound: false, textSize: 'normal', difficulty: 'normal', mode: 'day', tutorialDone: false };
+export const DEFAULT_SETTINGS = { sound: false, textSize: 'normal', difficulty: 'normal', mode: 'day', tutorialDone: false, shiftsDone: 0 };
 export function readSettings() {
   try {
     return { ...DEFAULT_SETTINGS, ...(JSON.parse(localStorage.getItem(SET_KEY) || '{}')) };

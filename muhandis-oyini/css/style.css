@@ -297,3 +297,6 @@ details.npcard summary { cursor: pointer; font-weight: 700; font-size: 1.1rem; m
 }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 @media print { .topbar, .taskstrip, .drawer, .toasts, .modals { display: none !important; } }
+
+/* Smena raqami */
+.shiftbanner { margin: 10px 0; padding: 8px 12px; border-left: 3px solid var(--accent, #f5b301); background: rgba(245, 179, 1, .12); border-radius: 4px; }
