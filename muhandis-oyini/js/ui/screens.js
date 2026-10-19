@@ -1,7 +1,7 @@
 // Ekranlar: menyu, smena boshlanishi, xarita, joy, uskuna paneli, energiya tahlili.
 import { h, clear, icon, eqIcon } from './dom.js';
 import { fmtNum, fmtSom, fmtClock } from '../util.js';
-import { cableAmpacity, nominalCurrent } from '../sim/electrical.js';
+import { cableAmpacity, cableAmpacityN, nominalCurrent } from '../sim/electrical.js';
 import { mountChart } from './charts.js';
 import { beep } from './audio.js';
 import * as Dialogs from './dialogs.js';
@@ -353,7 +353,7 @@ function nameplateRows(app, id) {
   const st = g.st(id);
   const row = (k, v) => [t('np.' + k), v];
   const rows = [];
-  const cable = np.cable && np.cable.section ? `${np.cable.section} mm², ${np.cable.length} m (${t('np.ampacity')}: ${cableAmpacity(np.cable.section)} A)` : null;
+  const cable = np.cable && np.cable.section ? `${np.cable.parallel > 1 ? `${np.cable.parallel}×` : ''}${np.cable.section} mm², ${np.cable.length} m (${t('np.ampacity')}: ${np.cable.parallel > 1 ? cableAmpacityN(np.cable.section, np.cable.parallel) : cableAmpacity(np.cable.section)} A)` : null;
   switch (def.type) {
     case 'motor':
       rows.push(row('P', `${fmtNum(np.P, np.P % 1 ? 1 : 0)} kW`), row('U', `${np.U} V`), row('I', `${fmtNum(nominalCurrent(np.P, np.U, np.cosphi, np.eta), 1)} A`), row('cos', fmtNum(np.cosphi, 2)),

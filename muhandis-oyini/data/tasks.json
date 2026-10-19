@@ -63,7 +63,7 @@
    "hints": [
     "Avval dvigatel nima uchun qizishini ajratib oling: tok, harorat va ko'zdan kechirish ma'lumotlarini solishtiring.",
     "Tok nominaldan oshganmi? Oshmagan bo'lsa, sovitish yoki izolyatsiyani o'ylang. Izolyatsiyani faqat o'chirilgan va kuchlanishi tekshirilgan dvigatelda megger bilan o'lchash mumkin.",
-    "Agar tok me'yorda, harorat baland va ventilyator iflos bo'lsa — sabab sovitish. Agar tok 25 % ga yuqori bo'lsa — mexanik yuklama. Megger < 0,5 MΩ bo'lsa — izolyatsiya."
+    "Agar tok me'yorda, harorat baland va ventilyator iflos bo'lsa — sabab sovitish. Agar tok 25 % ga yuqori bo'lsa — mexanik yuklama. Megger (1000 V) < 0,5 MΩ bo'lsa — izolyatsiya."
    ]
   },
   {
