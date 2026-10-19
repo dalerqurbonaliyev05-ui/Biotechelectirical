@@ -29,7 +29,7 @@ Barcha yo'llar nisbiy, shuning uchun papkani istalgan joyga qo'yish mumkin:
 
 ## O'ynash
 
-1. **Bosh menyu:** yangi smena (qiyinlik: Oson / Oddiy / Qiyin; Kunlik smena yoki Mashq rejimi — barcha 15 topshiriq), davom ettirish (`localStorage`), «Qanday o'ynaladi», sozlamalar (ovoz — standart o'chiq, matn o'lchami).
+1. **Bosh menyu:** yangi smena (qiyinlik: Oson / Oddiy / Qiyin; Kunlik smena yoki Mashq rejimi — barcha 25 topshiriq), davom ettirish (`localStorage`), «Qanday o'ynaladi», sozlamalar (ovoz — standart o'chiq, matn o'lchami).
 2. **Smena boshlanishi:** bosh energetikdan topshiriqlar. Birinchi marta tutorial (T0) bor.
 3. **Xarita:** binoni bosing yoki klaviaturada ←↑→↓ + Enter (M — xarita, T — topshiriqlar, Esc — oynani yopish). Yurish o'yin vaqtini sarflaydi.
 4. **Uskuna paneli:** shildik (nominal ma'lumot), asboblar (tok qisqichi, multimetr, megommetr, termovizor, vibratsiya, ko'zdan kechirish, quvvat analizatori), o'lchov jurnali. Har bir o'lchov vaqt sarflaydi, ortiqcha o'lchov ballni kamaytiradi.
@@ -37,7 +37,7 @@ Barcha yo'llar nisbiy, shuning uchun papkani istalgan joyga qo'yish mumkin:
 6. **Xavfsizlik:** ta'mirdan oldin ketma-ketlikni to'g'ri bajaring (kritik buzish — «Baxtsiz hodisa»). Megommetr faqat o'chirilgan va kuchlanishi tekshirilgan uskunada.
 7. **Smena yakuni:** ball, daraja (Stajyor / Elektrik / Muhandis / Katta muhandis), 4 toifa, xatolar tahlili, yutuqlar va chop etishga mos «Ish kuni dalolatnomasi».
 
-Topshiriqlar: T0 tutorial + M1–M4, P1–P3, N1–N3, V1–V3, E1–E2 (15 ta). Har birida yashirin sabab smena boshida tasodifiy (seed bilan) tanlanadi; **smena kodi** (seed) bir xil holatni takrorlash imkonini beradi.
+Topshiriqlar: T0 tutorial + M1–M6, P1–P7, N1–N5, V1–V5, E1–E2 (25 ta). Har birida yashirin sabab smena boshida tasodifiy (seed bilan) tanlanadi; **smena kodi** (seed) bir xil holatni takrorlash imkonini beradi.
 
 ## Papkalar
 

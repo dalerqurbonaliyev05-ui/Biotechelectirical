@@ -90,7 +90,7 @@ oksidlangan kontaktda `ΔU = √3·I·R_kontakt`. Faza nosimmetrikligi: `max|I_k
 (takrorlanadi). Sabab uskuna holatiga (sovitish, yuklama, izolyatsiya, kontakt qarshiligi, faza yo'qligi, himoya sozlamasi …) yozadi,
 asboblar o'qishlari shu holatdan hisoblanadi (±2 % shovqin). Ta'mir/almashtirish holatni o'zgartiradi → sex yuklamasi, transformator K, umumiy kW va cosφ qayta hisoblanadi.
 
-## 6. Alomat → yashirin sabab matritsasi (1 tutorial + 15 topshiriq)
+## 6. Alomat → yashirin sabab matritsasi (1 tutorial + 25 topshiriq)
 
 | Kod | Alomat | Yashirin sabablar (→ to'g'ri qaror) |
 |---|---|---|
@@ -110,6 +110,16 @@ asboblar o'qishlari shu holatdan hisoblanadi (±2 % shovqin). Ta'mir/almashtiris
 | V3 | Ventilyator doim 100 % | o'zgaruvchan talab (→ VFD) · bo'sh vaqtlar (→ taymer) · doimiy talab (→ hech narsa) |
 | E1 | Kunlik yuklama tahlili | cho'qqi payvandlash / tungi bo'sh yurish / past cosφ (→ byudjetdagi eng yaxshi to'plam) |
 | E2 | TM ta'mirga chiqsa, ikkinchisi ko'taradimi | tungi / kunduzgi / kechki oyna (→ K hisobi, kerak bo'lsa yuklamani boshqarish) |
+| M5 | Qirindi so'rgich ventilyatori havoni kuchsiz tortadi | filtr to'lgan (→ tozalash) · g'ildirak shponkasi kesilgan (→ shponka) · zaslonka yopiq (→ ochish) |
+| M6 | Moy nasosi ishga tushmayapti | kontaktor g'altagi uzilgan (→ g'altak) · moy qotgan (→ yuvish, moy almashtirish) · izolyatsiya teshilgan (→ qayta o'rash / almashtirish) |
+| P4 | 1-payvand apparati qizib ketadi | klemma kontakti bo'sh (→ qayta qisish) · sovitish tirqishlari bekilgan (→ tozalash) · o'ramlararo qisqa tutashuv (→ ta'mir) |
+| P5 | 2-payvand apparati avtomati uzib qo'yadi | magnit uzgich 2×In (→ sozlash) · kirish kabeli qobig'i kuygan (→ kabel ta'miri) · o'ram yerga tutashgan (→ ta'mir) |
+| P6 | 7-apparat korpusida «tok urmoqda» | yerga ulash uzilgan (→ tiklash) · izolyatsiya nam (→ quritish) · o'ram izolyatsiyasi kuygan (→ ta'mir) |
+| P7 | 3-apparat yoqilmayapti | ajratkich «o'chiq» (→ yoqish) · kontaktor g'altagi uzilgan (→ g'altak) · issiqlik himoyasi ishlagan (→ tozalash) |
+| N4 | Drenaj nasosi suv chiqarmayapti | so'rish panjarasi bekilgan (→ tozalash) · mufta sinib qolgan (→ mufta) · ish g'ildiragi yeyilgan (→ g'ildirak) |
+| N5 | Nasoslar sexi shchitida kuchlanish me'yordan chiqqan | ortiqcha yuklama (→ uzish) · kontakt oksidlangan (→ tozalash) · tashqi ta'minot nosimmetrik (→ dispetcherga xabar) |
+| V4 | 4-ventilyator doim ishlaydi | bo'sh soatlar (→ taymer) · o'zgaruvchan talab (→ VFD) · doimiy kam soatli talab (→ hech narsa) |
+| V5 | Ventilyatsiya shchitida kuchlanish tushgan | kirish kabeli kesimi kichik (→ kabel) · ortiqcha yuklama (→ uzish) · tashqi ta'minot nosimmetrik (→ dispetcherga xabar) |
 
 Har bir topshiriqda 3 ta maslahat (`hints`) bor.
 
@@ -159,7 +169,7 @@ Daraja: Stajyor < 50 ≤ Elektrik < 70 ≤ Muhandis < 85 ≤ Katta muhandis.
 
 ## 11. Smena, qiyinlik, favqulodda hodisalar
 
-- **Kunlik smena:** Oson 6 / Oddiy 8 / Qiyin 10 topshiriq (4 tasi har doim: M1, P1, N1, V1). **Mashq rejimi:** barcha 15 topshiriq (3 kunlik soat).
+- **Kunlik smena:** Oson 6 / Oddiy 8 / Qiyin 10 topshiriq (4 tasi har doim: M1, P1, N1, V1). **Mashq rejimi:** barcha 25 topshiriq (3 kunlik soat).
 - **Oson:** o'lchov statuslari rangda, birinchi maslahat bepul, soat sekin; **Qiyin:** maslahat yo'q, byudjet qisqa, shikast tez.
 - **Favqulodda chaqiruv** (kuchlanish tushishi, yuklama oshishi, avtomat uzilishi): muddat ichida javob berilmasa jarima.
 - **Yutuqlar:** «Hech qachon ortiqcha o'lchamadi», «Xavfsizlik 100 %», «Eng arzon yechim», …

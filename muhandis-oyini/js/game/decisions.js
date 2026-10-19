@@ -135,10 +135,12 @@ export const decisionMethods = {
     let weldSum = [0, 0, 0];
     for (const w of wids) {
       const e = plant.eq[w];
-      contrib[w] = e?.Iline ? e.Iline * (SQRT3 / 2) : 0;
+      const actual = e?.Iline ? e.Iline * (SQRT3 / 2) : 0;
+      // uzilgan/o'chirilgan apparat ta'mirdan keyin odatiy yuklama bilan qaytadi — taqsimlashda shuni hisobga olamiz
+      contrib[w] = actual || (((this.st(w).P / this.np(w).cosphi) * 1000) / this.cfg.plant.uNom) * (SQRT3 / 2);
       const [p0, p1] = PAIRS[this.st(w).pair];
-      weldSum[p0] += contrib[w];
-      weldSum[p1] += contrib[w];
+      weldSum[p0] += actual;
+      weldSum[p1] += actual;
     }
     const rest = ws.Ipre.map((x, k) => x - weldSum[k]);
     return { rest, contrib, wids, scale: ws.scale };
