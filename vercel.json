@@ -166,6 +166,11 @@
       "permanent": true
     },
     {
+      "source": "/sanoat-elektr-taminoti",
+      "destination": "/sanoat-elektr-taminoti/",
+      "permanent": true
+    },
+    {
       "source": "/muhandis-oyini",
       "destination": "/muhandis-oyini/",
       "permanent": true
