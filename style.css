@@ -469,6 +469,21 @@ ul, ol { list-style: none; }
 .footer-word { text-align: center; white-space: nowrap; font: 800 clamp(2.2rem, 10.2vw, 11.5rem) / 1.05 var(--display); letter-spacing: -.03em; background: var(--sunset); -webkit-background-clip: text; background-clip: text; color: transparent; user-select: none; padding-top: 14px; }
 .footer-inner { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px 20px; color: var(--ink-2); font-size: .9rem; font-weight: 600; }
 
+.t17 { grid-column: span 4; color: #fff; background: linear-gradient(120deg, #04170f 0%, #0b3d2a 55%, #16a36a 100%); }
+.t17 .tile-body { max-width: 46%; }
+.mini-ev { position: absolute; right: 40px; top: 14px; bottom: 14px; height: calc(100% - 28px); width: auto; max-width: 50%; }
+.ev-post { fill: rgba(255, 255, 255, .1); stroke: #bff5d9; stroke-width: 2.5; }
+.ev-scr { fill: #04170f; stroke: #5ad1a0; stroke-width: 2; }
+.ev-bolt { fill: #ffd166; }
+.ev-cable { fill: none; stroke: #5ad1a0; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 10 6; animation: flow 1.4s linear infinite; }
+.ev-body { fill: #1f7a57; stroke: #bff5d9; stroke-width: 2.5; stroke-linejoin: round; }
+.ev-win { fill: #04170f; opacity: .85; }
+.ev-wh { fill: #04170f; stroke: #bff5d9; stroke-width: 3; }
+.ev-lv { fill: rgba(255, 255, 255, .15); }
+.ev-lvf { fill: #ffd166; transform-box: fill-box; transform-origin: left center; animation: evfill 4s ease-in-out infinite; }
+@keyframes evfill { 0% { transform: scaleX(.15); } 85%, 100% { transform: scaleX(1); } }
+@media (prefers-reduced-motion: reduce) { .ev-cable, .ev-lvf { animation: none; } }
+
 /* ---------- Responsive ---------- */
 @media (min-width: 1280px) { .rail { display: flex; } }
 
@@ -476,7 +491,7 @@ ul, ol { list-style: none; }
     .bento { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 200px; }
     .t1 { grid-column: span 2; grid-row: span 2; }
     .t2, .t3 { grid-column: span 1; }
-    .t4, .t5, .t6, .t7, .t8, .t9, .t10, .t11, .t12, .t13, .t14, .t15, .t16 { grid-column: span 2; }
+    .t4, .t5, .t6, .t7, .t8, .t9, .t10, .t11, .t12, .t13, .t14, .t15, .t16, .t17 { grid-column: span 2; }
     .skills-grid { grid-template-columns: 1fr; }
     .skill-category h3 { min-height: 0; }
     .fb { display: none; }
@@ -548,9 +563,10 @@ ul, ol { list-style: none; }
     .hero-waves { height: 130px; }
     .marquee-track { font-size: .85rem; gap: 20px; }
     .bento { grid-template-columns: 1fr; grid-auto-rows: auto; }
-    .t1, .t2, .t3, .t4, .t5, .t6, .t7, .t8, .t9, .t10, .t11, .t12, .t13, .t14, .t15, .t16 { grid-column: span 1; grid-row: span 1; min-height: 200px; }
-    .t7, .t8, .t9, .t10, .t11, .t12, .t13, .t14, .t15, .t16 { min-height: 350px; }
-    .t13 .tile-body, .t14 .tile-body, .t15 .tile-body, .t16 .tile-body { max-width: none; }
+    .t1, .t2, .t3, .t4, .t5, .t6, .t7, .t8, .t9, .t10, .t11, .t12, .t13, .t14, .t15, .t16, .t17 { grid-column: span 1; grid-row: span 1; min-height: 200px; }
+    .t7, .t8, .t9, .t10, .t11, .t12, .t13, .t14, .t15, .t16, .t17 { min-height: 350px; }
+    .t13 .tile-body, .t14 .tile-body, .t15 .tile-body, .t16 .tile-body, .t17 .tile-body { max-width: none; }
+    .mini-ev { left: 50%; right: auto; transform: translateX(-50%); top: 12px; bottom: auto; height: 112px; max-width: none; }
     .mini-se { left: 50%; right: auto; transform: translateX(-50%); top: 12px; bottom: auto; height: 112px; max-width: none; }
     .mini-rh { left: 50%; right: auto; transform: translateX(-50%); top: 12px; bottom: auto; height: 112px; max-width: none; }
     .mini-eg { left: 50%; right: auto; transform: translateX(-50%); top: 12px; bottom: auto; height: 112px; max-width: none; }
@@ -558,7 +574,7 @@ ul, ol { list-style: none; }
     .t11 .tile-body, .t12 .tile-body { max-width: none; }
     .mini-uy { left: 50%; right: auto; transform: translateX(-50%); top: 12px; bottom: auto; height: 112px; max-width: none; }
     .mini-ps { left: 50%; right: auto; transform: translateX(-50%); top: 12px; bottom: auto; height: 112px; max-width: none; }
-    .t12, .t14, .t15, .t16 { min-height: 400px; }
+    .t12, .t14, .t15, .t16, .t17 { min-height: 400px; }
     .t10 .tile-body { max-width: none; }
     .mini-rev { left: 50%; right: auto; transform: translateX(-50%); top: 12px; bottom: auto; height: 112px; max-width: none; }
     .t9 .tile-body { max-width: none; }

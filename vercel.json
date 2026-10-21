@@ -171,6 +171,11 @@
       "permanent": true
     },
     {
+      "source": "/ev-zaryad",
+      "destination": "/ev-zaryad/",
+      "permanent": true
+    },
+    {
       "source": "/muhandis-oyini",
       "destination": "/muhandis-oyini/",
       "permanent": true
