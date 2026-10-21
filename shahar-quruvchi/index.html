@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Shahar quruvchi | EnergyVibe</title>
+<meta name="description" content="Shahar quruvchi: 20 bosqichli o‘yin. Stansiya, liniya va transformator bilan shaharni yoriting, kecha-kunduz yuklamani ushlang, pul yetsin.">
+<link rel="icon" type="image/png" href="/rasmlar1/rasm5/rasm4.png">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Maket: tepada HUD, chapda shahar xaritasi, o'ngda qurilish paneli. Telefonda panel xaritadan keyin keladi. */
+:root{
+  color-scheme:dark;
+  --bg:#0a0f18; --surface:#111b29; --surface-2:#182436; --edge:#243449;
+  --text:#e7eef7; --muted:#8a9db4;
+  --cyan:#4fd8ea; --lamp:#ffcf6b; --ok:#5fe3a1; --warn:#ffb347; --bad:#ff5f70;
+  --ui:"Chakra Petch",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--text);font:14px/1.45 var(--ui);
+  padding-block:14px 32px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+}
+body::before{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(900px 500px at 10% -10%,rgba(79,216,234,.10),transparent 60%),
+    radial-gradient(800px 500px at 100% 0,rgba(255,207,107,.06),transparent 60%),
+    var(--bg);
+}
+button{font:inherit;color:inherit}
+.app{max-width:1240px;margin:0 auto;display:grid;gap:12px}
+
+.hud{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:space-between}
+.brand{min-width:0}
+.brand h1{margin:0;font-size:24px;font-weight:700;letter-spacing:.02em;text-wrap:balance}
+.brand p{margin:2px 0 0;color:var(--muted);font-size:13px;max-width:46ch}
+.stats{display:flex;flex-wrap:wrap;gap:8px}
+.stat{background:var(--surface);border:1px solid var(--edge);border-radius:10px;padding:7px 12px;min-width:104px;display:grid;gap:3px;align-content:start}
+.stat .k{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.stat b{font-family:var(--mono);font-weight:500;font-size:15px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.meter{height:6px;border-radius:3px;background:var(--surface-2);overflow:hidden}
+.meter i{display:block;height:100%;width:100%;background:var(--ok);transition:width .3s,background .3s}
+.speed{display:flex;gap:4px}
+.speed button{min-width:42px;height:36px;border-radius:8px;border:1px solid var(--edge);background:var(--surface);cursor:pointer;font-family:var(--mono);font-size:13px}
+.speed button[aria-pressed="true"]{border-color:var(--cyan);color:var(--cyan);background:var(--surface-2)}
+button:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+
+.how{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:4px 22px;color:var(--muted);font-size:13px;counter-reset:s}
+.how li{counter-increment:s}
+.how li::before{content:counter(s) ".";font-family:var(--mono);color:var(--cyan);margin-right:6px}
+
+.stage{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:12px;align-items:start}
+@media (max-width:940px){.stage{grid-template-columns:minmax(0,1fr)}}
+.map-wrap{position:relative;border:1px solid var(--edge);border-radius:12px;overflow:hidden;background:#0d1520;line-height:0}
+#map{display:block;width:100%;touch-action:none;cursor:crosshair}
+.note{position:absolute;left:12px;bottom:12px;max-width:calc(100% - 24px);padding:7px 11px;border-radius:8px;background:rgba(10,15,24,.88);border:1px solid var(--edge);font-size:13px;line-height:1.3;opacity:0;transform:translateY(6px);transition:opacity .2s,transform .2s;pointer-events:none}
+.note.show{opacity:1;transform:none}
+.overlay{position:fixed;inset:0;z-index:20;display:flex;overflow:auto;background:rgba(6,10,18,.88);line-height:1.45;
+  padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.overlay[hidden]{display:none}
+.card{margin:auto;width:min(100%,560px);background:var(--surface);border:1px solid var(--edge);border-radius:14px;padding:22px;display:grid;gap:12px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.card .row{display:flex;flex-wrap:wrap;gap:8px}
+.card ul{margin:0;padding:0;list-style:none;display:grid;gap:6px;font-size:13.5px}
+.card li b{color:var(--muted);font-weight:500;margin-right:6px}
+.stars{font-size:26px;letter-spacing:.1em;color:var(--lamp)}
+.kicker{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan);font-weight:600}
+.card h2{margin:0;font-size:28px;text-wrap:balance}
+.card p{margin:0;color:var(--muted)}
+.primary{height:42px;padding:0 20px;border-radius:9px;border:1px solid var(--cyan);background:rgba(79,216,234,.14);color:var(--cyan);font-weight:600;cursor:pointer}
+.primary:hover{background:rgba(79,216,234,.24)}
+.ghost{height:42px;padding:0 16px;border-radius:9px;border:1px solid var(--edge);background:var(--surface-2);color:var(--text);cursor:pointer}
+.ghost:hover{border-color:var(--muted)}
+.lvgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:8px}
+.lvbtn{text-align:left;display:grid;gap:2px;padding:9px 10px;border-radius:9px;border:1px solid var(--edge);background:var(--surface-2);cursor:pointer;min-width:0}
+.lvbtn b{font-family:var(--mono);font-size:15px;font-weight:600}
+.lvbtn span{font-size:12px;color:var(--muted);overflow-wrap:anywhere;line-height:1.25}
+.lvbtn i{font-style:normal;color:var(--lamp);font-size:13px;letter-spacing:.08em;min-height:16px}
+.lvbtn:disabled{opacity:.4;cursor:not-allowed}
+.lvbtn[aria-current="true"]{border-color:var(--cyan);box-shadow:0 0 0 1px var(--cyan) inset}
+.stat-goal b{white-space:normal;font-size:12.5px;max-width:240px;line-height:1.3}
+.tool[hidden]{display:none}
+.mission{background:var(--surface);border:1px solid var(--cyan);border-radius:12px;padding:12px 14px;display:grid;gap:8px;box-shadow:0 0 0 1px rgba(79,216,234,.12) inset}
+.mhead{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;justify-content:space-between}
+.mhead b{font-size:16px;font-weight:700;text-wrap:balance}
+.mhead small{color:var(--muted);font-size:12.5px}
+#mList{margin:0;padding:0;list-style:none;display:grid;gap:6px}
+#mList li{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:8px;align-items:center;font-size:14px}
+#mList .box{width:20px;height:20px;border-radius:6px;border:2px solid var(--edge);display:grid;place-items:center;font-size:13px;line-height:1;color:var(--bg)}
+#mList li.ok .box{background:var(--ok);border-color:var(--ok)}
+#mList li.bad .box{border-color:var(--bad)}
+#mList .v{font-family:var(--mono);font-size:13px;color:var(--muted);white-space:nowrap}
+#mList li.ok .v{color:var(--ok)} #mList li.bad .v{color:var(--bad)}
+
+.side{display:grid;gap:12px;min-width:0}
+.panel{background:var(--surface);border:1px solid var(--edge);border-radius:12px;padding:12px;min-width:0}
+.panel h2{margin:0 0 8px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.tools{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:6px}
+.tool{text-align:left;background:var(--surface-2);border:1px solid var(--edge);border-left:3px solid var(--c,var(--edge));border-radius:9px;padding:7px 9px;cursor:pointer;display:grid;gap:1px;min-width:0}
+.tool .n{font-weight:600;font-size:13px;overflow-wrap:anywhere}
+.tool .c{font-family:var(--mono);font-size:11.5px;color:var(--muted);display:flex;justify-content:space-between;gap:6px}
+.tool kbd{font-family:var(--mono);font-size:10.5px;color:var(--muted);opacity:.7}
+.tool[aria-pressed="true"]{border-color:var(--cyan);border-left-color:var(--c);box-shadow:0 0 0 1px var(--cyan) inset,0 0 18px rgba(79,216,234,.18)}
+.tool.poor{opacity:.5}
+
+#info{font-size:13px;display:grid;gap:5px;min-height:132px;align-content:start}
+#info .t{font-weight:700;font-size:15px}
+#info .d{color:var(--muted)}
+#info .r{display:flex;justify-content:space-between;gap:10px;font-family:var(--mono);font-size:12.5px;font-variant-numeric:tabular-nums}
+#info .r span:first-child{color:var(--muted)}
+#info .bad{color:var(--bad)} #info .ok{color:var(--ok)} #info .warn{color:var(--warn)}
+#chart{display:block;width:100%;height:150px}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:8px;font-size:12px;color:var(--muted)}
+.sw{display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--c);margin-right:5px;vertical-align:-1px}
+#log{margin:0;padding:0;list-style:none;display:grid;gap:5px;font-size:12.5px}
+#log li{display:grid;grid-template-columns:44px 1fr;gap:8px}
+#log time{font-family:var(--mono);color:var(--muted)}
+#log .warn{color:var(--warn)} #log .bad{color:var(--bad)} #log .ok{color:var(--ok)}
+@media (prefers-reduced-motion:reduce){.note,.meter i{transition:none}}
+a.ghost{display:inline-grid;place-items:center;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="hud">
+    <div class="brand">
+      <h1>Shahar Quruvchi</h1>
+      <p>O'z shaharingni yoritasan: hech kim qorong'ida qolmasin, pul ham yetsin.</p>
+    </div>
+    <div class="stats">
+      <div class="stat"><span class="k">Bosqich</span><b id="lvl">1 / 20</b></div>
+      <div class="stat"><span class="k">Vaqt</span><b id="clock">Kun 1 · 16:00</b></div>
+      <div class="stat"><span class="k">Mablag'</span><b id="money">360 mln</b></div>
+      <div class="stat"><span class="k">Yoritilgan</span><b id="lit">100%</b></div>
+      <div class="stat"><span class="k">Ishonch</span><b id="trust">100</b><div class="meter"><i id="trustBar"></i></div></div>
+      <div class="stat"><span class="k">Ob-havo</span><b id="tag">Ochiq</b></div>
+    </div>
+    <div class="speed" role="group" aria-label="O'yin tezligi">
+      <button type="button" data-sp="0" aria-pressed="false" title="Pauza (Probel)">II</button>
+      <button type="button" data-sp="1" aria-pressed="true">1×</button>
+      <button type="button" data-sp="3" aria-pressed="false">3×</button>
+      <button type="button" data-sp="8" aria-pressed="false">8×</button>
+    </div>
+    <a class="ghost" href="/#tools" id="homeBtn">← Sayt</a>
+    <button type="button" class="ghost" id="menuBtn">Bosqichlar</button>
+  </header>
+
+  <section class="mission" aria-label="Bosqich vazifasi" aria-live="polite">
+    <div class="mhead"><span class="kicker">Vazifa</span><b id="mTitle"></b><small id="mSub"></small></div>
+    <ul id="mList"></ul>
+  </section>
+
+  <ol class="how">
+    <li>Uy, zavod va kasalxona qo'ying</li>
+    <li>Stansiya va transformator quring</li>
+    <li>Liniyani sudrab torting, hammasini ulang</li>
+  </ol>
+
+  <main class="stage">
+    <section class="map-wrap" aria-label="Shahar xaritasi">
+      <canvas id="map" role="img" aria-label="Shahar xaritasi: binolar, stansiyalar va liniyalar"></canvas>
+      <div class="note" id="note" role="status"></div>
+    </section>
+
+    <aside class="side">
+      <section class="panel">
+        <h2>Qurilish</h2>
+        <div class="tools" id="tools"></div>
+      </section>
+      <section class="panel">
+        <h2>Tanlangan katakcha</h2>
+        <div id="info"></div>
+      </section>
+      <section class="panel">
+        <h2>24 soatlik quvvat</h2>
+        <canvas id="chart" role="img" aria-label="Sutkalik talab va ishlab chiqarish grafigi"></canvas>
+        <div class="legend">
+          <span><i class="sw" style="--c:var(--lamp)"></i>Talab</span>
+          <span><i class="sw" style="--c:var(--cyan)"></i>Ishlab chiqarish</span>
+          <span><i class="sw" style="--c:var(--bad)"></i>Yetishmaydi</span>
+        </div>
+      </section>
+      <section class="panel">
+        <h2>Voqealar</h2>
+        <ul id="log"></ul>
+      </section>
+    </aside>
+  </main>
+  <div class="overlay" id="overlay" hidden><div class="card" id="card"></div></div>
+</div>
+
+<script>(function(){'use strict';
+/* ===== 20 bosqich ===== */
+const hl=(x1,x2,y,s)=>{const a=[];for(let x=x1;x<=x2;x++)a.push([s||'-',x,y]);return a;};
+const vl=(x,y1,y2,s)=>{const a=[];for(let y=y1;y<=y2;y++)a.push([s||'-',x,y]);return a;};
+const P=(s,x,y)=>[[s,x,y]];
+const area=(s,x1,y1,x2,y2)=>{const a=[];for(let y=y1;y<=y2;y++)for(let x=x1;x<=x2;x++)a.push([s,x,y]);return a;};
+const core=y=>[...P('I',1,y),...hl(2,3,y),...P('T',4,y)];
+const T_BASE=['liniya','mahalla','kasalxona','trafo','zavod'];
+const T_ALL=['liniya','mahalla','kasalxona','trafo','zavod','quyosh','ies','batareya'];
+const T_GREEN=['liniya','mahalla','kasalxona','trafo','zavod','quyosh','batareya'];
+const SOLAR_PAIR=[...P('Q',1,3),...P('-',1,4),...P('Q',0,3),...P('B',0,4)];
+
+const LEVELS=[
+ {n:"Birinchi chiroq",d:"IES va transformator tayyor. Liniya tortib, uzoqdagi uyga tok yetkazing.",
+  days:2,money:30,hour:16,tools:['liniya'],goal:{connected:1},
+  cells:[...core(5),...hl(5,5,5),...P('m',9,5)]},
+ {n:"Ikki mahalla",d:"Yangi mahalla quring va ikkala uyni tarmoqqa ulang. Uy qo'shni liniya yoniga qo'yilsa ham ulanadi.",
+  days:2,money:100,hour:16,tools:['liniya','mahalla'],goal:{connected:2},
+  cells:[...core(5),...hl(5,9,5),...P('m',13,3)]},
+ {n:"Kasalxona",d:"Kasalxona kechayu kunduz ishlaydi va tok uzilsa ishonch tez tushadi. Uni quring va hamma uyni ulang.",
+  days:3,money:170,hour:16,tools:['liniya','mahalla','kasalxona'],goal:{connected:3},
+  cells:[...core(5),...hl(5,8,5),...P('m',9,5),...P('m',14,8)]},
+ {n:"Transformator",d:"Bu tarmoqda transformator yo'q, shuning uchun tok iste'molchiga yetmaydi. Transformator qo'ying va kasalxonani ulang.",
+  days:3,money:130,hour:16,tools:['liniya','mahalla','kasalxona','trafo'],goal:{connected:2},
+  cells:[...P('I',1,6),...hl(2,6,6),...P('m',7,6),...P('k',10,6)]},
+ {n:"Zavod",d:"Zavod 3 MW tortadi. Bitta transformator 6 MW gacha o'tkazadi: ikkinchisini qo'shmasangiz kechqurun quvvat yetmaydi.",
+  days:3,money:220,hour:16,tools:T_BASE,goal:{connected:4},growth:0.05,
+  cells:[...core(5),...hl(5,7,5),...P('m',6,6),...P('m',6,4),...P('k',8,5),...P('z',12,5)]},
+ {n:"Quyosh",d:"Gaz IES har MWh uchun yoqilg'i pulini oladi. Quyosh stansiyasi kunduzi bepul tok beradi: mablag'ni ko'paytiring.",
+  days:4,money:150,hour:8,tools:[...T_BASE,'quyosh'],goal:{money:450},growth:0.05,
+  cells:[...core(5),...hl(5,7,5),...P('m',6,6),...P('m',6,4),...P('k',8,5),...P('m',8,6)]},
+ {n:"Batareya",d:"Bu yerda gaz IES yo'q. Quyosh tokini kunduzi batareyaga yig'ib, kechasi ishlating. Tun tushishidan oldin ulguring.",
+  days:3,money:600,hour:8,tools:['liniya','mahalla','trafo','quyosh','batareya'],goal:{trust:50},
+  cells:[...P('Q',1,5),...hl(2,3,5),...P('T',4,5),...hl(5,7,5),...P('m',6,6),...P('m',8,5),...P('k',6,4)]},
+ {n:"Yangi mahallalar",d:"Har kuni shaharga yangi bino qo'shiladi. Sariq belgi bor binoni 18 soat ichida ulang.",
+  days:4,money:260,hour:15,tools:T_ALL,goal:{trust:60},growth:0.06,spawn:1,
+  cells:[...core(5),...hl(5,7,5),...P('m',6,6),...P('m',6,4),...P('k',8,5),...SOLAR_PAIR.slice(0,2)]},
+ {n:"Ko'l bo'yida",d:"Ko'l o'rtada turibdi. Liniyani uni aylanib o'tkazing: uzun yo'l qimmat turadi.",
+  days:4,money:320,hour:15,tools:T_ALL,goal:{trust:60},growth:0.06,spawn:1,
+  cells:[...core(5),...hl(5,7,5),...P('m',6,6),...P('k',7,4),...area('~',9,1,11,8),...P('m',14,3),...P('m',14,7),...P('z',15,5)]},
+ {n:"Bulutli hafta",d:"Bulutli kunda quyosh stansiyalari uchdan bir quvvat beradi. Zaxirangiz bo'lsin.",
+  days:5,money:320,hour:15,tools:T_ALL,goal:{trust:70},growth:0.06,spawn:1,cloud:0.6,
+  cells:[...core(5),...hl(5,7,5),...P('m',6,6),...P('m',6,4),...P('k',8,5),...SOLAR_PAIR]},
+ {n:"Issiq yoz",d:"Issiq kunlarda kondensionerlar tufayli talab 25% oshadi, shahar ham tez o'sadi.",
+  days:5,money:320,hour:15,tools:T_ALL,goal:{trust:70},growth:0.1,spawn:1,heat:0.5,
+  cells:[...core(5),...hl(5,8,5),...P('m',6,6),...P('m',6,4),...P('k',9,5),...P('m',8,6),...P('m',12,5)]},
+ {n:"Tor byudjet",d:"Pul oz. Har liniya va stansiya hisobli: oxirida kamida 350 mln to'plang.",
+  days:5,money:90,hour:15,tools:T_ALL,goal:{money:350},growth:0.06,spawn:1,
+  cells:[...core(5),...hl(5,8,5),...P('m',6,6),...P('m',6,4),...P('k',9,5),...P('z',12,5),...P('m',12,7)]},
+ {n:"Kasalxonalar",d:"Uch kasalxona bor va yangi binolar ko'pincha kasalxona bo'ladi. Tok uzilishiga yo'l qo'ymang.",
+  days:5,money:320,hour:15,tools:T_ALL,goal:{trust:80},growth:0.06,spawn:1,mix:{m:0.3,z:0.1,k:0.6},
+  cells:[...core(5),...hl(5,8,5),...P('k',6,6),...P('k',6,4),...P('m',8,6),...P('k',9,5),...P('m',12,3)]},
+ {n:"Sanoat zonasi",d:"Zavodlar ko'p va ular juda ko'p tok oladi. Transformator va IES quvvatini oldindan oshiring.",
+  days:6,money:380,hour:15,tools:T_ALL,goal:{trust:60},growth:0.08,spawn:2,heat:0.2,mix:{m:0.2,z:0.7,k:0.1},
+  cells:[...core(5),...P('I',1,6),...P('T',5,6),...hl(5,8,5),...P('z',6,6),...P('m',6,4),...P('z',9,5)]},
+ {n:"Yashil shahar",d:"Gaz IES qurish mumkin emas. Faqat quyosh va batareyadan foydalaning.",
+  days:5,money:520,hour:15,tools:T_GREEN,goal:{trust:60},growth:0.06,spawn:1,cloud:0.3,
+  cells:[...P('Q',1,5),...P('Q',1,4),...P('Q',1,6),...hl(2,3,5),...P('T',4,5),...P('B',2,4),...P('B',2,6),...hl(5,8,5),...P('m',6,6),...P('m',6,4),...P('k',9,5),...P('m',8,6)]},
+ {n:"Tog' oralig'i",d:"Ko'l va tog'lar yo'lni to'sadi. Liniyani to'siqlar orasidan o'tkazing.",
+  days:6,money:420,hour:15,tools:T_ALL,goal:{trust:60},growth:0.08,spawn:2,cloud:0.3,
+  cells:[...core(5),...hl(5,6,5),...P('m',6,4),...P('k',5,6),
+    ...area('~',7,0,8,6),...area('^',11,2,12,3),...area('^',5,8,6,9),...area('^',10,8,11,9),
+    ...P('m',10,5),...P('k',13,4),...P('z',14,7),...P('m',13,9)]},
+ {n:"Bo'ronli hafta",d:"Bulutli va issiq kunlar almashadi. Quyosh ham, zaxira ham kerak bo'ladi.",
+  days:6,money:460,hour:15,tools:T_ALL,goal:{trust:65},growth:0.1,spawn:1.5,cloud:0.5,heat:0.35,
+  cells:[...core(5),...hl(5,8,5),...P('m',6,6),...P('m',6,4),...P('k',9,5),...P('m',8,6),...SOLAR_PAIR,...P('z',12,5)]},
+ {n:"Katta shahar",d:"Shahar katta va tarmoq tor. Quvvatni oshirib borib, hammasini ulab turing.",
+  days:7,money:460,hour:15,tools:T_ALL,goal:{trust:60},growth:0.08,spawn:2,
+  cells:[...core(5),...P('I',1,6),...hl(5,10,5),...P('T',5,6),...P('T',5,4),
+    ...P('m',6,6),...P('m',6,4),...P('k',7,6),...P('m',8,4),...P('m',8,6),...P('z',10,6),...P('m',10,4),...P('k',11,5),...P('m',12,5)]},
+ {n:"Qiyin hafta",d:"Ob-havo shafqatsiz, talab tez o'sadi. Ishonchni 80 dan tushirmang.",
+  days:7,money:520,hour:15,tools:T_ALL,goal:{trust:80},growth:0.12,spawn:2,cloud:0.5,heat:0.4,
+  cells:[...core(5),...P('I',1,6),...hl(5,8,5),...P('T',5,6),...P('m',6,6),...P('m',6,4),...P('k',9,5),...P('m',8,6),...SOLAR_PAIR,...P('z',12,5)]},
+ {n:"Bosh energetik",d:"Oxirgi sinov: o'sayotgan shahar, bulut, issiq, ko'l va tog'. 8 kunda ishonchni saqlang va 3000 mln to'plang.",
+  days:8,money:600,hour:15,tools:T_ALL,goal:{money:3000,trust:60},growth:0.12,spawn:2.5,cloud:0.45,heat:0.35,
+  cells:[...core(5),...P('I',1,6),...hl(5,9,5),...P('T',5,6),...P('m',6,6),...P('m',6,4),...P('k',8,6),...P('z',9,6),...P('m',8,4),...SOLAR_PAIR,
+    ...area('~',11,1,12,6),...area('^',14,5,15,6),...P('m',14,8),...P('z',15,3),...P('k',16,7)]}
+];
+
+/* ===== Qiyinlik sozlamalari: yoqilg'i narxi (fuelMul), avariya ehtimoli (fault), maqsadlar ===== */
+const TUNE={
+  5:{fuelMul:3,goal:{money:300}},
+  7:{fuelMul:1.3},8:{fuelMul:1.3},
+  9:{fuelMul:1.5},10:{fuelMul:1.5},
+  11:{fuelMul:2,goal:{money:900}},
+  12:{fuelMul:1.5,fault:0.2},
+  13:{fuelMul:2,fault:0.3},
+  14:{cloud:0.15,money:700,fault:0.2},
+  15:{fuelMul:2,fault:0.4},
+  16:{fuelMul:2,fault:0.5},
+  17:{fuelMul:2.5,fault:0.5},
+  18:{fuelMul:2.5,fault:0.6},
+  19:{fuelMul:3,fault:0.7,goal:{money:2500,trust:60}}
+};
+Object.keys(TUNE).forEach(k=>Object.assign(LEVELS[k],TUNE[k]));
+
+/* Aniq vazifa: ishonch shartli bosqichlarda "hamma bino yoritilgan bo'lsin" qo'shiladi */
+for(let i=6;i<LEVELS.length;i++)LEVELS[i].goal=Object.assign({all:true},LEVELS[i].goal);
+/* ===== Dvigatel: qoidalar, tarmoq, soatlik hisob ===== */
+const W=18,H=12;
+const D4=[[1,0],[-1,0],[0,1],[0,-1]];
+const TYPES={
+  mahalla:{n:'Mahalla',kind:'load',cost:30,peak:1.0,rate:5.0,crit:0,pen:0.5,up:0,c:'#ffcf6b',info:"Turar-joy. Kechqurun yuklama eng baland bo'ladi."},
+  zavod:{n:'Zavod',kind:'load',cost:110,peak:3.0,rate:5.2,crit:0,pen:0.25,up:0,c:'#c58cff',info:"Kunduzi to'liq quvvatda ishlaydi, kechasi sekinlashadi."},
+  kasalxona:{n:'Kasalxona',kind:'load',cost:80,peak:1.5,rate:4.5,crit:1,pen:3,up:0,c:'#ff7a8a',info:"Kechayu kunduz ishlaydi. Tok uzilsa ishonch tez tushadi. Birinchi bo'lib ta'minlanadi."},
+  quyosh:{n:'Quyosh EES',kind:'gen',cost:90,cap:4,up:0.3,c:'#ffe27a',info:"Kunduzi bepul tok beradi, kechasi nol. Bulutli kunda kuchsiz."},
+  ies:{n:'Gaz IES',kind:'gen',cost:220,cap:8,fuel:1.4,up:1.2,c:'#ff9d57',info:"Doim ishlaydi, lekin har MWh uchun yoqilg'i pulini to'laysiz."},
+  batareya:{n:'Batareya',kind:'store',cost:70,pw:2,mwh:8,up:0.2,c:'#5fe3a1',info:"Kunduzi ortiqcha quyosh tokini yig'adi, kechqurun qaytaradi."},
+  trafo:{n:'Transformator',kind:'trafo',cost:40,cap:6,up:0.2,c:'#4fd8ea',info:"Tarmoqdan 6 MW gacha o'tkazadi. Transformatorsiz tarmoq ishlamaydi."},
+  liniya:{n:'Liniya',kind:'wire',cost:3,up:0.03,c:'#7f95b0',info:"Qo'shni katakchalarni ulaydi. Sudrab tortib chizing."}
+};
+const PROF={
+  mahalla:[.28,.22,.2,.2,.22,.32,.5,.55,.42,.36,.34,.36,.42,.4,.38,.42,.58,.82,.96,1,.96,.86,.62,.4],
+  zavod:[.32,.3,.3,.3,.32,.45,.75,.95,1,1,1,.95,.8,.96,1,1,.94,.78,.5,.4,.36,.33,.32,.32],
+  kasalxona:[.72,.7,.7,.7,.72,.76,.82,.9,.95,.96,.96,.95,.93,.94,.95,.94,.92,.9,.88,.86,.82,.78,.75,.73]
+};
+const SOLAR=Array.from({length:24},(_,h)=>{const t=(h+.5-6)/12;return(t<=0||t>=1)?0:Math.pow(Math.sin(Math.PI*t),1.2);});
+const IDX=(x,y)=>y*W+x;
+const pad2=n=>String(n).padStart(2,'0');
+const SYM={I:'ies',Q:'quyosh',B:'batareya',T:'trafo','-':'liniya',m:'mahalla',z:'zavod',k:'kasalxona'};
+
+function mk(t,grace){return{t:t,grace:grace||0,s:1,d:0,soc:0,out:0,mode:'idle'};}
+
+/* Bosqich yuklanadi: xarita ASCII belgilaridan quriladi. ~ ko'l, ^ tog' (qurib bo'lmaydi) */
+function newState(li){
+  const lv=LEVELS[li];
+  const s={li:li,lv:lv,goalDay:lv.days+1,day:1,hour:lv.hour||15,frac:0,money:lv.money,trust:100,speed:1,
+    cells:new Array(W*H).fill(null),terrain:new Uint8Array(W*H),
+    over:null,hold:0,failWhy:'',cloudy:false,heat:false,dayInc:0,dayCost:0,dayDark:0,wasDark:false,
+    log:[],logV:0,lit:100,nets:[],netOf:new Int16Array(W*H).fill(-1),live:new Uint8Array(W*H)};
+  for(const e of lv.cells){
+    const sym=e[0],x=e[1],y=e[2];
+    if(x<0||y<0||x>=W||y>=H)continue;
+    if(sym==='~')s.terrain[IDX(x,y)]=1;
+    else if(sym==='^')s.terrain[IDX(x,y)]=2;
+    else s.cells[IDX(x,y)]=mk(SYM[sym],(sym==='m'||sym==='z'||sym==='k')?40:0);
+  }
+  for(let i=0;i<W*H;i++)if(s.terrain[i])s.cells[i]=null;
+  return s;
+}
+let S=newState(0);
+
+function say(msg,k){
+  S.log.unshift({t:pad2(S.hour)+':00',m:msg,k:k||''});
+  if(S.log.length>7)S.log.pop();
+  S.logV++;
+}
+
+const growth=()=>(1+(S.lv.growth||0)*(S.day-1))*(S.heat?1.25:1);
+const demandAt=(t,hour)=>TYPES[t].peak*PROF[t][hour]*growth();
+const sunNow=()=>SOLAR[S.hour]*(S.cloudy?0.35:1);
+const allowed=t=>S.lv.tools.indexOf(t)>=0;
+
+function components(){
+  const seen=new Int16Array(W*H).fill(-1),list=[];
+  for(let i=0;i<W*H;i++){
+    if(!S.cells[i]||seen[i]>=0)continue;
+    const id=list.length,stack=[i],members=[];
+    seen[i]=id;
+    while(stack.length){
+      const c=stack.pop();members.push(c);
+      const x=c%W,y=(c/W)|0;
+      for(const d of D4){
+        const nx=x+d[0],ny=y+d[1];
+        if(nx<0||ny<0||nx>=W||ny>=H)continue;
+        const j=ny*W+nx;
+        if(S.cells[j]&&seen[j]<0){seen[j]=id;stack.push(j);}
+      }
+    }
+    list.push(members);
+  }
+  return list;
+}
+
+/* Bir soatlik hisob. commit=false bo'lsa faqat ko'rinish yangilanadi (batareya, pul, ishonch o'zgarmaydi). */
+function solve(commit){
+  const list=components(),nets=[];
+  const night=S.hour>=18||S.hour<6;
+  S.netOf.fill(-1);S.live.fill(0);
+  let income=0,fuel=0,pen=0;
+  for(const m of list){
+    const L=[],G=[],B=[],R=[];
+    for(const i of m){
+      const c=S.cells[i],k=TYPES[c.t].kind;
+      if(k==='load')L.push(c);else if(k==='gen')G.push(c);else if(k==='store')B.push(c);else if(k==='trafo')R.push(c);
+    }
+    let demand=0;
+    for(const c of L){c.d=demandAt(c.t,S.hour);demand+=c.d;}
+    const limit=R.length*TYPES.trafo.cap;
+    const solarCap=G.filter(g=>g.t==='quyosh').length*TYPES.quyosh.cap;
+    const solar=solarCap*sunNow();
+    const iesCap=G.filter(g=>g.t==='ies').length*TYPES.ies.cap;
+    const need=Math.min(demand,limit);
+    const sol=Math.min(solar,need);
+    let rem=need-sol,surplus=R.length?solar-sol:0,dis=0,chg=0;
+    for(const b of B){
+      const t=Math.min(rem,TYPES.batareya.pw,b.soc);
+      if(t>0){if(commit)b.soc-=t;rem-=t;dis+=t;}
+    }
+    const gasUse=Math.min(rem,iesCap);
+    for(const b of B){
+      const t=Math.min(surplus,TYPES.batareya.pw,TYPES.batareya.mwh-b.soc);
+      if(t>0){if(commit)b.soc+=t;surplus-=t;chg+=t;}
+    }
+    const served=sol+dis+gasUse;
+    let pool=served;
+    const crit=L.filter(c=>TYPES[c.t].crit),rest=L.filter(c=>!TYPES[c.t].crit);
+    const dc=crit.reduce((a,c)=>a+c.d,0),gc=Math.min(pool,dc);pool-=gc;
+    for(const c of crit)c.s=dc>0?gc/dc:1;
+    const dr=rest.reduce((a,c)=>a+c.d,0),gr=Math.min(pool,dr);
+    for(const c of rest)c.s=dr>0?gr/dr:1;
+    for(const c of L){
+      const T=TYPES[c.t];
+      income+=c.d*c.s*T.rate;
+      if(c.grace<=0)pen+=(1-c.s)*T.pen*((night&&c.t==='mahalla')?1.6:1);
+    }
+    fuel+=gasUse*TYPES.ies.fuel*(S.lv.fuelMul||1);
+    const live=R.length>0&&(solar>0.01||iesCap>0||dis>0)?1:0;
+    const id=nets.length;
+    nets.push({n:m.length,loads:L.length,demand:demand,limit:limit,solar:solar,iesCap:iesCap,served:served,hasTrafo:R.length>0,hasGen:G.length>0,live:live,dis:dis,chg:chg,gasUse:gasUse});
+    for(const b of B)b.mode=dis>0?'dis':chg>0?'chg':'idle';
+    for(const g of G){
+      if(g.t==='quyosh')g.out=R.length?sunNow():0;
+      else g.out=(R.length&&iesCap>0)?gasUse/iesCap:0;
+    }
+    for(const i of m){S.netOf[i]=id;S.live[i]=live;}
+  }
+  let upkeep=0,totD=0,totS=0;
+  for(const c of S.cells){
+    if(!c)continue;
+    upkeep+=TYPES[c.t].up;
+    if(TYPES[c.t].kind==='load'){totD+=c.d;totS+=c.d*c.s;}
+  }
+  S.nets=nets;
+  S.lit=totD>0?totS/totD*100:100;
+  return{income:income,fuel:fuel,upkeep:upkeep,pen:pen,totD:totD,totS:totS};
+}
+
+/* Har yangi kuni shaharga yangi bino(lar) qo'shiladi: ularni ulash kerak */
+function spawnBuilding(){
+  const sp=S.lv.spawn||0;
+  if(sp<=0)return;
+  const n=Math.floor(sp)+(Math.random()<sp-Math.floor(sp)?1:0);
+  const mix=S.lv.mix||{m:0.55,z:0.3,k:0.15};
+  for(let q=0;q<n;q++){
+    const free=[];
+    for(let i=0;i<W*H;i++)if(!S.cells[i]&&!S.terrain[i])free.push(i);
+    if(free.length<20)return;
+    const i=free[Math.floor(Math.random()*free.length)],r=Math.random()*(mix.m+mix.z+mix.k);
+    const t=r<mix.m?'mahalla':r<mix.m+mix.z?'zavod':'kasalxona';
+    S.cells[i]=mk(t,18);
+    say("Shaharga yangi "+TYPES[t].n.toLowerCase()+" qo'shildi. Sariq belgi: uni 18 soat ichida ulang.",'warn');
+  }
+}
+
+function endDay(){
+  say('Kun '+S.day+' tugadi: daromad +'+Math.round(S.dayInc)+', xarajat -'+Math.round(S.dayCost)+' mln.',S.dayInc>S.dayCost?'ok':'warn');
+  if(S.dayDark>0.5)say('Kun davomida '+S.dayDark.toFixed(1)+' MWh energiya yetishmadi.','warn');
+  S.dayInc=0;S.dayCost=0;S.dayDark=0;
+  S.day++;
+  if(S.day>=S.goalDay)return;
+  S.cloudy=Math.random()<(S.lv.cloud||0);
+  S.heat=Math.random()<(S.lv.heat||0);
+  spawnBuilding();
+  if(Math.random()<(S.lv.fault||0)){
+    const w=[];
+    for(let i=0;i<W*H;i++)if(S.cells[i]&&S.cells[i].t==='liniya')w.push(i);
+    if(w.length>4){
+      const i=w[Math.floor(Math.random()*w.length)];
+      S.cells[i]=null;
+      say("Avariya: bitta liniya uzildi. Uni qayta torting.",'bad');
+    }
+  }
+  if(S.cloudy)say('Bugun bulutli: quyosh stansiyalari ancha kuchsiz ishlaydi.','warn');
+  if(S.heat)say("Issiq kun: kondensionerlar tufayli talab 25% oshdi.",'warn');
+  if(!S.cloudy&&!S.heat)say('Kun '+S.day+' boshlandi.');
+}
+
+/* Maqsadlar: oxirgi kun tugaganda tekshiriladi */
+function goalStatus(){
+  const g=S.lv.goal||{},out=[];
+  let conn=0;
+  for(const c of S.cells)if(c&&TYPES[c.t].kind==='load'&&c.s>=0.95)conn++;
+  if(g.all){let tot=0;for(const c of S.cells)if(c&&TYPES[c.t].kind==='load')tot++;out.push({k:'all',ok:tot>0&&conn>=tot,cur:conn,need:tot,t:"hamma bino yoritilgan ("+conn+"/"+tot+")"});}
+  if(g.connected)out.push({k:'connected',ok:conn>=g.connected,cur:conn,need:g.connected,t:g.connected+" bino yoritilgan ("+conn+" ta bor)"});
+  if(g.money)out.push({k:'money',ok:S.money>=g.money,cur:Math.round(S.money),need:g.money,t:"mablag' "+g.money+" mln ("+Math.round(S.money)+" bor)"});
+  if(g.trust)out.push({k:'trust',ok:S.trust>=g.trust,cur:Math.round(S.trust),need:g.trust,t:"ishonch "+g.trust+" ("+Math.round(S.trust)+" bor)"});
+  return out;
+}
+const stars=()=>S.trust>=90?3:S.trust>=60?2:1;
+const holdNeed=()=>(S.lv.goal&&S.lv.goal.connected)?3:1;
+
+/* Vazifa bajarilishi bilan bosqich tugaydi. Ishonch sharti bor bosqichlarda muddat oxirigacha chidash kerak. */
+function checkEnd(){
+  if(S.over)return;
+  if(S.trust<=0){S.over='dark';return;}
+  if(S.money<-100){S.over='broke';return;}
+  const gs=goalStatus(),ok=gs.every(g=>g.ok),g=S.lv.goal||{};
+  if(!g.trust){
+    S.hold=ok?(S.hold||0)+1:0;
+    if(S.hold>=holdNeed()){S.over='win';return;}
+  }
+  if(S.day>=S.goalDay){
+    if(ok)S.over='win';
+    else{S.over='goal';S.failWhy=gs.filter(x=>!x.ok).map(x=>x.t).join('; ');}
+  }
+}
+
+function stepHour(){
+  const r=solve(true);
+  S.money+=r.income-r.fuel-r.upkeep;
+  S.dayInc+=r.income;S.dayCost+=r.fuel+r.upkeep;
+  S.dayDark+=Math.max(0,r.totD-r.totS);
+  if(r.pen>0){
+    S.trust=Math.max(0,S.trust-r.pen);
+    if(!S.wasDark){say("Qorong'ida qolgan joylar bor! Ishonch tushmoqda.",'bad');S.wasDark=true;}
+  }else{
+    S.trust=Math.min(100,S.trust+0.5);
+    if(S.wasDark){say('Hamma joy yoritildi.','ok');S.wasDark=false;}
+  }
+  if(S.money<0&&S.hour%6===0)say("Mablag' minusda! Daromaddan ko'p sarflayapsiz.",'warn');
+  for(const c of S.cells)if(c&&c.grace>0)c.grace--;
+  S.hour++;
+  if(S.hour>=24){S.hour=0;endDay();}
+  checkEnd();
+  solve(false);
+}
+
+/* Qurish va buzish: 1 = qo'yildi, 0 = katakcha band yoki chegaradan tashqari, -1 = pul yetmaydi, -2 = bu bosqichda yo'q, -3 = to'siq */
+function build(t,x,y){
+  if(S.over||x<0||y<0||x>=W||y>=H)return 0;
+  const i=IDX(x,y);
+  if(S.terrain[i])return -3;
+  if(S.cells[i])return 0;
+  if(!allowed(t))return -2;
+  const T=TYPES[t];
+  if(S.money<T.cost)return -1;
+  S.money-=T.cost;
+  S.cells[i]=mk(t,12);
+  return 1;
+}
+function demolish(x,y){
+  if(S.over||x<0||y<0||x>=W||y>=H)return 0;
+  const i=IDX(x,y),c=S.cells[i];
+  if(!c)return 0;
+  S.money+=Math.round(TYPES[c.t].cost*0.5);
+  S.cells[i]=null;
+  return 1;
+}
+
+/* ===== Chizish ===== */
+const $=id=>document.getElementById(id);
+const cv=$('map'),cx=cv.getContext('2d'),gc=$('chart'),gx=gc.getContext('2d');
+const RM=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches);
+let u=40,dpr=1,tool='info',hover=null,sel=-1,drag=false;
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const darkAt=t=>1-clamp(Math.max(0,Math.sin(Math.PI*(t-6)/12))/0.45,0,1);
+const hash=i=>{const x=Math.sin(i*127.1)*43758.5453;return x-Math.floor(x);};
+const TAU=Math.PI*2;
+const lampFill=l=>l>.05?'rgba(255,212,120,'+(.3+.7*l).toFixed(2)+')':'#0b121c';
+
+function fit(){
+  const w=Math.max(280,cv.parentElement.clientWidth);
+  dpr=Math.min(2,window.devicePixelRatio||1);
+  u=w/W;
+  cv.width=Math.round(w*dpr);cv.height=Math.round(u*H*dpr);
+  cv.style.height=(u*H)+'px';
+  const gw=Math.max(200,gc.clientWidth||280);
+  gc.width=Math.round(gw*dpr);gc.height=Math.round(150*dpr);
+}
+
+function rr(x,y,w,h,r){
+  cx.beginPath();cx.moveTo(x+r,y);cx.arcTo(x+w,y,x+w,y+h,r);cx.arcTo(x+w,y+h,x,y+h,r);
+  cx.arcTo(x,y+h,x,y,r);cx.arcTo(x,y,x+w,y,r);cx.closePath();
+}
+function smoke(x,y,time,k){
+  for(let n=0;n<3;n++){
+    const ph=(time*.35+n/3)%1;
+    cx.fillStyle='rgba(190,205,225,'+(.3*(1-ph)*k).toFixed(3)+')';
+    cx.beginPath();cx.arc(x+ph*u*.12,y-ph*u*.5,u*(.05+.07*ph),0,TAU);cx.fill();
+  }
+}
+function glow(x,y,r,rgb,a){
+  const g=cx.createRadialGradient(x,y,0,x,y,r);
+  g.addColorStop(0,'rgba('+rgb+','+a.toFixed(3)+')');
+  g.addColorStop(1,'rgba('+rgb+',0)');
+  cx.fillStyle=g;cx.fillRect(x-r,y-r,r*2,r*2);
+}
+
+/* Binolar: har biri o'z katakchasi ichida (0,0)-(u,u) ga chiziladi */
+function house(x,y,w,h,lit){
+  cx.fillStyle='#2c3d56';cx.fillRect(x,y,w,h);
+  cx.fillStyle='#5a4358';cx.beginPath();cx.moveTo(x-w*.1,y);cx.lineTo(x+w/2,y-h*.55);cx.lineTo(x+w*1.1,y);cx.closePath();cx.fill();
+  cx.fillStyle=lampFill(lit);cx.fillRect(x+w*.14,y+h*.18,w*.28,h*.3);cx.fillRect(x+w*.58,y+h*.18,w*.28,h*.3);
+  cx.fillStyle='#1a2536';cx.fillRect(x+w*.38,y+h*.58,w*.24,h*.42);
+}
+function bMahalla(c){house(u*.12,u*.5,u*.36,u*.36,c.s);house(u*.54,u*.42,u*.34,u*.44,c.s);}
+function bZavod(c,time){
+  cx.fillStyle='#34405a';cx.fillRect(u*.1,u*.45,u*.8,u*.41);
+  cx.fillStyle='#46536f';
+  for(let k=0;k<3;k++){const x0=u*(.1+k*.8/3);cx.beginPath();cx.moveTo(x0,u*.45);cx.lineTo(x0,u*.3);cx.lineTo(x0+u*.8/3,u*.45);cx.closePath();cx.fill();}
+  cx.fillStyle='#2a3248';cx.fillRect(u*.72,u*.12,u*.12,u*.36);
+  cx.fillStyle=lampFill(c.s);
+  for(let k=0;k<4;k++)cx.fillRect(u*(.16+k*.18),u*.58,u*.1,u*.1);
+  if(c.s>.2&&!RM)smoke(u*.78,u*.1,time,.9);
+}
+function bKasalxona(c){
+  cx.fillStyle='#c5d2e4';cx.fillRect(u*.12,u*.28,u*.76,u*.58);
+  cx.fillStyle='#9fb1c9';cx.fillRect(u*.12,u*.28,u*.76,u*.08);
+  cx.fillStyle=c.s>.05?'#ff5f70':'#7a4850';
+  cx.fillRect(u*.44,u*.4,u*.12,u*.3);cx.fillRect(u*.35,u*.49,u*.3,u*.12);
+  cx.fillStyle=lampFill(c.s);
+  cx.fillRect(u*.2,u*.7,u*.12,u*.1);cx.fillRect(u*.68,u*.7,u*.12,u*.1);
+  cx.fillRect(u*.2,u*.42,u*.12,u*.1);cx.fillRect(u*.68,u*.42,u*.12,u*.1);
+}
+function bQuyosh(c){
+  const o=clamp(c.out,0,1);
+  cx.fillStyle='#13202c';cx.fillRect(u*.08,u*.12,u*.84,u*.76);
+  for(let r=0;r<2;r++)for(let k=0;k<3;k++){
+    const x=u*(.14+k*.27),y=u*(.2+r*.35),w=u*.24,h=u*.28,sk=u*.05;
+    const g=cx.createLinearGradient(x,y,x+w,y+h);
+    g.addColorStop(0,'rgb('+(30+80*o|0)+','+(70+120*o|0)+','+(130+100*o|0)+')');
+    g.addColorStop(1,'rgb(20,'+(40+60*o|0)+','+(90+60*o|0)+')');
+    cx.fillStyle=g;cx.beginPath();cx.moveTo(x+sk,y);cx.lineTo(x+w+sk,y);cx.lineTo(x+w,y+h);cx.lineTo(x,y+h);cx.closePath();cx.fill();
+    cx.strokeStyle='rgba(255,255,255,.18)';cx.lineWidth=1;cx.stroke();
+  }
+}
+function bIes(c,time){
+  const o=c.out;
+  cx.fillStyle='#3a3f52';
+  cx.beginPath();cx.moveTo(u*.1,u*.86);cx.lineTo(u*.2,u*.34);cx.lineTo(u*.4,u*.34);cx.lineTo(u*.5,u*.86);cx.closePath();cx.fill();
+  cx.fillStyle='#2b3042';cx.fillRect(u*.54,u*.58,u*.34,u*.28);
+  cx.fillStyle='#c9ced9';cx.fillRect(u*.66,u*.14,u*.1,u*.46);
+  cx.fillStyle='#ff5f70';cx.fillRect(u*.66,u*.2,u*.1,u*.07);cx.fillRect(u*.66,u*.34,u*.1,u*.07);
+  if(o>.05){cx.fillStyle='rgba(255,157,87,'+(.5+.4*o).toFixed(2)+')';cx.fillRect(u*.6,u*.72,u*.22,u*.1);}
+  if(o>.05&&!RM){smoke(u*.3,u*.32,time,1);smoke(u*.71,u*.12,time+.5,.8);}
+}
+function bBat(c,time){
+  const f=clamp(c.soc/TYPES.batareya.mwh,0,1);
+  cx.fillStyle='#14313a';rr(u*.2,u*.24,u*.6,u*.62,u*.07);cx.fill();
+  cx.strokeStyle='#5fe3a1';cx.lineWidth=Math.max(1,u*.035);cx.stroke();
+  cx.fillStyle='#5fe3a1';cx.fillRect(u*.4,u*.16,u*.2,u*.08);
+  for(let k=0;k<4;k++){
+    cx.fillStyle=f>((3-k)/4)+.02?'#5fe3a1':'rgba(95,227,161,.14)';
+    cx.fillRect(u*.28,u*.32+k*u*.13,u*.44,u*.09);
+  }
+  if(c.mode!=='idle'){
+    const p=RM?1:.55+.45*Math.sin(time*6);
+    cx.fillStyle=c.mode==='chg'?'rgba(79,216,234,'+p.toFixed(2)+')':'rgba(255,207,107,'+p.toFixed(2)+')';
+    cx.beginPath();cx.arc(u*.84,u*.2,u*.07,0,TAU);cx.fill();
+  }
+}
+function bTrafo(c,time,live){
+  cx.fillStyle='#26324a';rr(u*.18,u*.46,u*.64,u*.4,u*.05);cx.fill();
+  cx.strokeStyle='#3d4f72';cx.lineWidth=1;cx.stroke();
+  for(let k=0;k<3;k++){
+    const x=u*(.3+k*.2);
+    cx.fillStyle='#8fa4c2';cx.fillRect(x-u*.025,u*.26,u*.05,u*.22);
+    cx.fillStyle=live?'#7be6f2':'#a9b8cf';cx.beginPath();cx.arc(x,u*.25,u*.05,0,TAU);cx.fill();
+  }
+  cx.strokeStyle='rgba(120,200,230,.35)';cx.lineWidth=1;
+  for(let k=0;k<4;k++){cx.beginPath();cx.moveTo(u*.24,u*.54+k*u*.07);cx.lineTo(u*.76,u*.54+k*u*.07);cx.stroke();}
+  if(live&&!RM&&((time*8)|0)%7===0){
+    cx.strokeStyle='#d6fbff';cx.lineWidth=1.5;cx.beginPath();
+    cx.moveTo(u*.3,u*.2);cx.lineTo(u*.4,u*.12);cx.lineTo(u*.5,u*.2);cx.lineTo(u*.6,u*.12);cx.lineTo(u*.7,u*.2);cx.stroke();
+  }
+}
+function bPole(live){
+  cx.fillStyle=cx.strokeStyle=live?'#7be6f2':'#8aa0bb';
+  cx.fillRect(u*.45,u*.45,u*.1,u*.1);
+  cx.lineWidth=Math.max(1,u*.03);cx.beginPath();cx.moveTo(u*.3,u*.36);cx.lineTo(u*.7,u*.36);cx.stroke();
+}
+function drawBuilding(t,c,time,live){
+  if(t==='mahalla')bMahalla(c);
+  else if(t==='zavod')bZavod(c,time);
+  else if(t==='kasalxona')bKasalxona(c);
+  else if(t==='quyosh')bQuyosh(c);
+  else if(t==='ies')bIes(c,time);
+  else if(t==='batareya')bBat(c,time);
+  else if(t==='trafo')bTrafo(c,time,live);
+  else bPole(live);
+}
+
+function drawGround(){
+  cx.fillStyle='#1d3a3d';cx.fillRect(0,0,u*W,u*H);
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++){
+    const i=IDX(x,y),h=hash(i);
+    cx.fillStyle=h>.5?'rgba(255,255,255,.025)':'rgba(0,0,0,.05)';
+    cx.fillRect(x*u,y*u,u,u);
+    if(!S.cells[i]&&h>.8){
+      cx.fillStyle='rgba(20,60,48,.8)';
+      cx.beginPath();cx.arc((x+.3+hash(i+9)*.4)*u,(y+.3+hash(i+3)*.4)*u,u*.1,0,TAU);cx.fill();
+    }
+  }
+  const tt=performance.now()/1000;
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++){
+    const i=IDX(x,y),k=S.terrain[i];
+    if(!k)continue;
+    if(k===1){
+      cx.fillStyle='#17455f';cx.fillRect(x*u,y*u,u,u);
+      cx.strokeStyle='rgba(140,210,240,.35)';cx.lineWidth=1.2;
+      for(let r=0;r<2;r++){
+        const yy=(y+.35+r*.35)*u,ph=Math.sin(tt*1.3+x*.9+r*2)*u*.04;
+        cx.beginPath();cx.moveTo((x+.15)*u,yy+ph);cx.quadraticCurveTo((x+.35)*u,yy-u*.09+ph,(x+.5)*u,yy+ph);cx.quadraticCurveTo((x+.65)*u,yy+u*.09+ph,(x+.85)*u,yy+ph);cx.stroke();
+      }
+    }else{
+      cx.fillStyle='#2a323d';cx.fillRect(x*u,y*u,u,u);
+      cx.fillStyle='#4a5565';cx.beginPath();cx.moveTo((x+.1)*u,(y+.9)*u);cx.lineTo((x+.45)*u,(y+.2)*u);cx.lineTo((x+.9)*u,(y+.9)*u);cx.closePath();cx.fill();
+      cx.fillStyle='#e7eef7';cx.beginPath();cx.moveTo((x+.45)*u,(y+.2)*u);cx.lineTo((x+.34)*u,(y+.4)*u);cx.lineTo((x+.56)*u,(y+.4)*u);cx.closePath();cx.fill();
+      cx.fillStyle='#38414f';cx.beginPath();cx.moveTo((x+.45)*u,(y+.9)*u);cx.lineTo((x+.72)*u,(y+.5)*u);cx.lineTo((x+.95)*u,(y+.9)*u);cx.closePath();cx.fill();
+    }
+  }
+  cx.strokeStyle='rgba(255,255,255,.05)';cx.lineWidth=1;cx.beginPath();
+  for(let x=0;x<=W;x++){cx.moveTo(x*u,0);cx.lineTo(x*u,H*u);}
+  for(let y=0;y<=H;y++){cx.moveTo(0,y*u);cx.lineTo(W*u,y*u);}
+  cx.stroke();
+}
+function drawLinks(time){
+  cx.lineCap='round';
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++){
+    const i=IDX(x,y);
+    if(!S.cells[i])continue;
+    const live=S.live[i];
+    for(const d of [[1,0],[0,1]]){
+      const nx=x+d[0],ny=y+d[1];
+      if(nx>=W||ny>=H||!S.cells[IDX(nx,ny)])continue;
+      cx.beginPath();cx.moveTo((x+.5)*u,(y+.5)*u);cx.lineTo((nx+.5)*u,(ny+.5)*u);
+      cx.lineWidth=u*.07;cx.strokeStyle=live?'#2ea7b8':'#4a5d75';cx.stroke();
+      if(live&&!RM){
+        cx.save();cx.setLineDash([u*.06,u*.3]);cx.lineDashOffset=-time*u*1.1;
+        cx.strokeStyle='#d6fbff';cx.lineWidth=u*.04;cx.stroke();cx.restore();
+      }
+    }
+  }
+}
+function drawSky(dk){
+  cx.save();
+  cx.fillStyle='rgba(10,15,24,.78)';rr(8,8,92,28,8);cx.fill();
+  if(dk<.5){
+    cx.fillStyle=cx.strokeStyle='#ffd35c';
+    cx.beginPath();cx.arc(24,22,5.5,0,TAU);cx.fill();
+    cx.lineWidth=1.5;
+    for(let k=0;k<8;k++){const a=k*TAU/8;cx.beginPath();cx.moveTo(24+Math.cos(a)*8,22+Math.sin(a)*8);cx.lineTo(24+Math.cos(a)*11,22+Math.sin(a)*11);cx.stroke();}
+  }else{
+    cx.fillStyle='#dfe8f5';cx.beginPath();cx.arc(24,22,8,0,TAU);cx.fill();
+    cx.fillStyle='#0d141f';cx.beginPath();cx.arc(28,19,7,0,TAU);cx.fill();
+  }
+  cx.fillStyle='#e7eef7';cx.font='600 13px "IBM Plex Mono",monospace';cx.textBaseline='middle';
+  cx.fillText(pad2(S.hour)+':'+pad2(Math.floor(S.frac*60)),42,23);
+  cx.restore();
+}
+
+function draw(time){
+  cx.setTransform(dpr,0,0,dpr,0,0);
+  cx.clearRect(0,0,u*W,u*H);
+  const t=S.hour+S.frac,dk=darkAt(t);
+  drawGround();drawLinks(time);
+  for(let i=0;i<W*H;i++){
+    const c=S.cells[i];if(!c)continue;
+    const x=i%W,y=(i/W)|0;
+    cx.save();cx.translate(x*u,y*u);
+    if(c.t!=='liniya'){cx.fillStyle='rgba(8,14,22,.55)';rr(u*.06,u*.06,u*.88,u*.88,u*.1);cx.fill();}
+    drawBuilding(c.t,c,time,S.live[i]);
+    cx.restore();
+  }
+  cx.fillStyle='rgba(5,9,26,'+(dk*.6).toFixed(3)+')';cx.fillRect(0,0,u*W,u*H);
+  cx.globalCompositeOperation='lighter';
+  for(let i=0;i<W*H;i++){
+    const c=S.cells[i];if(!c)continue;
+    const x=(i%W+.5)*u,y=((i/W|0)+.5)*u,T=TYPES[c.t];
+    if(T.kind==='load'){if(c.s>.05&&dk>.05)glow(x,y,u*1.5,'255,190,90',.34*c.s*dk);}
+    else if(c.t==='ies'){if(c.out>.05)glow(x,y,u*1.3,'255,150,70',.3*c.out*(.4+.6*dk));}
+    else if(c.t==='trafo'){if(S.live[i])glow(x,y,u,'79,216,234',.25*(.5+.5*dk));}
+    else if(c.t==='liniya'){if(S.live[i]&&dk>.1)glow(x,y,u*.55,'79,216,234',.18*dk);}
+    else if(c.t==='quyosh'){if(c.out>.1)glow(x,y,u,'255,240,150',.18*c.out*(1-dk));}
+  }
+  cx.globalCompositeOperation='source-over';
+  for(let i=0;i<W*H;i++){
+    const c=S.cells[i];
+    if(!c||TYPES[c.t].kind!=='load'||c.s>=.5)continue;
+    const bad=c.grace<=0,p=RM?1:.65+.35*Math.sin(time*6);
+    const x=(i%W+.84)*u,y=((i/W|0)+.17)*u,r=Math.max(7,u*.16);
+    cx.fillStyle=bad?'rgba(255,95,112,'+p.toFixed(2)+')':'rgba(255,179,71,.95)';
+    cx.beginPath();cx.arc(x,y,r,0,TAU);cx.fill();
+    cx.fillStyle='#1a0a0c';cx.font='700 '+Math.round(r*1.4)+'px "Chakra Petch",sans-serif';
+    cx.textAlign='center';cx.textBaseline='middle';cx.fillText('!',x,y+1);cx.textAlign='start';
+  }
+  if(hover){
+    const i=IDX(hover.x,hover.y),occ=S.cells[i],T=TYPES[tool];
+    if(tool!=='info'){
+      const ok=tool==='bul'?!!occ:(!occ&&!S.terrain[i]&&allowed(tool)&&S.money>=T.cost);
+      cx.fillStyle=ok?'rgba(79,216,234,.18)':'rgba(255,95,112,.22)';cx.fillRect(hover.x*u,hover.y*u,u,u);
+      cx.strokeStyle=ok?'#4fd8ea':'#ff5f70';cx.lineWidth=2;cx.strokeRect(hover.x*u+1,hover.y*u+1,u-2,u-2);
+      if(T&&!occ&&!S.terrain[i]){
+        const g=mk(tool,0);g.out=.6;
+        cx.save();cx.globalAlpha=.6;cx.translate(hover.x*u,hover.y*u);drawBuilding(tool,g,time,false);cx.restore();
+      }
+    }else{
+      cx.strokeStyle='rgba(231,238,247,.4)';cx.lineWidth=1;cx.strokeRect(hover.x*u+.5,hover.y*u+.5,u-1,u-1);
+    }
+  }
+  if(sel>=0){
+    cx.strokeStyle='#ffcf6b';cx.lineWidth=2;cx.setLineDash([5,4]);
+    cx.strokeRect((sel%W)*u+2,((sel/W)|0)*u+2,u-4,u-4);cx.setLineDash([]);
+  }
+  drawSky(dk);
+}
+
+function drawChart(){
+  const w=gc.width/dpr,h=gc.height/dpr;
+  gx.setTransform(dpr,0,0,dpr,0,0);gx.clearRect(0,0,w,h);
+  let iesN=0,solN=0,trafoCap=0;
+  for(const c of S.cells){
+    if(!c)continue;
+    if(c.t==='ies')iesN++;else if(c.t==='quyosh')solN++;else if(c.t==='trafo')trafoCap+=TYPES.trafo.cap;
+  }
+  const dem=[],sup=[];
+  for(let hr=0;hr<24;hr++){
+    let d=0;
+    for(const c of S.cells)if(c&&TYPES[c.t].kind==='load')d+=demandAt(c.t,hr);
+    dem.push(d);
+    sup.push(solN*TYPES.quyosh.cap*SOLAR[hr]*(S.cloudy?.35:1)+iesN*TYPES.ies.cap);
+  }
+  const L=28,R=8,T=8,B=18,pw=w-L-R,ph=h-T-B;
+  const ymax=Math.max(4,Math.max.apply(null,dem),Math.max.apply(null,sup),trafoCap)*1.1;
+  const X=hr=>L+pw*hr/23,Y=v=>T+ph*(1-v/ymax);
+  const step=ymax>16?8:ymax>8?4:2;
+  gx.font='10px "IBM Plex Mono",monospace';gx.textBaseline='middle';gx.lineWidth=1;
+  for(let v=0;v<=ymax;v+=step){
+    gx.strokeStyle='rgba(138,157,180,.18)';gx.beginPath();gx.moveTo(L,Y(v));gx.lineTo(w-R,Y(v));gx.stroke();
+    gx.fillStyle='#8a9db4';gx.textAlign='right';gx.fillText(String(v),L-5,Y(v));
+  }
+  gx.textAlign='center';gx.textBaseline='top';
+  [0,6,12,18,23].forEach(hr=>{gx.fillStyle='#8a9db4';gx.fillText(hr===23?'24':String(hr),X(hr),h-B+5);});
+  gx.fillStyle='rgba(255,95,112,.38)';
+  for(let hr=0;hr<23;hr++){
+    if(dem[hr]<=sup[hr]&&dem[hr+1]<=sup[hr+1])continue;
+    gx.beginPath();
+    gx.moveTo(X(hr),Y(Math.max(dem[hr],sup[hr])));gx.lineTo(X(hr+1),Y(Math.max(dem[hr+1],sup[hr+1])));
+    gx.lineTo(X(hr+1),Y(sup[hr+1]));gx.lineTo(X(hr),Y(sup[hr]));gx.closePath();gx.fill();
+  }
+  gx.beginPath();gx.moveTo(X(0),Y(0));
+  for(let hr=0;hr<24;hr++)gx.lineTo(X(hr),Y(dem[hr]));
+  gx.lineTo(X(23),Y(0));gx.closePath();gx.fillStyle='rgba(255,207,107,.14)';gx.fill();
+  gx.lineWidth=1.8;gx.lineJoin='round';
+  gx.beginPath();for(let hr=0;hr<24;hr++)gx[hr?'lineTo':'moveTo'](X(hr),Y(dem[hr]));
+  gx.strokeStyle='#ffcf6b';gx.stroke();
+  gx.beginPath();for(let hr=0;hr<24;hr++)gx[hr?'lineTo':'moveTo'](X(hr),Y(sup[hr]));
+  gx.strokeStyle='#4fd8ea';gx.stroke();
+  if(trafoCap>0){
+    gx.setLineDash([4,4]);gx.strokeStyle='rgba(231,238,247,.45)';gx.lineWidth=1;
+    gx.beginPath();gx.moveTo(L,Y(trafoCap));gx.lineTo(w-R,Y(trafoCap));gx.stroke();gx.setLineDash([]);
+    gx.fillStyle='rgba(231,238,247,.6)';gx.textAlign='right';gx.textBaseline='bottom';gx.fillText('trafo',w-R,Y(trafoCap)-2);
+  }
+  const nx=X(clamp(S.hour+S.frac,0,23));
+  gx.strokeStyle='rgba(255,255,255,.55)';gx.lineWidth=1;gx.beginPath();gx.moveTo(nx,T);gx.lineTo(nx,T+ph);gx.stroke();
+}
+
+/* ===== Interfeys: asboblar, ma'lumot paneli, boshqaruv, asosiy sikl ===== */
+const ORDER=['info','mahalla','zavod','kasalxona','quyosh','ies','batareya','trafo','liniya','bul'];
+const EXTRA={info:["Ko'rish",'tanlash','#8a9db4'],bul:['Buzish','50% qaytadi','#ff5f70']};
+const toolsEl=$('tools');
+ORDER.forEach((id,n)=>{
+  const T=TYPES[id],b=document.createElement('button');
+  b.type='button';b.className='tool';b.dataset.id=id;
+  b.style.setProperty('--c',T?T.c:EXTRA[id][2]);
+  b.innerHTML='<span class="n">'+(T?T.n:EXTRA[id][0])+'</span><span class="c"><span>'+(T?T.cost+' mln':EXTRA[id][1])+'</span><kbd>'+((n+1)%10)+'</kbd></span>';
+  b.addEventListener('click',()=>setTool(id));
+  toolsEl.appendChild(b);
+});
+function setTool(id){
+  if(TYPES[id]&&!allowed(id)){toast("Bu bosqichda "+TYPES[id].n.toLowerCase()+" yo'q.");return;}
+  tool=id;if(id!=='info')sel=-1;
+}
+
+let noteTimer=0;
+function toast(msg){
+  const n=$('note');n.textContent=msg;n.classList.add('show');
+  clearTimeout(noteTimer);noteTimer=setTimeout(()=>n.classList.remove('show'),2200);
+}
+function setSpeed(s){
+  S.speed=s;
+  document.querySelectorAll('.speed button').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.sp===s)));
+}
+document.querySelectorAll('.speed button').forEach(b=>b.addEventListener('click',()=>{if(!panel&&!S.over)setSpeed(+b.dataset.sp);}));
+
+/* ===== Saqlash (brauzerda) ===== */
+const KEY='shahar-quruvchi-v1',NL=LEVELS.length;
+let prog={unlocked:1,stars:[]};
+try{
+  const raw=JSON.parse(localStorage.getItem(KEY)||'null');
+  if(raw&&typeof raw.unlocked==='number'){prog.unlocked=Math.max(1,Math.min(NL,raw.unlocked|0));prog.stars=Array.isArray(raw.stars)?raw.stars.slice(0,NL).map(n=>+n||0):[];}
+}catch(e){}
+function saveProg(){try{localStorage.setItem(KEY,JSON.stringify(prog));}catch(e){}}
+
+/* ===== Bosqichlar: panel, tavsif, natija ===== */
+let panel=null,resumeSpeed=1;
+const cardEl=$('card'),ovEl=$('overlay');
+const starStr=n=>'★'.repeat(n)+'☆'.repeat(3-n);
+function goalText(lv,short){
+  const g=lv.goal||{},p=[];
+  if(g.all)p.push('hamma bino yoritilgan');
+  if(g.connected)p.push(g.connected+' bino yoritilgan');
+  if(g.money)p.push("mablag' "+g.money+" mln");
+  if(g.trust)p.push('ishonch '+g.trust+' dan past emas');
+  return (short?lv.days+' kun · ':lv.days+' kun ichida: ')+p.join(', ');
+}
+const mCache={};
+function mission(){
+  const g=S.lv.goal||{},gs=goalStatus(),it=[];
+  const byK={};gs.forEach(x=>byK[x.k]=x);
+  const row=(ok,txt,val,bad)=>'<li class="'+(ok?'ok':bad?'bad':'')+'"><span class="box">'+(ok?'✓':'')+'</span><span>'+txt+'</span><span class="v">'+val+'</span></li>';
+  if(byK.all)it.push(row(byK.all.ok,'Hamma binoni yoriting',byK.all.cur+' / '+byK.all.need));
+  if(byK.connected)it.push(row(byK.connected.ok,byK.connected.need+' ta binoni yoriting'+' (3 soat ushlab turing)',byK.connected.cur+' / '+byK.connected.need+(S.hold>0?' · '+S.hold+'/3 s':'')));
+  if(byK.money)it.push(row(byK.money.ok,"Mablag'ni "+byK.money.need+" mlngacha yetkazing",byK.money.cur+' / '+byK.money.need));
+  if(byK.trust)it.push(row(byK.trust.ok,'Ishonchni '+byK.trust.need+' dan tushirmang',byK.trust.cur,!byK.trust.ok));
+  const d=Math.min(S.day,S.lv.days);
+  const t=g.trust||g.all?'Kun '+d+' / '+S.lv.days+': vazifa muddat oxirida tekshiriladi':'Muddat: kun '+d+' / '+S.lv.days+'. Vazifa bajarilishi bilan bosqich tugaydi';
+  const html=it.join('');
+  if(mCache.h!==html){mCache.h=html;$('mList').innerHTML=html;}
+  if(mCache.t!==t){mCache.t=t;$('mSub').textContent=t;}
+  if(mCache.n!==S.lv.n){mCache.n=S.lv.n;$('mTitle').textContent=(S.li+1)+'-bosqich: '+S.lv.n;}
+}
+function risks(lv){
+  const r=[];
+  if(lv.spawn)r.push("har kuni yangi bino");
+  if(lv.cloud)r.push("bulutli kunlar");
+  if(lv.heat)r.push("issiq kunlar");
+  if(lv.fault)r.push("liniya avariyalari");
+  if(lv.fuelMul>1)r.push("yoqilg'i "+lv.fuelMul+"× qimmat");
+  if(lv.growth>=0.1)r.push("talab tez o'sadi");
+  return r.length?r.join(', '):"yo'q";
+}
+function openPanel(kind,html){
+  if(!panel&&!S.over)resumeSpeed=S.speed||1;
+  panel=kind;cardEl.innerHTML=html;ovEl.hidden=false;
+  if(!S.over)setSpeed(0);
+  const f=cardEl.querySelector('.primary')||cardEl.querySelector('button:not(:disabled)');
+  try{if(f)f.focus({preventScroll:true});}catch(e){}
+}
+function closePanel(){panel=null;ovEl.hidden=true;}
+function showBrief(){
+  const lv=S.lv,names=lv.tools.map(t=>TYPES[t].n).join(', ');
+  openPanel('brief',
+    '<div class="kicker">Bosqich '+(S.li+1)+' / '+NL+'</div><h2>'+lv.n+'</h2><p>'+lv.d+'</p><ul>'+
+    '<li><b>Vazifa</b>'+goalText(lv)+'</li>'+
+    "<li><b>Boshlang'ich mablag'</b>"+lv.money+' mln</li>'+
+    '<li><b>Asboblar</b>'+names+'</li>'+
+    '<li><b>Qiyinchiliklar</b>'+risks(lv)+'</li></ul>'+
+    '<div class="row"><button type="button" class="primary" id="goBtn">Boshlash</button>'+
+    '<button type="button" class="ghost" id="lvBtn">Bosqichlar</button></div>');
+  $('goBtn').onclick=()=>{closePanel();setSpeed(1);};
+  $('lvBtn').onclick=showSelect;
+}
+function showSelect(){
+  let g='';
+  for(let i=0;i<NL;i++){
+    const lock=i>=prog.unlocked,st=prog.stars[i]||0;
+    g+='<button type="button" class="lvbtn" data-i="'+i+'"'+(lock?' disabled':'')+(i===S.li?' aria-current="true"':'')+'>'+
+      '<b>'+(i+1)+'</b><span>'+LEVELS[i].n+'</span><i>'+(lock?'🔒':st?starStr(st):'')+'</i></button>';
+  }
+  const done=prog.stars.reduce((a,n)=>a+(n>0?1:0),0);
+  openPanel('select','<div class="kicker">Bosqichlar</div><h2>Shaharni tanlang</h2><p>'+done+' / '+NL+" bosqich o'tilgan. Yulduz ko'p bo'lishi uchun ishonchni baland ushlang.</p>"+
+    '<div class="lvgrid">'+g+'</div>'+
+    (S.over?'':'<div class="row"><button type="button" class="primary" id="backBtn">Davom etish</button></div>'));
+  cardEl.querySelectorAll('.lvbtn').forEach(b=>b.addEventListener('click',()=>startLevel(+b.dataset.i)));
+  const bb=$('backBtn');if(bb)bb.onclick=()=>{closePanel();setSpeed(resumeSpeed);};
+}
+function showEnd(){
+  const o=S.over,li=S.li,last=li===NL-1;
+  let h;
+  if(o==='win'){
+    const st=stars();
+    prog.stars[li]=Math.max(prog.stars[li]||0,st);
+    prog.unlocked=Math.max(prog.unlocked,Math.min(NL,li+2));
+    saveProg();
+    h='<div class="kicker">Bosqich '+(li+1)+' / '+NL+'</div><h2>'+(last?'Siz bosh energetiksiz!':'Vazifa bajarildi!')+'</h2>'+
+      '<div class="stars" aria-label="'+st+' yulduz">'+starStr(st)+'</div>'+
+      "<p>Ishonch: "+Math.round(S.trust)+", mablag': "+Math.round(S.money)+' mln.'+(last?" Barcha 20 bosqich o'tildi.":'')+'</p>'+
+      '<div class="row">'+(last?'':'<button type="button" class="primary" id="nextBtn">Keyingi bosqich</button>')+
+      '<button type="button" class="ghost" id="retryBtn">Qayta o\'ynash</button><button type="button" class="ghost" id="lvBtn">Bosqichlar</button></div>';
+  }else{
+    const t=o==='dark'?"Shahar qorong'ida qoldi":o==='broke'?'Bankrot':'Maqsadga yetilmadi';
+    const x=o==='dark'?"Aholi ishonchi tugadi. Kasalxona va uylar uchun transformator hamda zaxira quvvatni oldindan quring.":
+      o==='broke'?"Mablag' juda minusga ketdi. Gaz yoqilg'isi qimmat: quyosh stansiyasi va batareya arzonroq bo'ladi.":
+      'Muddat tugadi, lekin shart bajarilmadi: '+S.failWhy+'.';
+    h='<div class="kicker">Bosqich '+(li+1)+' / '+NL+'</div><h2>'+t+'</h2><p>'+x+'</p>'+
+      '<div class="row"><button type="button" class="primary" id="retryBtn">Qayta urinish</button><button type="button" class="ghost" id="lvBtn">Bosqichlar</button></div>';
+  }
+  openPanel('end',h);
+  const nb=$('nextBtn');if(nb)nb.onclick=()=>startLevel(li+1);
+  $('retryBtn').onclick=()=>startLevel(li);
+  $('lvBtn').onclick=showSelect;
+}
+function startLevel(li){
+  S=newState(li);solve(false);lastLog=-1;lastInfo='';sel=-1;tool='info';lastOver=undefined;
+  say(LEVELS[li].n+': '+goalText(LEVELS[li],true)+'.');
+  showBrief();
+}
+$('menuBtn').addEventListener('click',()=>{if(panel!=='select')showSelect();});
+
+/* Xarita bilan ishlash */
+function cellAt(e){
+  const r=cv.getBoundingClientRect();
+  const x=Math.floor((e.clientX-r.left)/r.width*W),y=Math.floor((e.clientY-r.top)/r.height*H);
+  return(x<0||y<0||x>=W||y>=H)?null:{x:x,y:y};
+}
+function act(c,first){
+  const i=IDX(c.x,c.y);
+  if(tool==='info'){sel=S.cells[i]?i:-1;return;}
+  if(tool==='bul'){
+    if(demolish(c.x,c.y)){solve(false);}
+    else if(first)toast("Bu katakcha bo'sh.");
+    return;
+  }
+  const r=build(tool,c.x,c.y);
+  if(r===1)solve(false);
+  else if(r===-1)toast("Mablag' yetmaydi: "+TYPES[tool].n+" "+TYPES[tool].cost+" mln turadi.");
+  else if(r===-2)toast("Bu bosqichda "+TYPES[tool].n.toLowerCase()+" qurib bo'lmaydi.");
+  else if(r===-3){if(first)toast("Bu yerda "+(S.terrain[i]===1?"ko'l":"tog'")+" bor: qurib bo'lmaydi.");}
+  else if(first)toast("Katakcha band. Avval uni buzing yoki boshqa joyni tanlang.");
+}
+cv.addEventListener('pointerdown',e=>{
+  if(panel)return;
+  const c=cellAt(e);if(!c)return;
+  try{cv.setPointerCapture(e.pointerId);}catch(err){}
+  drag=true;hover=c;act(c,true);
+});
+cv.addEventListener('pointermove',e=>{
+  const c=cellAt(e);hover=c;
+  if(drag&&c&&(tool==='liniya'||tool==='bul'))act(c,false);
+});
+const endDrag=()=>{drag=false;};
+cv.addEventListener('pointerup',endDrag);
+cv.addEventListener('pointercancel',endDrag);
+cv.addEventListener('pointerleave',()=>{if(!drag)hover=null;});
+
+document.addEventListener('keydown',e=>{
+  if(e.target&&/INPUT|TEXTAREA/.test(e.target.tagName))return;
+  if(panel){if(e.key==='Escape'&&panel==='select'&&!S.over){closePanel();setSpeed(resumeSpeed);}return;}
+  if(e.key===' '){e.preventDefault();setSpeed(S.speed>0?0:1);return;}
+  if(e.key==='Escape'){setTool('info');return;}
+  if(/^[0-9]$/.test(e.key)){const n=(+e.key+9)%10;if(ORDER[n]&&!toolsEl.children[n].hidden)setTool(ORDER[n]);}
+});
+
+/* Ma'lumot paneli */
+const row=(a,b,k)=>'<div class="r"><span>'+a+'</span><span class="'+(k||'')+'">'+b+'</span></div>';
+function whyDark(c,net){
+  if(!net.hasTrafo)return["Tarmoqda transformator yo'q",'bad'];
+  if(!net.hasGen&&net.dis<=0)return['Stansiyaga ulanmagan','bad'];
+  if(c.s<.95)return[net.limit<net.demand?'Transformator yetmayapti ('+net.limit+' MW)':'Quvvat yetmayapti','warn'];
+  return['Yoritilgan','ok'];
+}
+function infoHTML(){
+  const i=sel>=0?sel:(hover?IDX(hover.x,hover.y):-1);
+  if(i<0){
+    return '<div class="t">Shahar holati</div><div class="d">Katakchaga boring yoki bosing: bino haqida ma\'lumot chiqadi.</div>'+
+      row('Yoritilgan aholi',S.lit.toFixed(0)+'%',S.lit>95?'ok':S.lit>70?'warn':'bad')+row('Alohida tarmoqlar',String(S.nets.length));
+  }
+  const c=S.cells[i];
+  if(!c)return '<div class="t">Bo\'sh katakcha</div><div class="d">Bu yerga bino, stansiya yoki liniya qo\'yishingiz mumkin.</div>';
+  const T=TYPES[c.t],net=S.nets[S.netOf[i]];
+  let h='<div class="t" style="color:'+T.c+'">'+T.n+'</div><div class="d">'+T.info+'</div>';
+  if(T.kind==='load'){
+    const w=whyDark(c,net);
+    h+=row('Talab (hozir)',c.d.toFixed(2)+' MW')+row("Ta'minot",Math.round(c.s*100)+'%',c.s>.95?'ok':c.s>.4?'warn':'bad')+
+       row('Daromad',(c.d*c.s*T.rate).toFixed(1)+' mln/soat')+row('Holat',w[0],w[1]);
+    if(c.grace>0)h+=row('Ulash uchun vaqt',c.grace+' soat','warn');
+  }else if(T.kind==='gen'){
+    h+=row('Hozirgi quvvat',(c.out*T.cap).toFixed(1)+' / '+T.cap+' MW');
+    if(!net.hasTrafo)h+=row('Holat',"Transformator yo'q",'bad');
+  }else if(T.kind==='store'){
+    h+=row('Zaryad',c.soc.toFixed(1)+' / '+T.mwh+' MWh')+row('Rejim',c.mode==='chg'?'zaryadlanmoqda':c.mode==='dis'?'tok bermoqda':'kutmoqda');
+  }else if(T.kind==='trafo'){
+    h+=row('Limit',T.cap+' MW')+row('Hozirgi yuk',Math.min(net.demand,net.limit).toFixed(1)+' MW',net.demand>net.limit?'bad':'ok');
+  }else{
+    h+=row('Holat',S.live[i]?'tok bor':"tok yo'q",S.live[i]?'ok':'warn');
+  }
+  h+=row('Tarmoq',"talab "+net.demand.toFixed(1)+" · berish "+net.served.toFixed(1)+" MW");
+  return h;
+}
+
+/* HUD */
+const cache={};
+function setT(id,v){if(cache[id]!==v){cache[id]=v;$(id).textContent=v;}}
+let lastLog=-1,lastInfo='',lastOver;
+function hud(){
+  const d=Math.min(S.day,S.lv.days);
+  mission();
+  setT('lvl',(S.li+1)+' / '+NL);
+  setT('clock','Kun '+d+' / '+S.lv.days+' · '+pad2(S.hour)+':'+pad2(Math.floor(S.frac*60)));
+  setT('money',Math.round(S.money)+' mln');
+  $('money').style.color=S.money<0?'var(--bad)':'';
+  setT('lit',S.lit.toFixed(0)+'%');
+  setT('trust',String(Math.round(S.trust)));
+  const tb=$('trustBar');
+  tb.style.width=S.trust+'%';
+  tb.style.background=S.trust>60?'var(--ok)':S.trust>30?'var(--warn)':'var(--bad)';
+  setT('tag',S.heat&&S.cloudy?'Issiq, bulutli':S.heat?'Issiq (+25%)':S.cloudy?'Bulutli':'Ochiq');
+  for(const b of toolsEl.children){
+    const id=b.dataset.id,T=TYPES[id];
+    b.setAttribute('aria-pressed',String(id===tool));
+    b.classList.toggle('poor',!!T&&S.money<T.cost);
+    const hide=!!T&&!allowed(id);
+    if(b.hidden!==hide)b.hidden=hide;
+  }
+  const html=infoHTML();
+  if(html!==lastInfo){lastInfo=html;$('info').innerHTML=html;}
+  if(lastLog!==S.logV){
+    lastLog=S.logV;
+    $('log').innerHTML=S.log.map(l=>'<li><time>'+l.t+'</time><span class="'+l.k+'">'+l.m+'</span></li>').join('');
+  }
+  if(lastOver!==S.over){
+    lastOver=S.over;
+    if(S.over)showEnd();
+  }
+}
+
+/* Sikl */
+let last=performance.now(),chartAt=0;
+function frame(now){
+  const dt=Math.min(.1,(now-last)/1000);last=now;
+  if(!S.over&&!panel&&S.speed>0){
+    S.frac+=dt*S.speed/4;
+    while(S.frac>=1&&!S.over){S.frac-=1;stepHour();}
+  }
+  draw(now/1000);
+  if(now-chartAt>200){chartAt=now;drawChart();}
+  hud();
+  requestAnimationFrame(frame);
+}
+
+fit();
+if(window.ResizeObserver)new ResizeObserver(fit).observe(cv.parentElement);
+window.addEventListener('resize',fit);
+startLevel(Math.min(prog.unlocked,NL)-1);
+requestAnimationFrame(frame);
+})();</script>
+</body>
+</html>
