@@ -176,6 +176,11 @@
       "permanent": true
     },
     {
+      "source": "/shahar-quruvchi",
+      "destination": "/shahar-quruvchi/",
+      "permanent": true
+    },
+    {
       "source": "/muhandis-oyini",
       "destination": "/muhandis-oyini/",
       "permanent": true
