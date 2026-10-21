@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Elektromobil zaryadlash | EnergyVibe</title>
+<meta name="description" content="Elektromobil zaryadlash stansiyasi ilovasining interaktiv demosi: zaryad olish, kabelni uzish, so‘m va dollarda to‘lov hamda chek chiqarish.">
+<link rel="icon" type="image/png" href="/rasmlar1/rasm5/rasm4.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans+Condensed:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+<style>
+:root{
+  --bg:#E4E9ED; --surface:#F3F6F8; --ink:#15222D; --ink-2:#51626F; --line:#C5CED6;
+  --accent:#2563EB; --accent-ink:#fff; --ok:#1B7F46; --bad:#C62828;
+  --f-ui:'IBM Plex Sans Condensed','Arial Narrow',system-ui,sans-serif;
+  --f-mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F161D; --surface:#17212A; --ink:#E7EDF2; --ink-2:#9AABB9; --line:#2B3944;
+    --accent:#4F83F5; --ok:#4CC585; --bad:#FF6B6B; color-scheme:dark;
+  }
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-ui);font-size:15px;line-height:1.4;padding:22px 16px 56px}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1100px;margin-inline:auto}
+
+/* ---------- page header ---------- */
+.top{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:space-between;margin-bottom:18px}
+.back{color:var(--ink-2);text-decoration:none;font-weight:600;padding:8px 0;min-height:44px;display:inline-flex;align-items:center}
+.back:hover{color:var(--ink)}
+.tools{display:flex;gap:10px;flex-wrap:wrap}
+.seg{display:inline-flex;border:1.5px solid var(--ink);border-radius:4px;overflow:hidden}
+.seg button{border:0;background:transparent;padding:8px 14px;min-height:44px;font-weight:600}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+h1{margin:0;font-weight:700;font-size:clamp(26px,5vw,38px);letter-spacing:.03em;text-transform:uppercase;line-height:1.05;text-wrap:balance}
+.sub{margin:6px 0 0;color:var(--ink-2);max-width:60ch}
+.head{margin-bottom:16px}
+.demo-note{display:flex;gap:10px;align-items:flex-start;margin:0 0 20px;padding:10px 12px;border:1px solid var(--line);border-left:4px solid #E39B00;background:var(--surface);border-radius:4px;color:var(--ink-2);font-size:14px}
+
+.grid{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:28px;align-items:start}
+
+/* ---------- phone ---------- */
+.phone{
+  --a:#2563eb; --a2:#1d4ed8; --pbg:#f1f4fa; --card:#fff; --tx:#0f172a; --mu:#64748b; --ln:#e5e9f2; --okc:#16a34a;
+  position:relative;width:100%;max-width:400px;margin-inline:auto;height:min(820px,calc(100svh - 40px));min-height:700px;
+  background:#0b0f14;border-radius:46px;padding:10px;box-shadow:0 24px 60px rgba(8,16,30,.35),0 0 0 2px #26313c inset;
+}
+.viewport{position:relative;width:100%;height:100%;border-radius:36px;overflow:hidden;background:var(--pbg);color:var(--tx);isolation:isolate}
+.island{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:104px;height:28px;background:#000;border-radius:16px;z-index:50;pointer-events:none}
+.statusbar{position:absolute;top:0;left:0;right:0;height:48px;padding:14px 28px 0;display:flex;justify-content:space-between;font-weight:600;font-size:14px;z-index:40;pointer-events:none;color:var(--tx)}
+.viewport.dk .statusbar{color:#e8eefc}
+.screen{position:absolute;inset:0;overflow-y:auto;padding:54px 16px 20px;display:flex;flex-direction:column;gap:12px;-webkit-overflow-scrolling:touch}
+.screen.dark{background:radial-gradient(120% 80% at 50% 0%,#12305f 0%,#0a1630 55%,#060d1f 100%);color:#e8eefc;padding-top:60px}
+.scr-head{display:flex;align-items:center;gap:10px}
+.scr-head .ttl{flex:1;min-width:0}
+.scr-head b{display:block;font-size:17px;line-height:1.2}
+.scr-head small{display:block;color:var(--mu);font-size:12.5px}
+.icon-btn{flex:none;width:44px;height:44px;border-radius:50%;border:0;background:var(--card);color:var(--tx);display:grid;place-items:center;box-shadow:0 1px 2px rgba(15,23,42,.08)}
+.icon-btn svg{width:20px;height:20px}
+.card{background:var(--card);border-radius:20px;padding:14px;box-shadow:0 1px 2px rgba(15,23,42,.06)}
+.seg2{display:grid;grid-template-columns:1fr 1fr;background:#e4e9f4;border-radius:14px;padding:4px;gap:4px}
+.seg2 button{border:0;border-radius:11px;background:transparent;min-height:44px;font-weight:600;color:var(--mu);font-size:14px}
+.seg2 button[aria-pressed="true"]{background:var(--a);color:#fff}
+.seg2 button:disabled{opacity:.5;cursor:not-allowed}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.badge{font-size:11.5px;font-weight:600;color:var(--a);background:#e5edff;padding:3px 9px;border-radius:99px}
+.badge.done{color:var(--okc);background:#dcf5e5}
+.car-box{position:relative;margin:6px 0 2px}
+.car-box svg{display:block;width:100%;height:auto}
+.car-pct{position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-size:30px;font-weight:700;text-shadow:0 1px 8px rgba(0,20,80,.45);font-variant-numeric:tabular-nums}
+.car-pct small{font-size:17px;font-weight:600}
+.stats2{display:grid;grid-template-columns:1fr 1fr;text-align:center;margin-top:6px}
+.stats2 b{display:block;font-size:22px;font-variant-numeric:tabular-nums}
+.stats2 b small{font-size:13px;font-weight:600;color:var(--mu)}
+.stats2 > div > span{color:var(--mu);font-size:12.5px}
+.limit{margin-top:12px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 12px;background:#f1f4fa;border-radius:12px;color:var(--mu);font-size:14px}
+.limit select{border:0;background:transparent;font-weight:700;color:var(--tx);padding:8px 4px;min-height:36px}
+.kv{display:flex;justify-content:space-between;gap:10px;padding:9px 2px;border-bottom:1px solid var(--ln);font-size:14.5px}
+.kv:last-child{border-bottom:0}
+.kv span:first-child{color:var(--mu)}
+.kv b{font-variant-numeric:tabular-nums;text-align:right}
+.kv.total b{color:var(--a);font-size:17px}
+.btn-primary{border:0;border-radius:16px;background:var(--a);color:#fff;font-weight:700;font-size:16px;min-height:52px;padding:0 18px;width:100%;box-shadow:0 6px 16px rgba(37,99,235,.28)}
+.btn-primary:active{transform:translateY(1px)}
+.btn-primary:disabled{opacity:.55;cursor:not-allowed;box-shadow:none}
+.btn-ghost{border:0;border-radius:14px;background:#eef2fb;color:var(--tx);font-weight:600;min-height:48px;padding:0 16px}
+.nav-pill{margin:auto auto 0;display:flex;gap:6px;background:#111827;border-radius:99px;padding:8px;width:fit-content}
+.nav-pill i{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;color:#94a3b8}
+.nav-pill i.on{background:#1f2937;color:#fff}
+.nav-pill svg{width:20px;height:20px}
+
+/* sheet (charging / charged / unplugged) */
+.sheet{position:absolute;left:0;right:0;bottom:0;top:46px;background:var(--card);border-radius:28px 28px 0 0;z-index:20;padding:12px 16px 20px;display:flex;flex-direction:column;gap:8px;transform:translateY(105%);transition:transform .45s cubic-bezier(.2,.8,.2,1);box-shadow:0 -10px 30px rgba(15,23,42,.18);overflow-y:auto}
+.sheet.open{transform:none}
+.ring-wrap{position:relative;width:min(260px,70%);aspect-ratio:1;margin:8px auto 0}
+.ring-wrap svg{width:100%;height:100%;display:block;transform:rotate(-90deg)}
+.ring-bg{fill:#eef2fb;stroke:#d9e3fa;stroke-width:5}
+.ring-fg{fill:none;stroke:var(--a);stroke-width:12;stroke-linecap:round;transition:stroke-dashoffset .12s linear}
+.ring-lim{fill:#fff;stroke:var(--a);stroke-width:3}
+.ring-center{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.ring-center b{font-size:54px;line-height:1;font-variant-numeric:tabular-nums}
+.ring-center b small{font-size:24px}
+.ring-center > span{color:var(--mu);font-size:13px;margin-top:4px}
+.chip{align-self:center;display:inline-flex;gap:8px;align-items:center;background:#e5edff;color:var(--a2);font-weight:600;font-size:13px;padding:7px 14px;border-radius:99px}
+.chip i{width:8px;height:8px;border-radius:50%;background:var(--a)}
+.spin{width:30px;height:30px;border-radius:50%;border:3px solid #d5defa;border-top-color:var(--a);margin:2px auto;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sheet-stats{display:grid;grid-template-columns:repeat(3,1fr);text-align:center;margin-top:auto;padding:10px 0}
+.sheet-stats b{display:block;font-size:20px;font-variant-numeric:tabular-nums}
+.sheet-stats span{font-size:12px;color:var(--mu)}
+
+/* summary / payment */
+.battery{margin-top:6px}
+.bar{position:relative;height:12px;border-radius:8px;background:#e5e9f2;overflow:hidden}
+.bar i{position:absolute;top:0;bottom:0;border-radius:8px;background:var(--a)}
+.bar .base{background:#9db8f5}
+.bar-l{display:flex;justify-content:space-between;color:var(--mu);font-size:12px;margin-top:5px}
+.tri{display:grid;grid-template-columns:repeat(3,1fr);text-align:center;margin-top:10px}
+.tri b{display:block;font-variant-numeric:tabular-nums}
+.tri span{font-size:12px;color:var(--mu)}
+.pay{display:flex;align-items:center;gap:12px;padding:10px 4px;min-height:56px;cursor:pointer;border-bottom:1px solid var(--ln)}
+.pay:last-child{border-bottom:0}
+.pay input{position:absolute;opacity:0;pointer-events:none}
+.pay .logo{flex:none;width:40px;height:28px;border-radius:7px;display:grid;place-items:center;font-size:11px;font-weight:700;color:#fff;letter-spacing:.02em}
+.pay .nm{flex:1;min-width:0}
+.pay .nm b{display:block;font-size:14.5px}
+.pay .nm small{color:var(--mu);font-size:12px}
+.pay .radio{flex:none;width:22px;height:22px;border-radius:50%;border:2px solid #c3cde3;display:grid;place-items:center}
+.pay input:checked ~ .radio{border-color:var(--a)}
+.pay input:checked ~ .radio::after{content:"";width:11px;height:11px;border-radius:50%;background:var(--a)}
+.pay input:focus-visible ~ .radio{outline:2px solid var(--a);outline-offset:2px}
+.footer-bar{position:sticky;bottom:-20px;margin:auto -16px -20px;padding:12px 16px 20px;background:var(--card);border-top:1px solid var(--ln);display:flex;align-items:center;gap:14px}
+.footer-bar .tot small{display:block;color:var(--mu);font-size:12px}
+.footer-bar .tot b{font-size:20px;font-variant-numeric:tabular-nums}
+.footer-bar .btn-primary{width:auto;flex:1}
+
+/* modal */
+.scrim{position:absolute;inset:0;z-index:30;background:rgba(15,23,42,.45);display:grid;place-items:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .25s}
+.scrim.on{opacity:1;pointer-events:auto}
+.dialog{background:#fff;border-radius:22px;padding:20px 18px;width:100%;text-align:center;transform:scale(.94);transition:transform .25s;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+.scrim.on .dialog{transform:none}
+.dialog h3{margin:0 0 4px;font-size:18px}
+.dialog p{margin:4px 0;color:var(--mu);font-size:13.5px}
+.dialog .amt{font-size:34px;font-weight:700;color:var(--tx);margin:8px 0 2px;font-variant-numeric:tabular-nums}
+.dialog .btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.dialog .btns .btn-primary{min-height:48px;box-shadow:none;font-size:15px}
+.check{width:64px;height:64px;margin:0 auto 8px;border-radius:50%;background:var(--a);display:grid;place-items:center}
+.check svg{width:34px;height:34px;stroke:#fff;fill:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:40;stroke-dashoffset:40}
+#dOk:not([hidden]) .check{animation:pop .45s cubic-bezier(.2,1.4,.4,1)}
+#dOk:not([hidden]) .check svg{animation:draw .45s .2s ease forwards}
+@keyframes pop{from{transform:scale(.3)}to{transform:scale(1)}}
+@keyframes draw{to{stroke-dashoffset:0}}
+
+/* receipt */
+.r-head{text-align:center}
+.r-head b{display:block;font-size:20px}
+.r-head span{color:#9fb3da;font-size:13px}
+.printer{position:relative;height:14px;border-radius:8px;background:linear-gradient(#dfe7f7,#b4c3e3);box-shadow:0 4px 14px rgba(0,0,0,.45);z-index:2;margin:0 2px}
+.printer::after{content:"";position:absolute;left:8px;right:8px;bottom:3px;height:3px;border-radius:3px;background:#0b1530}
+.paper-clip{position:relative;overflow:hidden;margin:-4px 14px 0;padding-top:4px;flex:1;min-height:320px}
+.paper{background:#fbfbf7;color:#1a1a1a;font-family:var(--f-mono);font-size:11.5px;padding:16px 16px 22px;border-radius:0 0 4px 4px;transform:translateY(-101%);clip-path:polygon(0 0,100% 0,100% calc(100% - 6px),96% 100%,92% calc(100% - 6px),88% 100%,84% calc(100% - 6px),80% 100%,76% calc(100% - 6px),72% 100%,68% calc(100% - 6px),64% 100%,60% calc(100% - 6px),56% 100%,52% calc(100% - 6px),48% 100%,44% calc(100% - 6px),40% 100%,36% calc(100% - 6px),32% 100%,28% calc(100% - 6px),24% 100%,20% calc(100% - 6px),16% 100%,12% calc(100% - 6px),8% 100%,4% calc(100% - 6px),0 100%)}
+.printing .paper{animation:feed 3.4s steps(48,end) forwards}
+.printed .paper{transform:none}
+@keyframes feed{to{transform:none}}
+.paper h4{margin:0 0 2px;text-align:center;font-size:14px;letter-spacing:.06em}
+.paper .c{text-align:center;color:#666}
+.paper hr{border:0;border-top:1px dashed #999;margin:9px 0}
+.paper .l{display:flex;justify-content:space-between;gap:8px;padding:2px 0}
+.paper .l.t{font-size:17px;font-weight:700;padding:5px 0}
+.paper .bc{height:40px;margin:12px 0 4px}
+.paper .bc svg{display:block;width:100%;height:100%;fill:#111}
+.paper .ok{color:#14803c;font-weight:700}
+.r-btns{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
+.r-btns button{min-height:50px;border-radius:99px;border:0;font-weight:700;font-size:15px}
+.r-btns .ghost{background:transparent;color:#9fb3da}
+.r-btns .solid{background:#fff;color:#0a1630}
+.toast{position:absolute;left:16px;right:16px;bottom:24px;z-index:60;background:#111827;color:#fff;padding:12px 14px;border-radius:14px;font-size:14px;text-align:center;opacity:0;transform:translateY(10px);transition:.3s;pointer-events:none}
+.toast.on{opacity:1;transform:none}
+
+/* ---------- side panel ---------- */
+.panel{display:flex;flex-direction:column;gap:16px}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px}
+.box h2{margin:0 0 12px;font-size:16px;letter-spacing:.04em;text-transform:uppercase}
+.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 14px}
+.fld{display:flex;flex-direction:column;gap:4px;font-size:13.5px;color:var(--ink-2)}
+.fld input,.fld select{background:var(--bg);border:1.5px solid var(--line);border-radius:4px;padding:8px 10px;min-height:44px;color:var(--ink);font-weight:600;width:100%}
+.fld.wide{grid-column:1/-1}
+.live{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;text-align:center}
+.live b{display:block;font-family:var(--f-mono);font-size:18px}
+.live span{font-size:12.5px;color:var(--ink-2)}
+.formula{font-family:var(--f-mono);font-size:13px;background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:10px 12px;margin:0 0 10px;overflow-wrap:anywhere}
+.box p{margin:0 0 8px;color:var(--ink-2)}
+.box p:last-child{margin-bottom:0}
+.curve{width:100%;height:auto;display:block;margin-top:8px}
+.curve .ax{stroke:var(--line);stroke-width:1}
+.curve .ln{fill:none;stroke:var(--accent);stroke-width:2.5}
+.curve .pt{fill:var(--ink);stroke:var(--bg);stroke-width:2}
+.curve text{fill:var(--ink-2);font:11px var(--f-ui)}
+.btn{border:1.5px solid var(--ink);border-radius:4px;background:transparent;font-weight:600;min-height:44px;padding:0 16px}
+.btn:hover{background:var(--ink);color:var(--bg)}
+
+.scr-head b,.scr-head small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ---------- stations ---------- */
+.stations{margin-top:40px}
+.stations h2{margin:0 0 6px;font-size:clamp(20px,3.4vw,28px);letter-spacing:.03em;text-transform:uppercase}
+.st-lead{margin:0 0 14px;color:var(--ink-2);max-width:70ch}
+.st-tools{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:flex-end}
+.st-search{flex:1 1 260px;max-width:420px}
+.chk{display:inline-flex;gap:8px;align-items:center;min-height:44px;color:var(--ink-2);font-weight:600}
+.chk input{width:20px;height:20px;accent-color:var(--accent)}
+.st-status{margin:12px 0 4px;color:var(--ink);font-weight:600;min-height:1.4em}
+.st-legend{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin:6px 0 12px;color:var(--ink-2);font-size:13.5px}
+.dot{display:inline-block;width:12px;height:12px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--line);flex:none}
+.dot.dc{background:#16a34a}.dot.ac{background:#2563eb;margin-left:10px}
+.st-grid{display:grid;grid-template-columns:minmax(260px,380px) minmax(0,1fr);gap:16px;height:560px}
+.st-list{list-style:none;margin:0;padding:0;overflow:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+.st-item{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:transparent;padding:10px 12px;min-height:56px}
+.st-item:hover{background:var(--bg)}
+.st-item.on{background:var(--bg);box-shadow:inset 3px 0 0 var(--accent)}
+.st-item b{display:flex;gap:8px;align-items:center;font-size:15px}
+.st-item b .dot{margin:0}
+.st-item span{display:block;color:var(--ink-2);font-size:13px;margin-top:2px}
+.st-empty{padding:16px;color:var(--ink-2)}
+.st-map{border:1px solid var(--line);border-radius:6px;min-height:320px;background:#cfd8e0;z-index:0}
+.st-attr{margin:10px 0 0;color:var(--ink-2);font-size:13px}
+.leaflet-container{font-family:var(--f-ui)}
+.pop{min-width:190px;max-width:240px;color:#15222D}
+.pop h4{margin:0 0 4px;font-size:15px;line-height:1.25}
+.pop p{margin:0 0 4px;font-size:13px;line-height:1.35}
+.pop .pbtn{display:block;width:100%;margin-top:8px;border:0;border-radius:6px;background:#2563eb;color:#fff;font-weight:700;min-height:40px;font-size:14px}
+.pop a{color:#2563eb;font-size:12.5px}
+@media (max-width:920px){
+  .st-grid{grid-template-columns:1fr;height:auto}
+  .st-list{max-height:300px}
+  .st-map{height:380px}
+}
+@media (max-width:520px){ .stations{margin-inline:16px} }
+
+@media (max-width:920px){
+  .grid{grid-template-columns:1fr}
+  .panel{max-width:520px;margin-inline:auto;width:100%}
+}
+@media (max-width:520px){
+  body{padding:14px 0 40px}
+  .wrap{padding-inline:0}
+  .top,.head,.demo-note,.panel{margin-inline:16px}
+  .phone{border-radius:0;padding:0;box-shadow:none;background:transparent;height:min(780px,calc(100svh - 24px));min-height:660px}
+  .viewport{border-radius:0}
+  .island{display:none}
+  .panel{width:auto}
+  .fields{grid-template-columns:1fr}
+  .live{grid-template-columns:repeat(2,1fr)}
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  .paper{transform:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="back" href="/#tools" data-i18n="back">← Vositalar</a>
+    <div class="tools">
+      <div class="seg" role="group" aria-label="Til / Language / Язык">
+        <button type="button" data-lang="uz" aria-pressed="true">UZ</button>
+        <button type="button" data-lang="ru" aria-pressed="false">RU</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <div class="seg" role="group" aria-label="Valyuta / Currency / Валюта">
+        <button type="button" data-cur="UZS" aria-pressed="true" data-i18n="cur.uzs">so‘m</button>
+        <button type="button" data-cur="USD" aria-pressed="false">$ USD</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="head">
+    <h1 data-i18n="h1">Elektromobil zaryadlash</h1>
+    <p class="sub" data-i18n="sub">Zaryad stansiyasi ilovasining interaktiv demosi: zaryadlash → kabelni uzish → to‘lov → chek.</p>
+  </div>
+  <p class="demo-note" role="note"><strong data-i18n="demo.b">DEMO.</strong> <span data-i18n="demo.t">Stansiya va to‘lov simulyatsiya qilingan: haqiqiy pul yechilmaydi, ma’lumotlar saqlanmaydi.</span></p>
+
+  <div class="grid">
+    <!-- ================= PHONE ================= -->
+    <section aria-label="Ilova / App / Приложение">
+      <div class="phone" id="phone">
+        <div class="viewport">
+          <div class="island" aria-hidden="true"></div>
+          <div class="statusbar" aria-hidden="true"><span id="clock">8:36</span><span>5G ▮▮▮</span></div>
+
+          <!-- screen 1: charging -->
+          <section class="screen" id="scrCharge" aria-label="Zaryadlash">
+            <div class="scr-head">
+              <span class="icon-btn" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+              <div class="ttl"><b class="js-st" data-i18n="st.name">EV Zaryad · Tez stansiya</b><small class="js-conn" data-i18n="st.bay">04-slot · CCS2</small></div>
+            </div>
+            <div class="seg2" role="group" aria-label="Rejim">
+              <button type="button" id="modeEco" aria-pressed="false" data-i18n="mode.eco">Eco rejim</button>
+              <button type="button" id="modeFast" aria-pressed="true" data-i18n="mode.fast">Tez zaryad</button>
+            </div>
+            <div class="card">
+              <div class="row"><b data-i18n="bat">Batareya</b><span class="badge" id="badge" data-i18n="badge.charging">Zaryadlanmoqda</span></div>
+              <div class="car-box">
+                <svg viewBox="0 0 300 130" role="img" aria-label="Elektromobil / EV">
+                  <defs>
+                    <linearGradient id="cb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#1e40af"/></linearGradient>
+                    <clipPath id="fillclip"><rect id="fillrect" x="0" y="0" width="0" height="130"/></clipPath>
+                  </defs>
+                  <g fill="#0f172a"><rect x="206" y="6" width="44" height="15" rx="7"/><rect x="206" y="109" width="44" height="15" rx="7"/><rect x="58" y="6" width="44" height="15" rx="7"/><rect x="58" y="109" width="44" height="15" rx="7"/></g>
+                  <g transform="translate(0 65) scale(1 1.2) translate(0 -65)">
+                  <g fill="#0b1f4d"><rect x="186" y="19" width="16" height="9" rx="4"/><rect x="186" y="102" width="16" height="9" rx="4"/></g>
+                  <path id="carBody" d="M20 52C20 38 34 28 56 27L224 27C256 28 282 40 287 58L287 72C282 90 256 102 224 103L56 103C34 102 20 92 20 78Z" fill="url(#cb)"/>
+                  <path d="M20 52C20 38 34 28 56 27L224 27C256 28 282 40 287 58L287 72C282 90 256 102 224 103L56 103C34 102 20 92 20 78Z" fill="#7cc4ff" opacity=".6" clip-path="url(#fillclip)"/>
+                  <path d="M210 38L238 47Q247 65 238 83L210 92Q217 65 210 38Z" fill="#071634" opacity=".88"/>
+                  <path d="M82 39L60 48Q54 65 60 82L82 91Q76 65 82 39Z" fill="#071634" opacity=".88"/>
+                  <rect x="90" y="36" width="112" height="58" rx="16" fill="#0b1f4d" opacity=".4"/>
+                  <path d="M246 33Q268 40 281 52" stroke="#fff" stroke-opacity=".4" stroke-width="3" fill="none" stroke-linecap="round"/>
+                  <path d="M280 42Q287 46 286 52Q282 50 276 48Z M280 88Q287 84 286 78Q282 80 276 82Z" fill="#fef3c7"/>
+                  <rect x="18" y="40" width="5" height="14" rx="2" fill="#ef4444"/><rect x="18" y="76" width="5" height="14" rx="2" fill="#ef4444"/>
+                  </g>
+                </svg>
+                <div class="car-pct" aria-hidden="true"><span><span id="carPct">20</span><small>%</small></span></div>
+              </div>
+              <div class="stats2">
+                <div><b><span id="stSoc">20</span><small> %</small></b><span data-i18n="lvl">Zaryad darajasi</span></div>
+                <div><b><span id="stRange">0</span><small> km</small></b><span data-i18n="rng">Yurish masofasi</span></div>
+              </div>
+              <label class="limit"><span data-i18n="lim">Zaryad limiti</span>
+                <select id="limit" aria-label="Zaryad limiti">
+                  <option value="60">60%</option><option value="70">70%</option><option value="80" selected>80%</option><option value="90">90%</option><option value="100">100%</option>
+                </select></label>
+            </div>
+            <div class="card">
+              <div class="kv"><span data-i18n="k.energy">Qo‘shilgan energiya</span><b id="kEnergy">0 kWh</b></div>
+              <div class="kv"><span data-i18n="k.price">1 kWh narxi</span><b id="kPrice"></b></div>
+              <div class="kv"><span data-i18n="k.cost">Hozirgacha summa</span><b id="kCost"></b></div>
+            </div>
+            <button type="button" class="btn-primary" id="btnView" data-i18n="view">Zaryadlashni ko‘rish</button>
+            <div class="nav-pill" aria-hidden="true">
+              <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 16l1.5-5h11L19 16M4 16h16v3H4zM7 19v1.5M17 19v1.5"/></svg></i>
+              <i class="on"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L5 14h6l-1 8 8-12h-6z"/></svg></i>
+              <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2z M9 4v14 M15 6v14"/></svg></i>
+              <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg></i>
+            </div>
+          </section>
+
+          <!-- screen 2: summary + payment -->
+          <section class="screen" id="scrSummary" hidden aria-label="Zaryad xulosasi">
+            <div class="scr-head"><div class="ttl"><b data-i18n="sum.title">Zaryad xulosasi</b></div></div>
+            <div class="card">
+              <div class="row" style="justify-content:flex-start;gap:10px">
+                <span class="check" style="width:30px;height:30px;margin:0"><svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke-dashoffset:0"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+                <div><b data-i18n="sum.done">Zaryadlash yakunlandi</b><div style="color:var(--mu);font-size:12.5px" data-i18n="sum.ready">Uzildi — yo‘lga tayyor</div></div>
+              </div>
+              <div class="battery">
+                <div class="row" style="margin-bottom:6px"><span style="color:var(--mu);font-size:13px" data-i18n="bat">Batareya</span><b style="color:var(--a)" id="sumAdded">+60%</b></div>
+                <div class="bar" aria-hidden="true"><i class="base" id="barBase"></i><i id="barAdd"></i></div>
+                <div class="bar-l"><span id="barL"></span><span id="barR"></span></div>
+              </div>
+              <div class="tri">
+                <div><b id="sumKwh">0</b><span data-i18n="sum.energy">Energiya</span></div>
+                <div><b id="sumMin">0</b><span data-i18n="sum.dur">Davomiyligi</span></div>
+                <div><b id="sumKm">0</b><span data-i18n="sum.range">Masofa</span></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="kv"><span data-i18n="sum.station">Stansiya</span><b class="js-st" data-i18n="st.short">EV Zaryad · Tez stansiya</b></div>
+              <div class="kv"><span data-i18n="sum.date">Sana</span><b id="sumDate"></b></div>
+              <div class="kv"><span data-i18n="sum.conn">Ulagich</span><b class="js-conn" data-i18n="st.bay">04-slot · CCS2</b></div>
+              <div class="kv"><span id="lblEnergy"></span><b id="valEnergy"></b></div>
+              <div class="kv"><span data-i18n="sum.service">Xizmat haqi</span><b id="valService"></b></div>
+              <div class="kv"><span id="lblVat"></span><b id="valVat"></b></div>
+              <div class="kv total"><span data-i18n="sum.total">Jami</span><b id="valTotal"></b></div>
+            </div>
+            <div class="card">
+              <b style="display:block;margin-bottom:2px" data-i18n="pay.title">To‘lov usuli</b>
+              <div id="methods" role="radiogroup" aria-label="To‘lov usuli"></div>
+            </div>
+            <div class="footer-bar">
+              <div class="tot"><small data-i18n="sum.total">Jami</small><b id="footTotal"></b></div>
+              <button type="button" class="btn-primary" id="btnPay" data-i18n="pay.now">To‘lash</button>
+            </div>
+          </section>
+
+          <!-- screen 3: receipt -->
+          <section class="screen dark" id="scrReceipt" hidden aria-label="Chek">
+            <div class="r-head"><b data-i18n="rc.title">Sizning chekingiz</b><span id="rcState" aria-live="polite" data-i18n="rc.printing">Chop etilmoqda…</span></div>
+            <div class="printer" aria-hidden="true"></div>
+            <div class="paper-clip" id="paperClip">
+              <div class="paper" id="paper">
+                <h4 id="rcHead">EV ZARYAD · ENERGYVIBE</h4>
+                <div class="c" id="rcNo"></div>
+                <div class="c" id="rcDate"></div>
+                <hr>
+                <div class="l"><span id="rcEnLbl"></span><span id="rcEn"></span></div>
+                <div class="l"><span data-i18n="rc.service">XIZMAT HAQI</span><span id="rcSv"></span></div>
+                <div class="l"><span id="rcVatLbl"></span><span id="rcVat"></span></div>
+                <hr>
+                <div class="l t"><span data-i18n="rc.total">JAMI</span><span id="rcTot"></span></div>
+                <hr>
+                <div class="l"><span data-i18n="rc.with">TO‘LOV USULI</span><span id="rcWith"></span></div>
+                <div class="l"><span data-i18n="rc.status">HOLAT</span><span class="ok" data-i18n="rc.ok">TASDIQLANDI</span></div>
+                <div class="bc" id="rcBc" aria-hidden="true"></div>
+                <div class="c" data-i18n="rc.thanks">Zaryadlaganingiz uchun rahmat!</div>
+                <div class="c" style="margin-top:6px" data-i18n="rc.demo">DEMO CHEK — haqiqiy to‘lov emas</div>
+              </div>
+            </div>
+            <div class="r-btns">
+              <button type="button" class="ghost" id="btnAgain" data-i18n="rc.again">Yana chop etish</button>
+              <button type="button" class="solid" id="btnDone" data-i18n="rc.done">Tayyor</button>
+            </div>
+          </section>
+
+          <!-- sheet -->
+          <div class="sheet" id="sheet" role="dialog" aria-modal="false" aria-labelledby="sTitle">
+            <div class="scr-head">
+              <button type="button" class="icon-btn" id="sheetClose" aria-label="Yopish / Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+              <div class="ttl"><b id="sTitle"></b><small class="js-st" data-i18n="st.short">EV Zaryad · Tez stansiya</small></div>
+            </div>
+            <div class="ring-wrap" id="ringWrap">
+              <svg viewBox="0 0 200 200" aria-hidden="true">
+                <circle class="ring-bg" cx="100" cy="100" r="86"/>
+                <circle class="ring-fg" id="ringFg" cx="100" cy="100" r="86" stroke-dasharray="540.35" stroke-dashoffset="540.35"/>
+                <circle class="ring-lim" id="ringLim" cx="100" cy="14" r="6"/>
+              </svg>
+              <div class="ring-center"><b><span id="ringPct">0</span><small>%</small></b><span id="ringSub"></span></div>
+            </div>
+            <div class="chip" id="sChip"><i></i><span id="sChipT"></span></div>
+            <div class="spin" id="sSpin" hidden></div>
+            <div class="sheet-stats">
+              <div><b id="sS1"></b><span id="sS1l"></span></div>
+              <div><b id="sS2"></b><span data-i18n="rng">Yurish masofasi</span></div>
+              <div><b id="sS3"></b><span id="sS3l"></span></div>
+            </div>
+            <button type="button" class="btn-primary" id="sBtn"></button>
+          </div>
+
+          <!-- modal -->
+          <div class="scrim" id="modal" aria-live="polite">
+            <div class="dialog" id="dConfirm" role="alertdialog" aria-labelledby="dcT" hidden>
+              <h3 id="dcT" data-i18n="cf.title">To‘lovni tasdiqlang</h3>
+              <div class="amt" id="dcAmt"></div>
+              <p id="dcWith"></p><p id="dcEn"></p>
+              <div class="btns"><button type="button" class="btn-ghost" id="dcNo" data-i18n="cf.cancel">Bekor qilish</button><button type="button" class="btn-primary" id="dcYes" data-i18n="cf.yes">Ha, to‘layman</button></div>
+            </div>
+            <div class="dialog" id="dProc" role="alert" hidden>
+              <div class="spin" style="width:42px;height:42px;margin-bottom:10px"></div>
+              <h3 data-i18n="pr.title">To‘lov amalga oshirilmoqda</h3>
+              <p id="dpT"></p>
+            </div>
+            <div class="dialog" id="dOk" role="alertdialog" aria-labelledby="doT" hidden>
+              <div class="check"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+              <h3 id="doT" data-i18n="ok.title">To‘lov muvaffaqiyatli</h3>
+              <p id="doP"></p>
+              <p style="margin-top:12px;color:var(--tx);font-weight:600" data-i18n="ok.ask">Chek kerakmi?</p>
+              <div class="btns"><button type="button" class="btn-ghost" id="doNo" data-i18n="ok.no">Yo‘q, rahmat</button><button type="button" class="btn-primary" id="doYes" data-i18n="ok.yes">Chekni chiqarish</button></div>
+            </div>
+          </div>
+          <div class="toast" id="toast" role="status"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PANEL ================= -->
+    <aside class="panel">
+      <div class="box">
+        <h2 data-i18n="p.params">Parametrlar</h2>
+        <div class="fields">
+          <label class="fld"><span data-i18n="p.power">Stansiya quvvati</span>
+            <select id="fPower"><option value="22">22 kW (AC)</option><option value="50" selected>50 kW (DC)</option><option value="120">120 kW (DC)</option><option value="180">180 kW (DC)</option></select></label>
+          <label class="fld"><span data-i18n="p.cap">Batareya sig‘imi, kWh</span><input id="fCap" type="number" inputmode="decimal" min="20" max="150" step="1" value="75"></label>
+          <label class="fld"><span data-i18n="p.start">Boshlang‘ich zaryad, %</span><input id="fStart" type="number" inputmode="numeric" min="5" max="70" step="1" value="20"></label>
+          <label class="fld"><span data-i18n="p.speed">Simulyatsiya tezligi</span>
+            <select id="fSpeed"><option value="60">×60</option><option value="300" selected>×300</option><option value="900">×900</option></select></label>
+          <label class="fld"><span data-i18n="p.tariff">Tarif, so‘m / kWh</span><input id="fTariff" type="number" inputmode="numeric" min="0" step="50" value="3200"></label>
+          <label class="fld"><span data-i18n="p.service">Xizmat haqi, so‘m</span><input id="fService" type="number" inputmode="numeric" min="0" step="500" value="6000"></label>
+          <label class="fld"><span data-i18n="p.vat">QQS, %</span><input id="fVat" type="number" inputmode="decimal" min="0" max="30" step="1" value="12"></label>
+          <label class="fld"><span data-i18n="p.rate">1 $ = … so‘m</span><input id="fRate" type="number" inputmode="decimal" min="1000" step="0.01" value="12012.30"></label>
+          <div class="fld wide"><span id="rateNote"></span></div>
+          <div class="fld wide"><button type="button" class="btn" id="btnRestart" data-i18n="p.restart">Qayta boshlash</button></div>
+          <div class="fld wide" id="stDefWrap" hidden><button type="button" class="btn" id="btnDefaultSt" data-i18n="s.default">Standart stansiya</button></div>
+        </div>
+      </div>
+
+      <div class="box" aria-live="off">
+        <h2 data-i18n="p.live">Hozirgi holat</h2>
+        <div class="live">
+          <div><b id="lvP">0</b><span data-i18n="p.lp">Quvvat, kW</span></div>
+          <div><b id="lvSoc">0</b><span data-i18n="p.ls">Zaryad, %</span></div>
+          <div><b id="lvE">0</b><span data-i18n="p.le">Energiya, kWh</span></div>
+          <div><b id="lvT">0</b><span data-i18n="p.lt">Vaqt, daq</span></div>
+        </div>
+      </div>
+
+      <div class="box">
+        <h2 data-i18n="p.how">Qanday hisoblanadi</h2>
+        <p class="formula" data-i18n="p.f1">E = ∫ P dt;  to‘lov = E × tarif + xizmat haqi + QQS</p>
+        <p data-i18n="p.curve">Batareya 50% dan keyin quvvatni kamaytiradi, 80% dan keyin keskin pasaytiradi. Shuning uchun odatda 80% gacha zaryadlanadi: oxirgi foizlar ko‘p vaqt oladi.</p>
+        <p data-i18n="p.eco">Eco rejimda quvvat 11 kW bilan cheklanadi (uy zaryadlovchisi darajasi).</p>
+        <svg class="curve" id="curve" viewBox="0 0 320 130" role="img" aria-label="Quvvat — zaryad / Power vs SOC"></svg>
+      </div>
+    </aside>
+  </div>
+
+  <section class="stations" id="stations" aria-labelledby="stTitle">
+    <h2 id="stTitle" data-i18n="s.title">Toshkent zaryad stansiyalari</h2>
+    <p class="st-lead" data-i18n="s.lead">Haqiqiy stansiyalar sahifa ochilganda OpenStreetMap’dan yuklanadi. Stansiyani tanlang: demo ilova uning nomi va quvvati bilan ishlaydi.</p>
+    <div class="st-tools">
+      <label class="fld st-search"><span data-i18n="s.search">Qidirish</span><input id="stSearch" type="search" autocomplete="off" data-i18n-ph="s.ph" placeholder="Nom, operator yoki manzil"></label>
+      <label class="chk"><input type="checkbox" id="stFast"><span data-i18n="s.fast">Faqat tez (≥ 40 kW)</span></label>
+      <button type="button" class="btn" id="stNear" data-i18n="s.near">Menga yaqin</button>
+    </div>
+    <p class="st-status" id="stStatus" role="status" aria-live="polite"></p>
+    <button type="button" class="btn" id="stRetry" hidden data-i18n="s.retry">Qayta urinish</button>
+    <p class="st-legend"><i class="dot dc"></i><span data-i18n="s.l.dc">Tez (DC, ≥ 40 kW)</span><i class="dot ac"></i><span data-i18n="s.l.ac">Sekin yoki quvvat noma’lum</span></p>
+    <div class="st-grid">
+      <ul class="st-list" id="stList" aria-label="Stansiyalar / Stations"></ul>
+      <div class="st-map" id="stMap" role="region" aria-label="Xarita / Map"></div>
+    </div>
+    <p class="st-attr" data-i18n="s.attr">Xarita va ma’lumot: © OpenStreetMap hissadorlari (ODbL). Ro‘yxat to‘liq bo‘lmasligi mumkin; narx va band-bo‘shlik ma’lumoti yo‘q.</p>
+  </section>
+</div>
+
+<noscript><p style="max-width:520px;margin:20px auto;padding:0 16px">JavaScript kerak / Requires JavaScript / Нужен JavaScript.</p></noscript>
+
+<script src="vendor/leaflet/leaflet.js"></script>
+<script>
+(function () {
+'use strict';
+
+/* ===================== i18n ===================== */
+const I18N = {
+uz: {
+  title:'Elektromobil zaryadlash | EnergyVibe',
+  meta:'Elektromobil zaryadlash stansiyasi ilovasining interaktiv demosi: zaryad olish, kabelni uzish, so‘m va dollarda to‘lov hamda chek chiqarish.',
+  back:'← Vositalar', 'cur.uzs':'so‘m', h1:'Elektromobil zaryadlash',
+  sub:'Zaryad stansiyasi ilovasining interaktiv demosi: zaryadlash → kabelni uzish → to‘lov → chek.',
+  'demo.b':'DEMO.', 'demo.t':'Stansiya va to‘lov simulyatsiya qilingan: haqiqiy pul yechilmaydi, ma’lumotlar saqlanmaydi.',
+  'st.name':'EV Zaryad · Tez stansiya','st.short':'EV Zaryad · Tez stansiya','st.bay':'04-slot · CCS2',
+  'mode.eco':'Eco rejim','mode.fast':'Tez zaryad', bat:'Batareya',
+  'badge.charging':'Zaryadlanmoqda','badge.charged':'Zaryadlandi',
+  lvl:'Zaryad darajasi', rng:'Yurish masofasi', lim:'Zaryad limiti',
+  'k.energy':'Qo‘shilgan energiya','k.price':'1 kWh narxi','k.cost':'Hozirgacha summa', view:'Zaryadlashni ko‘rish',
+  'sh.charging':'Zaryadlanmoqda','sh.charged':'Zaryadlandi','sh.unplugged':'Uzildi',
+  'ring.charging':'Zaryadlanmoqda…','ring.reached':'{n}% ga yetdi','ring.stopped':'To‘xtatildi','ring.released':'Kabel bo‘shatildi',
+  'chip.added':'+{e} kWh qo‘shildi','sh.eta':'Limitgacha','sh.dur':'Davomiyligi','sh.cost':'Hozirgacha summa','sh.ecost':'Energiya narxi',
+  'min':'daq','btn.stop':'To‘xtatish','btn.unplug':'Kabelni uzish','btn.wait':'Uzilmoqda…',
+  'sum.title':'Zaryad xulosasi','sum.done':'Zaryadlash yakunlandi','sum.ready':'Uzildi — yo‘lga tayyor','sum.energy':'Energiya','sum.dur':'Davomiyligi','sum.range':'Masofa',
+  'sum.added':'+{n}% qo‘shildi','sum.from':'Boshida {n}%','sum.to':'Hozir {n}%',
+  'sum.station':'Stansiya','sum.date':'Sana','sum.conn':'Ulagich','sum.service':'Xizmat haqi','sum.vat':'QQS ({v}%)','sum.total':'Jami','sum.en':'Energiya: {e} kWh × {t}',
+  'pay.title':'To‘lov usuli','pay.now':'To‘lash',
+  'm.humo':'Humo / UzCard','m.visa':'Visa / Mastercard','m.payme':'Payme','m.click':'Click',
+  'ms.humo':'Karta •••• 4821','ms.visa':'Karta •••• 7310','ms.payme':'Ilova hamyoni','ms.click':'Ilova hamyoni',
+  'cf.title':'To‘lovni tasdiqlang','cf.with':'To‘lov usuli: {m}','cf.en':'{e} kWh · {t} daq','cf.cancel':'Bekor qilish','cf.yes':'Ha, to‘layman',
+  'pr.title':'To‘lov amalga oshirilmoqda','pr.sub':'{a} · {m}',
+  'ok.title':'To‘lov muvaffaqiyatli','ok.sub':'{a} — {m} orqali to‘landi','ok.ask':'Chek kerakmi?','ok.no':'Yo‘q, rahmat','ok.yes':'Chekni chiqarish','ok.thanks':'Rahmat! Demo qayta boshlandi.',
+  'rc.title':'Sizning chekingiz','rc.printing':'Chop etilmoqda…','rc.ready':'Tayyor','rc.again':'Yana chop etish','rc.done':'Tayyor',
+  'rc.energy':'ENERGIYA {e} kWh','rc.service':'XIZMAT HAQI','rc.vat':'QQS {v}%','rc.total':'JAMI','rc.with':'TO‘LOV USULI','rc.status':'HOLAT','rc.ok':'TASDIQLANDI','rc.thanks':'Zaryadlaganingiz uchun rahmat!','rc.demo':'DEMO CHEK — haqiqiy to‘lov emas',
+  'p.params':'Parametrlar','p.power':'Stansiya quvvati','p.cap':'Batareya sig‘imi, kWh','p.start':'Boshlang‘ich zaryad, %','p.speed':'Simulyatsiya tezligi','p.tariff':'Tarif, so‘m / kWh','p.service':'Xizmat haqi, so‘m','p.vat':'QQS, %','p.rate':'1 $ = … so‘m','p.restart':'Qayta boshlash',
+  'p.rnote':'Standart kurs: Markaziy bank, 21.10.2026. Tarif, xizmat haqi va QQS — demo qiymatlar, o‘zingiz o‘zgartirishingiz mumkin.',
+  'p.live':'Hozirgi holat','p.lp':'Quvvat, kW','p.ls':'Zaryad, %','p.le':'Energiya, kWh','p.lt':'Vaqt, daq',
+  'p.how':'Qanday hisoblanadi','p.f1':'E = ∫ P dt;  to‘lov = E × tarif + xizmat haqi + QQS',
+  'p.curve':'Batareya 50% dan keyin quvvatni kamaytiradi, 80% dan keyin keskin pasaytiradi. Shuning uchun odatda 80% gacha zaryadlanadi: oxirgi foizlar ko‘p vaqt oladi.',
+  'p.eco':'Eco rejimda quvvat 11 kW bilan cheklanadi (uy zaryadlovchisi darajasi).','c.x':'Zaryad, %','c.y':'Quvvat, kW',
+  's.title':'Toshkent zaryad stansiyalari',
+  's.lead':'Haqiqiy stansiyalar sahifa ochilganda OpenStreetMap’dan yuklanadi. Stansiyani tanlang: demo ilova uning nomi va quvvati bilan ishlaydi.',
+  's.search':'Qidirish',
+  's.ph':'Nom, operator yoki manzil',
+  's.fast':'Faqat tez (≥ 40 kW)',
+  's.near':'Menga yaqin',
+  's.loading':'Stansiyalar yuklanmoqda…',
+  's.count':'{n} ta stansiya',
+  's.count2':'{n} / {m} ta stansiya',
+  's.error':'Ma’lumotni yuklab bo‘lmadi. Internetni tekshirib, qayta urinib ko‘ring.',
+  's.retry':'Qayta urinish',
+  's.empty':'Hech narsa topilmadi',
+  's.use':'Demoda ishlatish',
+  's.using':'Demo ilova: {n}',
+  's.kwu':'quvvat noma’lum',
+  's.hours':'Ish vaqti: {h}',
+  's.fee.yes':'Pullik',
+  's.fee.no':'Bepul',
+  's.osm':'OpenStreetMap’da ochish',
+  's.geoerr':'Joylashuv aniqlanmadi.',
+  's.geook':'Eng yaqin stansiyalar yuqorida.',
+  's.default':'Standart stansiya',
+  's.noname':'Zaryad stansiyasi',
+  's.l.dc':'Tez (DC, ≥ 40 kW)',
+  's.l.ac':'Sekin yoki quvvat noma’lum',
+  's.attr':'Xarita va ma’lumot: © OpenStreetMap hissadorlari (ODbL). Ro‘yxat to‘liq bo‘lmasligi mumkin; narx va band-bo‘shlik ma’lumoti yo‘q.',
+  cur:{UZS:'so‘m'}
+},
+ru: {
+  title:'Зарядка электромобиля | EnergyVibe',
+  meta:'Интерактивная демо-версия приложения зарядной станции: зарядка, отключение кабеля, оплата в сумах и долларах, печать чека.',
+  back:'← Инструменты','cur.uzs':'сум', h1:'Зарядка электромобиля',
+  sub:'Интерактивное демо приложения зарядной станции: зарядка → отключение кабеля → оплата → чек.',
+  'demo.b':'ДЕМО.', 'demo.t':'Станция и оплата имитируются: реальные деньги не списываются, данные не сохраняются.',
+  'st.name':'EV Заряд · Быстрая станция','st.short':'EV Заряд · Быстрая станция','st.bay':'Слот 04 · CCS2',
+  'mode.eco':'Эко-режим','mode.fast':'Быстрая зарядка', bat:'Батарея',
+  'badge.charging':'Идёт зарядка','badge.charged':'Заряжено',
+  lvl:'Уровень заряда', rng:'Запас хода', lim:'Лимит заряда',
+  'k.energy':'Добавлено энергии','k.price':'Цена за 1 кВт·ч','k.cost':'Сумма на данный момент', view:'Открыть зарядку',
+  'sh.charging':'Идёт зарядка','sh.charged':'Заряжено','sh.unplugged':'Отключено',
+  'ring.charging':'Зарядка…','ring.reached':'Достигнуто {n}%','ring.stopped':'Остановлено','ring.released':'Кабель освобождён',
+  'chip.added':'+{e} кВт·ч добавлено','sh.eta':'До лимита','sh.dur':'Длительность','sh.cost':'Сумма сейчас','sh.ecost':'Стоимость энергии',
+  'min':'мин','btn.stop':'Остановить','btn.unplug':'Отключить кабель','btn.wait':'Отключение…',
+  'sum.title':'Итоги зарядки','sum.done':'Зарядка завершена','sum.ready':'Отключено — готов к поездке','sum.energy':'Энергия','sum.dur':'Длительность','sum.range':'Запас хода',
+  'sum.added':'+{n}% добавлено','sum.from':'В начале {n}%','sum.to':'Сейчас {n}%',
+  'sum.station':'Станция','sum.date':'Дата','sum.conn':'Разъём','sum.service':'Сервисный сбор','sum.vat':'НДС ({v}%)','sum.total':'Итого','sum.en':'Энергия: {e} кВт·ч × {t}',
+  'pay.title':'Способ оплаты','pay.now':'Оплатить',
+  'm.humo':'Humo / UzCard','m.visa':'Visa / Mastercard','m.payme':'Payme','m.click':'Click',
+  'ms.humo':'Карта •••• 4821','ms.visa':'Карта •••• 7310','ms.payme':'Кошелёк в приложении','ms.click':'Кошелёк в приложении',
+  'cf.title':'Подтвердите оплату','cf.with':'Способ оплаты: {m}','cf.en':'{e} кВт·ч · {t} мин','cf.cancel':'Отмена','cf.yes':'Да, оплатить',
+  'pr.title':'Обработка платежа','pr.sub':'{a} · {m}',
+  'ok.title':'Оплата прошла успешно','ok.sub':'{a} — оплачено через {m}','ok.ask':'Нужен чек?','ok.no':'Нет, спасибо','ok.yes':'Печать чека','ok.thanks':'Спасибо! Демо начато заново.',
+  'rc.title':'Ваш чек','rc.printing':'Печать…','rc.ready':'Готово','rc.again':'Печатать ещё раз','rc.done':'Готово',
+  'rc.energy':'ЭНЕРГИЯ {e} кВт·ч','rc.service':'СЕРВИСНЫЙ СБОР','rc.vat':'НДС {v}%','rc.total':'ИТОГО','rc.with':'СПОСОБ ОПЛАТЫ','rc.status':'СТАТУС','rc.ok':'ОДОБРЕНО','rc.thanks':'Спасибо за зарядку!','rc.demo':'ДЕМО-ЧЕК — не реальный платёж',
+  'p.params':'Параметры','p.power':'Мощность станции','p.cap':'Ёмкость батареи, кВт·ч','p.start':'Начальный заряд, %','p.speed':'Скорость симуляции','p.tariff':'Тариф, сум / кВт·ч','p.service':'Сервисный сбор, сум','p.vat':'НДС, %','p.rate':'1 $ = … сум','p.restart':'Начать заново',
+  'p.rnote':'Курс по умолчанию: Центральный банк, 21.10.2026. Тариф, сбор и НДС — демо-значения, их можно менять.',
+  'p.live':'Текущее состояние','p.lp':'Мощность, кВт','p.ls':'Заряд, %','p.le':'Энергия, кВт·ч','p.lt':'Время, мин',
+  'p.how':'Как это считается','p.f1':'E = ∫ P dt;  оплата = E × тариф + сервисный сбор + НДС',
+  'p.curve':'После 50% батарея снижает мощность, после 80% — резко. Поэтому обычно заряжают до 80%: последние проценты занимают много времени.',
+  'p.eco':'В эко-режиме мощность ограничена 11 кВт (уровень домашней зарядки).','c.x':'Заряд, %','c.y':'Мощность, кВт',
+  's.title':'Зарядные станции Ташкента',
+  's.lead':'Реальные станции загружаются из OpenStreetMap при открытии страницы. Выберите станцию: демо-приложение будет работать с её названием и мощностью.',
+  's.search':'Поиск',
+  's.ph':'Название, оператор или адрес',
+  's.fast':'Только быстрые (≥ 40 кВт)',
+  's.near':'Рядом со мной',
+  's.loading':'Загрузка станций…',
+  's.count':'Станций: {n}',
+  's.count2':'Станций: {n} из {m}',
+  's.error':'Не удалось загрузить данные. Проверьте интернет и повторите попытку.',
+  's.retry':'Повторить',
+  's.empty':'Ничего не найдено',
+  's.use':'Использовать в демо',
+  's.using':'Демо-приложение: {n}',
+  's.kwu':'мощность неизвестна',
+  's.hours':'Время работы: {h}',
+  's.fee.yes':'Платно',
+  's.fee.no':'Бесплатно',
+  's.osm':'Открыть в OpenStreetMap',
+  's.geoerr':'Не удалось определить местоположение.',
+  's.geook':'Ближайшие станции — вверху списка.',
+  's.default':'Станция по умолчанию',
+  's.noname':'Зарядная станция',
+  's.l.dc':'Быстрые (DC, ≥ 40 кВт)',
+  's.l.ac':'Медленные или мощность неизвестна',
+  's.attr':'Карта и данные: © участники OpenStreetMap (ODbL). Список может быть неполным; данных о цене и занятости нет.'
+},
+en: {
+  title:'EV charging | EnergyVibe',
+  meta:'An interactive demo of an EV charging station app: charging, unplugging, payment in sum or dollars and a printed receipt.',
+  back:'← Tools','cur.uzs':'UZS', h1:'EV charging',
+  sub:'An interactive demo of a charging-station app: charging → unplug → payment → receipt.',
+  'demo.b':'DEMO.', 'demo.t':'The station and payment are simulated: no real money is charged and nothing is stored.',
+  'st.name':'EV Charge · Fast station','st.short':'EV Charge · Fast station','st.bay':'Bay 04 · CCS2',
+  'mode.eco':'Eco mode','mode.fast':'Fast charging', bat:'Battery',
+  'badge.charging':'Charging','badge.charged':'Charged',
+  lvl:'Charge level', rng:'Range', lim:'Charge limit',
+  'k.energy':'Energy added','k.price':'Price per kWh','k.cost':'Cost so far', view:'View charging',
+  'sh.charging':'Charging','sh.charged':'Charged','sh.unplugged':'Unplugged',
+  'ring.charging':'Charging…','ring.reached':'Reached {n}%','ring.stopped':'Stopped','ring.released':'Cable released',
+  'chip.added':'+{e} kWh added','sh.eta':'To limit','sh.dur':'Duration','sh.cost':'Cost so far','sh.ecost':'Energy cost',
+  'min':'min','btn.stop':'Stop charging','btn.unplug':'Unplug','btn.wait':'Unplugging…',
+  'sum.title':'Charging summary','sum.done':'Charging complete','sum.ready':'Unplugged · ready to drive','sum.energy':'Energy','sum.dur':'Duration','sum.range':'Range',
+  'sum.added':'+{n}% added','sum.from':'Start {n}%','sum.to':'Now {n}%',
+  'sum.station':'Station','sum.date':'Date','sum.conn':'Connector','sum.service':'Service fee','sum.vat':'VAT ({v}%)','sum.total':'Total','sum.en':'Energy: {e} kWh × {t}',
+  'pay.title':'Payment method','pay.now':'Pay now',
+  'm.humo':'Humo / UzCard','m.visa':'Visa / Mastercard','m.payme':'Payme','m.click':'Click',
+  'ms.humo':'Card •••• 4821','ms.visa':'Card •••• 7310','ms.payme':'In-app wallet','ms.click':'In-app wallet',
+  'cf.title':'Confirm payment','cf.with':'Pay with: {m}','cf.en':'{e} kWh · {t} min','cf.cancel':'Cancel','cf.yes':'Yes, pay',
+  'pr.title':'Processing payment','pr.sub':'{a} · {m}',
+  'ok.title':'Payment successful','ok.sub':'{a} paid with {m}','ok.ask':'Would you like a receipt?','ok.no':'No, thanks','ok.yes':'Print receipt','ok.thanks':'Thank you! Demo restarted.',
+  'rc.title':'Your receipt','rc.printing':'Printing…','rc.ready':'Printed','rc.again':'Print again','rc.done':'Done',
+  'rc.energy':'ENERGY {e} kWh','rc.service':'SERVICE FEE','rc.vat':'VAT {v}%','rc.total':'TOTAL','rc.with':'PAID WITH','rc.status':'STATUS','rc.ok':'APPROVED','rc.thanks':'Thank you for charging!','rc.demo':'DEMO RECEIPT — not a real payment',
+  'p.params':'Parameters','p.power':'Station power','p.cap':'Battery capacity, kWh','p.start':'Starting charge, %','p.speed':'Simulation speed','p.tariff':'Tariff, UZS / kWh','p.service':'Service fee, UZS','p.vat':'VAT, %','p.rate':'1 USD = … UZS','p.restart':'Restart',
+  'p.rnote':'Default rate: Central Bank of Uzbekistan, 21.10.2026. Tariff, fee and VAT are demo values you can change.',
+  'p.live':'Live status','p.lp':'Power, kW','p.ls':'Charge, %','p.le':'Energy, kWh','p.lt':'Time, min',
+  'p.how':'How it is calculated','p.f1':'E = ∫ P dt;  payment = E × tariff + service fee + VAT',
+  'p.curve':'Above 50% the battery reduces power, above 80% it drops sharply. That is why people usually charge to 80%: the last percent take a long time.',
+  'p.eco':'In Eco mode power is limited to 11 kW (home-charger level).','c.x':'Charge, %','c.y':'Power, kW',
+  's.title':'Tashkent charging stations',
+  's.lead':'Real stations are loaded from OpenStreetMap when the page opens. Pick a station and the demo app runs with its name and power.',
+  's.search':'Search',
+  's.ph':'Name, operator or address',
+  's.fast':'Fast only (≥ 40 kW)',
+  's.near':'Near me',
+  's.loading':'Loading stations…',
+  's.count':'{n} stations',
+  's.count2':'{n} of {m} stations',
+  's.error':'Could not load the data. Check your connection and try again.',
+  's.retry':'Try again',
+  's.empty':'Nothing found',
+  's.use':'Use in demo',
+  's.using':'Demo app: {n}',
+  's.kwu':'power unknown',
+  's.hours':'Hours: {h}',
+  's.fee.yes':'Paid',
+  's.fee.no':'Free',
+  's.osm':'Open in OpenStreetMap',
+  's.geoerr':'Could not get your location.',
+  's.geook':'Nearest stations are at the top.',
+  's.default':'Default station',
+  's.noname':'Charging station',
+  's.l.dc':'Fast (DC, ≥ 40 kW)',
+  's.l.ac':'Slow or power unknown',
+  's.attr':'Map and data: © OpenStreetMap contributors (ODbL). The list may be incomplete; no price or availability data.'
+}
+};
+const LANG_KEY = 'energyvibe-lang', CUR_KEY = 'energyvibe-ev-cur';
+const LOCALE = { uz:'uz', ru:'ru', en:'en' };
+let lang = 'uz', cur = 'UZS';
+const $ = (id) => document.getElementById(id);
+function t(key, vars) {
+  let s = (I18N[lang] && I18N[lang][key]) || I18N.uz[key] || key;
+  if (vars) for (const k in vars) s = s.split('{' + k + '}').join(vars[k]);
+  return s;
+}
+
+/* ===================== model ===================== */
+const CAR_MAX_KW = 150, ECO_KW = 11, CONS = 18;   // kWh / 100 km
+const CFG = { power:50, cap:75, start:20, speed:300, tariff:3200, service:6000, vat:12, rate:12012.30 };
+const S = { phase:'charging', sheet:false, mode:'fast', soc:20, soc0:20, limit:80, energy:0, elapsed:0, stopped:false,
+            method:'humo', modal:null, rcNo:'', when:new Date(), unplugT:null, stationObj:null };
+
+function curveF(soc) { return soc <= 50 ? 1 : soc <= 80 ? 1 - 0.5 * (soc - 50) / 30 : Math.max(0.1, 0.5 - 0.4 * (soc - 80) / 20); }
+function powerAt(soc, mode) { let p = Math.min(CFG.power, CAR_MAX_KW) * curveF(soc); if (mode === 'eco') p = Math.min(p, ECO_KW); return p; }
+function etaMin() { let s = S.soc, tt = 0, n = 0; while (s < S.limit && n++ < 20000) { s += powerAt(s, S.mode) * 10 / 3600 / CFG.cap * 100; tt += 10; } return tt / 60; }
+function rangeKm(soc) { return Math.round(soc / 100 * CFG.cap / CONS * 100); }
+
+/* ===================== number / money formatting ===================== */
+function num(v, d) {
+  const neg = v < 0; v = Math.abs(v);
+  const parts = v.toFixed(d).split('.');
+  const grp = lang === 'en' ? ',' : ' ';
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, grp);
+  return (neg ? '−' : '') + parts.join(lang === 'en' ? '.' : ',');
+}
+function cvt(uzs) { return cur === 'USD' ? Math.round(uzs / CFG.rate * 100) / 100 : Math.round(uzs); }
+function fmt(v) {
+  if (cur === 'USD') return lang === 'en' ? '$' + num(v, 2) : num(v, 2) + ' $';
+  return num(v, 0) + ' ' + (lang === 'uz' ? 'so‘m' : lang === 'ru' ? 'сум' : 'UZS');
+}
+function money(uzs) { return fmt(cvt(uzs)); }
+function kwh(v) { return num(v, 1); }
+function bill() {
+  const e = S.energy * CFG.tariff, s = CFG.service, v = (e + s) * CFG.vat / 100;
+  const ce = cvt(e), cs = cvt(s), cv = cvt(v);
+  return { e, s, v, ce, cs, cv, total: Math.round((ce + cs + cv) * 100) / 100 };
+}
+function methodName(m) { return t('m.' + m); }
+function dateStr(d) {
+  try { return new Intl.DateTimeFormat(LOCALE[lang], { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }).format(d); }
+  catch (e) { return d.toLocaleString(); }
+}
+
+/* ===================== static text / controls ===================== */
+function applyStatic() {
+  document.documentElement.lang = lang;
+  document.title = t('title');
+  const m = document.querySelector('meta[name="description"]'); if (m) m.setAttribute('content', t('meta'));
+  document.querySelectorAll('[data-i18n]').forEach((el) => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll('[data-lang]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+  document.querySelectorAll('[data-cur]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.cur === cur)));
+  document.querySelectorAll('[data-i18n-ph]').forEach((el) => { el.placeholder = t(el.dataset.i18nPh); });
+  $('rateNote').textContent = t('p.rnote');
+  $('sheetClose').setAttribute('aria-label', lang === 'ru' ? 'Закрыть' : lang === 'en' ? 'Close' : 'Yopish');
+  buildMethods(); drawCurve(); render(); renderStations();
+}
+function buildMethods() {
+  const box = $('methods'); box.textContent = '';
+  const defs = [['humo', '#0f766e', 'HU'], ['visa', '#1d4ed8', 'VM'], ['payme', '#06b6d4', 'PM'], ['click', '#2563eb', 'CL']];
+  defs.forEach(([k, col, ab]) => {
+    const lab = document.createElement('label'); lab.className = 'pay';
+    lab.innerHTML = '<input type="radio" name="method" value="' + k + '"' + (S.method === k ? ' checked' : '') + '>' +
+      '<span class="logo" style="background:' + col + '">' + ab + '</span>' +
+      '<span class="nm"><b></b><small></small></span><span class="radio"></span>';
+    lab.querySelector('b').textContent = t('m.' + k);
+    lab.querySelector('small').textContent = t('ms.' + k);
+    lab.querySelector('input').addEventListener('change', () => { S.method = k; });
+    box.appendChild(lab);
+  });
+}
+function drawCurve() {
+  const W = 320, H = 130, L = 34, B = 22, T = 8, R = 8, pw = W - L - R, ph = H - B - T;
+  const maxP = Math.min(CFG.power, CAR_MAX_KW);
+  let d = '';
+  for (let s = 0; s <= 100; s += 2) {
+    const x = L + pw * s / 100, y = T + ph * (1 - powerAt(Math.min(s, 99.9), S.mode) / maxP);
+    d += (s ? 'L' : 'M') + x.toFixed(1) + ' ' + y.toFixed(1);
+  }
+  const cx = L + pw * Math.min(S.soc, 100) / 100, cy = T + ph * (1 - powerAt(Math.min(S.soc, 99.9), S.mode) / maxP);
+  $('curve').innerHTML =
+    '<line class="ax" x1="' + L + '" y1="' + (T + ph) + '" x2="' + (W - R) + '" y2="' + (T + ph) + '"/>' +
+    '<line class="ax" x1="' + L + '" y1="' + T + '" x2="' + L + '" y2="' + (T + ph) + '"/>' +
+    '<path class="ln" d="' + d + '"/><circle class="pt" cx="' + cx.toFixed(1) + '" cy="' + cy.toFixed(1) + '" r="5"/>' +
+    '<text x="' + L + '" y="' + (H - 6) + '">0</text><text x="' + (L + pw / 2 - 6) + '" y="' + (H - 6) + '">50</text><text x="' + (W - R) + '" y="' + (H - 6) + '" text-anchor="end">' + t('c.x') + '</text>' +
+    '<text x="2" y="' + (T + 8) + '">' + Math.round(maxP) + '</text><text x="2" y="' + (T + ph) + '">0 ' + t('c.y').split(', ')[1] + '</text>';
+}
+
+/* ===================== render ===================== */
+function render() {
+  const soc = S.soc, p = (S.phase === 'charging') ? powerAt(soc, S.mode) : 0;
+  const charging = S.phase === 'charging';
+  const b = bill();
+
+  /* station name */
+  const stNm = S.stationObj ? stName(S.stationObj) : null;
+  document.querySelectorAll('.js-st').forEach((e) => { e.textContent = stNm || t('st.short'); });
+  document.querySelectorAll('.js-conn').forEach((e) => { e.textContent = S.stationObj ? (S.stationObj.socks[0] || 'CCS2') : t('st.bay'); });
+  $('stDefWrap').hidden = !S.stationObj;
+
+  /* screens */
+  document.querySelector('.viewport').classList.toggle('dk', S.phase === 'receipt');
+  const onCharge = ['charging', 'charged', 'unplugging'].includes(S.phase);
+  $('scrCharge').hidden = !onCharge;
+  $('scrSummary').hidden = !(S.phase === 'summary' || S.phase === 'paying' || S.phase === 'paid');
+  $('scrReceipt').hidden = S.phase !== 'receipt';
+  $('sheet').classList.toggle('open', S.sheet && onCharge);
+  $('sheet').setAttribute('aria-modal', S.sheet && onCharge ? 'true' : 'false');
+
+  /* charge screen */
+  $('carPct').textContent = num(soc, 0);
+  $('fillrect').setAttribute('width', (300 * soc / 100).toFixed(1));
+  $('stSoc').textContent = num(soc, 0);
+  $('stRange').textContent = num(rangeKm(soc), 0);
+  $('kEnergy').textContent = kwh(S.energy) + ' kWh';
+  $('kPrice').textContent = money(CFG.tariff) + ' / kWh';
+  $('kCost').textContent = money(S.energy * CFG.tariff);
+  $('badge').textContent = t(charging ? 'badge.charging' : 'badge.charged');
+  $('badge').classList.toggle('done', !charging);
+  $('modeEco').setAttribute('aria-pressed', String(S.mode === 'eco'));
+  $('modeFast').setAttribute('aria-pressed', String(S.mode === 'fast'));
+  $('modeEco').disabled = $('modeFast').disabled = !charging;
+  const sel = $('limit'); sel.disabled = !charging;
+  Array.from(sel.options).forEach((o) => { o.disabled = +o.value <= Math.ceil(soc) && charging; });
+  sel.value = String(S.limit);
+
+  /* sheet */
+  const st = S.phase === 'unplugging' ? 'unplugged' : (charging ? 'charging' : 'charged');
+  $('sTitle').textContent = t('sh.' + st);
+  const r = 86, C = 2 * Math.PI * r;
+  $('ringFg').setAttribute('stroke-dashoffset', (C * (1 - soc / 100)).toFixed(2));
+  const ang = (-90 + 360 * S.limit / 100) * Math.PI / 180;
+  $('ringLim').setAttribute('cx', (100 + r * Math.cos(ang)).toFixed(2));
+  $('ringLim').setAttribute('cy', (100 + r * Math.sin(ang)).toFixed(2));
+  $('ringPct').textContent = num(soc, 0);
+  $('ringSub').textContent = st === 'charging' ? t('ring.charging') : st === 'unplugged' ? t('ring.released') : (S.stopped ? t('ring.stopped') : t('ring.reached', { n: S.limit }));
+  $('sChip').hidden = st === 'unplugged';
+  $('sChipT').textContent = st === 'charging' ? t('chip.added', { e: kwh(S.energy) }) : t('chip.added', { e: kwh(S.energy) });
+  $('sSpin').hidden = st !== 'unplugged';
+  if (st === 'charging') {
+    $('sS1').textContent = '≈ ' + num(Math.ceil(etaMin()), 0) + ' ' + t('min'); $('sS1l').textContent = t('sh.eta');
+    $('sS3').textContent = money(S.energy * CFG.tariff); $('sS3l').textContent = t('sh.cost');
+  } else {
+    $('sS1').textContent = num(Math.round(S.elapsed / 60), 0) + ' ' + t('min'); $('sS1l').textContent = t('sh.dur');
+    $('sS3').textContent = money(S.energy * CFG.tariff); $('sS3l').textContent = t('sh.ecost');
+  }
+  $('sS2').textContent = num(rangeKm(soc), 0) + ' km';
+  const sb = $('sBtn');
+  sb.textContent = st === 'charging' ? t('btn.stop') : st === 'charged' ? t('btn.unplug') : t('btn.wait');
+  sb.disabled = st === 'unplugged';
+
+  /* summary */
+  if (!$('scrSummary').hidden) {
+    $('sumAdded').textContent = t('sum.added', { n: num(soc - S.soc0, 0) });
+    $('barBase').style.left = '0'; $('barBase').style.width = S.soc0 + '%';
+    $('barAdd').style.left = S.soc0 + '%'; $('barAdd').style.width = Math.max(0, soc - S.soc0) + '%';
+    $('barL').textContent = t('sum.from', { n: num(S.soc0, 0) }); $('barR').textContent = t('sum.to', { n: num(soc, 0) });
+    $('sumKwh').textContent = kwh(S.energy) + ' kWh';
+    $('sumMin').textContent = num(Math.round(S.elapsed / 60), 0) + ' ' + t('min');
+    $('sumKm').textContent = '+' + num(rangeKm(soc) - rangeKm(S.soc0), 0) + ' km';
+    $('sumDate').textContent = dateStr(S.when);
+    $('lblEnergy').textContent = t('sum.en', { e: kwh(S.energy), t: money(CFG.tariff) });
+    $('valEnergy').textContent = fmt(b.ce);
+    $('valService').textContent = fmt(b.cs);
+    $('lblVat').textContent = t('sum.vat', { v: num(CFG.vat, CFG.vat % 1 ? 1 : 0) });
+    $('valVat').textContent = fmt(b.cv);
+    $('valTotal').textContent = fmt(b.total);
+    $('footTotal').textContent = fmt(b.total);
+    $('btnPay').disabled = S.phase !== 'summary';
+  }
+
+  /* modals */
+  const mm = S.modal;
+  $('modal').classList.toggle('on', !!mm);
+  $('dConfirm').hidden = mm !== 'confirm'; $('dProc').hidden = mm !== 'proc'; $('dOk').hidden = mm !== 'ok';
+  if (mm) {
+    const amt = fmt(b.total), mn = methodName(S.method);
+    $('dcAmt').textContent = amt; $('dcWith').textContent = t('cf.with', { m: mn });
+    $('dcEn').textContent = t('cf.en', { e: kwh(S.energy), t: num(Math.round(S.elapsed / 60), 0) });
+    $('dpT').textContent = t('pr.sub', { a: amt, m: mn });
+    $('doP').textContent = t('ok.sub', { a: amt, m: mn });
+  }
+
+  /* receipt */
+  if (S.phase === 'receipt') {
+    $('rcHead').textContent = (stNm || 'EV ZARYAD').toUpperCase() + ' · ENERGYVIBE';
+    $('rcNo').textContent = '№ ' + S.rcNo;
+    $('rcDate').textContent = dateStr(S.when);
+    $('rcEnLbl').textContent = t('rc.energy', { e: kwh(S.energy) }); $('rcEn').textContent = fmt(b.ce);
+    $('rcSv').textContent = fmt(b.cs);
+    $('rcVatLbl').textContent = t('rc.vat', { v: num(CFG.vat, CFG.vat % 1 ? 1 : 0) }); $('rcVat').textContent = fmt(b.cv);
+    $('rcTot').textContent = fmt(b.total);
+    $('rcWith').textContent = methodName(S.method);
+    const pc = $('paperClip');
+    $('rcState').textContent = pc.classList.contains('printed') ? t('rc.ready') : t('rc.printing');
+  }
+
+  /* panel */
+  $('lvP').textContent = num(p, 1); $('lvSoc').textContent = num(soc, 1);
+  $('lvE').textContent = num(S.energy, 2); $('lvT').textContent = num(S.elapsed / 60, 1);
+}
+
+/* ===================== simulation loop ===================== */
+let last = 0, curveT = 0;
+function tick(ts) {
+  if (!last) last = ts;
+  let dtReal = Math.min((ts - last) / 1000, 0.25); last = ts;
+  if (S.phase === 'charging') {
+    let dt = dtReal * CFG.speed;
+    while (dt > 0 && S.phase === 'charging') {
+      const step = Math.min(dt, 5); dt -= step;
+      const p = powerAt(S.soc, S.mode), dE = p * step / 3600;
+      S.energy += dE; S.soc += dE / CFG.cap * 100; S.elapsed += step;
+      if (S.soc >= S.limit) { S.soc = S.limit; S.phase = 'charged'; S.sheet = true; announce(); }
+    }
+    curveT += dtReal; if (curveT > 0.25) { curveT = 0; drawCurve(); }
+    render();
+  }
+  requestAnimationFrame(tick);
+}
+function announce() { drawCurve(); }
+
+/* ===================== actions ===================== */
+let toastT = null;
+function toast(msg) { const el = $('toast'); el.textContent = msg; el.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('on'), 2600); }
+function restart() {
+  clearTimeout(S.unplugT);
+  Object.assign(S, { phase:'charging', sheet:false, soc:CFG.start, soc0:CFG.start, energy:0, elapsed:0, stopped:false, modal:null, when:new Date() });
+  const lim = [60, 70, 80, 90, 100].find((v) => v > CFG.start + 4) || 100;
+  if (S.limit <= CFG.start + 4) S.limit = lim;
+  const pc = $('paperClip'); pc.classList.remove('printing', 'printed');
+  drawCurve(); render();
+}
+function openModal(m) { S.modal = m; render(); const f = { confirm:'dcYes', ok:'doYes' }[m]; if (f) setTimeout(() => $(f).focus({ preventScroll:true }), 60); }
+function printReceipt() {
+  const pc = $('paperClip');
+  pc.classList.remove('printing', 'printed'); void pc.offsetWidth; pc.classList.add('printing');
+  $('rcState').textContent = t('rc.printing');
+  const done = () => { pc.classList.remove('printing'); pc.classList.add('printed'); render(); };
+  clearTimeout(printReceipt.t);
+  printReceipt.t = setTimeout(done, window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 50 : 3500);
+}
+function barcode(seed) {
+  let h = 2166136261 >>> 0; for (const c of seed) h = Math.imul(h ^ c.charCodeAt(0), 16777619) >>> 0; h |= 1;
+  const rnd = () => { h ^= h << 13; h >>>= 0; h ^= h >>> 17; h ^= h << 5; h >>>= 0; return h / 4294967296; };
+  let x = 0, out = '';
+  for (let i = 0; i < 70; i++) { const w = 1 + Math.floor(rnd() * 3); if (i % 2 === 0) out += '<rect x="' + x + '" y="0" width="' + w + '" height="40"/>'; x += w; }
+  return '<svg viewBox="0 0 ' + x + ' 40" preserveAspectRatio="none">' + out + '</svg>';
+}
+
+$('modeEco').addEventListener('click', () => { S.mode = 'eco'; drawCurve(); render(); });
+$('modeFast').addEventListener('click', () => { S.mode = 'fast'; drawCurve(); render(); });
+$('limit').addEventListener('change', (e) => { S.limit = +e.target.value; render(); });
+$('btnView').addEventListener('click', () => { S.sheet = true; render(); setTimeout(() => $('sBtn').focus({ preventScroll:true }), 480); });
+$('sheetClose').addEventListener('click', () => { S.sheet = false; render(); $('btnView').focus({ preventScroll:true }); });
+$('sBtn').addEventListener('click', () => {
+  if (S.phase === 'charging') { S.phase = 'charged'; S.stopped = true; render(); return; }
+  if (S.phase === 'charged') {
+    S.phase = 'unplugging'; render();
+    S.unplugT = setTimeout(() => { S.phase = 'summary'; S.sheet = false; S.when = new Date(); render(); $('scrSummary').scrollTop = 0; }, 1700);
+  }
+});
+$('btnPay').addEventListener('click', () => openModal('confirm'));
+$('dcNo').addEventListener('click', () => { S.modal = null; S.phase = 'summary'; render(); $('btnPay').focus({ preventScroll:true }); });
+$('dcYes').addEventListener('click', () => {
+  S.phase = 'paying'; openModal('proc');
+  setTimeout(() => {
+    const d = S.when, p2 = (n) => String(n).padStart(2, '0');
+    S.rcNo = 'EV-' + d.getFullYear() + p2(d.getMonth() + 1) + p2(d.getDate()) + '-' + String(Math.floor(1000 + Math.random() * 9000));
+    S.phase = 'paid'; openModal('ok');
+  }, 1900);
+});
+$('doNo').addEventListener('click', () => { restart(); toast(t('ok.thanks')); });
+$('doYes').addEventListener('click', () => {
+  S.modal = null; S.phase = 'receipt';
+  $('rcBc').innerHTML = barcode(S.rcNo);
+  render(); $('scrReceipt').scrollTop = 0; printReceipt();
+  setTimeout(() => $('btnDone').focus({ preventScroll:true }), 80);
+});
+$('btnAgain').addEventListener('click', printReceipt);
+$('btnDone').addEventListener('click', () => { restart(); });
+$('btnRestart').addEventListener('click', restart);
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape') return;
+  if (S.modal === 'confirm') $('dcNo').click(); else if (S.sheet && S.phase === 'charging') $('sheetClose').click();
+});
+
+/* parameters */
+function num0(el, lo, hi, def) { let v = parseFloat(String(el.value).replace(',', '.')); if (!isFinite(v)) v = def; return Math.min(hi, Math.max(lo, v)); }
+$('fPower').addEventListener('change', (e) => { CFG.power = +e.target.value; drawCurve(); render(); });
+$('fSpeed').addEventListener('change', (e) => { CFG.speed = +e.target.value; });
+$('fCap').addEventListener('change', (e) => { CFG.cap = num0(e.target, 20, 150, 75); e.target.value = CFG.cap; restart(); });
+$('fStart').addEventListener('change', (e) => { CFG.start = Math.round(num0(e.target, 5, 70, 20)); e.target.value = CFG.start; restart(); });
+$('fTariff').addEventListener('input', (e) => { CFG.tariff = num0(e.target, 0, 100000, 3200); render(); });
+$('fService').addEventListener('input', (e) => { CFG.service = num0(e.target, 0, 1000000, 6000); render(); });
+$('fVat').addEventListener('input', (e) => { CFG.vat = num0(e.target, 0, 30, 12); render(); });
+$('fRate').addEventListener('input', (e) => { CFG.rate = num0(e.target, 1000, 100000, 12012.30); render(); });
+
+/* language + currency */
+document.querySelectorAll('[data-lang]').forEach((b) => b.addEventListener('click', () => {
+  lang = b.dataset.lang; try { localStorage.setItem(LANG_KEY, lang); } catch (e) {} applyStatic();
+}));
+document.querySelectorAll('[data-cur]').forEach((b) => b.addEventListener('click', () => {
+  cur = b.dataset.cur; try { localStorage.setItem(CUR_KEY, cur); } catch (e) {} applyStatic();
+}));
+
+/* clock */
+function clock() { const d = new Date(); $('clock').textContent = d.getHours() + ':' + String(d.getMinutes()).padStart(2, '0'); }
+clock(); setInterval(clock, 20000);
+
+/* ===================== stations (OpenStreetMap) ===================== */
+const OVERPASS = ['https://overpass-api.de/api/interpreter', 'https://overpass.kumi.systems/api/interpreter'];
+const OV_QUERY = '[out:json][timeout:30];nwr["amenity"="charging_station"](41.15,69.05,41.48,69.45);out center tags;';
+const ST_KEY = 'energyvibe-ev-stations-v1', ST_TTL = 12 * 3600 * 1000;
+const SOCK = { type2:'Type 2', type2_combo:'CCS2', chademo:'CHAdeMO', type1:'Type 1', type1_combo:'CCS1', gb_ac:'GB/T AC', gb_dc:'GB/T DC',
+  tesla_supercharger:'Tesla', tesla_destination:'Tesla', tesla_standard:'Tesla', schuko:'Schuko', cee_blue:'CEE', cee_red:'CEE' };
+const DC_SOCK = new Set(['type2_combo', 'chademo', 'type1_combo', 'gb_dc', 'tesla_supercharger']);
+let stations = [], stState = 'loading', stMap = null, stLayer = null, stMarkers = {}, userPos = null, userMark = null, selId = null, stNote = '';
+
+function parseKw(v) {
+  let best = 0;
+  String(v).replace(/(\d+(?:[.,]\d+)?)\s*(kW|MW|W)?/gi, (m, n, u) => {
+    let x = parseFloat(n.replace(',', '.')); u = (u || '').toLowerCase();
+    if (u === 'w') x /= 1000; else if (u === 'mw') x *= 1000; else if (!u && x > 1000) x /= 1000;
+    if (x > best && x < 1000) best = x; return m;
+  });
+  return best;
+}
+function parseStation(el) {
+  const tg = el.tags || {};
+  const lat = el.lat != null ? el.lat : (el.center && el.center.lat), lon = el.lon != null ? el.lon : (el.center && el.center.lon);
+  if (typeof lat !== 'number' || typeof lon !== 'number') return null;
+  if (tg.access === 'private' || tg.access === 'no') return null;
+  const socks = [], seen = new Set(); let kw = 0, dc = false;
+  Object.keys(tg).forEach((k) => {
+    let m = k.match(/^socket:([a-z0-9_]+)$/);
+    if (m && tg[k] !== 'no' && tg[k] !== '0') { const lbl = SOCK[m[1]] || m[1].replace(/_/g, ' ').toUpperCase(); if (!seen.has(lbl)) { seen.add(lbl); socks.push(lbl); } if (DC_SOCK.has(m[1])) dc = true; }
+    m = k.match(/^socket:([a-z0-9_]+):output$/);
+    if (m) { const x = parseKw(tg[k]); if (x > kw) kw = x; }
+  });
+  if (tg['charging_station:output']) { const x = parseKw(tg['charging_station:output']); if (x > kw) kw = x; }
+  const names = { uz: tg['name:uz'] || '', ru: tg['name:ru'] || '', en: tg['name:en'] || '', def: tg.name || tg.operator || tg.brand || tg.network || '' };
+  return {
+    id: el.type + el.id, lat, lon, names, op: tg.operator || tg.brand || tg.network || '', kw: Math.round(kw * 10) / 10, socks,
+    fast: kw >= 40 || (dc && kw === 0), hours: tg.opening_hours || '', fee: tg.fee === 'yes' ? 'yes' : tg.fee === 'no' ? 'no' : '',
+    addr: [tg['addr:street'], tg['addr:housenumber']].filter(Boolean).join(' ')
+  };
+}
+function stName(st) { return st.names[lang] || st.names.def || t('s.noname'); }
+function kwLabel(st) { return st.kw ? num(st.kw, st.kw % 1 ? 1 : 0) + ' kW' : t('s.kwu'); }
+function dist(a, b) {
+  const R = 6371, rad = Math.PI / 180, dLa = (b.lat - a.lat) * rad, dLo = (b.lon - a.lon) * rad;
+  const h = Math.sin(dLa / 2) ** 2 + Math.cos(a.lat * rad) * Math.cos(b.lat * rad) * Math.sin(dLo / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+
+async function fetchOverpass() {
+  let lastErr = new Error('no endpoint');
+  for (const url of OVERPASS) {
+    const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), 30000);
+    try {
+      const r = await fetch(url, { method: 'POST', body: 'data=' + encodeURIComponent(OV_QUERY), headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, signal: ctl.signal });
+      clearTimeout(to);
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const j = await r.json();
+      if (!j || !Array.isArray(j.elements)) throw new Error('bad response');
+      return j.elements;
+    } catch (e) { clearTimeout(to); lastErr = e; }
+  }
+  throw lastErr;
+}
+async function loadStations(force) {
+  stState = 'loading'; stNote = ''; renderStations();
+  let cached = null;
+  try { cached = JSON.parse(localStorage.getItem(ST_KEY) || 'null'); } catch (e) {}
+  const okCache = cached && Array.isArray(cached.data);
+  if (!force && okCache && Date.now() - cached.t < ST_TTL) { stations = cached.data; stState = 'ready'; renderStations(true); return; }
+  try {
+    stations = (await fetchOverpass()).map(parseStation).filter(Boolean);
+    try { localStorage.setItem(ST_KEY, JSON.stringify({ t: Date.now(), data: stations })); } catch (e) {}
+    stState = 'ready';
+  } catch (e) {
+    if (okCache) { stations = cached.data; stState = 'ready'; } else { stState = 'error'; }
+  }
+  renderStations(true);
+}
+
+function visibleStations() {
+  const q = $('stSearch').value.trim().toLowerCase(), fast = $('stFast').checked;
+  const a = stations.filter((s) => (!fast || s.fast) && (!q || (stName(s) + ' ' + s.op + ' ' + s.addr).toLowerCase().indexOf(q) !== -1));
+  a.forEach((s) => { s._d = userPos ? dist(userPos, s) : null; });
+  a.sort((x, y) => userPos ? x._d - y._d : ((y.fast ? 1 : 0) - (x.fast ? 1 : 0)) || stName(x).localeCompare(stName(y)));
+  return a;
+}
+function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+function popup(st) {
+  const d = el('div', 'pop');
+  d.appendChild(el('h4', '', stName(st)));
+  if (st.op && st.op !== stName(st)) d.appendChild(el('p', '', st.op));
+  if (st.addr) d.appendChild(el('p', '', st.addr));
+  d.appendChild(el('p', '', [kwLabel(st), st.socks.join(' / ')].filter(Boolean).join(' · ')));
+  if (st.hours) d.appendChild(el('p', '', t('s.hours', { h: st.hours })));
+  if (st.fee) d.appendChild(el('p', '', t('s.fee.' + st.fee)));
+  const a = el('a', '', t('s.osm')); a.href = 'https://www.openstreetmap.org/' + st.id.replace(/^(node|way|relation)(\d+)$/, '$1/$2'); a.target = '_blank'; a.rel = 'noopener noreferrer'; d.appendChild(a);
+  const b = el('button', 'pbtn', t('s.use')); b.type = 'button'; b.addEventListener('click', () => useStation(st)); d.appendChild(b);
+  return d;
+}
+function ensureMap() {
+  if (stMap || typeof L === 'undefined') return;
+  stMap = L.map('stMap', { scrollWheelZoom: false }).setView([41.3111, 69.2797], 11);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a>' }).addTo(stMap);
+  stLayer = L.layerGroup().addTo(stMap);
+  stMap.on('click', () => stMap.scrollWheelZoom.enable());
+  stMap.on('mouseout', () => stMap.scrollWheelZoom.disable());
+}
+function selectStation(st, fromMap) {
+  selId = st.id;
+  document.querySelectorAll('.st-item').forEach((b) => { const on = b.dataset.id === st.id; b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); if (on && fromMap) b.scrollIntoView({ block: 'nearest' }); });
+  if (stMap && !fromMap) {
+    stMap.setView([st.lat, st.lon], Math.max(stMap.getZoom(), 15));
+    if (stMarkers[st.id]) stMarkers[st.id].openPopup();
+    if (window.innerWidth <= 920) $('stMap').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+function renderStations(fit) {
+  ensureMap();
+  const list = $('stList'), vis = stations.length ? visibleStations() : [];
+  list.textContent = '';
+  let msg = '';
+  if (stState === 'loading') msg = t('s.loading');
+  else if (stState === 'error') msg = t('s.error');
+  else msg = (vis.length === stations.length ? t('s.count', { n: num(vis.length, 0) }) : t('s.count2', { n: num(vis.length, 0), m: num(stations.length, 0) }));
+  $('stStatus').textContent = msg + (stNote ? ' ' + stNote : '');
+  $('stRetry').hidden = stState !== 'error';
+
+  if (stState === 'ready' && !vis.length) list.appendChild(el('li', 'st-empty', t('s.empty')));
+  vis.slice(0, 400).forEach((s) => {
+    const li = document.createElement('li'), b = el('button', 'st-item' + (s.id === selId ? ' on' : ''));
+    b.type = 'button'; b.dataset.id = s.id; b.setAttribute('aria-pressed', String(s.id === selId));
+    const n = el('b'); n.appendChild(el('i', 'dot ' + (s.fast ? 'dc' : 'ac'))); n.appendChild(document.createTextNode(stName(s)));
+    const meta = el('span', '', [s.op && s.op !== stName(s) ? s.op : '', kwLabel(s), s.socks.slice(0, 3).join(' / '), s._d != null ? num(s._d, 1) + ' km' : ''].filter(Boolean).join(' · '));
+    b.appendChild(n); b.appendChild(meta); b.addEventListener('click', () => selectStation(s, false));
+    li.appendChild(b); list.appendChild(li);
+  });
+
+  if (stMap) {
+    stLayer.clearLayers(); stMarkers = {};
+    vis.forEach((s) => {
+      const m = L.circleMarker([s.lat, s.lon], { radius: 8, weight: 2, color: '#fff', fillColor: s.fast ? '#16a34a' : '#2563eb', fillOpacity: .9 });
+      m.bindPopup(() => popup(s)); m.on('click', () => selectStation(s, true)); m.addTo(stLayer); stMarkers[s.id] = m;
+    });
+    if (fit && vis.length && !userPos) { try { stMap.fitBounds(L.latLngBounds(vis.map((s) => [s.lat, s.lon])).pad(0.08), { maxZoom: 13 }); } catch (e) {} }
+  }
+}
+function useStation(st) {
+  S.stationObj = st;
+  const sel = $('fPower');
+  sel.querySelectorAll('option[data-custom]').forEach((o) => o.remove());
+  if (st.kw) {
+    const kw = Math.round(st.kw);
+    let o = Array.from(sel.options).find((x) => +x.value === kw);
+    if (!o) { o = new Option(kw + ' kW (OSM)', String(kw)); o.dataset.custom = '1'; sel.add(o, Array.from(sel.options).find((x) => +x.value > kw) || null); }
+    sel.value = String(kw); CFG.power = kw;
+  }
+  restart();
+  $('phone').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  toast(t('s.using', { n: stName(st) }));
+}
+$('stSearch').addEventListener('input', () => renderStations());
+$('stFast').addEventListener('change', () => renderStations());
+$('stRetry').addEventListener('click', () => loadStations(true));
+$('btnDefaultSt').addEventListener('click', () => { S.stationObj = null; sel0(); restart(); });
+function sel0() { const sel = $('fPower'); sel.querySelectorAll('option[data-custom]').forEach((o) => o.remove()); sel.value = '50'; CFG.power = 50; }
+$('stNear').addEventListener('click', () => {
+  if (!navigator.geolocation) { stNote = t('s.geoerr'); renderStations(); return; }
+  navigator.geolocation.getCurrentPosition((pos) => {
+    userPos = { lat: pos.coords.latitude, lon: pos.coords.longitude }; stNote = t('s.geook');
+    if (stMap) { if (userMark) userMark.remove(); userMark = L.circleMarker([userPos.lat, userPos.lon], { radius: 7, weight: 3, color: '#fff', fillColor: '#f59e0b', fillOpacity: 1 }).addTo(stMap); stMap.setView([userPos.lat, userPos.lon], 13); }
+    renderStations();
+  }, () => { stNote = t('s.geoerr'); renderStations(); }, { timeout: 10000, maximumAge: 60000 });
+});
+
+/* init */
+try { const l = localStorage.getItem(LANG_KEY); if (l && I18N[l]) lang = l; const c = localStorage.getItem(CUR_KEY); if (c === 'USD' || c === 'UZS') cur = c; } catch (e) {}
+applyStatic(); restart();
+requestAnimationFrame(tick);
+loadStations(false);
+})();
+</script>
+</body>
+</html>
