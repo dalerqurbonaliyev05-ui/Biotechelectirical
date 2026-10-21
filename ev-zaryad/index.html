@@ -7,6 +7,7 @@
 <meta name="description" content="Elektromobil zaryadlash stansiyasi ilovasining interaktiv demosi: zaryad olish, kabelni uzish, so‘m va dollarda to‘lov hamda chek chiqarish.">
 <link rel="icon" type="image/png" href="/rasmlar1/rasm5/rasm4.png">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans+Condensed:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css">
 <style>
 :root{
   --bg:#E4E9ED; --surface:#F3F6F8; --ink:#15222D; --ink-2:#51626F; --line:#C5CED6;
@@ -204,6 +205,44 @@ h1{margin:0;font-weight:700;font-size:clamp(26px,5vw,38px);letter-spacing:.03em;
 .btn{border:1.5px solid var(--ink);border-radius:4px;background:transparent;font-weight:600;min-height:44px;padding:0 16px}
 .btn:hover{background:var(--ink);color:var(--bg)}
 
+.scr-head b,.scr-head small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ---------- stations ---------- */
+.stations{margin-top:40px}
+.stations h2{margin:0 0 6px;font-size:clamp(20px,3.4vw,28px);letter-spacing:.03em;text-transform:uppercase}
+.st-lead{margin:0 0 14px;color:var(--ink-2);max-width:70ch}
+.st-tools{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:flex-end}
+.st-search{flex:1 1 260px;max-width:420px}
+.chk{display:inline-flex;gap:8px;align-items:center;min-height:44px;color:var(--ink-2);font-weight:600}
+.chk input{width:20px;height:20px;accent-color:var(--accent)}
+.st-status{margin:12px 0 4px;color:var(--ink);font-weight:600;min-height:1.4em}
+.st-legend{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin:6px 0 12px;color:var(--ink-2);font-size:13.5px}
+.dot{display:inline-block;width:12px;height:12px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--line);flex:none}
+.dot.dc{background:#16a34a}.dot.ac{background:#2563eb;margin-left:10px}
+.st-grid{display:grid;grid-template-columns:minmax(260px,380px) minmax(0,1fr);gap:16px;height:560px}
+.st-list{list-style:none;margin:0;padding:0;overflow:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+.st-item{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:transparent;padding:10px 12px;min-height:56px}
+.st-item:hover{background:var(--bg)}
+.st-item.on{background:var(--bg);box-shadow:inset 3px 0 0 var(--accent)}
+.st-item b{display:flex;gap:8px;align-items:center;font-size:15px}
+.st-item b .dot{margin:0}
+.st-item span{display:block;color:var(--ink-2);font-size:13px;margin-top:2px}
+.st-empty{padding:16px;color:var(--ink-2)}
+.st-map{border:1px solid var(--line);border-radius:6px;min-height:320px;background:#cfd8e0;z-index:0}
+.st-attr{margin:10px 0 0;color:var(--ink-2);font-size:13px}
+.leaflet-container{font-family:var(--f-ui)}
+.pop{min-width:190px;max-width:240px;color:#15222D}
+.pop h4{margin:0 0 4px;font-size:15px;line-height:1.25}
+.pop p{margin:0 0 4px;font-size:13px;line-height:1.35}
+.pop .pbtn{display:block;width:100%;margin-top:8px;border:0;border-radius:6px;background:#2563eb;color:#fff;font-weight:700;min-height:40px;font-size:14px}
+.pop a{color:#2563eb;font-size:12.5px}
+@media (max-width:920px){
+  .st-grid{grid-template-columns:1fr;height:auto}
+  .st-list{max-height:300px}
+  .st-map{height:380px}
+}
+@media (max-width:520px){ .stations{margin-inline:16px} }
+
 @media (max-width:920px){
   .grid{grid-template-columns:1fr}
   .panel{max-width:520px;margin-inline:auto;width:100%}
@@ -260,7 +299,7 @@ h1{margin:0;font-weight:700;font-size:clamp(26px,5vw,38px);letter-spacing:.03em;
           <section class="screen" id="scrCharge" aria-label="Zaryadlash">
             <div class="scr-head">
               <span class="icon-btn" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
-              <div class="ttl"><b data-i18n="st.name">EV Zaryad · Tez stansiya</b><small data-i18n="st.bay">04-slot · CCS2</small></div>
+              <div class="ttl"><b class="js-st" data-i18n="st.name">EV Zaryad · Tez stansiya</b><small class="js-conn" data-i18n="st.bay">04-slot · CCS2</small></div>
             </div>
             <div class="seg2" role="group" aria-label="Rejim">
               <button type="button" id="modeEco" aria-pressed="false" data-i18n="mode.eco">Eco rejim</button>
@@ -332,9 +371,9 @@ h1{margin:0;font-weight:700;font-size:clamp(26px,5vw,38px);letter-spacing:.03em;
               </div>
             </div>
             <div class="card">
-              <div class="kv"><span data-i18n="sum.station">Stansiya</span><b data-i18n="st.short">EV Zaryad · Tez stansiya</b></div>
+              <div class="kv"><span data-i18n="sum.station">Stansiya</span><b class="js-st" data-i18n="st.short">EV Zaryad · Tez stansiya</b></div>
               <div class="kv"><span data-i18n="sum.date">Sana</span><b id="sumDate"></b></div>
-              <div class="kv"><span data-i18n="sum.conn">Ulagich</span><b data-i18n="st.bay">04-slot · CCS2</b></div>
+              <div class="kv"><span data-i18n="sum.conn">Ulagich</span><b class="js-conn" data-i18n="st.bay">04-slot · CCS2</b></div>
               <div class="kv"><span id="lblEnergy"></span><b id="valEnergy"></b></div>
               <div class="kv"><span data-i18n="sum.service">Xizmat haqi</span><b id="valService"></b></div>
               <div class="kv"><span id="lblVat"></span><b id="valVat"></b></div>
@@ -356,7 +395,7 @@ h1{margin:0;font-weight:700;font-size:clamp(26px,5vw,38px);letter-spacing:.03em;
             <div class="printer" aria-hidden="true"></div>
             <div class="paper-clip" id="paperClip">
               <div class="paper" id="paper">
-                <h4>EV ZARYAD · ENERGYVIBE</h4>
+                <h4 id="rcHead">EV ZARYAD · ENERGYVIBE</h4>
                 <div class="c" id="rcNo"></div>
                 <div class="c" id="rcDate"></div>
                 <hr>
@@ -383,7 +422,7 @@ h1{margin:0;font-weight:700;font-size:clamp(26px,5vw,38px);letter-spacing:.03em;
           <div class="sheet" id="sheet" role="dialog" aria-modal="false" aria-labelledby="sTitle">
             <div class="scr-head">
               <button type="button" class="icon-btn" id="sheetClose" aria-label="Yopish / Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
-              <div class="ttl"><b id="sTitle"></b><small data-i18n="st.short">EV Zaryad · Tez stansiya</small></div>
+              <div class="ttl"><b id="sTitle"></b><small class="js-st" data-i18n="st.short">EV Zaryad · Tez stansiya</small></div>
             </div>
             <div class="ring-wrap" id="ringWrap">
               <svg viewBox="0 0 200 200" aria-hidden="true">
@@ -446,6 +485,7 @@ h1{margin:0;font-weight:700;font-size:clamp(26px,5vw,38px);letter-spacing:.03em;
           <label class="fld"><span data-i18n="p.rate">1 $ = … so‘m</span><input id="fRate" type="number" inputmode="decimal" min="1000" step="0.01" value="12012.30"></label>
           <div class="fld wide"><span id="rateNote"></span></div>
           <div class="fld wide"><button type="button" class="btn" id="btnRestart" data-i18n="p.restart">Qayta boshlash</button></div>
+          <div class="fld wide" id="stDefWrap" hidden><button type="button" class="btn" id="btnDefaultSt" data-i18n="s.default">Standart stansiya</button></div>
         </div>
       </div>
 
@@ -468,10 +508,29 @@ h1{margin:0;font-weight:700;font-size:clamp(26px,5vw,38px);letter-spacing:.03em;
       </div>
     </aside>
   </div>
+
+  <section class="stations" id="stations" aria-labelledby="stTitle">
+    <h2 id="stTitle" data-i18n="s.title">Toshkent zaryad stansiyalari</h2>
+    <p class="st-lead" data-i18n="s.lead">Haqiqiy stansiyalar sahifa ochilganda OpenStreetMap’dan yuklanadi. Stansiyani tanlang: demo ilova uning nomi va quvvati bilan ishlaydi.</p>
+    <div class="st-tools">
+      <label class="fld st-search"><span data-i18n="s.search">Qidirish</span><input id="stSearch" type="search" autocomplete="off" data-i18n-ph="s.ph" placeholder="Nom, operator yoki manzil"></label>
+      <label class="chk"><input type="checkbox" id="stFast"><span data-i18n="s.fast">Faqat tez (≥ 40 kW)</span></label>
+      <button type="button" class="btn" id="stNear" data-i18n="s.near">Menga yaqin</button>
+    </div>
+    <p class="st-status" id="stStatus" role="status" aria-live="polite"></p>
+    <button type="button" class="btn" id="stRetry" hidden data-i18n="s.retry">Qayta urinish</button>
+    <p class="st-legend"><i class="dot dc"></i><span data-i18n="s.l.dc">Tez (DC, ≥ 40 kW)</span><i class="dot ac"></i><span data-i18n="s.l.ac">Sekin yoki quvvat noma’lum</span></p>
+    <div class="st-grid">
+      <ul class="st-list" id="stList" aria-label="Stansiyalar / Stations"></ul>
+      <div class="st-map" id="stMap" role="region" aria-label="Xarita / Map"></div>
+    </div>
+    <p class="st-attr" data-i18n="s.attr">Xarita va ma’lumot: © OpenStreetMap hissadorlari (ODbL). Ro‘yxat to‘liq bo‘lmasligi mumkin; narx va band-bo‘shlik ma’lumoti yo‘q.</p>
+  </section>
 </div>
 
 <noscript><p style="max-width:520px;margin:20px auto;padding:0 16px">JavaScript kerak / Requires JavaScript / Нужен JavaScript.</p></noscript>
 
+<script src="vendor/leaflet/leaflet.js"></script>
 <script>
 (function () {
 'use strict';
@@ -510,6 +569,32 @@ uz: {
   'p.how':'Qanday hisoblanadi','p.f1':'E = ∫ P dt;  to‘lov = E × tarif + xizmat haqi + QQS',
   'p.curve':'Batareya 50% dan keyin quvvatni kamaytiradi, 80% dan keyin keskin pasaytiradi. Shuning uchun odatda 80% gacha zaryadlanadi: oxirgi foizlar ko‘p vaqt oladi.',
   'p.eco':'Eco rejimda quvvat 11 kW bilan cheklanadi (uy zaryadlovchisi darajasi).','c.x':'Zaryad, %','c.y':'Quvvat, kW',
+  's.title':'Toshkent zaryad stansiyalari',
+  's.lead':'Haqiqiy stansiyalar sahifa ochilganda OpenStreetMap’dan yuklanadi. Stansiyani tanlang: demo ilova uning nomi va quvvati bilan ishlaydi.',
+  's.search':'Qidirish',
+  's.ph':'Nom, operator yoki manzil',
+  's.fast':'Faqat tez (≥ 40 kW)',
+  's.near':'Menga yaqin',
+  's.loading':'Stansiyalar yuklanmoqda…',
+  's.count':'{n} ta stansiya',
+  's.count2':'{n} / {m} ta stansiya',
+  's.error':'Ma’lumotni yuklab bo‘lmadi. Internetni tekshirib, qayta urinib ko‘ring.',
+  's.retry':'Qayta urinish',
+  's.empty':'Hech narsa topilmadi',
+  's.use':'Demoda ishlatish',
+  's.using':'Demo ilova: {n}',
+  's.kwu':'quvvat noma’lum',
+  's.hours':'Ish vaqti: {h}',
+  's.fee.yes':'Pullik',
+  's.fee.no':'Bepul',
+  's.osm':'OpenStreetMap’da ochish',
+  's.geoerr':'Joylashuv aniqlanmadi.',
+  's.geook':'Eng yaqin stansiyalar yuqorida.',
+  's.default':'Standart stansiya',
+  's.noname':'Zaryad stansiyasi',
+  's.l.dc':'Tez (DC, ≥ 40 kW)',
+  's.l.ac':'Sekin yoki quvvat noma’lum',
+  's.attr':'Xarita va ma’lumot: © OpenStreetMap hissadorlari (ODbL). Ro‘yxat to‘liq bo‘lmasligi mumkin; narx va band-bo‘shlik ma’lumoti yo‘q.',
   cur:{UZS:'so‘m'}
 },
 ru: {
@@ -543,7 +628,33 @@ ru: {
   'p.live':'Текущее состояние','p.lp':'Мощность, кВт','p.ls':'Заряд, %','p.le':'Энергия, кВт·ч','p.lt':'Время, мин',
   'p.how':'Как это считается','p.f1':'E = ∫ P dt;  оплата = E × тариф + сервисный сбор + НДС',
   'p.curve':'После 50% батарея снижает мощность, после 80% — резко. Поэтому обычно заряжают до 80%: последние проценты занимают много времени.',
-  'p.eco':'В эко-режиме мощность ограничена 11 кВт (уровень домашней зарядки).','c.x':'Заряд, %','c.y':'Мощность, кВт'
+  'p.eco':'В эко-режиме мощность ограничена 11 кВт (уровень домашней зарядки).','c.x':'Заряд, %','c.y':'Мощность, кВт',
+  's.title':'Зарядные станции Ташкента',
+  's.lead':'Реальные станции загружаются из OpenStreetMap при открытии страницы. Выберите станцию: демо-приложение будет работать с её названием и мощностью.',
+  's.search':'Поиск',
+  's.ph':'Название, оператор или адрес',
+  's.fast':'Только быстрые (≥ 40 кВт)',
+  's.near':'Рядом со мной',
+  's.loading':'Загрузка станций…',
+  's.count':'Станций: {n}',
+  's.count2':'Станций: {n} из {m}',
+  's.error':'Не удалось загрузить данные. Проверьте интернет и повторите попытку.',
+  's.retry':'Повторить',
+  's.empty':'Ничего не найдено',
+  's.use':'Использовать в демо',
+  's.using':'Демо-приложение: {n}',
+  's.kwu':'мощность неизвестна',
+  's.hours':'Время работы: {h}',
+  's.fee.yes':'Платно',
+  's.fee.no':'Бесплатно',
+  's.osm':'Открыть в OpenStreetMap',
+  's.geoerr':'Не удалось определить местоположение.',
+  's.geook':'Ближайшие станции — вверху списка.',
+  's.default':'Станция по умолчанию',
+  's.noname':'Зарядная станция',
+  's.l.dc':'Быстрые (DC, ≥ 40 кВт)',
+  's.l.ac':'Медленные или мощность неизвестна',
+  's.attr':'Карта и данные: © участники OpenStreetMap (ODbL). Список может быть неполным; данных о цене и занятости нет.'
 },
 en: {
   title:'EV charging | EnergyVibe',
@@ -576,7 +687,33 @@ en: {
   'p.live':'Live status','p.lp':'Power, kW','p.ls':'Charge, %','p.le':'Energy, kWh','p.lt':'Time, min',
   'p.how':'How it is calculated','p.f1':'E = ∫ P dt;  payment = E × tariff + service fee + VAT',
   'p.curve':'Above 50% the battery reduces power, above 80% it drops sharply. That is why people usually charge to 80%: the last percent take a long time.',
-  'p.eco':'In Eco mode power is limited to 11 kW (home-charger level).','c.x':'Charge, %','c.y':'Power, kW'
+  'p.eco':'In Eco mode power is limited to 11 kW (home-charger level).','c.x':'Charge, %','c.y':'Power, kW',
+  's.title':'Tashkent charging stations',
+  's.lead':'Real stations are loaded from OpenStreetMap when the page opens. Pick a station and the demo app runs with its name and power.',
+  's.search':'Search',
+  's.ph':'Name, operator or address',
+  's.fast':'Fast only (≥ 40 kW)',
+  's.near':'Near me',
+  's.loading':'Loading stations…',
+  's.count':'{n} stations',
+  's.count2':'{n} of {m} stations',
+  's.error':'Could not load the data. Check your connection and try again.',
+  's.retry':'Try again',
+  's.empty':'Nothing found',
+  's.use':'Use in demo',
+  's.using':'Demo app: {n}',
+  's.kwu':'power unknown',
+  's.hours':'Hours: {h}',
+  's.fee.yes':'Paid',
+  's.fee.no':'Free',
+  's.osm':'Open in OpenStreetMap',
+  's.geoerr':'Could not get your location.',
+  's.geook':'Nearest stations are at the top.',
+  's.default':'Default station',
+  's.noname':'Charging station',
+  's.l.dc':'Fast (DC, ≥ 40 kW)',
+  's.l.ac':'Slow or power unknown',
+  's.attr':'Map and data: © OpenStreetMap contributors (ODbL). The list may be incomplete; no price or availability data.'
 }
 };
 const LANG_KEY = 'energyvibe-lang', CUR_KEY = 'energyvibe-ev-cur';
@@ -593,7 +730,7 @@ function t(key, vars) {
 const CAR_MAX_KW = 150, ECO_KW = 11, CONS = 18;   // kWh / 100 km
 const CFG = { power:50, cap:75, start:20, speed:300, tariff:3200, service:6000, vat:12, rate:12012.30 };
 const S = { phase:'charging', sheet:false, mode:'fast', soc:20, soc0:20, limit:80, energy:0, elapsed:0, stopped:false,
-            method:'humo', modal:null, rcNo:'', when:new Date(), unplugT:null };
+            method:'humo', modal:null, rcNo:'', when:new Date(), unplugT:null, stationObj:null };
 
 function curveF(soc) { return soc <= 50 ? 1 : soc <= 80 ? 1 - 0.5 * (soc - 50) / 30 : Math.max(0.1, 0.5 - 0.4 * (soc - 80) / 20); }
 function powerAt(soc, mode) { let p = Math.min(CFG.power, CAR_MAX_KW) * curveF(soc); if (mode === 'eco') p = Math.min(p, ECO_KW); return p; }
@@ -634,9 +771,10 @@ function applyStatic() {
   document.querySelectorAll('[data-i18n]').forEach((el) => { el.textContent = t(el.dataset.i18n); });
   document.querySelectorAll('[data-lang]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
   document.querySelectorAll('[data-cur]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.cur === cur)));
+  document.querySelectorAll('[data-i18n-ph]').forEach((el) => { el.placeholder = t(el.dataset.i18nPh); });
   $('rateNote').textContent = t('p.rnote');
   $('sheetClose').setAttribute('aria-label', lang === 'ru' ? 'Закрыть' : lang === 'en' ? 'Close' : 'Yopish');
-  buildMethods(); drawCurve(); render();
+  buildMethods(); drawCurve(); render(); renderStations();
 }
 function buildMethods() {
   const box = $('methods'); box.textContent = '';
@@ -674,6 +812,12 @@ function render() {
   const soc = S.soc, p = (S.phase === 'charging') ? powerAt(soc, S.mode) : 0;
   const charging = S.phase === 'charging';
   const b = bill();
+
+  /* station name */
+  const stNm = S.stationObj ? stName(S.stationObj) : null;
+  document.querySelectorAll('.js-st').forEach((e) => { e.textContent = stNm || t('st.short'); });
+  document.querySelectorAll('.js-conn').forEach((e) => { e.textContent = S.stationObj ? (S.stationObj.socks[0] || 'CCS2') : t('st.bay'); });
+  $('stDefWrap').hidden = !S.stationObj;
 
   /* screens */
   document.querySelector('.viewport').classList.toggle('dk', S.phase === 'receipt');
@@ -760,6 +904,7 @@ function render() {
 
   /* receipt */
   if (S.phase === 'receipt') {
+    $('rcHead').textContent = (stNm || 'EV ZARYAD').toUpperCase() + ' · ENERGYVIBE';
     $('rcNo').textContent = '№ ' + S.rcNo;
     $('rcDate').textContent = dateStr(S.when);
     $('rcEnLbl').textContent = t('rc.energy', { e: kwh(S.energy) }); $('rcEn').textContent = fmt(b.ce);
@@ -884,10 +1029,183 @@ document.querySelectorAll('[data-cur]').forEach((b) => b.addEventListener('click
 function clock() { const d = new Date(); $('clock').textContent = d.getHours() + ':' + String(d.getMinutes()).padStart(2, '0'); }
 clock(); setInterval(clock, 20000);
 
+/* ===================== stations (OpenStreetMap) ===================== */
+const OVERPASS = ['https://overpass-api.de/api/interpreter', 'https://overpass.kumi.systems/api/interpreter'];
+const OV_QUERY = '[out:json][timeout:30];nwr["amenity"="charging_station"](41.15,69.05,41.48,69.45);out center tags;';
+const ST_KEY = 'energyvibe-ev-stations-v1', ST_TTL = 12 * 3600 * 1000;
+const SOCK = { type2:'Type 2', type2_combo:'CCS2', chademo:'CHAdeMO', type1:'Type 1', type1_combo:'CCS1', gb_ac:'GB/T AC', gb_dc:'GB/T DC',
+  tesla_supercharger:'Tesla', tesla_destination:'Tesla', tesla_standard:'Tesla', schuko:'Schuko', cee_blue:'CEE', cee_red:'CEE' };
+const DC_SOCK = new Set(['type2_combo', 'chademo', 'type1_combo', 'gb_dc', 'tesla_supercharger']);
+let stations = [], stState = 'loading', stMap = null, stLayer = null, stMarkers = {}, userPos = null, userMark = null, selId = null, stNote = '';
+
+function parseKw(v) {
+  let best = 0;
+  String(v).replace(/(\d+(?:[.,]\d+)?)\s*(kW|MW|W)?/gi, (m, n, u) => {
+    let x = parseFloat(n.replace(',', '.')); u = (u || '').toLowerCase();
+    if (u === 'w') x /= 1000; else if (u === 'mw') x *= 1000; else if (!u && x > 1000) x /= 1000;
+    if (x > best && x < 1000) best = x; return m;
+  });
+  return best;
+}
+function parseStation(el) {
+  const tg = el.tags || {};
+  const lat = el.lat != null ? el.lat : (el.center && el.center.lat), lon = el.lon != null ? el.lon : (el.center && el.center.lon);
+  if (typeof lat !== 'number' || typeof lon !== 'number') return null;
+  if (tg.access === 'private' || tg.access === 'no') return null;
+  const socks = [], seen = new Set(); let kw = 0, dc = false;
+  Object.keys(tg).forEach((k) => {
+    let m = k.match(/^socket:([a-z0-9_]+)$/);
+    if (m && tg[k] !== 'no' && tg[k] !== '0') { const lbl = SOCK[m[1]] || m[1].replace(/_/g, ' ').toUpperCase(); if (!seen.has(lbl)) { seen.add(lbl); socks.push(lbl); } if (DC_SOCK.has(m[1])) dc = true; }
+    m = k.match(/^socket:([a-z0-9_]+):output$/);
+    if (m) { const x = parseKw(tg[k]); if (x > kw) kw = x; }
+  });
+  if (tg['charging_station:output']) { const x = parseKw(tg['charging_station:output']); if (x > kw) kw = x; }
+  const names = { uz: tg['name:uz'] || '', ru: tg['name:ru'] || '', en: tg['name:en'] || '', def: tg.name || tg.operator || tg.brand || tg.network || '' };
+  return {
+    id: el.type + el.id, lat, lon, names, op: tg.operator || tg.brand || tg.network || '', kw: Math.round(kw * 10) / 10, socks,
+    fast: kw >= 40 || (dc && kw === 0), hours: tg.opening_hours || '', fee: tg.fee === 'yes' ? 'yes' : tg.fee === 'no' ? 'no' : '',
+    addr: [tg['addr:street'], tg['addr:housenumber']].filter(Boolean).join(' ')
+  };
+}
+function stName(st) { return st.names[lang] || st.names.def || t('s.noname'); }
+function kwLabel(st) { return st.kw ? num(st.kw, st.kw % 1 ? 1 : 0) + ' kW' : t('s.kwu'); }
+function dist(a, b) {
+  const R = 6371, rad = Math.PI / 180, dLa = (b.lat - a.lat) * rad, dLo = (b.lon - a.lon) * rad;
+  const h = Math.sin(dLa / 2) ** 2 + Math.cos(a.lat * rad) * Math.cos(b.lat * rad) * Math.sin(dLo / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+
+async function fetchOverpass() {
+  let lastErr = new Error('no endpoint');
+  for (const url of OVERPASS) {
+    const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), 30000);
+    try {
+      const r = await fetch(url, { method: 'POST', body: 'data=' + encodeURIComponent(OV_QUERY), headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, signal: ctl.signal });
+      clearTimeout(to);
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const j = await r.json();
+      if (!j || !Array.isArray(j.elements)) throw new Error('bad response');
+      return j.elements;
+    } catch (e) { clearTimeout(to); lastErr = e; }
+  }
+  throw lastErr;
+}
+async function loadStations(force) {
+  stState = 'loading'; stNote = ''; renderStations();
+  let cached = null;
+  try { cached = JSON.parse(localStorage.getItem(ST_KEY) || 'null'); } catch (e) {}
+  const okCache = cached && Array.isArray(cached.data);
+  if (!force && okCache && Date.now() - cached.t < ST_TTL) { stations = cached.data; stState = 'ready'; renderStations(true); return; }
+  try {
+    stations = (await fetchOverpass()).map(parseStation).filter(Boolean);
+    try { localStorage.setItem(ST_KEY, JSON.stringify({ t: Date.now(), data: stations })); } catch (e) {}
+    stState = 'ready';
+  } catch (e) {
+    if (okCache) { stations = cached.data; stState = 'ready'; } else { stState = 'error'; }
+  }
+  renderStations(true);
+}
+
+function visibleStations() {
+  const q = $('stSearch').value.trim().toLowerCase(), fast = $('stFast').checked;
+  const a = stations.filter((s) => (!fast || s.fast) && (!q || (stName(s) + ' ' + s.op + ' ' + s.addr).toLowerCase().indexOf(q) !== -1));
+  a.forEach((s) => { s._d = userPos ? dist(userPos, s) : null; });
+  a.sort((x, y) => userPos ? x._d - y._d : ((y.fast ? 1 : 0) - (x.fast ? 1 : 0)) || stName(x).localeCompare(stName(y)));
+  return a;
+}
+function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+function popup(st) {
+  const d = el('div', 'pop');
+  d.appendChild(el('h4', '', stName(st)));
+  if (st.op && st.op !== stName(st)) d.appendChild(el('p', '', st.op));
+  if (st.addr) d.appendChild(el('p', '', st.addr));
+  d.appendChild(el('p', '', [kwLabel(st), st.socks.join(' / ')].filter(Boolean).join(' · ')));
+  if (st.hours) d.appendChild(el('p', '', t('s.hours', { h: st.hours })));
+  if (st.fee) d.appendChild(el('p', '', t('s.fee.' + st.fee)));
+  const a = el('a', '', t('s.osm')); a.href = 'https://www.openstreetmap.org/' + st.id.replace(/^(node|way|relation)(\d+)$/, '$1/$2'); a.target = '_blank'; a.rel = 'noopener noreferrer'; d.appendChild(a);
+  const b = el('button', 'pbtn', t('s.use')); b.type = 'button'; b.addEventListener('click', () => useStation(st)); d.appendChild(b);
+  return d;
+}
+function ensureMap() {
+  if (stMap || typeof L === 'undefined') return;
+  stMap = L.map('stMap', { scrollWheelZoom: false }).setView([41.3111, 69.2797], 11);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a>' }).addTo(stMap);
+  stLayer = L.layerGroup().addTo(stMap);
+  stMap.on('click', () => stMap.scrollWheelZoom.enable());
+  stMap.on('mouseout', () => stMap.scrollWheelZoom.disable());
+}
+function selectStation(st, fromMap) {
+  selId = st.id;
+  document.querySelectorAll('.st-item').forEach((b) => { const on = b.dataset.id === st.id; b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); if (on && fromMap) b.scrollIntoView({ block: 'nearest' }); });
+  if (stMap && !fromMap) {
+    stMap.setView([st.lat, st.lon], Math.max(stMap.getZoom(), 15));
+    if (stMarkers[st.id]) stMarkers[st.id].openPopup();
+    if (window.innerWidth <= 920) $('stMap').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+function renderStations(fit) {
+  ensureMap();
+  const list = $('stList'), vis = stations.length ? visibleStations() : [];
+  list.textContent = '';
+  let msg = '';
+  if (stState === 'loading') msg = t('s.loading');
+  else if (stState === 'error') msg = t('s.error');
+  else msg = (vis.length === stations.length ? t('s.count', { n: num(vis.length, 0) }) : t('s.count2', { n: num(vis.length, 0), m: num(stations.length, 0) }));
+  $('stStatus').textContent = msg + (stNote ? ' ' + stNote : '');
+  $('stRetry').hidden = stState !== 'error';
+
+  if (stState === 'ready' && !vis.length) list.appendChild(el('li', 'st-empty', t('s.empty')));
+  vis.slice(0, 400).forEach((s) => {
+    const li = document.createElement('li'), b = el('button', 'st-item' + (s.id === selId ? ' on' : ''));
+    b.type = 'button'; b.dataset.id = s.id; b.setAttribute('aria-pressed', String(s.id === selId));
+    const n = el('b'); n.appendChild(el('i', 'dot ' + (s.fast ? 'dc' : 'ac'))); n.appendChild(document.createTextNode(stName(s)));
+    const meta = el('span', '', [s.op && s.op !== stName(s) ? s.op : '', kwLabel(s), s.socks.slice(0, 3).join(' / '), s._d != null ? num(s._d, 1) + ' km' : ''].filter(Boolean).join(' · '));
+    b.appendChild(n); b.appendChild(meta); b.addEventListener('click', () => selectStation(s, false));
+    li.appendChild(b); list.appendChild(li);
+  });
+
+  if (stMap) {
+    stLayer.clearLayers(); stMarkers = {};
+    vis.forEach((s) => {
+      const m = L.circleMarker([s.lat, s.lon], { radius: 8, weight: 2, color: '#fff', fillColor: s.fast ? '#16a34a' : '#2563eb', fillOpacity: .9 });
+      m.bindPopup(() => popup(s)); m.on('click', () => selectStation(s, true)); m.addTo(stLayer); stMarkers[s.id] = m;
+    });
+    if (fit && vis.length && !userPos) { try { stMap.fitBounds(L.latLngBounds(vis.map((s) => [s.lat, s.lon])).pad(0.08), { maxZoom: 13 }); } catch (e) {} }
+  }
+}
+function useStation(st) {
+  S.stationObj = st;
+  const sel = $('fPower');
+  sel.querySelectorAll('option[data-custom]').forEach((o) => o.remove());
+  if (st.kw) {
+    const kw = Math.round(st.kw);
+    let o = Array.from(sel.options).find((x) => +x.value === kw);
+    if (!o) { o = new Option(kw + ' kW (OSM)', String(kw)); o.dataset.custom = '1'; sel.add(o, Array.from(sel.options).find((x) => +x.value > kw) || null); }
+    sel.value = String(kw); CFG.power = kw;
+  }
+  restart();
+  $('phone').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  toast(t('s.using', { n: stName(st) }));
+}
+$('stSearch').addEventListener('input', () => renderStations());
+$('stFast').addEventListener('change', () => renderStations());
+$('stRetry').addEventListener('click', () => loadStations(true));
+$('btnDefaultSt').addEventListener('click', () => { S.stationObj = null; sel0(); restart(); });
+function sel0() { const sel = $('fPower'); sel.querySelectorAll('option[data-custom]').forEach((o) => o.remove()); sel.value = '50'; CFG.power = 50; }
+$('stNear').addEventListener('click', () => {
+  if (!navigator.geolocation) { stNote = t('s.geoerr'); renderStations(); return; }
+  navigator.geolocation.getCurrentPosition((pos) => {
+    userPos = { lat: pos.coords.latitude, lon: pos.coords.longitude }; stNote = t('s.geook');
+    if (stMap) { if (userMark) userMark.remove(); userMark = L.circleMarker([userPos.lat, userPos.lon], { radius: 7, weight: 3, color: '#fff', fillColor: '#f59e0b', fillOpacity: 1 }).addTo(stMap); stMap.setView([userPos.lat, userPos.lon], 13); }
+    renderStations();
+  }, () => { stNote = t('s.geoerr'); renderStations(); }, { timeout: 10000, maximumAge: 60000 });
+});
+
 /* init */
 try { const l = localStorage.getItem(LANG_KEY); if (l && I18N[l]) lang = l; const c = localStorage.getItem(CUR_KEY); if (c === 'USD' || c === 'UZS') cur = c; } catch (e) {}
 applyStatic(); restart();
 requestAnimationFrame(tick);
+loadStations(false);
 })();
 </script>
 </body>
