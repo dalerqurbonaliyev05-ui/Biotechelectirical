@@ -423,6 +423,13 @@ ul, ol { list-style: none; }
 .project-tech li:nth-child(3) { background: #ffeaf1; }
 .link { display: inline-flex; font: 800 .95rem var(--mono); text-decoration: none; color: var(--ink); border-bottom: 3px solid var(--pink); padding-bottom: 2px; transition: color .2s, letter-spacing .25s; }
 .link:hover { color: var(--pink); letter-spacing: .05em; }
+.project.is-lab a.project-media { display: block; }
+.project.is-lab .frame img { transition: transform .6s ease; }
+.project.is-lab:hover .frame img, .project.is-lab:focus-within .frame img { transform: scale(1.06); }
+.project.is-lab .frame::after { content: "▶ 7 · LAB"; position: absolute; left: 16px; bottom: 16px; padding: 8px 14px; border-radius: 999px; background: var(--ink); color: #fff; font: 700 .78rem var(--mono); letter-spacing: .06em; opacity: 0; transform: translateY(12px); transition: opacity .35s, transform .35s; }
+.project.is-lab:hover .frame::after, .project.is-lab:focus-within .frame::after { opacity: 1; transform: none; }
+.project.is-lab:hover .link, .project.is-lab:focus-within .link { color: var(--pink); letter-spacing: .05em; }
+@media (prefers-reduced-motion: reduce) { .project.is-lab .frame img, .project.is-lab .frame::after { transition: none; } }
 
 /* ---------- Contact: the socket ---------- */
 .contact { color: #fff; overflow: hidden; isolation: isolate; padding-bottom: 130px; }

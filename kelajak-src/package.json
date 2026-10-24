@@ -1,0 +1,27 @@
+{
+  "name": "kelajak",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Kelajak loyihalari: 7 qadamli interaktiv o'quv sahifalari (Next.js static export), /kelajak/ manzilida.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "lint": "eslint .",
+    "typecheck": "next typegen && tsc --noEmit",
+    "test": "node --test tests/*.test.ts",
+    "deploy": "npm run build && node scripts/deploy.mjs"
+  },
+  "dependencies": {
+    "next": "16.4.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "eslint": "^9.39.0",
+    "eslint-config-next": "16.4.0",
+    "typescript": "~5.9.3"
+  }
+}
