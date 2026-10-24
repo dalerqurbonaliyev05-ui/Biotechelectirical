@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Shahar quruvchi | EnergyVibe</title>
-<meta name="description" content="Shahar quruvchi: 20 bosqichli o‘yin. Stansiya, liniya va transformator bilan shaharni yoriting, kecha-kunduz yuklamani ushlang, pul yetsin.">
+<meta name="description" content="Shahar quruvchi: 40 bosqichli o‘yin. Stansiya, liniya, biogaz, shamol va zaxira generatorlar bilan shaharni yoriting, tarmoqni xavfsiz qiling.">
 <link rel="icon" type="image/png" href="/rasmlar1/rasm5/rasm4.png">
 <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -82,7 +82,12 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
 .lvbtn:disabled{opacity:.4;cursor:not-allowed}
 .lvbtn[aria-current="true"]{border-color:var(--cyan);box-shadow:0 0 0 1px var(--cyan) inset}
 .stat-goal b{white-space:normal;font-size:12.5px;max-width:240px;line-height:1.3}
-.tool[hidden]{display:none}
+.tool[hidden],.stat[hidden]{display:none}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tab{height:36px;padding:0 14px;border-radius:9px;border:1px solid var(--edge);background:var(--surface-2);color:var(--text);cursor:pointer;font-weight:600;font-size:13px}
+.tab[aria-selected="true"]{border-color:var(--cyan);color:var(--cyan);background:rgba(79,216,234,.12)}
+.tab:disabled{opacity:.45;cursor:not-allowed}
+.sect{font-size:12.5px;color:var(--muted);margin:0}
 .mission{background:var(--surface);border:1px solid var(--cyan);border-radius:12px;padding:12px 14px;display:grid;gap:8px;box-shadow:0 0 0 1px rgba(79,216,234,.12) inset}
 .mhead{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;justify-content:space-between}
 .mhead b{font-size:16px;font-weight:700;text-wrap:balance}
@@ -124,6 +129,7 @@ a.ghost{display:inline-grid;place-items:center;text-decoration:none}
 </style>
 </head>
 <body>
+
 <div class="app">
   <header class="hud">
     <div class="brand">
@@ -137,6 +143,8 @@ a.ghost{display:inline-grid;place-items:center;text-decoration:none}
       <div class="stat"><span class="k">Yoritilgan</span><b id="lit">100%</b></div>
       <div class="stat"><span class="k">Ishonch</span><b id="trust">100</b><div class="meter"><i id="trustBar"></i></div></div>
       <div class="stat"><span class="k">Ob-havo</span><b id="tag">Ochiq</b></div>
+      <div class="stat" id="stWind" hidden><span class="k">Shamol</span><b id="wind">-</b></div>
+      <div class="stat" id="stSec" hidden><span class="k">N-1 xavfsizlik</span><b id="sec">100%</b><div class="meter"><i id="secBar"></i></div></div>
     </div>
     <div class="speed" role="group" aria-label="O'yin tezligi">
       <button type="button" data-sp="0" aria-pressed="false" title="Pauza (Probel)">II</button>
@@ -154,9 +162,9 @@ a.ghost{display:inline-grid;place-items:center;text-decoration:none}
   </section>
 
   <ol class="how">
-    <li>Uy, zavod va kasalxona qo'ying</li>
-    <li>Stansiya va transformator quring</li>
-    <li>Liniyani sudrab torting, hammasini ulang</li>
+    <li id="h1">Uy, zavod va kasalxona qo'ying</li>
+    <li id="h2">Stansiya va transformator quring</li>
+    <li id="h3">Liniyani sudrab torting, hammasini ulang</li>
   </ol>
 
   <main class="stage">
@@ -290,44 +298,146 @@ Object.keys(TUNE).forEach(k=>Object.assign(LEVELS[k],TUNE[k]));
 
 /* Aniq vazifa: ishonch shartli bosqichlarda "hamma bino yoritilgan bo'lsin" qo'shiladi */
 for(let i=6;i<LEVELS.length;i++)LEVELS[i].goal=Object.assign({all:true},LEVELS[i].goal);
+
+/* ===== 2-bo'lim: zamonaviy tarmoq (21–40-bosqichlar) ===== */
+const base2=['liniya','trafo','mahalla','kasalxona','zavod'];
+const T2_GREEN=['liniya','mahalla','trafo','quyosh','batareya','shamol','ferma','biogaz','kasalxona'];
+const T2_ALL=[...base2,'quyosh','ies','batareya','biogaz','ferma','shamol','dizel','maktab','universitet','aeroport'];
+const two=y=>[ // ikki tomonlama ta'minot: ikkita transformatorli feeder (pastki feeder 'y' qatorda)
+  ...P('I',1,5),...hl(2,3,5),...P('T',4,5),
+  ...vl(1,6,y),...hl(2,3,y),...P('T',4,y)];
+
+const LEVELS2=[
+ /* --- Biogaz (21–24) --- */
+ {n:"Ferma va biogaz",d:"Fermadagi mol va qo'y go'ngidan biogaz olinadi. Biogaz EES ni fermaning yoniga (4 tomondan) qo'ying va tarmoqqa ulang. Gaz yoqilg'isi qimmat, biogaz esa pulsiz.",
+  days:3,money:260,hour:15,tools:['liniya','biogaz'],goal:{has:{biogaz:1},all:true,trust:60},growth:0.05,fuelMul:3,
+  cells:[...core(5),...hl(5,7,5),...P('m',6,4),...P('m',6,6),...P('m',10,4),...P('F',12,7)]},
+ {n:"Mol va qo'y fermalari",d:"Bitta ferma 2 MW xomashyo beradi, biogaz EES esa 3 MW gacha ishlaydi: ikkita ferma stansiyani to'liq quvvatga olib chiqadi. Uzun liniyada tok yo'qoladi, shuning uchun yo'lni qisqa tuting.",
+  days:4,money:340,hour:15,tools:['liniya','mahalla','biogaz','ferma'],goal:{has:{biogaz:1},all:true,trust:60},growth:0.06,spawn:1,mix:{m:1},fuelMul:3,loss:0.006,
+  cells:[...core(5),...hl(5,8,5),...P('m',6,4),...P('m',6,6),...P('m',8,6),...P('m',11,3),...P('F',12,8),...P('F',13,8),...P('F',14,8)]},
+ {n:"Gazsiz oqshom",d:"Gaz IES yo'q. Kechasi quyosh ishlamaydi, biogaz esa kechayu kunduz bir tekis beradi. Ikkita biogaz EES quring va batareya bilan to'ldiring.",
+  days:4,money:560,hour:15,tools:['liniya','mahalla','trafo','quyosh','batareya','ferma','biogaz'],goal:{has:{biogaz:2},all:true,trust:60},growth:0.05,cloud:0.2,
+  cells:[...P('Q',1,5),...hl(2,3,5),...P('T',4,5),...hl(5,7,5),...P('m',6,4),...P('m',6,6),...P('k',8,4),...P('m',8,6),
+    ...P('F',12,8),...P('F',13,8),...P('F',12,9),...P('F',13,9)]},
+ {n:"Arzon energiya",d:"Yoqilg'i 3 baravar qimmat. Biogaz va quyoshdan foydalanib, 5 kunda 650 mln to'plang.",
+  days:5,money:480,hour:15,tools:['liniya','mahalla','trafo','kasalxona','zavod','quyosh','ies','batareya','ferma','biogaz'],goal:{money:650,all:true,trust:60},growth:0.08,spawn:1,cloud:0.3,fault:0.2,fuelMul:3,loss:0.004,
+  cells:[...core(5),...hl(5,8,5),...P('m',6,4),...P('m',6,6),...P('k',8,4),...P('z',8,6),...P('m',10,3),...P('F',13,3),...P('F',14,3)]},
+
+ /* --- Shamol (25–28) --- */
+ {n:"Shamol esadi",d:"Shamol generatori shamol esganda tok beradi. U shovqin qiladi: uylardan kamida 1 katak uzoqda bo'lishi kerak. Hozirgi shamol tezligi tepada ko'rinadi.",
+  days:3,money:380,hour:15,tools:['liniya','mahalla','trafo','shamol'],goal:{has:{shamol:1},all:true,trust:60},growth:0.05,fuelMul:2,calm:0.15,
+  cells:[...core(5),...hl(5,8,5),...P('m',6,4),...P('m',6,6),...P('m',8,6),...P('m',8,4),...P('m',11,5),...area('~',14,8,16,10)]},
+ {n:"Kechasi esadigan shamol",d:"Gaz IES yo'q. Shamol ko'pincha kechasi kuchliroq esadi: u quyoshning aksini to'ldiradi. Ikkita shamol generatori quring.",
+  days:4,money:560,hour:15,tools:['liniya','mahalla','trafo','quyosh','batareya','shamol'],goal:{has:{shamol:2},all:true,trust:60},growth:0.06,spawn:1,mix:{m:1},cloud:0.25,calm:0.2,
+  cells:[...P('Q',1,5),...P('Q',1,4),...P('B',1,6),...hl(2,3,5),...P('T',4,5),...hl(5,7,5),...P('m',6,4),...P('m',6,6),...P('m',8,4),...P('m',8,6),...area('~',3,8,5,10)]},
+ {n:"Bo'ronli kunlar",d:"Juda kuchli shamolda generatorlar o'zini o'chiradi, shamolsiz kunda esa tok bermaydi. IES va batareya zaxirada tursin. 5 kunda 850 mln to'plang.",
+  days:5,money:520,hour:15,tools:['liniya','mahalla','trafo','kasalxona','zavod','quyosh','ies','batareya','shamol'],goal:{money:850,all:true,trust:60},growth:0.08,spawn:1,cloud:0.3,fuelMul:2.5,storm:0.3,calm:0.25,
+  cells:[...core(5),...hl(5,8,5),...P('m',6,4),...P('m',6,6),...P('k',8,4),...P('m',8,6),...P('z',11,5),...area('^',14,2,15,3)]},
+ {n:"Shamolsiz hafta",d:"Yarim kunlarda shamol yo'q. Shamol, biogaz, quyosh va batareyani birga ishlating. Gaz IES qurib bo'lmaydi.",
+  days:5,money:700,hour:15,tools:T2_GREEN,goal:{has:{shamol:1,biogaz:1},all:true,trust:65},growth:0.08,spawn:1,mix:{m:0.7,k:0.3},cloud:0.3,calm:0.5,storm:0.05,
+  cells:[...P('Q',1,5),...P('Q',1,4),...P('B',1,6),...hl(2,3,5),...P('T',4,5),...hl(5,8,5),...P('m',6,4),...P('m',6,6),...P('k',8,4),...P('m',8,6),
+    ...P('F',12,9),...P('F',13,9),...area('~',10,0,12,2)]},
+
+ /* --- N-1 xavfsizlik (29–32) --- */
+ {n:"Halqa",d:"Bitta liniya uzilsa maktab tokdan ajralib qoladi. Ikkinchi yo'l (halqa) qo'shing: tepadagi va pastdagi feederni maktab oldida ulang. Xavfsizlik 100% bo'lsin.",
+  days:3,money:140,hour:15,tools:['liniya','trafo'],goal:{safe:100,all:true,trust:60},growth:0.04,fault:1,sec:true,
+  cells:[...two(7),...hl(5,10,5),...hl(5,8,7),...P('s',10,6),...P('m',7,4),...P('m',9,4)]},
+ {n:"Ikki tomonlama ta'minot",d:"Hamma narsa bitta feeder va bitta transformatorga bog'liq. Transformator yoki liniya uzilsa butun shahar qorong'ida qoladi. Ikkinchi transformator va ikkinchi yo'l quring.",
+  days:4,money:260,hour:15,tools:['liniya','trafo'],goal:{safe:100,all:true,trust:60},growth:0.05,fault:0.8,sec:true,
+  cells:[...core(5),...hl(5,11,5),...P('s',8,4),...P('z',10,6),...P('m',7,6),...P('u',12,5)]},
+ {n:"Katta halqa",d:"Shahar o'sadi, yangi maktablar va universitetlar qo'shiladi. Har birini ikki tomonlama ulang. Uzun liniyalarda tok yo'qoladi.",
+  days:5,money:420,hour:15,tools:['liniya','trafo','mahalla','zavod','maktab','universitet','ies'],goal:{safe:90,all:true,trust:60},growth:0.06,spawn:1,mix:{s:0.45,u:0.3,z:0.1,m:0.15},fault:0.8,sec:true,loss:0.004,
+  cells:[...two(8),...hl(5,10,5),...hl(5,9,8),...P('s',10,6),...P('u',12,5),...P('m',7,4),...P('m',9,3),...P('z',12,8)]},
+ {n:"Avariyalar kuni",d:"Har kuni ikkita liniya uziladi va avariya aynan zaif joyga uradi. Tezda qayta torting va halqani saqlang.",
+  days:5,money:480,hour:15,tools:['liniya','trafo','mahalla','zavod','maktab','universitet','ies'],goal:{safe:100,all:true,trust:65},growth:0.06,spawn:1.5,mix:{s:0.4,u:0.3,z:0.3},fault:1,faultN:2,sec:true,loss:0.004,
+  cells:[...two(8),...hl(5,10,5),...hl(5,10,8),...P('s',10,6),...P('u',12,6),...P('m',7,4),...P('z',8,3),...P('s',13,8)]},
+
+ /* --- Kasalxona va zaxira manba (33–36) --- */
+ {n:"Kasalxona zaxirasi",d:"Kasalxona 1-kategoriya: tarmoq o'chsa ham ishlashi shart. Uning yoniga dizel generator qo'ying: u tok kelmaganda kasalxonani yoritadi. Bugun soat tizim avariyasi bo'ladi.",
+  days:3,money:220,hour:15,tools:['liniya','trafo','dizel'],goal:{backup:true,all:true,trust:55},growth:0.05,outage:0.8,outLen:4,
+  cells:[...core(5),...hl(5,8,5),...P('k',8,4),...P('m',6,4),...P('m',6,6),...P('m',10,5)]},
+ {n:"Ikki manba, bitta kasalxona",d:"Kasalxonaga ikki tomondan tok kelishi va yoniga zaxira generator turishi kerak. Bir vaqtda halqa va dizelni ta'minlang.",
+  days:4,money:360,hour:15,tools:['liniya','trafo','dizel','maktab'],goal:{safe:100,backup:true,all:true,trust:60},growth:0.05,fault:1,outage:0.6,outLen:4,sec:true,
+  cells:[...two(7),...hl(5,10,5),...hl(5,8,7),...P('k',10,6),...P('m',7,4),...P('m',9,4),...P('s',12,5)]},
+ {n:"Ikkita kasalxona",d:"Ikkita kasalxona va yangi binolarning yarmi ham kasalxona yoki maktab. Pul tor, avariya uzoqroq: 5 soat.",
+  days:5,money:420,hour:15,tools:['liniya','trafo','dizel','maktab','mahalla','kasalxona','ies'],goal:{safe:100,backup:true,all:true,trust:65},growth:0.06,spawn:1,mix:{k:0.45,m:0.3,s:0.25},fault:0.8,outage:0.7,outLen:5,sec:true,
+  cells:[...two(8),...hl(5,10,5),...hl(5,9,8),...P('k',10,6),...P('k',9,4),...P('s',12,6),...P('m',7,4),...P('m',7,9)]},
+ {n:"Uzoq uzilish",d:"Avariya 8 soat davom etadi. Dizel yoqilg'isi qimmat: batareya orqali kasalxonani qisman qo'llab, dizelni tejang.",
+  days:5,money:620,hour:15,tools:['liniya','trafo','dizel','mahalla','kasalxona','quyosh','ies','batareya'],goal:{backup:true,all:true,trust:65},growth:0.06,spawn:1,mix:{m:0.5,k:0.3,z:0.2},cloud:0.2,fuelMul:2,outage:0.8,outLen:8,
+  cells:[...core(5),...hl(5,9,5),...P('k',8,4),...P('k',10,6),...P('m',6,4),...P('m',6,6),...P('m',9,4),...P('z',12,5)]},
+
+ /* --- Yangi iste'molchilar (37–40) --- */
+ {n:"Maktab va universitet",d:"Maktab kunduzi, yotoqxonali universitet kechqurun ham tok oladi. Ikkalasi 2-kategoriya: ikki tomonlama ta'minot talab qilinadi.",
+  days:5,money:480,hour:15,tools:['liniya','trafo','mahalla','zavod','maktab','universitet','quyosh','ies','batareya'],goal:{safe:80,all:true,trust:65},growth:0.06,spawn:1.5,mix:{s:0.4,u:0.3,m:0.3},sec:true,fault:0.7,loss:0.004,
+  cells:[...two(8),...hl(5,11,5),...hl(5,10,8),...P('s',8,4),...P('u',11,6),...P('m',7,6),...P('s',12,8),...P('m',10,3)]},
+ {n:"Aeroport",d:"Aeroport 4 MW tortadi (1-kategoriya). Bitta dizel 3 MW beradi: yetarli zaxira uchun aeroport yoniga ikkita dizel kerak. Halqa va zaxira birga.",
+  days:5,money:760,hour:15,tools:['liniya','trafo','dizel','mahalla','quyosh','ies','batareya','maktab'],goal:{safe:100,backup:true,all:true,trust:60},growth:0.05,spawn:1,mix:{m:0.6,s:0.4},fault:0.8,outage:0.6,outLen:4,sec:true,loss:0.004,
+  cells:[...two(8),...P('I',1,4),...hl(5,12,5),...hl(5,11,8),...P('a',13,6),...P('m',7,4),...P('m',9,6),...P('m',9,4)]},
+ {n:"Katta shahar II",d:"Hamma yangiliklar birga: biogaz, shamol, halqa, zaxira generator, maktab, universitet va aeroport. 7 kun davomida tarmoqni ushlang.",
+  days:7,money:900,hour:15,tools:T2_ALL,goal:{safe:80,backup:true,all:true,trust:60},growth:0.07,spawn:2,mix:{m:0.25,z:0.12,k:0.15,s:0.2,u:0.18,a:0.1},cloud:0.3,heat:0.3,fault:0.8,outage:0.5,outLen:4,loss:0.005,sec:true,calm:0.2,storm:0.1,fuelMul:1.5,
+  cells:[...two(8),...P('I',1,4),...hl(5,10,5),...hl(5,10,8),...P('m',7,4),...P('m',7,6),...P('k',9,6),...P('s',11,4),...P('u',11,6),...P('z',9,9),
+    ...P('F',15,2),...P('F',16,2),...area('~',13,9,15,10)]},
+ {n:"Bosh dispetcher",d:"Oxirgi sinov: o'sayotgan shahar, bo'ron, bulut, issiq, har kuni ikkita avariya va tizim avariyasi. Xavfsiz tarmoq qurib, 8 kunda 2000 mln to'plang.",
+  days:8,money:1000,hour:15,tools:T2_ALL,goal:{money:2000,safe:90,backup:true,all:true,trust:60},growth:0.05,spawn:1.6,mix:{m:0.25,z:0.12,k:0.15,s:0.2,u:0.2,a:0.08},cloud:0.4,heat:0.3,fault:1,faultN:2,outage:0.5,outLen:4,loss:0.005,sec:true,calm:0.3,storm:0.15,fuelMul:2.5,
+  cells:[...two(8),...P('I',1,4),...hl(5,11,5),...hl(5,11,8),...P('m',7,4),...P('m',7,6),...P('k',9,6),...P('s',10,4),...P('u',12,6),...P('a',14,5),
+    ...P('F',15,1),...P('F',16,1),...P('F',16,2),...area('~',3,10,6,11),...area('^',9,0,10,1)]}
+];
+LEVELS2.forEach(l=>LEVELS.push(l));
+LEVELS.forEach((l,i)=>{l.part=i<20?1:2;});
 /* ===== Dvigatel: qoidalar, tarmoq, soatlik hisob ===== */
 const W=18,H=12;
 const D4=[[1,0],[-1,0],[0,1],[0,-1]];
+const D8=[[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];
 const TYPES={
-  mahalla:{n:'Mahalla',kind:'load',cost:30,peak:1.0,rate:5.0,crit:0,pen:0.5,up:0,c:'#ffcf6b',info:"Turar-joy. Kechqurun yuklama eng baland bo'ladi."},
-  zavod:{n:'Zavod',kind:'load',cost:110,peak:3.0,rate:5.2,crit:0,pen:0.25,up:0,c:'#c58cff',info:"Kunduzi to'liq quvvatda ishlaydi, kechasi sekinlashadi."},
-  kasalxona:{n:'Kasalxona',kind:'load',cost:80,peak:1.5,rate:4.5,crit:1,pen:3,up:0,c:'#ff7a8a',info:"Kechayu kunduz ishlaydi. Tok uzilsa ishonch tez tushadi. Birinchi bo'lib ta'minlanadi."},
+  mahalla:{n:'Mahalla',kind:'load',cat:3,cost:30,peak:1.0,rate:5.0,crit:0,pen:0.5,up:0,c:'#ffcf6b',info:"Turar-joy (3-kategoriya). Kechqurun yuklama eng baland bo'ladi."},
+  zavod:{n:'Zavod',kind:'load',cat:2,cost:110,peak:3.0,rate:5.2,crit:0,pen:0.25,up:0,c:'#c58cff',info:"Kunduzi to'liq quvvatda ishlaydi, kechasi sekinlashadi."},
+  kasalxona:{n:'Kasalxona',kind:'load',cat:1,cost:80,peak:1.5,rate:4.5,crit:1,pen:3,up:0,c:'#ff7a8a',info:"1-kategoriya: kechayu kunduz ishlaydi. Tok uzilsa ishonch tez tushadi. Birinchi bo'lib ta'minlanadi."},
+  maktab:{n:'Maktab',kind:'load',cat:2,cost:70,peak:0.9,rate:4.8,crit:0,pen:1,up:0,c:'#ffd6a0',info:"2-kategoriya: kunduzi ishlaydi, kechasi deyarli tok olmaydi. Ikki tomonlama ta'minot kerak."},
+  universitet:{n:'Universitet',kind:'load',cat:2,cost:150,peak:2.2,rate:5.0,crit:0,pen:1.2,up:0,c:'#b6a2ff',info:"2-kategoriya: kunduzi katta yuk, kechqurun yotoqxona. Ikki tomonlama ta'minot kerak."},
+  aeroport:{n:'Aeroport',kind:'load',cat:1,cost:220,peak:4.0,rate:5.5,crit:1,pen:3,up:0,c:'#7fd0ff',info:"1-kategoriya: kechayu kunduz katta yuk. Ikki tomonlama ta'minot va yetarli zaxira generator kerak."},
   quyosh:{n:'Quyosh EES',kind:'gen',cost:90,cap:4,up:0.3,c:'#ffe27a',info:"Kunduzi bepul tok beradi, kechasi nol. Bulutli kunda kuchsiz."},
   ies:{n:'Gaz IES',kind:'gen',cost:220,cap:8,fuel:1.4,up:1.2,c:'#ff9d57',info:"Doim ishlaydi, lekin har MWh uchun yoqilg'i pulini to'laysiz."},
+  biogaz:{n:'Biogaz EES',kind:'gen',cost:150,cap:3,up:0.8,c:'#9be15d',info:"Yon tomonidagi fermalarning go'ngidan tok ishlab chiqaradi. Kechayu kunduz bir tekis, yoqilg'i pulsiz."},
+  shamol:{n:'Shamol EES',kind:'gen',cost:110,cap:3,up:0.4,c:'#8fe3ff',info:"Shamol esganda tok beradi (kechasi ko'proq). Uylardan kamida 1 katak uzoqda bo'lishi kerak. Bo'ronda o'chadi."},
   batareya:{n:'Batareya',kind:'store',cost:70,pw:2,mwh:8,up:0.2,c:'#5fe3a1',info:"Kunduzi ortiqcha quyosh tokini yig'adi, kechqurun qaytaradi."},
+  ferma:{n:'Ferma',kind:'feed',cost:45,feed:2,up:0.3,c:'#a8d86e',info:"Mol va qo'y fermasi. Go'ngi biogaz xomashyosi: biogaz EES ni yoniga (4 tomondan) qo'ying."},
+  dizel:{n:'Dizel generator',kind:'backup',cost:60,cap:3,fuel:3,up:0.1,c:'#ffb36b',info:"Zaxira manba. Yon tomonidagi 1-kategoriya iste'molchisi tarmoqdan ajralganda unga tok beradi (yoqilg'i pulga)."},
   trafo:{n:'Transformator',kind:'trafo',cost:40,cap:6,up:0.2,c:'#4fd8ea',info:"Tarmoqdan 6 MW gacha o'tkazadi. Transformatorsiz tarmoq ishlamaydi."},
   liniya:{n:'Liniya',kind:'wire',cost:3,up:0.03,c:'#7f95b0',info:"Qo'shni katakchalarni ulaydi. Sudrab tortib chizing."}
 };
+const GEN=['quyosh','ies','biogaz','shamol'];
 const PROF={
   mahalla:[.28,.22,.2,.2,.22,.32,.5,.55,.42,.36,.34,.36,.42,.4,.38,.42,.58,.82,.96,1,.96,.86,.62,.4],
   zavod:[.32,.3,.3,.3,.32,.45,.75,.95,1,1,1,.95,.8,.96,1,1,.94,.78,.5,.4,.36,.33,.32,.32],
-  kasalxona:[.72,.7,.7,.7,.72,.76,.82,.9,.95,.96,.96,.95,.93,.94,.95,.94,.92,.9,.88,.86,.82,.78,.75,.73]
+  kasalxona:[.72,.7,.7,.7,.72,.76,.82,.9,.95,.96,.96,.95,.93,.94,.95,.94,.92,.9,.88,.86,.82,.78,.75,.73],
+  aeroport:[.62,.58,.56,.56,.62,.78,.92,1,1,.98,.96,.95,.95,.95,.96,.97,.99,1,.98,.95,.9,.82,.72,.66],
+  maktab:[.04,.04,.04,.04,.04,.06,.2,.65,1,1,1,1,.9,.95,.85,.6,.3,.15,.1,.08,.06,.05,.05,.04],
+  universitet:[.25,.22,.2,.2,.2,.24,.35,.6,.9,1,1,.98,.9,.97,1,.95,.85,.7,.6,.55,.5,.42,.35,.3]
 };
 const SOLAR=Array.from({length:24},(_,h)=>{const t=(h+.5-6)/12;return(t<=0||t>=1)?0:Math.pow(Math.sin(Math.PI*t),1.2);});
 const IDX=(x,y)=>y*W+x;
 const pad2=n=>String(n).padStart(2,'0');
-const SYM={I:'ies',Q:'quyosh',B:'batareya',T:'trafo','-':'liniya',m:'mahalla',z:'zavod',k:'kasalxona'};
+const cl01=v=>Math.max(0,Math.min(1,v));
+const SYM={I:'ies',Q:'quyosh',B:'batareya',T:'trafo','-':'liniya',m:'mahalla',z:'zavod',k:'kasalxona',
+  F:'ferma',G:'biogaz',W:'shamol',D:'dizel',a:'aeroport',s:'maktab',u:'universitet'};
+const MIXMAP={m:'mahalla',z:'zavod',k:'kasalxona',a:'aeroport',s:'maktab',u:'universitet'};
 
-function mk(t,grace){return{t:t,grace:grace||0,s:1,d:0,soc:0,out:0,mode:'idle'};}
+function mk(t,grace){return{t:t,grace:grace||0,s:1,d:0,soc:0,out:0,mode:'idle',bk:0,used:0,ang:0};}
 
 /* Bosqich yuklanadi: xarita ASCII belgilaridan quriladi. ~ ko'l, ^ tog' (qurib bo'lmaydi) */
 function newState(li){
   const lv=LEVELS[li];
   const s={li:li,lv:lv,goalDay:lv.days+1,day:1,hour:lv.hour||15,frac:0,money:lv.money,trust:100,speed:1,
-    cells:new Array(W*H).fill(null),terrain:new Uint8Array(W*H),
+    cells:new Array(W*H).fill(null),terrain:new Uint8Array(W*H),feed:new Float32Array(W*H),
     over:null,hold:0,failWhy:'',cloudy:false,heat:false,dayInc:0,dayCost:0,dayDark:0,wasDark:false,
+    windBase:typeof lv.wind0==='number'?lv.wind0:0.62,outage:0,outStart:-1,ver:0,n1:null,n1v:-1,
     log:[],logV:0,lit:100,nets:[],netOf:new Int16Array(W*H).fill(-1),live:new Uint8Array(W*H)};
   for(const e of lv.cells){
     const sym=e[0],x=e[1],y=e[2];
     if(x<0||y<0||x>=W||y>=H)continue;
     if(sym==='~')s.terrain[IDX(x,y)]=1;
     else if(sym==='^')s.terrain[IDX(x,y)]=2;
-    else s.cells[IDX(x,y)]=mk(SYM[sym],(sym==='m'||sym==='z'||sym==='k')?40:0);
+    else{const t=SYM[sym];s.cells[IDX(x,y)]=mk(t,TYPES[t].kind==='load'?40:0);}
   }
   for(let i=0;i<W*H;i++)if(s.terrain[i])s.cells[i]=null;
   return s;
@@ -343,7 +453,20 @@ function say(msg,k){
 const growth=()=>(1+(S.lv.growth||0)*(S.day-1))*(S.heat?1.25:1);
 const demandAt=(t,hour)=>TYPES[t].peak*PROF[t][hour]*growth();
 const sunNow=()=>SOLAR[S.hour]*(S.cloudy?0.35:1);
+const windNow=()=>{
+  if(S.windBase>1.1)return 0;
+  const f=(S.hour>=18||S.hour<6)?1.15:0.88;
+  return cl01(S.windBase*f*(1+0.1*Math.sin(S.hour*1.7+S.day)));
+};
+const windLabel=()=>{const w=windNow();return S.windBase>1.1?"Bo'ron":w<0.2?'Shamolsiz':w<0.5?'Kuchsiz':w<0.8?"O'rtacha":'Kuchli';};
 const allowed=t=>S.lv.tools.indexOf(t)>=0;
+
+function rollWind(){
+  const r=Math.random(),calm=S.lv.calm===undefined?0.15:S.lv.calm,storm=S.lv.storm===undefined?0.05:S.lv.storm;
+  if(r<calm)return 0.03+Math.random()*0.12;
+  if(r>1-storm)return 1.25;
+  return 0.45+Math.random()*0.5;
+}
 
 function components(){
   const seen=new Int16Array(W*H).fill(-1),list=[];
@@ -366,27 +489,62 @@ function components(){
   return list;
 }
 
+/* Ferma -> biogaz: har ferma o'z xomashyosini yon tomondagi biogaz stansiyalariga bo'lib beradi */
+function bioFeeds(){
+  const feed=S.feed;feed.fill(0);
+  let any=false;
+  for(let i=0;i<W*H;i++){const c=S.cells[i];if(c&&c.t==='biogaz'){any=true;break;}}
+  if(!any)return;
+  for(let f=0;f<W*H;f++){
+    const c=S.cells[f];if(!c||c.t!=='ferma')continue;
+    const x=f%W,y=(f/W)|0,adj=[];
+    for(const d of D4){
+      const nx=x+d[0],ny=y+d[1];
+      if(nx<0||ny<0||nx>=W||ny>=H)continue;
+      const j=ny*W+nx,o=S.cells[j];
+      if(o&&o.t==='biogaz')adj.push(j);
+    }
+    for(const j of adj)feed[j]+=TYPES.ferma.feed/adj.length;
+  }
+}
+
 /* Bir soatlik hisob. commit=false bo'lsa faqat ko'rinish yangilanadi (batareya, pul, ishonch o'zgarmaydi). */
 function solve(commit){
+  bioFeeds();
   const list=components(),nets=[];
   const night=S.hour>=18||S.hour<6;
+  const out=S.outage>0,sun=sunNow(),wnow=windNow(),lossK=S.lv.loss||0;
   S.netOf.fill(-1);S.live.fill(0);
   let income=0,fuel=0,pen=0;
   for(const m of list){
-    const L=[],G=[],B=[],R=[];
+    const L=[],Li=[],G=[],B=[],R=[],Dz=[];let wires=0;
     for(const i of m){
       const c=S.cells[i],k=TYPES[c.t].kind;
-      if(k==='load')L.push(c);else if(k==='gen')G.push(c);else if(k==='store')B.push(c);else if(k==='trafo')R.push(c);
+      if(k==='load'){L.push(c);Li.push(i);}
+      else if(k==='gen')G.push({c:c,i:i});
+      else if(k==='store')B.push(c);
+      else if(k==='trafo')R.push(c);
+      else if(k==='backup')Dz.push({c:c,i:i});
+      else if(k==='wire')wires++;
     }
     let demand=0;
     for(const c of L){c.d=demandAt(c.t,S.hour);demand+=c.d;}
+    const lf=1+wires*lossK;
     const limit=R.length*TYPES.trafo.cap;
-    const solarCap=G.filter(g=>g.t==='quyosh').length*TYPES.quyosh.cap;
-    const solar=solarCap*sunNow();
-    const iesCap=G.filter(g=>g.t==='ies').length*TYPES.ies.cap;
-    const need=Math.min(demand,limit);
-    const sol=Math.min(solar,need);
-    let rem=need-sol,surplus=R.length?solar-sol:0,dis=0,chg=0;
+    let nSol=0,nWind=0,nIes=0,bioCap=0;
+    for(const g of G){
+      const t=g.c.t;
+      if(t==='quyosh')nSol++;else if(t==='shamol')nWind++;else if(t==='ies')nIes++;
+      else if(t==='biogaz')bioCap+=Math.min(TYPES.biogaz.cap,S.feed[g.i]);
+    }
+    const solar=out?0:nSol*TYPES.quyosh.cap*sun;
+    const wind=out?0:nWind*TYPES.shamol.cap*wnow;
+    const bio=out?0:bioCap;
+    const iesCap=out?0:nIes*TYPES.ies.cap;
+    const freeP=solar+wind+bio;
+    const need=Math.min(demand*lf,limit);
+    const fre=Math.min(freeP,need);
+    let rem=need-fre,surplus=R.length?freeP-fre:0,dis=0,chg=0;
     for(const b of B){
       const t=Math.min(rem,TYPES.batareya.pw,b.soc);
       if(t>0){if(commit)b.soc-=t;rem-=t;dis+=t;}
@@ -396,26 +554,56 @@ function solve(commit){
       const t=Math.min(surplus,TYPES.batareya.pw,TYPES.batareya.mwh-b.soc);
       if(t>0){if(commit)b.soc+=t;surplus-=t;chg+=t;}
     }
-    const served=sol+dis+gasUse;
+    const served=(fre+dis+gasUse)/lf;
     let pool=served;
     const crit=L.filter(c=>TYPES[c.t].crit),rest=L.filter(c=>!TYPES[c.t].crit);
     const dc=crit.reduce((a,c)=>a+c.d,0),gc=Math.min(pool,dc);pool-=gc;
     for(const c of crit)c.s=dc>0?gc/dc:1;
     const dr=rest.reduce((a,c)=>a+c.d,0),gr=Math.min(pool,dr);
     for(const c of rest)c.s=dr>0?gr/dr:1;
+    /* zaxira dizel generatorlar: yon tomondagi 1-kategoriya iste'molchisiga */
+    let bkFuel=0;
+    if(Dz.length){
+      const dzAt=new Map();
+      for(const z of Dz){z.c.used=0;dzAt.set(z.i,z);}
+      for(let q=0;q<L.length;q++){
+        const c=L[q];c.bk=0;
+        if(!TYPES[c.t].crit||c.d<=0||c.s>=0.999)continue;
+        let def=c.d*(1-c.s);
+        const x=Li[q]%W,y=(Li[q]/W)|0;
+        for(const d of D4){
+          if(def<=1e-6)break;
+          const nx=x+d[0],ny=y+d[1];
+          if(nx<0||ny<0||nx>=W||ny>=H)continue;
+          const z=dzAt.get(ny*W+nx);
+          if(!z)continue;
+          const take=Math.min(TYPES.dizel.cap-z.c.used,def);
+          if(take>0){z.c.used+=take;def-=take;c.bk+=take;}
+        }
+        if(c.bk>0){c.s=Math.min(1,c.s+c.bk/c.d);bkFuel+=c.bk*TYPES.dizel.fuel*(S.lv.fuelMul||1);}
+      }
+      for(const z of Dz)z.c.out=z.c.used/TYPES.dizel.cap;
+    }else for(const c of L)c.bk=0;
     for(const c of L){
       const T=TYPES[c.t];
       income+=c.d*c.s*T.rate;
-      if(c.grace<=0)pen+=(1-c.s)*T.pen*((night&&c.t==='mahalla')?1.6:1);
+      if(c.grace<=0){
+        const of=out?(T.cat===1?1:T.cat===2?0.5:0.4):1;
+        pen+=(1-c.s)*T.pen*((night&&c.t==='mahalla')?1.6:1)*of;
+      }
     }
-    fuel+=gasUse*TYPES.ies.fuel*(S.lv.fuelMul||1);
-    const live=R.length>0&&(solar>0.01||iesCap>0||dis>0)?1:0;
+    fuel+=gasUse*TYPES.ies.fuel*(S.lv.fuelMul||1)+bkFuel;
+    const live=R.length>0&&(freeP>0.01||iesCap>0||dis>0)?1:0;
     const id=nets.length;
-    nets.push({n:m.length,loads:L.length,demand:demand,limit:limit,solar:solar,iesCap:iesCap,served:served,hasTrafo:R.length>0,hasGen:G.length>0,live:live,dis:dis,chg:chg,gasUse:gasUse});
+    nets.push({n:m.length,loads:L.length,demand:demand,limit:limit,solar:solar,wind:wind,bio:bio,iesCap:iesCap,served:served,
+      hasTrafo:R.length>0,hasGen:G.length>0,live:live,dis:dis,chg:chg,gasUse:gasUse,wires:wires,lf:lf});
     for(const b of B)b.mode=dis>0?'dis':chg>0?'chg':'idle';
     for(const g of G){
-      if(g.t==='quyosh')g.out=R.length?sunNow():0;
-      else g.out=(R.length&&iesCap>0)?gasUse/iesCap:0;
+      const t=g.c.t;
+      if(t==='quyosh')g.c.out=(R.length&&!out)?sun:0;
+      else if(t==='shamol')g.c.out=(R.length&&!out)?wnow:0;
+      else if(t==='biogaz')g.c.out=(R.length&&!out)?Math.min(1,S.feed[g.i]/TYPES.biogaz.cap):0;
+      else g.c.out=(R.length&&iesCap>0)?gasUse/iesCap:0;
     }
     for(const i of m){S.netOf[i]=id;S.live[i]=live;}
   }
@@ -430,21 +618,133 @@ function solve(commit){
   return{income:income,fuel:fuel,upkeep:upkeep,pen:pen,totD:totD,totS:totS};
 }
 
+/* N-1 xavfsizlik: bitta liniya yoki transformator uzilsa, iste'molchi tokdan ajralib qoladimi? */
+function n1(){
+  if(S.n1&&S.n1v===S.ver)return S.n1;
+  const cells=S.cells,elems=[],cons=[];
+  for(let i=0;i<W*H;i++){
+    const c=cells[i];if(!c)continue;
+    const k=TYPES[c.t].kind;
+    if(k==='wire'||k==='trafo')elems.push(i);
+    else if(k==='load')cons.push(i);
+  }
+  function supplied(rem){
+    const seen=new Uint8Array(W*H),flag=new Uint8Array(W*H);
+    for(let i=0;i<W*H;i++){
+      if(i===rem||!cells[i]||seen[i])continue;
+      const stack=[i],mem=[];seen[i]=1;
+      let tr=false,g=false;
+      while(stack.length){
+        const c=stack.pop();mem.push(c);
+        const t=cells[c].t;
+        if(t==='trafo')tr=true;else if(GEN.indexOf(t)>=0)g=true;
+        const x=c%W,y=(c/W)|0;
+        for(const d of D4){
+          const nx=x+d[0],ny=y+d[1];
+          if(nx<0||ny<0||nx>=W||ny>=H)continue;
+          const j=ny*W+nx;
+          if(j===rem||!cells[j]||seen[j])continue;
+          seen[j]=1;stack.push(j);
+        }
+      }
+      if(tr&&g)for(const c of mem)flag[c]=1;
+    }
+    return flag;
+  }
+  const base=supplied(-1),safe=new Map(),bridgeAny=new Set(),bridgeKey=new Set();
+  for(const c of cons)safe.set(c,base[c]===1);
+  for(const e of elems){
+    const f=supplied(e);
+    for(const c of cons){
+      if(base[c]===1&&f[c]!==1){
+        safe.set(c,false);bridgeAny.add(e);
+        if(TYPES[cells[c].t].cat<=2)bridgeKey.add(e);
+      }
+    }
+  }
+  let tot=0,ok=0;
+  for(const c of cons)if(TYPES[cells[c].t].cat<=2){tot++;if(safe.get(c))ok++;}
+  S.n1={pct:tot?ok/tot*100:100,tot:tot,ok:ok,safe:safe,bridgeAny:bridgeAny,bridgeKey:bridgeKey};
+  S.n1v=S.ver;
+  return S.n1;
+}
+
+/* 1-kategoriya iste'molchilarda zaxira (dizel) quvvati yetarlimi */
+function backupStatus(){
+  let tot=0,ok=0;
+  for(let i=0;i<W*H;i++){
+    const c=S.cells[i];
+    if(!c||TYPES[c.t].cat!==1||TYPES[c.t].kind!=='load')continue;
+    tot++;
+    let cap=0;const x=i%W,y=(i/W)|0;
+    for(const d of D4){
+      const nx=x+d[0],ny=y+d[1];
+      if(nx<0||ny<0||nx>=W||ny>=H)continue;
+      const o=S.cells[ny*W+nx];
+      if(o&&o.t==='dizel')cap+=TYPES.dizel.cap;
+    }
+    if(cap>=TYPES[c.t].peak-1e-6)ok++;
+  }
+  return{tot:tot,ok:ok};
+}
+function hasCount(t){
+  let n=0;
+  for(let i=0;i<W*H;i++){
+    const c=S.cells[i];
+    if(!c||c.t!==t)continue;
+    const net=S.nets[S.netOf[i]];
+    if(!net||!net.hasTrafo)continue;
+    if(t==='biogaz'&&S.feed[i]<0.05)continue;
+    n++;
+  }
+  return n;
+}
+
+const nearKind=(i,test)=>{
+  const x=i%W,y=(i/W)|0;
+  for(const d of D8){
+    const nx=x+d[0],ny=y+d[1];
+    if(nx<0||ny<0||nx>=W||ny>=H)continue;
+    const c=S.cells[ny*W+nx];
+    if(c&&test(c))return true;
+  }
+  return false;
+};
+const nearLoad=i=>nearKind(i,c=>TYPES[c.t].kind==='load');
+const nearWind=i=>nearKind(i,c=>c.t==='shamol');
+
 /* Har yangi kuni shaharga yangi bino(lar) qo'shiladi: ularni ulash kerak */
 function spawnBuilding(){
   const sp=S.lv.spawn||0;
   if(sp<=0)return;
   const n=Math.floor(sp)+(Math.random()<sp-Math.floor(sp)?1:0);
   const mix=S.lv.mix||{m:0.55,z:0.3,k:0.15};
+  const keys=Object.keys(mix),sum=keys.reduce((a,k)=>a+mix[k],0);
   for(let q=0;q<n;q++){
     const free=[];
-    for(let i=0;i<W*H;i++)if(!S.cells[i]&&!S.terrain[i])free.push(i);
+    for(let i=0;i<W*H;i++)if(!S.cells[i]&&!S.terrain[i]&&!nearWind(i))free.push(i);
     if(free.length<20)return;
-    const i=free[Math.floor(Math.random()*free.length)],r=Math.random()*(mix.m+mix.z+mix.k);
-    const t=r<mix.m?'mahalla':r<mix.m+mix.z?'zavod':'kasalxona';
-    S.cells[i]=mk(t,18);
+    const i=free[Math.floor(Math.random()*free.length)];
+    let r=Math.random()*sum,key=keys[keys.length-1];
+    for(const k of keys){if(r<mix[k]){key=k;break;}r-=mix[k];}
+    const t=MIXMAP[key];
+    S.cells[i]=mk(t,18);S.ver++;
     say("Shaharga yangi "+TYPES[t].n.toLowerCase()+" qo'shildi. Sariq belgi: uni 18 soat ichida ulang.",'warn');
   }
+}
+
+function faultLine(){
+  const w=[];
+  for(let i=0;i<W*H;i++)if(S.cells[i]&&S.cells[i].t==='liniya')w.push(i);
+  if(w.length<=4)return false;
+  let pool=w;
+  if(S.lv.sec){
+    const br=n1().bridgeAny,bl=w.filter(i=>br.has(i));
+    if(bl.length&&Math.random()<0.8)pool=bl;
+  }
+  const i=pool[Math.floor(Math.random()*pool.length)];
+  S.cells[i]=null;S.ver++;
+  return true;
 }
 
 function endDay(){
@@ -456,41 +756,61 @@ function endDay(){
   S.cloudy=Math.random()<(S.lv.cloud||0);
   S.heat=Math.random()<(S.lv.heat||0);
   spawnBuilding();
+  let faults=0;
   if(Math.random()<(S.lv.fault||0)){
-    const w=[];
-    for(let i=0;i<W*H;i++)if(S.cells[i]&&S.cells[i].t==='liniya')w.push(i);
-    if(w.length>4){
-      const i=w[Math.floor(Math.random()*w.length)];
-      S.cells[i]=null;
-      say("Avariya: bitta liniya uzildi. Uni qayta torting.",'bad');
-    }
+    const nF=S.lv.faultN||1;
+    for(let q=0;q<nF;q++)if(faultLine())faults++;
   }
+  if(faults){
+    if(S.lv.sec){
+      const p=n1().pct;
+      if(p>=99.9)say("Avariya: liniya uzildi, lekin ikkinchi yo'l borligi tufayli hech kim tokdan ajralmadi. Uzilgan liniyani qayta torting.",'warn');
+      else say("Avariya: liniya uzildi! Xavfsizlik "+Math.round(p)+"%. Uni tezroq qayta torting.",'bad');
+    }else say("Avariya: bitta liniya uzildi. Uni qayta torting.",'bad');
+  }
+  let windMsg=false;
+  if(allowed('shamol')){
+    S.windBase=rollWind();
+    if(S.windBase>1.1){say("Bo'ron: shamol generatorlari xavfsizlik uchun o'chdi.",'warn');windMsg=true;}
+    else if(S.windBase<0.2){say("Bugun shamol deyarli yo'q.",'warn');windMsg=true;}
+  }
+  if(S.lv.outage&&Math.random()<S.lv.outage){
+    S.outStart=6+Math.floor(Math.random()*14);
+    say("Ogohlantirish: bugun soat "+pad2(S.outStart)+":00 da tizim avariyasi kutilmoqda.",'warn');
+  }else S.outStart=-1;
   if(S.cloudy)say('Bugun bulutli: quyosh stansiyalari ancha kuchsiz ishlaydi.','warn');
   if(S.heat)say("Issiq kun: kondensionerlar tufayli talab 25% oshdi.",'warn');
-  if(!S.cloudy&&!S.heat)say('Kun '+S.day+' boshlandi.');
+  if(!S.cloudy&&!S.heat&&!windMsg&&!faults&&S.outStart<0)say('Kun '+S.day+' boshlandi.');
 }
 
-/* Maqsadlar: oxirgi kun tugaganda tekshiriladi */
+/* Maqsadlar */
 function goalStatus(){
   const g=S.lv.goal||{},out=[];
-  let conn=0;
-  for(const c of S.cells)if(c&&TYPES[c.t].kind==='load'&&c.s>=0.95)conn++;
-  if(g.all){let tot=0;for(const c of S.cells)if(c&&TYPES[c.t].kind==='load')tot++;out.push({k:'all',ok:tot>0&&conn>=tot,cur:conn,need:tot,t:"hamma bino yoritilgan ("+conn+"/"+tot+")"});}
+  let conn=0,tot=0;
+  for(const c of S.cells)if(c&&TYPES[c.t].kind==='load'){tot++;if(c.s>=0.95)conn++;}
+  if(g.all)out.push({k:'all',ok:tot>0&&conn>=tot,cur:conn,need:tot,t:"hamma bino yoritilgan ("+conn+"/"+tot+")"});
   if(g.connected)out.push({k:'connected',ok:conn>=g.connected,cur:conn,need:g.connected,t:g.connected+" bino yoritilgan ("+conn+" ta bor)"});
+  if(g.has)for(const t of Object.keys(g.has)){
+    const n=hasCount(t);
+    out.push({k:'has',what:t,ok:n>=g.has[t],cur:n,need:g.has[t],t:g.has[t]+" ta "+TYPES[t].n+" ishlashi kerak ("+n+" ta bor)"});
+  }
+  if(g.safe){const p=n1();out.push({k:'safe',ok:p.pct>=g.safe-1e-6,cur:Math.round(p.pct),need:g.safe,t:"N-1 xavfsizlik "+g.safe+"% ("+Math.round(p.pct)+"% bor)"});}
+  if(g.backup){const b=backupStatus();out.push({k:'backup',ok:b.ok>=b.tot,cur:b.ok,need:b.tot,t:"zaxira generatori ("+b.ok+"/"+b.tot+" 1-kategoriya iste'molchida yetarli)"});}
   if(g.money)out.push({k:'money',ok:S.money>=g.money,cur:Math.round(S.money),need:g.money,t:"mablag' "+g.money+" mln ("+Math.round(S.money)+" bor)"});
   if(g.trust)out.push({k:'trust',ok:S.trust>=g.trust,cur:Math.round(S.trust),need:g.trust,t:"ishonch "+g.trust+" ("+Math.round(S.trust)+" bor)"});
   return out;
 }
 const stars=()=>S.trust>=90?3:S.trust>=60?2:1;
 const holdNeed=()=>(S.lv.goal&&S.lv.goal.connected)?3:1;
+const isTimed=lv=>{const g=lv.goal||{};return !!(g.trust||g.safe||g.backup);};
 
-/* Vazifa bajarilishi bilan bosqich tugaydi. Ishonch sharti bor bosqichlarda muddat oxirigacha chidash kerak. */
+/* Vazifa bajarilishi bilan bosqich tugaydi. Ishonch, xavfsizlik, zaxira shartlari bor bosqichlarda muddat oxirigacha chidash kerak. */
 function checkEnd(){
   if(S.over)return;
   if(S.trust<=0){S.over='dark';return;}
   if(S.money<-100){S.over='broke';return;}
-  const gs=goalStatus(),ok=gs.every(g=>g.ok),g=S.lv.goal||{};
-  if(!g.trust){
+  const gs=goalStatus(),ok=gs.every(g=>g.ok);
+  if(!isTimed(S.lv)){
     S.hold=ok?(S.hold||0)+1:0;
     if(S.hold>=holdNeed()){S.over='win';return;}
   }
@@ -514,23 +834,38 @@ function stepHour(){
   }
   if(S.money<0&&S.hour%6===0)say("Mablag' minusda! Daromaddan ko'p sarflayapsiz.",'warn');
   for(const c of S.cells)if(c&&c.grace>0)c.grace--;
+  if(S.outage>0){S.outage--;if(S.outage===0)say('Tizim avariyasi tugadi: tarmoq tiklandi.','ok');}
   S.hour++;
   if(S.hour>=24){S.hour=0;endDay();}
+  if(S.outStart===S.hour&&S.outage===0&&!S.over){
+    S.outage=S.lv.outLen||4;S.outStart=-1;
+    say("TIZIM AVARIYASI: "+S.outage+" soatga hamma stansiyalar o'chdi. Faqat batareya va zaxira generatorlar ishlaydi.",'bad');
+  }
   checkEnd();
   solve(false);
 }
 
-/* Qurish va buzish: 1 = qo'yildi, 0 = katakcha band yoki chegaradan tashqari, -1 = pul yetmaydi, -2 = bu bosqichda yo'q, -3 = to'siq */
-function build(t,x,y){
-  if(S.over||x<0||y<0||x>=W||y>=H)return 0;
+/* Qurish va buzish: 1 = qo'yildi, 0 = katakcha band yoki chegaradan tashqari, -1 = pul yetmaydi, -2 = bu bosqichda yo'q,
+   -3 = to'siq, -4 = shamol generatori uylarga juda yaqin, -5 = uy shamol generatoriga juda yaqin */
+function placeCheck(t,x,y){
+  if(x<0||y<0||x>=W||y>=H)return 0;
   const i=IDX(x,y);
   if(S.terrain[i])return -3;
   if(S.cells[i])return 0;
   if(!allowed(t))return -2;
   const T=TYPES[t];
+  if(t==='shamol'&&nearLoad(i))return -4;
+  if(T.kind==='load'&&nearWind(i))return -5;
   if(S.money<T.cost)return -1;
-  S.money-=T.cost;
-  S.cells[i]=mk(t,12);
+  return 1;
+}
+function build(t,x,y){
+  if(S.over)return 0;
+  const r=placeCheck(t,x,y);
+  if(r!==1)return r;
+  S.money-=TYPES[t].cost;
+  S.cells[IDX(x,y)]=mk(t,12);
+  S.ver++;
   return 1;
 }
 function demolish(x,y){
@@ -538,7 +873,7 @@ function demolish(x,y){
   const i=IDX(x,y),c=S.cells[i];
   if(!c)return 0;
   S.money+=Math.round(TYPES[c.t].cost*0.5);
-  S.cells[i]=null;
+  S.cells[i]=null;S.ver++;
   return 1;
 }
 
@@ -561,6 +896,7 @@ function fit(){
   cv.style.height=(u*H)+'px';
   const gw=Math.max(200,gc.clientWidth||280);
   gc.width=Math.round(gw*dpr);gc.height=Math.round(150*dpr);
+  try{drawChart();}catch(e){}
 }
 
 function rr(x,y,w,h,r){
@@ -659,6 +995,96 @@ function bTrafo(c,time,live){
     cx.moveTo(u*.3,u*.2);cx.lineTo(u*.4,u*.12);cx.lineTo(u*.5,u*.2);cx.lineTo(u*.6,u*.12);cx.lineTo(u*.7,u*.2);cx.stroke();
   }
 }
+
+function bFerma(c,time){
+  const bob=RM?0:Math.sin(time*2.2)*u*.012;
+  cx.fillStyle='#7a3b34';cx.fillRect(u*.1,u*.36,u*.5,u*.38);
+  cx.fillStyle='#55282a';cx.beginPath();cx.moveTo(u*.05,u*.38);cx.lineTo(u*.35,u*.14);cx.lineTo(u*.65,u*.38);cx.closePath();cx.fill();
+  cx.strokeStyle='#ecdcc8';cx.lineWidth=Math.max(1,u*.03);
+  cx.strokeRect(u*.22,u*.48,u*.26,u*.26);
+  cx.beginPath();cx.moveTo(u*.22,u*.48);cx.lineTo(u*.48,u*.74);cx.moveTo(u*.48,u*.48);cx.lineTo(u*.22,u*.74);cx.stroke();
+  cx.fillStyle='#9aa7b8';rr(u*.7,u*.26,u*.18,u*.48,u*.04);cx.fill();
+  cx.fillStyle='#74829a';cx.beginPath();cx.arc(u*.79,u*.26,u*.09,Math.PI,0);cx.fill();
+  cx.fillStyle='#f2f4f8';cx.beginPath();cx.arc(u*.2,u*.86+bob,u*.065,0,TAU);cx.arc(u*.29,u*.87+bob,u*.055,0,TAU);cx.fill();
+  cx.fillStyle='#2a2f3a';cx.beginPath();cx.arc(u*.15,u*.85+bob,u*.025,0,TAU);cx.fill();
+  cx.fillStyle='#e9eef5';cx.fillRect(u*.5,u*.8-bob,u*.2,u*.1);
+  cx.fillStyle='#2a2f3a';cx.fillRect(u*.54,u*.82-bob,u*.05,u*.04);cx.fillRect(u*.62,u*.84-bob,u*.04,u*.04);
+  cx.fillStyle='#e9eef5';cx.fillRect(u*.68,u*.8-bob,u*.06,u*.06);
+}
+function bBiogaz(c,time){
+  const o=clamp(c.out,0,1),fd=c.fd===undefined?TYPES.biogaz.cap:c.fd;
+  cx.fillStyle='#27352c';cx.fillRect(u*.08,u*.74,u*.84,u*.14);
+  cx.fillStyle='#3c6a40';cx.beginPath();cx.arc(u*.36,u*.74,u*.27,Math.PI,0);cx.closePath();cx.fill();
+  cx.strokeStyle='#9be15d';cx.lineWidth=Math.max(1,u*.03);cx.beginPath();cx.arc(u*.36,u*.74,u*.27,Math.PI,0);cx.stroke();
+  cx.strokeStyle='rgba(255,255,255,.25)';cx.beginPath();cx.arc(u*.36,u*.74,u*.18,Math.PI*1.15,Math.PI*1.55);cx.stroke();
+  cx.fillStyle='#2f3b4e';cx.fillRect(u*.68,u*.46,u*.22,u*.28);
+  cx.fillStyle=o>.05?'#9be15d':'#53606f';cx.fillRect(u*.72,u*.52,u*.14,u*.07);
+  cx.fillStyle='#c9ced9';cx.fillRect(u*.78,u*.2,u*.06,u*.28);
+  if(o>.05&&!RM){
+    for(let k=0;k<3;k++){const ph=(time*.5+k/3)%1;cx.fillStyle='rgba(190,255,150,'+(.55*(1-ph)).toFixed(2)+')';
+      cx.beginPath();cx.arc(u*(.22+k*.14),u*(.72-ph*.22),u*.03,0,TAU);cx.fill();}
+    smoke(u*.81,u*.18,time,.45);
+  }
+  const f=clamp(fd/TYPES.biogaz.cap,0,1);
+  cx.fillStyle='rgba(8,14,22,.8)';cx.fillRect(u*.1,u*.08,u*.5,u*.07);
+  cx.fillStyle=f>.6?'#9be15d':f>.05?'#ffb347':'#ff5f70';cx.fillRect(u*.1,u*.08,u*.5*f,u*.07);
+}
+function bShamol(c){
+  cx.fillStyle='#cfd8e6';cx.beginPath();cx.moveTo(u*.46,u*.9);cx.lineTo(u*.54,u*.9);cx.lineTo(u*.515,u*.38);cx.lineTo(u*.485,u*.38);cx.closePath();cx.fill();
+  cx.fillStyle='#2b3042';cx.fillRect(u*.3,u*.88,u*.4,u*.06);
+  cx.save();cx.translate(u*.5,u*.36);cx.rotate(c.ang||0);
+  cx.fillStyle='#eaf2fb';
+  for(let k=0;k<3;k++){
+    cx.rotate(TAU/3);
+    cx.beginPath();cx.moveTo(-u*.015,0);cx.lineTo(-u*.04,-u*.3);cx.lineTo(u*.02,-u*.32);cx.lineTo(u*.02,0);cx.closePath();cx.fill();
+  }
+  cx.restore();
+  cx.fillStyle='#8fe3ff';cx.beginPath();cx.arc(u*.5,u*.36,u*.04,0,TAU);cx.fill();
+}
+function bDizel(c,time){
+  cx.fillStyle='#4a3d2e';rr(u*.1,u*.4,u*.8,u*.42,u*.06);cx.fill();
+  cx.fillStyle='#ffb36b';cx.fillRect(u*.1,u*.4,u*.8,u*.08);
+  cx.fillStyle='#2a2118';cx.fillRect(u*.18,u*.54,u*.34,u*.2);
+  cx.strokeStyle='#6d5a43';cx.lineWidth=1;
+  for(let k=0;k<4;k++){cx.beginPath();cx.moveTo(u*.18,u*.58+k*u*.045);cx.lineTo(u*.52,u*.58+k*u*.045);cx.stroke();}
+  cx.fillStyle='#c9ced9';cx.fillRect(u*.72,u*.2,u*.07,u*.22);
+  const on=(c.used||0)>.01;
+  cx.fillStyle=on?'#ffb347':'#5d6677';cx.beginPath();cx.arc(u*.68,u*.62,u*.05,0,TAU);cx.fill();
+  if(on&&!RM)smoke(u*.755,u*.18,time,1);
+}
+function bAeroport(c,time){
+  cx.fillStyle='#39424f';cx.fillRect(u*.06,u*.66,u*.88,u*.2);
+  cx.strokeStyle='#e7eef7';cx.lineWidth=Math.max(1,u*.025);cx.setLineDash([u*.08,u*.07]);
+  cx.beginPath();cx.moveTo(u*.08,u*.76);cx.lineTo(u*.92,u*.76);cx.stroke();cx.setLineDash([]);
+  cx.fillStyle='#51709a';cx.fillRect(u*.08,u*.36,u*.54,u*.22);
+  cx.fillStyle='#3e5578';cx.fillRect(u*.08,u*.36,u*.54,u*.05);
+  cx.fillStyle=lampFill(c.s);
+  for(let k=0;k<5;k++)cx.fillRect(u*(.12+k*.1),u*.46,u*.07,u*.08);
+  cx.fillStyle='#cfd8e6';cx.fillRect(u*.74,u*.22,u*.07,u*.36);
+  cx.fillStyle=c.s>.05?'#7fd0ff':'#4a5b70';cx.fillRect(u*.69,u*.14,u*.17,u*.1);
+  if(c.s>.05&&!RM&&((time*2)|0)%2===0){cx.fillStyle='#ff5f70';cx.beginPath();cx.arc(u*.775,u*.1,u*.03,0,TAU);cx.fill();}
+  const px=RM?.5:((time*.12)%1);
+  cx.fillStyle='#e7eef7';cx.beginPath();cx.moveTo(u*(.08+px*.7),u*.76);cx.lineTo(u*(.08+px*.7+.08),u*.74);cx.lineTo(u*(.08+px*.7),u*.72);cx.closePath();cx.fill();
+}
+function bMaktab(c){
+  cx.fillStyle='#d9b26e';cx.fillRect(u*.1,u*.4,u*.8,u*.46);
+  cx.fillStyle='#8a5a3c';cx.beginPath();cx.moveTo(u*.06,u*.42);cx.lineTo(u*.5,u*.22);cx.lineTo(u*.94,u*.42);cx.closePath();cx.fill();
+  cx.fillStyle=lampFill(c.s);
+  for(let k=0;k<3;k++){cx.fillRect(u*(.16+k*.22),u*.5,u*.12,u*.12);}
+  cx.fillStyle='#4a3626';cx.fillRect(u*.42,u*.66,u*.16,u*.2);
+  cx.strokeStyle='#e7eef7';cx.lineWidth=Math.max(1,u*.025);cx.beginPath();cx.moveTo(u*.78,u*.4);cx.lineTo(u*.78,u*.16);cx.stroke();
+  cx.fillStyle='#4fd8ea';cx.fillRect(u*.78,u*.16,u*.12,u*.08);
+}
+function bUniversitet(c){
+  cx.fillStyle='#b8aee0';cx.fillRect(u*.08,u*.44,u*.84,u*.42);
+  cx.fillStyle='#8f84c4';cx.beginPath();cx.moveTo(u*.04,u*.46);cx.lineTo(u*.5,u*.24);cx.lineTo(u*.96,u*.46);cx.closePath();cx.fill();
+  cx.fillStyle='#6a5fa8';cx.beginPath();cx.arc(u*.5,u*.24,u*.09,Math.PI,0);cx.fill();
+  cx.fillStyle='#e9e4fa';
+  for(let k=0;k<5;k++)cx.fillRect(u*(.14+k*.17),u*.5,u*.05,u*.3);
+  cx.fillStyle=lampFill(c.s);
+  for(let k=0;k<4;k++)cx.fillRect(u*(.2+k*.17),u*.58,u*.09,u*.08);
+  cx.fillStyle='#3d3566';cx.fillRect(u*.44,u*.7,u*.12,u*.16);
+}
 function bPole(live){
   cx.fillStyle=cx.strokeStyle=live?'#7be6f2':'#8aa0bb';
   cx.fillRect(u*.45,u*.45,u*.1,u*.1);
@@ -672,6 +1098,13 @@ function drawBuilding(t,c,time,live){
   else if(t==='ies')bIes(c,time);
   else if(t==='batareya')bBat(c,time);
   else if(t==='trafo')bTrafo(c,time,live);
+  else if(t==='ferma')bFerma(c,time);
+  else if(t==='biogaz')bBiogaz(c,time);
+  else if(t==='shamol')bShamol(c);
+  else if(t==='dizel')bDizel(c,time);
+  else if(t==='aeroport')bAeroport(c,time);
+  else if(t==='maktab')bMaktab(c);
+  else if(t==='universitet')bUniversitet(c);
   else bPole(live);
 }
 
@@ -744,14 +1177,79 @@ function drawSky(dk){
   cx.restore();
 }
 
+
+/* 2-bo'lim qatlamlari: N-1 xavfsizlik, zaxira belgisi, tizim avariyasi */
+function dizelCap(i){
+  let cap=0;const x=i%W,y=(i/W)|0;
+  for(const d of D4){
+    const nx=x+d[0],ny=y+d[1];
+    if(nx<0||ny<0||nx>=W||ny>=H)continue;
+    const o=S.cells[ny*W+nx];
+    if(o&&o.t==='dizel')cap+=TYPES.dizel.cap;
+  }
+  return cap;
+}
+function badge(x,y,r,fill,txt,col){
+  cx.fillStyle=fill;cx.beginPath();cx.arc(x,y,r,0,TAU);cx.fill();
+  cx.fillStyle=col||'#08110c';cx.font='700 '+Math.round(r*1.15)+'px "Chakra Petch",sans-serif';
+  cx.textAlign='center';cx.textBaseline='middle';cx.fillText(txt,x,y+.5);cx.textAlign='start';
+}
+function drawSecurity(time){
+  const showSec=!!S.lv.sec,showBk=allowed('dizel')||!!(S.lv.goal&&S.lv.goal.backup);
+  if(!showSec&&!showBk)return;
+  const p=showSec?n1():null,r=Math.max(7,u*.15);
+  if(p){
+    const pul=RM?1:.55+.45*Math.sin(time*5);
+    p.bridgeKey.forEach(i=>{
+      cx.strokeStyle='rgba(255,179,71,'+pul.toFixed(2)+')';cx.lineWidth=Math.max(1.5,u*.05);
+      cx.beginPath();cx.arc((i%W+.5)*u,((i/W|0)+.5)*u,u*.27,0,TAU);cx.stroke();
+    });
+  }
+  for(let i=0;i<W*H;i++){
+    const c=S.cells[i];if(!c)continue;
+    const T=TYPES[c.t];if(T.kind!=='load')continue;
+    const x0=(i%W)*u,y0=((i/W)|0)*u;
+    if(p&&T.cat<=2){
+      if(p.safe.get(i))badge(x0+u*.17,y0+u*.84,r*.85,'#5fe3a1','✓');
+      else{
+        cx.fillStyle='#ffb347';rr(x0+u*.04,y0+u*.74,u*.34,u*.2,u*.05);cx.fill();
+        cx.fillStyle='#1a1205';cx.font='700 '+Math.max(8,Math.round(u*.15))+'px "IBM Plex Mono",monospace';
+        cx.textAlign='center';cx.textBaseline='middle';cx.fillText('N-1',x0+u*.21,y0+u*.84);cx.textAlign='start';
+      }
+    }
+    if(showBk&&T.cat===1){
+      const ok=dizelCap(i)>=T.peak-1e-6;
+      badge(x0+u*.83,y0+u*.84,r*.85,ok?'#ffb36b':'#ff5f70','D');
+    }
+  }
+}
+function drawBanner(time){
+  if(S.outage>0){
+    cx.fillStyle='rgba(70,0,12,.34)';cx.fillRect(0,0,u*W,u*H);
+    const t='TIZIM AVARIYASI · '+S.outage+' soat';
+    cx.font='700 14px "Chakra Petch",sans-serif';const w=cx.measureText(t).width+28;
+    cx.fillStyle='rgba(120,10,25,.92)';rr((u*W-w)/2,10,w,30,8);cx.fill();
+    cx.fillStyle='#ffe3e6';cx.textAlign='center';cx.textBaseline='middle';cx.fillText(t,u*W/2,26);cx.textAlign='start';
+  }else if(S.outStart>=0&&S.outStart!==undefined){
+    const t='Avariya kutilmoqda: '+pad2(S.outStart)+':00';
+    cx.font='600 12px "Chakra Petch",sans-serif';const w=cx.measureText(t).width+24;
+    cx.fillStyle='rgba(60,40,5,.9)';rr((u*W-w)/2,10,w,26,8);cx.fill();
+    cx.fillStyle='#ffd58a';cx.textAlign='center';cx.textBaseline='middle';cx.fillText(t,u*W/2,23);cx.textAlign='start';
+  }
+}
+
+let lastDrawT=0;
 function draw(time){
   cx.setTransform(dpr,0,0,dpr,0,0);
   cx.clearRect(0,0,u*W,u*H);
   const t=S.hour+S.frac,dk=darkAt(t);
+  const ddt=Math.min(.1,Math.max(0,time-lastDrawT));lastDrawT=time;
   drawGround();drawLinks(time);
   for(let i=0;i<W*H;i++){
     const c=S.cells[i];if(!c)continue;
     const x=i%W,y=(i/W)|0;
+    if(c.t==='shamol')c.ang=(c.ang||0)+ddt*(S.speed>0?(.4+c.out*7):0);
+    else if(c.t==='biogaz')c.fd=S.feed[i];
     cx.save();cx.translate(x*u,y*u);
     if(c.t!=='liniya'){cx.fillStyle='rgba(8,14,22,.55)';rr(u*.06,u*.06,u*.88,u*.88,u*.1);cx.fill();}
     drawBuilding(c.t,c,time,S.live[i]);
@@ -767,6 +1265,8 @@ function draw(time){
     else if(c.t==='trafo'){if(S.live[i])glow(x,y,u,'79,216,234',.25*(.5+.5*dk));}
     else if(c.t==='liniya'){if(S.live[i]&&dk>.1)glow(x,y,u*.55,'79,216,234',.18*dk);}
     else if(c.t==='quyosh'){if(c.out>.1)glow(x,y,u,'255,240,150',.18*c.out*(1-dk));}
+    else if(c.t==='biogaz'){if(c.out>.05)glow(x,y,u*1.1,'155,225,93',.22*c.out*(.5+.5*dk));}
+    else if(c.t==='dizel'){if((c.used||0)>.01)glow(x,y,u*1.2,'255,170,90',.3*(.5+.5*dk));}
   }
   cx.globalCompositeOperation='source-over';
   for(let i=0;i<W*H;i++){
@@ -782,7 +1282,15 @@ function draw(time){
   if(hover){
     const i=IDX(hover.x,hover.y),occ=S.cells[i],T=TYPES[tool];
     if(tool!=='info'){
-      const ok=tool==='bul'?!!occ:(!occ&&!S.terrain[i]&&allowed(tool)&&S.money>=T.cost);
+      const ok=tool==='bul'?!!occ:(placeCheck(tool,hover.x,hover.y)===1);
+      if(T&&(tool==='shamol'||T.kind==='load')){
+        cx.fillStyle='rgba(255,95,112,.10)';
+        for(let q=0;q<W*H;q++){
+          if(S.cells[q]||S.terrain[q])continue;
+          const rc=placeCheck(tool,q%W,(q/W)|0);
+          if(rc===-4||rc===-5)cx.fillRect((q%W)*u,((q/W)|0)*u,u,u);
+        }
+      }
       cx.fillStyle=ok?'rgba(79,216,234,.18)':'rgba(255,95,112,.22)';cx.fillRect(hover.x*u,hover.y*u,u,u);
       cx.strokeStyle=ok?'#4fd8ea':'#ff5f70';cx.lineWidth=2;cx.strokeRect(hover.x*u+1,hover.y*u+1,u-2,u-2);
       if(T&&!occ&&!S.terrain[i]){
@@ -797,23 +1305,28 @@ function draw(time){
     cx.strokeStyle='#ffcf6b';cx.lineWidth=2;cx.setLineDash([5,4]);
     cx.strokeRect((sel%W)*u+2,((sel/W)|0)*u+2,u-4,u-4);cx.setLineDash([]);
   }
+  drawSecurity(time);
+  drawBanner(time);
   drawSky(dk);
 }
 
 function drawChart(){
   const w=gc.width/dpr,h=gc.height/dpr;
   gx.setTransform(dpr,0,0,dpr,0,0);gx.clearRect(0,0,w,h);
-  let iesN=0,solN=0,trafoCap=0;
-  for(const c of S.cells){
+  let iesN=0,solN=0,trafoCap=0,windN=0,bioCap=0;
+  for(let i=0;i<W*H;i++){
+    const c=S.cells[i];
     if(!c)continue;
     if(c.t==='ies')iesN++;else if(c.t==='quyosh')solN++;else if(c.t==='trafo')trafoCap+=TYPES.trafo.cap;
+    else if(c.t==='shamol')windN++;else if(c.t==='biogaz')bioCap+=Math.min(TYPES.biogaz.cap,S.feed[i]);
   }
+  const windAtH=hr=>S.windBase>1.1?0:cl01(S.windBase*((hr>=18||hr<6)?1.15:0.88)*(1+0.1*Math.sin(hr*1.7+S.day)));
   const dem=[],sup=[];
   for(let hr=0;hr<24;hr++){
     let d=0;
     for(const c of S.cells)if(c&&TYPES[c.t].kind==='load')d+=demandAt(c.t,hr);
     dem.push(d);
-    sup.push(solN*TYPES.quyosh.cap*SOLAR[hr]*(S.cloudy?.35:1)+iesN*TYPES.ies.cap);
+    sup.push(solN*TYPES.quyosh.cap*SOLAR[hr]*(S.cloudy?.35:1)+iesN*TYPES.ies.cap+windN*TYPES.shamol.cap*windAtH(hr)+bioCap);
   }
   const L=28,R=8,T=8,B=18,pw=w-L-R,ph=h-T-B;
   const ymax=Math.max(4,Math.max.apply(null,dem),Math.max.apply(null,sup),trafoCap)*1.1;
@@ -851,14 +1364,14 @@ function drawChart(){
 }
 
 /* ===== Interfeys: asboblar, ma'lumot paneli, boshqaruv, asosiy sikl ===== */
-const ORDER=['info','mahalla','zavod','kasalxona','quyosh','ies','batareya','trafo','liniya','bul'];
+const ORDER=['info','mahalla','zavod','kasalxona','quyosh','ies','batareya','trafo','liniya','bul','maktab','universitet','aeroport','ferma','biogaz','shamol','dizel'];
 const EXTRA={info:["Ko'rish",'tanlash','#8a9db4'],bul:['Buzish','50% qaytadi','#ff5f70']};
 const toolsEl=$('tools');
 ORDER.forEach((id,n)=>{
   const T=TYPES[id],b=document.createElement('button');
   b.type='button';b.className='tool';b.dataset.id=id;
   b.style.setProperty('--c',T?T.c:EXTRA[id][2]);
-  b.innerHTML='<span class="n">'+(T?T.n:EXTRA[id][0])+'</span><span class="c"><span>'+(T?T.cost+' mln':EXTRA[id][1])+'</span><kbd>'+((n+1)%10)+'</kbd></span>';
+  b.innerHTML='<span class="n">'+(T?T.n:EXTRA[id][0])+'</span><span class="c"><span>'+(T?T.cost+' mln':EXTRA[id][1])+'</span><kbd>'+(n<10?(n+1)%10:'')+'</kbd></span>';
   b.addEventListener('click',()=>setTool(id));
   toolsEl.appendChild(b);
 });
@@ -880,11 +1393,15 @@ document.querySelectorAll('.speed button').forEach(b=>b.addEventListener('click'
 
 /* ===== Saqlash (brauzerda) ===== */
 const KEY='shahar-quruvchi-v1',NL=LEVELS.length;
+const P2=LEVELS.findIndex(l=>l.part===2);
+const lvNo=li=>li-(LEVELS[li].part===2?P2:0)+1;
+const lvLabel=li=>(LEVELS[li].part===2?"2-bo'lim · ":'')+lvNo(li)+'-bosqich';
 let prog={unlocked:1,stars:[]};
 try{
   const raw=JSON.parse(localStorage.getItem(KEY)||'null');
   if(raw&&typeof raw.unlocked==='number'){prog.unlocked=Math.max(1,Math.min(NL,raw.unlocked|0));prog.stars=Array.isArray(raw.stars)?raw.stars.slice(0,NL).map(n=>+n||0):[];}
 }catch(e){}
+if((prog.stars[P2-1]||0)>0)prog.unlocked=Math.max(prog.unlocked,P2+1);
 function saveProg(){try{localStorage.setItem(KEY,JSON.stringify(prog));}catch(e){}}
 
 /* ===== Bosqichlar: panel, tavsif, natija ===== */
@@ -896,6 +1413,9 @@ function goalText(lv,short){
   if(g.all)p.push('hamma bino yoritilgan');
   if(g.connected)p.push(g.connected+' bino yoritilgan');
   if(g.money)p.push("mablag' "+g.money+" mln");
+  if(g.has)Object.keys(g.has).forEach(t=>p.push(g.has[t]+' ta '+TYPES[t].n+' ishlasin'));
+  if(g.safe)p.push('N-1 xavfsizlik '+g.safe+'%');
+  if(g.backup)p.push("1-kategoriya iste'molchilarda zaxira generator");
   if(g.trust)p.push('ishonch '+g.trust+' dan past emas');
   return (short?lv.days+' kun · ':lv.days+' kun ichida: ')+p.join(', ');
 }
@@ -906,21 +1426,33 @@ function mission(){
   const row=(ok,txt,val,bad)=>'<li class="'+(ok?'ok':bad?'bad':'')+'"><span class="box">'+(ok?'✓':'')+'</span><span>'+txt+'</span><span class="v">'+val+'</span></li>';
   if(byK.all)it.push(row(byK.all.ok,'Hamma binoni yoriting',byK.all.cur+' / '+byK.all.need));
   if(byK.connected)it.push(row(byK.connected.ok,byK.connected.need+' ta binoni yoriting'+' (3 soat ushlab turing)',byK.connected.cur+' / '+byK.connected.need+(S.hold>0?' · '+S.hold+'/3 s':'')));
+  gs.filter(x=>x.k==='has').forEach(x=>it.push(row(x.ok,x.need+' ta '+TYPES[x.what].n+(x.what==='biogaz'?' (ferma yonida) ulang':' ulang'),x.cur+' / '+x.need)));
+  if(byK.safe)it.push(row(byK.safe.ok,"Ikki tomonlama ta'minot: N-1 "+byK.safe.need+"%",byK.safe.cur+'%'));
+  if(byK.backup)it.push(row(byK.backup.ok,"Kasalxona/aeroport yoniga zaxira dizel",byK.backup.cur+' / '+byK.backup.need));
   if(byK.money)it.push(row(byK.money.ok,"Mablag'ni "+byK.money.need+" mlngacha yetkazing",byK.money.cur+' / '+byK.money.need));
   if(byK.trust)it.push(row(byK.trust.ok,'Ishonchni '+byK.trust.need+' dan tushirmang',byK.trust.cur,!byK.trust.ok));
   const d=Math.min(S.day,S.lv.days);
-  const t=g.trust||g.all?'Kun '+d+' / '+S.lv.days+': vazifa muddat oxirida tekshiriladi':'Muddat: kun '+d+' / '+S.lv.days+'. Vazifa bajarilishi bilan bosqich tugaydi';
+  const t=isTimed(S.lv)||g.all?'Kun '+d+' / '+S.lv.days+': vazifa muddat oxirida tekshiriladi':'Muddat: kun '+d+' / '+S.lv.days+'. Vazifa bajarilishi bilan bosqich tugaydi';
   const html=it.join('');
   if(mCache.h!==html){mCache.h=html;$('mList').innerHTML=html;}
   if(mCache.t!==t){mCache.t=t;$('mSub').textContent=t;}
-  if(mCache.n!==S.lv.n){mCache.n=S.lv.n;$('mTitle').textContent=(S.li+1)+'-bosqich: '+S.lv.n;}
+  if(mCache.p!==S.lv.part){
+    mCache.p=S.lv.part;
+    const hs=S.lv.part===2?["Sariq belgi: yangi bino tokni kutyapti","Biogaz fermaning yoniga, shamol uylardan uzoqqa","Muhim bino ikki yo'ldan tok olsin, kasalxona yoniga dizel"]:
+      ["Uy, zavod va kasalxona qo'ying","Stansiya va transformator quring","Liniyani sudrab torting, hammasini ulang"];
+    hs.forEach((t,k)=>{$('h'+(k+1)).textContent=t;});
+  }
+  if(mCache.n!==S.lv.n){mCache.n=S.lv.n;$('mTitle').textContent=lvLabel(S.li)+': '+S.lv.n;}
 }
 function risks(lv){
   const r=[];
   if(lv.spawn)r.push("har kuni yangi bino");
   if(lv.cloud)r.push("bulutli kunlar");
   if(lv.heat)r.push("issiq kunlar");
-  if(lv.fault)r.push("liniya avariyalari");
+  if(lv.fault)r.push(lv.sec?"liniya uziladi (aynan zaif joyga)":"liniya avariyalari");
+  if(lv.outage)r.push("tizim avariyasi ("+(lv.outLen||4)+" soat)");
+  if(lv.calm>=0.3||lv.storm>=0.1)r.push("shamolsiz va bo'ronli kunlar");
+  if(lv.loss)r.push("uzun liniyada tok yo'qoladi");
   if(lv.fuelMul>1)r.push("yoqilg'i "+lv.fuelMul+"× qimmat");
   if(lv.growth>=0.1)r.push("talab tez o'sadi");
   return r.length?r.join(', '):"yo'q";
@@ -936,7 +1468,7 @@ function closePanel(){panel=null;ovEl.hidden=true;}
 function showBrief(){
   const lv=S.lv,names=lv.tools.map(t=>TYPES[t].n).join(', ');
   openPanel('brief',
-    '<div class="kicker">Bosqich '+(S.li+1)+' / '+NL+'</div><h2>'+lv.n+'</h2><p>'+lv.d+'</p><ul>'+
+    '<div class="kicker">'+lvLabel(S.li)+' / '+(lv.part===2?NL-P2:P2)+'</div><h2>'+lv.n+'</h2><p>'+lv.d+'</p><ul>'+
     '<li><b>Vazifa</b>'+goalText(lv)+'</li>'+
     "<li><b>Boshlang'ich mablag'</b>"+lv.money+' mln</li>'+
     '<li><b>Asboblar</b>'+names+'</li>'+
@@ -946,18 +1478,28 @@ function showBrief(){
   $('goBtn').onclick=()=>{closePanel();setSpeed(1);};
   $('lvBtn').onclick=showSelect;
 }
-function showSelect(){
+function showSelect(part){
+  if(typeof part!=='number')part=LEVELS[S.li].part;
+  const lo=part===1?0:P2,hi=part===1?P2:NL;
+  const p2open=prog.unlocked>P2;
   let g='';
-  for(let i=0;i<NL;i++){
+  for(let i=lo;i<hi;i++){
     const lock=i>=prog.unlocked,st=prog.stars[i]||0;
     g+='<button type="button" class="lvbtn" data-i="'+i+'"'+(lock?' disabled':'')+(i===S.li?' aria-current="true"':'')+'>'+
-      '<b>'+(i+1)+'</b><span>'+LEVELS[i].n+'</span><i>'+(lock?'🔒':st?starStr(st):'')+'</i></button>';
+      '<b>'+lvNo(i)+'</b><span>'+LEVELS[i].n+'</span><i>'+(lock?'🔒':st?starStr(st):'')+'</i></button>';
   }
-  const done=prog.stars.reduce((a,n)=>a+(n>0?1:0),0);
-  openPanel('select','<div class="kicker">Bosqichlar</div><h2>Shaharni tanlang</h2><p>'+done+' / '+NL+" bosqich o'tilgan. Yulduz ko'p bo'lishi uchun ishonchni baland ushlang.</p>"+
+  let done=0;for(let i=lo;i<hi;i++)if((prog.stars[i]||0)>0)done++;
+  const intro=part===1?"Oddiy tarmoq: uylar, zavodlar, quyosh va batareya.":
+    "Zamonaviy tarmoq: biogaz, shamol, ikki tomonlama ta'minot, zaxira generator, maktab, universitet va aeroport.";
+  openPanel('select','<div class="kicker">Bosqichlar</div><h2>Shaharni tanlang</h2>'+
+    '<div class="tabs" role="tablist">'+
+    '<button type="button" class="tab" role="tab" data-part="1" aria-selected="'+(part===1)+'">1-bo\'lim</button>'+
+    '<button type="button" class="tab" role="tab" data-part="2" aria-selected="'+(part===2)+'"'+(p2open?'':' disabled')+'>'+(p2open?'':'🔒 ')+'2-bo\'lim</button></div>'+
+    '<p class="sect">'+intro+' '+done+' / '+(hi-lo)+" bosqich o'tilgan."+(p2open?'':" 2-bo'lim 1-bo'limning 20 bosqichi tugagach ochiladi.")+'</p>'+
     '<div class="lvgrid">'+g+'</div>'+
     (S.over?'':'<div class="row"><button type="button" class="primary" id="backBtn">Davom etish</button></div>'));
   cardEl.querySelectorAll('.lvbtn').forEach(b=>b.addEventListener('click',()=>startLevel(+b.dataset.i)));
+  cardEl.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{if(!b.disabled)showSelect(+b.dataset.part);}));
   const bb=$('backBtn');if(bb)bb.onclick=()=>{closePanel();setSpeed(resumeSpeed);};
 }
 function showEnd(){
@@ -968,17 +1510,19 @@ function showEnd(){
     prog.stars[li]=Math.max(prog.stars[li]||0,st);
     prog.unlocked=Math.max(prog.unlocked,Math.min(NL,li+2));
     saveProg();
-    h='<div class="kicker">Bosqich '+(li+1)+' / '+NL+'</div><h2>'+(last?'Siz bosh energetiksiz!':'Vazifa bajarildi!')+'</h2>'+
+    const p1end=li===P2-1;
+    h='<div class="kicker">'+lvLabel(li)+'</div><h2>'+(last?'Siz bosh dispetchersiz!':p1end?"1-bo'lim tugadi!":'Vazifa bajarildi!')+'</h2>'+
       '<div class="stars" aria-label="'+st+' yulduz">'+starStr(st)+'</div>'+
-      "<p>Ishonch: "+Math.round(S.trust)+", mablag': "+Math.round(S.money)+' mln.'+(last?" Barcha 20 bosqich o'tildi.":'')+'</p>'+
-      '<div class="row">'+(last?'':'<button type="button" class="primary" id="nextBtn">Keyingi bosqich</button>')+
+      "<p>Ishonch: "+Math.round(S.trust)+", mablag': "+Math.round(S.money)+' mln.'+(last?" Barcha "+NL+" bosqich o'tildi.":'')+'</p>'+
+      (p1end?"<p>2-bo'lim ochildi: biogaz, shamol generatorlari, ikki tomonlama ta'minot, kasalxona uchun zaxira manba, maktab, universitet va aeroport.</p>":'')+
+      '<div class="row">'+(last?'':'<button type="button" class="primary" id="nextBtn">'+(p1end?"2-bo'limga o'tish":'Keyingi bosqich')+'</button>')+
       '<button type="button" class="ghost" id="retryBtn">Qayta o\'ynash</button><button type="button" class="ghost" id="lvBtn">Bosqichlar</button></div>';
   }else{
     const t=o==='dark'?"Shahar qorong'ida qoldi":o==='broke'?'Bankrot':'Maqsadga yetilmadi';
-    const x=o==='dark'?"Aholi ishonchi tugadi. Kasalxona va uylar uchun transformator hamda zaxira quvvatni oldindan quring.":
+    const x=o==='dark'?(S.lv.part===2?"Aholi ishonchi tugadi. Ikki tomonlama ta'minot, yetarli quvvat va zaxira generatorlar tizim avariyasidan saqlaydi.":"Aholi ishonchi tugadi. Kasalxona va uylar uchun transformator hamda zaxira quvvatni oldindan quring."):
       o==='broke'?"Mablag' juda minusga ketdi. Gaz yoqilg'isi qimmat: quyosh stansiyasi va batareya arzonroq bo'ladi.":
       'Muddat tugadi, lekin shart bajarilmadi: '+S.failWhy+'.';
-    h='<div class="kicker">Bosqich '+(li+1)+' / '+NL+'</div><h2>'+t+'</h2><p>'+x+'</p>'+
+    h='<div class="kicker">'+lvLabel(li)+'</div><h2>'+t+'</h2><p>'+x+'</p>'+
       '<div class="row"><button type="button" class="primary" id="retryBtn">Qayta urinish</button><button type="button" class="ghost" id="lvBtn">Bosqichlar</button></div>';
   }
   openPanel('end',h);
@@ -1008,9 +1552,15 @@ function act(c,first){
     return;
   }
   const r=build(tool,c.x,c.y);
-  if(r===1)solve(false);
+  if(r===1){
+    solve(false);
+    if(tool==='biogaz'&&S.feed[i]<0.05)toast("Bu biogaz EES ga xomashyo yo'q: uni fermaning yoniga (4 tomondan) qo'ying.");
+    else if(tool==='ferma'){let nb=0;for(const d of D4){const o=S.cells[(c.y+d[1])*W+c.x+d[0]];if(o&&o.t==='biogaz')nb++;}if(!nb)toast("Fermaning yoniga biogaz EES qo'ying: go'ng shu yerdan oladi.");}
+  }
   else if(r===-1)toast("Mablag' yetmaydi: "+TYPES[tool].n+" "+TYPES[tool].cost+" mln turadi.");
   else if(r===-2)toast("Bu bosqichda "+TYPES[tool].n.toLowerCase()+" qurib bo'lmaydi.");
+  else if(r===-4){toast("Shamol generatori uylardan kamida 1 katak uzoqda bo'lishi kerak (shovqin).");}
+  else if(r===-5){toast("Bu yer shamol generatoriga juda yaqin: bino qurib bo'lmaydi.");}
   else if(r===-3){if(first)toast("Bu yerda "+(S.terrain[i]===1?"ko'l":"tog'")+" bor: qurib bo'lmaydi.");}
   else if(first)toast("Katakcha band. Avval uni buzing yoki boshqa joyni tanlang.");
 }
@@ -1049,7 +1599,8 @@ function infoHTML(){
   const i=sel>=0?sel:(hover?IDX(hover.x,hover.y):-1);
   if(i<0){
     return '<div class="t">Shahar holati</div><div class="d">Katakchaga boring yoki bosing: bino haqida ma\'lumot chiqadi.</div>'+
-      row('Yoritilgan aholi',S.lit.toFixed(0)+'%',S.lit>95?'ok':S.lit>70?'warn':'bad')+row('Alohida tarmoqlar',String(S.nets.length));
+      row('Yoritilgan aholi',S.lit.toFixed(0)+'%',S.lit>95?'ok':S.lit>70?'warn':'bad')+row('Alohida tarmoqlar',String(S.nets.length))+
+      (S.lv.sec?row('N-1 xavfsizlik',Math.round(n1().pct)+'%',n1().pct>=99.9?'ok':'warn'):'');
   }
   const c=S.cells[i];
   if(!c)return '<div class="t">Bo\'sh katakcha</div><div class="d">Bu yerga bino, stansiya yoki liniya qo\'yishingiz mumkin.</div>';
@@ -1057,12 +1608,26 @@ function infoHTML(){
   let h='<div class="t" style="color:'+T.c+'">'+T.n+'</div><div class="d">'+T.info+'</div>';
   if(T.kind==='load'){
     const w=whyDark(c,net);
-    h+=row('Talab (hozir)',c.d.toFixed(2)+' MW')+row("Ta'minot",Math.round(c.s*100)+'%',c.s>.95?'ok':c.s>.4?'warn':'bad')+
+    h+=row('Kategoriya',T.cat+'-kategoriya')+row('Talab (hozir)',c.d.toFixed(2)+' MW')+row("Ta'minot",Math.round(c.s*100)+'%',c.s>.95?'ok':c.s>.4?'warn':'bad')+
        row('Daromad',(c.d*c.s*T.rate).toFixed(1)+' mln/soat')+row('Holat',w[0],w[1]);
     if(c.grace>0)h+=row('Ulash uchun vaqt',c.grace+' soat','warn');
+    if(S.lv.sec&&T.cat<=2){const sf=n1().safe.get(i);h+=row("Ta'minot yo'li",sf?'ikki tomonlama':'bitta (zaif)',sf?'ok':'warn');}
+    if(T.cat===1&&(allowed('dizel')||(S.lv.goal&&S.lv.goal.backup))){
+      const cap=dizelCap(i);h+=row('Zaxira dizel',cap.toFixed(0)+' / '+T.peak+' MW',cap>=T.peak-1e-6?'ok':'warn');
+      if(c.bk>0)h+=row('Dizel beryapti',c.bk.toFixed(1)+' MW','ok');
+    }
   }else if(T.kind==='gen'){
     h+=row('Hozirgi quvvat',(c.out*T.cap).toFixed(1)+' / '+T.cap+' MW');
-    if(!net.hasTrafo)h+=row('Holat',"Transformator yo'q",'bad');
+    if(c.t==='biogaz'){const fd=S.feed[i];h+=row('Xomashyo (go\'ng)',fd.toFixed(1)+' / '+T.cap+' MW',fd>=T.cap-.05?'ok':fd>.05?'warn':'bad');if(fd<.05)h+=row('Maslahat',"fermaning yoniga qo'ying",'warn');}
+    if(c.t==='shamol')h+=row('Shamol',windLabel()+' · '+(windNow()*12).toFixed(0)+' m/s',windNow()>.45?'ok':'warn');
+    if(S.outage>0)h+=row('Holat',"tizim avariyasi: o'chgan",'bad');
+    else if(!net.hasTrafo)h+=row('Holat',"Transformator yo'q",'bad');
+  }else if(T.kind==='feed'){
+    let nb=0;for(const d of D4){const nx=(i%W)+d[0],ny=((i/W)|0)+d[1];if(nx<0||ny<0||nx>=W||ny>=H)continue;const o=S.cells[ny*W+nx];if(o&&o.t==='biogaz')nb++;}
+    h+=row('Xomashyo',T.feed+' MW')+row('Yon tomonda biogaz EES',String(nb),nb?'ok':'warn');
+  }else if(T.kind==='backup'){
+    let pr=0;for(const d of D4){const nx=(i%W)+d[0],ny=((i/W)|0)+d[1];if(nx<0||ny<0||nx>=W||ny>=H)continue;const o=S.cells[ny*W+nx];if(o&&TYPES[o.t].kind==='load'&&TYPES[o.t].cat===1)pr++;}
+    h+=row('Hozirgi yuk',(c.used||0).toFixed(1)+' / '+T.cap+' MW',(c.used||0)>.01?'ok':'')+row('Himoya qiladi',pr+' ta 1-kategoriya',pr?'ok':'warn');
   }else if(T.kind==='store'){
     h+=row('Zaryad',c.soc.toFixed(1)+' / '+T.mwh+' MWh')+row('Rejim',c.mode==='chg'?'zaryadlanmoqda':c.mode==='dis'?'tok bermoqda':'kutmoqda');
   }else if(T.kind==='trafo'){
@@ -1070,7 +1635,11 @@ function infoHTML(){
   }else{
     h+=row('Holat',S.live[i]?'tok bor':"tok yo'q",S.live[i]?'ok':'warn');
   }
-  h+=row('Tarmoq',"talab "+net.demand.toFixed(1)+" · berish "+net.served.toFixed(1)+" MW");
+  if(S.lv.sec&&(T.kind==='wire'||T.kind==='trafo')&&n1().bridgeKey.has(i))h+=row('N-1',"zaif joy: uzilsa iste'molchi tokdan ajraladi",'warn');
+  if(net){
+    h+=row('Tarmoq',"talab "+net.demand.toFixed(1)+" · berish "+net.served.toFixed(1)+" MW");
+    if(S.lv.loss&&net.wires)h+=row("Liniyada yo'qotish",'+'+((net.lf-1)*100).toFixed(0)+'%',net.lf>1.2?'warn':'');
+  }
   return h;
 }
 
@@ -1081,7 +1650,7 @@ let lastLog=-1,lastInfo='',lastOver;
 function hud(){
   const d=Math.min(S.day,S.lv.days);
   mission();
-  setT('lvl',(S.li+1)+' / '+NL);
+  setT('lvl',S.lv.part===2?"2-bo'lim · "+lvNo(S.li)+' / '+(NL-P2):lvNo(S.li)+' / '+P2);
   setT('clock','Kun '+d+' / '+S.lv.days+' · '+pad2(S.hour)+':'+pad2(Math.floor(S.frac*60)));
   setT('money',Math.round(S.money)+' mln');
   $('money').style.color=S.money<0?'var(--bad)':'';
@@ -1090,7 +1659,18 @@ function hud(){
   const tb=$('trustBar');
   tb.style.width=S.trust+'%';
   tb.style.background=S.trust>60?'var(--ok)':S.trust>30?'var(--warn)':'var(--bad)';
-  setT('tag',S.heat&&S.cloudy?'Issiq, bulutli':S.heat?'Issiq (+25%)':S.cloudy?'Bulutli':'Ochiq');
+  let tg=S.heat&&S.cloudy?'Issiq, bulutli':S.heat?'Issiq (+25%)':S.cloudy?'Bulutli':'Ochiq';
+  if(S.outage>0)tg='AVARIYA · '+S.outage+' s';else if(S.outStart>=0)tg+=' · avariya '+pad2(S.outStart)+':00';
+  setT('tag',tg);
+  const sw=allowed('shamol'),swEl=$('stWind');
+  if(swEl.hidden===sw)swEl.hidden=!sw;
+  if(sw)setT('wind',windLabel()+' · '+(windNow()*12).toFixed(0)+' m/s');
+  const ss=!!S.lv.sec,ssEl=$('stSec');
+  if(ssEl.hidden===ss)ssEl.hidden=!ss;
+  if(ss){
+    const pc=n1().pct;setT('sec',Math.round(pc)+'%');
+    const sb=$('secBar');sb.style.width=pc+'%';sb.style.background=pc>=99.9?'var(--ok)':pc>50?'var(--warn)':'var(--bad)';
+  }
   for(const b of toolsEl.children){
     const id=b.dataset.id,T=TYPES[id];
     b.setAttribute('aria-pressed',String(id===tool));

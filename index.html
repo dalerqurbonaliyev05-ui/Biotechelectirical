@@ -28,14 +28,9 @@
             <nav class="nav-menu" id="nav-menu" aria-label="Asosiy menyu">
                 <a href="#about" data-i18n="nav.about">Men haqimda</a>
                 <a href="#tools" data-i18n="nav.tools">Vositalar</a>
+                <a href="#apps" data-i18n="nav.apps">Ilovalar</a>
                 <a href="#skills" data-i18n="nav.skills">Yo‘nalishlar</a>
                 <a href="#projects" data-i18n="nav.projects">Loyihalar</a>
-                <a href="/rele-lugat/" data-i18n="nav.app">Rele Lug‘at</a>
-                <a href="/uyovqat/" data-i18n="nav.food">Uy taomlari</a>
-                <a href="/mushuk-it/" data-i18n="nav.pets">Mushuk va Itlar</a>
-                <a href="/fizika/" data-i18n="nav.phys">Fizika</a>
-                <a href="/elektr-uy/" data-i18n="nav.elektr">ElektrUy</a>
-                <a href="/oyinlar/" data-i18n="nav.games">O‘yinlar</a>
                 <a href="#contact" data-i18n="nav.contact">Aloqa</a>
             </nav>
 
@@ -56,7 +51,8 @@
     <ol class="rail" id="rail" aria-hidden="true">
         <li data-target="about"><i></i><span>110 kV</span></li>
         <li data-target="tools"><i></i><span>35 kV</span></li>
-        <li data-target="skills"><i></i><span>10 kV</span></li>
+        <li data-target="apps"><i></i><span>10 kV</span></li>
+        <li data-target="skills"><i></i><span>6 kV</span></li>
         <li data-target="projects"><i></i><span>0,4 kV</span></li>
         <li data-target="contact"><i></i><span>220 V</span></li>
     </ol>
@@ -455,7 +451,81 @@
                         <div class="tile-body">
                             <span class="tile-tag" data-i18n="tools.t18.tag">O‘yin</span>
                             <h3 data-i18n="tools.t18.title">Shahar quruvchi</h3>
-                            <p data-i18n="tools.t18.desc">20 bosqichli o‘yin: uy, zavod va kasalxonalar orasiga stansiya, liniya va transformator tortib, shaharni yoriting. Kecha-kunduz yuklama o‘zgaradi, pul ham yetishi kerak.</p>
+                            <p data-i18n="tools.t18.desc">40 bosqichli o‘yin: stansiya, liniya va transformator bilan shaharni yoriting. 2-bo‘limda biogaz, shamol generatorlari, ikki tomonlama ta’minot va kasalxona uchun zaxira manba qo‘shiladi.</p>
+                            <span class="tile-go"><span data-i18n="tools.open">Ochish →</span></span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Apps: bento (Vositalar kabi, lekin ilova va o‘yinlar uchun) -->
+        <section id="apps" class="section apps">
+            <div class="container">
+                <header class="section-head reveal">
+                    <span class="station"><b>03</b>10 kV</span>
+                    <h2 class="section-title" data-i18n="apps.title">Ilovalar</h2>
+                </header>
+                <p class="section-lead reveal" data-i18n="apps.lead">Telefon uchun ilovalarim va o‘yinlarim: yuklab oling yoki brauzerda oching.</p>
+
+                <div class="bento">
+                    <a class="tile ap1 reveal" href="/rele-lugat/">
+                        <span class="tile-no">01</span>
+                        <svg class="app-ico" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 12c-4-3-10-4-16-3v27c6-1 12 0 16 3 4-3 10-4 16-3V9c-6-1-12 0-16 3z"/><path d="M24 12v27"/></svg>
+                        <div class="tile-body">
+                            <span class="tile-tag" data-i18n="apps.a1.tag">Android · iPhone</span>
+                            <h3 data-i18n="apps.a1.title">Rele Lug‘at</h3>
+                            <p data-i18n="apps.a1.desc">Releli himoyani o‘ynab o‘rganing: 214 atama, 24 sxema, 170 test savoli. Internetsiz ishlaydi.</p>
+                            <span class="tile-go"><span data-i18n="tools.open">Ochish →</span></span>
+                        </div>
+                    </a>
+                    <a class="tile ap2 reveal" href="/uyovqat/">
+                        <span class="tile-no">02</span>
+                        <svg class="app-ico" viewBox="0 0 48 48" aria-hidden="true"><path d="M6 22h36c0 10-7 16-18 16S6 32 6 22z"/><path d="M16 14c0-3 3-3 3-6M24 14c0-3 3-3 3-6M32 14c0-3 3-3 3-6"/></svg>
+                        <div class="tile-body">
+                            <span class="tile-tag" data-i18n="apps.a2.tag">Android ilova</span>
+                            <h3 data-i18n="apps.a2.title">Uy taomlari</h3>
+                            <p data-i18n="apps.a2.desc">Uyda tayyorlangan taomlar bozori: xaridor, sotuvchi va kuryer ilovalari.</p>
+                            <span class="tile-go"><span data-i18n="tools.open">Ochish →</span></span>
+                        </div>
+                    </a>
+                    <a class="tile ap3 reveal" href="/mushuk-it/">
+                        <span class="tile-no">03</span>
+                        <svg class="app-ico" viewBox="0 0 48 48" aria-hidden="true"><ellipse cx="24" cy="31" rx="9" ry="7"/><circle cx="12" cy="20" r="3.5"/><circle cx="20" cy="12" r="3.5"/><circle cx="29" cy="12" r="3.5"/><circle cx="37" cy="20" r="3.5"/></svg>
+                        <div class="tile-body">
+                            <span class="tile-tag" data-i18n="apps.a3.tag">Android · iPhone</span>
+                            <h3 data-i18n="apps.a3.title">Mushuk va Itlar</h3>
+                            <p data-i18n="apps.a3.desc">Ko‘chada uchragan mushuk va itlarni suratga oling, joylashuv avtomatik belgilanadi.</p>
+                            <span class="tile-go"><span data-i18n="tools.open">Ochish →</span></span>
+                        </div>
+                    </a>
+                    <a class="tile ap4 reveal" href="/fizika/">
+                        <span class="tile-no">04</span>
+                        <svg class="app-ico" viewBox="0 0 48 48" aria-hidden="true"><ellipse cx="24" cy="24" rx="19" ry="7"/><ellipse cx="24" cy="24" rx="19" ry="7" transform="rotate(60 24 24)"/><ellipse cx="24" cy="24" rx="19" ry="7" transform="rotate(120 24 24)"/><circle cx="24" cy="24" r="2.5" fill="currentColor"/></svg>
+                        <div class="tile-body">
+                            <span class="tile-tag" data-i18n="apps.a4.tag">Android ilova</span>
+                            <h3 data-i18n="apps.a4.title">Fizika</h3>
+                            <p data-i18n="apps.a4.desc">6–11-sinf va abituriyentlar uchun: darslik testlari, sertifikatga tayyorlov, laboratoriya o‘yinlari.</p>
+                            <span class="tile-go"><span data-i18n="tools.open">Ochish →</span></span>
+                        </div>
+                    </a>
+                    <a class="tile ap5 reveal" href="/elektr-uy/">
+                        <span class="tile-no">05</span>
+                        <svg class="app-ico" viewBox="0 0 48 48" aria-hidden="true"><path d="M6 23 24 8l18 15"/><path d="M11 20v20h26V20"/><path d="M26 22l-6 9h6l-3 8 8-11h-6z"/></svg>
+                        <div class="tile-body">
+                            <span class="tile-tag" data-i18n="apps.a5.tag">Android ilova</span>
+                            <h3 data-i18n="apps.a5.title">ElektrUy</h3>
+                            <p data-i18n="apps.a5.desc">Xona rasmidan kabel trassasi, sxema, 3D ko‘rinish va materiallar ro‘yxati. Ovozli darslar.</p>
+                            <span class="tile-go"><span data-i18n="tools.open">Ochish →</span></span>
+                        </div>
+                    </a>
+                    <a class="tile ap6 reveal" href="/oyinlar/">
+                        <span class="tile-no">06</span>
+                        <svg class="app-ico" viewBox="0 0 48 48" aria-hidden="true"><rect x="5" y="14" width="38" height="22" rx="11"/><path d="M15 21v8M11 25h8"/><circle cx="32" cy="23" r="1.8" fill="currentColor"/><circle cx="37" cy="27" r="1.8" fill="currentColor"/></svg>
+                        <div class="tile-body">
+                            <span class="tile-tag" data-i18n="apps.a6.tag">Veb-o‘yinlar</span>
+                            <h3 data-i18n="apps.a6.title">O‘yinlar</h3>
+                            <p data-i18n="apps.a6.desc">Milliy o‘zbek o‘yinlari to‘plami: arqon tortish, besh tosh, oshiq, chillak, kurash va boshqalar. Reyting bilan.</p>
                             <span class="tile-go"><span data-i18n="tools.open">Ochish →</span></span>
                         </div>
                     </a>
@@ -474,7 +544,7 @@
             </svg>
             <div class="container">
                 <header class="section-head reveal">
-                    <span class="station"><b>03</b>10 kV</span>
+                    <span class="station"><b>04</b>6 kV</span>
                     <h2 class="section-title" data-i18n="skills.title">Yo‘nalishlar</h2>
                 </header>
                 <div class="skills-grid">
@@ -525,7 +595,7 @@
         <section id="projects" class="section projects">
             <div class="container">
                 <header class="section-head reveal">
-                    <span class="station"><b>04</b>0,4 kV</span>
+                    <span class="station"><b>05</b>0,4 kV</span>
                     <h2 class="section-title" data-i18n="projects.title">Kelajakdagi loyihalar</h2>
                 </header>
 
@@ -570,7 +640,7 @@
             <div class="contact-mark" aria-hidden="true">220 V</div>
             <div class="container">
                 <header class="section-head reveal">
-                    <span class="station on-dark"><b>05</b>220 V</span>
+                    <span class="station on-dark"><b>06</b>220 V</span>
                     <h2 class="section-title" data-i18n="contact.title">Bog‘lanish</h2>
                 </header>
 
