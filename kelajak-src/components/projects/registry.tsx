@@ -83,4 +83,37 @@ export const REGISTRY: Record<string, ProjectComponents> = {
       },
     },
   },
+  "vodorod-motori": {
+    Hero: dynamic(() => import("./vodorod-motori/Hero"), { ssr: false, loading: Loading }),
+    steps: {
+      tamoyil: {
+        Visual: dynamic(() => import("./vodorod-motori/S1Tamoyil").then((m) => m.Visual), { ssr: false, loading: Loading }),
+        Sim: dynamic(() => import("./vodorod-motori/S1Tamoyil").then((m) => m.Sim), { ssr: false, loading: Loading }),
+      },
+      elektroliz: {
+        Visual: dynamic(() => import("./vodorod-motori/S2Elektroliz").then((m) => m.Visual), { ssr: false, loading: Loading }),
+        Sim: dynamic(() => import("./vodorod-motori/S2Elektroliz").then((m) => m.Sim), { ssr: false, loading: Loading }),
+      },
+      saqlash: {
+        Visual: dynamic(() => import("./vodorod-motori/S3Saqlash").then((m) => m.Visual), { ssr: false, loading: Loading }),
+        Sim: dynamic(() => import("./vodorod-motori/S3Saqlash").then((m) => m.Sim), { ssr: false, loading: Loading }),
+      },
+      stek: {
+        Visual: dynamic(() => import("./vodorod-motori/S4Stek").then((m) => m.Visual), { ssr: false, loading: Loading }),
+        Sim: dynamic(() => import("./vodorod-motori/S4Stek").then((m) => m.Sim), { ssr: false, loading: Loading }),
+      },
+      elektronika: {
+        Visual: dynamic(() => import("./vodorod-motori/S5Elektronika").then((m) => m.Visual), { ssr: false, loading: Loading }),
+        Sim: dynamic(() => import("./vodorod-motori/S5Elektronika").then((m) => m.Sim), { ssr: false, loading: Loading }),
+      },
+      motor: {
+        Visual: dynamic(() => import("./vodorod-motori/S6Motor").then((m) => m.Visual), { ssr: false, loading: Loading }),
+        Sim: dynamic(() => import("./vodorod-motori/S6Motor").then((m) => m.Sim), { ssr: false, loading: Loading }),
+      },
+      sinov: {
+        Visual: dynamic(() => import("./vodorod-motori/S7Sinov").then((m) => m.Visual), { ssr: false, loading: Loading }),
+        Sim: dynamic(() => import("./vodorod-motori/S7Sinov").then((m) => m.Sim), { ssr: false, loading: Loading }),
+      },
+    },
+  },
 };

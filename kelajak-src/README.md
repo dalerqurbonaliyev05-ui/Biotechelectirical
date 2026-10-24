@@ -10,6 +10,7 @@ npm run lint && npm run typecheck && npm test
 npm run deploy     # build + ../kelajak/ ga nusxalash (Vercel shu papkani beradi)
 ```
 
+- Loyihalar: `aqlli-hisoblagich`, `simsiz-energiya`, `vodorod-motori` (har biri 7 qadam).
 - Kontent: `content/future/<slug>.ts` (sxema — `content/future/types.ts`), ro‘yxat — `content/future/index.ts`.
 - Umumiy shablon: `components/template/*` (hero, progress, qadam bloklari, quiz, laboratoriya UI, canvas sikli).
 - Qadam vizual/simulyatorlari: `components/projects/<slug>/*`, `components/projects/registry.tsx` orqali lazy yuklanadi.
