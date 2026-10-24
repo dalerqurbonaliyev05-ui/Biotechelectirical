@@ -1,0 +1,57 @@
+# Kelajak loyihalari (kelajak-src): lint, typecheck, unit testlar (lib/physics) va production build tekshiruvi.
+# Sayt statik: tayyor natija kelajak/ ga yoziladi. Bu yerda `claude/**` shoxlariga push bo'lganda
+# package-lock.json va tayyor natija avtomatik commit qilinadi ([skip ci]); main'ga faqat PR orqali tushadi.
+name: Kelajak loyihalari
+
+on:
+  push:
+    branches: [main, 'claude/**']
+    paths:
+      - 'kelajak-src/**'
+      - '.github/workflows/kelajak.yml'
+  pull_request:
+    paths:
+      - 'kelajak-src/**'
+      - '.github/workflows/kelajak.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: kelajak-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Lint, typecheck, test, build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    defaults:
+      run:
+        working-directory: kelajak-src
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install (package-lock.json bo'lsa npm ci)
+        run: |
+          if [ -f package-lock.json ]; then npm ci; else npm install; fi
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - name: Tayyor natijani kelajak/ ga yozish va commit qilish (faqat claude/** push)
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/claude/')
+        run: |
+          node scripts/deploy.mjs
+          cd "$GITHUB_WORKSPACE"
+          git add kelajak kelajak-src/package-lock.json
+          if git diff --cached --quiet; then
+            echo "O'zgarish yo'q"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "kelajak: build natijasi va package-lock.json [skip ci]"
+            git push
+          fi

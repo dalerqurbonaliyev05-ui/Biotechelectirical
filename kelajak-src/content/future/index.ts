@@ -1,0 +1,32 @@
+import { aqlliHisoblagich } from "./aqlli-hisoblagich";
+import type { Project, ProjectCard } from "./types";
+
+// Tayyor loyihalar. Yangi loyiha: content/future/<slug>.ts yozib, shu ro'yxatga qo'shing
+// (va ixtiyoriy ravishda components/projects/registry.tsx ga vizual/simulyatorlarini).
+export const PROJECTS: Project[] = [aqlliHisoblagich];
+
+export const PROJECT_BY_SLUG: Record<string, Project> = Object.fromEntries(PROJECTS.map((p) => [p.slug, p]));
+
+/** Ro'yxat sahifasi va "Keyingi loyiha" tugmasi uchun — tartib shu yerda. */
+export const CARDS: ProjectCard[] = [
+  { slug: "aqlli-hisoblagich", title: "Aqlli hisoblagich", short: aqlliHisoblagich.short, accent: "#9bc53d", ready: true },
+  {
+    slug: "simsiz-energiya",
+    title: "Simsiz elektr energiya uzatish",
+    short: "Induksiya va rezonans: g‘altaklar, inverter, kompensatsiya va masofaga qarab FIK.",
+    accent: "#6d4aff",
+    ready: false,
+  },
+  {
+    slug: "vodorod-motori",
+    title: "Vodorod motori",
+    short: "Elektrolizdan yoqilg‘i elementi va elektr yuritmagacha: vodorodli transport tizimi.",
+    accent: "#22c7ff",
+    ready: false,
+  },
+].map((c) => ({ ...c, ready: c.ready && c.slug in PROJECT_BY_SLUG }));
+
+export function nextCard(slug: string): ProjectCard | undefined {
+  const k = CARDS.findIndex((c) => c.slug === slug);
+  return k < 0 ? undefined : CARDS[(k + 1) % CARDS.length];
+}
