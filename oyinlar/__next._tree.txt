@@ -2,4 +2,4 @@
 :HL["/oyinlar/_next/static/chunks/05ofz22g8do94.css","style"]
 :HL["https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600;700&display=swap","style"]
 1:[["children",{"s":"__PAGE__","h":160}]]
-0:{"b":"f3m8odHBRFg6_rCKzkHIJ","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
+0:{"b":"kcasEDRC4rCz-DJqKwCUQ","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
