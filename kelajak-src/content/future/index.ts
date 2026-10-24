@@ -1,9 +1,10 @@
 import { aqlliHisoblagich } from "./aqlli-hisoblagich";
+import { simsizEnergiya } from "./simsiz-energiya";
 import type { Project, ProjectCard } from "./types";
 
 // Tayyor loyihalar. Yangi loyiha: content/future/<slug>.ts yozib, shu ro'yxatga qo'shing
 // (va ixtiyoriy ravishda components/projects/registry.tsx ga vizual/simulyatorlarini).
-export const PROJECTS: Project[] = [aqlliHisoblagich];
+export const PROJECTS: Project[] = [aqlliHisoblagich, simsizEnergiya];
 
 export const PROJECT_BY_SLUG: Record<string, Project> = Object.fromEntries(PROJECTS.map((p) => [p.slug, p]));
 
@@ -13,9 +14,9 @@ export const CARDS: ProjectCard[] = [
   {
     slug: "simsiz-energiya",
     title: "Simsiz elektr energiya uzatish",
-    short: "Induksiya va rezonans: g‘altaklar, inverter, kompensatsiya va masofaga qarab FIK.",
-    accent: "#6d4aff",
-    ready: false,
+    short: simsizEnergiya.short,
+    accent: simsizEnergiya.accent,
+    ready: true,
   },
   {
     slug: "vodorod-motori",

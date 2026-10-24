@@ -50,4 +50,37 @@ export const REGISTRY: Record<string, ProjectComponents> = {
       },
     },
   },
+  "simsiz-energiya": {
+    Hero: dynamic(() => import("./simsiz-energiya/Hero"), { ssr: false, loading: Loading }),
+    steps: {
+      tamoyil: {
+        Visual: dynamic(() => import("./simsiz-energiya/S1Tamoyil").then((m) => m.Visual), { ssr: false, loading: Loading }),
+        Sim: dynamic(() => import("./simsiz-energiya/S1Tamoyil").then((m) => m.Sim), { ssr: false, loading: Loading }),
+      },
+      inverter: {
+        Visual: dynamic(() => import("./simsiz-energiya/S2Inverter").then((m) => m.Visual), { ssr: false, loading: Loading }),
+        Sim: dynamic(() => import("./simsiz-energiya/S2Inverter").then((m) => m.Sim), { ssr: false, loading: Loading }),
+      },
+      "tx-galtak": {
+        Visual: dynamic(() => import("./simsiz-energiya/S3TxGaltak").then((m) => m.Visual), { ssr: false, loading: Loading }),
+        Sim: dynamic(() => import("./simsiz-energiya/S3TxGaltak").then((m) => m.Sim), { ssr: false, loading: Loading }),
+      },
+      "rx-togrilagich": {
+        Visual: dynamic(() => import("./simsiz-energiya/S4Rx").then((m) => m.Visual), { ssr: false, loading: Loading }),
+        Sim: dynamic(() => import("./simsiz-energiya/S4Rx").then((m) => m.Sim), { ssr: false, loading: Loading }),
+      },
+      rezonans: {
+        Visual: dynamic(() => import("./simsiz-energiya/S5Rezonans").then((m) => m.Visual), { ssr: false, loading: Loading }),
+        Sim: dynamic(() => import("./simsiz-energiya/S5Rezonans").then((m) => m.Sim), { ssr: false, loading: Loading }),
+      },
+      yuklama: {
+        Visual: dynamic(() => import("./simsiz-energiya/S6Yuklama").then((m) => m.Visual), { ssr: false, loading: Loading }),
+        Sim: dynamic(() => import("./simsiz-energiya/S6Yuklama").then((m) => m.Sim), { ssr: false, loading: Loading }),
+      },
+      "fik-masofa": {
+        Visual: dynamic(() => import("./simsiz-energiya/S7Fik").then((m) => m.Visual), { ssr: false, loading: Loading }),
+        Sim: dynamic(() => import("./simsiz-energiya/S7Fik").then((m) => m.Sim), { ssr: false, loading: Loading }),
+      },
+    },
+  },
 };
