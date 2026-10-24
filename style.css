@@ -498,6 +498,20 @@ ul, ol { list-style: none; }
 @keyframes sqblink { 0%, 100% { opacity: 1; } 45%, 60% { opacity: .15; } }
 @media (prefers-reduced-motion: reduce) { .sq-l, .sq-w { animation: none; } }
 
+/* ---------- Apps: bento (Vositalar bilan bir xil kartochkalar) ---------- */
+.apps { background: #faf7ff; }
+.apps .container { position: relative; }
+.apps .bento { grid-auto-rows: 300px; }
+.app-ico { position: absolute; left: 24px; top: 22px; width: 54px; height: 54px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.ap1 { grid-column: span 2; color: #fff; background: linear-gradient(150deg, #6d4aff 0%, #9b47ff 55%, #ff5c8a 130%); }
+.ap1 h3 { font-size: clamp(1.4rem, 2.6vw, 2rem); }
+.ap2 { background: #ffd27a; }
+.ap3 { background: #9be7ff; }
+.ap4 { background: #cfc4ff; }
+.ap5 { background: #a8f0d6; }
+.ap6 { grid-column: span 2; color: #fff; background: linear-gradient(120deg, #0a0f18 0%, #112a3d 55%, #1f6f8b 100%); }
+.ap1 .app-ico, .ap6 .app-ico { width: 66px; height: 66px; }
+
 /* ---------- Responsive ---------- */
 @media (min-width: 1280px) { .rail { display: flex; } }
 
@@ -506,6 +520,9 @@ ul, ol { list-style: none; }
     .t1 { grid-column: span 2; grid-row: span 2; }
     .t2, .t3 { grid-column: span 1; }
     .t4, .t5, .t6, .t7, .t8, .t9, .t10, .t11, .t12, .t13, .t14, .t15, .t16, .t17, .t18 { grid-column: span 2; }
+    .apps .bento { grid-auto-rows: 280px; }
+    .ap1, .ap6 { grid-column: span 2; }
+    .ap2, .ap3, .ap4, .ap5 { grid-column: span 1; }
     .skills-grid { grid-template-columns: 1fr; }
     .skill-category h3 { min-height: 0; }
     .fb { display: none; }
@@ -599,6 +616,9 @@ ul, ol { list-style: none; }
     .t7 .tile-body { max-width: none; }
     .mini-board { left: 20px; right: 20px; width: auto; top: 14px; bottom: auto; height: 120px; }
     .t1 { min-height: 340px; }
+    .apps .bento { grid-auto-rows: auto; }
+    .ap1, .ap2, .ap3, .ap4, .ap5, .ap6 { grid-column: span 1; min-height: 250px; padding-top: 104px; }
+    .ap1, .ap6 { padding-top: 116px; }
     .form-group { grid-template-columns: 1fr; }
     .contact-form { padding: 24px 20px; }
     .about-stats { gap: 8px; }
