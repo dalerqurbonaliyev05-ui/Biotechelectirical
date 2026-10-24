@@ -1,4 +1,4 @@
 :HL["/kelajak/_next/static/chunks/3njlbwvt2ugt-.css","style"]
 :HL["https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap","style"]
 1:[["children",{"s":"__PAGE__","h":160}]]
-0:{"b":"aehkTBiow2j6weqsY4lXR","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
+0:{"b":"kZf_P0ZueY7hql9g3sRpb","t":{"t":{"s":"","h":80,"c":"$Q1"}}}

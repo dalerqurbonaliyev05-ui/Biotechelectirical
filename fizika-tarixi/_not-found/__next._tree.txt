@@ -2,4 +2,4 @@
 :HL["https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap","style"]
 2:[["children",{"s":"__PAGE__","h":160}]]
 1:[["children",{"s":"/_not-found","h":96,"c":"$Q2"}]]
-0:{"b":"J70U4yQNsSEiPUtikLP6m","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
+0:{"b":"N42MCUwB-65yBnjA6JOT_","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
