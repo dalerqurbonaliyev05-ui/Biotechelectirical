@@ -2,4 +2,4 @@
 :HL["https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap","style"]
 2:[["children",{"s":"__PAGE__","h":160}]]
 1:[["children",{"s":{"n":"slug","t":"d","k":"aqlli-hisoblagich","s":[]},"h":65632,"c":"$Q2"}]]
-0:{"b":"IR8zbWmBE0d9NjKM_BSjU","t":{"t":{"s":"","h":131152,"c":"$Q1"}}}
+0:{"b":"2JTkWJO8r6pLOovwPSdsG","t":{"t":{"s":"","h":131152,"c":"$Q1"}}}
