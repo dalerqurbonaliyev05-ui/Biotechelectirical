@@ -82,14 +82,16 @@ test('mobil ko\'rinish: gorizontal skroll yo\'q, menyu ochiladi, bosh sahifada h
   await p2.goto(`${base}uyovqat/`);
   assert.ok(await p2.locator('#ios-note').isVisible());
 
-  // Bosh sahifa menyusida yangi havola
+  // Bosh sahifa: menyuda "Ilovalar" bo'limi, ichida "Uy taomlari" kartochkasi
   const home = await browser.newContext({ viewport: { width: 1280, height: 800 } });
   const p3 = await home.newPage();
   await p3.route(/fonts\.(googleapis|gstatic)\.com/, (r) => r.abort());
   await p3.goto(base);
-  const link = p3.locator('#nav-menu a[href="/uyovqat/"]');
-  assert.ok(await link.isVisible());
-  assert.equal((await link.textContent()).trim(), 'Uy taomlari');
+  const navLink = p3.locator('#nav-menu a[href="#apps"]');
+  assert.ok(await navLink.isVisible());
+  assert.equal((await navLink.textContent()).trim(), 'Ilovalar');
+  const link = p3.locator('#apps a.tile[href="/uyovqat/"]');
+  assert.equal((await link.locator('h3').textContent()).trim(), 'Uy taomlari');
   await p3.screenshot({ path: `${SHOTS}home-nav.png`, clip: { x: 0, y: 0, width: 1280, height: 120 } });
 });
 
