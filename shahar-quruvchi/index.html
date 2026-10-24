@@ -1401,6 +1401,7 @@ try{
   const raw=JSON.parse(localStorage.getItem(KEY)||'null');
   if(raw&&typeof raw.unlocked==='number'){prog.unlocked=Math.max(1,Math.min(NL,raw.unlocked|0));prog.stars=Array.isArray(raw.stars)?raw.stars.slice(0,NL).map(n=>+n||0):[];}
 }catch(e){}
+if((prog.stars[P2-1]||0)>0)prog.unlocked=Math.max(prog.unlocked,P2+1);
 function saveProg(){try{localStorage.setItem(KEY,JSON.stringify(prog));}catch(e){}}
 
 /* ===== Bosqichlar: panel, tavsif, natija ===== */
