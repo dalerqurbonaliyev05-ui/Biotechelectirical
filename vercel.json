@@ -191,6 +191,11 @@
       "permanent": true
     },
     {
+      "source": "/transformator-yigish",
+      "destination": "/transformator-yigish/",
+      "permanent": true
+    },
+    {
       "source": "/shahar-quruvchi",
       "destination": "/shahar-quruvchi/",
       "permanent": true
