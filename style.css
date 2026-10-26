@@ -519,6 +519,20 @@ ul, ol { list-style: none; }
 @keyframes sqblink { 0%, 100% { opacity: 1; } 45%, 60% { opacity: .15; } }
 @media (prefers-reduced-motion: reduce) { .sq-l, .sq-w { animation: none; } }
 
+.t20 { grid-column: span 4; color: #fff; background: linear-gradient(120deg, #0c1117 0%, #2a2216 55%, #a8601e 100%); }
+.t20 .tile-body { max-width: 46%; }
+.mini-tk { position: absolute; right: 40px; top: 14px; bottom: 14px; height: calc(100% - 28px); width: auto; max-width: 50%; }
+.tk-core { fill: rgba(255, 255, 255, .1); stroke: #ffd7a0; stroke-width: 2; }
+.tk-win { fill: #0c1117; stroke: #ffd7a0; stroke-width: 1.5; }
+.tk-lv { fill: #e0954a; }
+.tk-hv { fill: #7fb0de; }
+.tk-dim { fill: none; stroke: rgba(255, 255, 255, .55); stroke-width: 1.2; stroke-dasharray: 4 3; }
+.tk-doc { fill: rgba(255, 255, 255, .92); stroke: #ffd7a0; stroke-width: 2; }
+.tk-ln { fill: none; stroke: #2a5d9a; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 60; animation: tkwrite 3.6s ease-in-out infinite; }
+.tk-w { font: 700 12px system-ui, sans-serif; fill: #2a5d9a; }
+@keyframes tkwrite { 0% { stroke-dashoffset: 60; } 60%, 100% { stroke-dashoffset: 0; } }
+@media (prefers-reduced-motion: reduce) { .tk-ln { animation: none; } }
+
 /* ---------- Apps: bento (Vositalar bilan bir xil kartochkalar) ---------- */
 .apps { background: #faf7ff; }
 .apps .container { position: relative; }
@@ -540,7 +554,7 @@ ul, ol { list-style: none; }
     .bento { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 200px; }
     .t1 { grid-column: span 2; grid-row: span 2; }
     .t2, .t3 { grid-column: span 1; }
-    .t4, .t5, .t6, .t7, .t8, .t9, .t10, .t11, .t12, .t13, .t14, .t15, .t16, .t17, .t18, .t19 { grid-column: span 2; }
+    .t4, .t5, .t6, .t7, .t8, .t9, .t10, .t11, .t12, .t13, .t14, .t15, .t16, .t17, .t18, .t19, .t20 { grid-column: span 2; }
     .apps .bento { grid-auto-rows: 280px; }
     .ap1, .ap6 { grid-column: span 2; }
     .ap2, .ap3, .ap4, .ap5 { grid-column: span 1; }
@@ -615,9 +629,10 @@ ul, ol { list-style: none; }
     .hero-waves { height: 130px; }
     .marquee-track { font-size: .85rem; gap: 20px; }
     .bento { grid-template-columns: 1fr; grid-auto-rows: auto; }
-    .t1, .t2, .t3, .t4, .t5, .t6, .t7, .t8, .t9, .t10, .t11, .t12, .t13, .t14, .t15, .t16, .t17, .t18, .t19 { grid-column: span 1; grid-row: span 1; min-height: 200px; }
-    .t7, .t8, .t9, .t10, .t11, .t12, .t13, .t14, .t15, .t16, .t17, .t18, .t19 { min-height: 350px; }
-    .t13 .tile-body, .t14 .tile-body, .t15 .tile-body, .t16 .tile-body, .t17 .tile-body, .t18 .tile-body, .t19 .tile-body { max-width: none; }
+    .t1, .t2, .t3, .t4, .t5, .t6, .t7, .t8, .t9, .t10, .t11, .t12, .t13, .t14, .t15, .t16, .t17, .t18, .t19, .t20 { grid-column: span 1; grid-row: span 1; min-height: 200px; }
+    .t7, .t8, .t9, .t10, .t11, .t12, .t13, .t14, .t15, .t16, .t17, .t18, .t19, .t20 { min-height: 350px; }
+    .t13 .tile-body, .t14 .tile-body, .t15 .tile-body, .t16 .tile-body, .t17 .tile-body, .t18 .tile-body, .t19 .tile-body, .t20 .tile-body { max-width: none; }
+    .mini-tk { left: 50%; right: auto; transform: translateX(-50%); top: 12px; bottom: auto; height: 112px; max-width: none; }
     .mini-tr { left: 50%; right: auto; transform: translateX(-50%); top: 12px; bottom: auto; height: 112px; max-width: none; }
     .mini-sq { left: 50%; right: auto; transform: translateX(-50%); top: 12px; bottom: auto; height: 112px; max-width: none; }
     .mini-ev { left: 50%; right: auto; transform: translateX(-50%); top: 12px; bottom: auto; height: 112px; max-width: none; }
@@ -628,7 +643,7 @@ ul, ol { list-style: none; }
     .t11 .tile-body, .t12 .tile-body { max-width: none; }
     .mini-uy { left: 50%; right: auto; transform: translateX(-50%); top: 12px; bottom: auto; height: 112px; max-width: none; }
     .mini-ps { left: 50%; right: auto; transform: translateX(-50%); top: 12px; bottom: auto; height: 112px; max-width: none; }
-    .t12, .t14, .t15, .t16, .t17, .t18, .t19 { min-height: 400px; }
+    .t12, .t14, .t15, .t16, .t17, .t18, .t19, .t20 { min-height: 400px; }
     .t10 .tile-body { max-width: none; }
     .mini-rev { left: 50%; right: auto; transform: translateX(-50%); top: 12px; bottom: auto; height: 112px; max-width: none; }
     .t9 .tile-body { max-width: none; }

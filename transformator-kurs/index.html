@@ -1,0 +1,1630 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Kuch transformatori kurs loyihasi hisobi (Tixomirov uslubi, ToshDTU): o'zbek va rus tilida, Word faylni yuklab olish.">
+<title>Transformator hisobi</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=PT+Serif:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: sticky input panel (left) + results header, sketches and A4-like report sheet (right); stacks on phones */
+:root{
+  --bg:#eef1f4; --panel:#ffffff; --ink:#15202e; --muted:#5b6878; --line:#d5dbe2;
+  --copper:#b5621b; --copper-soft:#f6e6d6; --steel:#2e5f8f; --steel-soft:#dde8f3;
+  --ok:#1f7a4d; --ok-bg:#e1f2e8; --warn:#9a6400; --warn-bg:#fbefd6; --bad:#b3261e; --bad-bg:#fbe3e1;
+  --paper:#ffffff; --paper-ink:#16181c; --paper-line:#c9ced6;
+  --f-ui:"Golos Text", "Segoe UI", system-ui, sans-serif;
+  --f-doc:"PT Serif", "Times New Roman", Georgia, serif;
+  --f-num:"IBM Plex Mono", ui-monospace, Consolas, monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f151c; --panel:#17202a; --ink:#e6ebf1; --muted:#9aa7b6; --line:#2a3644;
+  --copper:#e08a45; --copper-soft:#3a2716; --steel:#7fb0de; --steel-soft:#1b2c3e;
+  --ok:#5fd09a; --ok-bg:#163326; --warn:#f0bd5a; --warn-bg:#3a2d12; --bad:#ff8a80; --bad-bg:#3d1a18;
+  --paper:#f7f8fa; --paper-ink:#16181c; --paper-line:#c9ced6; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f151c; --panel:#17202a; --ink:#e6ebf1; --muted:#9aa7b6; --line:#2a3644;
+  --copper:#e08a45; --copper-soft:#3a2716; --steel:#7fb0de; --steel-soft:#1b2c3e;
+  --ok:#5fd09a; --ok-bg:#163326; --warn:#f0bd5a; --warn-bg:#3a2d12; --bad:#ff8a80; --bad-bg:#3d1a18;
+  --paper:#f7f8fa; --paper-ink:#16181c; --paper-line:#c9ced6; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-ui);font-size:15px;line-height:1.5;margin:0;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px}
+.wrap{max-width:1280px;margin:0 auto}
+header.top{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;padding-block:18px 14px;border-bottom:1px solid var(--line);margin-bottom:20px}
+.brand{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1 1 320px}
+.crumb{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.crumb b{color:var(--copper);font-weight:600}
+.crumb a.back{color:inherit;text-decoration:none}.crumb a.back:hover b{text-decoration:underline}
+h1.title{font-size:clamp(22px,3vw,30px);line-height:1.15;margin:0;font-weight:700;text-wrap:balance;letter-spacing:-.01em}
+h1.title span{color:var(--copper)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:var(--panel)}
+.seg button{border:0;background:none;color:var(--muted);font:600 13px var(--f-ui);padding:6px 14px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.seg button:focus-visible,.btn:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--copper);outline-offset:2px}
+.grid{display:grid;grid-template-columns:330px minmax(0,1fr);gap:22px;align-items:start}
+@media (max-width:920px){.grid{grid-template-columns:minmax(0,1fr)}}
+aside.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px;position:sticky;top:12px;display:flex;flex-direction:column;gap:14px}
+@media (max-width:920px){aside.panel{position:static}}
+.panel h2{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0;font-weight:600}
+.field{display:flex;flex-direction:column;gap:4px;min-width:0}
+.field label{font-size:12.5px;color:var(--muted)}
+.field label i{font-family:var(--f-doc);color:var(--ink)}
+input,select{font:500 14px var(--f-ui);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:8px 10px;width:100%;min-width:0}
+input[type=number]{font-family:var(--f-num);font-size:13.5px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+details{border-top:1px dashed var(--line);padding-top:10px}
+summary{cursor:pointer;font-size:13px;color:var(--muted);font-weight:500}
+details .body{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+.hint{font-size:12px;color:var(--muted);margin:0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:8px;border:1px solid transparent;font:600 14px var(--f-ui);padding:10px 14px;cursor:pointer}
+.btn.primary{background:var(--copper);color:#fff}
+.btn.ghost{background:var(--panel);border-color:var(--line);color:var(--ink)}
+.btn.ghost:hover{border-color:var(--copper)}
+.btn svg{width:16px;height:16px}
+.btn[disabled]{opacity:.55;cursor:progress}
+main{min-width:0;display:flex;flex-direction:column;gap:18px}
+.summary{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:14px}
+.sumhead{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:flex-end;justify-content:space-between}
+.ttype{font-family:var(--f-num);font-size:26px;font-weight:500;letter-spacing:-.01em;line-height:1}
+.tsub{color:var(--muted);font-size:13px;margin-top:6px}
+.dl{display:flex;flex-wrap:wrap;gap:8px}
+.chips{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.chip{border-radius:8px;padding:10px 12px;background:var(--bg);border:1px solid var(--line);display:flex;flex-direction:column;gap:2px;min-width:0}
+.chip .k{font-size:12px;color:var(--muted)}
+.chip .v{font-family:var(--f-num);font-size:16px;font-weight:500;font-variant-numeric:tabular-nums}
+.chip .d{font-size:12px;font-weight:600}
+.chip.ok{border-color:color-mix(in srgb,var(--ok) 35%,var(--line))}.chip.ok .d{color:var(--ok)}
+.chip.warn{border-color:color-mix(in srgb,var(--warn) 45%,var(--line))}.chip.warn .d{color:var(--warn)}
+.chip.bad{border-color:color-mix(in srgb,var(--bad) 45%,var(--line))}.chip.bad .d{color:var(--bad)}
+.msg{font-size:13px;padding:8px 12px;border-radius:8px;background:var(--steel-soft);color:var(--ink)}
+.msg[data-k="bad"]{background:var(--bad-bg)}
+.sheet{background:var(--paper);color:var(--paper-ink);border-radius:4px;box-shadow:0 1px 2px rgba(0,0,0,.08),0 8px 30px rgba(20,30,45,.08);padding:clamp(18px,4vw,56px) clamp(16px,5vw,64px);font-family:var(--f-doc);font-size:16px;line-height:1.6;min-width:0}
+.sheet .doc-h1{font-size:19px;font-weight:700;text-align:center;margin:30px 0 12px;text-wrap:balance}
+.sheet .doc-h1:first-child{margin-top:0}
+.sheet .doc-h2{font-size:17px;font-weight:700;margin:20px 0 8px}
+.sheet p{margin:8px 0;text-align:justify;hyphens:auto}
+.sheet .fm{margin:6px 0 6px 28px;font-style:italic;overflow-wrap:anywhere}
+.sheet sub,.sheet sup{font-size:.7em;line-height:0}
+.sheet .ck{margin:8px 0 8px 28px;padding:6px 10px;border-left:3px solid #1f7a4d;background:#eef7f1;font-size:15px}
+.sheet .ck.no{border-left-color:#b3261e;background:#fbecea}
+.sheet .tw{overflow-x:auto;margin:10px 0}
+.sheet table{border-collapse:collapse;width:100%;font-size:14.5px;font-variant-numeric:tabular-nums}
+.sheet caption{caption-side:top;text-align:right;font-style:italic;padding-bottom:4px;font-size:14px}
+.sheet th,.sheet td{border:1px solid var(--paper-line);padding:5px 8px;text-align:left;vertical-align:top}
+.sheet th{background:#f1f3f6;font-weight:700}
+.sheet figure{margin:16px 0;text-align:center}
+.sheet figure .svgbox{overflow-x:auto}
+.sheet figure svg{max-width:100%;height:auto}
+.sheet figcaption{font-size:14.5px;margin-top:6px}
+.sheet ol.lit{padding-left:22px;margin:6px 0}
+.sheet ol.lit li{margin:4px 0}
+.foot{font-size:12px;color:var(--muted);text-align:center;margin-top:8px}
+@media (prefers-reduced-motion:no-preference){.chip,.sheet{transition:opacity .2s}}
+.busy .sheet{opacity:.5}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <div class="crumb"><a class="back" href="../#tools">← <b>energyvibe.uz</b></a> · <span data-t="crumb"></span></div>
+      <h1 class="title" data-t="title"></h1>
+    </div>
+    <div class="seg" role="group" aria-label="Til / Язык">
+      <button type="button" id="lang-uz" aria-pressed="false">O'zbekcha</button>
+      <button type="button" id="lang-ru" aria-pressed="false">Русский</button>
+    </div>
+  </header>
+
+  <div class="grid">
+    <aside class="panel" aria-label="input">
+      <h2 data-t="inputs"></h2>
+      <div class="field">
+        <label for="variant" data-t="variant"></label>
+        <select id="variant"></select>
+      </div>
+      <div class="row2">
+        <div class="field"><label for="student" data-t="student"></label><input id="student" type="text" autocomplete="off"></div>
+        <div class="field"><label for="group" data-t="group"></label><input id="group" type="text" autocomplete="off"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label for="S"><i>S</i><sub>н</sub>, kV·A</label><input id="S" type="number" min="100" max="16000" step="10"></div>
+        <div class="field"><label for="mat" data-t="mat"></label><select id="mat"><option value="Cu"></option><option value="Al"></option></select></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label for="U2"><i>U</i><sub>н2</sub> (<span data-t="hv"></span>), kV</label><select id="U2"><option>6</option><option>10</option><option>20</option><option>35</option></select></div>
+        <div class="field"><label for="U1"><i>U</i><sub>н1</sub> (<span data-t="lv"></span>), kV</label><select id="U1"><option>0.23</option><option>0.4</option><option>0.69</option><option>3.15</option><option>6.3</option><option>10.5</option></select></div>
+      </div>
+      <div class="field"><label for="scheme" data-t="scheme"></label>
+        <select id="scheme"><option value="Y/D-11">Y/Δ-11</option><option value="Y/Yn-0">Y/Yн-0</option><option value="D/Yn-11">Δ/Yн-11</option><option value="Yn/D-11">Yн/Δ-11</option><option value="Y/Y-0">Y/Y-0</option></select></div>
+      <div class="row2">
+        <div class="field"><label for="uk"><i>u</i><sub>к</sub>, %</label><input id="uk" type="number" step="0.1" min="2" max="15"></div>
+        <div class="field"><label for="i0"><i>i</i><sub>о</sub>, %</label><input id="i0" type="number" step="0.1" min="0.1" max="5"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label for="Pk"><i>P</i><sub>к</sub>, <span data-t="W"></span></label><input id="Pk" type="number" step="100" min="100"></div>
+        <div class="field"><label for="P0"><i>P</i><sub>х</sub>, <span data-t="W"></span></label><input id="P0" type="number" step="10" min="10"></div>
+      </div>
+      <details>
+        <summary data-t="adv"></summary>
+        <div class="body">
+          <div class="field"><label for="teacher" data-t="teacher"></label><input id="teacher" type="text" autocomplete="off"></div>
+          <div class="row3">
+            <div class="field"><label for="ovd"><i>d</i>, m</label><select id="ovd"></select></div>
+            <div class="field"><label for="ovw"><i>w</i><sub>1</sub></label><input id="ovw" type="number" min="1" step="1" placeholder="auto"></div>
+            <div class="field"><label for="ovB"><i>B</i><sub>с</sub>, T</label><input id="ovB" type="number" min="1.3" max="1.75" step="0.01" placeholder="1.6"></div>
+          </div>
+          <p class="hint" data-t="advHint"></p>
+        </div>
+      </details>
+      <button type="button" class="btn primary" id="run"><span data-t="run"></span></button>
+      <p class="hint" data-t="method"></p>
+    </aside>
+
+    <main id="main">
+      <section class="summary" aria-live="polite">
+        <div class="sumhead">
+          <div>
+            <div class="ttype" id="ttype">ТМ</div>
+            <div class="tsub" id="tsub"></div>
+          </div>
+          <div class="dl">
+            <button type="button" class="btn ghost" id="dl-uz"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg>Word · UZ</button>
+            <button type="button" class="btn ghost" id="dl-ru"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg>Word · RU</button>
+          </div>
+        </div>
+        <div class="chips" id="chips"></div>
+        <div class="msg" id="msg" hidden></div>
+      </section>
+      <article class="sheet" id="sheet"></article>
+      <p class="foot" data-t="foot"></p>
+    </main>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/docx@9.5.1/dist/index.iife.js"></script>
+<script>
+/* Расчёт трёхфазного двухобмоточного масляного трансформатора
+   по методике П.М. Тихомирова (1986) и метод. указаниям ТашГТУ (Пирматов, Якубова, 2022).
+   Индекс 1 — обмотка НН, индекс 2 — обмотка ВН. */
+(function (root) {
+  'use strict';
+  var SQ3 = Math.sqrt(3), SQ2 = Math.sqrt(2), PI = Math.PI;
+
+  function interp(tab, x) { // tab: [[x,y],...] sorted by x
+    if (x <= tab[0][0]) return tab[0][1];
+    for (var i = 1; i < tab.length; i++) {
+      if (x <= tab[i][0]) {
+        var x0 = tab[i - 1][0], y0 = tab[i - 1][1], x1 = tab[i][0], y1 = tab[i][1];
+        return y0 + (y1 - y0) * (x - x0) / (x1 - x0);
+      }
+    }
+    return tab[tab.length - 1][1];
+  }
+  function ceilTo(x, s) { return Math.ceil(x / s - 1e-9) * s; }
+
+  // ---------- Таблицы ----------
+  // Табл.1 Испытательные напряжения (класс, кВ -> Uисп, кВ)
+  var T1 = [[3, 18], [6, 25], [10, 35], [15, 45], [20, 55], [35, 85]];
+  function voltClass(kv) {
+    var cls = [[3.6, 3], [7.2, 6], [12, 10], [17.5, 15], [24, 20], [40.5, 35]];
+    for (var i = 0; i < cls.length; i++) if (kv <= cls[i][0]) return cls[i][1];
+    return 35;
+  }
+  function testVoltage(kv) {
+    if (kv <= 1) return 5;
+    var c = voltClass(kv);
+    for (var i = 0; i < T1.length; i++) if (T1[i][0] === c) return T1[i][1];
+    return 85;
+  }
+  // Табл.2 Главная изоляция ВН
+  function table2(S, Uisp) {
+    if (Uisp <= 35) {
+      if (S <= 100) return { l02: 20, dsh: 0, a12: 9, d12: 2.5, lc2: 10, a22: 8, d22: 0, row: '25-100' };
+      if (S <= 630) return { l02: 30, dsh: 0, a12: 9, d12: 3, lc2: 15, a22: 10, d22: 0, row: '160-630' };
+      return { l02: 50, dsh: 0, a12: 20, d12: 4, lc2: 20, a22: 18, d22: 0, row: '1000-6300' };
+    }
+    if (Uisp <= 45) return { l02: 50, dsh: 2, a12: 20, d12: 4, lc2: 20, a22: 18, d22: 2, row: '630 и выше' };
+    if (Uisp <= 55) return { l02: 50, dsh: 2, a12: 20, d12: 5, lc2: 30, a22: 20, d22: 3, row: '630 и выше' };
+    if (S <= 630) return { l02: 75, dsh: 2, a12: 27, d12: 5, lc2: 50, a22: 20, d22: 3, row: '160-630' };
+    if (S <= 6300) return { l02: 75, dsh: 2, a12: 27, d12: 5, lc2: 50, a22: 30, d22: 3, row: '1000-6300' };
+    return { l02: 80, dsh: 3, a12: 30, d12: 6, lc2: 50, a22: 30, d22: 3, row: '10000 и выше' };
+  }
+  // Табл.3 Главная изоляция НН (винтовая обмотка)
+  function table3(S, Uisp1) {
+    if (Uisp1 <= 5) return { d01: 4, ac1: 6, a01: 15, lc1: 18, row: '1000-2500' };
+    if (Uisp1 <= 35) return S <= 1600 ? { d01: 4, ac1: 6, a01: 15, lc1: 25, row: '630-1600' } : { d01: 4, ac1: 8, a01: 17.5, lc1: 25, row: '2500-6300' };
+    if (Uisp1 <= 45) return { d01: 5, ac1: 10, a01: 20, lc1: 30, row: '630 и выше' };
+    if (Uisp1 <= 55) return { d01: 5, ac1: 13, a01: 23, lc1: 45, row: '630 и выше' };
+    return { d01: 6, ac1: 19, a01: 30, lc1: 70, row: 'все мощности' };
+  }
+  // Табл.4 коэффициент k для (a1+a2)/3
+  function table4(S, cls) {
+    var k;
+    if (cls <= 10) {
+      if (S <= 250) k = 0.63; else if (S <= 630) k = 0.53;
+      else k = interp([[1000, 0.51], [2500, 0.51], [4000, 0.47], [6300, 0.45], [10000, 0.43]], S);
+    } else {
+      if (S <= 250) k = 0.62; else if (S <= 630) k = 0.55;
+      else k = interp([[1000, 0.52], [2500, 0.51], [4000, 0.50], [6300, 0.48], [10000, 0.47]], S);
+    }
+    return k;
+  }
+  // Табл.7 kд
+  function table7range(S) {
+    if (S <= 100) return [0.97, 0.97]; if (S <= 630) return [0.93, 0.96]; if (S <= 6300) return [0.85, 0.93];
+    if (S <= 16000) return [0.82, 0.84]; return [0.80, 0.82];
+  }
+  function table7(S) { return interp([[100, 0.97], [160, 0.96], [630, 0.93], [1000, 0.92], [2500, 0.91], [4000, 0.88], [6300, 0.86], [10000, 0.84]], S); }
+  // Табл.8 a = d12/d
+  function table8(S, cls) {
+    if (cls <= 10) return S <= 630 ? 1.36 : 1.38;
+    return S <= 6300 ? 1.40 : 1.40;
+  }
+  // Табл.9 b = 2a2/d
+  function table9(S, cls) {
+    if (cls <= 10) {
+      if (S <= 250) return 0.55; if (S <= 630) return 0.43;
+      return interp([[1000, 0.26], [2500, 0.25], [6300, 0.24]], S);
+    }
+    if (S <= 630) return 0.42;
+    if (S <= 6300) return interp([[1000, 0.32], [6300, 0.28]], S);
+    return 0.26;
+  }
+  // Табл.5 рекомендуемая индукция (сталь 3405, масляные)
+  function table5(S) { return S <= 16 ? 1.52 : (S <= 100 ? 1.58 : 1.60); }
+  // Табл.6 kз: 3405, 0,30 мм, нагревостойкое + однократная лакировка
+  var KZ = 0.955;
+  // Табл.2.5 (Тихомиров) число ступеней и kкр по диаметру
+  function kkrByD(d) {
+    var t = [[0.18, 6, 0.913], [0.20, 7, 0.918], [0.23, 8, 0.928], [0.27, 8, 0.925], [0.31, 8, 0.928], [0.35, 9, 0.929],
+      [0.39, 9, 0.913], [0.44, 11, 0.922], [0.52, 14, 0.927], [0.59, 15, 0.927], [0.70, 16, 0.929], [9, 16, 0.931]];
+    for (var i = 0; i < t.length; i++) if (d <= t[i][0] + 1e-9) return { steps: t[i][1], kkr: t[i][2] };
+    return { steps: 16, kkr: 0.931 };
+  }
+  // Табл.16 Пф.с, Пф.я (см2), Vу (см3) без прессующей пластины
+  var T16 = [[0.19, 262.8, 267.3, 4118], [0.20, 288.4, 296.2, 4811], [0.21, 319.2, 327.2, 5680], [0.22, 353.0, 360.5, 6460],
+    [0.23, 387.7, 394.0, 7482], [0.24, 419.3, 425.6, 8428], [0.25, 456.2, 462.6, 9532], [0.26, 490.6, 507.1, 10746],
+    [0.27, 532.6, 543.4, 12018], [0.28, 570.9, 591.1, 13738], [0.29, 612.4, 622.8, 14858], [0.30, 657.2, 675.2, 16556],
+    [0.31, 702.0, 715.8, 18672], [0.32, 746.2, 762.4, 20144], [0.33, 797.1, 820.2, 22382], [0.34, 844.8, 860.8, 23732],
+    [0.35, 903.6, 927.6, 26814], [0.36, 929.2, 948.8, 27944], [0.37, 988.8, 1003.8, 30606], [0.38, 1035.8, 1063.4, 33074],
+    [0.39, 1105.2, 1123.6, 35966], [0.40, 1155.6, 1167.6, 39550], [0.42, 1282.9, 1315.0, 46220], [0.45, 1479.2, 1500.2, 56560],
+    [0.48, 1688.9, 1718.7, 68274], [0.50, 1816.4, 1843.9, 76604], [0.53, 2044.8, 2077.8, 92752], [0.56, 2286.2, 2316.7, 107900],
+    [0.60, 2639.4, 2690.9, 133770], [0.63, 2892.5, 2958.3, 154240], [0.67, 3273.9, 3397.7, 186170], [0.71, 3688.0, 3797.8, 222880],
+    [0.75, 4115.7, 4251.8, 262210]];
+  function t16(d) { for (var i = 0; i < T16.length; i++) if (Math.abs(T16[i][0] - d) < 1e-6) return T16[i]; return null; }
+  // Табл.17 удельные потери 3405 0,30 мм: [B, p Вт/кг, pз (две пластины) Вт/м2]
+  var T17 = [[0.2, 0.023, 30], [0.4, 0.085, 70], [0.6, 0.175, 125], [0.8, 0.280, 215], [1.0, 0.425, 345], [1.2, 0.610, 515],
+    [1.22, 0.631, 536], [1.24, 0.652, 557], [1.26, 0.673, 578], [1.28, 0.694, 599], [1.30, 0.715, 620], [1.32, 0.739, 642],
+    [1.34, 0.763, 664], [1.36, 0.787, 686], [1.38, 0.811, 708], [1.40, 0.835, 730], [1.42, 0.860, 754], [1.44, 0.888, 778],
+    [1.46, 0.916, 802], [1.48, 0.943, 826], [1.50, 0.970, 850], [1.52, 1.004, 878], [1.54, 1.038, 906], [1.56, 1.074, 934],
+    [1.58, 1.112, 962], [1.60, 1.150, 990], [1.62, 1.194, 1017], [1.64, 1.238, 1044], [1.66, 1.288, 1071], [1.68, 1.344, 1098],
+    [1.70, 1.400, 1125], [1.72, 1.460, 1155], [1.74, 1.520, 1185], [1.76, 1.588, 1215], [1.78, 1.664, 1245], [1.80, 1.740, 1275],
+    [1.82, 1.815, 1305], [1.84, 1.890, 1335], [1.86, 1.970, 1365], [1.88, 2.060, 1395], [1.90, 2.150, 1425], [1.95, 2.390, 1500], [2.0, 2.630, 1580]];
+  // Табл.20 намагничивающая мощность 3405 0,30: [B, q ВА/кг, qз ВА/м2]
+  var T20 = [[0.2, 0.038, 40], [0.4, 0.115, 80], [0.6, 0.223, 140], [0.8, 0.362, 280], [1.0, 0.525, 900], [1.2, 0.722, 3700],
+    [1.22, 0.748, 4160], [1.24, 0.773, 4620], [1.26, 0.799, 5080], [1.28, 0.824, 5540], [1.30, 0.850, 6000], [1.32, 0.880, 6640],
+    [1.34, 0.910, 7280], [1.36, 0.940, 7920], [1.38, 0.970, 8560], [1.40, 1.000, 9200], [1.42, 1.041, 10120], [1.44, 1.082, 11040],
+    [1.46, 1.123, 11960], [1.48, 1.161, 12880], [1.50, 1.205, 13800], [1.52, 1.263, 14760], [1.54, 1.321, 15720], [1.56, 1.383, 16800],
+    [1.58, 1.449, 18000], [1.60, 1.526, 19200], [1.62, 1.645, 20480], [1.64, 1.775, 21760], [1.66, 1.956, 23160], [1.68, 2.188, 24680],
+    [1.70, 2.420, 27000], [1.72, 3.080, 28520], [1.74, 3.740, 30840], [1.76, 4.736, 33000], [1.78, 6.068, 35000], [1.80, 7.400, 37000],
+    [1.82, 12.54, 39800], [1.84, 17.68, 43600], [1.86, 22.82, 47400], [1.88, 27.96, 51200], [1.90, 33.10, 55000]];
+  function p17(B) { return { p: interp(T17.map(function (r) { return [r[0], r[1]]; }), B), pz: interp(T17.map(function (r) { return [r[0], r[2]]; }), B) }; }
+  function q20(B) { return { q: interp(T20.map(function (r) { return [r[0], r[1]]; }), B), qz: interp(T20.map(function (r) { return [r[0], r[2]]; }), B) }; }
+  // Табл.22 kт.у (4 косых + 2 прямых)
+  function kty(B) { return interp([[1.4, 38.5], [1.5, 41.7], [1.6, 42.45], [1.7, 40.5], [1.8, 33.66]], B); }
+  // Табл.21 kт.пл
+  function ktpl(B, a2) {
+    var xs = [0.05, 0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70];
+    var row = B < 1.35 ? [1.70, 1.38, 1.25, 1.21, 1.18, 1.17, 1.16, 1.15] : (B < 1.68 ? [2.00, 1.50, 1.35, 1.25, 1.20, 1.19, 1.18, 1.16] : [3.00, 2.00, 1.50, 1.35, 1.30, 1.25, 1.20, 1.18]);
+    return interp(xs.map(function (x, i) { return [x, row[i]]; }), a2);
+  }
+  // Табл.13 k для потерь в баке
+  function table13(S) { return S < 1000 ? 0.02 : interp([[1000, 0.025], [2500, 0.03], [4000, 0.035], [6300, 0.04], [10000, 0.045]], S); }
+  // Табл.14 мощность КЗ сети, МВА
+  function table14(cls) { return cls <= 10 ? 500 : 2500; }
+  // Табл.24 k3
+  function table24(r) {
+    if (r < 0.08) return 1.10; if (r < 0.095) return 1.05; if (r < 0.105) return 1.0; if (r < 0.125) return 0.95;
+    if (r < 0.145) return 0.90; if (r < 0.195) return 0.85; return 0.80;
+  }
+  // Табл.11 увеличение массы провода за счёт изоляции, %
+  function table11(a, b) {
+    var col = a <= 1.85 ? 0 : (a <= 2.7 ? 1 : (a <= 3.8 ? 2 : 3));
+    return (b <= 7.75 ? [3.5, 3, 2.5, 2] : [2.5, 2, 2, 1.5])[col];
+  }
+  // Табл.30 двойные радиаторы с гнутыми трубами
+  var T30 = [[1880, 22.9], [2000, 24.15], [2285, 27.05], [2485, 29.1], [2685, 31.15], [3000, 34.35], [3250, 36.9], [3750, 42.0], [4000, 44.6], [4250, 47.2]];
+  // Табл.28 радиаторы с прямыми трубами, два ряда
+  var T28 = [[710, 2.135], [900, 2.733], [1150, 3.533], [1400, 4.333], [1615, 4.961], [1800, 5.613], [2000, 6.253], [2200, 6.893], [2400, 7.533]];
+
+  // Провода
+  var A_SER = [1.40, 1.50, 1.60, 1.70, 1.80, 1.90, 2.00, 2.12, 2.24, 2.36, 2.50, 2.65, 2.80, 3.00, 3.15, 3.35, 3.55, 3.75, 4.00, 4.25, 4.50, 4.75, 5.00, 5.30, 5.60];
+  var B_SER = [3.75, 4.00, 4.25, 4.50, 4.75, 5.00, 5.30, 5.60, 6.00, 6.30, 6.70, 7.10, 7.50, 8.00, 8.50, 9.00, 9.50, 10.00, 10.60, 11.20, 11.80, 12.50, 13.20, 14.00, 15.00, 16.00];
+  var D_SER = [1.18, 1.25, 1.32, 1.40, 1.50, 1.60, 1.70, 1.80, 1.90, 2.00, 2.12, 2.24, 2.36, 2.50, 2.65, 2.80, 3.00, 3.15, 3.35, 3.55, 3.75, 4.00, 4.25, 4.50, 4.75, 5.00, 5.20];
+  function rCorner(a) { return a <= 1.6 ? 0.5 : (a <= 2.24 ? 0.65 : (a <= 3.55 ? 0.8 : 1.0)); }
+  function rectArea(a, b) { return a * b - (4 - PI) * Math.pow(rCorner(a), 2); }
+  var INS = 0.5; // толщина изоляции ПБ на две стороны с допуском, мм
+  var INS_R = 0.3; // круглый провод ПБ
+
+  function parseScheme(s) {
+    s = (s || '').replace(/\s/g, '').replace(/[ΔД∆]/g, 'D').replace(/[УY]/g, 'Y').replace(/[нH]/g, 'n');
+    var m = s.match(/^(Yn|Y|D)\/(Yn|Y|D)-?(\d+)$/);
+    if (!m) return { hv: 'Y', lv: 'D', group: 11 };
+    return { hv: m[1][0], lv: m[2][0], hvN: m[1] === 'Yn', lvN: m[2] === 'Yn', group: +m[3] };
+  }
+
+  function design(inp, dFix, w1Fix, kdFix, hvT) {
+    var R = { inp: inp, warn: [] };
+    var Cu = inp.mat !== 'Al';
+    var S = +inp.S, Uvn = +inp.U2 * 1000, Unn = +inp.U1 * 1000; // В
+    var uk = +inp.uk, Pk = +inp.Pk, P0 = +inp.P0, i0 = +inp.i0, f = 50, c = 3;
+    var ov = inp.ov || {};
+    var sch = parseScheme(inp.scheme);
+    R.sch = sch; R.Cu = Cu; R.f = f; R.c = c;
+    // 1. Основные электрические величины
+    var Sf = S / 3;
+    var I2 = S * 1e3 / (SQ3 * Uvn), I1 = S * 1e3 / (SQ3 * Unn);
+    var If2 = sch.hv === 'Y' ? I2 : I2 / SQ3, Uf2 = sch.hv === 'Y' ? Uvn / SQ3 : Uvn;
+    var If1 = sch.lv === 'Y' ? I1 : I1 / SQ3, Uf1 = sch.lv === 'Y' ? Unn / SQ3 : Unn;
+    var cls2 = voltClass(+inp.U2), Uisp2 = testVoltage(+inp.U2), Uisp1 = testVoltage(+inp.U1);
+    R.e = { Sf: Sf, I1: I1, I2: I2, If1: If1, If2: If2, Uf1: Uf1, Uf2: Uf2, Uvn: Uvn, Unn: Unn, cls2: cls2, Uisp1: Uisp1, Uisp2: Uisp2 };
+    var ins2 = table2(S, Uisp2), ins1 = table3(S, Uisp1);
+    ins1.l01 = ins2.l02;
+    R.ins1 = ins1; R.ins2 = ins2;
+    // 2. Исходные данные расчёта
+    var k4 = ov.k || table4(S, cls2) * (Cu ? 1 : 1.25);
+    var a13 = k4 * Math.pow(Sf, 0.25) * 1e-2;
+    var ap = ins2.a12 * 1e-3 + a13;
+    var ua = Pk / (10 * S), up = Math.sqrt(uk * uk - ua * ua);
+    var Bc = ov.Bc || table5(S);
+    var kd = kdFix || ov.kd || table7(S);
+    var aa = ov.a || table8(S, cls2) * (Cu ? 1 : 1.06);
+    var bb = ov.b || table9(S, cls2) * (Cu ? 1 : 1.25);
+    var kp0 = 0.95;
+    R.p = { k4: k4, a13: a13, ap: ap, ua: ua, up: up, Bc: Bc, kd: kd, a: aa, b: bb, kp: kp0, kz: KZ };
+    // 3. Основные размеры: A, d
+    var kk = kkrByD(0.3), kc = kk.kkr * KZ, A, d, x, beta, chosen;
+    for (var it = 0; it < 3; it++) {
+      A = 0.507 * Math.pow(Sf * ap * kp0 / (f * up * Bc * Bc * kc * kc), 0.25);
+      if (dFix) d = +dFix;
+      else {
+        var best = null;
+        for (var i = 0; i < T16.length; i++) {
+          var dd = T16[i][0], bt = Math.pow(dd / A, 4);
+          var sc = (bt >= 1.8 && bt <= 2.4 ? 0 : 10) + Math.abs(bt - 2.1);
+          if (!best || sc < best.sc) best = { d: dd, sc: sc };
+        }
+        d = best.d;
+      }
+      kk = kkrByD(d); var kcn = kk.kkr * KZ;
+      if (Math.abs(kcn - kc) < 1e-6) break; kc = kcn;
+    }
+    x = d / A; beta = Math.pow(x, 4);
+    if (beta < 1.8 || beta > 2.4) R.warn.push('beta');
+    var d12 = aa * d, l = PI * d12 / beta, l0 = ins2.l02 * 1e-3, lc = l + 2 * l0;
+    var C = d12 + ins2.a12 * 1e-3 + bb * d + ins2.a22 * 1e-3;
+    var Pc0 = 0.785 * kc * d * d, Uv0 = 4.44 * f * Pc0 * Bc;
+    var upchk = 7.95 * f * Sf * beta * ap * kp0 / (Uv0 * Uv0) * 0.1;
+    R.m = { A: A, d: d, x: x, beta: beta, steps: kk.steps, kkr: kk.kkr, kc: kc, d12: d12, l: l, l0: l0, lc: lc, C: C, Pc: Pc0, Uv: Uv0, upchk: upchk, updev: (upchk - up) / up * 100 };
+
+    // 4. Обмотка НН (винтовая)
+    var w1 = w1Fix || Math.max(1, Math.round(Uf1 / Uv0));
+    var Uv = Uf1 / w1;
+    var Jsr = (Cu ? 0.746 : 0.463) * kd * Pk * Uv / (S * d12) * 1e4;
+    var P1p = If1 / Jsr * 1e6; // мм2
+    var hk = 5;
+    var hv1 = (l / (w1 + 4) - hk * 1e-3) * 1e3; // мм
+    var kh = hv1 <= 15 ? 1 : (hv1 / 2 <= 16.5 ? 2 : 4);
+    var btarget = hv1 / kh;
+    var KADD = Cu ? 0.095e8 : 0.037e8;
+    function lvHeight(bp) {
+      if (kh === 1) return (bp * (w1 + 4) + 0.95 * hk * (w1 + 3)) * 1e-3;
+      var G = kh * (w1 + 1), ch = G - 1, n10 = Math.min(6, ch);
+      return (G * bp + 0.95 * ((ch - n10) * hk + n10 * 10)) * 1e-3;
+    }
+    var cand = null;
+    B_SER.forEach(function (b) {
+      if (b + INS > btarget + 0.6 || b + INS < btarget - 5) return;
+      A_SER.forEach(function (a) {
+        if (b / a < 1.3 || b / a > 8) return;
+        var s1 = rectArea(a, b);
+        var ng0 = Math.ceil(P1p / (kh * s1));
+        [ng0 - 1, ng0].forEach(function (ng) {
+          if (ng < 1 || ng > 16) return;
+          var P = kh * ng * s1, dev = (P - P1p) / P1p;
+          if (dev < -0.08 || dev > 0.12) return;
+          var l1 = lvHeight(b + INS);
+          var m = kh === 1 ? w1 + 1 : kh * (w1 + 1);
+          var bd = b * 1e-3 * m * 0.95 / l1;
+          var kad = 1 + KADD * bd * bd * Math.pow(a * 1e-3, 4) * ng * ng * (ng === 1 ? 0.8 : 1);
+          var score = Math.abs(dev) + 1.5 * (kad - 1) + 0.6 * Math.abs(l1 - l) / l + (ng > 12 ? 0.1 : 0);
+          if (!cand || score < cand.score) cand = { a: a, b: b, ng: ng, n: kh * ng, s1: s1, P: P, l1: l1, kad: kad, m: m, bd: bd, score: score };
+        });
+      });
+    });
+    if (!cand) { R.error = 'lvwire'; return R; }
+    var lw = cand;
+    var P1 = lw.P, J1 = If1 / (P1 * 1e-6);
+    var ap1 = lw.a + INS, bp1 = lw.b + INS;
+    var a1 = lw.ng * ap1 * 1e-3;
+    var l1 = lw.l1;
+    var D1i = d + 2 * ins1.a01 * 1e-3, D1o = D1i + 2 * a1, D1s = (D1i + D1o) / 2;
+    var q1 = (Cu ? 107 : 172) * J1 * If1 * (1 / kh) * lw.kad / (0.8 * (bp1 * 1e-3 + a1)) * 1e-10;
+    var Go1 = (Cu ? 28e3 : 8.47e3) * c * D1s * w1 * P1 * 1e-6;
+    var ins1pct = table11(lw.a, lw.b);
+    var Gpr1 = Go1 * (1 + ins1pct / 100);
+    var cyl1 = { Din: d + ins1.a01 * 1e-3, Dout: d + ins1.a01 * 1e-3 + 2 * ins1.d01 * 1e-3, h: l1 + 2 * ins1.lc1 * 1e-3 };
+    R.lv = { w1: w1, Uv: Uv, Jsr: Jsr, P1p: P1p, hk: hk, hv1: hv1, kh: kh, wire: lw, P1: P1, J1: J1, ap: ap1, bp: bp1, a1: a1, l1: l1,
+      D1i: D1i, D1o: D1o, D1s: D1s, q1: q1, Go1: Go1, insPct: ins1pct, Gpr1: Gpr1, kad: lw.kad, cyl: cyl1, nTr: kh === 1 ? 3 : lw.n };
+    l = l1; // далее высота обмоток = высота обмотки НН
+
+    // 5. Обмотка ВН
+    var wn2 = Math.max(1, Math.round(w1 * Uf2 / Uf1));
+    var wp = Math.max(1, Math.round(0.025 * Uf2 / Uv));
+    var w2max = wn2 + 2 * wp;
+    var taps = [[5, wn2 + 2 * wp], [2.5, wn2 + wp], [0, wn2], [-2.5, wn2 - wp], [-5, wn2 - 2 * wp]];
+    var Uswork = 0.1 * Uf2, Ustest = 2 * Uswork;
+    var J2p = 2 * Jsr - J1, P2p = If2 / J2p * 1e6;
+    var hk2 = 5, hkr = cls2 <= 10 ? 12 : (cls2 <= 20 ? 18 : 25);
+    var hv = { wn2: wn2, wp: wp, w2max: w2max, taps: taps, Uswork: Uswork, Ustest: Ustest, J2p: J2p, P2p: P2p, hkr: hkr, hk2: hk2 };
+    R.hv = hv;
+    var D2i, a2, hvBest = null;
+    var L = l * 1e3;
+    var useDisc = hvT ? hvT === 'disc' : (ov.hvType ? ov.hvType === 'disc' : P2p >= 4.6);
+    if (useDisc && P2p < 3.6) useDisc = false;
+    if (useDisc) {
+      hv.type = 'disc';
+      [1, 2, 3, 4].forEach(function (np) {
+        A_SER.forEach(function (a) {
+          B_SER.forEach(function (b) {
+            if (b / a < 1.3 || b / a > 8) return;
+            var s1 = rectArea(a, b), P = np * s1, dev = (P - P2p) / P2p;
+            if (dev < -0.07 || dev > 0.12) return;
+            var bp = b + INS, ap_ = a + INS, nk;
+            if (cls2 >= 35) nk = Math.round((L - 4 - 0.95 * (hkr + 15 - 4 * hk2)) / (bp + 0.95 * hk2));
+            else nk = Math.round((L - 0.95 * (hkr - 2 * hk2)) / (bp + 0.95 * hk2));
+            if (nk < 20) return;
+            var Treg = 4 * wp, nreg = 8, Tm = w2max - Treg, nm = nk - nreg;
+            if (Tm < nm * 2) return;
+            var wm = Math.ceil(Tm / nm);
+            var a2mm = np * ap_ * wm;
+            if (a2mm < 15 || a2mm > 90) return;
+            var bd = b * 1e-3 * nk * 0.95 / l;
+            var kad = 1 + KADD * bd * bd * Math.pow(a * 1e-3, 4) * Math.pow(np * wm, 2);
+            var score = Math.abs(dev) + 1.5 * (kad - 1) + 0.04 * (np - 1) + (a2mm > 70 ? 0.05 : 0);
+            if (!hvBest || score < hvBest.score) hvBest = { np: np, a: a, b: b, s1: s1, P: P, nk: nk, wm: wm, a2mm: a2mm, kad: kad, bd: bd, score: score };
+          });
+        });
+      });
+      if (!hvBest) { R.error = 'hvwire'; return R; }
+      var hw = hvBest;
+      var P2 = hw.P, J2 = If2 / (P2 * 1e-6);
+      var bp2 = hw.b + INS, ap2 = hw.a + INS;
+      var Treg = 4 * wp, nreg = 8, Tm = w2max - Treg, nm = hw.nk - nreg;
+      var regBase = Math.floor(Treg / nreg), regRem = Treg - regBase * nreg;
+      var mBase = Math.floor(Tm / nm), mRem = Tm - mBase * nm;
+      var dist = [];
+      if (mRem > 0) dist.push({ n: mRem, w: mBase + 1, kind: 'main' });
+      dist.push({ n: nm - mRem, w: mBase, kind: 'main' });
+      if (regRem > 0) dist.push({ n: regRem, w: regBase + 1, kind: 'reg' });
+      if (nreg - regRem > 0 && regBase > 0) dist.push({ n: nreg - regRem, w: regBase, kind: 'reg' });
+      var l2;
+      if (cls2 >= 35) l2 = (bp2 * (hw.nk - 4) + (bp2 + 1) * 4 + 0.95 * (hkr + 2 * 7.5 + hk2 * (hw.nk - 4))) * 1e-3;
+      else l2 = (hw.nk * bp2 + 0.95 * (hkr + hk2 * (hw.nk - 2))) * 1e-3;
+      a2 = hw.a2mm * 1e-3;
+      D2i = 0; // set below
+      Object.assign(hv, { wire: hw, P2: P2, J2: J2, bp2: bp2, ap2: ap2, nk: hw.nk, wk: hw.wm, dist: dist, l2: l2, a2: a2, kad: hw.kad });
+    } else {
+      hv.type = 'cyl';
+      D_SER.forEach(function (dw) {
+        [1, 2].forEach(function (np) {
+          var s1 = PI * dw * dw / 4, P = np * s1, dev = (P - P2p) / P2p;
+          if (dev < -0.08 || dev > 0.15) return;
+          var dp = dw + INS_R;
+          var wsl = Math.floor(L / (np * dp)) - 1;
+          var nsl = Math.ceil(w2max / wsl);
+          var Umsl = 2 * wsl * Uv;
+          var nsh = Umsl <= 1000 ? 2 : (Umsl <= 2000 ? 3 : (Umsl <= 3000 ? 4 : (Umsl <= 3500 ? 5 : (Umsl <= 4000 ? 6 : (Umsl <= 4500 ? 7 : (Umsl <= 5000 ? 8 : 9))))));
+          var dmsl = nsh * 0.12;
+          var ch = nsl >= 4 ? 6 : 0;
+          var a2mm = dp * nsl + dmsl * (nsl - 1) + ch;
+          var bd = dw * 1e-3 * wsl * np * 0.95 / l;
+          var kad = 1 + (Cu ? 0.044e8 : 0.017e8) * bd * bd * Math.pow(dw * 1e-3, 4) * nsl * nsl;
+          var score = Math.abs(dev) + 1.5 * (kad - 1) + 0.04 * (np - 1) + (a2mm > 80 ? 0.2 : 0);
+          if (!hvBest || score < hvBest.score) hvBest = { dw: dw, np: np, s1: s1, P: P, dp: dp, wsl: wsl, nsl: nsl, Umsl: Umsl, nsh: nsh, dmsl: dmsl, ch: ch, a2mm: a2mm, kad: kad, bd: bd, score: score };
+        });
+      });
+      if (!hvBest) { R.error = 'hvwire'; return R; }
+      var hc = hvBest;
+      var P2c = hc.P, J2c = If2 / (P2c * 1e-6);
+      var l2c = (hc.np * hc.dp * (hc.wsl + 1)) * 1e-3;
+      a2 = hc.a2mm * 1e-3;
+      Object.assign(hv, { wire: hc, P2: P2c, J2: J2c, l2: l2c, a2: a2, kad: hc.kad, nsl: hc.nsl, wsl: hc.wsl });
+    }
+    D2i = D1o + 2 * ins2.a12 * 1e-3; var D2o = D2i + 2 * a2, D2s = (D2i + D2o) / 2;
+    hv.D2i = D2i; hv.D2o = D2o; hv.D2s = D2s;
+    hv.cyl = { Din: D1o + ins2.a12 * 1e-3, Dout: D1o + ins2.a12 * 1e-3 + 2 * ins2.d12 * 1e-3, h: l + 2 * ins2.lc2 * 1e-3 };
+    hv.Go2 = (Cu ? 28e3 : 8.47e3) * c * D2s * w2max * hv.P2 * 1e-6;
+    hv.insPct = hv.type === 'disc' ? table11(hv.wire.a, hv.wire.b) : (hv.wire.dw < 2 ? 5 : (hv.wire.dw < 3 ? 4 : 3));
+    hv.Gpr2 = hv.Go2 * (1 + hv.insPct / 100);
+    var Pos1 = (Cu ? 2.4e-12 : 12.75e-12) * J1 * J1 * Go1;
+    var Pos2 = (Cu ? 2.4e-12 : 12.75e-12) * hv.J2 * hv.J2 * hv.Go2;
+    if (hv.type === 'disc') {
+      hv.q2 = (Cu ? 107 : 172) * hv.J2 * If2 * hv.wk * hv.kad / (0.8 * (hv.bp2 * 1e-3 + a2)) * 1e-10;
+    } else {
+      var Pi02 = c * 0.8 * PI * l * (D2i + D2o + (hv.wire.ch ? 2 * (D2i + a2) : 0));
+      hv.Pi02 = Pi02;
+      hv.q2 = Pos2 * hv.kad / Pi02;
+    }
+    R.hv = hv;
+    R.G = { Go: Go1 + hv.Go2, Gpr: Gpr1 + hv.Gpr2 };
+
+    // 6. Короткое замыкание
+    var kpos = Cu ? 2.4e-12 : 12.75e-12, gam = Cu ? 8900 : 2700;
+    var lotv1 = (sch.lv === 'Y' ? 7.5 : 14) * l, lotv2 = (sch.hv === 'Y' ? 7.5 : 14) * l;
+    var Gotv1 = lotv1 * P1 * 1e-6 * gam, Gotv2 = lotv2 * hv.P2 * 1e-6 * gam;
+    var Potv1 = kpos * J1 * J1 * Gotv1, Potv2 = kpos * hv.J2 * hv.J2 * Gotv2;
+    var kb = table13(S), Pb = 10 * kb * S;
+    var Pkp = Pos1 * lw.kad + Pos2 * hv.kad + Potv1 + Potv2 + Pb;
+    var Pkn = Pkp - 0.05 * Pos2 * hv.kad;
+    var ua2 = Pkn / (10 * S);
+    var ap2s = ins2.a12 * 1e-3 + (a1 + a2) / 3;
+    var d12b = D1o + ins2.a12 * 1e-3;
+    var beta2 = PI * d12b / l;
+    var sig = (ins2.a12 * 1e-3 + a1 + a2) / (PI * l);
+    var kp = 1 - sig * (1 - Math.exp(-1 / sig));
+    var lx = (2 * wp / w2max) * l + hkr * 1e-3, xx = lx / l;
+    var kq = 1 + xx * xx * l / (3 * ap2s * kp);
+    var up2 = 7.9 * f * Sf * beta2 * ap2s * kp * kq / (Uv * Uv) * 0.1;
+    var uk2 = Math.sqrt(ua2 * ua2 + up2 * up2);
+    var Sk = table14(cls2);
+    var Iky = 100 * I2 / (uk2 * (1 + 100 * S / (uk2 * Sk * 1e3)));
+    var kmax = SQ2 * (1 + Math.exp(-PI * ua2 / up2));
+    var ikmax = kmax * Iky;
+    var tk = 5, thn = 90;
+    function thk(J) { var r = uk2 / (J * 1e-6); return (Cu ? 670 * tk / (12.5 * r * r - tk) : 670 * tk / (5.5 * r * r - tk)) + thn; }
+    R.sc = { Pos1: Pos1, Pos2: Pos2, kd1: lw.kad, kd2: hv.kad, lotv1: lotv1, lotv2: lotv2, Gotv1: Gotv1, Gotv2: Gotv2, Potv1: Potv1, Potv2: Potv2,
+      kb: kb, Pb: Pb, Pkp: Pkp, Pkn: Pkn, Pkdev: Pkn / Pk * 100, ua: ua2, ap: ap2s, d12: d12b, beta: beta2, sig: sig, kp: kp, lx: lx, kq: kq,
+      up: up2, uk: uk2, ukdev: uk2 / uk * 100, Sk: Sk, Iky: Iky, kmax: kmax, ikmax: ikmax, tk: tk, thn: thn, th1: thk(J1), th2: thk(hv.J2), thlim: Cu ? 250 : 200, gam: gam };
+
+    // 7. Магнитная система
+    var t = t16(d) || T16[0];
+    var Pfc = t[1] * 1e-4, Pfy = t[2] * 1e-4, Vy = t[3] * 1e-6;
+    var Pc = KZ * Pfc, Py = KZ * Pfy, Vyst = KZ * Vy;
+    var lcF = l + 2 * l0, Cf = D2o + ins2.a22 * 1e-3;
+    var gst = 7650;
+    var hya = Math.round(0.97 * d / 0.005) * 0.005; // ширина первого пакета ярма
+    var a2pk = Math.round(0.92 * d / 0.005) * 0.005;
+    var Gy = Vyst * gst;
+    var Gyp = 2 * Py * 2 * Cf * gst, Gypp = 2 * Gy, Gya = Gyp + Gypp;
+    var Gcp = c * lcF * Pc * gst, Gcpp = c * (Pc * hya * gst - Gy), Gc = Gcp + Gcpp, Gst = Gya + Gc;
+    R.core = { Pfc: Pfc, Pfy: Pfy, Vy: Vy, Pc: Pc, Py: Py, Vyst: Vyst, lc: lcF, C: Cf, gst: gst, hya: hya, a2pk: a2pk, Gy: Gy, Gyp: Gyp, Gypp: Gypp, Gya: Gya,
+      Gcp: Gcp, Gcpp: Gcpp, Gc: Gc, Gst: Gst, kya: Pfy / Pfc };
+    // 8. Потери холостого хода
+    var Bcr = Uv / (4.44 * f * Pc), Byr = Uv / (4.44 * f * Py), Bkos = Bcr / SQ2, Pkos = SQ2 * Pc;
+    var pc = p17(Bcr), py = p17(Byr), pk = p17(Bkos);
+    var kpr = 1.05, kpz = 1.0, kpy = 10.64, kpya = 1.0, kpp = S <= 630 ? 1.03 : (S <= 6300 ? 1.03 : 1.04), kpsh = 1.05;
+    var core1 = pc.p * Gc + py.p * Gyp - 4 * py.p * Gy + (pc.p + py.p) / 2 * kpy * Gy;
+    var joints = 4 * pk.pz * Pkos + 1 * pc.pz * Pc + 2 * py.pz * Py;
+    var Px = (kpr * kpz * core1 + joints) * kpya * kpp * kpsh;
+    R.nl = { Bc: Bcr, By: Byr, Bkos: Bkos, Pkos: Pkos, pc: pc.p, py: py.p, pcz: pc.pz, pyz: py.pz, pkos: pk.pz, kpr: kpr, kpz: kpz, kpy: kpy, kpya: kpya, kpp: kpp, kpsh: kpsh,
+      core1: core1, joints: joints, Px: Px, Pxdev: Px / P0 * 100 };
+    // 9. Ток холостого хода
+    var qc = q20(Bcr), qy = q20(Byr), qk = q20(Bkos);
+    var ktr = 1.18, ktz = 1.0, kty_ = kty(Bcr), ktpl_ = ktpl(Bcr, a2pk), ktya = 1.0, ktp = S <= 630 ? 1.045 : (S <= 6300 ? 1.05 : 1.06), ktsh = 1.05;
+    var qcore = qc.q * Gc + qy.q * Gyp - 4 * qy.q * Gy + (qc.q + qy.q) / 2 * kty_ * ktpl_ * Gy;
+    var qj = 4 * qk.qz * Pkos + 1 * qc.qz * Pc + 2 * qy.qz * Py;
+    var Qx = (ktr * ktz * qcore + qj) * ktya * ktp * ktsh;
+    var i0c = Qx / (10 * S), i0a = Px / (10 * S), i0p = Math.sqrt(Math.max(0, i0c * i0c - i0a * i0a));
+    R.nl2 = { qc: qc.q, qy: qy.q, qcz: qc.qz, qyz: qy.qz, qkos: qk.qz, ktr: ktr, ktz: ktz, kty: kty_, ktpl: ktpl_, ktya: ktya, ktp: ktp, ktsh: ktsh,
+      qcore: qcore, qj: qj, Qx: Qx, i0: i0c, i0a: i0a, i0p: i0p, i0dev: i0c / i0 * 100 };
+    // 10. Тепловой расчёт обмоток
+    var lam = 0.17, dl = 0.25e-3;
+    var th01 = R.lv.q1 * dl / lam;
+    var r1 = hk / (a1 * 1e3), k31 = table24(r1);
+    var thom1 = 1 * 1.1 * k31 * 0.35 * Math.pow(R.lv.q1, 0.6);
+    var th02, thom2, k32 = null, r2 = null, lamsr = null, pvol = null;
+    if (hv.type === 'disc') {
+      th02 = hv.q2 * dl / lam;
+      r2 = hk2 / (a2 * 1e3); k32 = table24(r2);
+      thom2 = 1 * 1.0 * k32 * 0.35 * Math.pow(hv.q2, 0.6);
+    } else {
+      var w = hv.wire;
+      lamsr = lam * (w.dp + w.dmsl) / ((w.dp - w.dw) + w.dmsl);
+      pvol = (Cu ? 2.14e-8 : 3.44e-8) * hv.J2 * hv.J2 * (w.np * PI * w.dw * w.dw / 4) / (w.np * w.dp * (w.dp + w.dmsl));
+      var apart = (w.ch ? (a2 - w.ch * 1e-3) / 2 : a2);
+      th02 = pvol * apart * apart / (8 * lamsr);
+      thom2 = 0.285 * Math.pow(hv.q2, 0.6);
+    }
+    var thsr1 = th01 + thom1, thsr2 = th02 + thom2;
+    R.th = { lam: lam, dl: dl, th01: th01, r1: r1, k31: k31, thom1: thom1, th02: th02, r2: r2, k32: k32, thom2: thom2, thsr1: thsr1, thsr2: thsr2, lamsr: lamsr, pvol: pvol };
+    // 11. Бак
+    var s1, s2, s3, s4, d1 = 10, d2 = 20;
+    if (Uisp2 <= 35) { s1 = 28; s2 = 22; s4 = 33; } else if (Uisp2 <= 55) { s1 = 45; s2 = 37; s4 = 50; } else { s1 = 50; s2 = 50; s4 = 90; }
+    s3 = Uisp1 <= 25 ? 22 : 28;
+    var Bt0 = D2o + (s1 + s2 + d2 + s3 + s4 + d1) * 1e-3, Bt = ceilTo(Bt0, 0.05);
+    var At = 2 * Cf + Bt;
+    var nbr = 0.05, Hach = lcF + 2 * hya + nbr;
+    var Hyk = cls2 <= 10 ? 0.16 : (cls2 <= 20 ? 0.30 : 0.40);
+    var Hb0 = Hach + Hyk;
+    var rad, radType;
+    var avail = (Hb0 - 0.185) * 1e3;
+    if (S >= 2500 || avail >= 1880) {
+      radType = 'T30';
+      rad = T30[0]; for (var ri = 0; ri < T30.length; ri++) if (T30[ri][0] <= avail) rad = T30[ri];
+    } else {
+      radType = 'T28';
+      rad = T28[0]; for (var rj = 0; rj < T28.length; rj++) if (T28[rj][0] <= avail) rad = T28[rj];
+    }
+    var Hb = ceilTo(Math.max(Hb0, rad[0] * 1e-3 + 0.185), 0.05);
+    var kf = radType === 'T30' ? 1.4 : 1.26, Pkk = radType === 'T30' ? 0.66 : 0;
+    var thmax = Math.max(thsr1, thsr2);
+    var thmv = 65 - thmax; var thmvLim = false;
+    if (1.2 * thmv > 60) { thmv = 50; thmvLim = true; }
+    var thbv = thmv - 5 - 2;
+    if (thbv < 10) { thbv = 10; R.warn.push('thbv'); }
+    var Pkgl = Hb * (2 * (At - Bt) + PI * Bt);
+    var Pi = 1.5 * Pkgl;
+    var Ptot = 1.05 * (Pkn + Px);
+    var Pkreq = Ptot / (2.5 * Math.pow(thbv, 1.25)) - 1.12 * Pi;
+    var Pkkr = 0.5 * ((At - Bt) * (Bt + 0.16) + PI * Math.pow(Bt + 0.16, 2) / 4);
+    var SPkr = Pkreq - Pkgl - Pkkr;
+    var Pkr1 = kf * rad[1] + Pkk;
+    var nr = Math.max(2, Math.ceil(SPkr / Pkr1 - 1e-9));
+    var Pk_ = nr * Pkr1 + Pkgl + Pkkr;
+    var thbv2 = Math.pow(Ptot / (2.8 * Pi + 2.5 * Pk_), 0.8);
+    var thmb = 0.165 * Math.pow(Ptot / (nr * rad[1] + Pkgl + Pkkr), 0.6);
+    var thmv2 = thmb + thbv2, thmvv = 1.2 * thmv2;
+    var thov1 = thsr1 + thmv2, thov2 = thsr2 + thmv2;
+    R.tank = { s1: s1, s2: s2, s3: s3, s4: s4, d1: d1, d2: d2, B0: Bt0, B: Bt, A: At, n: nbr, hya: hya, Hach: Hach, Hyk: Hyk, Hb0: Hb0, Hb: Hb, radType: radType, rad: rad, kf: kf, Pkk: Pkk,
+      thmax: thmax, thmv: thmv, thmvLim: thmvLim, thbv: thbv, Pkgl: Pkgl, Pi: Pi, Ptot: Ptot, Pkreq: Pkreq, Pkkr: Pkkr, SPkr: SPkr, Pkr1: Pkr1, nr: nr, Pk: Pk_,
+      thbv2: thbv2, thmb: thmb, thmv2: thmv2, thmvv: thmvv, thov1: thov1, thov2: thov2 };
+    return R;
+  }
+
+  // Допуски по ГОСТ 11677-85: uк ±10 %, Pк +10 %, Pх +15 %, iо +30 %
+  function score(R) {
+    if (R.error) return 1e9;
+    var sc = 0, uk = R.sc.ukdev - 100, pk = R.sc.Pkdev - 100, px = R.nl.Pxdev - 100, i0 = R.nl2.i0dev - 100;
+    sc += 2 * Math.abs(uk) + 30 * Math.max(0, Math.abs(uk) - 10);
+    sc += (pk > 0 ? 2 * pk : 0.5 * -pk) + 30 * Math.max(0, pk - 10);
+    sc += (px > 0 ? px : 0.2 * -px) + 20 * Math.max(0, px - 15);
+    sc += 0.1 * Math.abs(i0) + 5 * Math.max(0, i0 - 30);
+    var b = R.m.beta;
+    sc += 30 * (Math.max(0, 1.8 - b) + Math.max(0, b - 2.4)) + 60 * (Math.max(0, 1.2 - b) + Math.max(0, b - 3.6));
+    if (R.lv.q1 > 1400) sc += (R.lv.q1 - 1400) / 20; if (R.hv.q2 > 1400) sc += (R.hv.q2 - 1400) / 20;
+    if (!(R.tank.thov1 <= 65) || !(R.tank.thov2 <= 65)) sc += 50;
+    return sc;
+  }
+  function calc(inp) {
+    var ov = inp.ov || {};
+    if (ov.d && ov.w1) return design(inp, ov.d, ov.w1);
+    var base = design(inp, ov.d || null, ov.w1 || null);
+    if (base.error && !base.m) return base;
+    var A = base.m.A, Uf1 = base.e.Uf1, cands = [];
+    var ds = ov.d ? [+ov.d] : T16.map(function (r) { return r[0]; }).filter(function (dd) { var b = Math.pow(dd / A, 4); return b >= 1.4 && b <= 3.2; });
+    ds.forEach(function (dd) {
+      var t = kkrByD(dd), Uv0 = 4.44 * 50 * 0.785 * t.kkr * KZ * dd * dd * base.p.Bc, w0 = Uf1 / Uv0;
+      var ws = ov.w1 ? [+ov.w1] : [Math.max(1, Math.floor(w0)), Math.max(1, Math.ceil(w0)), Math.max(1, Math.ceil(w0)) + 1];
+      ws.filter(function (v, i, a) { return a.indexOf(v) === i; }).forEach(function (w) { cands.push([dd, w]); });
+    });
+    var best = null, n = 0, kr = table7range(+inp.S), k0 = table7(+inp.S);
+    var p2 = base.hv ? base.hv.P2p : 0;
+    var hvts = ov.hvType ? [ov.hvType] : (p2 >= 3.6 && p2 <= 12 ? ['disc', 'cyl'] : [null]);
+    var kds = ov.kd ? [ov.kd] : [kr[0], k0, kr[1]].filter(function (v, i, a) { return a.indexOf(v) === i; });
+    cands.forEach(function (cw) {
+      kds.forEach(function (kd) {
+        hvts.forEach(function (ht) {
+          var R = design(inp, cw[0], cw[1], kd, ht); n++;
+          var scv = score(R) + 0.5 * Math.abs(kd - k0) / 0.04;
+          if (!best || scv < best.s) best = { s: scv, R: R };
+        });
+      });
+    });
+    var R = best ? best.R : base;
+    R.opt = { tried: n, score: best ? best.s : null };
+    return R;
+  }
+
+  var api = { calc: calc, design: design, parseScheme: parseScheme, rectArea: rectArea, voltClass: voltClass };
+  if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.TrCalc = api;
+})(this);
+
+/* Двуязычный (RU / UZ) построитель пояснительной записки.
+   Разметка формул: _{...} — нижний индекс, ^{...} — верхний индекс. */
+(function (root) {
+  'use strict';
+  function N(x, d) {
+    if (x === null || x === undefined || isNaN(x)) return '—';
+    if (d === undefined) d = Math.abs(x) >= 1000 ? 0 : Math.abs(x) >= 100 ? 1 : Math.abs(x) >= 10 ? 2 : Math.abs(x) >= 1 ? 3 : 4;
+    var s = (+x).toFixed(d);
+    if (s.indexOf('.') >= 0) s = s.replace(/0+$/, '').replace(/\.$/, '');
+    if (s === '-0') s = '0';
+    return s.replace('.', ',');
+  }
+  var UNITS = {
+    ru: { V: 'В', A: 'А', kV: 'кВ', kVA: 'кВ·А', W: 'Вт', m: 'м', mm: 'мм', m2: 'м^{2}', mm2: 'мм^{2}', m3: 'м^{3}', kg: 'кг', T: 'Тл', MAm2: 'МА/м^{2}', Wm2: 'Вт/м^{2}', Wkg: 'Вт/кг', VAkg: 'В·А/кг', VAm2: 'В·А/м^{2}', VA: 'В·А', C: '°С', Hz: 'Гц', s: 'с', MVA: 'МВ·А', turns: 'витков', coils: 'катушек', Wmc: 'Вт/(м·°С)', kgm3: 'кг/м^{3}', Wm3: 'Вт/м^{3}' },
+    uz: { V: 'V', A: 'A', kV: 'kV', kVA: 'kV·A', W: 'Vt', m: 'm', mm: 'mm', m2: 'm^{2}', mm2: 'mm^{2}', m3: 'm^{3}', kg: 'kg', T: 'Tl', MAm2: 'MA/m^{2}', Wm2: 'Vt/m^{2}', Wkg: 'Vt/kg', VAkg: 'V·A/kg', VAm2: 'V·A/m^{2}', VA: 'V·A', C: '°C', Hz: 'Gs', s: 's', MVA: 'MV·A', turns: "o'ram", coils: "g'altak", Wmc: 'Vt/(m·°C)', kgm3: 'kg/m^{3}', Wm3: 'Vt/m^{3}' }
+  };
+
+  function build(R, lang, meta) {
+    var uz = lang === 'uz';
+    var u = UNITS[lang];
+    function L(ru, z) { return uz ? z : ru; }
+    var B = [];
+    function h1(ru, z) { B.push({ t: 'h1', s: L(ru, z) }); }
+    function h2(ru, z) { B.push({ t: 'h2', s: L(ru, z) }); }
+    function p(ru, z) { B.push({ t: 'p', s: L(ru, z) }); }
+    function f(s) { B.push({ t: 'f', s: s }); }
+    function chk(ok, ru, z) { B.push({ t: 'chk', ok: ok, s: L(ru, z) }); }
+    function tbl(title, head, rows) { B.push({ t: 'tbl', title: title, head: head, rows: rows }); }
+    var e = R.e, ins1 = R.ins1, ins2 = R.ins2, P = R.p, m = R.m, lv = R.lv, hv = R.hv, sc = R.sc, co = R.core, nl = R.nl, n2 = R.nl2, th = R.th, tk = R.tank;
+    var inp = R.inp, Cu = R.Cu, S = +inp.S;
+    var hvY = R.sch.hv === 'Y', lvY = R.sch.lv === 'Y';
+    var star = L('звезду', 'yulduz'), tri = L('треугольник', 'uchburchak');
+    var schemeTxt = (inp.scheme || '').replace(/D/g, 'Δ').replace(/Yn/g, 'Y_{н}');
+    var matTxt = Cu ? L('медь', 'mis') : L('алюминий', 'alyuminiy');
+    var kpos = Cu ? '2,4·10^{-12}' : '12,75·10^{-12}';
+    var cg = Cu ? '28·10^{3}' : '8,47·10^{3}';
+    var khTxt = { 1: L('одноходовая', 'bir yo\'lli'), 2: L('двухходовая', 'ikki yo\'lli'), 4: L('четырёхходовая', "to'rt yo'lli") }[lv.kh];
+    var hvTypeTxt = hv.type === 'disc' ? L('непрерывная катушечная из прямоугольного провода', "to'g'ri burchakli simdan uzluksiz g'altakli")
+      : L('многослойная цилиндрическая из круглого провода', "dumaloq simdan ko'p qatlamli silindrik");
+    function dev(x) { return N(x, 1) + ' %'; }
+
+    // ---------- Задание ----------
+    h1('Задание на курсовой проект', 'Kurs loyihasi uchun topshiriq');
+    p('Рассчитать трёхфазный двухобмоточный масляный трансформатор с естественным масляным охлаждением (М) и переключением ответвлений без возбуждения (ПБВ) со следующими данными:',
+      "Tabiiy moyli sovutishli (M) va qo'zg'atishsiz tarmoqlarni almashtiruvchi (PBV) uch fazali ikki chulg'amli moyli transformatorni quyidagi ma'lumotlar bo'yicha hisoblash:");
+    tbl(null, [L('Параметр', 'Parametr'), L('Значение', 'Qiymati')], [
+      [L('Номинальная мощность', 'Nominal quvvat'), 'S_{н} = ' + N(S) + ' ' + u.kVA],
+      [L('Число фаз', 'Fazalar soni'), 'm = 3'],
+      [L('Частота', 'Chastota'), 'f = 50 ' + u.Hz],
+      [L('Номинальное напряжение обмотки ВН', "YuK chulg'amining nominal kuchlanishi"), 'U_{н2} = ' + N(e.Uvn, 0) + ' ± 2×2,5 % ' + u.V],
+      [L('Номинальное напряжение обмотки НН', "PK chulg'amining nominal kuchlanishi"), 'U_{н1} = ' + N(e.Unn, 0) + ' ' + u.V],
+      [L('Схема и группа соединения', 'Ulanish sxemasi va guruhi'), schemeTxt],
+      [L('Напряжение короткого замыкания', 'Qisqa tutashuv kuchlanishi'), 'u_{к} = ' + N(+inp.uk) + ' %'],
+      [L('Потери короткого замыкания', 'Qisqa tutashuv isroflari'), 'P_{к} = ' + N(+inp.Pk, 0) + ' ' + u.W],
+      [L('Потери холостого хода', 'Salt ishlash isroflari'), 'P_{х} = ' + N(+inp.P0, 0) + ' ' + u.W],
+      [L('Ток холостого хода', 'Salt ishlash toki'), 'i_{о} = ' + N(+inp.i0) + ' %'],
+      [L('Материал обмоток', "Chulg'amlar materiali"), matTxt]
+    ]);
+
+    // ---------- 1 ----------
+    h1('Расчёт основных электрических величин и изоляционных расстояний', 'Asosiy elektr kattaliklari va izolyatsiya masofalarini hisoblash');
+    p('Расчёт проводим для трёхфазного трансформатора стержневого типа с концентрическими обмотками. Мощность одной фазы и одного стержня:',
+      "Hisobni konsentrik chulg'amli sterjenli turdagi uch fazali transformator uchun olib boramiz. Bir faza va bir sterjen quvvati:");
+    f('S_{ф} = S\' = S_{н}/3 = ' + N(S) + '/3 = ' + N(e.Sf, 1) + ' ' + u.kVA);
+    p('Номинальные (линейные) токи на сторонах:', 'Tomonlardagi nominal (liniya) toklar:');
+    f(L('ВН', 'YuK') + ': I_{2} = S_{н}·10^{3}/(√3·U_{н2}) = ' + N(S) + '·10^{3}/(√3·' + N(e.Uvn, 0) + ') = ' + N(e.I2, 2) + ' ' + u.A);
+    f(L('НН', 'PK') + ': I_{1} = S_{н}·10^{3}/(√3·U_{н1}) = ' + N(S) + '·10^{3}/(√3·' + N(e.Unn, 0) + ') = ' + N(e.I1, 1) + ' ' + u.A);
+    p('Фазные токи обмоток:', "Chulg'amlarning faza toklari:");
+    f(L('ВН (соединение в ', 'YuK (') + (hvY ? star : tri) + L(')', ' ulanish)') + ': I_{ф2} = ' + (hvY ? 'I_{2} = ' : 'I_{2}/√3 = ' + N(e.I2, 2) + '/√3 = ') + N(e.If2, 2) + ' ' + u.A);
+    f(L('НН (соединение в ', 'PK (') + (lvY ? star : tri) + L(')', ' ulanish)') + ': I_{ф1} = ' + (lvY ? 'I_{1} = ' : 'I_{1}/√3 = ' + N(e.I1, 1) + '/√3 = ') + N(e.If1, 1) + ' ' + u.A);
+    p('Фазные напряжения обмоток:', "Chulg'amlarning faza kuchlanishlari:");
+    f(L('ВН', 'YuK') + ': U_{ф2} = ' + (hvY ? 'U_{н2}/√3 = ' + N(e.Uvn, 0) + '/√3 = ' : 'U_{н2} = ') + N(e.Uf2, 0) + ' ' + u.V);
+    f(L('НН', 'PK') + ': U_{ф1} = ' + (lvY ? 'U_{н1}/√3 = ' + N(e.Unn, 0) + '/√3 = ' : 'U_{н1} = ') + N(e.Uf1, 1) + ' ' + u.V);
+    p('Испытательные напряжения обмоток находим по табл. 1 (ГОСТ 1516.1-76); при рабочем напряжении до 1 кВ U_{исп} = 5 кВ:',
+      "Chulg'amlarning sinov kuchlanishlarini 1-jadvaldan (GOST 1516.1-76) topamiz; ish kuchlanishi 1 kV gacha bo'lganda U_{исп} = 5 kV:");
+    f(L('ВН', 'YuK') + ': U_{исп2} = ' + e.Uisp2 + ' ' + u.kV + ';   ' + L('НН', 'PK') + ': U_{исп1} = ' + e.Uisp1 + ' ' + u.kV);
+    p('По табл. 2 выбираем тип обмоток:', "2-jadval bo'yicha chulg'amlar turini tanlaymiz:");
+    p('Обмотка ВН при напряжении ' + N(e.Uvn / 1000) + ' кВ и токе ' + N(e.If2, 1) + ' А — ' + hvTypeTxt + '.',
+      "YuK chulg'ami (" + N(e.Uvn / 1000) + ' kV, ' + N(e.If2, 1) + ' A) — ' + hvTypeTxt + " chulg'am.");
+    p('Обмотка НН при напряжении ' + N(e.Unn / 1000) + ' кВ и токе ' + N(e.If1, 0) + ' А — винтовая ' + khTxt + ' из прямоугольного провода.',
+      "PK chulg'ami (" + N(e.Unn / 1000) + ' kV, ' + N(e.If1, 0) + " A) — to'g'ri burchakli simdan " + khTxt + " vintsimon chulg'am.");
+    p('Для испытательного напряжения обмотки ВН U_{исп2} = ' + e.Uisp2 + ' кВ по табл. 2 находим изоляционные расстояния (рис. 1):',
+      "YuK chulg'amining sinov kuchlanishi U_{исп2} = " + e.Uisp2 + ' kV uchun 2-jadvaldan izolyatsiya masofalarini topamiz (1-rasm):');
+    f('a_{12} = ' + ins2.a12 + ' ' + u.mm + ';  δ_{12} = ' + ins2.d12 + ' ' + u.mm + ';  l_{ц2} = ' + ins2.lc2 + ' ' + u.mm + ';  l_{02} = ' + ins2.l02 + ' ' + u.mm + ';  a_{22} = ' + ins2.a22 + ' ' + u.mm + (ins2.d22 ? ';  δ_{22} = ' + ins2.d22 + ' ' + u.mm : '') + (ins2.dsh ? ';  δ_{ш} = ' + ins2.dsh + ' ' + u.mm : ''));
+    p('Для обмотки НН (U_{исп1} = ' + e.Uisp1 + ' кВ) по табл. 3 находим:', "PK chulg'ami uchun (U_{исп1} = " + e.Uisp1 + ' kV) 3-jadvaldan topamiz:');
+    f('a_{01} = ' + N(ins1.a01) + ' ' + u.mm + ';  δ_{01} = ' + ins1.d01 + ' ' + u.mm + ';  a_{ц1} = ' + ins1.ac1 + ' ' + u.mm + ';  l_{ц1} = ' + ins1.lc1 + ' ' + u.mm + ';  l_{01} = l_{02} = ' + ins1.l01 + ' ' + u.mm);
+    B.push({ t: 'img', key: 'ins' });
+
+    // ---------- 2 ----------
+    h1('Определение исходных данных расчёта', "Hisobning boshlang'ich ma'lumotlarini aniqlash");
+    p('Мощность обмоток одного стержня:', "Bir sterjen chulg'amlarining quvvati:");
+    f('S\' = ' + N(e.Sf, 1) + ' ' + u.kVA);
+    p('Ширина приведённого канала рассеяния:', 'Sochilish keltirilgan kanalining kengligi:');
+    f('a_{р} = a_{12} + (a_{1} + a_{2})/3');
+    f('(a_{1} + a_{2})/3 = k·⁴√S\'·10^{-2} = ' + N(P.k4) + '·⁴√' + N(e.Sf, 1) + '·10^{-2} = ' + N(P.a13, 4) + ' ' + u.m);
+    p('где k = ' + N(P.k4) + ' — по табл. 4' + (Cu ? '' : ' (для алюминия умножено на 1,25)') + '.', 'bu yerda k = ' + N(P.k4) + ' — 4-jadvaldan' + (Cu ? '' : ' (alyuminiy uchun 1,25 ga ko\'paytirilgan)') + '.');
+    f('a_{р} = ' + ins2.a12 + '·10^{-3} + ' + N(P.a13, 4) + ' = ' + N(P.ap, 4) + ' ' + u.m);
+    p('Активная составляющая напряжения короткого замыкания:', 'Qisqa tutashuv kuchlanishining aktiv tashkil etuvchisi:');
+    f('u_{а} = P_{к}/(10·S_{н}) = ' + N(+inp.Pk, 0) + '/(10·' + N(S) + ') = ' + N(P.ua) + ' %');
+    p('Реактивная составляющая:', 'Reaktiv tashkil etuvchisi:');
+    f('u_{р} = √(u_{к}^{2} − u_{а}^{2}) = √(' + N(+inp.uk) + '^{2} − ' + N(P.ua) + '^{2}) = ' + N(P.up) + ' %');
+    p('Выбираем трёхфазную стержневую шихтованную магнитную систему с косыми стыками на крайних стержнях и прямыми стыками на среднем стержне (рис. 2). Прессовка стержней — бандажами из стеклоленты, ярм — стальными балками. Материал магнитной системы — холоднокатаная электротехническая сталь марки 3405 толщиной 0,30 мм.',
+      "Chetki sterjenlarda qiya, o'rta sterjenda to'g'ri tutashuvli uch fazali sterjenli shixtalangan magnit tizimini tanlaymiz (2-rasm). Sterjenlar shisha lentali bandajlar bilan, yarmolar po'lat balkalar bilan presslanadi. Magnit tizimi materiali — qalinligi 0,30 mm bo'lgan 3405 markali sovuq prokatlangan elektrotexnik po'lat.");
+    B.push({ t: 'img', key: 'core' });
+    p('Индукцию в стержне принимаем по рекомендациям табл. 5:', "Sterjendagi induksiyani 5-jadval tavsiyalari bo'yicha qabul qilamiz:");
+    f('B_{с} = ' + N(P.Bc, 2) + ' ' + u.T);
+    p('Коэффициент заполнения сечения стержня сталью при изоляции пластин нагревостойким покрытием и однократной лакировкой (табл. 6):',
+      "Plastinalar issiqbardosh qoplama va bir martalik loklash bilan izolyatsiyalanganda sterjen kesimining po'lat bilan to'ldirish koeffitsienti (6-jadval):");
+    f('k_{з} = ' + N(P.kz, 3));
+    p('По табл. 7 находим коэффициент, учитывающий отношение основных потерь в обмотках к потерям КЗ, по табл. 8 и 9 — постоянные коэффициенты' + (Cu ? ' для медных обмоток' : ' (для алюминия с поправками 1,06 и 1,25)') + '. Коэффициент приведения идеального поля рассеяния к реальному (коэффициент Роговского) принимаем предварительно:',
+      "7-jadvaldan chulg'amlardagi asosiy isroflarning QT isroflariga nisbatini hisobga oluvchi koeffitsientni, 8 va 9-jadvallardan " + (Cu ? "mis chulg'amlar uchun" : "(alyuminiy uchun 1,06 va 1,25 tuzatishlar bilan)") + " doimiy koeffitsientlarni topamiz. Ideal sochilish maydonini realga keltirish koeffitsientini (Rogovskiy koeffitsienti) dastlabki qabul qilamiz:");
+    f('k_{д} = ' + N(P.kd, 2) + ';  a = d_{12}/d = ' + N(P.a, 2) + ';  b = 2a_{2}/d = ' + N(P.b, 3) + ';  k_{р} = ' + N(P.kp, 2));
+
+    // ---------- 3 ----------
+    h1('Расчёт основных коэффициентов и определение основных размеров', 'Asosiy koeffitsientlarni hisoblash va asosiy o\'lchamlarni aniqlash');
+    p('Диаметр стержня выбираем по нормализованной шкале диаметров (табл. 16), для него по табл. 2.5 [1] находим число ступеней в сечении стержня ' + m.steps + ' и коэффициент заполнения круга k_{кр} = ' + N(m.kkr, 3) + '. Коэффициент заполнения площади круга сталью:',
+      "Sterjen diametrini normallashtirilgan diametrlar shkalasidan (16-jadval) tanlaymiz, u uchun [1] dagi 2.5-jadvaldan sterjen kesimidagi pog'onalar soni " + m.steps + " va doirani to'ldirish koeffitsienti k_{кр} = " + N(m.kkr, 3) + " topiladi. Doira yuzasini po'lat bilan to'ldirish koeffitsienti:");
+    f('k_{с} = k_{кр}·k_{з} = ' + N(m.kkr, 3) + '·' + N(P.kz, 3) + ' = ' + N(m.kc, 3));
+    f('A = 0,507·⁴√(S\'·a_{р}·k_{р}/(f·u_{р}·B_{с}^{2}·k_{с}^{2})) = 0,507·⁴√(' + N(e.Sf, 1) + '·' + N(P.ap, 4) + '·' + N(P.kp, 2) + '/(50·' + N(P.up) + '·' + N(P.Bc, 2) + '^{2}·' + N(m.kc, 3) + '^{2})) = ' + N(m.A, 4));
+    p('Величина β определяет соотношение между диаметром и высотой обмотки и равна отношению средней длины окружности канала между обмотками πd_{12} к высоте обмотки l. Рекомендуется β = 1,8…2,4 (в существующих сериях 1,2…3,6). Из нормализованного ряда рассмотрено ' + (R.opt ? R.opt.tried : 1) + ' сочетаний диаметра стержня и числа витков обмотки НН; принят вариант, при котором u_{к}, P_{к} и P_{х} наиболее близки к заданным с учётом допусков ГОСТ 11677-85:',
+      "β kattaligi chulg'am diametri va balandligi orasidagi nisbatni belgilaydi va chulg'amlar orasidagi kanal aylanasining o'rtacha uzunligi πd_{12} ning chulg'am balandligi l ga nisbatiga teng. β = 1,8…2,4 tavsiya etiladi (mavjud seriyalarda 1,2…3,6). Normallashtirilgan qatordan sterjen diametri va PK o'ramlar sonining " + (R.opt ? R.opt.tried : 1) + " ta jufti ko'rib chiqildi; GOST 11677-85 ruxsatnomalarini hisobga olgan holda u_{к}, P_{к} va P_{х} berilganlarga eng yaqin bo'lgan variant qabul qilindi:");
+    f('d = ' + N(m.d, 2) + ' ' + u.m + ';   x = d/A = ' + N(m.d, 2) + '/' + N(m.A, 4) + ' = ' + N(m.x, 4) + ';   β = x^{4} = ' + N(m.x, 4) + '^{4} = ' + N(m.beta, 3));
+    chk(m.beta >= 1.8 && m.beta <= 2.4, m.beta >= 1.8 && m.beta <= 2.4 ? 'β входит в рекомендуемый диапазон 1,8 ≤ β ≤ 2,4' : 'β вне рекомендуемого диапазона 1,8…2,4, но в пределах 1,2…3,6, встречающихся в существующих сериях',
+      m.beta >= 1.8 && m.beta <= 2.4 ? "β tavsiya etilgan 1,8 ≤ β ≤ 2,4 oralig'ida" : "β tavsiya etilgan 1,8…2,4 oralig'idan tashqarida, lekin mavjud seriyalardagi 1,2…3,6 chegarasida");
+    p('Активное сечение стержня:', "Sterjenning aktiv kesimi:");
+    f('П_{с} = 0,785·k_{с}·d^{2} = 0,785·' + N(m.kc, 3) + '·' + N(m.d, 2) + '^{2} = ' + N(m.Pc, 4) + ' ' + u.m2);
+    p('Средний диаметр канала между обмотками:', "Chulg'amlar orasidagi kanalning o'rtacha diametri:");
+    f('d_{12} = a·d = ' + N(P.a, 2) + '·' + N(m.d, 2) + ' = ' + N(m.d12, 4) + ' ' + u.m);
+    p('Высота обмоток:', "Chulg'amlar balandligi:");
+    f('l = π·d_{12}/β = 3,14·' + N(m.d12, 4) + '/' + N(m.beta, 3) + ' = ' + N(m.l, 3) + ' ' + u.m);
+    p('Высота стержня:', 'Sterjen balandligi:');
+    f('l_{с} = l + 2·l_{0} = ' + N(m.l, 3) + ' + 2·' + N(m.l0, 3) + ' = ' + N(m.lc, 3) + ' ' + u.m);
+    p('Расстояние между осями стержней:', "Sterjenlar o'qlari orasidagi masofa:");
+    f('C = d_{12} + a_{12} + b·d + a_{22} = ' + N(m.d12, 4) + ' + ' + N(ins2.a12 / 1000, 3) + ' + ' + N(P.b, 3) + '·' + N(m.d, 2) + ' + ' + N(ins2.a22 / 1000, 3) + ' = ' + N(m.C, 4) + ' ' + u.m);
+    p('Напряжение одного витка (предварительно):', "Bir o'ram kuchlanishi (dastlabki):");
+    f('U_{в} = 4,44·f·П_{с}·B_{с} = 4,44·50·' + N(m.Pc, 4) + '·' + N(P.Bc, 2) + ' = ' + N(m.Uv, 2) + ' ' + u.V);
+    p('Проверка реактивной составляющей напряжения короткого замыкания:', 'Qisqa tutashuv kuchlanishi reaktiv tashkil etuvchisini tekshirish:');
+    f('u_{р} = 7,95·f·S\'·β·a_{р}·k_{р}/U_{в}^{2}·10^{-1} = 7,95·50·' + N(e.Sf, 1) + '·' + N(m.beta, 3) + '·' + N(P.ap, 4) + '·' + N(P.kp, 2) + '/' + N(m.Uv, 2) + '^{2}·10^{-1} = ' + N(m.upchk) + ' %');
+    chk(Math.abs(m.updev) <= 10, 'Отклонение от заданного значения ' + N(P.up) + ' % составляет ' + dev(m.updev) + ' (допускается не более 10 %)',
+      'Berilgan ' + N(P.up) + ' % qiymatdan chetlanish ' + dev(m.updev) + ' (10 % dan oshmasligi kerak)');
+
+    // ---------- 4 НН ----------
+    h1('Расчёт обмотки НН', "PK chulg'amini hisoblash");
+    p('Число витков обмотки НН:', "PK chulg'amining o'ramlar soni:");
+    f('w_{1} = U_{ф1}/U_{в} = ' + N(e.Uf1, 1) + '/' + N(m.Uv, 2) + ' = ' + N(e.Uf1 / m.Uv, 2));
+    p('Принимаем w_{1} = ' + lv.w1 + ' витков. Уточнённое напряжение одного витка:', 'w_{1} = ' + lv.w1 + " o'ram qabul qilamiz. Bir o'ramning aniqlangan kuchlanishi:");
+    f('U_{в} = U_{ф1}/w_{1} = ' + N(e.Uf1, 1) + '/' + lv.w1 + ' = ' + N(lv.Uv, 3) + ' ' + u.V);
+    p('Средняя плотность тока в обмотках:', "Chulg'amlardagi o'rtacha tok zichligi:");
+    f('J_{ср} = ' + (Cu ? '0,746' : '0,463') + '·k_{д}·P_{к}·U_{в}/(S_{н}·d_{12})·10^{4} = ' + (Cu ? '0,746' : '0,463') + '·' + N(P.kd, 2) + '·' + N(+inp.Pk, 0) + '·' + N(lv.Uv, 3) + '/(' + N(S) + '·' + N(m.d12, 4) + ')·10^{4} = ' + N(lv.Jsr / 1e6, 3) + '·10^{6} ' + L('А/м^{2}', 'A/m^{2}'));
+    p('Сечение витка ориентировочно:', "O'ram kesimi taxminan:");
+    f('П\'_{1} = I_{ф1}/J_{ср} = ' + N(e.If1, 1) + '/(' + N(lv.Jsr / 1e6, 3) + '·10^{6}) = ' + N(lv.P1p, 1) + ' ' + u.mm2);
+    p('Ориентировочно осевой размер витка (h_{к} = ' + lv.hk + ' мм — радиальный канал):', "O'ramning taxminiy o'q bo'yicha o'lchami (h_{к} = " + lv.hk + ' mm — radial kanal):');
+    f('h_{в1} = l/(w_{1} + 4) − h_{к} = ' + N(m.l, 3) + '/(' + lv.w1 + ' + 4) − 0,005 = ' + N(lv.hv1 / 1000, 4) + ' ' + u.m + ' = ' + N(lv.hv1, 1) + ' ' + u.mm);
+    if (lv.kh === 1) p('Так как h_{в1} ≤ 15 мм, выбираем одноходовую винтовую обмотку из прямоугольного медного провода марки ПБ с тремя транспозициями (групповой и общей).',
+      "h_{в1} ≤ 15 mm bo'lgani uchun PB markali to'g'ri burchakli simdan uchta transpozitsiyali bir yo'lli vintsimon chulg'amni tanlaymiz.");
+    else p('Так как h_{в1} > 15 мм, а при максимальном размере провода 15–16 мм и данной плотности тока тепловой поток недопустим при естественном масляном охлаждении, выбираем ' + khTxt + ' винтовую обмотку с радиальными каналами в витках и между витками и с равномерно распределённой транспозицией. Провод марки ПБ (толщина изоляции на две стороны 0,45 мм; в расчёте с допуском 0,5 мм).',
+      "h_{в1} > 15 mm, simning eng katta o'lchami 15–16 mm bo'lganda ushbu tok zichligida issiqlik oqimi tabiiy moyli sovutishda ruxsat etilmaydi, shuning uchun o'ramlar ichida va o'ramlar orasida radial kanalli, tekis taqsimlangan transpozitsiyali " + khTxt + " vintsimon chulg'amni tanlaymiz. PB markali sim (ikki tomonga izolyatsiya qalinligi 0,45 mm; hisobda ruxsatnoma bilan 0,5 mm).");
+    var w = lv.wire;
+    p('По полученным значениям П\'_{1} и h_{в1} подбираем виток из ' + w.n + ' параллельных проводов' + (lv.kh > 1 ? ', разделённых на ' + lv.kh + ' группы по ' + w.ng + ' провода с каналами по 5 мм между группами и между витками' : '') + ':',
+      "Olingan П'_{1} va h_{в1} qiymatlari bo'yicha o'ramni " + w.n + ' ta parallel simdan tanlaymiz' + (lv.kh > 1 ? ", ular guruhlar va o'ramlar orasida 5 mm kanallar bilan " + lv.kh + ' guruhga (har birida ' + w.ng + ' ta sim) bo\'lingan' : '') + ':');
+    f(L('ПБ', 'PB') + ' ' + w.n + '×(' + N(w.a, 2) + '×' + N(w.b, 2) + ')/(' + N(lv.ap, 2) + '×' + N(lv.bp, 2) + ');   П_{эл} = ' + N(w.s1, 2) + ' ' + u.mm2);
+    p('Полное сечение витка и плотность тока:', "O'ramning to'liq kesimi va tok zichligi:");
+    f('П_{1} = n_{эл}·П_{эл} = ' + w.n + '·' + N(w.s1, 2) + ' = ' + N(lv.P1, 1) + ' ' + u.mm2);
+    f('J_{1} = I_{ф1}/П_{1} = ' + N(e.If1, 1) + '/(' + N(lv.P1, 1) + '·10^{-6}) = ' + N(lv.J1 / 1e6, 3) + ' ' + u.MAm2);
+    p('Высота (осевой размер) обмотки:', "Chulg'am balandligi (o'q bo'yicha o'lchami):");
+    if (lv.kh === 1) f('l_{1} = [b\'·(w_{1} + 4) + 0,95·h_{к}·(w_{1} + 3)]·10^{-3} = [' + N(lv.bp, 2) + '·(' + lv.w1 + ' + 4) + 0,95·5·(' + lv.w1 + ' + 3)]·10^{-3} = ' + N(lv.l1, 3) + ' ' + u.m);
+    else {
+      var G = lv.kh * (lv.w1 + 1), ch = G - 1, n10 = Math.min(6, ch);
+      f('l_{1} = ' + lv.kh + '·(w_{1} + 1)·b\'·10^{-3} + [(' + lv.kh + '·w_{1} + ' + (lv.kh - 1) + ' − 6)·h_{к} + 10·6]·0,95·10^{-3} = ' + G + '·' + N(lv.bp, 2) + '·10^{-3} + [' + (ch - n10) + '·5 + 60]·0,95·10^{-3} = ' + N(lv.l1, 3) + ' ' + u.m);
+      p('Для частичной компенсации разрыва в обмотке ВН при регулировании напряжения в середине высоты обмотки НН размещено шесть радиальных каналов по 10 мм.',
+        "Kuchlanishni rostlashda YuK chulg'amidagi uzilishni qisman kompensatsiyalash uchun PK chulg'ami balandligining o'rtasida 10 mm li oltita radial kanal joylashtirilgan.");
+    }
+    p('Радиальный размер обмотки:', "Chulg'amning radial o'lchami:");
+    f('a_{1} = (n_{эл}/' + lv.kh + ')·a\' = ' + w.ng + '·' + N(lv.ap, 2) + '·10^{-3} = ' + N(lv.a1, 4) + ' ' + u.m);
+    p('Внутренний, внешний и средний диаметры обмотки:', "Chulg'amning ichki, tashqi va o'rtacha diametrlari:");
+    f('D\'_{1} = d + 2·a_{01} = ' + N(m.d, 2) + ' + 2·' + N(ins1.a01 / 1000, 4) + ' = ' + N(lv.D1i, 4) + ' ' + u.m);
+    f('D\'\'_{1} = D\'_{1} + 2·a_{1} = ' + N(lv.D1i, 4) + ' + 2·' + N(lv.a1, 4) + ' = ' + N(lv.D1o, 4) + ' ' + u.m);
+    f('D_{ср1} = (D\'_{1} + D\'\'_{1})/2 = (' + N(lv.D1i, 4) + ' + ' + N(lv.D1o, 4) + ')/2 = ' + N(lv.D1s, 4) + ' ' + u.m);
+    p('Обмотка наматывается на рейках на бумажно-бакелитовом цилиндре размерами:', "Chulg'am qog'oz-bakelit silindrdagi reykalarga o'raladi, silindr o'lchamlari:");
+    f('⌀ ' + N(lv.cyl.Din, 3) + '/' + N(lv.cyl.Dout, 3) + ' × ' + N(lv.cyl.h, 3) + ' ' + u.m + '  (⌀ (d + a_{01})/(d + a_{01} + 2δ_{01}) × (l_{1} + 2l_{ц1}))');
+    p('Коэффициент добавочных потерь от поля рассеяния (формула 7.14 [1]):', "Sochilish maydonidan qo'shimcha isroflar koeffitsienti ([1] dagi 7.14-formula):");
+    f('β_{д} = b·m·k_{р}/l = ' + N(w.b / 1000, 4) + '·' + w.m + '·0,95/' + N(lv.l1, 3) + ' = ' + N(w.bd, 3));
+    f('k_{д1} = 1 + ' + (Cu ? '0,095' : '0,037') + '·10^{8}·β_{д}^{2}·a^{4}·n^{2} = 1 + ' + (Cu ? '0,095' : '0,037') + '·10^{8}·' + N(w.bd, 3) + '^{2}·(' + N(w.a / 1000, 5) + ')^{4}·' + w.ng + '^{2} = ' + N(lv.kad, 3));
+    p('Плотность теплового потока на поверхности обмотки (k_{з} = 0,8 — коэффициент закрытия поверхности, w_{к} = ' + N(1 / lv.kh, 2) + '):',
+      "Chulg'am sirtidagi issiqlik oqimi zichligi (k_{з} = 0,8 — sirtning yopilish koeffitsienti, w_{к} = " + N(1 / lv.kh, 2) + '):');
+    f('q_{1} = ' + (Cu ? '107' : '172') + '·J_{1}·I_{ф1}·w_{к}·k_{д1}/(k_{з}·(b\' + a_{1}))·10^{-10} = ' + (Cu ? '107' : '172') + '·' + N(lv.J1 / 1e6, 3) + '·10^{6}·' + N(e.If1, 1) + '·' + N(1 / lv.kh, 2) + '·' + N(lv.kad, 3) + '/(0,8·(' + N(lv.bp / 1000, 4) + ' + ' + N(lv.a1, 4) + '))·10^{-10} = ' + N(lv.q1, 0) + ' ' + u.Wm2);
+    chk(lv.q1 <= 1400, lv.q1 <= 1400 ? 'q_{1} ≤ 1400 Вт/м^{2} — допустимо при естественном масляном охлаждении' : 'q_{1} > 1400 Вт/м^{2} — тепловой поток повышен',
+      lv.q1 <= 1400 ? "q_{1} ≤ 1400 Vt/m^{2} — tabiiy moyli sovutishda ruxsat etiladi" : "q_{1} > 1400 Vt/m^{2} — issiqlik oqimi yuqori");
+    p('Масса металла обмотки НН (c = 3 — число активных стержней):', "PK chulg'ami metallining massasi (c = 3 — aktiv sterjenlar soni):");
+    f('G_{о1} = ' + cg + '·c·D_{ср1}·w_{1}·П_{1} = ' + cg + '·3·' + N(lv.D1s, 4) + '·' + lv.w1 + '·' + N(lv.P1, 1) + '·10^{-6} = ' + N(lv.Go1, 1) + ' ' + u.kg);
+    p('Масса провода с изоляцией (увеличение по табл. 11 — ' + N(lv.insPct) + ' %):', "Izolyatsiyali sim massasi (11-jadval bo'yicha oshish — " + N(lv.insPct) + ' %):');
+    f('G_{пр1} = ' + N(1 + lv.insPct / 100, 3) + '·' + N(lv.Go1, 1) + ' = ' + N(lv.Gpr1, 1) + ' ' + u.kg);
+
+    // ---------- 5 ВН ----------
+    h1('Расчёт обмотки ВН', "YuK chulg'amini hisoblash");
+    p('Регулирование напряжения ПБВ ±2×2,5 %: концы всех трёх фаз обмотки выведены к одному трёхфазному переключателю, регулировочные витки расположены в середине высоты обмотки. Контакты переключателя рассчитываются на рабочий ток I_{2} = ' + N(e.I2, 1) + ' А. Наибольшее напряжение между контактами переключателя в одной фазе:',
+      "PBV ±2×2,5 % kuchlanishni rostlash: barcha uch faza chulg'ami uchlari bitta uch fazali o'zgartirgichga chiqarilgan, rostlash o'ramlari chulg'am balandligining o'rtasida joylashgan. O'zgartirgich kontaktlari ishchi tok I_{2} = " + N(e.I2, 1) + " A ga hisoblanadi. Bir fazada o'zgartirgich kontaktlari orasidagi eng katta kuchlanish:");
+    f(L('рабочее', 'ishchi') + ' 10 %·U_{ф2} = ' + N(hv.Uswork, 0) + ' ' + u.V + ';   ' + L('испытательное', 'sinov') + ' 2·10 %·U_{ф2} = ' + N(hv.Ustest, 0) + ' ' + u.V);
+    p('Число витков обмотки ВН при номинальном напряжении и на одной ступени регулирования:', "Nominal kuchlanishdagi va bir rostlash pog'onasidagi YuK chulg'ami o'ramlar soni:");
+    f('w_{н2} = w_{1}·U_{ф2}/U_{ф1} = ' + lv.w1 + '·' + N(e.Uf2, 0) + '/' + N(e.Uf1, 1) + ' = ' + N(lv.w1 * e.Uf2 / e.Uf1, 1) + ' ≈ ' + hv.wn2 + ' ' + u.turns);
+    f('w_{р} = 0,025·U_{ф2}/U_{в} = 0,025·' + N(e.Uf2, 0) + '/' + N(lv.Uv, 3) + ' = ' + N(0.025 * e.Uf2 / lv.Uv, 2) + ' ≈ ' + hv.wp + ' ' + u.turns);
+    tbl(L('Число витков на ответвлениях', "Tarmoqlardagi o'ramlar soni"), [L('Напряжение', 'Kuchlanish'), u.V, L('Число витков', "O'ramlar soni")], hv.taps.map(function (t) {
+      var lab = t[0] === 0 ? 'U_{н2}' : 'U_{н2} ' + (t[0] > 0 ? '+ ' : '− ') + N(Math.abs(t[0])) + ' %';
+      var expr = t[0] === 0 ? hv.wn2 + ' = w_{н2}' : hv.wn2 + (t[0] > 0 ? ' + ' : ' − ') + (Math.abs(t[0]) === 5 ? '2·' : '') + hv.wp + ' = ' + t[1] + (t[0] === 5 ? ' = w_{2max}' : '');
+      return [lab, N(e.Uvn * (1 + t[0] / 100), 0), expr];
+    }));
+    p('Ориентировочная плотность тока и сечение витка:', "Taxminiy tok zichligi va o'ram kesimi:");
+    f('J\'_{2} = 2·J_{ср} − J_{1} = 2·' + N(lv.Jsr / 1e6, 3) + ' − ' + N(lv.J1 / 1e6, 3) + ' = ' + N(hv.J2p / 1e6, 3) + ' ' + u.MAm2);
+    f('П\'_{2} = I_{ф2}/J\'_{2} = ' + N(e.If2, 2) + '/(' + N(hv.J2p / 1e6, 3) + '·10^{6}) = ' + N(hv.P2p, 2) + ' ' + u.mm2);
+    var hw = hv.wire;
+    if (hv.type === 'disc') {
+      p('По табл. 2 выбираем непрерывную катушечную обмотку из медного прямоугольного провода. По сортаменту обмоточного провода (табл. 5.2 [1]) выбираем провод марки ПБ:',
+        "2-jadval bo'yicha to'g'ri burchakli simdan uzluksiz g'altakli chulg'amni tanlaymiz. Chulg'am simi sortamentidan ([1] dagi 5.2-jadval) PB markali simni tanlaymiz:");
+      f(L('ПБ', 'PB') + ' ' + hw.np + '×(' + N(hw.a, 2) + '×' + N(hw.b, 2) + ')/(' + N(hv.ap2, 2) + '×' + N(hv.bp2, 2) + ');   П_{2} = ' + hw.np + '·' + N(hw.s1, 2) + ' = ' + N(hv.P2, 2) + ' ' + u.mm2);
+      f('J_{2} = I_{ф2}/П_{2} = ' + N(e.If2, 2) + '/(' + N(hv.P2, 2) + '·10^{-6}) = ' + N(hv.J2 / 1e6, 3) + ' ' + u.MAm2);
+      if (e.cls2 >= 35) p('Так как U_{н2} ≥ 35 кВ, в двух верхних и двух нижних катушках каждой фазы применяем провод с усиленной изоляцией: (a\' + 1)×(b\' + 1) = ' + N(hv.ap2 + 1, 2) + '×' + N(hv.bp2 + 1, 2) + ' мм; эти катушки отделены каналами по 7,5 мм.',
+        "U_{н2} ≥ 35 kV bo'lgani uchun har bir fazaning ikkita yuqori va ikkita pastki g'altagida kuchaytirilgan izolyatsiyali simni qo'llaymiz: (a' + 1)×(b' + 1) = " + N(hv.ap2 + 1, 2) + '×' + N(hv.bp2 + 1, 2) + " mm; bu g'altaklar 7,5 mm li kanallar bilan ajratilgan.");
+      p('Принимаем радиальные каналы h\'_{к} = 5 мм между всеми катушками; канал в месте разрыва обмотки (регулировочная зона) h_{кр} = ' + hv.hkr + ' мм (табл. 12). Число катушек на стержне:',
+        "Barcha g'altaklar orasida h'_{к} = 5 mm radial kanallarni qabul qilamiz; chulg'am uzilishi joyidagi (rostlash zonasi) kanal h_{кр} = " + hv.hkr + " mm (12-jadval). Sterjendagi g'altaklar soni:");
+      f('n_{кат} ≈ l·10^{3}/(b\'_{2} + h\'_{к}) ≈ ' + N(m.l * 0 + lv.l1 * 1000, 0) + '/(' + N(hv.bp2, 2) + ' + 5) ≈ ' + hv.nk + ' ' + u.coils);
+      f('w_{кат} = w_{2max}/n_{кат} = ' + hv.w2max + '/' + hv.nk + ' = ' + N(hv.w2max / hv.nk, 2));
+      tbl(L('Распределение витков по катушкам', "O'ramlarning g'altaklar bo'yicha taqsimlanishi"), [L('Катушки', "G'altaklar"), L('Кол-во', 'Soni'), L('Витков в катушке', "G'altakdagi o'ramlar"), L('Всего витков', "Jami o'ramlar")],
+        hv.dist.map(function (dd) { return [dd.kind === 'main' ? L('основные', 'asosiy') : L('регулировочные', 'rostlovchi'), dd.n, dd.w, dd.n * dd.w]; })
+          .concat([[L('Всего', 'Jami'), hv.nk, '—', hv.w2max]]));
+      p('Радиальный размер обмотки:', "Chulg'amning radial o'lchami:");
+      f('a_{2} = n_{пр}·a\'·w_{кат.max} = ' + hw.np + '·' + N(hv.ap2, 2) + '·' + hw.wm + '·10^{-3} = ' + N(hv.a2, 4) + ' ' + u.m);
+      p('Осевой размер (высота) обмотки ВН:', "YuK chulg'amining o'q bo'yicha o'lchami (balandligi):");
+      if (e.cls2 >= 35) f('l_{2} = [b\'_{2}·(n_{кат} − 4) + b\'\'_{2}·4 + 0,95·(h_{кр} + 2·7,5 + h\'_{к}·(n_{кат} − 4))]·10^{-3} = [' + N(hv.bp2, 2) + '·' + (hv.nk - 4) + ' + ' + N(hv.bp2 + 1, 2) + '·4 + 0,95·(' + hv.hkr + ' + 15 + 5·' + (hv.nk - 4) + ')]·10^{-3} = ' + N(hv.l2, 3) + ' ' + u.m);
+      else f('l_{2} = [n_{кат}·b\'_{2} + 0,95·(h_{кр} + h\'_{к}·(n_{кат} − 2))]·10^{-3} = [' + hv.nk + '·' + N(hv.bp2, 2) + ' + 0,95·(' + hv.hkr + ' + 5·' + (hv.nk - 2) + ')]·10^{-3} = ' + N(hv.l2, 3) + ' ' + u.m);
+    } else {
+      p('Ток фазы ВН мал (П\'_{2} < 5 мм^{2}), поэтому по табл. 2 выбираем многослойную цилиндрическую обмотку из круглого медного провода марки ПБ (изоляция 0,30 мм на две стороны):',
+        "YuK faza toki kichik (П'_{2} < 5 mm^{2}), shuning uchun 2-jadval bo'yicha PB markali dumaloq mis simdan (ikki tomonga izolyatsiya 0,30 mm) ko'p qatlamli silindrik chulg'amni tanlaymiz:");
+      f(L('ПБ', 'PB') + ' ' + hw.np + '×⌀' + N(hw.dw, 2) + '/' + N(hw.dp, 2) + ';   П_{2} = ' + hw.np + '·π·' + N(hw.dw, 2) + '^{2}/4 = ' + N(hv.P2, 3) + ' ' + u.mm2);
+      f('J_{2} = I_{ф2}/П_{2} = ' + N(e.If2, 2) + '/(' + N(hv.P2, 3) + '·10^{-6}) = ' + N(hv.J2 / 1e6, 3) + ' ' + u.MAm2);
+      p('Число витков в слое и число слоёв:', "Qatlamdagi o'ramlar soni va qatlamlar soni:");
+      f('w_{сл} = l·10^{3}/(n_{пр}·d\') − 1 = ' + N(lv.l1 * 1000, 0) + '/(' + hw.np + '·' + N(hw.dp, 2) + ') − 1 ≈ ' + hw.wsl);
+      f('n_{сл} = w_{2max}/w_{сл} = ' + hv.w2max + '/' + hw.wsl + ' = ' + N(hv.w2max / hw.wsl, 2) + ' → ' + hw.nsl);
+      p('Рабочее напряжение двух слоёв и междуслойная изоляция (кабельная бумага по 0,12 мм):', "Ikki qatlamning ishchi kuchlanishi va qatlamlararo izolyatsiya (0,12 mm li kabel qog'ozi):");
+      f('U_{мсл} = 2·w_{сл}·U_{в} = 2·' + hw.wsl + '·' + N(lv.Uv, 3) + ' = ' + N(hw.Umsl, 0) + ' ' + u.V + ';   δ_{мсл} = ' + hw.nsh + '×0,12 = ' + N(hw.dmsl, 2) + ' ' + u.mm);
+      if (hw.ch) p('Обмотка разделена на две концентрические части с осевым масляным каналом a\'_{22} = 6 мм.', "Chulg'am o'q bo'ylab 6 mm li moy kanali bilan ikki konsentrik qismga bo'lingan.");
+      p('Радиальный размер обмотки и её высота:', "Chulg'amning radial o'lchami va balandligi:");
+      f('a_{2} = [d\'·n_{сл} + δ_{мсл}·(n_{сл} − 1)' + (hw.ch ? ' + a\'_{22}' : '') + ']·10^{-3} = [' + N(hw.dp, 2) + '·' + hw.nsl + ' + ' + N(hw.dmsl, 2) + '·' + (hw.nsl - 1) + (hw.ch ? ' + 6' : '') + ']·10^{-3} = ' + N(hv.a2, 4) + ' ' + u.m);
+      f('l_{2} = n_{пр}·d\'·(w_{сл} + 1)·10^{-3} = ' + hw.np + '·' + N(hw.dp, 2) + '·' + (hw.wsl + 1) + '·10^{-3} = ' + N(hv.l2, 3) + ' ' + u.m);
+    }
+    chk(Math.abs(hv.l2 - lv.l1) / lv.l1 < 0.03, 'Высоты обмоток ВН и НН практически равны (l_{2} = ' + N(hv.l2, 3) + ' м, l_{1} = ' + N(lv.l1, 3) + ' м)',
+      "YuK va PK chulg'amlarining balandliklari deyarli teng (l_{2} = " + N(hv.l2, 3) + ' m, l_{1} = ' + N(lv.l1, 3) + ' m)');
+    p('Диаметры обмотки ВН:', "YuK chulg'amining diametrlari:");
+    f('D\'_{2} = D\'\'_{1} + 2·a_{12} = ' + N(lv.D1o, 4) + ' + 2·' + N(ins2.a12 / 1000, 3) + ' = ' + N(hv.D2i, 4) + ' ' + u.m);
+    f('D\'\'_{2} = D\'_{2} + 2·a_{2} = ' + N(hv.D2i, 4) + ' + 2·' + N(hv.a2, 4) + ' = ' + N(hv.D2o, 4) + ' ' + u.m);
+    f('D_{ср2} = (D\'_{2} + D\'\'_{2})/2 = ' + N(hv.D2s, 4) + ' ' + u.m);
+    p('Обмотка ВН наматывается на бумажно-бакелитовом цилиндре:', "YuK chulg'ami qog'oz-bakelit silindrga o'raladi:");
+    f('⌀ ' + N(hv.cyl.Din, 3) + '/' + N(hv.cyl.Dout, 3) + ' × ' + N(hv.cyl.h, 3) + ' ' + u.m + '  (⌀ (D\'\'_{1} + a_{12})/(D\'\'_{1} + a_{12} + 2δ_{12}) × (l + 2l_{ц2}))');
+    p('Коэффициент добавочных потерь обмотки ВН:', "YuK chulg'amining qo'shimcha isroflar koeffitsienti:");
+    if (hv.type === 'disc') {
+      f('β_{д} = b·n_{кат}·k_{р}/l = ' + N(hw.b / 1000, 4) + '·' + hv.nk + '·0,95/' + N(lv.l1, 3) + ' = ' + N(hw.bd, 3));
+      f('k_{д2} = 1 + ' + (Cu ? '0,095' : '0,037') + '·10^{8}·β_{д}^{2}·a^{4}·n^{2} = 1 + ' + (Cu ? '0,095' : '0,037') + '·10^{8}·' + N(hw.bd, 3) + '^{2}·(' + N(hw.a / 1000, 5) + ')^{4}·' + (hw.np * hw.wm) + '^{2} = ' + N(hv.kad, 3));
+      p('Плотность теплового потока на поверхности катушки ВН:', "YuK g'altagi sirtidagi issiqlik oqimi zichligi:");
+      f('q_{2} = ' + (Cu ? '107' : '172') + '·J_{2}·I_{ф2}·w_{кат}·k_{д2}/(k_{з}·(b\'_{2} + a_{2}))·10^{-10} = ' + (Cu ? '107' : '172') + '·' + N(hv.J2 / 1e6, 3) + '·10^{6}·' + N(e.If2, 2) + '·' + hv.wk + '·' + N(hv.kad, 3) + '/(0,8·(' + N(hv.bp2 / 1000, 4) + ' + ' + N(hv.a2, 4) + '))·10^{-10} = ' + N(hv.q2, 0) + ' ' + u.Wm2);
+    } else {
+      f('β_{д} = d·w_{сл}·n_{пр}·k_{р}/l = ' + N(hw.dw / 1000, 5) + '·' + hw.wsl + '·' + hw.np + '·0,95/' + N(lv.l1, 3) + ' = ' + N(hw.bd, 3));
+      f('k_{д2} = 1 + ' + (Cu ? '0,044' : '0,017') + '·10^{8}·β_{д}^{2}·d^{4}·n_{сл}^{2} = ' + N(hv.kad, 4));
+      p('Плотность теплового потока на охлаждаемой поверхности обмотки ВН:', "YuK chulg'amining sovutiladigan sirtidagi issiqlik oqimi zichligi:");
+      f('q_{2} = P_{осн2}·k_{д2}/П_{о2} = ' + N(sc.Pos2, 0) + '·' + N(hv.kad, 3) + '/' + N(hv.Pi02, 3) + ' = ' + N(hv.q2, 0) + ' ' + u.Wm2);
+    }
+    p('Масса металла обмотки ВН:', "YuK chulg'ami metallining massasi:");
+    f('G_{о2} = ' + cg + '·c·D_{ср2}·w_{2max}·П_{2} = ' + cg + '·3·' + N(hv.D2s, 4) + '·' + hv.w2max + '·' + N(hv.P2, 3) + '·10^{-6} = ' + N(hv.Go2, 1) + ' ' + u.kg);
+    f('G_{пр2} = ' + N(1 + hv.insPct / 100, 3) + '·' + N(hv.Go2, 1) + ' = ' + N(hv.Gpr2, 1) + ' ' + u.kg);
+    p('Масса металла и провода двух обмоток:', "Ikki chulg'am metali va simining massasi:");
+    f('G_{о} = G_{о1} + G_{о2} = ' + N(lv.Go1, 1) + ' + ' + N(hv.Go2, 1) + ' = ' + N(R.G.Go, 1) + ' ' + u.kg + ';   G_{пр} = ' + N(lv.Gpr1, 1) + ' + ' + N(hv.Gpr2, 1) + ' = ' + N(R.G.Gpr, 1) + ' ' + u.kg);
+
+    // ---------- 6 КЗ ----------
+    h1('Расчёт параметров короткого замыкания', 'Qisqa tutashuv parametrlarini hisoblash');
+    h2('Потери короткого замыкания', 'Qisqa tutashuv isroflari');
+    p('Основные потери в обмотках:', "Chulg'amlardagi asosiy isroflar:");
+    f(L('НН', 'PK') + ': P_{осн1} = ' + kpos + '·J_{1}^{2}·G_{о1} = ' + kpos + '·(' + N(lv.J1 / 1e6, 3) + '·10^{6})^{2}·' + N(lv.Go1, 1) + ' = ' + N(sc.Pos1, 0) + ' ' + u.W);
+    f(L('ВН', 'YuK') + ': P_{осн2} = ' + kpos + '·J_{2}^{2}·G_{о2} = ' + kpos + '·(' + N(hv.J2 / 1e6, 3) + '·10^{6})^{2}·' + N(hv.Go2, 1) + ' = ' + N(sc.Pos2, 0) + ' ' + u.W);
+    p('Коэффициенты добавочных потерь (см. расчёт обмоток): k_{д1} = ' + N(sc.kd1, 3) + ', k_{д2} = ' + N(sc.kd2, 3) + '.', "Qo'shimcha isroflar koeffitsientlari (chulg'amlar hisobiga qarang): k_{д1} = " + N(sc.kd1, 3) + ', k_{д2} = ' + N(sc.kd2, 3) + '.');
+    p('Длина отводов определяется приближённо: при соединении в звезду l_{отв} = 7,5·l, в треугольник l_{отв} = 14·l. Плотность металла отводов γ = ' + sc.gam + ' кг/м^{3}.',
+      "Otvodlar uzunligi taxminan aniqlanadi: yulduz ulanishda l_{отв} = 7,5·l, uchburchakda l_{отв} = 14·l. Otvodlar metalining zichligi γ = " + sc.gam + ' kg/m^{3}.');
+    f('l_{отв1} = ' + (lvY ? '7,5' : '14') + '·' + N(lv.l1, 3) + ' = ' + N(sc.lotv1, 2) + ' ' + u.m + ';   l_{отв2} = ' + (hvY ? '7,5' : '14') + '·' + N(lv.l1, 3) + ' = ' + N(sc.lotv2, 2) + ' ' + u.m);
+    f('G_{отв1} = l_{отв1}·П_{1}·γ = ' + N(sc.lotv1, 2) + '·' + N(lv.P1, 1) + '·10^{-6}·' + sc.gam + ' = ' + N(sc.Gotv1, 2) + ' ' + u.kg);
+    f('P_{отв1} = ' + kpos + '·J_{1}^{2}·G_{отв1} = ' + N(sc.Potv1, 1) + ' ' + u.W);
+    f('G_{отв2} = l_{отв2}·П_{2}·γ = ' + N(sc.lotv2, 2) + '·' + N(hv.P2, 3) + '·10^{-6}·' + sc.gam + ' = ' + N(sc.Gotv2, 3) + ' ' + u.kg);
+    f('P_{отв2} = ' + kpos + '·J_{2}^{2}·G_{отв2} = ' + N(sc.Potv2, 2) + ' ' + u.W);
+    p('Потери в стенках бака и других элементах конструкции (k по табл. 13):', "Bak devorlari va boshqa konstruksiya elementlaridagi isroflar (k — 13-jadvaldan):");
+    f('P_{б} = 10·k·S_{н} = 10·' + N(sc.kb, 4) + '·' + N(S) + ' = ' + N(sc.Pb, 0) + ' ' + u.W);
+    p('Полные потери короткого замыкания:', "Qisqa tutashuvning to'liq isroflari:");
+    f('P\'_{к} = P_{осн1}·k_{д1} + P_{осн2}·k_{д2} + P_{отв1} + P_{отв2} + P_{б} = ' + N(sc.Pos1, 0) + '·' + N(sc.kd1, 3) + ' + ' + N(sc.Pos2, 0) + '·' + N(sc.kd2, 3) + ' + ' + N(sc.Potv1, 1) + ' + ' + N(sc.Potv2, 2) + ' + ' + N(sc.Pb, 0) + ' = ' + N(sc.Pkp, 0) + ' ' + u.W);
+    p('Для номинального напряжения обмотки ВН:', "YuK chulg'amining nominal kuchlanishi uchun:");
+    f('P\'_{кн} = P\'_{к} − 0,05·P_{осн2}·k_{д2} = ' + N(sc.Pkp, 0) + ' − 0,05·' + N(sc.Pos2, 0) + '·' + N(sc.kd2, 3) + ' = ' + N(sc.Pkn, 0) + ' ' + u.W);
+    chk(sc.Pkdev <= 110, 'P\'_{кн} составляет ' + dev(sc.Pkdev) + ' заданного значения (допуск ГОСТ 11677-85: +10 %)', "P'_{кн} berilgan qiymatning " + dev(sc.Pkdev) + ' ini tashkil etadi (GOST 11677-85 ruxsatnomasi: +10 %)');
+    h2('Напряжение короткого замыкания', 'Qisqa tutashuv kuchlanishi');
+    p('Активная составляющая:', 'Aktiv tashkil etuvchi:');
+    f('u_{а} = P\'_{кн}/(10·S_{н}) = ' + N(sc.Pkn, 0) + '/(10·' + N(S) + ') = ' + N(sc.ua, 3) + ' %');
+    p('Реактивная составляющая:', 'Reaktiv tashkil etuvchi:');
+    f('a_{р} = a_{12} + (a_{1} + a_{2})/3 = ' + N(ins2.a12 / 1000, 3) + ' + (' + N(lv.a1, 4) + ' + ' + N(hv.a2, 4) + ')/3 = ' + N(sc.ap, 4) + ' ' + u.m);
+    f('d_{12} = D\'\'_{1} + a_{12} = ' + N(lv.D1o, 4) + ' + ' + N(ins2.a12 / 1000, 3) + ' = ' + N(sc.d12, 4) + ' ' + u.m + ';   β = π·d_{12}/l = π·' + N(sc.d12, 4) + '/' + N(lv.l1, 3) + ' = ' + N(sc.beta, 3));
+    f('σ = (a_{12} + a_{1} + a_{2})/(π·l) = ' + N(sc.sig, 4) + ';   k_{р} = 1 − σ·(1 − e^{−1/σ}) = ' + N(sc.kp, 3));
+    p('Коэффициент k_{q}, учитывающий неравномерное распределение витков по высоте из-за разрыва в регулировочной зоне (x = l_{x}/l, l_{x} = ' + N(sc.lx, 3) + ' м):',
+      "Rostlash zonasidagi uzilish sababli o'ramlarning balandlik bo'yicha notekis taqsimlanishini hisobga oluvchi k_{q} koeffitsienti (x = l_{x}/l, l_{x} = " + N(sc.lx, 3) + ' m):');
+    f('k_{q} = 1 + x^{2}·l/(3·a_{р}·k_{р}) = 1 + ' + N(sc.lx / lv.l1, 4) + '^{2}·' + N(lv.l1, 3) + '/(3·' + N(sc.ap, 4) + '·' + N(sc.kp, 3) + ') = ' + N(sc.kq, 3));
+    f('u_{р} = 7,9·f·S\'·β·a_{р}·k_{р}·k_{q}/U_{в}^{2}·10^{-1} = 7,9·50·' + N(e.Sf, 1) + '·' + N(sc.beta, 3) + '·' + N(sc.ap, 4) + '·' + N(sc.kp, 3) + '·' + N(sc.kq, 3) + '/' + N(lv.Uv, 3) + '^{2}·10^{-1} = ' + N(sc.up, 3) + ' %');
+    p('Напряжение короткого замыкания:', 'Qisqa tutashuv kuchlanishi:');
+    f('u_{к} = √(u_{р}^{2} + u_{а}^{2}) = √(' + N(sc.up, 3) + '^{2} + ' + N(sc.ua, 3) + '^{2}) = ' + N(sc.uk, 3) + ' %');
+    chk(Math.abs(sc.ukdev - 100) <= 10, 'u_{к} составляет ' + dev(sc.ukdev) + ' заданного значения (допуск ±10 %)', "u_{к} berilgan qiymatning " + dev(sc.ukdev) + ' ini tashkil etadi (ruxsatnoma ±10 %)');
+    h2('Токи короткого замыкания и нагрев обмоток', "Qisqa tutashuv toklari va chulg'amlarning qizishi");
+    p('Установившийся ток короткого замыкания на обмотке ВН (S_{к} = ' + sc.Sk + ' МВ·А — мощность КЗ сети по табл. 14):', "YuK chulg'amidagi barqaror qisqa tutashuv toki (S_{к} = " + sc.Sk + ' MV·A — tarmoqning QT quvvati, 14-jadval):');
+    f('I_{к.у} = 100·I_{2}/(u_{к}·[1 + 100·S_{н}/(u_{к}·S_{к})]) = 100·' + N(e.I2, 2) + '/(' + N(sc.uk, 3) + '·[1 + 100·' + N(S) + '/(' + N(sc.uk, 3) + '·' + sc.Sk + '·10^{3})]) = ' + N(sc.Iky, 1) + ' ' + u.A);
+    p('Мгновенное максимальное значение тока короткого замыкания (u_{р}/u_{а} = ' + N(sc.up / sc.ua, 2) + '):', 'Qisqa tutashuv tokining eng katta oniy qiymati (u_{р}/u_{а} = ' + N(sc.up / sc.ua, 2) + '):');
+    f('k_{max}·√2 = √2·(1 + e^{−π·u_{а}/u_{р}}) = ' + N(sc.kmax, 3) + ';   i_{к.max} = ' + N(sc.kmax, 3) + '·' + N(sc.Iky, 1) + ' = ' + N(sc.ikmax, 0) + ' ' + u.A);
+    p('Температура обмоток через t_{к} = 5 с после возникновения КЗ (начальная θ_{н} = 90 °С):', "QT boshlanganidan t_{к} = 5 s o'tgach chulg'amlar harorati (boshlang'ich θ_{н} = 90 °C):");
+    var cK = Cu ? '12,5' : '5,5';
+    f('θ_{к1} = 670·t_{к}/(' + cK + '·(u_{к}/J_{1})^{2} − t_{к}) + θ_{н} = 670·5/(' + cK + '·(' + N(sc.uk, 3) + '/' + N(lv.J1 / 1e6, 3) + ')^{2} − 5) + 90 = ' + N(sc.th1, 1) + ' ' + u.C);
+    f('θ_{к2} = 670·t_{к}/(' + cK + '·(u_{к}/J_{2})^{2} − t_{к}) + θ_{н} = 670·5/(' + cK + '·(' + N(sc.uk, 3) + '/' + N(hv.J2 / 1e6, 3) + ')^{2} − 5) + 90 = ' + N(sc.th2, 1) + ' ' + u.C);
+    chk(Math.max(sc.th1, sc.th2) <= sc.thlim, 'Допустимая температура обмотки при КЗ ' + sc.thlim + ' °С — условие ' + (Math.max(sc.th1, sc.th2) <= sc.thlim ? 'выполняется' : 'не выполняется'),
+      "QT da chulg'amning ruxsat etilgan harorati " + sc.thlim + ' °C — shart ' + (Math.max(sc.th1, sc.th2) <= sc.thlim ? 'bajariladi' : 'bajarilmaydi'));
+
+    // ---------- 7 Магнитная система ----------
+    h1('Расчёт магнитной системы', 'Magnit tizimini hisoblash');
+    p('Принята конструкция трёхфазной плоской шихтованной магнитной системы из пластин холоднокатаной стали марки 3405 толщиной 0,30 мм, диаметр стержня d = ' + N(m.d, 2) + ' м без прессующей пластины, число ступеней в сечении стержня ' + m.steps + '. Стержни скрепляются бандажами из стеклоленты, ярма прессуются ярмовыми балками. Площади ступенчатых фигур и объём угла — по табл. 16:',
+      "Qalinligi 0,30 mm bo'lgan 3405 markali sovuq prokatlangan po'lat plastinalardan uch fazali tekis shixtalangan magnit tizimi konstruksiyasi qabul qilindi, sterjen diametri d = " + N(m.d, 2) + " m presslovchi plastinasiz, sterjen kesimidagi pog'onalar soni " + m.steps + ". Sterjenlar shisha lentali bandajlar bilan mahkamlanadi, yarmolar yarmo balkalari bilan presslanadi. Pog'onali shakllar yuzalari va burchak hajmi — 16-jadvaldan:");
+    f('П_{ф.с} = ' + N(co.Pfc * 1e4, 1) + ' ' + L('см', 'sm') + '^{2} = ' + N(co.Pfc, 5) + ' ' + u.m2 + ';   П_{ф.я} = ' + N(co.Pfy * 1e4, 1) + ' ' + L('см', 'sm') + '^{2} = ' + N(co.Pfy, 5) + ' ' + u.m2 + ';   V_{у} = ' + N(co.Vy * 1e6, 0) + ' ' + L('см', 'sm') + '^{3} = ' + N(co.Vy, 6) + ' ' + u.m3);
+    p('Активные сечения стержня и ярма, объём стали угла:', "Sterjen va yarmoning aktiv kesimlari, burchak po'latining hajmi:");
+    f('П_{с} = k_{з}·П_{ф.с} = ' + N(P.kz, 3) + '·' + N(co.Pfc, 5) + ' = ' + N(co.Pc, 5) + ' ' + u.m2);
+    f('П_{я} = k_{з}·П_{ф.я} = ' + N(P.kz, 3) + '·' + N(co.Pfy, 5) + ' = ' + N(co.Py, 5) + ' ' + u.m2);
+    f('V_{у.ст} = k_{з}·V_{у} = ' + N(P.kz, 3) + '·' + N(co.Vy, 6) + ' = ' + N(co.Vyst, 6) + ' ' + u.m3);
+    p('Длина стержня и расстояние между осями стержней:', "Sterjen uzunligi va sterjenlar o'qlari orasidagi masofa:");
+    f('l_{с} = l + 2·l_{02} = ' + N(lv.l1, 3) + ' + 2·' + N(ins2.l02 / 1000, 3) + ' = ' + N(co.lc, 3) + ' ' + u.m);
+    f('C = D\'\'_{2} + a_{22} = ' + N(hv.D2o, 4) + ' + ' + N(ins2.a22 / 1000, 3) + ' = ' + N(co.C, 4) + ' ' + u.m);
+    p('Массы стали (γ_{ст} = 7650 кг/м^{3} — плотность холоднокатаной стали; a_{1я} = ' + N(co.hya, 3) + ' м — ширина пластины первого пакета ярма):',
+      "Po'lat massalari (γ_{ст} = 7650 kg/m^{3} — sovuq prokatlangan po'lat zichligi; a_{1я} = " + N(co.hya, 3) + ' m — yarmo birinchi paketi plastinasining kengligi):');
+    f('G_{у} = V_{у.ст}·γ_{ст} = ' + N(co.Vyst, 6) + '·7650 = ' + N(co.Gy, 1) + ' ' + u.kg);
+    f('G_{я} = 2·П_{я}·2C·γ_{ст} + 2·G_{у} = 2·' + N(co.Py, 5) + '·2·' + N(co.C, 4) + '·7650 + 2·' + N(co.Gy, 1) + ' = ' + N(co.Gyp, 1) + ' + ' + N(co.Gypp, 1) + ' = ' + N(co.Gya, 1) + ' ' + u.kg);
+    f('G\'_{с} = 3·l_{с}·П_{с}·γ_{ст} = 3·' + N(co.lc, 3) + '·' + N(co.Pc, 5) + '·7650 = ' + N(co.Gcp, 1) + ' ' + u.kg);
+    f('G\'\'_{с} = 3·(П_{с}·a_{1я}·γ_{ст} − G_{у}) = 3·(' + N(co.Pc, 5) + '·' + N(co.hya, 3) + '·7650 − ' + N(co.Gy, 1) + ') = ' + N(co.Gcpp, 1) + ' ' + u.kg);
+    f('G_{с} = G\'_{с} + G\'\'_{с} = ' + N(co.Gc, 1) + ' ' + u.kg + ';   G_{ст} = G_{я} + G_{с} = ' + N(co.Gya, 1) + ' + ' + N(co.Gc, 1) + ' = ' + N(co.Gst, 1) + ' ' + u.kg);
+
+    // ---------- 8 Потери ХХ ----------
+    h1('Расчёт потерь холостого хода', 'Salt ishlash isroflarini hisoblash');
+    f('B_{с} = U_{в}/(4,44·f·П_{с}) = ' + N(lv.Uv, 3) + '/(4,44·50·' + N(co.Pc, 5) + ') = ' + N(nl.Bc, 3) + ' ' + u.T);
+    f('B_{я} = U_{в}/(4,44·f·П_{я}) = ' + N(lv.Uv, 3) + '/(4,44·50·' + N(co.Py, 5) + ') = ' + N(nl.By, 3) + ' ' + u.T);
+    f('B_{кос} = B_{с}/√2 = ' + N(nl.Bkos, 3) + ' ' + u.T + ';   П_{кос} = √2·П_{с} = ' + N(nl.Pkos, 5) + ' ' + u.m2);
+    p('Удельные потери для стали стержней, ярм и стыков находим по табл. 17 для стали 3405 толщиной 0,30 мм при шихтовке в две пластины:',
+      "Sterjenlar, yarmolar va tutashuvlar po'lati uchun solishtirma isroflarni 17-jadvaldan qalinligi 0,30 mm bo'lgan 3405 po'lat uchun ikki plastinali shixtalashda topamiz:");
+    f('B_{с} = ' + N(nl.Bc, 3) + ' ' + u.T + ': p_{с} = ' + N(nl.pc, 3) + ' ' + u.Wkg + ', p_{с.з} = ' + N(nl.pcz, 0) + ' ' + u.Wm2);
+    f('B_{я} = ' + N(nl.By, 3) + ' ' + u.T + ': p_{я} = ' + N(nl.py, 3) + ' ' + u.Wkg + ', p_{я.з} = ' + N(nl.pyz, 0) + ' ' + u.Wm2);
+    f('B_{кос} = ' + N(nl.Bkos, 3) + ' ' + u.T + ': p_{кос} = ' + N(nl.pkos, 0) + ' ' + u.Wm2);
+    p('Для плоской магнитной системы с косыми стыками на крайних и прямыми на среднем стержне, с многоступенчатым ярмом, без отверстий для шпилек, с отжигом пластин после резки и удалением заусенцев принимаем коэффициенты (табл. 18, 19): k_{п.р} = ' + N(nl.kpr, 2) + '; k_{п.з} = ' + N(nl.kpz, 2) + '; k_{п.я} = ' + N(nl.kpya, 2) + '; k_{п.п} = ' + N(nl.kpp, 3) + '; k_{п.ш} = ' + N(nl.kpsh, 2) + '; k_{п.у} = ' + N(nl.kpy, 2) + '. Потери холостого хода:',
+      "Chetki sterjenlarda qiya va o'rtasida to'g'ri tutashuvli, ko'p pog'onali yarmoli, shpilka teshiklarisiz, kesishdan keyin plastinalari kuydirilgan va g'adir-budurlari olib tashlangan tekis magnit tizimi uchun koeffitsientlarni qabul qilamiz (18, 19-jadvallar): k_{п.р} = " + N(nl.kpr, 2) + '; k_{п.з} = ' + N(nl.kpz, 2) + '; k_{п.я} = ' + N(nl.kpya, 2) + '; k_{п.п} = ' + N(nl.kpp, 3) + '; k_{п.ш} = ' + N(nl.kpsh, 2) + '; k_{п.у} = ' + N(nl.kpy, 2) + '. Salt ishlash isroflari:');
+    f('P_{х} = [k_{п.р}·k_{п.з}·(p_{с}·G_{с} + p_{я}·G\'_{я} − 4·p_{я}·G_{у} + (p_{с} + p_{я})/2·k_{п.у}·G_{у}) + 4·p_{кос}·П_{кос} + 1·p_{с.з}·П_{с} + 2·p_{я.з}·П_{я}]·k_{п.я}·k_{п.п}·k_{п.ш}');
+    f('P_{х} = [' + N(nl.kpr, 2) + '·' + N(nl.kpz, 2) + '·(' + N(nl.pc, 3) + '·' + N(co.Gc, 1) + ' + ' + N(nl.py, 3) + '·' + N(co.Gyp, 1) + ' − 4·' + N(nl.py, 3) + '·' + N(co.Gy, 1) + ' + ' + N((nl.pc + nl.py) / 2, 3) + '·' + N(nl.kpy, 2) + '·' + N(co.Gy, 1) + ') + 4·' + N(nl.pkos, 0) + '·' + N(nl.Pkos, 5) + ' + ' + N(nl.pcz, 0) + '·' + N(co.Pc, 5) + ' + 2·' + N(nl.pyz, 0) + '·' + N(co.Py, 5) + ']·' + N(nl.kpya, 2) + '·' + N(nl.kpp, 3) + '·' + N(nl.kpsh, 2) + ' = ' + N(nl.Px, 0) + ' ' + u.W);
+    chk(nl.Pxdev <= 115, 'P_{х} составляет ' + dev(nl.Pxdev) + ' заданного значения (не должно превышать заданное более чем на 15 %)', "P_{х} berilgan qiymatning " + dev(nl.Pxdev) + " ini tashkil etadi (berilgandan 15 % dan ortiq oshmasligi kerak)");
+
+    // ---------- 9 Ток ХХ ----------
+    h1('Расчёт тока холостого хода', 'Salt ishlash tokini hisoblash');
+    p('По табл. 20 находим удельные намагничивающие мощности:', "20-jadvaldan solishtirma magnitlovchi quvvatlarni topamiz:");
+    f('B_{с} = ' + N(nl.Bc, 3) + ' ' + u.T + ': q_{с} = ' + N(n2.qc, 3) + ' ' + u.VAkg + ', q_{с.з} = ' + N(n2.qcz, 0) + ' ' + u.VAm2);
+    f('B_{я} = ' + N(nl.By, 3) + ' ' + u.T + ': q_{я} = ' + N(n2.qy, 3) + ' ' + u.VAkg + ', q_{я.з} = ' + N(n2.qyz, 0) + ' ' + u.VAm2);
+    f('B_{кос} = ' + N(nl.Bkos, 3) + ' ' + u.T + ': q_{кос} = ' + N(n2.qkos, 0) + ' ' + u.VAm2);
+    p('С учётом принятой конструкции и технологии изготовления принимаем коэффициенты: k_{т.р} = ' + N(n2.ktr, 2) + '; k_{т.з} = ' + N(n2.ktz, 2) + '; k_{т.пл} = ' + N(n2.ktpl, 3) + ' (табл. 21, ширина пластины второго пакета a_{2} ≈ ' + N(co.a2pk, 3) + ' м); k_{т.я} = ' + N(n2.ktya, 2) + '; k_{т.п} = ' + N(n2.ktp, 3) + '; k_{т.ш} = ' + N(n2.ktsh, 2) + '; k_{т.у} = ' + N(n2.kty, 2) + ' (табл. 22). Намагничивающая мощность холостого хода:',
+      "Qabul qilingan konstruksiya va tayyorlash texnologiyasini hisobga olib koeffitsientlarni qabul qilamiz: k_{т.р} = " + N(n2.ktr, 2) + '; k_{т.з} = ' + N(n2.ktz, 2) + '; k_{т.пл} = ' + N(n2.ktpl, 3) + " (21-jadval, ikkinchi paket plastinasi kengligi a_{2} ≈ " + N(co.a2pk, 3) + ' m); k_{т.я} = ' + N(n2.ktya, 2) + '; k_{т.п} = ' + N(n2.ktp, 3) + '; k_{т.ш} = ' + N(n2.ktsh, 2) + '; k_{т.у} = ' + N(n2.kty, 2) + " (22-jadval). Salt ishlashdagi magnitlovchi quvvat:");
+    f('Q_{х} = [k_{т.р}·k_{т.з}·(q_{с}·G_{с} + q_{я}·G\'_{я} − 4·q_{я}·G_{у} + (q_{с} + q_{я})/2·k_{т.у}·k_{т.пл}·G_{у}) + 4·q_{кос}·П_{кос} + 1·q_{с.з}·П_{с} + 2·q_{я.з}·П_{я}]·k_{т.я}·k_{т.п}·k_{т.ш}');
+    f('Q_{х} = [' + N(n2.ktr, 2) + '·' + N(n2.ktz, 2) + '·(' + N(n2.qc, 3) + '·' + N(co.Gc, 1) + ' + ' + N(n2.qy, 3) + '·' + N(co.Gyp, 1) + ' − 4·' + N(n2.qy, 3) + '·' + N(co.Gy, 1) + ' + ' + N((n2.qc + n2.qy) / 2, 3) + '·' + N(n2.kty, 2) + '·' + N(n2.ktpl, 3) + '·' + N(co.Gy, 1) + ') + 4·' + N(n2.qkos, 0) + '·' + N(nl.Pkos, 5) + ' + ' + N(n2.qcz, 0) + '·' + N(co.Pc, 5) + ' + 2·' + N(n2.qyz, 0) + '·' + N(co.Py, 5) + ']·' + N(n2.ktya, 2) + '·' + N(n2.ktp, 3) + '·' + N(n2.ktsh, 2) + ' = ' + N(n2.Qx, 0) + ' ' + u.VA);
+    p('Ток холостого хода и его составляющие:', 'Salt ishlash toki va uning tashkil etuvchilari:');
+    f('i_{о} = Q_{х}/(10·S_{н}) = ' + N(n2.Qx, 0) + '/(10·' + N(S) + ') = ' + N(n2.i0, 3) + ' %');
+    chk(n2.i0dev <= 130, 'i_{о} составляет ' + dev(n2.i0dev) + ' заданного значения (допуск +30 %)', "i_{о} berilgan qiymatning " + dev(n2.i0dev) + ' ini tashkil etadi (ruxsatnoma +30 %)');
+    f('i_{о.а} = P_{х}/(10·S_{н}) = ' + N(nl.Px, 0) + '/(10·' + N(S) + ') = ' + N(n2.i0a, 3) + ' %;   i_{о.р} = √(i_{о}^{2} − i_{о.а}^{2}) = ' + N(n2.i0p, 3) + ' %');
+
+    // ---------- 10 Тепловой расчёт обмоток ----------
+    h1('Тепловой расчёт обмоток', "Chulg'amlarning issiqlik hisobi");
+    p('Внутренний перепад температуры (δ = 0,25·10^{-3} м — толщина изоляции провода на одну сторону; λ_{из} = 0,17 Вт/(м·°С) — теплопроводность бумажной, пропитанной маслом изоляции, табл. 23):',
+      "Ichki harorat farqi (δ = 0,25·10^{-3} m — simning bir tomondagi izolyatsiya qalinligi; λ_{из} = 0,17 Vt/(m·°C) — moy shimdirilgan qog'oz izolyatsiyaning issiqlik o'tkazuvchanligi, 23-jadval):");
+    f(L('НН', 'PK') + ': θ_{о1} = q_{1}·δ/λ_{из} = ' + N(lv.q1, 0) + '·0,25·10^{-3}/0,17 = ' + N(th.th01, 2) + ' ' + u.C);
+    if (hv.type === 'disc') f(L('ВН', 'YuK') + ': θ_{о2} = q_{2}·δ/λ_{из} = ' + N(hv.q2, 0) + '·0,25·10^{-3}/0,17 = ' + N(th.th02, 2) + ' ' + u.C);
+    else {
+      p('Для многослойной цилиндрической обмотки ВН: средняя теплопроводность λ_{ср} и потери в единице объёма p обмотки:', "Ko'p qatlamli silindrik YuK chulg'ami uchun: o'rtacha issiqlik o'tkazuvchanlik λ_{ср} va chulg'am hajm birligidagi isroflar p:");
+      f('λ_{ср} = λ_{из}·(d\' + δ_{мсл})/((d\' − d) + δ_{мсл}) = ' + N(th.lamsr, 3) + ' ' + u.Wmc + ';   p = ' + N(th.pvol, 0) + ' ' + u.Wm3);
+      f(L('ВН', 'YuK') + ': θ_{о2} = p·a^{2}/(8·λ_{ср}) = ' + N(th.th02, 2) + ' ' + u.C);
+    }
+    p('Перепад температуры на поверхности обмоток (k_{1} = 1 — естественное масляное охлаждение; k_{2} = 1,1 для внутренней обмотки НН и 1,0 для наружной обмотки ВН; k_{3} — по табл. 24):',
+      "Chulg'amlar sirtidagi harorat farqi (k_{1} = 1 — tabiiy moyli sovutish; k_{2} = 1,1 ichki PK chulg'ami uchun va 1,0 tashqi YuK chulg'ami uchun; k_{3} — 24-jadvaldan):");
+    f(L('НН', 'PK') + ': θ_{о.м1} = k_{1}·k_{2}·k_{3}·0,35·q_{1}^{0,6} = 1·1,1·' + N(th.k31, 2) + '·0,35·' + N(lv.q1, 0) + '^{0,6} = ' + N(th.thom1, 2) + ' ' + u.C + '   (h_{к}/a_{1} = ' + N(th.r1, 3) + ')');
+    if (hv.type === 'disc') f(L('ВН', 'YuK') + ': θ_{о.м2} = k_{1}·k_{2}·k_{3}·0,35·q_{2}^{0,6} = 1·1,0·' + N(th.k32, 2) + '·0,35·' + N(hv.q2, 0) + '^{0,6} = ' + N(th.thom2, 2) + ' ' + u.C + '   (h_{к}/a_{2} = ' + N(th.r2, 3) + ')');
+    else f(L('ВН', 'YuK') + ': θ_{о.м2} = 0,285·q_{2}^{0,6} = 0,285·' + N(hv.q2, 0) + '^{0,6} = ' + N(th.thom2, 2) + ' ' + u.C);
+    p('Полный средний перепад температуры от обмотки к маслу:', "Chulg'amdan moyga to'liq o'rtacha harorat farqi:");
+    f(L('НН', 'PK') + ': θ_{о.м.ср1} = θ_{о1} + θ_{о.м1} = ' + N(th.th01, 2) + ' + ' + N(th.thom1, 2) + ' = ' + N(th.thsr1, 2) + ' ' + u.C);
+    f(L('ВН', 'YuK') + ': θ_{о.м.ср2} = θ_{о2} + θ_{о.м2} = ' + N(th.th02, 2) + ' + ' + N(th.thom2, 2) + ' = ' + N(th.thsr2, 2) + ' ' + u.C);
+
+    // ---------- 11 Бак ----------
+    h1('Тепловой расчёт бака', 'Bakning issiqlik hisobi');
+    p('По табл. 25 в соответствии с мощностью трансформатора выбираем конструкцию гладкого бака с навесными радиаторами ' + (tk.radType === 'T30' ? 'с гнутыми трубами (двойные радиаторы, табл. 30)' : 'с прямыми трубами в два ряда (табл. 28)') + '. Изоляционные расстояния отводов определяем до прессующей балки верхнего ярма и до стенки бака; внешние габариты прессующих балок принимаем равными внешнему габариту обмотки ВН.',
+      "25-jadval bo'yicha transformator quvvatiga mos ravishda " + (tk.radType === 'T30' ? "egilgan quvurli osma radiatorli (qo'sh radiatorlar, 30-jadval)" : "ikki qator to'g'ri quvurli osma radiatorli (28-jadval)") + " silliq bak konstruksiyasini tanlaymiz. Otvodlarning izolyatsiya masofalarini yuqori yarmoning presslovchi balkasigacha va bak devorigacha aniqlaymiz; presslovchi balkalarning tashqi o'lchamlarini YuK chulg'amining tashqi o'lchamiga teng deb olamiz.");
+    p('Изоляционные расстояния (табл. 26): s_{1} = ' + tk.s1 + ' мм — от отвода ВН до стенки бака; s_{2} = ' + tk.s2 + ' мм — от отвода ВН до собственной обмотки; s_{3} = ' + tk.s3 + ' мм — от отвода НН до стенки бака; s_{4} = ' + tk.s4 + ' мм — от отвода НН до обмотки ВН; d_{1} = ' + tk.d1 + ' мм — размер отвода НН (шины); d_{2} = ' + tk.d2 + ' мм — диаметр изолированного отвода ВН.',
+      "Izolyatsiya masofalari (26-jadval): s_{1} = " + tk.s1 + " mm — YuK otvodidan bak devorigacha; s_{2} = " + tk.s2 + " mm — YuK otvodidan o'z chulg'amigacha; s_{3} = " + tk.s3 + " mm — PK otvodidan bak devorigacha; s_{4} = " + tk.s4 + " mm — PK otvodidan YuK chulg'amigacha; d_{1} = " + tk.d1 + " mm — PK otvodi (shina) o'lchami; d_{2} = " + tk.d2 + " mm — YuK izolyatsiyalangan otvodining diametri.");
+    f(L('Ширина бака', 'Bak kengligi') + ': B = D\'\'_{2} + (s_{1} + s_{2} + d_{2} + s_{3} + s_{4} + d_{1})·10^{-3} = ' + N(hv.D2o, 4) + ' + (' + [tk.s1, tk.s2, tk.d2, tk.s3, tk.s4, tk.d1].join(' + ') + ')·10^{-3} = ' + N(tk.B0, 3) + ' ' + u.m);
+    p('Принимаем B = ' + N(tk.B, 2) + ' м при центральном положении активной части в баке.', "Aktiv qism bakda markaziy joylashganda B = " + N(tk.B, 2) + ' m qabul qilamiz.');
+    f(L('Длина бака', 'Bak uzunligi') + ': A = 2·C + B = 2·' + N(co.C, 4) + ' + ' + N(tk.B, 2) + ' = ' + N(tk.A, 3) + ' ' + u.m);
+    f(L('Высота активной части', 'Aktiv qism balandligi') + ': H_{а.ч} = l_{с} + 2·h_{я} + n = ' + N(co.lc, 3) + ' + 2·' + N(tk.hya, 3) + ' + 0,05 = ' + N(tk.Hach, 3) + ' ' + u.m);
+    p('где h_{я} = ' + N(tk.hya, 3) + ' м — высота ярма; n = 0,05 м — толщина бруска между дном бака и нижним ярмом. Минимальное расстояние от ярма до крышки бака по табл. 27: H_{я.к} = ' + N(tk.Hyk, 2) + ' м.',
+      "bu yerda h_{я} = " + N(tk.hya, 3) + " m — yarmo balandligi; n = 0,05 m — bak tubi va pastki yarmo orasidagi brusok qalinligi. 27-jadval bo'yicha yarmodan bak qopqog'igacha eng kichik masofa: H_{я.к} = " + N(tk.Hyk, 2) + ' m.');
+    f('H_{б} = H_{а.ч} + H_{я.к} = ' + N(tk.Hach, 3) + ' + ' + N(tk.Hyk, 2) + ' = ' + N(tk.Hb0, 3) + ' ' + u.m);
+    p('Для развития поверхности охлаждения применяем радиаторы с расстоянием между осями фланцев A_{р} = ' + tk.rad[0] + ' мм и поверхностью труб П_{к.тр} = ' + N(tk.rad[1], 3) + ' м^{2}' + (tk.Pkk ? ', поверхность двух коллекторов П_{к.к} = ' + N(tk.Pkk, 2) + ' м^{2}' : '') + '. Для их установки глубина бака (c_{1} = 0,085 м, c_{2} = 0,1 м — расстояния осей фланцев от нижнего и верхнего срезов стенки):',
+      "Sovutish sirtini oshirish uchun flanslar o'qlari orasidagi masofa A_{р} = " + tk.rad[0] + ' mm va quvurlar sirti П_{к.тр} = ' + N(tk.rad[1], 3) + ' m^{2}' + (tk.Pkk ? ", ikki kollektor sirti П_{к.к} = " + N(tk.Pkk, 2) + ' m^{2}' : '') + " bo'lgan radiatorlarni qo'llaymiz. Ularni o'rnatish uchun bak chuqurligi (c_{1} = 0,085 m, c_{2} = 0,1 m — flans o'qlarining devor pastki va yuqori kesimlaridan masofalari):");
+    f('H_{б} ≥ A_{р} + c_{1} + c_{2} = ' + N(tk.rad[0] / 1000, 3) + ' + 0,085 + 0,1 = ' + N(tk.rad[0] / 1000 + 0.185, 3) + ' ' + u.m + ';   ' + L('принимаем', 'qabul qilamiz') + ' H_{б} = ' + N(tk.Hb, 2) + ' ' + u.m);
+    p('Допустимое превышение средней температуры масла над воздухом для наиболее нагретой обмотки:', "Eng qizigan chulg'am uchun moy o'rtacha haroratining havodan ruxsat etilgan oshishi:");
+    f('θ_{м.в} = 65 − θ_{о.м.ср} = 65 − ' + N(tk.thmax, 2) + ' = ' + N(65 - tk.thmax, 2) + ' ' + u.C + (tk.thmvLim ? L(' → ограничиваем 50 °С (1,2·θ_{м.в} ≤ 60 °С)', " → 50 °C bilan cheklaymiz (1,2·θ_{м.в} ≤ 60 °C)") : ';   1,2·θ_{м.в} = ' + N(1.2 * tk.thmv, 1) + ' < 60 ' + u.C));
+    p('Принимая перепад температуры на внутренней поверхности стенки бака θ_{м.б} = 5 °С и запас 2 °С:', "Bak devori ichki sirtidagi harorat farqini θ_{м.б} = 5 °C va 2 °C zaxira deb qabul qilib:");
+    f('θ_{б.в} = θ_{м.в} − θ_{м.б} − 2 = ' + N(tk.thmv, 2) + ' − 5 − 2 = ' + N(tk.thbv, 2) + ' ' + u.C);
+    p('Поверхность конвекции гладкой стенки бака и ориентировочная поверхность излучения (k = 1,5 для бака с навесными радиаторами):', "Bak silliq devorining konveksiya sirti va taxminiy nurlanish sirti (osma radiatorli bak uchun k = 1,5):");
+    f('П_{к.гл} = H_{б}·[2·(A − B) + π·B] = ' + N(tk.Hb, 2) + '·[2·(' + N(tk.A, 3) + ' − ' + N(tk.B, 2) + ') + 3,14·' + N(tk.B, 2) + '] = ' + N(tk.Pkgl, 2) + ' ' + u.m2);
+    f('П_{и} = k·П_{к.гл} = 1,5·' + N(tk.Pkgl, 2) + ' = ' + N(tk.Pi, 2) + ' ' + u.m2);
+    p('Ориентировочная необходимая поверхность конвекции:', 'Taxminiy zarur konveksiya sirti:');
+    f('П\'_{к} = 1,05·(P_{к} + P_{х})/(2,5·θ_{б.в}^{1,25}) − 1,12·П_{и} = 1,05·(' + N(sc.Pkn, 0) + ' + ' + N(nl.Px, 0) + ')/(2,5·' + N(tk.thbv, 2) + '^{1,25}) − 1,12·' + N(tk.Pi, 2) + ' = ' + N(tk.Pkreq, 2) + ' ' + u.m2);
+    p('Поверхность крышки бака (0,16 — удвоенная ширина верхней рамы бака, 0,5 — учёт закрытия вводами и арматурой):', "Bak qopqog'ining sirti (0,16 — bak yuqori ramasining ikkilangan kengligi, 0,5 — kiritmalar va armatura bilan yopilishini hisobga oladi):");
+    f('П_{к.кр} = 0,5·[(A − B)·(B + 0,16) + π·(B + 0,16)^{2}/4] = ' + N(tk.Pkkr, 3) + ' ' + u.m2);
+    f('ΣП_{к.р} = П\'_{к} − П_{к.гл} − П_{к.кр} = ' + N(tk.Pkreq, 2) + ' − ' + N(tk.Pkgl, 2) + ' − ' + N(tk.Pkkr, 3) + ' = ' + N(tk.SPkr, 2) + ' ' + u.m2);
+    p('Поверхность конвекции одного радиатора, приведённая к поверхности гладкой стенки (k_{ф} = ' + N(tk.kf, 2) + ', табл. 29):', "Bitta radiatorning silliq devor sirtiga keltirilgan konveksiya sirti (k_{ф} = " + N(tk.kf, 2) + ', 29-jadval):');
+    f('П_{к.р} = k_{ф}·П_{к.тр} + П_{к.к} = ' + N(tk.kf, 2) + '·' + N(tk.rad[1], 3) + ' + ' + N(tk.Pkk, 2) + ' = ' + N(tk.Pkr1, 2) + ' ' + u.m2);
+    f('n_{р} = ΣП_{к.р}/П_{к.р} = ' + N(tk.SPkr, 2) + '/' + N(tk.Pkr1, 2) + ' = ' + N(tk.SPkr / tk.Pkr1, 2) + ';   ' + L('принимаем', 'qabul qilamiz') + ' n_{р} = ' + tk.nr);
+    B.push({ t: 'img', key: 'tank' });
+    f('П_{к} = n_{р}·П_{к.р} + П_{к.гл} + П_{к.кр} = ' + tk.nr + '·' + N(tk.Pkr1, 2) + ' + ' + N(tk.Pkgl, 2) + ' + ' + N(tk.Pkkr, 3) + ' = ' + N(tk.Pk, 1) + ' ' + u.m2);
+
+    // ---------- 12 Превышения ----------
+    h1('Превышения температуры масла и обмоток над воздухом', "Moy va chulg'amlar haroratining havodan oshishi");
+    p('Среднее превышение температуры наружной поверхности бака (труб) над температурой воздуха:', 'Bak (quvurlar) tashqi sirti haroratining havo haroratidan o\'rtacha oshishi:');
+    f('θ_{б.в} = [1,05·(P_{к} + P_{х})/(2,8·П_{и} + 2,5·П_{к})]^{0,8} = [' + N(tk.Ptot, 0) + '/(2,8·' + N(tk.Pi, 2) + ' + 2,5·' + N(tk.Pk, 1) + ')]^{0,8} = ' + N(tk.thbv2, 2) + ' ' + u.C);
+    p('Среднее превышение температуры масла вблизи стенки над температурой внутренней поверхности стенки:', "Devor yaqinidagi moy haroratining devor ichki sirti haroratidan o'rtacha oshishi:");
+    f('θ_{м.б} = 0,165·[1,05·(P_{к} + P_{х})/(n_{р}·П_{к.тр} + П_{к.гл} + П_{к.кр})]^{0,6} = 0,165·[' + N(tk.Ptot, 0) + '/(' + tk.nr + '·' + N(tk.rad[1], 3) + ' + ' + N(tk.Pkgl, 2) + ' + ' + N(tk.Pkkr, 3) + ')]^{0,6} = ' + N(tk.thmb, 2) + ' ' + u.C);
+    p('Превышение средней температуры масла над воздухом и превышение в верхних слоях:', "Moy o'rtacha haroratining havodan oshishi va yuqori qatlamlardagi oshish:");
+    f('θ_{м.в} = θ_{м.б} + θ_{б.в} = ' + N(tk.thmb, 2) + ' + ' + N(tk.thbv2, 2) + ' = ' + N(tk.thmv2, 2) + ' ' + u.C);
+    f('θ_{м.в.в} = 1,2·θ_{м.в} = 1,2·' + N(tk.thmv2, 2) + ' = ' + N(tk.thmvv, 2) + ' ' + u.C);
+    chk(tk.thmvv < 60, 'θ_{м.в.в} = ' + N(tk.thmvv, 1) + ' °С ' + (tk.thmvv < 60 ? '<' : '≥') + ' 60 °С', 'θ_{м.в.в} = ' + N(tk.thmvv, 1) + ' °C ' + (tk.thmvv < 60 ? '<' : '≥') + ' 60 °C');
+    p('Превышение средней температуры обмоток над воздухом:', "Chulg'amlar o'rtacha haroratining havodan oshishi:");
+    f(L('НН', 'PK') + ': θ_{о.в1} = θ_{о.м.ср1} + θ_{м.в} = ' + N(th.thsr1, 2) + ' + ' + N(tk.thmv2, 2) + ' = ' + N(tk.thov1, 2) + ' ' + u.C);
+    f(L('ВН', 'YuK') + ': θ_{о.в2} = θ_{о.м.ср2} + θ_{м.в} = ' + N(th.thsr2, 2) + ' + ' + N(tk.thmv2, 2) + ' = ' + N(tk.thov2, 2) + ' ' + u.C);
+    var okT = tk.thov1 < 65 && tk.thov2 < 65 && tk.thmvv < 60;
+    chk(okT, okT ? 'Превышения температуры масла в верхних слоях (< 60 °С) и обмоток (< 65 °С) лежат в пределах допустимого нагрева по ГОСТ 11677-85' : 'Превышения температуры выходят за пределы ГОСТ 11677-85 — требуется увеличить поверхность охлаждения',
+      okT ? "Moy yuqori qatlamlari (< 60 °C) va chulg'amlar (< 65 °C) haroratining oshishi GOST 11677-85 bo'yicha ruxsat etilgan qizish chegarasida" : "Harorat oshishi GOST 11677-85 chegarasidan chiqadi — sovutish sirtini oshirish kerak");
+
+    // ---------- 13 Итоги ----------
+    h1('Основные результаты расчёта', 'Hisobning asosiy natijalari');
+    function row(name, sym, giv, got, unit, tol, ok) { return [name, sym, giv, got, unit, tol, ok ? '✓' : '✗']; }
+    tbl(L('Сравнение с заданными значениями', 'Berilgan qiymatlar bilan taqqoslash'),
+      [L('Параметр', 'Parametr'), L('Обозн.', 'Belgi'), L('Задано', 'Berilgan'), L('Получено', 'Olingan'), L('Ед.', "O'lch."), L('Допуск', 'Ruxsatnoma'), ''],
+      [row(L('Потери КЗ', 'QT isroflari'), 'P_{к}', N(+inp.Pk, 0), N(sc.Pkn, 0) + ' (' + dev(sc.Pkdev) + ')', u.W, '+10 %', sc.Pkdev <= 110),
+        row(L('Напряжение КЗ', 'QT kuchlanishi'), 'u_{к}', N(+inp.uk), N(sc.uk, 2) + ' (' + dev(sc.ukdev) + ')', '%', '±10 %', Math.abs(sc.ukdev - 100) <= 10),
+        row(L('Потери ХХ', 'Salt ishlash isroflari'), 'P_{х}', N(+inp.P0, 0), N(nl.Px, 0) + ' (' + dev(nl.Pxdev) + ')', u.W, '+15 %', nl.Pxdev <= 115),
+        row(L('Ток ХХ', 'Salt ishlash toki'), 'i_{о}', N(+inp.i0), N(n2.i0, 3) + ' (' + dev(n2.i0dev) + ')', '%', '+30 %', n2.i0dev <= 130),
+        row(L('Превышение темп. масла (верх)', 'Moy haroratining oshishi (yuqori)'), 'θ_{м.в.в}', '≤ 60', N(tk.thmvv, 1), u.C, '—', tk.thmvv < 60),
+        row(L('Превышение темп. обмоток', "Chulg'amlar haroratining oshishi"), 'θ_{о.в}', '≤ 65', N(Math.max(tk.thov1, tk.thov2), 1), u.C, '—', Math.max(tk.thov1, tk.thov2) < 65)]);
+    tbl(L('Основные размеры и массы', "Asosiy o'lchamlar va massalar"), [L('Величина', 'Kattalik'), L('Значение', 'Qiymati')], [
+      [L('Диаметр стержня d', 'Sterjen diametri d'), N(m.d, 2) + ' ' + u.m],
+      [L('Высота обмоток l', "Chulg'amlar balandligi l"), N(lv.l1, 3) + ' ' + u.m],
+      [L('Расстояние между осями стержней C', "Sterjenlar o'qlari orasidagi masofa C"), N(co.C, 3) + ' ' + u.m],
+      [L('Обмотка НН: витков / провод', "PK chulg'ami: o'ramlar / sim"), lv.w1 + ' / ' + L('ПБ', 'PB') + ' ' + lv.wire.n + '×(' + N(lv.wire.a, 2) + '×' + N(lv.wire.b, 2) + ')'],
+      [L('Обмотка ВН: витков / провод', "YuK chulg'ami: o'ramlar / sim"), hv.wn2 + ' (' + hv.w2max + ' max) / ' + L('ПБ', 'PB') + ' ' + (hv.type === 'disc' ? hv.wire.np + '×(' + N(hv.wire.a, 2) + '×' + N(hv.wire.b, 2) + ')' : hv.wire.np + '×⌀' + N(hv.wire.dw, 2))],
+      [L('Масса металла обмоток G_{о}', "Chulg'amlar metali massasi G_{о}"), N(R.G.Go, 1) + ' ' + u.kg],
+      [L('Масса провода G_{пр}', 'Sim massasi G_{пр}'), N(R.G.Gpr, 1) + ' ' + u.kg],
+      [L('Масса стали G_{ст}', "Po'lat massasi G_{ст}"), N(co.Gst, 1) + ' ' + u.kg],
+      [L('Габариты бака A×B×H_{б}', 'Bak gabaritlari A×B×H_{б}'), N(tk.A, 2) + '×' + N(tk.B, 2) + '×' + N(tk.Hb, 2) + ' ' + u.m],
+      [L('Радиаторы', 'Radiatorlar'), tk.nr + ' ' + L('шт.', 'dona') + ' (A_{р} = ' + tk.rad[0] + ' ' + u.mm + ')']
+    ]);
+
+    h1('Литература', 'Adabiyotlar');
+    B.push({ t: 'lit', items: [
+      L('Тихомиров П.М. Расчёт трансформаторов: учебное пособие для вузов. — 5-е изд., перераб. и доп. — М.: Энергоатомиздат, 1986. — 528 с.', "Tixomirov P.M. Transformatorlarni hisoblash: oliy o'quv yurtlari uchun o'quv qo'llanma. — 5-nashr. — M.: Energoatomizdat, 1986. — 528 b."),
+      L('Пирматов Н.Б., Якубова Д.К. Электрические машины. Курсовой проект. Методические указания. — Ташкент: ТашГТУ, 2022.', "Pirmatov N.B., Yakubova D.K. Elektr mashinalari. Kurs loyihasi. Uslubiy ko'rsatmalar. — Toshkent: ToshDTU, 2022."),
+      L('Тюков В.А., Савилова Э.Е., Темлякова З.С. Электрические машины. Трансформаторы: учебное пособие. — Новосибирск: НГТУ, 2002. — 116 с.', "Tyukov V.A., Savilova E.E., Temlyakova Z.S. Elektr mashinalari. Transformatorlar: o'quv qo'llanma. — Novosibirsk: NGTU, 2002. — 116 b."),
+      L('Гончарук А.И. Расчёт и конструирование трансформаторов. — М.: Энергоатомиздат, 1990. — 256 с.', "Goncharuk A.I. Transformatorlarni hisoblash va loyihalash. — M.: Energoatomizdat, 1990. — 256 b."),
+      L('ГОСТ 11677-85. Трансформаторы силовые. Общие технические условия.', 'GOST 11677-85. Kuch transformatorlari. Umumiy texnik shartlar.')
+    ] });
+    return B;
+  }
+
+  function titleInfo(R, lang, meta) {
+    var uz = lang === 'uz', S = +R.inp.S, cls = R.e.cls2;
+    var type = (R.Cu ? (uz ? 'TM' : 'ТМ') : (uz ? 'TMA' : 'ТМА')) + '-' + S + '/' + cls;
+    return {
+      type: type,
+      ministry: uz ? "O'ZBEKISTON RESPUBLIKASI OLIY TA'LIM, FAN VA INNOVATSIYALAR VAZIRLIGI" : 'МИНИСТЕРСТВО ВЫСШЕГО ОБРАЗОВАНИЯ, НАУКИ И ИННОВАЦИЙ РЕСПУБЛИКИ УЗБЕКИСТАН',
+      univ: uz ? 'ISLOM KARIMOV NOMIDAGI TOSHKENT DAVLAT TEXNIKA UNIVERSITETI' : 'ТАШКЕНТСКИЙ ГОСУДАРСТВЕННЫЙ ТЕХНИЧЕСКИЙ УНИВЕРСИТЕТ ИМЕНИ ИСЛАМА КАРИМОВА',
+      dept: uz ? '«Elektr mashinalari va yuritmalari muhandisligi» kafedrasi' : 'Кафедра «Инженерия электрических машин и приводов»',
+      work: uz ? 'KURS LOYIHASI' : 'КУРСОВОЙ ПРОЕКТ',
+      subj: uz ? '«Elektr mashinalari» fanidan' : 'по предмету «Электрические машины»',
+      topic: uz ? 'Mavzu: Uch fazali ikki chulg\'amli moyli kuch transformatori ' + type + ' ni hisoblash' : 'Тема: Расчёт трёхфазного двухобмоточного масляного силового трансформатора ' + type,
+      done: uz ? 'Bajardi' : 'Выполнил(а)',
+      grp: uz ? 'guruh talabasi' : 'студент(ка) группы',
+      sup: uz ? 'Rahbar' : 'Руководитель',
+      varTxt: uz ? 'Variant' : 'Вариант',
+      city: (uz ? 'Toshkent' : 'Ташкент') + ' – ' + (meta.year || new Date().getFullYear()),
+      contents: uz ? 'Mundarija' : 'Содержание'
+    };
+  }
+
+  var api = { build: build, titleInfo: titleInfo, N: N, UNITS: UNITS };
+  if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.TrReport = api;
+})(this);
+
+/* Эскизы (SVG) для пояснительной записки. Чёрно-белая инженерная графика. */
+(function (root) {
+  'use strict';
+  var N = function (x, d) { return (+x).toFixed(d).replace('.', ','); };
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+  // текст с индексами _{..} и ^{..}
+  function T(x, y, s, o) {
+    o = o || {};
+    var fs = o.fs || 13, anchor = o.anchor || 'middle', out = '', re = /(_\{[^}]*\}|\^\{[^}]*\})/g, parts = String(s).split(re), shift = 0;
+    parts.forEach(function (pt) {
+      if (!pt) return;
+      if (pt[0] === '_' && pt[1] === '{') { out += '<tspan dy="' + (4 - shift) + '" font-size="' + (fs * 0.72) + '">' + esc(pt.slice(2, -1)) + '</tspan>'; shift = 4; }
+      else if (pt[0] === '^' && pt[1] === '{') { out += '<tspan dy="' + (-5 - shift) + '" font-size="' + (fs * 0.72) + '">' + esc(pt.slice(2, -1)) + '</tspan>'; shift = -5; }
+      else { out += '<tspan dy="' + (-shift) + '">' + esc(pt) + '</tspan>'; shift = 0; }
+    });
+    var rot = o.rot ? ' transform="rotate(' + o.rot + ' ' + x + ' ' + y + ')"' : '';
+    return '<text x="' + x + '" y="' + y + '" font-size="' + fs + '" text-anchor="' + anchor + '" font-family="Times New Roman, Times, serif" font-style="italic" fill="#111"' + rot + '>' + out + '</text>';
+  }
+  function line(x1, y1, x2, y2, w, dash) { return '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" stroke="#111" stroke-width="' + (w || 1) + '"' + (dash ? ' stroke-dasharray="' + dash + '"' : '') + '/>'; }
+  function rect(x, y, w, h, fill, sw) { return '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="' + (fill || 'none') + '" stroke="#111" stroke-width="' + (sw || 1.2) + '"/>'; }
+  function arrowH(x1, x2, y, label, above) {
+    var a = 5, s = line(x1, y, x2, y, 0.8);
+    s += '<path d="M' + x1 + ' ' + y + ' l' + a + ' -2.5 v5 z M' + x2 + ' ' + y + ' l' + (-a) + ' -2.5 v5 z" fill="#111"/>';
+    if (label) s += T((x1 + x2) / 2, y + (above === false ? 15 : -5), label, { fs: 12 });
+    return s;
+  }
+  function arrowV(x, y1, y2, label, left) {
+    var a = 5, s = line(x, y1, x, y2, 0.8);
+    s += '<path d="M' + x + ' ' + y1 + ' l-2.5 ' + a + ' h5 z M' + x + ' ' + y2 + ' l-2.5 ' + (-a) + ' h5 z" fill="#111"/>';
+    if (label) s += T(x + (left ? -6 : 6), (y1 + y2) / 2 + 4, label, { fs: 12, anchor: left ? 'end' : 'start' });
+    return s;
+  }
+  var HATCH = '<defs><pattern id="hs" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#555" stroke-width="0.8"/></pattern>' +
+    '<pattern id="hc" width="5" height="5" patternUnits="userSpaceOnUse"><path d="M0 0 L5 5 M5 0 L0 5" stroke="#777" stroke-width="0.5"/></pattern></defs>';
+
+  function insSketch(R, uz) {
+    var i1 = R.ins1, i2 = R.ins2, lv = R.lv, hv = R.hv, m = R.m;
+    var W = 700, H = 360, x0 = 40, top = 40;
+    var mm = [i1.a01, lv.a1 * 1000, i2.a12, hv.a2 * 1000, i2.a22];
+    var tot = mm.reduce(function (a, b) { return a + b; }, 0), k = 480 / tot;
+    var xs = [x0 + 70]; mm.forEach(function (v) { xs.push(xs[xs.length - 1] + v * k); });
+    var yoke = top + 30, l0px = Math.max(36, i2.l02 * 1.1), wy = yoke + l0px;
+    var s = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + W + ' ' + H + '" width="' + W + '" height="' + H + '">' + HATCH;
+    s += '<rect width="' + W + '" height="' + H + '" fill="#fff"/>';
+    s += rect(x0, top, xs[5] + 40 - x0, 30, 'url(#hs)');
+    s += T(x0 + 30, top - 8, uz ? 'Yarmo' : 'Ярмо', { anchor: 'start' });
+    s += rect(x0, top + 30, 70, H - top - 40, 'url(#hs)');
+    s += T(x0 + 35, H - 18, uz ? 'Sterjen' : 'Стержень', { fs: 12 });
+    // НН
+    s += rect(xs[1], wy, xs[2] - xs[1], H - wy - 10, 'url(#hc)', 1.4);
+    s += T((xs[1] + xs[2]) / 2, wy + 40, uz ? 'PK' : 'НН', { fs: 14 });
+    // ВН
+    s += rect(xs[3], wy, xs[4] - xs[3], H - wy - 10, 'url(#hc)', 1.4);
+    s += T((xs[3] + xs[4]) / 2, wy + 40, uz ? 'YuK' : 'ВН', { fs: 14 });
+    // цилиндры
+    s += rect(xs[0] + (i1.a01 - i1.d01) * k * 0.5, wy - i1.lc1 * 0.9, Math.max(2, i1.d01 * k * 0.6), H - wy - 10 + i1.lc1 * 0.9, '#fff', 0.8);
+    s += rect(xs[2] + (i2.a12 - i2.d12) * k * 0.5, wy - i2.lc2 * 0.9, Math.max(2, i2.d12 * k * 0.6), H - wy - 10 + i2.lc2 * 0.9, '#fff', 0.8);
+    // межфазная перегородка
+    s += line(xs[5] - 1, yoke + 6, xs[5] - 1, H - 10, 1, '6 3');
+    s += T(xs[5] + 8, (yoke + H) / 2, uz ? "fazalararo to'siq" : 'междуфазная перегородка', { fs: 11, rot: -90 });
+    var yd = H - 26;
+    s += arrowH(xs[0], xs[1], yd - 22, 'a_{01}=' + N(i1.a01, i1.a01 % 1 ? 1 : 0));
+    s += arrowH(xs[1], xs[2], yd, 'a_{1}=' + N(lv.a1 * 1000, 1));
+    s += arrowH(xs[2], xs[3], yd - 22, 'a_{12}=' + i2.a12);
+    s += arrowH(xs[3], xs[4], yd, 'a_{2}=' + N(hv.a2 * 1000, 1));
+    s += arrowH(xs[4], xs[5], yd - 22, 'a_{22}=' + i2.a22);
+    s += arrowV(xs[2] - 14, yoke, wy, 'l_{01}=' + i1.l01, true);
+    s += arrowV(xs[4] - 14, yoke, wy, 'l_{02}=' + i2.l02, true);
+    s += T(W - 12, H - 6, uz ? "o'lchamlar, mm" : 'размеры, мм', { fs: 11, anchor: 'end' });
+    s += '</svg>';
+    return { svg: s, w: W, h: H, cap: uz ? "1-rasm. Chulg'amlarning izolyatsiya masofalari" : 'Рис. 1. Изоляционные расстояния обмоток' };
+  }
+
+  function coreSketch(R, uz) {
+    var m = R.m, co = R.core, lv = R.lv, hv = R.hv, d = m.d, C = co.C, hy = co.hya, lc = co.lc, l = lv.l1, l02 = R.ins2.l02 / 1000;
+    var Wm = 2 * C + hv.D2o, Hm = lc + 2 * hy;
+    var W = 700, H = 500, padL = 80, padT = 50, k = Math.min((W - 2 * padL) / Wm, (H - 150) / Hm);
+    var cx0 = padL + (W - 2 * padL - Wm * k) / 2 + hv.D2o / 2 * k, yTop = padT;
+    var X = function (v) { return cx0 + v * k; }, Y = function (v) { return yTop + v * k; };
+    var s = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + W + ' ' + H + '" width="' + W + '" height="' + H + '">' + HATCH + '<rect width="' + W + '" height="' + H + '" fill="#fff"/>';
+    var coreL = X(-d / 2 - hy * 0.0), coreR = X(2 * C + d / 2);
+    // ярма
+    s += rect(coreL, Y(0), coreR - coreL, hy * k, 'url(#hs)');
+    s += rect(coreL, Y(hy + lc), coreR - coreL, hy * k, 'url(#hs)');
+    for (var i = 0; i < 3; i++) {
+      var c = i * C;
+      s += rect(X(c - d / 2), Y(hy), d * k, lc * k, 'url(#hs)');
+      var yw = hy + l02;
+      [[-1, 1]].forEach(function () { });
+      [-1, 1].forEach(function (sg) {
+        var a = sg < 0 ? X(c - lv.D1o / 2) : X(c + lv.D1i / 2);
+        s += rect(a, Y(yw), (lv.D1o - lv.D1i) / 2 * k, l * k, '#f3d9a4', 1);
+        var b = sg < 0 ? X(c - hv.D2o / 2) : X(c + hv.D2i / 2);
+        s += rect(b, Y(yw), (hv.D2o - hv.D2i) / 2 * k, l * k, '#cfe0f2', 1);
+      });
+      s += line(X(c), Y(-0.03), X(c), Y(Hm + 0.03), 0.6, '10 3 2 3');
+      s += T(X(c), Y(hy + lc / 2) + 4, ['A', 'B', 'C'][i], { fs: 13 });
+    }
+    s += arrowH(X(0), X(C), Y(-0.05) - 8, 'C = ' + N(C, 3) + (uz ? ' m' : ' м'));
+    s += arrowH(X(C), X(2 * C), Y(-0.05) - 8, 'C = ' + N(C, 3) + (uz ? ' m' : ' м'));
+    var xl = Math.min(coreL, X(-hv.D2o / 2)) - 14;
+    s += arrowV(xl, Y(hy), Y(hy + lc), 'l_{с}=' + N(lc, 3), true);
+    s += arrowV(xl, Y(0), Y(hy), 'h_{я}', true);
+    var xr = X(2 * C + hv.D2o / 2) + 16;
+    s += arrowV(xr, Y(hy + l02), Y(hy + l02 + l), 'l=' + N(l, 3), false);
+    s += arrowH(X(2 * C - hv.D2o / 2), X(2 * C + hv.D2o / 2), Y(Hm) + 16, "D''_{2}=" + N(hv.D2o, 3), false);
+    s += arrowH(X(C - d / 2), X(C + d / 2), Y(Hm) + 16, 'd=' + N(d, 2), false);
+    // легенда
+    var ly = H - 12;
+    s += rect(padL, ly - 10, 18, 11, '#f3d9a4', 1) + T(padL + 24, ly, uz ? "PK chulg'ami" : 'обмотка НН', { fs: 12, anchor: 'start' });
+    s += rect(padL + 150, ly - 10, 18, 11, '#cfe0f2', 1) + T(padL + 174, ly, uz ? "YuK chulg'ami" : 'обмотка ВН', { fs: 12, anchor: 'start' });
+    s += rect(padL + 300, ly - 10, 18, 11, 'url(#hs)', 1) + T(padL + 324, ly, uz ? "po'lat 3405, 0,30 mm" : 'сталь 3405, 0,30 мм', { fs: 12, anchor: 'start' });
+    s += '</svg>';
+    return { svg: s, w: W, h: H, cap: uz ? '2-rasm. Chulg\'amli magnit tizimi eskizi (old ko\'rinish), o\'lchamlar m da' : 'Рис. 2. Эскиз магнитной системы с обмотками (вид спереди), размеры в м' };
+  }
+
+  function tankSketch(R, uz) {
+    var tk = R.tank, co = R.core, hv = R.hv, A = tk.A, Bw = tk.B, C = co.C;
+    var nr = tk.nr, depth = 0.32;
+    var Wm = A + 0.2, Hm = Bw + 2 * depth + 0.1;
+    var W = 700, H = 380, k = Math.min((W - 120) / Wm, (H - 90) / Hm);
+    var ox = (W - A * k) / 2, oy = (H - Bw * k) / 2 + 6;
+    var X = function (v) { return ox + v * k; }, Y = function (v) { return oy + v * k; };
+    var s = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + W + ' ' + H + '" width="' + W + '" height="' + H + '">' + '<rect width="' + W + '" height="' + H + '" fill="#fff"/>';
+    var r = Bw / 2;
+    // радиаторы
+    var perSide = [Math.ceil(nr / 2), Math.floor(nr / 2)];
+    var span = A - Bw;
+    [0, 1].forEach(function (side) {
+      var n = perSide[side]; if (!n) return;
+      for (var j = 0; j < n; j++) {
+        var cxr = r + span * (n === 1 ? 0.5 : j / (n - 1)) ;
+        var w = Math.min(0.2, span / Math.max(n, 1) * 0.7);
+        var y0 = side === 0 ? -depth : Bw;
+        s += rect(X(cxr - w / 2), Y(y0), w * k, depth * k, '#eef2f5', 1);
+        for (var t = 1; t < 5; t++) s += line(X(cxr - w / 2 + w * t / 5), Y(y0), X(cxr - w / 2 + w * t / 5), Y(y0 + depth), 0.5);
+      }
+    });
+    s += '<path d="M' + X(r) + ' ' + Y(0) + ' H' + X(A - r) + ' A' + r * k + ' ' + r * k + ' 0 0 1 ' + X(A - r) + ' ' + Y(Bw) + ' H' + X(r) + ' A' + r * k + ' ' + r * k + ' 0 0 1 ' + X(r) + ' ' + Y(0) + ' Z" fill="#fff" stroke="#111" stroke-width="1.6"/>';
+    var cx1 = A / 2 - C;
+    for (var i = 0; i < 3; i++) {
+      var cx = cx1 + i * C;
+      s += '<circle cx="' + X(cx) + '" cy="' + Y(r) + '" r="' + hv.D2o / 2 * k + '" fill="#cfe0f2" stroke="#111"/>';
+      s += '<circle cx="' + X(cx) + '" cy="' + Y(r) + '" r="' + R.lv.D1o / 2 * k + '" fill="#f3d9a4" stroke="#111"/>';
+      s += '<circle cx="' + X(cx) + '" cy="' + Y(r) + '" r="' + R.m.d / 2 * k + '" fill="#bbb" stroke="#111"/>';
+    }
+    s += arrowH(X(0), X(A), Y(Bw + depth) + 20, 'A = ' + N(A, 2) + (uz ? ' m' : ' м'), false);
+    s += arrowV(X(A) + 26, Y(0), Y(Bw), 'B = ' + N(Bw, 2) + (uz ? ' m' : ' м'), false);
+    s += arrowH(X(cx1), X(cx1 + C), Y(r) - hv.D2o / 2 * k - 8, 'C');
+    s += T(X(A / 2), Y(-depth) - 8, (uz ? 'Radiatorlar: ' : 'Радиаторы: ') + nr + (uz ? ' dona, A' : ' шт., A') + '_{р} = ' + tk.rad[0] + (uz ? ' mm' : ' мм'), { fs: 12 });
+    s += '</svg>';
+    return { svg: s, w: W, h: H, cap: uz ? '3-rasm. Radiatorli bak eskizi (yuqoridan ko\'rinish)' : 'Рис. 3. Эскиз бака с радиаторами (вид сверху)' };
+  }
+
+  function sketch(R, key, lang) {
+    var uz = lang === 'uz';
+    if (key === 'ins') return insSketch(R, uz);
+    if (key === 'core') return coreSketch(R, uz);
+    return tankSketch(R, uz);
+  }
+  var api = { sketch: sketch };
+  if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.TrSketch = api;
+})(this);
+
+</script>
+<script>
+(function(){
+'use strict';
+var VARIANTS = [
+  {id:'v1', no:1, ru:'Алижонов Зухриддин', uz:'Alijonov Zuhriddin', S:1000, U2:35, U1:0.4, scheme:'Y/D-11', mat:'Cu', uk:6.5, Pk:12200, P0:2000, i0:1.4},
+  {id:'v2', no:2, ru:'Душанова Нигина', uz:'Dushanova Nigina', S:4000, U2:10, U1:0.4, scheme:'Y/Yn-0', mat:'Cu', uk:7.5, Pk:33500, P0:5200, i0:0.9},
+  {id:'v3', no:3, ru:'Собитов Афзал', uz:'Sobitov Afzal', S:630, U2:35, U1:0.4, scheme:'D/Yn-11', mat:'Cu', uk:6.5, Pk:7600, P0:1600, i0:2},
+  {id:'v4', no:4, ru:'Хушматов Хаётбек', uz:'Xushmatov Hayotbek', S:6300, U2:35, U1:3.15, scheme:'Y/Yn-0', mat:'Cu', uk:7.5, Pk:46500, P0:7600, i0:0.8},
+  {id:'ex', no:0, ru:'Пример из методички (2500 кВА)', uz:"Uslubiy ko'rsatmadagi misol (2500 kVA)", S:2500, U2:10, U1:0.4, scheme:'Y/D-11', mat:'Cu', uk:5.5, Pk:22500, P0:3900, i0:1}
+];
+var GROUP = {ru:'52-24 ЭМ', uz:'52-24 EM'};
+var TEACHER = {ru:'Халбутаева А.К.', uz:'Xalbutayeva A.K.'};
+var TX = {
+  ru:{crumb:'Инструменты · Электрические машины', title:'Расчёт силового <span>трансформатора</span> — курсовой проект', inputs:'Исходные данные', variant:'Вариант задания', student:'Студент', group:'Группа', mat:'Материал обмоток', hv:'ВН', lv:'НН', scheme:'Схема и группа соединения', W:'Вт', adv:'Ручная настройка', teacher:'Руководитель', advHint:'Пустые поля — подбор автоматически. Диаметр d и число витков w₁ подбираются перебором по нормализованному ряду, чтобы uк, Pк и Pх были ближе к заданным.', run:'Рассчитать', method:'Методика: П.М. Тихомиров «Расчёт трансформаторов» (1986) и метод. указания ТашГТУ (Пирматов Н.Б., Якубова Д.К., 2022).', foot:'Расчёт выполняется в браузере. Word-файл формируется на вашем устройстве.', cu:'медь', al:'алюминий', custom:'Свой вариант', auto:'авто', tsub:'Трёхфазный двухобмоточный масляный трансформатор', chipPk:'Потери КЗ', chipUk:'Напряжение КЗ', chipPx:'Потери ХХ', chipI0:'Ток ХХ', chipT:'Нагрев обмоток', given:'задано', making:'Формирую Word…', saved:'Файл сохранён.', declined:'Сохранение отменено.', noDl:'Скачивание недоступно в этом окне. Откройте инструмент на energyvibe.uz.', err:'Не удалось подобрать провод для этих данных. Проверьте исходные данные или задайте d вручную.', errDocx:'Не удалось сформировать Word-файл: ', contents:'Содержание'},
+  uz:{crumb:'Vositalar · Elektr mashinalari', title:'Kuch <span>transformatori</span> hisobi — kurs loyihasi', inputs:"Boshlang'ich ma'lumotlar", variant:'Topshiriq varianti', student:'Talaba', group:'Guruh', mat:"Chulg'amlar materiali", hv:'YuK', lv:'PK', scheme:'Ulanish sxemasi va guruhi', W:'Vt', adv:"Qo'lda sozlash", teacher:'Rahbar', advHint:"Bo'sh maydonlar — avtomatik tanlanadi. d diametri va w₁ o'ramlar soni normallashtirilgan qatordan uk, Pk va Px berilganlarga yaqin bo'lishi uchun saralab tanlanadi.", run:'Hisoblash', method:"Uslubiyat: P.M. Tixomirov «Transformatorlarni hisoblash» (1986) va ToshDTU uslubiy ko'rsatmasi (Pirmatov N.B., Yakubova D.K., 2022).", foot:"Hisob brauzerda bajariladi. Word fayl qurilmangizda yaratiladi.", cu:'mis', al:'alyuminiy', custom:"O'z variantim", auto:'avto', tsub:"Uch fazali ikki chulg'amli moyli transformator", chipPk:'QT isroflari', chipUk:'QT kuchlanishi', chipPx:'Salt ishlash isroflari', chipI0:'Salt ishlash toki', chipT:"Chulg'amlar qizishi", given:'berilgan', making:'Word tayyorlanmoqda…', saved:'Fayl saqlandi.', declined:'Saqlash bekor qilindi.', noDl:"Bu oynada yuklab olish mavjud emas. Vositani energyvibe.uz saytida oching.", err:"Bu ma'lumotlar uchun sim tanlab bo'lmadi. Ma'lumotlarni tekshiring yoki d ni qo'lda bering.", errDocx:"Word fayl yaratib bo'lmadi: ", contents:'Mundarija'}
+};
+var lang = 'uz', R = null, touchedTeacher = false;
+var $ = function(id){ return document.getElementById(id); };
+var DSER = [0.19,0.20,0.21,0.22,0.23,0.24,0.25,0.26,0.27,0.28,0.29,0.30,0.31,0.32,0.33,0.34,0.35,0.36,0.37,0.38,0.39,0.40,0.42,0.45,0.48,0.50,0.53,0.56];
+function store(k,v){ try{ localStorage.setItem('trcalc:'+k, JSON.stringify(v)); }catch(e){} }
+function load(k){ try{ var v = localStorage.getItem('trcalc:'+k); return v ? JSON.parse(v) : null; }catch(e){ return null; } }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function mk(s){ return esc(s).replace(/_\{([^}]*)\}/g,'<sub>$1</sub>').replace(/\^\{([^}]*)\}/g,'<sup>$1</sup>'); }
+var CYR = {'а':'a','б':'b','в':'v','г':'g','д':'d','е':'e','ё':'yo','ж':'j','з':'z','и':'i','й':'y','к':'k','л':'l','м':'m','н':'n','о':'o','п':'p','р':'r','с':'s','т':'t','у':'u','ф':'f','х':'x','ц':'ts','ч':'ch','ш':'sh','щ':'sh','ъ':"'",'ы':'i','ь':'','э':'e','ю':'yu','я':'ya','ў':"o'",'қ':'q','ғ':"g'",'ҳ':'h'};
+function translit(s){ return String(s).replace(/[А-Яа-яЁёЎўҚқҒғҲҳ]/g, function(ch){ var lo = ch.toLowerCase(), t = CYR[lo]; if (t === undefined) return ch; return ch === lo ? t : (t.charAt(0).toUpperCase() + t.slice(1)); }); }
+
+function fillStatic(){
+  var t = TX[lang];
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-t]').forEach(function(el){ var k = el.getAttribute('data-t'); if (t[k] !== undefined) el.innerHTML = t[k]; });
+  $('lang-uz').setAttribute('aria-pressed', lang === 'uz'); $('lang-ru').setAttribute('aria-pressed', lang === 'ru');
+  var v = $('variant'), cur = v.value;
+  v.innerHTML = VARIANTS.map(function(x){ return '<option value="'+x.id+'">'+(x.no ? x.no+'. ' : '')+esc(x[lang])+(x.no ? ' — '+x.S+'/'+x.U2 : '')+'</option>'; }).join('') + '<option value="custom">'+esc(t.custom)+'</option>';
+  if (cur) v.value = cur;
+  var m = $('mat'); m.options[0].textContent = t.cu; m.options[1].textContent = t.al;
+  var od = $('ovd'), cd = od.value; od.innerHTML = '<option value="">'+t.auto+'</option>' + DSER.map(function(d){ return '<option>'+d.toFixed(2)+'</option>'; }).join(''); od.value = cd || '';
+  if (!touchedTeacher) $('teacher').value = TEACHER[lang];
+  var g = $('group').value; if (!g || g === GROUP.ru || g === GROUP.uz) $('group').value = GROUP[lang];
+  var vv = VARIANTS.filter(function(x){ return x.id === v.value; })[0]; if (vv && vv.no) $('student').value = vv[lang];
+}
+function applyVariant(id){
+  var x = VARIANTS.filter(function(v){ return v.id === id; })[0]; if (!x) return;
+  ['S','uk','Pk','P0','i0'].forEach(function(k){ $(k).value = x[k]; });
+  $('U2').value = String(x.U2); $('U1').value = String(x.U1); $('scheme').value = x.scheme; $('mat').value = x.mat;
+  $('student').value = x.no ? x[lang] : '';
+  $('ovd').value = ''; $('ovw').value = ''; $('ovB').value = '';
+}
+function readInputs(){
+  var ov = {};
+  if ($('ovd').value) ov.d = +$('ovd').value;
+  if ($('ovw').value) ov.w1 = +$('ovw').value;
+  if ($('ovB').value) ov.Bc = +$('ovB').value;
+  return { S:+$('S').value, U2:+$('U2').value, U1:+$('U1').value, scheme:$('scheme').value, mat:$('mat').value, uk:+$('uk').value, Pk:+$('Pk').value, P0:+$('P0').value, i0:+$('i0').value, ov:ov };
+}
+function meta(lg){
+  var st = $('student').value.trim(), vid = $('variant').value, vv = VARIANTS.filter(function(x){ return x.id === vid; })[0];
+  if (vv && vv.no && (st === vv.ru || st === vv.uz)) st = vv[lg];
+  else if (lg === 'uz') st = translit(st);
+  var grp = $('group').value.trim(); if (grp === GROUP.ru || grp === GROUP.uz) grp = GROUP[lg]; else if (lg === 'uz') grp = translit(grp);
+  var te = $('teacher').value.trim(); if (!touchedTeacher || te === TEACHER.ru || te === TEACHER.uz) te = TEACHER[lg]; else if (lg === 'uz') te = translit(te);
+  return { student: st, group: grp, teacher: te, variant: vv && vv.no ? vv.no : '', year: new Date().getFullYear() };
+}
+
+function chip(k, v, d, state){ return '<div class="chip '+state+'"><span class="k">'+k+'</span><span class="v">'+v+'</span><span class="d">'+d+'</span></div>'; }
+function render(){
+  var t = TX[lang], N = TrReport.N, sheet = $('sheet'), msg = $('msg');
+  msg.hidden = true;
+  if (!R || R.error){ sheet.innerHTML = ''; $('chips').innerHTML = ''; msg.hidden = false; msg.setAttribute('data-k','bad'); msg.textContent = t.err; return; }
+  var ti = TrReport.titleInfo(R, lang, meta(lang));
+  $('ttype').textContent = ti.type;
+  $('tsub').textContent = t.tsub + ' · ' + R.inp.scheme.replace(/D/g,'Δ').replace(/Yn/g, lang === 'uz' ? 'Yn' : 'Yн');
+  var sc = R.sc, nl = R.nl, n2 = R.nl2, tk = R.tank;
+  function st(dev, lim, two){ var x = dev - 100; if (two ? Math.abs(x) <= lim : x <= lim) return Math.abs(x) <= lim*0.5 || (!two && x <= 0) ? 'ok' : 'warn'; return 'bad'; }
+  function dv(x){ return (x - 100 >= 0 ? '+' : '−') + N(Math.abs(x - 100), 1) + ' %'; }
+  var W = lang === 'uz' ? 'Vt' : 'Вт';
+  var tmax = Math.max(tk.thov1, tk.thov2);
+  $('chips').innerHTML =
+    chip(t.chipUk, N(sc.uk,2)+' %', dv(sc.ukdev)+' · '+t.given+' '+N(R.inp.uk)+' %', st(sc.ukdev,10,true)) +
+    chip(t.chipPk, N(sc.Pkn,0)+' '+W, dv(sc.Pkdev)+' · '+t.given+' '+N(R.inp.Pk,0), st(sc.Pkdev,10)) +
+    chip(t.chipPx, N(nl.Px,0)+' '+W, dv(nl.Pxdev)+' · '+t.given+' '+N(R.inp.P0,0), st(nl.Pxdev,15)) +
+    chip(t.chipI0, N(n2.i0,3)+' %', dv(n2.i0dev)+' · '+t.given+' '+N(R.inp.i0)+' %', st(n2.i0dev,30)) +
+    chip(t.chipT, N(tmax,1)+' / '+N(tk.thmvv,1)+' °C', '≤ 65 / ≤ 60 °C', tmax < 65 && tk.thmvv < 60 ? 'ok' : 'bad');
+  var B = TrReport.build(R, lang, meta(lang)), html = [], n1 = 0, n2c = 0;
+  B.forEach(function(b){
+    if (b.t === 'h1'){ var lit = /Литература|Adabiyotlar|Задание|topshiriq/.test(b.s); if (!lit){ n1++; n2c = 0; } html.push('<h2 class="doc-h1">'+(lit ? '' : n1+'. ')+mk(b.s)+'</h2>'); }
+    else if (b.t === 'h2'){ n2c++; html.push('<h3 class="doc-h2">'+n1+'.'+n2c+'. '+mk(b.s)+'</h3>'); }
+    else if (b.t === 'p') html.push('<p>'+mk(b.s)+'</p>');
+    else if (b.t === 'f') html.push('<div class="fm">'+mk(b.s)+'</div>');
+    else if (b.t === 'chk') html.push('<div class="ck'+(b.ok ? '' : ' no')+'">'+(b.ok ? '✓ ' : '✗ ')+mk(b.s)+'</div>');
+    else if (b.t === 'tbl') html.push('<div class="tw"><table>'+(b.title ? '<caption>'+mk(b.title)+'</caption>' : '')+'<thead><tr>'+b.head.map(function(h){ return '<th>'+mk(h)+'</th>'; }).join('')+'</tr></thead><tbody>'+b.rows.map(function(r){ return '<tr>'+r.map(function(c){ return '<td>'+mk(String(c))+'</td>'; }).join('')+'</tr>'; }).join('')+'</tbody></table></div>');
+    else if (b.t === 'img'){ var sk = TrSketch.sketch(R, b.key, lang); html.push('<figure><div class="svgbox">'+sk.svg+'</div><figcaption>'+esc(sk.cap)+'</figcaption></figure>'); }
+    else if (b.t === 'lit') html.push('<ol class="lit">'+b.items.map(function(x){ return '<li>'+mk(x)+'</li>'; }).join('')+'</ol>');
+  });
+  sheet.innerHTML = html.join('');
+}
+function run(){
+  document.body.classList.add('busy');
+  setTimeout(function(){
+    try { R = TrCalc.calc(readInputs()); } catch(e){ R = { error: String(e) }; }
+    render(); document.body.classList.remove('busy');
+    store('inputs', { inp: readInputs(), variant: $('variant').value, student: $('student').value, group: $('group').value });
+  }, 10);
+}
+
+// ---------- Word ----------
+function svgToPng(svg, w, h){
+  return new Promise(function(res, rej){
+    var img = new Image(), scale = 2;
+    img.onload = function(){ var c = document.createElement('canvas'); c.width = w*scale; c.height = h*scale; var g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0,0,c.width,c.height); g.drawImage(img,0,0,c.width,c.height);
+      c.toBlob(function(b){ if(!b) return rej(new Error('png')); b.arrayBuffer().then(res, rej); }, 'image/png'); };
+    img.onerror = function(){ rej(new Error('svg')); };
+    img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+  });
+}
+async function makeDocx(lg){
+  var D = window.docx; if (!D) throw new Error('docx library not loaded');
+  var M = meta(lg), ti = TrReport.titleInfo(R, lg, M), B = TrReport.build(R, lg, M);
+  var FONT = 'Times New Roman';
+  function runs(s, o){ o = o || {}; var out = [], re = /(_\{[^}]*\}|\^\{[^}]*\})/g; String(s).split(re).forEach(function(pt){ if (!pt) return;
+    if (pt.slice(0,2) === '_{') out.push(new D.TextRun({ text: pt.slice(2,-1), subScript: true, italics: o.italics, bold: o.bold, size: o.size, font: FONT }));
+    else if (pt.slice(0,2) === '^{') out.push(new D.TextRun({ text: pt.slice(2,-1), superScript: true, italics: o.italics, bold: o.bold, size: o.size, font: FONT }));
+    else out.push(new D.TextRun({ text: pt, italics: o.italics, bold: o.bold, size: o.size, font: FONT })); }); return out; }
+  function P(children, o){ o = o || {}; return new D.Paragraph(Object.assign({ children: children, spacing: { line: o.line || 360, before: o.before || 0, after: o.after || 0 } }, o.extra || {})); }
+  var C = D.AlignmentType;
+  // титульный лист
+  var tp = [];
+  function cline(txt, o){ o = o || {}; tp.push(P(runs(txt, { bold: o.bold, size: o.size || 28 }), { extra: { alignment: o.al || C.CENTER }, before: o.before || 0, after: o.after || 0 })); }
+  cline(ti.ministry, { bold: true, size: 26 }); cline(ti.univ, { bold: true, size: 26, before: 120 }); cline(ti.dept, { before: 240 });
+  cline(ti.work, { bold: true, size: 40, before: 2200 }); cline(ti.subj, { before: 120 }); cline(ti.topic, { before: 360 });
+  if (M.variant) cline(ti.varTxt + ' № ' + M.variant, { before: 240 });
+  cline(ti.done + ': ' + (lg === 'uz' ? M.group + ' ' + ti.grp : ti.grp + ' ' + M.group), { al: C.RIGHT, before: 1800 }); cline(M.student || '________________', { al: C.RIGHT, bold: true });
+  cline(ti.sup + ': ' + M.teacher, { al: C.RIGHT, before: 240 });
+  cline(ti.city, { before: 2000 });
+  // содержание
+  var body = [], toc = [], n1 = 0, n2c = 0, figs = 0;
+  B.forEach(function(b){ if (b.t === 'h1'){ var lit = /Литература|Adabiyotlar|Задание|topshiriq/.test(b.s); if (!lit) n1++; toc.push((lit ? '' : n1 + '. ') + b.s); } });
+  body.push(P(runs(ti.contents, { bold: true }), { extra: { alignment: C.CENTER }, after: 200 }));
+  toc.forEach(function(x){ body.push(P(runs(x), { line: 300, after: 60 })); });
+  n1 = 0;
+  var first = true;
+  for (var i = 0; i < B.length; i++){
+    var b = B[i];
+    if (b.t === 'h1'){
+      var lit = /Литература|Adabiyotlar|Задание|topshiriq/.test(b.s); if (!lit){ n1++; n2c = 0; }
+      body.push(new D.Paragraph({ children: runs((lit ? '' : n1 + '. ') + b.s, { bold: true }), alignment: C.CENTER, pageBreakBefore: first || lit && i > 5 || /Литература|Adabiyotlar/.test(b.s), spacing: { before: first ? 0 : 360, after: 200, line: 360 }, keepNext: true }));
+      first = false;
+    } else if (b.t === 'h2'){ n2c++; body.push(new D.Paragraph({ children: runs(n1 + '.' + n2c + '. ' + b.s, { bold: true }), spacing: { before: 240, after: 120, line: 360 }, keepNext: true, indent: { firstLine: 709 } })); }
+    else if (b.t === 'p') body.push(new D.Paragraph({ children: runs(b.s), alignment: C.JUSTIFIED, indent: { firstLine: 709 }, spacing: { line: 360 } }));
+    else if (b.t === 'f') body.push(new D.Paragraph({ children: runs(b.s, { italics: true }), indent: { left: 709 }, spacing: { line: 312, before: 40, after: 40 } }));
+    else if (b.t === 'chk') body.push(new D.Paragraph({ children: runs((b.ok ? '✓ ' : '✗ ') + b.s), indent: { left: 709 }, spacing: { line: 312, before: 60, after: 60 } }));
+    else if (b.t === 'tbl'){
+      if (b.title) body.push(new D.Paragraph({ children: runs(b.title, { italics: true, size: 26 }), alignment: C.RIGHT, spacing: { before: 120, after: 60 }, keepNext: true }));
+      var rows = [b.head].concat(b.rows).map(function(r, ri){ return new D.TableRow({ tableHeader: ri === 0, children: r.map(function(c){ return new D.TableCell({ children: [new D.Paragraph({ children: runs(String(c), { bold: ri === 0, size: 24 }), spacing: { line: 260 } })], margins: { top: 40, bottom: 40, left: 80, right: 80 } }); }) }); });
+      body.push(new D.Table({ rows: rows, width: { size: 100, type: D.WidthType.PERCENTAGE } }));
+      body.push(P([new D.TextRun({ text: '', font: FONT })], { after: 80 }));
+    } else if (b.t === 'img'){
+      var sk = TrSketch.sketch(R, b.key, lg), png = await svgToPng(sk.svg, sk.w, sk.h), wpx = 600, hpx = Math.round(sk.h * wpx / sk.w);
+      body.push(new D.Paragraph({ children: [new D.ImageRun({ type: 'png', data: png, transformation: { width: wpx, height: hpx } })], alignment: C.CENTER, spacing: { before: 120 }, keepNext: true }));
+      body.push(new D.Paragraph({ children: runs(sk.cap, { size: 26 }), alignment: C.CENTER, spacing: { after: 160 } }));
+    } else if (b.t === 'lit') b.items.forEach(function(x, k){ body.push(new D.Paragraph({ children: runs((k + 1) + '. ' + x), alignment: C.JUSTIFIED, indent: { firstLine: 709 }, spacing: { line: 360 } })); });
+  }
+  var page = { size: { width: 11906, height: 16838 }, margin: { top: 1134, bottom: 1134, left: 1701, right: 850 } };
+  var doc = new D.Document({
+    creator: 'energyvibe.uz', title: ti.topic, description: ti.work,
+    styles: { default: { document: { run: { font: FONT, size: 28 } } } },
+    sections: [
+      { properties: { page: page }, children: tp },
+      { properties: { page: Object.assign({}, page, { pageNumbers: { start: 2 } }) },
+        footers: { default: new D.Footer({ children: [new D.Paragraph({ alignment: C.CENTER, children: [new D.TextRun({ children: [D.PageNumber.CURRENT], font: FONT, size: 24 })] })] }) },
+        children: body }
+    ]
+  });
+  var blob = await D.Packer.toBlob(doc);
+  var who = (M.student || '').split(/\s+/)[0] || 'student';
+  var fname = (lg === 'uz' ? 'Kurs_loyiha_' : 'Kursovoy_proekt_') + ti.type.replace(/[\/]/g, '-').replace(/ТМА/,'TMA').replace(/ТМ/,'TM') + '_' + translit(who).replace(/[^A-Za-z0-9'_-]/g, '') + '_' + lg.toUpperCase() + '.docx';
+  return { blob: blob, name: fname };
+}
+var dlCap = (window.claude && window.claude.use) ? window.claude.use('downloads').catch(function(){ return null; }) : Promise.resolve(null);
+async function download(lg, btn){
+  var t = TX[lang], msg = $('msg');
+  if (!R || R.error) return;
+  btn.disabled = true; msg.hidden = false; msg.removeAttribute('data-k'); msg.textContent = t.making;
+  try {
+    var f = await makeDocx(lg);
+    var dl = await dlCap;
+    if (dl){
+      try { await dl.save({ filename: f.name, data: f.blob }); msg.textContent = t.saved + ' ' + f.name; }
+      catch(e){ msg.textContent = e && e.code === 'declined' ? t.declined : t.noDl; }
+    } else if (window.claude && window.claude.use){ msg.textContent = t.noDl; }
+    else {
+      var url = URL.createObjectURL(f.blob), a = document.createElement('a');
+      a.href = url; a.download = f.name; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
+      msg.textContent = t.saved + ' ' + f.name;
+    }
+  } catch(e){ msg.setAttribute('data-k','bad'); msg.textContent = t.errDocx + (e && e.message ? e.message : e); }
+  btn.disabled = false;
+}
+
+// ---------- init ----------
+$('lang-uz').addEventListener('click', function(){ lang = 'uz'; store('lang', lang); fillStatic(); render(); });
+$('lang-ru').addEventListener('click', function(){ lang = 'ru'; store('lang', lang); fillStatic(); render(); });
+$('variant').addEventListener('change', function(){ if (this.value !== 'custom') applyVariant(this.value); run(); });
+$('teacher').addEventListener('input', function(){ touchedTeacher = true; });
+$('run').addEventListener('click', run);
+['S','U2','U1','scheme','mat','uk','Pk','P0','i0','ovd','ovw','ovB'].forEach(function(id){ $(id).addEventListener('change', function(){ if (['S','U2','U1','scheme','mat','uk','Pk','P0','i0'].indexOf(id) >= 0 && $('variant').value !== 'custom'){ var x = VARIANTS.filter(function(v){ return v.id === $('variant').value; })[0]; var cur = readInputs(); if (x && (cur.S !== x.S || cur.U2 !== x.U2 || cur.U1 !== x.U1 || cur.scheme !== x.scheme || cur.mat !== x.mat || cur.uk !== x.uk || cur.Pk !== x.Pk || cur.P0 !== x.P0 || cur.i0 !== x.i0)) $('variant').value = 'custom'; } run(); }); });
+$('student').addEventListener('change', function(){ render(); });
+$('dl-uz').addEventListener('click', function(){ download('uz', this); });
+$('dl-ru').addEventListener('click', function(){ download('ru', this); });
+lang = load('lang') || 'uz';
+fillStatic();
+var saved = load('inputs');
+var hashV = (location.hash || '').replace('#','');
+if (hashV && VARIANTS.some(function(v){ return v.id === hashV; })){ $('variant').value = hashV; applyVariant(hashV); }
+else if (saved && saved.inp){
+  $('variant').value = saved.variant || 'custom';
+  var s = saved.inp; ['S','uk','Pk','P0','i0'].forEach(function(k){ $(k).value = s[k]; });
+  $('U2').value = String(s.U2); $('U1').value = String(s.U1); $('scheme').value = s.scheme; $('mat').value = s.mat;
+  if (s.ov){ if (s.ov.d) $('ovd').value = s.ov.d.toFixed(2); if (s.ov.w1) $('ovw').value = s.ov.w1; if (s.ov.Bc) $('ovB').value = s.ov.Bc; }
+  if (saved.student) $('student').value = saved.student; if (saved.group) $('group').value = saved.group;
+} else { $('variant').value = 'v1'; applyVariant('v1'); }
+fillStatic();
+run();
+})();
+</script>
+
+</body>
+</html>
