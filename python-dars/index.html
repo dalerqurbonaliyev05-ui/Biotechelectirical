@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Python Dars</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+<style>
+:root{
+  --bg:#f5f6f8; --panel:#ffffff; --panel2:#f9fafb; --text:#16181d; --muted:#667085; --border:#e3e6eb;
+  --accent:#2563eb; --accent-bg:#eef3ff; --ok:#16a34a; --ok-bg:#ecfdf3; --err:#dc2626; --err-bg:#fef2f2;
+  --warn:#d97706; --warn-bg:#fff7e6; --star:#7c3aed; --star-bg:#f4efff;
+  --btn:#111827; --btn-text:#fff; --code-bg:#ffffff; --console-bg:#0f172a; --console-text:#e2e8f0;
+  --cm-kw:#7c3aed; --cm-str:#15803d; --cm-num:#b45309; --cm-com:#94a3b8; --cm-def:#2563eb; --cm-builtin:#0e7490;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#111317; --panel:#1a1d23; --panel2:#15181d; --text:#eceef2; --muted:#98a2b3; --border:#2b3039;
+    --accent:#60a5fa; --accent-bg:#172338; --ok:#4ade80; --ok-bg:#12261b; --err:#f87171; --err-bg:#2c1517;
+    --warn:#fbbf24; --warn-bg:#2b2111; --star:#a78bfa; --star-bg:#221a37;
+    --btn:#eceef2; --btn-text:#111317; --code-bg:#15181d; --console-bg:#0b0d10;
+    --cm-kw:#c4b5fd; --cm-str:#86efac; --cm-num:#fcd34d; --cm-com:#64748b; --cm-def:#93c5fd; --cm-builtin:#67e8f9;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#111317; --panel:#1a1d23; --panel2:#15181d; --text:#eceef2; --muted:#98a2b3; --border:#2b3039;
+  --accent:#60a5fa; --accent-bg:#172338; --ok:#4ade80; --ok-bg:#12261b; --err:#f87171; --err-bg:#2c1517;
+  --warn:#fbbf24; --warn-bg:#2b2111; --star:#a78bfa; --star-bg:#221a37;
+  --btn:#eceef2; --btn-text:#111317; --code-bg:#15181d; --console-bg:#0b0d10;
+  --cm-kw:#c4b5fd; --cm-str:#86efac; --cm-num:#fcd34d; --cm-com:#64748b; --cm-def:#93c5fd; --cm-builtin:#67e8f9;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,"Segoe UI",Roboto,Inter,sans-serif;font-size:15px}
+body{padding:16px;padding-top:max(16px,env(safe-area-inset-top));padding-bottom:max(16px,env(safe-area-inset-bottom))}
+#app{max-width:1400px;margin:0 auto}
+h1{font-size:20px;margin:0}
+h2{font-size:15px;margin:0 0 10px;font-weight:650}
+.muted{color:var(--muted)}
+.small{font-size:12.5px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px}
+.stack>*+*{margin-top:12px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.spacer{flex:1}
+.btn{background:var(--btn);color:var(--btn-text);border:1px solid transparent;border-radius:10px;padding:9px 14px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.outline{background:transparent;color:var(--text);border-color:var(--border)}
+.btn.blue{background:var(--accent);color:#fff}
+.btn.green{background:var(--ok);color:#fff}
+.btn.red{background:var(--err);color:#fff}
+.btn.warn{background:var(--warn);color:#fff}
+.btn.star{background:var(--star);color:#fff}
+.btn.sm{padding:6px 10px;font-size:13px;border-radius:8px}
+input[type=text],input[type=password],select,textarea{width:100%;background:var(--panel2);color:var(--text);border:1px solid var(--border);border-radius:10px;padding:10px;font-size:14px;font-family:inherit}
+textarea.mono,.mono{font-family:ui-monospace,"JetBrains Mono",Menlo,Consolas,monospace;font-size:13.5px}
+label.lbl{display:block;font-size:12.5px;color:var(--muted);margin:0 0 4px}
+.pill{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;font-size:12px;font-weight:600;background:var(--panel2);border:1px solid var(--border);color:var(--muted)}
+.pill.ok{background:var(--ok-bg);color:var(--ok);border-color:transparent}
+.pill.err{background:var(--err-bg);color:var(--err);border-color:transparent}
+.pill.warn{background:var(--warn-bg);color:var(--warn);border-color:transparent}
+.pill.star{background:var(--star-bg);color:var(--star);border-color:transparent}
+.pill.blue{background:var(--accent-bg);color:var(--accent);border-color:transparent}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted);display:inline-block}
+.dot.on{background:var(--ok)}
+.center{text-align:center}
+.hidden{display:none!important}
+
+/* Kirish ekrani */
+.welcome{max-width:460px;margin:40px auto}
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+.role-btn{padding:26px 10px;font-size:16px;border-radius:14px}
+.role-btn span{display:block;font-size:12.5px;font-weight:500;opacity:.75;margin-top:4px}
+
+/* Umumiy yuqori panel */
+.topbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.topbar .title{display:flex;flex-direction:column;gap:2px}
+
+/* Talaba ishchi maydoni */
+.work{display:grid;grid-template-columns:minmax(260px,380px) 1fr;gap:14px;align-items:start}
+@media (max-width:900px){.work{grid-template-columns:1fr}}
+.problem{white-space:pre-wrap;line-height:1.55;font-size:15px}
+.tabs{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.tab{background:transparent;border:1px solid var(--border);color:var(--text);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.tab.active{background:var(--btn);color:var(--btn-text);border-color:var(--btn)}
+.tab.star{border-color:var(--star);color:var(--star)}
+.tab.star.active{background:var(--star);color:#fff}
+.editor-wrap{border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--code-bg)}
+.editor-wrap.locked{border-color:var(--warn);box-shadow:0 0 0 2px var(--warn-bg)}
+.CodeMirror{height:340px;font-family:ui-monospace,"JetBrains Mono",Menlo,Consolas,monospace;font-size:14px;background:var(--code-bg);color:var(--text)}
+.CodeMirror-gutters{background:var(--panel2);border-right:1px solid var(--border)}
+.CodeMirror-linenumber{color:var(--muted)}
+.CodeMirror-cursor{border-left-color:var(--text)}
+.CodeMirror-selected{background:var(--accent-bg)!important}
+.CodeMirror-focused .CodeMirror-selected{background:var(--accent-bg)!important}
+.cm-s-default .cm-keyword{color:var(--cm-kw);font-weight:600}
+.cm-s-default .cm-string{color:var(--cm-str)}
+.cm-s-default .cm-number{color:var(--cm-num)}
+.cm-s-default .cm-comment{color:var(--cm-com);font-style:italic}
+.cm-s-default .cm-def{color:var(--cm-def)}
+.cm-s-default .cm-builtin{color:var(--cm-builtin)}
+.cm-s-default .cm-variable,.cm-s-default .cm-variable-2,.cm-s-default .cm-property{color:var(--text)}
+.cm-s-default .cm-operator{color:var(--text)}
+.cm-s-default .cm-meta{color:var(--cm-builtin)}
+.CodeMirror-matchingbracket{color:var(--ok)!important;font-weight:700}
+.fallback-editor{width:100%;height:340px;border:0;border-radius:0;resize:vertical;white-space:pre;background:var(--code-bg)}
+.console{background:var(--console-bg);color:var(--console-text);border-radius:10px;padding:12px;min-height:90px;max-height:320px;overflow:auto;white-space:pre-wrap;word-break:break-word;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13.5px;line-height:1.45}
+.console .err{color:#fca5a5}
+.console .info{color:#93c5fd}
+.console .hint{color:#fde68a}
+.console .done{color:#86efac}
+.banner{border-radius:12px;padding:12px 14px;font-size:14px;line-height:1.45}
+.banner.warn{background:var(--warn-bg);color:var(--text);border:1px solid var(--warn)}
+.banner.star{background:var(--star-bg);color:var(--text);border:1px solid var(--star)}
+.banner.blue{background:var(--accent-bg);color:var(--text);border:1px solid var(--accent)}
+.banner.ok{background:var(--ok-bg);color:var(--text);border:1px solid var(--ok)}
+.banner b{font-weight:700}
+
+/* Ustoz paneli */
+.stats{display:flex;gap:8px;flex-wrap:wrap}
+.stat{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:8px 12px;min-width:92px}
+.stat b{display:block;font-size:20px}
+.stat span{font-size:12px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;margin-top:12px}
+.scard{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:10px 12px;cursor:pointer;display:flex;flex-direction:column;gap:6px;text-align:left;font-family:inherit;color:var(--text);transition:border-color .15s}
+.scard:hover{border-color:var(--accent)}
+.scard.off{opacity:.55}
+.scard.help{border-color:var(--warn);box-shadow:0 0 0 2px var(--warn-bg);animation:pulse 1.6s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 5px var(--warn-bg)}}
+.scard .nm{font-weight:650;font-size:14.5px;line-height:1.25}
+.scard .preview{background:var(--panel2);border-radius:8px;padding:6px 8px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;line-height:1.35;height:86px;overflow:hidden;white-space:pre;color:var(--muted)}
+.scard .meta{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+
+/* Ustoz: talaba tafsiloti (to'liq ekran oyna) */
+.overlay{position:fixed;inset:0;background:var(--bg);z-index:50;overflow:auto;padding:16px;padding-top:max(16px,env(safe-area-inset-top))}
+.overlay-inner{max-width:1400px;margin:0 auto}
+.detail{display:grid;grid-template-columns:minmax(260px,380px) 1fr;gap:14px;align-items:start}
+@media (max-width:900px){.detail{grid-template-columns:1fr}}
+
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--btn);color:var(--btn-text);padding:10px 16px;border-radius:10px;font-size:14px;z-index:100;box-shadow:0 6px 24px rgba(0,0,0,.2);max-width:calc(100% - 32px)}
+.empty{padding:40px 10px;text-align:center;color:var(--muted)}
+details summary{cursor:pointer;color:var(--muted);font-size:13px}
+@media (max-width:520px){.role-grid{grid-template-columns:1fr}.stat{min-width:0;flex:1 1 40%}}
+</style>
+</head>
+<body>
+<div id="app"><div class="empty">Yuklanmoqda…</div></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-database-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js"></script>
+<script src="amaliyotlar.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -216,6 +216,11 @@
       "permanent": true
     },
     {
+      "source": "/python-dars",
+      "destination": "/python-dars/",
+      "permanent": true
+    },
+    {
       "source": "/podstansiya-src/:path*",
       "destination": "/podstansiya-simulyatori/",
       "permanent": false
