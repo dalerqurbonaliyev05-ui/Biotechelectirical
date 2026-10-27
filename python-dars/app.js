@@ -399,6 +399,20 @@ function namunaTugmalari(root, am, muharrirga) {
   });
 }
 
+// Muharrirdagi kodni .py fayl qilib kompyuterga yuklab berish
+function kodniYuklab(kod, nom) {
+  if (!String(kod || '').trim()) { toast("Kod bo'sh — yuklab olinadigan narsa yo'q"); return; }
+  const url = URL.createObjectURL(new Blob([kod.endsWith('\n') ? kod : kod + '\n'], { type: 'text/x-python;charset=utf-8' }));
+  const a = document.createElement('a');
+  a.href = url; a.download = nom;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+  toast(`⬇ ${nom} yuklab olindi`);
+}
+function kodFaylNomi(aId, vi, ism, qoshimcha) {
+  const n = String(aId || '').replace(/^a/, '');
+  return `${n}-amaliyot_${qoshimcha ? 'qoshimcha' : 'v' + ((vi ?? 0) + 1)}_${slug(ism) || 'talaba'}.py`;
+}
 const hajmMatn = (b) => (b < 1024 ? b + ' B' : b < 1048576 ? (b / 1024).toFixed(1) + ' KB' : (b / 1048576).toFixed(1) + ' MB');
 const faylBelgi = (n) => (/\.py$/i.test(n) ? '🐍' : /\.(png|jpe?g|gif|svg)$/i.test(n) ? '🖼️' : /\.(xlsx?|csv)$/i.test(n) ? '📊' : /\.json$/i.test(n) ? '🧾' : '📄');
 const MIME = { png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', gif: 'image/gif', svg: 'image/svg+xml', csv: 'text/csv', json: 'application/json', txt: 'text/plain', py: 'text/x-python', xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' };
@@ -608,6 +622,7 @@ function talabaEkrani(t) {
               <button class="btn green" id="runBtn">▶ Ishga tushirish</button>
               <button class="btn outline" id="stopBtn" disabled>■ To'xtatish</button>
               <span class="spacer"></span>
+              <button class="btn outline sm" id="yuklaBtn" title="Kodni .py fayl qilib kompyuterga saqlash">⬇ .py yuklab olish</button>
               <button class="btn outline sm" id="tozalaBtn">Konsolni tozalash</button>
             </div>
             <div class="console" id="konsol"><span class="info">Natija shu yerda chiqadi.</span></div>
@@ -742,6 +757,7 @@ function talabaEkrani(t) {
       runBtn.onclick = run;
       stopBtn.onclick = () => runner().stop('toxtatildi');
       $('#tozalaBtn').onclick = () => konsol.tozala();
+      $('#yuklaBtn').onclick = () => kodniYuklab(cm.getValue(), kodFaylNomi(aId, d.variant, t.ism, tab === 'qoshimcha'));
       $('#yordamBtn').onclick = () => ishRef.update({ yordam: d.yordam ? null : TS });
       $('#tayyorBtn').onclick = () => ishRef.update({ tayyor: d.tayyor ? null : TS });
 
@@ -999,6 +1015,7 @@ function ustozPaneli() {
             <button class="btn warn" id="dTahrir">✏️ Kodni tuzatish</button>
             <button class="btn green" id="dRun">▶ Ishga tushirish</button>
             <button class="btn outline" id="dStop" disabled>■</button>
+            <button class="btn outline sm" id="dYukla" title="Talabaning kodini .py fayl qilib saqlash">⬇ .py</button>
             <span class="spacer"></span>
             <span class="small muted" id="dSaqlash"></span>
           </div>
@@ -1172,6 +1189,10 @@ function ustozPaneli() {
       b.disabled = false; $('#dStop', ov).disabled = true;
     };
     $('#dStop', ov).onclick = () => runner().stop('toxtatildi');
+    $('#dYukla', ov).onclick = () => {
+      const d = ishlar[sid] || {}, p = talabalar[sid] || {};
+      kodniYuklab(cm.getValue(), kodFaylNomi(aId, d.variant, p.ism || d.ism || sid, tab === 'qoshimcha'));
+    };
     $('#dVar', ov).onchange = (e) => {
       // yangi variantning kiruvchi ma'lumotlari qo'yilishi uchun eski saqlangan kirish tozalanadi
       ishRef.update({ variant: +e.target.value, 'fayllar/asosiy/kirish': null });
