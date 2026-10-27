@@ -357,15 +357,9 @@ function masalaHTML(am, vi, q) {
     ${am.topshiriq ? `<div><div class="h3">Topshiriqlar</div><div class="problem">${esc(am.topshiriq)}</div></div>` : ''}
     ${am.eslatma ? `<div class="banner warn small">${esc(am.eslatma)}</div>` : ''}
     ${am.nazariy ? `<button class="nazariy-btn" data-nazariy>📘 Nazariy ma'lumot, formulalar va jadvallar <span>ochish →</span></button>` : ''}
-    ${nm.length ? `<details class="ref"><summary>📄 Namuna dasturlar (${nm.length})</summary>${nm.map((n, i) => `
-      <div class="namuna">
-        <div class="row" style="gap:6px"><b class="mono" style="flex:1;min-width:120px">${esc(n.nomi)}</b>
-          <button class="btn outline sm" data-nm="${i}" data-amal="muharrir" title="Kodni muharrirga qo'yish">Muharrirga</button>
-          <button class="btn outline sm" data-nm="${i}" data-amal="fayl" title="${esc(n.nomi)} nomli fayl qilib saqlash (import qilish yoki o'qish uchun)">Fayl qilib saqlash</button>
-          <button class="btn outline sm" data-nm="${i}" data-amal="nusxa">Nusxa</button></div>
-        ${n.izoh ? `<div class="small muted">${esc(n.izoh)}</div>` : ''}
-        <pre class="code-pre">${esc(n.kod)}</pre>
-      </div>`).join('')}</details>` : ''}`;
+    ${nm.length ? `<details class="ref"><summary>📄 Namuna dasturlar (${nm.length})</summary>
+      <div class="small muted" style="margin-bottom:8px">Namunani o'qing va o'zingiz yozing — kodni nusxalab bo'lmaydi.</div>${nm.map((n, i) => `
+      <button class="nm-btn" data-nmk="${i}"><span class="mono">📄 ${esc(n.nomi)}</span>${n.izoh ? `<span class="small muted">${esc(n.izoh)}</span>` : ''}<span class="nm-och">ko'rish →</span></button>`).join('')}</details>` : ''}`;
 }
 function nazariyOyna(am) {
   const ov = document.createElement('div');
@@ -380,23 +374,72 @@ function nazariyOyna(am) {
   document.addEventListener('keydown', esc_);
   document.body.appendChild(ov);
 }
-function namunaTugmalari(root, am, muharrirga) {
+// Namuna kodi faylda XOR+base64 ko'rinishida saqlanadi (manbada ochiq matn bo'lib turmasin)
+function namunaKodi(n) {
+  if (n.kod) return n.kod;
+  try {
+    const kalit = new TextEncoder().encode('pydars-namuna');
+    const b = Uint8Array.from(atob(n.k64 || ''), (c) => c.charCodeAt(0));
+    return new TextDecoder().decode(b.map((x, i) => x ^ kalit[i % kalit.length]));
+  } catch (_) { return ''; }
+}
+// Kodni matn emas, rasm (canvas) qilib chizadi: belgilab nusxalab bo'lmaydi
+const PY_KALIT = new Set('False None True and as assert async await break class continue def del elif else except finally for from global if import in is lambda nonlocal not or pass raise return try while with yield'.split(' '));
+const PY_ICHKI = new Set('print input int float str len range sum max min abs round enumerate zip list dict tuple set sorted open type isinstance super map filter any all'.split(' '));
+function kodniChiz(konteyner, kod) {
+  const css = getComputedStyle(document.documentElement);
+  const rang = (v, z) => (css.getPropertyValue(v).trim() || z);
+  const R = { matn: rang('--text', '#16181d'), kw: rang('--cm-kw', '#7c3aed'), str: rang('--cm-str', '#15803d'), num: rang('--cm-num', '#b45309'), com: rang('--cm-com', '#94a3b8'), bi: rang('--cm-builtin', '#0e7490'), fon: rang('--code-bg', '#fff') };
+  const shrift = '12.5px ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace';
+  const qatorlar = String(kod).replace(/\t/g, '    ').replace(/\s+$/, '').split('\n');
+  const cv = document.createElement('canvas');
+  const ctx = cv.getContext('2d');
+  ctx.font = shrift;
+  const cw = ctx.measureText('M').width, lh = 18, pad = 10;
+  const w = Math.ceil(Math.max(...qatorlar.map((q) => q.length)) * cw + pad * 2), h = qatorlar.length * lh + pad * 2;
+  const dpr = window.devicePixelRatio || 1;
+  cv.width = w * dpr; cv.height = h * dpr; cv.style.width = w + 'px'; cv.style.height = h + 'px';
+  ctx.scale(dpr, dpr);
+  ctx.fillStyle = R.fon; ctx.fillRect(0, 0, w, h);
+  ctx.font = shrift; ctx.textBaseline = 'middle';
+  const tok = /(#.*$)|([rRbBfF]{0,2}(?:"[^"\\]*(?:\\.[^"\\]*)*"?|'[^'\\]*(?:\\.[^'\\]*)*'?))|(\b\d+(?:\.\d+)?(?:e[-+]?\d+)?\b)|([A-Za-z_][A-Za-z_0-9]*)|(\s+|.)/g;
+  qatorlar.forEach((q, i) => {
+    let x = pad; const y = pad + i * lh + lh / 2; let m;
+    tok.lastIndex = 0;
+    while ((m = tok.exec(q)) && m[0]) {
+      const t = m[0];
+      ctx.fillStyle = m[1] ? R.com : m[2] ? R.str : m[3] ? R.num : m[4] ? (PY_KALIT.has(t) ? R.kw : PY_ICHKI.has(t) ? R.bi : R.matn) : R.matn;
+      ctx.fillText(t, x, y);
+      x += t.length * cw;
+    }
+  });
+  konteyner.innerHTML = '';
+  konteyner.appendChild(cv);
+}
+function namunaTugmalari(root, am) {
   const nb = root.querySelector('[data-nazariy]');
   if (nb) nb.onclick = () => nazariyOyna(am);
-  root.querySelectorAll('[data-nm]').forEach((b) => {
-    const n = (am.namunalar || [])[+b.dataset.nm];
-    if (!n) return;
-    if (b.dataset.amal === 'muharrir' && !muharrirga) { b.remove(); return; }
-    b.onclick = async () => {
-      if (b.dataset.amal === 'nusxa') {
-        try { await navigator.clipboard.writeText(n.kod); toast('Nusxa olindi'); } catch (_) { toast("Nusxa olib bo'lmadi — matnni belgilab nusxalang"); }
-      } else if (b.dataset.amal === 'muharrir') {
-        muharrirga(n.kod);
-      } else {
-        try { await runner().fs('yoz', { nom: n.nomi, matn: n.kod }); toast(`📁 ${n.nomi} fayli saqlandi`); } catch (e) { toast(e.message); }
-      }
-    };
+  root.querySelectorAll('[data-nmk]').forEach((b) => {
+    const n = (am.namunalar || [])[+b.dataset.nmk];
+    if (n) b.onclick = () => namunaOyna(n);
   });
+}
+function namunaOyna(n) {
+  const ov = document.createElement('div');
+  ov.className = 'modal-fon';
+  ov.innerHTML = `<div class="modal" style="max-width:980px">
+    <div class="row"><b class="mono" style="flex:1">📄 ${esc(n.nomi)}</b><button class="btn sm" data-yop>Yopish</button></div>
+    ${n.izoh ? `<div class="small muted" style="margin:4px 0 0">${esc(n.izoh)}</div>` : ''}
+    <div class="small muted" style="margin:4px 0 10px">Namunani o'qing va muharrirga o'zingiz yozing — uni nusxalab bo'lmaydi.</div>
+    <div class="nm-kanvas"></div></div>`;
+  const yop = () => { ov.remove(); document.removeEventListener('keydown', esc_); };
+  const esc_ = (e) => { if (e.key === 'Escape') yop(); };
+  ov.onclick = (e) => { if (e.target === ov || e.target.dataset.yop != null) yop(); };
+  document.addEventListener('keydown', esc_);
+  document.body.appendChild(ov);
+  const el = ov.querySelector('.nm-kanvas');
+  ['contextmenu', 'copy', 'dragstart', 'selectstart'].forEach((ev) => el.addEventListener(ev, (e) => e.preventDefault()));
+  kodniChiz(el, namunaKodi(n));
 }
 
 // Muharrirdagi kodni .py fayl qilib kompyuterga yuklab berish
@@ -667,11 +710,7 @@ function talabaEkrani(t) {
         if (mk !== masalaKalit) {
           masalaKalit = mk;
           $('#masalaBlok').innerHTML = masalaHTML(am, vi, tab === 'qoshimcha' ? q : null);
-          namunaTugmalari($('#masalaBlok'), am, (kod) => {
-            if (qulflangan()) { toast('Ustoz hozir kodingizni tuzatmoqda'); return; }
-            if (cm.getValue().trim() && !confirm("Muharrirdagi kod namuna bilan almashtirilsinmi? (Hozirgi kodingiz o'chadi)")) return;
-            cm.setValue(kod); sync[tab].yozildi(kod); cm.focus();
-          });
+          namunaTugmalari($('#masalaBlok'), am);
         }
         // Tablar
         $('#tablar').innerHTML = `<button class="tab ${tab === 'asosiy' ? 'active' : ''}" data-t="asosiy">Asosiy vazifa</button>` +
@@ -1096,7 +1135,7 @@ function ustozPaneli() {
       if (mk !== masalaKalit) {
         masalaKalit = mk;
         $('#dMasala', ov).innerHTML = masalaHTML(am, vi, tab === 'qoshimcha' ? q : null);
-        namunaTugmalari($('#dMasala', ov), am, tahrir ? (kod) => { cm.setValue(kod); sync[tab].yozildi(kod); } : null);
+        namunaTugmalari($('#dMasala', ov), am);
       }
       // Holat
       $('#dYordamOk', ov).classList.toggle('hidden', !d.yordam);
