@@ -370,6 +370,8 @@ ul, ol { list-style: none; }
 @keyframes mbblink { 50% { opacity: .15; } }
 @media (prefers-reduced-motion: reduce) { .mb-led, .mb-wire { animation: none; } }
 .tile-no { position: absolute; right: 20px; top: 12px; font: 800 2.3rem var(--display); color: transparent; -webkit-text-stroke: 2px currentColor; opacity: .28; }
+.tile-tags { justify-self: start; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.tile-lock { display: inline-flex; align-items: center; gap: 5px; font: 700 .66rem var(--mono); letter-spacing: .08em; text-transform: uppercase; padding: 5px 10px; border-radius: 999px; background: var(--ink); color: #fff; border: 1.5px solid rgba(255, 255, 255, .85); }
 .tile-body { position: relative; display: grid; gap: 8px; }
 .tile-tag { justify-self: start; font: 700 .68rem var(--mono); letter-spacing: .1em; text-transform: uppercase; padding: 4px 11px; border-radius: 999px; background: rgba(255, 255, 255, .7); color: var(--ink); border: 1.5px solid var(--ink); }
 .tile h3 { font: 800 1.2rem / 1.2 var(--display); letter-spacing: -.01em; overflow-wrap: anywhere; }

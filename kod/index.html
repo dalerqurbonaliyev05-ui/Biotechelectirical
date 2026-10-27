@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Kodni kiriting — energyvibe.uz</title>
+    <link rel="icon" type="image/png" href="/rasmlar1/rasm5/rasm4.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;800&family=Manrope:wght@500;600;700;800&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #1b1440;
+            --ink-2: #57507a;
+            --paper: #fffaf6;
+            --line: #ece6f5;
+            --violet: #6d4aff;
+            --pink: #ff5c8a;
+            --amber: #ffb020;
+            --sunset: linear-gradient(120deg, #6d4aff 0%, #ff5c8a 55%, #ffb020 100%);
+            --shadow-lg: 0 30px 70px rgba(80, 50, 160, .22);
+            --display: 'Unbounded', 'Rubik', system-ui, sans-serif;
+            --font: 'Manrope', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            --mono: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+        }
+        * { box-sizing: border-box; margin: 0; }
+        body {
+            min-height: 100vh; min-height: 100dvh;
+            display: grid; place-items: center;
+            padding: 24px 16px;
+            font-family: var(--font); color: var(--ink);
+            background:
+                radial-gradient(900px 500px at 10% -10%, rgba(109, 74, 255, .16), transparent 60%),
+                radial-gradient(700px 500px at 110% 110%, rgba(255, 92, 138, .14), transparent 60%),
+                var(--paper);
+        }
+        .card {
+            width: 100%; max-width: 420px;
+            background: #fff; border: 1.5px solid var(--line); border-radius: 26px;
+            box-shadow: var(--shadow-lg);
+            padding: 34px 28px 28px;
+            position: relative; overflow: hidden;
+        }
+        .card::before { content: ""; position: absolute; inset: 0 0 auto; height: 6px; background: var(--sunset); }
+        .lock {
+            width: 58px; height: 58px; border-radius: 18px;
+            display: grid; place-items: center;
+            background: var(--sunset); color: #fff;
+            margin-bottom: 20px;
+        }
+        h1 { font: 800 1.45rem / 1.2 var(--display); letter-spacing: -.01em; margin-bottom: 8px; }
+        .lead { color: var(--ink-2); font-weight: 500; line-height: 1.55; font-size: .95rem; margin-bottom: 22px; }
+        label { display: block; font: 600 .72rem var(--mono); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 8px; }
+        .field { position: relative; }
+        input[type="password"], input[type="text"] {
+            width: 100%; font: 700 1.1rem var(--mono); letter-spacing: .08em;
+            padding: 14px 48px 14px 16px;
+            border: 2px solid var(--line); border-radius: 14px; background: var(--paper); color: var(--ink);
+            outline: none; transition: border-color .2s, box-shadow .2s;
+        }
+        input:focus { border-color: var(--violet); box-shadow: 0 0 0 4px rgba(109, 74, 255, .14); }
+        .eye {
+            position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+            width: 36px; height: 36px; border: 0; border-radius: 10px; background: transparent; color: var(--ink-2);
+            cursor: pointer; display: grid; place-items: center;
+        }
+        .eye:hover { background: var(--line); }
+        button[type="submit"] {
+            width: 100%; margin-top: 16px; padding: 15px;
+            border: 0; border-radius: 14px; cursor: pointer;
+            font: 800 .95rem var(--font); color: #fff; background: var(--ink);
+            transition: transform .15s, background .2s;
+        }
+        button[type="submit"]:hover { background: var(--violet); }
+        button[type="submit"]:active { transform: scale(.98); }
+        button[type="submit"]:disabled { opacity: .6; cursor: wait; }
+        .xato {
+            display: none; margin-bottom: 16px; padding: 12px 14px; border-radius: 12px;
+            background: #fff0f4; border: 1.5px solid #ffc2d2; color: #b3123f; font-weight: 600; font-size: .9rem; line-height: 1.45;
+        }
+        .xato.show { display: block; }
+        .orqaga { display: inline-block; margin-top: 20px; color: var(--ink-2); font-weight: 600; font-size: .9rem; text-decoration: none; }
+        .orqaga:hover { color: var(--violet); }
+        .lang { position: absolute; top: 18px; right: 18px; display: flex; gap: 4px; }
+        .lang button {
+            border: 1.5px solid var(--line); background: #fff; color: var(--ink-2); border-radius: 999px;
+            font: 600 .66rem var(--mono); padding: 4px 8px; cursor: pointer;
+        }
+        .lang button[aria-pressed="true"] { background: var(--ink); color: #fff; border-color: var(--ink); }
+    </style>
+</head>
+<body>
+    <main class="card">
+        <div class="lang" role="group" aria-label="Til">
+            <button type="button" data-lang="uz">UZ</button>
+            <button type="button" data-lang="ru">RU</button>
+            <button type="button" data-lang="en">EN</button>
+        </div>
+
+        <div class="lock" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10.5" width="16" height="10.5" rx="2.5"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/><circle cx="12" cy="15.5" r="1.3" fill="currentColor"/></svg>
+        </div>
+
+        <h1 data-t="title">Bu loyiha kod bilan himoyalangan</h1>
+        <p class="lead" data-t="lead">Kirish uchun sayt muallifi bergan kodni kiriting. Bir marta kiritsangiz, bu qurilmada 30 kun davomida qayta so‘ralmaydi.</p>
+
+        <div class="xato" id="xato" role="alert"></div>
+
+        <form method="POST" action="/kod/tekshir" id="forma">
+            <input type="hidden" name="next" id="next" value="/">
+            <label for="kod" data-t="label">Kirish kodi</label>
+            <div class="field">
+                <input type="password" id="kod" name="kod" required autocomplete="current-password" autofocus spellcheck="false">
+                <button type="button" class="eye" id="eye" aria-label="Kodni ko‘rsatish">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+            </div>
+            <button type="submit" id="yubor" data-t="submit">Kirish</button>
+        </form>
+
+        <a class="orqaga" href="/#tools" data-t="back">← Vositalarga qaytish</a>
+    </main>
+
+    <script>
+        (function () {
+            var T = {
+                uz: {
+                    title: 'Bu loyiha kod bilan himoyalangan',
+                    lead: 'Kirish uchun sayt muallifi bergan kodni kiriting. Bir marta kiritsangiz, bu qurilmada 30 kun davomida qayta so‘ralmaydi.',
+                    label: 'Kirish kodi', submit: 'Kirish', wait: 'Tekshirilmoqda…', back: '← Vositalarga qaytish',
+                    notogri: 'Kod noto‘g‘ri. Qaytadan urinib ko‘ring.',
+                    sozlanmagan: 'Kirish kodi hali sozlanmagan. Sayt muallifiga murojaat qiling.'
+                },
+                ru: {
+                    title: 'Этот проект защищён кодом',
+                    lead: 'Введите код, который дал автор сайта. После ввода на этом устройстве он не будет запрашиваться 30 дней.',
+                    label: 'Код доступа', submit: 'Войти', wait: 'Проверка…', back: '← Назад к инструментам',
+                    notogri: 'Неверный код. Попробуйте ещё раз.',
+                    sozlanmagan: 'Код доступа ещё не настроен. Обратитесь к автору сайта.'
+                },
+                en: {
+                    title: 'This project is protected by a code',
+                    lead: 'Enter the code the site author gave you. Once entered, it won’t be asked again on this device for 30 days.',
+                    label: 'Access code', submit: 'Enter', wait: 'Checking…', back: '← Back to tools',
+                    notogri: 'Wrong code. Please try again.',
+                    sozlanmagan: 'The access code has not been set up yet. Please contact the site author.'
+                }
+            };
+            var LANG_KEY = 'energyvibe-lang';
+            var lang = 'uz';
+            try { lang = localStorage.getItem(LANG_KEY) || 'uz'; } catch (e) {}
+            if (!T[lang]) lang = 'uz';
+
+            var q = new URLSearchParams(location.search);
+            var nextVal = q.get('next') || '/';
+            if (nextVal.charAt(0) !== '/' || nextVal.indexOf('//') === 0) nextVal = '/';
+            document.getElementById('next').value = nextVal;
+            var xatoKey = q.get('xato');
+
+            function apply(l) {
+                lang = l;
+                var t = T[l];
+                document.documentElement.lang = l;
+                document.querySelectorAll('[data-t]').forEach(function (el) { el.textContent = t[el.getAttribute('data-t')]; });
+                document.querySelectorAll('.lang button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-lang') === l)); });
+                var box = document.getElementById('xato');
+                if (xatoKey && t[xatoKey]) { box.textContent = t[xatoKey]; box.classList.add('show'); }
+            }
+            document.querySelectorAll('.lang button').forEach(function (b) {
+                b.addEventListener('click', function () {
+                    var l = b.getAttribute('data-lang');
+                    try { localStorage.setItem(LANG_KEY, l); } catch (e) {}
+                    apply(l);
+                });
+            });
+            apply(lang);
+
+            var inp = document.getElementById('kod');
+            document.getElementById('eye').addEventListener('click', function () {
+                inp.type = inp.type === 'password' ? 'text' : 'password';
+                inp.focus();
+            });
+            document.getElementById('forma').addEventListener('submit', function () {
+                var btn = document.getElementById('yubor');
+                btn.disabled = true;
+                btn.textContent = T[lang].wait;
+            });
+            // Orqaga tugmasi bilan qaytilganda tugma "kutish" holatida qolib ketmasin.
+            window.addEventListener('pageshow', function () {
+                var btn = document.getElementById('yubor');
+                btn.disabled = false;
+                btn.textContent = T[lang].submit;
+            });
+        })();
+    </script>
+</body>
+</html>
