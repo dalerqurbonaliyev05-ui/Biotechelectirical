@@ -1173,7 +1173,8 @@ function ustozPaneli() {
     };
     $('#dStop', ov).onclick = () => runner().stop('toxtatildi');
     $('#dVar', ov).onchange = (e) => {
-      ishRef.update({ variant: +e.target.value });
+      // yangi variantning kiruvchi ma'lumotlari qo'yilishi uchun eski saqlangan kirish tozalanadi
+      ishRef.update({ variant: +e.target.value, 'fayllar/asosiy/kirish': null });
       toast(`Variant ${+e.target.value + 1} berildi`);
     };
     $('#dYordamOk', ov).onclick = () => ishRef.update({ yordam: null });
