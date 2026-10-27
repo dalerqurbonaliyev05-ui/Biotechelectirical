@@ -96,46 +96,68 @@ function ekranniTozala() {
 
 // ---------------------------------------------------------------- Python (Pyodide, alohida worker'da)
 class PyRunner {
-  constructor() { this.n = 0; this.joriy = null; this.holat = 'yuklanmoqda'; this.kuzat = new Set(); this._yarat(); }
+  constructor() {
+    this.n = 0; this.joriy = null; this.holat = 'yuklanmoqda'; this.kuzat = new Set();
+    this.fayllar = []; this.faylKuzat = new Set(); this.fsKutish = new Map(); this.fsN = 0; this.saqlanadi = false;
+    this._yarat();
+  }
   _yarat() {
     this.holat = 'yuklanmoqda'; this._xabar();
-    this.w = new Worker(new URL('py-worker.js', document.baseURI));
+    this.w = new Worker(new URL('py-worker.js?v=2', document.baseURI));
     this.w.onmessage = (e) => this._msg(e.data);
     this.w.onerror = () => { this.holat = 'xato'; this._xabar(); };
   }
   _xabar() { this.kuzat.forEach((f) => { try { f(this.holat); } catch (_) {} }); }
-  _taymer(j) { j.t0 = performance.now(); j.timer = setTimeout(() => this.stop('vaqt'), VAQT_CHEGARASI); }
+  _taymer(j) { j.t0 = performance.now(); clearTimeout(j.timer); j.timer = setTimeout(() => this.stop('vaqt'), VAQT_CHEGARASI); }
+  _fayllar(list) { this.fayllar = list || []; this.faylKuzat.forEach((f) => { try { f(this.fayllar); } catch (_) {} }); }
   _msg(d) {
+    const j = this.joriy;
     if (d.tur === 'tayyor') {
-      this.holat = 'tayyor'; this._xabar();
-      if (this.joriy && !this.joriy.timer) this._taymer(this.joriy);
+      this.holat = 'tayyor'; this.saqlanadi = !!d.fayllarSaqlanadi; this._xabar();
     } else if (d.tur === 'yuklanmadi') {
       this.holat = 'xato'; this._xabar();
-      if (this.joriy) { const j = this.joriy; this.joriy = null; j.resolve({ ok: false, xato: "Python yuklanmadi. Internetni tekshirib, sahifani yangilang." }); }
-    } else if (d.tur === 'stdout' || d.tur === 'stderr') {
-      if (this.joriy) this.joriy.onChunk(d.matn, d.tur);
+      if (j) { this.joriy = null; j.resolve({ ok: false, xato: "Python yuklanmadi. Internetni tekshirib, sahifani yangilang." }); }
+    } else if (d.tur === 'boshlandi') {
+      if (j && j.id === d.id) this._taymer(j); // vaqt chegarasi kutubxonalar yuklangandan keyin hisoblanadi
+    } else if (d.tur === 'stdout' || d.tur === 'stderr' || d.tur === 'info') {
+      if (j) j.onChunk(d.matn, d.tur);
+    } else if (d.tur === 'rasm') {
+      if (j && j.id === d.id && j.onRasm) j.onRasm(d.data);
+    } else if (d.tur === 'fayllar') {
+      this._fayllar(d.list);
+    } else if (d.tur === 'fsJavob') {
+      const k = this.fsKutish.get(d.sid);
+      if (k) { this.fsKutish.delete(d.sid); d.xato ? k.reject(new Error(d.xato)) : k.resolve(d.natija); }
     } else if (d.tur === 'tugadi') {
-      const j = this.joriy;
       if (!j || j.id !== d.id) return;
       clearTimeout(j.timer); this.joriy = null;
-      j.resolve({ ok: d.ok, xato: d.xato, ms: performance.now() - j.t0 });
+      j.resolve({ ok: d.ok, xato: d.xato, ms: j.timer ? performance.now() - j.t0 : 0 });
     }
   }
-  run(kod, kirish, onChunk) {
+  run(kod, kirish, argv, onChunk, onRasm) {
     if (this.joriy) this.stop('toxtatildi');
     return new Promise((resolve) => {
-      const j = { id: ++this.n, resolve, onChunk, t0: performance.now(), timer: null };
+      const j = { id: ++this.n, resolve, onChunk, onRasm, t0: performance.now(), timer: null };
       this.joriy = j;
-      if (this.holat === 'tayyor') this._taymer(j);
-      this.w.postMessage({ id: j.id, kod, kirish });
+      this.w.postMessage({ tur: 'run', id: j.id, kod, kirish, argv });
     });
   }
   stop(sabab) {
     const j = this.joriy;
     if (!j) return;
     clearTimeout(j.timer); this.joriy = null;
-    this.w.terminate(); this._yarat();
+    this.w.terminate();
+    this.fsKutish.forEach((k) => k.reject(new Error("Python qayta ishga tushirildi")));
+    this.fsKutish.clear();
+    this._yarat();
     j.resolve({ ok: false, toxtatildi: true, sabab, ms: performance.now() - j.t0 });
+  }
+  fs(amal, params = {}) {
+    return new Promise((resolve, reject) => {
+      const sid = ++this.fsN;
+      this.fsKutish.set(sid, { resolve, reject });
+      this.w.postMessage({ tur: 'fs', sid, amal, ...params });
+    }).then((r) => { if (Array.isArray(r)) this._fayllar(r); return r; });
   }
 }
 let pyRunner = null;
@@ -151,6 +173,8 @@ function pyHolatPill(el) {
 }
 
 const MASLAHATLAR = [
+  [/No module named '_?tkinter'/, () => "Tkinter (grafik oyna) brauzerda ishlamaydi. Hisob funksiyalarini shu yerda yozib tekshiring, oynali ilovani esa kompyuteringizdagi Python (IDLE yoki VS Code) da ishga tushiring."],
+  [/FileNotFoundError: .*'([^']+)'/, (m) => `'${m[1]}' fayli topilmadi. Avval uni yarating: generator dasturini ishga tushiring yoki «📁 Fayllar» bo'limida «Yangi fayl» tugmasini bosing. Fayl nomi aynan bir xil bo'lishi kerak.`],
   [/IndentationError|TabError/, () => "Chekinish xatosi: if, for, while, def, else qatoridan keyingi qatorlar 4 ta bo'sh joy bilan ichkariga surilgan bo'lishi kerak, bir blokdagi qatorlar esa bir xil surilishi kerak."],
   [/SyntaxError: expected ':'/, () => "if, elif, else, for, while, def qatorining oxiriga ikki nuqta ( : ) qo'yilmagan."],
   [/SyntaxError: .*(never closed|unexpected EOF|unterminated string)/, () => "Qavs yoki qo'shtirnoq yopilmagan: ( ) [ ] { } va \" \" ' ' juftligini tekshiring."],
@@ -190,17 +214,39 @@ class Konsol {
     this.el.scrollTop = this.el.scrollHeight;
   }
   yangiQator() { if (this.matn && !this.matn.endsWith('\n')) this.qosh('\n'); }
+  rasm(b64) {
+    const img = document.createElement('img');
+    img.src = 'data:image/png;base64,' + b64;
+    img.className = 'kons-rasm';
+    img.alt = 'grafik';
+    img.title = 'Kattalashtirish uchun bosing';
+    img.onclick = () => rasmniOch(img.src);
+    this.el.appendChild(img);
+    this.el.appendChild(document.createElement('span')).dataset.c = '#';
+    this.el.scrollTop = this.el.scrollHeight;
+  }
 }
 
-// Kodni ishga tushirib, natijani konsolga chiqaradi. Natija: { ok, chiqish, xato, ms }
-async function ishgaTushir(kod, kirish, konsol, cm) {
+function rasmniOch(src) {
+  const ov = document.createElement('div');
+  ov.className = 'modal-fon';
+  ov.innerHTML = `<div class="modal" style="max-width:1100px"><div class="row"><b style="flex:1">Grafik</b>
+    <a class="btn outline sm" download="grafik.png" href="${src}">⬇ Yuklab olish</a><button class="btn sm" data-yop>Yopish</button></div>
+    <img src="${src}" style="max-width:100%;margin-top:10px;background:#fff;border-radius:8px"></div>`;
+  ov.onclick = (e) => { if (e.target === ov || e.target.dataset.yop != null) ov.remove(); };
+  document.body.appendChild(ov);
+}
+
+// Kodni ishga tushirib, natijani konsolga chiqaradi. Natija: { ok, chiqish, xato, ms, rasmlar }
+async function ishgaTushir(kod, kirish, argv, konsol, cm) {
   konsol.tozala();
   if (cm) xatoBelgisiniOlib(cm);
   if (!kod.trim()) { konsol.qosh("Kod bo'sh — avval kod yozing.\n", 'info'); return null; }
   if (runner().holat !== 'tayyor') konsol.qosh('Python yuklanmoqda, biroz kuting…\n', 'info');
-  const boshlanish = konsol.matn.length;
-  const r = await runner().run(kod, kirish, (matn, tur) => konsol.qosh(matn, tur === 'stderr' ? 'err' : ''));
-  const chiqish = konsol.matn.slice(boshlanish);
+  let chiqish = '', rasmlar = 0;
+  const r = await runner().run(kod, kirish, argv,
+    (matn, tur) => { if (tur !== 'info') chiqish += matn; konsol.qosh(matn, tur === 'stderr' ? 'err' : tur === 'info' ? 'info' : ''); },
+    (b64) => { rasmlar++; konsol.rasm(b64); });
   konsol.yangiQator();
   if (r.ok) {
     konsol.qosh(`✓ Dastur tugadi (${(r.ms / 1000).toFixed(2)} s)\n`, 'done');
@@ -215,8 +261,9 @@ async function ishgaTushir(kod, kirish, konsol, cm) {
     const q = xatoQatori(r.xato);
     if (cm && q) xatoBelgila(cm, q);
   }
+  if (rasmlar) chiqish += `\n[${rasmlar} ta grafik chizildi]\n`;
   const xato = r.ok ? '' : (r.toxtatildi ? (r.sabab === 'vaqt' ? 'Vaqt tugadi (cheksiz sikl?)' : "To'xtatildi") : r.xato);
-  return { ok: !!r.ok, chiqish, xato, ms: Math.round(r.ms || 0) };
+  return { ok: !!r.ok, chiqish, xato, ms: Math.round(r.ms || 0), rasmlar };
 }
 
 // ---------------------------------------------------------------- kod muharriri
@@ -294,6 +341,116 @@ class Sinxron {
     }).catch(() => { if (this.el) this.el.textContent = "saqlanmadi — internetni tekshiring"; });
   }
   bekor() { clearTimeout(this.timer); this.pending = false; }
+}
+
+// ---------------------------------------------------------------- masala bloki va fayllar paneli
+// Variant ma'lumotlari, topshiriqlar, nazariya va namuna dasturlar
+function masalaHTML(am, vi, q) {
+  if (q) {
+    return `<div class="vbox star"><div class="vbox-sar">⭐ ${esc(q.sarlavha || "Qo'shimcha masala")}</div><div class="problem">${esc(q.matn || '')}</div></div>
+      <div class="small muted">Bu ustoz faqat sizga yuborgan qo'shimcha (qiyinroq) masala. Asosiy vazifa «Asosiy vazifa» tabida qoladi.</div>`;
+  }
+  const vr = vi != null ? am.variantlar[vi % am.variantlar.length] : null;
+  const nm = am.namunalar || [];
+  return `
+    <div class="vbox"><div class="vbox-sar">${vr ? `Variant ${vi + 1} — boshlang'ich ma'lumotlar` : 'Variant tayinlanmoqda…'}</div>${vr ? `<div class="problem">${esc(vr.matn)}</div>` : ''}</div>
+    ${am.topshiriq ? `<div><div class="h3">Topshiriqlar</div><div class="problem">${esc(am.topshiriq)}</div></div>` : ''}
+    ${am.eslatma ? `<div class="banner warn small">${esc(am.eslatma)}</div>` : ''}
+    ${am.nazariy ? `<details class="ref"><summary>📘 Nazariy ma'lumot, formulalar va jadvallar</summary><div class="problem ref-matn">${esc(am.nazariy)}</div></details>` : ''}
+    ${nm.length ? `<details class="ref"><summary>📄 Namuna dasturlar (${nm.length})</summary>${nm.map((n, i) => `
+      <div class="namuna">
+        <div class="row" style="gap:6px"><b class="mono" style="flex:1;min-width:120px">${esc(n.nomi)}</b>
+          <button class="btn outline sm" data-nm="${i}" data-amal="muharrir" title="Kodni muharrirga qo'yish">Muharrirga</button>
+          <button class="btn outline sm" data-nm="${i}" data-amal="fayl" title="${esc(n.nomi)} nomli fayl qilib saqlash (import qilish yoki o'qish uchun)">Fayl qilib saqlash</button>
+          <button class="btn outline sm" data-nm="${i}" data-amal="nusxa">Nusxa</button></div>
+        ${n.izoh ? `<div class="small muted">${esc(n.izoh)}</div>` : ''}
+        <pre class="code-pre">${esc(n.kod)}</pre>
+      </div>`).join('')}</details>` : ''}`;
+}
+function namunaTugmalari(root, am, muharrirga) {
+  root.querySelectorAll('[data-nm]').forEach((b) => {
+    const n = (am.namunalar || [])[+b.dataset.nm];
+    if (!n) return;
+    if (b.dataset.amal === 'muharrir' && !muharrirga) { b.remove(); return; }
+    b.onclick = async () => {
+      if (b.dataset.amal === 'nusxa') {
+        try { await navigator.clipboard.writeText(n.kod); toast('Nusxa olindi'); } catch (_) { toast("Nusxa olib bo'lmadi — matnni belgilab nusxalang"); }
+      } else if (b.dataset.amal === 'muharrir') {
+        muharrirga(n.kod);
+      } else {
+        try { await runner().fs('yoz', { nom: n.nomi, matn: n.kod }); toast(`📁 ${n.nomi} fayli saqlandi`); } catch (e) { toast(e.message); }
+      }
+    };
+  });
+}
+
+const hajmMatn = (b) => (b < 1024 ? b + ' B' : b < 1048576 ? (b / 1024).toFixed(1) + ' KB' : (b / 1048576).toFixed(1) + ' MB');
+const faylBelgi = (n) => (/\.py$/i.test(n) ? '🐍' : /\.(png|jpe?g|gif|svg)$/i.test(n) ? '🖼️' : /\.(xlsx?|csv)$/i.test(n) ? '📊' : /\.json$/i.test(n) ? '🧾' : '📄');
+const MIME = { png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', gif: 'image/gif', svg: 'image/svg+xml', csv: 'text/csv', json: 'application/json', txt: 'text/plain', py: 'text/x-python', xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' };
+const mimeTuri = (n) => MIME[(String(n).split('.').pop() || '').toLowerCase()] || 'application/octet-stream';
+
+function faylPaneli(el) {
+  el.innerHTML = `<div class="row"><h2 style="margin:0;flex:1">📁 Fayllar</h2><button class="btn outline sm" data-yangi>+ Yangi fayl</button></div>
+    <div class="small muted" data-izoh style="margin-top:4px"></div><div class="fayl-list" data-list></div>`;
+  const chiz = (list) => {
+    if (!el.isConnected) { runner().faylKuzat.delete(chiz); return; }
+    el.querySelector('[data-izoh]').textContent = runner().saqlanadi
+      ? "Dastur yaratgan va siz qo'shgan fayllar shu brauzerda saqlanadi (open(), csv, json, savefig…)."
+      : "Fayllar sahifa yangilanguncha saqlanadi.";
+    const l = el.querySelector('[data-list]');
+    l.innerHTML = list.length
+      ? list.map((f) => `<button class="fayl" data-f="${esc(f.nom)}"><span class="mono">${faylBelgi(f.nom)} ${esc(f.nom)}</span><span class="small muted">${hajmMatn(f.hajm)}</span></button>`).join('')
+      : `<div class="small muted">Hozircha fayl yo'q.</div>`;
+    l.querySelectorAll('[data-f]').forEach((b) => { b.onclick = () => faylOyna(b.dataset.f); });
+  };
+  runner().faylKuzat.add(chiz);
+  chiz(runner().fayllar);
+  el.querySelector('[data-yangi]').onclick = () => faylOyna(null);
+}
+
+async function faylOyna(nom) {
+  const yangi = !nom;
+  const rasmmi = /\.(png|jpe?g|gif|svg)$/i.test(nom || '');
+  let data = null, matn = '', matnmi = true;
+  if (!yangi) {
+    try { data = await runner().fs('oqi', { nom }); } catch (e) { toast(e.message); return; }
+    if (!rasmmi) { try { matn = new TextDecoder('utf-8', { fatal: true }).decode(data); } catch (_) { matnmi = false; } }
+  }
+  const url = data ? URL.createObjectURL(new Blob([data], { type: mimeTuri(nom) })) : null;
+  const katta = matnmi && matn.length > 300000;
+  const ov = document.createElement('div');
+  ov.className = 'modal-fon';
+  ov.innerHTML = `<div class="modal stack">
+    <div class="row"><b style="flex:1;word-break:break-all">${yangi ? 'Yangi fayl' : faylBelgi(nom) + ' ' + esc(nom)}</b>
+      ${url ? `<a class="btn outline sm" download="${esc(nom.split('/').pop())}" href="${url}">⬇ Yuklab olish</a>` : ''}
+      ${!yangi ? `<button class="btn red sm" data-och>O'chirish</button>` : ''}
+      <button class="btn sm" data-yop>Yopish</button></div>
+    ${yangi ? `<div><label class="lbl">Fayl nomi</label><input type="text" data-nom placeholder="masalan: tarmoq_v7.json yoki energetika.py" spellcheck="false"></div>` : ''}
+    ${rasmmi ? `<img src="${url}" alt="${esc(nom)}" style="max-width:100%;background:#fff;border-radius:8px">`
+      : matnmi ? `<textarea class="mono" data-matn rows="18" spellcheck="false" ${katta ? 'readonly' : ''}></textarea>
+          <div class="row"><button class="btn blue sm" data-saqla ${katta ? 'disabled' : ''}>Saqlash</button>
+          <span class="small muted">${data ? hajmMatn(data.length) : ''}${katta ? ' — juda katta, faqat ko\'rish mumkin' : ''}</span></div>`
+      : `<p class="muted">Bu fayl matn emas (masalan, Excel). Uni yuklab olib, kompyuteringizda oching.</p>`}
+  </div>`;
+  document.body.appendChild(ov);
+  const yop = () => { if (url) URL.revokeObjectURL(url); ov.remove(); };
+  ov.onclick = (e) => { if (e.target === ov) yop(); };
+  ov.querySelector('[data-yop]').onclick = yop;
+  const ta = ov.querySelector('[data-matn]');
+  if (ta) { ta.value = katta ? matn.slice(0, 300000) : matn; ta.onkeydown = (e) => { if (e.key === 'Tab') { e.preventDefault(); ta.setRangeText('    ', ta.selectionStart, ta.selectionEnd, 'end'); } }; }
+  const sq = ov.querySelector('[data-saqla]');
+  if (sq) sq.onclick = async () => {
+    const n = yangi ? ov.querySelector('[data-nom]').value.trim() : nom;
+    if (!n) { toast('Fayl nomini yozing'); return; }
+    if (yangi && runner().fayllar.some((f) => f.nom === n) && !confirm(`${n} allaqachon bor. Ustidan yozilsinmi?`)) return;
+    try { await runner().fs('yoz', { nom: n, matn: ta.value }); toast(`📁 ${n} saqlandi`); yop(); } catch (e) { toast(e.message); }
+  };
+  const och = ov.querySelector('[data-och]');
+  if (och) och.onclick = async () => {
+    if (!confirm(`${nom} o'chirilsinmi?`)) return;
+    try { await runner().fs('ochir', { nom }); yop(); } catch (e) { toast(e.message); }
+  };
+  if (yangi) ov.querySelector('[data-nom]').focus();
 }
 
 // ---------------------------------------------------------------- 1) rol tanlash
@@ -416,20 +573,22 @@ function talabaEkrani(t) {
         <div id="bannerlar" class="stack" style="margin-bottom:12px"></div>
         <div class="work">
           <div class="card stack">
-            <h2 id="masalaSarl">Masala</h2>
-            <div class="problem" id="masala">Variant tayinlanmoqda…</div>
             <div class="row">
               <button class="btn warn sm" id="yordamBtn">✋ Yordam so'rash</button>
               <button class="btn outline sm" id="tayyorBtn">✅ Bajardim</button>
+              <span class="small muted" id="holatMatn"></span>
             </div>
-            <div class="small muted" id="holatMatn"></div>
+            <div id="masalaBlok" class="stack"><div class="muted">Variant tayinlanmoqda…</div></div>
           </div>
+          <div class="stack">
           <div class="card stack">
             <div class="tabs" id="tablar"></div>
             <div class="editor-wrap" id="edWrap"></div>
             <div class="row small muted"><span id="saqlashHolat">avtomatik saqlanadi</span><span class="spacer"></span><span>Ctrl+Enter — ishga tushirish</span></div>
             <div><label class="lbl" for="kirish">Kiruvchi ma'lumotlar — input() uchun, har qatorga bittadan</label>
               <textarea id="kirish" class="mono" rows="3" spellcheck="false"></textarea></div>
+            <div class="row small" style="gap:6px"><label class="muted" for="argv">Argumentlar (sys.argv):</label>
+              <span class="mono muted">python kod.py</span><input type="text" id="argv" class="mono argv" spellcheck="false" placeholder="bo'sh"></div>
             <div class="row">
               <button class="btn green" id="runBtn">▶ Ishga tushirish</button>
               <button class="btn outline" id="stopBtn" disabled>■ To'xtatish</button>
@@ -438,11 +597,15 @@ function talabaEkrani(t) {
             </div>
             <div class="console" id="konsol"><span class="info">Natija shu yerda chiqadi.</span></div>
           </div>
+          <div class="card" id="faylPanel"></div>
+          </div>
         </div>`;
       pyHolatPill($('#pyHolat'));
       $('#chiqish').onclick = chiqish;
 
       const konsol = new Konsol($('#konsol'));
+      faylPaneli($('#faylPanel'));
+      let masalaKalit = null;
       const saqlashEl = $('#saqlashHolat');
       const sync = {
         asosiy: new Sinxron(ishRef.child('fayllar/asosiy'), 'talaba', saqlashEl),
@@ -470,12 +633,15 @@ function talabaEkrani(t) {
         $('#varPill').textContent = vi != null ? `Variant ${vi + 1}` : 'Variant …';
         const q = d.qoshimcha;
         if (tab === 'qoshimcha' && !q) tab = 'asosiy';
-        if (tab === 'asosiy') {
-          $('#masalaSarl').textContent = vi != null ? `Masala — ${vi + 1}-variant` : 'Masala';
-          $('#masala').textContent = vr ? vr.matn : 'Variant tayinlanmoqda…';
-        } else {
-          $('#masalaSarl').textContent = '⭐ ' + (q.sarlavha || "Qo'shimcha masala");
-          $('#masala').textContent = q.matn || '';
+        const mk = tab === 'asosiy' ? 'a' + vi : 'q' + (q && q.vaqt);
+        if (mk !== masalaKalit) {
+          masalaKalit = mk;
+          $('#masalaBlok').innerHTML = masalaHTML(am, vi, tab === 'qoshimcha' ? q : null);
+          namunaTugmalari($('#masalaBlok'), am, (kod) => {
+            if (qulflangan()) { toast('Ustoz hozir kodingizni tuzatmoqda'); return; }
+            if (cm.getValue().trim() && !confirm("Muharrirdagi kod namuna bilan almashtirilsinmi? (Hozirgi kodingiz o'chadi)")) return;
+            cm.setValue(kod); sync[tab].yozildi(kod); cm.focus();
+          });
         }
         // Tablar
         $('#tablar').innerHTML = `<button class="tab ${tab === 'asosiy' ? 'active' : ''}" data-t="asosiy">Asosiy vazifa</button>` +
@@ -488,8 +654,14 @@ function talabaEkrani(t) {
         const kEl = $('#kirish');
         const kQiymat = f.kirish != null ? f.kirish : ((tab === 'asosiy' ? (vr && vr.kirish) : (q && q.kirish)) || '');
         if (kirishTab !== tab || (document.activeElement !== kEl && kEl.value === (kEl.dataset.v || '') && kEl.value !== kQiymat)) {
-          kEl.value = kQiymat; kEl.dataset.v = kQiymat; kirishTab = tab;
+          kEl.value = kQiymat; kEl.dataset.v = kQiymat;
         }
+        const aEl = $('#argv');
+        const aQiymat = f.argv != null ? f.argv : (tab === 'asosiy' && am.argvVariant && vi != null ? String(vi + 1) : '');
+        if (kirishTab !== tab || (document.activeElement !== aEl && aEl.value === (aEl.dataset.v || '') && aEl.value !== aQiymat)) {
+          aEl.value = aQiymat; aEl.dataset.v = aQiymat;
+        }
+        kirishTab = tab;
         // Ustoz tahrirlayaptimi
         cm.setOption('readOnly', qulflangan());
         $('#edWrap').classList.toggle('locked', qulflangan());
@@ -541,13 +713,13 @@ function talabaEkrani(t) {
         if (runBtn.disabled) return;
         const t0 = tab;
         await sync[t0].yubor();
-        const kod = cm.getValue(), kirish = $('#kirish').value;
+        const kod = cm.getValue(), kirish = $('#kirish').value, argv = $('#argv').value.trim();
         runBtn.disabled = true; stopBtn.disabled = false;
-        const r = await ishgaTushir(kod, kirish, konsol, cm);
+        const r = await ishgaTushir(kod, kirish, argv, konsol, cm);
         runBtn.disabled = false; stopBtn.disabled = true;
         if (!r) return;
         ishRef.child('fayllar/' + t0).update({
-          kirish,
+          kirish, argv,
           ishga: { ok: r.ok, chiqish: r.chiqish.slice(0, 4000), xato: (r.xato || '').slice(0, 2000), ms: r.ms, vaqt: TS },
         });
       }
@@ -767,9 +939,10 @@ function ustozPaneli() {
       <div class="detail">
         <div class="stack">
           <div class="card stack">
-            <div class="row"><h2 style="margin:0;flex:1" id="dMasalaSarl">Masala</h2>
+            <div class="row"><h2 style="margin:0;flex:1">Masala</h2>
+              <label class="small muted" for="dVar">Variantni almashtirish:</label>
               <select id="dVar" style="width:auto">${am.variantlar.map((_, i) => `<option value="${i}">Variant ${i + 1}</option>`).join('')}</select></div>
-            <div class="problem" id="dMasala"></div>
+            <div id="dMasala" class="stack"></div>
           </div>
           <div class="card stack">
             <h2>Holat</h2>
@@ -813,8 +986,11 @@ function ustozPaneli() {
           <div class="editor-wrap" id="dEd"></div>
           <div><label class="lbl" for="dKirish">Kiruvchi ma'lumotlar (talaba oxirgi marta ishlatgani)</label>
             <textarea id="dKirish" class="mono" rows="2" spellcheck="false"></textarea></div>
+          <div class="row small" style="gap:6px"><label class="muted" for="dArgv">Argumentlar (sys.argv):</label>
+            <span class="mono muted">python kod.py</span><input type="text" id="dArgv" class="mono argv" spellcheck="false"></div>
           <div><label class="lbl">Talabaning oxirgi natijasi <span id="dRunVaqt"></span></label><div class="console" id="dKonsolT"></div></div>
           <div class="hidden" id="dKonsolUWrap"><label class="lbl">Sizda ishga tushirilgan natija</label><div class="console" id="dKonsolU"></div></div>
+          <details><summary>📁 Sizning brauzeringizdagi fayllar (talaba kodini ishga tushirish uchun kerak bo'lsa)</summary><div id="dFayl" style="margin-top:8px"></div></details>
         </div>
       </div>`}
     </div>`;
@@ -852,7 +1028,8 @@ function ustozPaneli() {
       qoshimcha: new Sinxron(ishRef.child('fayllar/qoshimcha'), 'ustoz', $('#dSaqlash', ov)),
     };
     const cm = muharrir($('#dEd', ov), { readOnly: true, onChange: (v) => { if (tahrir) sync[tab].yozildi(v); }, onRun: () => $('#dRun', ov).click() });
-    let kirishTab = null;
+    let kirishTab = null, masalaKalit = null;
+    faylPaneli($('#dFayl', ov));
 
     const qoshFormaniTold = () => {
       const v = $('#dQoshTanla', ov).value;
@@ -879,12 +1056,11 @@ function ustozPaneli() {
       const vi = d.variant;
       if (vi != null && document.activeElement !== $('#dVar', ov)) $('#dVar', ov).value = String(vi);
       const vr = vi != null ? am.variantlar[vi % am.variantlar.length] : null;
-      if (tab === 'asosiy') {
-        $('#dMasalaSarl', ov).textContent = 'Masala';
-        $('#dMasala', ov).textContent = vr ? vr.matn : 'Variant hali tayinlanmagan';
-      } else {
-        $('#dMasalaSarl', ov).textContent = '⭐ ' + (q.sarlavha || "Qo'shimcha masala");
-        $('#dMasala', ov).textContent = q.matn || '';
+      const mk = tab === 'asosiy' ? 'a' + vi : 'q' + (q && q.vaqt);
+      if (mk !== masalaKalit) {
+        masalaKalit = mk;
+        $('#dMasala', ov).innerHTML = masalaHTML(am, vi, tab === 'qoshimcha' ? q : null);
+        namunaTugmalari($('#dMasala', ov), am, tahrir ? (kod) => { cm.setValue(kod); sync[tab].yozildi(kod); } : null);
       }
       // Holat
       $('#dYordamOk', ov).classList.toggle('hidden', !d.yordam);
@@ -906,8 +1082,14 @@ function ustozPaneli() {
       const kEl = $('#dKirish', ov);
       const kQiymat = f.kirish != null ? f.kirish : ((tab === 'asosiy' ? (vr && vr.kirish) : (q && q.kirish)) || '');
       if (kirishTab !== tab || (document.activeElement !== kEl && kEl.dataset.v !== kQiymat)) {
-        kEl.value = kQiymat; kEl.dataset.v = kQiymat; kirishTab = tab;
+        kEl.value = kQiymat; kEl.dataset.v = kQiymat;
       }
+      const aEl = $('#dArgv', ov);
+      const aQiymat = f.argv != null ? f.argv : (tab === 'asosiy' && am.argvVariant && vi != null ? String(vi + 1) : '');
+      if (kirishTab !== tab || (document.activeElement !== aEl && aEl.dataset.v !== aQiymat)) {
+        aEl.value = aQiymat; aEl.dataset.v = aQiymat;
+      }
+      kirishTab = tab;
       // Talabaning oxirgi natijasi
       const r = f.ishga;
       const kalit = r ? r.vaqt + tab : tab;
@@ -945,7 +1127,7 @@ function ustozPaneli() {
     $('#dTahrir', ov).onclick = async () => {
       if (tahrir) { tahrirniTugat(); holat.yangila(); return; }
       if (!(talabalar[sid] && talabalar[sid].online) && !confirm("Talaba hozir offlayn. Baribir tuzatasizmi? O'zgarishlar u qaytib kirganda ko'rinadi.")) return;
-      tahrir = true;
+      tahrir = true; masalaKalit = null;
       qulfRef = ishRef.child('ustozTahrir');
       await qulfRef.onDisconnect().remove();
       await qulfRef.set(tab);
@@ -954,7 +1136,7 @@ function ustozPaneli() {
       holat.yangila();
       cm.focus();
       tahrirniTugat = () => {
-        tahrir = false;
+        tahrir = false; masalaKalit = null;
         sync[tab].yubor();
         cm.setOption('readOnly', true);
         if (qulfRef) { qulfRef.onDisconnect().cancel(); qulfRef.remove(); qulfRef = null; }
@@ -967,7 +1149,7 @@ function ustozPaneli() {
       if (b.disabled) return;
       $('#dKonsolUWrap', ov).classList.remove('hidden');
       b.disabled = true; $('#dStop', ov).disabled = false;
-      await ishgaTushir(cm.getValue(), $('#dKirish', ov).value, konsolU, cm);
+      await ishgaTushir(cm.getValue(), $('#dKirish', ov).value, $('#dArgv', ov).value.trim(), konsolU, cm);
       b.disabled = false; $('#dStop', ov).disabled = true;
     };
     $('#dStop', ov).onclick = () => runner().stop('toxtatildi');

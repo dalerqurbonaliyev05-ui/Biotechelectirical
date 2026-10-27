@@ -136,6 +136,29 @@ label.lbl{display:block;font-size:12.5px;color:var(--muted);margin:0 0 4px}
 .detail{display:grid;grid-template-columns:minmax(260px,380px) 1fr;gap:14px;align-items:start}
 @media (max-width:900px){.detail{grid-template-columns:1fr}}
 
+/* Masala bloki */
+.vbox{background:var(--accent-bg);border:1px solid var(--accent);border-radius:12px;padding:12px 14px}
+.vbox.star{background:var(--star-bg);border-color:var(--star)}
+.vbox-sar{font-weight:700;font-size:13px;color:var(--accent);margin-bottom:6px;text-transform:uppercase;letter-spacing:.02em}
+.vbox.star .vbox-sar{color:var(--star);text-transform:none;font-size:15px}
+.vbox .problem{font-family:ui-monospace,"JetBrains Mono",Menlo,Consolas,monospace;font-size:14px;line-height:1.6}
+.h3{font-weight:700;font-size:14px;margin:2px 0 6px}
+details.ref{border:1px solid var(--border);border-radius:10px;padding:8px 12px;background:var(--panel2)}
+details.ref>summary{font-weight:600;color:var(--text);font-size:13.5px}
+details.ref[open]>summary{margin-bottom:8px}
+.ref-matn{font-size:13.5px;line-height:1.5}
+.namuna{border-top:1px solid var(--border);padding-top:10px;margin-top:10px}
+.namuna:first-of-type{border-top:0;margin-top:0;padding-top:0}
+.code-pre{background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:10px;margin:8px 0 0;overflow:auto;max-height:320px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;line-height:1.45;white-space:pre}
+input.argv{width:auto;flex:1;min-width:80px;max-width:240px;padding:6px 8px;font-size:13px}
+/* Fayllar */
+.fayl-list{display:flex;flex-direction:column;gap:4px;margin-top:10px}
+.fayl{display:flex;justify-content:space-between;gap:10px;align-items:center;background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:7px 10px;cursor:pointer;color:var(--text);font-family:inherit;font-size:13px;text-align:left}
+.fayl:hover{border-color:var(--accent)}
+.fayl .mono{word-break:break-all}
+.kons-rasm{display:block;max-width:100%;margin:8px 0;background:#fff;border-radius:6px;cursor:zoom-in}
+.modal-fon{position:fixed;inset:0;background:rgba(10,12,16,.55);z-index:80;display:flex;align-items:flex-start;justify-content:center;padding:24px 16px;overflow:auto}
+.modal{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px;width:100%;max-width:820px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
 .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--btn);color:var(--btn-text);padding:10px 16px;border-radius:10px;font-size:14px;z-index:100;box-shadow:0 6px 24px rgba(0,0,0,.2);max-width:calc(100% - 32px)}
 .empty{padding:40px 10px;text-align:center;color:var(--muted)}
 details summary{cursor:pointer;color:var(--muted);font-size:13px}
@@ -150,7 +173,7 @@ details summary{cursor:pointer;color:var(--muted);font-size:13px}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js"></script>
-<script src="amaliyotlar.js"></script>
-<script src="app.js"></script>
+<script src="amaliyotlar.js?v=2"></script>
+<script src="app.js?v=2"></script>
 </body>
 </html>
