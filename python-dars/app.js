@@ -765,8 +765,11 @@ async function ustozKirish() {
   $app.innerHTML = `<div class="welcome card"><p class="muted center">Tekshirilmoqda…</p></div>`;
   let pin = null;
   try { pin = (await R('ustoz/pin').once('value')).val(); } catch (_) {}
-  const saqlangan = saqla.get('pydars_ustoz');
-  if (pin && saqlangan === pin) { saqla.set('pydars_rol', 'ustoz'); ustozPaneli(); return; }
+  // Shu kompyuterda saqlangan parolning o'zi tekshiriladi (bazadagi xeshni nusxalab kirib bo'lmaydi)
+  saqla.del('pydars_ustoz');
+  const saqlangan = saqla.get('pydars_ustoz_p');
+  if (pin && saqlangan && (await xesh(saqlangan)) === pin) { saqla.set('pydars_rol', 'ustoz'); ustozPaneli(); return; }
+  if (saqlangan) saqla.del('pydars_ustoz_p');
   const yangi = !pin;
   $app.innerHTML = `
     <div class="welcome card stack">
@@ -782,9 +785,10 @@ async function ustozKirish() {
     const h = await xesh(p1);
     if (yangi) {
       if ($('#p2').value !== p1) { toast('Parollar mos emas'); return; }
-      await R('ustoz/pin').set(h);
+      try { await R('ustoz/pin').set(h); }
+      catch (_) { toast("Parol allaqachon o'rnatilgan — mavjud parol bilan kiring"); ustozKirish(); return; }
     } else if (h !== pin) { toast("Parol noto'g'ri"); $('#p1').select(); return; }
-    saqla.set('pydars_ustoz', h);
+    saqla.set('pydars_ustoz_p', p1);
     saqla.set('pydars_rol', 'ustoz');
     ustozPaneli();
   };
@@ -826,7 +830,7 @@ function ustozPaneli() {
     </div>
     <div class="grid" id="grid"></div>`;
   pyHolatPill($('#pyHolat'));
-  $('#chiqish').onclick = () => { saqla.del('pydars_rol'); saqla.del('pydars_ustoz'); rolTanlash(); };
+  $('#chiqish').onclick = () => { saqla.del('pydars_rol'); saqla.del('pydars_ustoz_p'); rolTanlash(); };
   $('#faqatOnlayn').onchange = (e) => { faqatOnlayn = e.target.checked; saqla.set('pydars_faqat_onlayn', faqatOnlayn); chiz(); };
   $('#boshla').onclick = async () => {
     const id = $('#amSel').value;
