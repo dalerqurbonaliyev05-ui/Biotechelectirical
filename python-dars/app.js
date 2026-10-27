@@ -356,7 +356,7 @@ function masalaHTML(am, vi, q) {
     <div class="vbox"><div class="vbox-sar">${vr ? `Variant ${vi + 1} — boshlang'ich ma'lumotlar` : 'Variant tayinlanmoqda…'}</div>${vr ? `<div class="problem">${esc(vr.matn)}</div>` : ''}</div>
     ${am.topshiriq ? `<div><div class="h3">Topshiriqlar</div><div class="problem">${esc(am.topshiriq)}</div></div>` : ''}
     ${am.eslatma ? `<div class="banner warn small">${esc(am.eslatma)}</div>` : ''}
-    ${am.nazariy ? `<details class="ref"><summary>📘 Nazariy ma'lumot, formulalar va jadvallar</summary><div class="problem ref-matn">${esc(am.nazariy)}</div></details>` : ''}
+    ${am.nazariy ? `<button class="nazariy-btn" data-nazariy>📘 Nazariy ma'lumot, formulalar va jadvallar <span>ochish →</span></button>` : ''}
     ${nm.length ? `<details class="ref"><summary>📄 Namuna dasturlar (${nm.length})</summary>${nm.map((n, i) => `
       <div class="namuna">
         <div class="row" style="gap:6px"><b class="mono" style="flex:1;min-width:120px">${esc(n.nomi)}</b>
@@ -367,7 +367,22 @@ function masalaHTML(am, vi, q) {
         <pre class="code-pre">${esc(n.kod)}</pre>
       </div>`).join('')}</details>` : ''}`;
 }
+function nazariyOyna(am) {
+  const ov = document.createElement('div');
+  ov.className = 'modal-fon';
+  ov.innerHTML = `<div class="modal" style="max-width:980px">
+    <div class="row"><b style="flex:1">📘 ${esc(am.nomi)}</b><button class="btn sm" data-yop>Yopish</button></div>
+    <div class="small muted" style="margin:4px 0 10px">Nazariy ma'lumot, formulalar va jadvallar</div>
+    <pre class="nazariy-pre">${esc(am.nazariy)}</pre></div>`;
+  const yop = () => { ov.remove(); document.removeEventListener('keydown', esc_); };
+  const esc_ = (e) => { if (e.key === 'Escape') yop(); };
+  ov.onclick = (e) => { if (e.target === ov || e.target.dataset.yop != null) yop(); };
+  document.addEventListener('keydown', esc_);
+  document.body.appendChild(ov);
+}
 function namunaTugmalari(root, am, muharrirga) {
+  const nb = root.querySelector('[data-nazariy]');
+  if (nb) nb.onclick = () => nazariyOyna(am);
   root.querySelectorAll('[data-nm]').forEach((b) => {
     const n = (am.namunalar || [])[+b.dataset.nm];
     if (!n) return;
