@@ -573,11 +573,26 @@ ul, ol { list-style: none; }
 /* ---------- Responsive ---------- */
 @media (min-width: 1280px) { .rail { display: flex; } }
 
+.t22 { grid-column: span 4; color: #fff; background: linear-gradient(120deg, #07141f 0%, #0f3b4a 55%, #1c8c86 100%); }
+.t22 .tile-body { max-width: 46%; }
+.mini-hgi { position: absolute; right: 40px; top: 14px; bottom: 14px; height: calc(100% - 28px); width: auto; max-width: 50%; }
+.hg-w { fill: none; stroke: rgba(255, 255, 255, .85); stroke-width: 2.4; stroke-linejoin: round; }
+.hg-r { fill: #07141f; stroke: #fff; stroke-width: 2; }
+.hg-e { fill: #07141f; stroke: #fff; stroke-width: 2; }
+.hg-ea { fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.hg-n { fill: #fff; }
+.hg-i { fill: none; stroke: #ff6b5e; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 8 14; animation: hgflow 1.6s linear infinite; }
+.hg-doc { fill: rgba(255, 255, 255, .92); stroke: #8ee6dc; stroke-width: 2; }
+.hg-ln { fill: none; stroke: #1c6e8c; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 60; animation: tkwrite 3.6s ease-in-out infinite; }
+.hg-t { font: 700 12px system-ui, sans-serif; fill: #1c6e8c; }
+@keyframes hgflow { to { stroke-dashoffset: -44; } }
+@media (prefers-reduced-motion: reduce) { .hg-i, .hg-ln { animation: none; } }
+
 @media (max-width: 1024px) {
     .bento { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 200px; }
     .t1 { grid-column: span 2; grid-row: span 2; }
     .t2, .t3 { grid-column: span 1; }
-    .t4, .t5, .t6, .t7, .t8, .t9, .t10, .t11, .t12, .t13, .t14, .t15, .t16, .t17, .t18, .t19, .t20, .t21 { grid-column: span 2; }
+    .t4, .t5, .t6, .t7, .t8, .t9, .t10, .t11, .t12, .t13, .t14, .t15, .t16, .t17, .t18, .t19, .t20, .t21, .t22 { grid-column: span 2; }
     .apps .bento { grid-auto-rows: 280px; }
     .ap1, .ap6 { grid-column: span 2; }
     .ap2, .ap3, .ap4, .ap5 { grid-column: span 1; }
@@ -652,11 +667,12 @@ ul, ol { list-style: none; }
     .hero-waves { height: 130px; }
     .marquee-track { font-size: .85rem; gap: 20px; }
     .bento { grid-template-columns: 1fr; grid-auto-rows: auto; }
-    .t1, .t2, .t3, .t4, .t5, .t6, .t7, .t8, .t9, .t10, .t11, .t12, .t13, .t14, .t15, .t16, .t17, .t18, .t19, .t20, .t21 { grid-column: span 1; grid-row: span 1; min-height: 200px; }
-    .t7, .t8, .t9, .t10, .t11, .t12, .t13, .t14, .t15, .t16, .t17, .t18, .t19, .t20, .t21 { min-height: 350px; }
-    .t13 .tile-body, .t14 .tile-body, .t15 .tile-body, .t16 .tile-body, .t17 .tile-body, .t18 .tile-body, .t19 .tile-body, .t20 .tile-body, .t21 .tile-body { max-width: none; }
+    .t1, .t2, .t3, .t4, .t5, .t6, .t7, .t8, .t9, .t10, .t11, .t12, .t13, .t14, .t15, .t16, .t17, .t18, .t19, .t20, .t21, .t22 { grid-column: span 1; grid-row: span 1; min-height: 200px; }
+    .t7, .t8, .t9, .t10, .t11, .t12, .t13, .t14, .t15, .t16, .t17, .t18, .t19, .t20, .t21, .t22 { min-height: 350px; }
+    .t13 .tile-body, .t14 .tile-body, .t15 .tile-body, .t16 .tile-body, .t17 .tile-body, .t18 .tile-body, .t19 .tile-body, .t20 .tile-body, .t21 .tile-body, .t22 .tile-body { max-width: none; }
     .mini-tk { left: 50%; right: auto; transform: translateX(-50%); top: 12px; bottom: auto; height: 112px; max-width: none; }
     .mini-py { left: 50%; right: auto; transform: translateX(-50%); top: 12px; bottom: auto; height: 112px; max-width: none; }
+    .mini-hgi { left: 50%; right: auto; transform: translateX(-50%); top: 12px; bottom: auto; height: 112px; max-width: none; }
     .mini-tr { left: 50%; right: auto; transform: translateX(-50%); top: 12px; bottom: auto; height: 112px; max-width: none; }
     .mini-sq { left: 50%; right: auto; transform: translateX(-50%); top: 12px; bottom: auto; height: 112px; max-width: none; }
     .mini-ev { left: 50%; right: auto; transform: translateX(-50%); top: 12px; bottom: auto; height: 112px; max-width: none; }

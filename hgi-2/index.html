@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Nazariy elektrotexnika 2-HGI: murakkab o'zgarmas tok zanjirlarini hisoblash. 30 ta variant — Kirxgof qonunlari, kontur toklar, tugun potensiallari, ekvivalent generator, quvvat balansi. Word faylni yuklab oling.">
+<title>2-HGI · Murakkab o'zgarmas tok zanjirlari</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=PT+Serif:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Chapda: variant tanlash, berilganlar, natijalar va Word tugmasi. O'ngda: to'liq yechim varag'i. Telefonda ustma-ust. */
+:root{
+  --bg:#eef1f4; --panel:#ffffff; --ink:#15202e; --muted:#5b6878; --line:#d5dbe2;
+  --acc:#1f5fad; --acc-soft:#dde8f5; --amber:#b5621b; --amber-soft:#f6e6d6;
+  --ok:#1f7a4d; --ok-bg:#e1f2e8;
+  --paper:#ffffff; --paper-ink:#16181c; --paper-line:#c9ced6;
+  --f-ui:"Golos Text","Segoe UI",system-ui,sans-serif;
+  --f-doc:"PT Serif","Times New Roman",Georgia,serif;
+  --f-num:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#0f151c; --panel:#17202a; --ink:#e6ebf1; --muted:#9aa7b6; --line:#2a3644;
+  --acc:#7fb0de; --acc-soft:#1b2c3e; --amber:#e08a45; --amber-soft:#3a2716;
+  --ok:#5fd09a; --ok-bg:#163326; color-scheme:dark}}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-ui);font-size:15px;line-height:1.5;margin:0;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px}
+.wrap{max-width:1320px;margin:0 auto}
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 20px;padding-block:18px 14px;border-bottom:1px solid var(--line);margin-bottom:20px}
+.brand{display:flex;flex-direction:column;gap:4px;min-width:0;flex:1 1 320px}
+.crumb{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.crumb a{color:inherit;text-decoration:none}.crumb a:hover b{text-decoration:underline}
+.crumb b{color:var(--acc);font-weight:600}
+h1{font-size:clamp(22px,3vw,30px);line-height:1.15;margin:0;font-weight:700;text-wrap:balance;letter-spacing:-.01em}
+h1 span{color:var(--acc)}
+.sub{color:var(--muted);margin:0;max-width:70ch}
+.grid{display:grid;grid-template-columns:340px minmax(0,1fr);gap:22px;align-items:start}
+@media (max-width:940px){.grid{grid-template-columns:minmax(0,1fr)}}
+aside.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px;position:sticky;top:12px;display:flex;flex-direction:column;gap:16px;max-height:calc(100vh - 24px);overflow:auto}
+@media (max-width:940px){aside.panel{position:static;max-height:none}}
+.panel h2{font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 8px;font-weight:600}
+.vrow{display:flex;gap:8px;align-items:stretch}
+.vrow input{font:600 22px var(--f-num);width:96px;text-align:center;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:6px}
+.vrow button{flex:1}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:8px;padding:10px 14px;font:600 14px var(--f-ui);cursor:pointer;text-decoration:none}
+.btn.pri{background:var(--acc);color:#fff}
+:root .btn.pri{color:#fff}
+@media (prefers-color-scheme: dark){.btn.pri{color:#0f151c}}
+.btn.ghost{background:var(--acc-soft);color:var(--acc)}
+.btn:focus-visible,input:focus-visible,.vgrid button:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.vgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:5px}
+.vgrid button{font:500 13px var(--f-num);padding:6px 0;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:6px;cursor:pointer}
+.vgrid button[aria-pressed="true"]{background:var(--acc);border-color:var(--acc);color:#fff}
+@media (prefers-color-scheme: dark){.vgrid button[aria-pressed="true"]{color:#0f151c}}
+table.kv{border-collapse:collapse;width:100%;font-size:13.5px}
+table.kv th,table.kv td{border:1px solid var(--line);padding:4px 6px;text-align:center}
+table.kv th{color:var(--muted);font-weight:500;font-size:12.5px}
+table.kv td{font-family:var(--f-num)}
+table.kv td.off{color:var(--muted);text-decoration:line-through}
+.res{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;font-size:13.5px}
+.res div{display:flex;justify-content:space-between;gap:8px;border-bottom:1px dashed var(--line);padding:2px 0}
+.res b{font-family:var(--f-num);font-weight:500}
+.res i{font-family:var(--f-doc)}
+.note{font-size:12.5px;color:var(--muted);margin:0}
+.note.warn{background:var(--amber-soft);color:var(--ink);border-radius:8px;padding:8px 10px}
+.okline{background:var(--ok-bg);color:var(--ok);border-radius:8px;padding:8px 10px;font-size:13px}
+.dl{display:flex;flex-direction:column;gap:8px}
+main.sheet-wrap{min-width:0}
+.sheet{background:var(--paper);color:var(--paper-ink);border:1px solid var(--paper-line);border-radius:6px;padding:clamp(18px,4vw,48px);font-family:var(--f-doc);font-size:16px;line-height:1.55;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.sheet h1{font-family:var(--f-doc);font-size:22px;margin:1.2em 0 .5em;color:#111}
+.sheet h2{font-family:var(--f-doc);font-size:18px;margin:1em 0 .4em;color:#111}
+.sheet p{margin:.45em 0;text-align:justify;hyphens:auto}
+.sheet table{border-collapse:collapse;margin:.6em auto;font-size:14px}
+.sheet th,.sheet td{border:1px solid #9aa3ad;padding:4px 8px;text-align:center}
+.sheet img{display:block;max-width:min(100%,520px);height:auto;margin:10px auto}
+.sheet figure{margin:10px 0}
+.sheet math[display="block"]{display:block;overflow-x:auto;overflow-y:hidden;padding:4px 0;margin:.5em 0}
+.sheet math{font-family:"STIX Two Math","Cambria Math","Latin Modern Math",serif;font-size:1.02em}
+.sheet ol,.sheet ul{margin:.3em 0 .3em 1.4em;padding:0}
+.loading{color:var(--muted);font-family:var(--f-ui);padding:30px;text-align:center}
+.titleblock{text-align:center;margin-bottom:6px}
+.titleblock .t1{font-size:22px;font-weight:700}
+.titleblock .t2{color:#555}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <div class="crumb"><a href="/#tools"><b>← energyvibe.uz</b> / Vositalar</a> · Nazariy elektrotexnika</div>
+      <h1>2-HGI: <span>murakkab o'zgarmas tok</span> elektr zanjirlarini hisoblash</h1>
+      <p class="sub">Variant raqamingizni kiriting: sxema, Kirxgof qonunlari, kontur toklar, tugun potensiallari, ekvivalent generator va quvvat balansi bo'yicha to'liq yechim chiqadi. Tayyor yechimni Word faylda yuklab olasiz.</p>
+    </div>
+  </header>
+
+  <div class="grid">
+    <aside class="panel" aria-label="Variant va natijalar">
+      <section>
+        <h2>Variant</h2>
+        <form class="vrow" id="vform">
+          <input id="vin" type="number" min="1" max="30" step="1" value="12" inputmode="numeric" aria-label="Variant raqami (1–30)">
+          <button class="btn pri" type="submit">Yechimni ko'rsatish</button>
+        </form>
+        <div class="vgrid" id="vgrid" style="margin-top:10px" role="group" aria-label="Variantlar"></div>
+      </section>
+      <section>
+        <h2>Berilgan (<span id="vt">12</span>-variant)</h2>
+        <div id="given"></div>
+        <p class="note" id="givennote" style="margin-top:6px"></p>
+      </section>
+      <section class="dl">
+        <a class="btn pri" id="dlword" href="#" download>⬇ Word faylni yuklab olish</a>
+        <button class="btn ghost" id="printbtn" type="button">Chop etish / PDF</button>
+      </section>
+      <section>
+        <h2>Natijalar</h2>
+        <div class="res" id="res"></div>
+        <div class="okline" id="okline" style="margin-top:10px"></div>
+      </section>
+      <p class="note">Hisob «2. Murakkab o'zgarmas tok elektr zanjirlarni hisoblash» topshirig'i (Jadval 1 va variant sxemalari) asosida bajarilgan. Toklar aniq kasrlarda hisoblanib, uch xil usul bilan tekshirilgan.</p>
+    </aside>
+
+    <main class="sheet-wrap">
+      <article class="sheet" id="sheet"><div class="loading">Yuklanmoqda…</div></article>
+    </main>
+  </div>
+</div>
+
+<script>
+(function(){
+  const SUB = s => String(s).replace(/[0-9]/g, d => "₀₁₂₃₄₅₆₇₈₉"[d]);
+  const fmt = (x, d=3) => (Math.abs(x) < 5e-10 ? 0 : x).toFixed(d).replace(".", ",").replace(/^-?0,0+$/, "0");
+  let DATA = null, cur = 0, loadId = 0;
+  const $ = id => document.getElementById(id);
+
+  const grid = $("vgrid");
+  for (let v = 1; v <= 30; v++) {
+    const b = document.createElement("button");
+    b.type = "button"; b.textContent = v; b.dataset.v = v; b.setAttribute("aria-pressed", "false");
+    b.addEventListener("click", () => show(v));
+    grid.appendChild(b);
+  }
+  $("vform").addEventListener("submit", e => { e.preventDefault(); const v = parseInt($("vin").value, 10); if (v >= 1 && v <= 30) show(v); else $("vin").focus(); });
+  $("printbtn").addEventListener("click", () => {
+    const w = window.open("", "_blank");
+    if (!w) { window.print(); return; }
+    w.document.write('<!doctype html><html lang="uz"><head><meta charset="utf-8"><title>2-HGI ' + cur + '-variant</title><base href="' + location.href.replace(/[#?].*$/, "") + '"><style>body{font-family:"Times New Roman",serif;font-size:14px;line-height:1.5;margin:24px} img{display:block;max-width:480px;margin:8px auto} table{border-collapse:collapse;margin:6px auto} th,td{border:1px solid #888;padding:3px 7px;text-align:center} math[display=block]{display:block;margin:6px 0} .titleblock{text-align:center}</style></head><body>' + $("sheet").innerHTML + '</body></html>');
+    w.document.close(); setTimeout(() => w.print(), 600);
+  });
+
+  function given(d) {
+    const used = new Set(d.used_E.map(String));
+    let t1 = "<tr><th>E₁, V</th><th>E₂, V</th><th>E₃, V</th><th>Uzil. tarmoq</th></tr><tr>";
+    for (const j of ["1","2","3"]) t1 += `<td class="${used.has(j) ? "" : "off"}"${used.has(j) ? "" : ' title="Sxemada yo\'q"'}>${d.E[j]}</td>`;
+    t1 += `<td>${d.kcut}</td></tr>`;
+    let t2 = "<tr>", t3 = "<tr>";
+    for (let k = 1; k <= 6; k++) { t2 += `<th>R${SUB(k)}, Om</th>`; t3 += `<td>${d.R[k]}</td>`; }
+    $("given").innerHTML = `<table class="kv"><tbody>${t1}</tbody></table><table class="kv" style="margin-top:6px"><tbody>${t2}</tr>${t3}</tr></tbody></table>`;
+    const miss = ["1","2","3"].filter(j => !used.has(j)).map(j => "E" + SUB(j));
+    let note = miss.length ? `Sxemada ${miss.join(", ")} yo'q — hisobda qatnashmaydi. ` : "";
+    $("givennote").textContent = note;
+    $("givennote").className = "note";
+    if (d.note) { $("givennote").textContent = note + d.note; $("givennote").className = "note warn"; }
+  }
+
+  function results(d) {
+    let h = "";
+    for (let k = 1; k <= 6; k++) h += `<div><span><i>I</i>${SUB(k)} (${d.dir[k][0]}→${d.dir[k][1]})</span><b>${fmt(d.I[k])} A</b></div>`;
+    for (const [n, p] of Object.entries(d.phi)) h += `<div><span><i>φ</i><sub>${n}</sub></span><b>${fmt(p)} V</b></div>`;
+    h += `<div><span><i>U</i><sub>xx</sub></span><b>${fmt(d.Uxx)} V</b></div>`;
+    h += `<div><span><i>R</i><sub>ekv</sub></span><b>${fmt(d.Rekv, 4)} Om</b></div>`;
+    h += `<div><span><i>P</i><sub>manba</sub></span><b>${fmt(d.Psrc, 2)} Vt</b></div>`;
+    h += `<div><span><i>P</i><sub>ist</sub></span><b>${fmt(d.Pload, 2)} Vt</b></div>`;
+    $("res").innerHTML = h;
+    $("okline").textContent = `Ekvivalent generator: I${SUB(d.kcut)} = ${fmt(d.Ieg)} A — kontur toklar natijasi bilan mos. Quvvat balansi bajarildi.`;
+  }
+
+  async function show(v) {
+    v = Math.max(1, Math.min(30, v | 0)); cur = v;
+    $("vin").value = v; $("vt").textContent = v;
+    for (const b of grid.children) b.setAttribute("aria-pressed", String(+b.dataset.v === v));
+    if (location.hash !== "#" + v) history.replaceState(null, "", "#" + v);
+    try { localStorage.setItem("hgi2-variant", String(v)); } catch (e) {}
+    $("dlword").href = `word/HGI-2_${v}-variant.docx`;
+    $("dlword").setAttribute("download", `HGI-2_${v}-variant.docx`);
+    if (DATA && DATA[v]) { given(DATA[v]); results(DATA[v]); }
+    const id = ++loadId;
+    $("sheet").innerHTML = '<div class="loading">Yuklanmoqda…</div>';
+    try {
+      const r = await fetch(`v/${v}.html`, { cache: "no-cache" });
+      if (!r.ok) throw new Error(r.status);
+      const html = await r.text();
+      if (id !== loadId) return;
+      $("sheet").innerHTML = `<div class="titleblock"><div class="t1">2-HGI. Murakkab o'zgarmas tok elektr zanjirlarini hisoblash</div><div class="t2">${v}-variant (${v}-sxema)</div></div>` + html;
+    } catch (e) {
+      if (id === loadId) $("sheet").innerHTML = '<div class="loading">Yechimni yuklab bo\'lmadi. Sahifani yangilab ko\'ring.</div>';
+    }
+  }
+
+  let start = parseInt((location.hash || "").slice(1), 10);
+  if (!(start >= 1 && start <= 30)) { try { start = parseInt(localStorage.getItem("hgi2-variant"), 10); } catch (e) {} }
+  if (!(start >= 1 && start <= 30)) start = 12;
+  fetch("data.json").then(r => r.json()).then(d => { DATA = d; if (DATA[cur]) { given(DATA[cur]); results(DATA[cur]); } }).catch(() => {});
+  window.addEventListener("hashchange", () => { const v = parseInt(location.hash.slice(1), 10); if (v >= 1 && v <= 30 && v !== cur) show(v); });
+  show(start);
+})();
+</script>
+</body>
+</html>
