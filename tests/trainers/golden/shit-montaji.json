@@ -1,0 +1,2412 @@
+{
+ "learn": [
+  {
+   "step": "ochilish",
+   "msgs": [],
+   "state": {
+    "status2": {
+     "t": "Namuna: tarmoq L va N simlari kirish avtomatiga ulangan. Endi avtomat pastki vintlarini УЗО ga ulang."
+    },
+    "power": {
+     "t": "Kuchlanish berish",
+     "d": 1,
+     "c": "btn pri"
+    },
+    "prog": {},
+    "pdone": {
+     "t": "2"
+    },
+    "exam": {
+     "h": 1
+    },
+    "wcount": {
+     "t": "0"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "c": "btn"
+    },
+    "hint": {
+     "t": "Maslahat",
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "h": 1,
+     "c": "btn"
+    },
+    "m-learn": {
+     "t": "O'rganish",
+     "p": "true"
+    },
+    "m-exam": {
+     "t": "Imtihon",
+     "p": "false"
+    },
+    "faults": {
+     "h": 1
+    },
+    "fshort": {
+     "t": "Qisqa tutashuv (L–N)",
+     "c": "btn"
+    },
+    "fleak": {
+     "t": "Sizish toki (L→PE)",
+     "c": "btn"
+    },
+    "ftest": {
+     "t": "УЗО Test tugmasi",
+     "c": "btn"
+    },
+    "freset": {
+     "t": "Qayta yoqish",
+     "c": "btn pri"
+    },
+    "fclear": {
+     "t": "Nosozlikni olib tashlash",
+     "c": "btn"
+    },
+    "fnote": {
+     "c": "fnote"
+    },
+    "fg": {
+     "t": "0",
+     "c": "sel"
+    },
+    "steps": [
+     "done|Tarmoq fazasi (L) → kirish avtomati L kirishi (tayyor)",
+     "done|Tarmoq noli (N) → kirish avtomati N kirishi (tayyor)",
+     "Kirish avtomati L chiqishi → УЗО L kirishi",
+     "Kirish avtomati N chiqishi → УЗО N kirishi",
+     "УЗО L chiqishi → hisoblagich 1-qisqich",
+     "УЗО N chiqishi → hisoblagich 3-qisqich",
+     "Hisoblagich 2-qisqich → AB-1, AB-2, AB-3 kirishlari0/4",
+     "AB-1 chiqishi → Kabel №1 fazasi",
+     "AB-2 chiqishi → Kabel №2 fazasi",
+     "AB-3 chiqishi → Kabel №3 fazasi",
+     "Hisoblagich 4-qisqich → N shina → uchala kabel noli0/5",
+     "Tarmoq PE → PE shina → uchala kabel PE si0/5"
+    ],
+    "report": []
+   }
+  },
+  {
+   "step": "bosish ab.lo",
+   "msgs": [
+    [
+     "Kirish avtomati, pastki faza (L). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Kirish avtomati, pastki faza (L). Boshqa vintga sudrang yoki ikkinchisini bosing."
+    }
+   }
+  },
+  {
+   "step": "bosish ab.lo",
+   "msgs": [
+    [
+     "Kirish avtomati, pastki faza (L). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Vintni bosib boshqasiga sudrang yoki ikkita vintni ketma-ket bosing.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Vintni bosib boshqasiga sudrang yoki ikkita vintni ketma-ket bosing."
+    }
+   }
+  },
+  {
+   "step": "sim ab.lo — rcd.ni",
+   "msgs": [
+    [
+     "Kirish avtomati, pastki faza (L). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Faza (L) va nol (N) ulandi: bu qisqa tutashuv, avtomat darhol o'chadi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Faza (L) va nol (N) ulandi: bu qisqa tutashuv, avtomat darhol o'chadi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim ab.lo — pb1",
+   "msgs": [
+    [
+     "Kirish avtomati, pastki faza (L). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Faza PE ga tushdi: shkaf va asbob korpusi xavfli kuchlanish ostida qoladi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Faza PE ga tushdi: shkaf va asbob korpusi xavfli kuchlanish ostida qoladi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim ab.no — pb1",
+   "msgs": [
+    [
+     "Kirish avtomati, pastki nol (N). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Ishchi nol (N) va himoya nol (PE) alohida yuradi. Ularni birlashtirsangiz УЗО noto'g'ri ishlaydi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Ishchi nol (N) va himoya nol (PE) alohida yuradi. Ularni birlashtirsangiz УЗО noto'g'ri ishlaydi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim rcd.li — rcd.lo",
+   "msgs": [
+    [
+     "УЗО, yuqori faza (L). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Bir qurilmaning kirishi va chiqishini ulash tokni qurilmadan chetlab o'tkazadi. Zanjir qurilma ichidan o'tishi kerak.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Bir qurilmaning kirishi va chiqishini ulash tokni qurilmadan chetlab o'tkazadi. Zanjir qurilma ichidan o'tishi kerak.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim ab.lo — m.1",
+   "msgs": [
+    [
+     "Kirish avtomati, pastki faza (L). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Bu ikki qisqich bevosita ulanmaydi. Tartib: tarmoq → AB → УЗО → hisoblagich → guruh avtomatlari → kabel.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Bu ikki qisqich bevosita ulanmaydi. Tartib: tarmoq → AB → УЗО → hisoblagich → guruh avtomatlari → kabel.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim ab.lo — rcd.li",
+   "msgs": [
+    [
+     "Kirish avtomati, pastki faza (L). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 3 / 12 zanjir tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 3 / 12 zanjir tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "3"
+    },
+    "steps": [
+     "done|Tarmoq fazasi (L) → kirish avtomati L kirishi (tayyor)",
+     "done|Tarmoq noli (N) → kirish avtomati N kirishi (tayyor)",
+     "done|Kirish avtomati L chiqishi → УЗО L kirishi (tayyor)",
+     "Kirish avtomati N chiqishi → УЗО N kirishi",
+     "УЗО L chiqishi → hisoblagich 1-qisqich",
+     "УЗО N chiqishi → hisoblagich 3-qisqich",
+     "Hisoblagich 2-qisqich → AB-1, AB-2, AB-3 kirishlari0/4",
+     "AB-1 chiqishi → Kabel №1 fazasi",
+     "AB-2 chiqishi → Kabel №2 fazasi",
+     "AB-3 chiqishi → Kabel №3 fazasi",
+     "Hisoblagich 4-qisqich → N shina → uchala kabel noli0/5",
+     "Tarmoq PE → PE shina → uchala kabel PE si0/5"
+    ]
+   }
+  },
+  {
+   "step": "sim rcd.li — ab.lo",
+   "msgs": [
+    [
+     "УЗО, yuqori faza (L). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Bu ikki vint allaqachon ulangan.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Bu ikki vint allaqachon ulangan."
+    }
+   }
+  },
+  {
+   "step": "tugma #hint",
+   "msgs": [
+    [
+     "Maslahat: Kirish avtomati N chiqishi → УЗО N kirishi",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Maslahat: Kirish avtomati N chiqishi → УЗО N kirishi"
+    }
+   }
+  },
+  {
+   "step": "tugma #undo",
+   "msgs": [
+    [
+     "Oxirgi sim olib tashlandi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Oxirgi sim olib tashlandi."
+    },
+    "pdone": {
+     "t": "2"
+    },
+    "steps": [
+     "done|Tarmoq fazasi (L) → kirish avtomati L kirishi (tayyor)",
+     "done|Tarmoq noli (N) → kirish avtomati N kirishi (tayyor)",
+     "Kirish avtomati L chiqishi → УЗО L kirishi",
+     "Kirish avtomati N chiqishi → УЗО N kirishi",
+     "УЗО L chiqishi → hisoblagich 1-qisqich",
+     "УЗО N chiqishi → hisoblagich 3-qisqich",
+     "Hisoblagich 2-qisqich → AB-1, AB-2, AB-3 kirishlari0/4",
+     "AB-1 chiqishi → Kabel №1 fazasi",
+     "AB-2 chiqishi → Kabel №2 fazasi",
+     "AB-3 chiqishi → Kabel №3 fazasi",
+     "Hisoblagich 4-qisqich → N shina → uchala kabel noli0/5",
+     "Tarmoq PE → PE shina → uchala kabel PE si0/5"
+    ]
+   }
+  },
+  {
+   "step": "sim ab.lo — rcd.li",
+   "msgs": [
+    [
+     "Kirish avtomati, pastki faza (L). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 3 / 12 zanjir tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 3 / 12 zanjir tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "3"
+    },
+    "steps": [
+     "done|Tarmoq fazasi (L) → kirish avtomati L kirishi (tayyor)",
+     "done|Tarmoq noli (N) → kirish avtomati N kirishi (tayyor)",
+     "done|Kirish avtomati L chiqishi → УЗО L kirishi (tayyor)",
+     "Kirish avtomati N chiqishi → УЗО N kirishi",
+     "УЗО L chiqishi → hisoblagich 1-qisqich",
+     "УЗО N chiqishi → hisoblagich 3-qisqich",
+     "Hisoblagich 2-qisqich → AB-1, AB-2, AB-3 kirishlari0/4",
+     "AB-1 chiqishi → Kabel №1 fazasi",
+     "AB-2 chiqishi → Kabel №2 fazasi",
+     "AB-3 chiqishi → Kabel №3 fazasi",
+     "Hisoblagich 4-qisqich → N shina → uchala kabel noli0/5",
+     "Tarmoq PE → PE shina → uchala kabel PE si0/5"
+    ]
+   }
+  },
+  {
+   "step": "sim ab.no — rcd.ni",
+   "msgs": [
+    [
+     "Kirish avtomati, pastki nol (N). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 4 / 12 zanjir tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 4 / 12 zanjir tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "4"
+    },
+    "steps": [
+     "done|Tarmoq fazasi (L) → kirish avtomati L kirishi (tayyor)",
+     "done|Tarmoq noli (N) → kirish avtomati N kirishi (tayyor)",
+     "done|Kirish avtomati L chiqishi → УЗО L kirishi (tayyor)",
+     "done|Kirish avtomati N chiqishi → УЗО N kirishi (tayyor)",
+     "УЗО L chiqishi → hisoblagich 1-qisqich",
+     "УЗО N chiqishi → hisoblagich 3-qisqich",
+     "Hisoblagich 2-qisqich → AB-1, AB-2, AB-3 kirishlari0/4",
+     "AB-1 chiqishi → Kabel №1 fazasi",
+     "AB-2 chiqishi → Kabel №2 fazasi",
+     "AB-3 chiqishi → Kabel №3 fazasi",
+     "Hisoblagich 4-qisqich → N shina → uchala kabel noli0/5",
+     "Tarmoq PE → PE shina → uchala kabel PE si0/5"
+    ]
+   }
+  },
+  {
+   "step": "sim rcd.lo — m.1",
+   "msgs": [
+    [
+     "УЗО, pastki faza (L). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 5 / 12 zanjir tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 5 / 12 zanjir tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "5"
+    },
+    "steps": [
+     "done|Tarmoq fazasi (L) → kirish avtomati L kirishi (tayyor)",
+     "done|Tarmoq noli (N) → kirish avtomati N kirishi (tayyor)",
+     "done|Kirish avtomati L chiqishi → УЗО L kirishi (tayyor)",
+     "done|Kirish avtomati N chiqishi → УЗО N kirishi (tayyor)",
+     "done|УЗО L chiqishi → hisoblagich 1-qisqich (tayyor)",
+     "УЗО N chiqishi → hisoblagich 3-qisqich",
+     "Hisoblagich 2-qisqich → AB-1, AB-2, AB-3 kirishlari0/4",
+     "AB-1 chiqishi → Kabel №1 fazasi",
+     "AB-2 chiqishi → Kabel №2 fazasi",
+     "AB-3 chiqishi → Kabel №3 fazasi",
+     "Hisoblagich 4-qisqich → N shina → uchala kabel noli0/5",
+     "Tarmoq PE → PE shina → uchala kabel PE si0/5"
+    ]
+   }
+  },
+  {
+   "step": "sim rcd.no — m.3",
+   "msgs": [
+    [
+     "УЗО, pastki nol (N). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 6 / 12 zanjir tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 6 / 12 zanjir tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "6"
+    },
+    "steps": [
+     "done|Tarmoq fazasi (L) → kirish avtomati L kirishi (tayyor)",
+     "done|Tarmoq noli (N) → kirish avtomati N kirishi (tayyor)",
+     "done|Kirish avtomati L chiqishi → УЗО L kirishi (tayyor)",
+     "done|Kirish avtomati N chiqishi → УЗО N kirishi (tayyor)",
+     "done|УЗО L chiqishi → hisoblagich 1-qisqich (tayyor)",
+     "done|УЗО N chiqishi → hisoblagich 3-qisqich (tayyor)",
+     "Hisoblagich 2-qisqich → AB-1, AB-2, AB-3 kirishlari0/4",
+     "AB-1 chiqishi → Kabel №1 fazasi",
+     "AB-2 chiqishi → Kabel №2 fazasi",
+     "AB-3 chiqishi → Kabel №3 fazasi",
+     "Hisoblagich 4-qisqich → N shina → uchala kabel noli0/5",
+     "Tarmoq PE → PE shina → uchala kabel PE si0/5"
+    ]
+   }
+  },
+  {
+   "step": "sim m.2 — ab1.i",
+   "msgs": [
+    [
+     "Hisoblagich, 2-qisqich: faza chiqishi. Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 6 / 12 zanjir tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Tarmoq fazasi (L) → kirish avtomati L kirishi (tayyor)",
+     "done|Tarmoq noli (N) → kirish avtomati N kirishi (tayyor)",
+     "done|Kirish avtomati L chiqishi → УЗО L kirishi (tayyor)",
+     "done|Kirish avtomati N chiqishi → УЗО N kirishi (tayyor)",
+     "done|УЗО L chiqishi → hisoblagich 1-qisqich (tayyor)",
+     "done|УЗО N chiqishi → hisoblagich 3-qisqich (tayyor)",
+     "part|Hisoblagich 2-qisqich → AB-1, AB-2, AB-3 kirishlari2/4",
+     "AB-1 chiqishi → Kabel №1 fazasi",
+     "AB-2 chiqishi → Kabel №2 fazasi",
+     "AB-3 chiqishi → Kabel №3 fazasi",
+     "Hisoblagich 4-qisqich → N shina → uchala kabel noli0/5",
+     "Tarmoq PE → PE shina → uchala kabel PE si0/5"
+    ]
+   }
+  },
+  {
+   "step": "sim ab1.i — ab2.i",
+   "msgs": [
+    [
+     "AB-1, yuqori qisqich (kirish). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 6 / 12 zanjir tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Tarmoq fazasi (L) → kirish avtomati L kirishi (tayyor)",
+     "done|Tarmoq noli (N) → kirish avtomati N kirishi (tayyor)",
+     "done|Kirish avtomati L chiqishi → УЗО L kirishi (tayyor)",
+     "done|Kirish avtomati N chiqishi → УЗО N kirishi (tayyor)",
+     "done|УЗО L chiqishi → hisoblagich 1-qisqich (tayyor)",
+     "done|УЗО N chiqishi → hisoblagich 3-qisqich (tayyor)",
+     "part|Hisoblagich 2-qisqich → AB-1, AB-2, AB-3 kirishlari3/4",
+     "AB-1 chiqishi → Kabel №1 fazasi",
+     "AB-2 chiqishi → Kabel №2 fazasi",
+     "AB-3 chiqishi → Kabel №3 fazasi",
+     "Hisoblagich 4-qisqich → N shina → uchala kabel noli0/5",
+     "Tarmoq PE → PE shina → uchala kabel PE si0/5"
+    ]
+   }
+  },
+  {
+   "step": "sim ab2.i — ab3.i",
+   "msgs": [
+    [
+     "AB-2, yuqori qisqich (kirish). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 7 / 12 zanjir tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 7 / 12 zanjir tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "7"
+    },
+    "steps": [
+     "done|Tarmoq fazasi (L) → kirish avtomati L kirishi (tayyor)",
+     "done|Tarmoq noli (N) → kirish avtomati N kirishi (tayyor)",
+     "done|Kirish avtomati L chiqishi → УЗО L kirishi (tayyor)",
+     "done|Kirish avtomati N chiqishi → УЗО N kirishi (tayyor)",
+     "done|УЗО L chiqishi → hisoblagich 1-qisqich (tayyor)",
+     "done|УЗО N chiqishi → hisoblagich 3-qisqich (tayyor)",
+     "done|Hisoblagich 2-qisqich → AB-1, AB-2, AB-3 kirishlari (tayyor)4/4",
+     "AB-1 chiqishi → Kabel №1 fazasi",
+     "AB-2 chiqishi → Kabel №2 fazasi",
+     "AB-3 chiqishi → Kabel №3 fazasi",
+     "Hisoblagich 4-qisqich → N shina → uchala kabel noli0/5",
+     "Tarmoq PE → PE shina → uchala kabel PE si0/5"
+    ]
+   }
+  },
+  {
+   "step": "sim ab1.o — k1.l",
+   "msgs": [
+    [
+     "AB-1, pastki qisqich (chiqish). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 8 / 12 zanjir tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 8 / 12 zanjir tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "8"
+    },
+    "steps": [
+     "done|Tarmoq fazasi (L) → kirish avtomati L kirishi (tayyor)",
+     "done|Tarmoq noli (N) → kirish avtomati N kirishi (tayyor)",
+     "done|Kirish avtomati L chiqishi → УЗО L kirishi (tayyor)",
+     "done|Kirish avtomati N chiqishi → УЗО N kirishi (tayyor)",
+     "done|УЗО L chiqishi → hisoblagich 1-qisqich (tayyor)",
+     "done|УЗО N chiqishi → hisoblagich 3-qisqich (tayyor)",
+     "done|Hisoblagich 2-qisqich → AB-1, AB-2, AB-3 kirishlari (tayyor)4/4",
+     "done|AB-1 chiqishi → Kabel №1 fazasi (tayyor)",
+     "AB-2 chiqishi → Kabel №2 fazasi",
+     "AB-3 chiqishi → Kabel №3 fazasi",
+     "Hisoblagich 4-qisqich → N shina → uchala kabel noli0/5",
+     "Tarmoq PE → PE shina → uchala kabel PE si0/5"
+    ]
+   }
+  },
+  {
+   "step": "sim ab2.o — k2.l",
+   "msgs": [
+    [
+     "AB-2, pastki qisqich (chiqish). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 9 / 12 zanjir tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 9 / 12 zanjir tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "9"
+    },
+    "steps": [
+     "done|Tarmoq fazasi (L) → kirish avtomati L kirishi (tayyor)",
+     "done|Tarmoq noli (N) → kirish avtomati N kirishi (tayyor)",
+     "done|Kirish avtomati L chiqishi → УЗО L kirishi (tayyor)",
+     "done|Kirish avtomati N chiqishi → УЗО N kirishi (tayyor)",
+     "done|УЗО L chiqishi → hisoblagich 1-qisqich (tayyor)",
+     "done|УЗО N chiqishi → hisoblagich 3-qisqich (tayyor)",
+     "done|Hisoblagich 2-qisqich → AB-1, AB-2, AB-3 kirishlari (tayyor)4/4",
+     "done|AB-1 chiqishi → Kabel №1 fazasi (tayyor)",
+     "done|AB-2 chiqishi → Kabel №2 fazasi (tayyor)",
+     "AB-3 chiqishi → Kabel №3 fazasi",
+     "Hisoblagich 4-qisqich → N shina → uchala kabel noli0/5",
+     "Tarmoq PE → PE shina → uchala kabel PE si0/5"
+    ]
+   }
+  },
+  {
+   "step": "sim ab3.o — k3.l",
+   "msgs": [
+    [
+     "AB-3, pastki qisqich (chiqish). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 10 / 12 zanjir tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 10 / 12 zanjir tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "10"
+    },
+    "steps": [
+     "done|Tarmoq fazasi (L) → kirish avtomati L kirishi (tayyor)",
+     "done|Tarmoq noli (N) → kirish avtomati N kirishi (tayyor)",
+     "done|Kirish avtomati L chiqishi → УЗО L kirishi (tayyor)",
+     "done|Kirish avtomati N chiqishi → УЗО N kirishi (tayyor)",
+     "done|УЗО L chiqishi → hisoblagich 1-qisqich (tayyor)",
+     "done|УЗО N chiqishi → hisoblagich 3-qisqich (tayyor)",
+     "done|Hisoblagich 2-qisqich → AB-1, AB-2, AB-3 kirishlari (tayyor)4/4",
+     "done|AB-1 chiqishi → Kabel №1 fazasi (tayyor)",
+     "done|AB-2 chiqishi → Kabel №2 fazasi (tayyor)",
+     "done|AB-3 chiqishi → Kabel №3 fazasi (tayyor)",
+     "Hisoblagich 4-qisqich → N shina → uchala kabel noli0/5",
+     "Tarmoq PE → PE shina → uchala kabel PE si0/5"
+    ]
+   }
+  },
+  {
+   "step": "sim m.4 — nb1",
+   "msgs": [
+    [
+     "Hisoblagich, 4-qisqich: nol chiqishi. Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 10 / 12 zanjir tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Tarmoq fazasi (L) → kirish avtomati L kirishi (tayyor)",
+     "done|Tarmoq noli (N) → kirish avtomati N kirishi (tayyor)",
+     "done|Kirish avtomati L chiqishi → УЗО L kirishi (tayyor)",
+     "done|Kirish avtomati N chiqishi → УЗО N kirishi (tayyor)",
+     "done|УЗО L chiqishi → hisoblagich 1-qisqich (tayyor)",
+     "done|УЗО N chiqishi → hisoblagich 3-qisqich (tayyor)",
+     "done|Hisoblagich 2-qisqich → AB-1, AB-2, AB-3 kirishlari (tayyor)4/4",
+     "done|AB-1 chiqishi → Kabel №1 fazasi (tayyor)",
+     "done|AB-2 chiqishi → Kabel №2 fazasi (tayyor)",
+     "done|AB-3 chiqishi → Kabel №3 fazasi (tayyor)",
+     "part|Hisoblagich 4-qisqich → N shina → uchala kabel noli2/5",
+     "Tarmoq PE → PE shina → uchala kabel PE si0/5"
+    ]
+   }
+  },
+  {
+   "step": "sim nb2 — k1.n",
+   "msgs": [
+    [
+     "N shina, nol uyasi. Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 10 / 12 zanjir tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Tarmoq fazasi (L) → kirish avtomati L kirishi (tayyor)",
+     "done|Tarmoq noli (N) → kirish avtomati N kirishi (tayyor)",
+     "done|Kirish avtomati L chiqishi → УЗО L kirishi (tayyor)",
+     "done|Kirish avtomati N chiqishi → УЗО N kirishi (tayyor)",
+     "done|УЗО L chiqishi → hisoblagich 1-qisqich (tayyor)",
+     "done|УЗО N chiqishi → hisoblagich 3-qisqich (tayyor)",
+     "done|Hisoblagich 2-qisqich → AB-1, AB-2, AB-3 kirishlari (tayyor)4/4",
+     "done|AB-1 chiqishi → Kabel №1 fazasi (tayyor)",
+     "done|AB-2 chiqishi → Kabel №2 fazasi (tayyor)",
+     "done|AB-3 chiqishi → Kabel №3 fazasi (tayyor)",
+     "part|Hisoblagich 4-qisqich → N shina → uchala kabel noli3/5",
+     "Tarmoq PE → PE shina → uchala kabel PE si0/5"
+    ]
+   }
+  },
+  {
+   "step": "sim nb3 — k2.n",
+   "msgs": [
+    [
+     "N shina, nol uyasi. Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 10 / 12 zanjir tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Tarmoq fazasi (L) → kirish avtomati L kirishi (tayyor)",
+     "done|Tarmoq noli (N) → kirish avtomati N kirishi (tayyor)",
+     "done|Kirish avtomati L chiqishi → УЗО L kirishi (tayyor)",
+     "done|Kirish avtomati N chiqishi → УЗО N kirishi (tayyor)",
+     "done|УЗО L chiqishi → hisoblagich 1-qisqich (tayyor)",
+     "done|УЗО N chiqishi → hisoblagich 3-qisqich (tayyor)",
+     "done|Hisoblagich 2-qisqich → AB-1, AB-2, AB-3 kirishlari (tayyor)4/4",
+     "done|AB-1 chiqishi → Kabel №1 fazasi (tayyor)",
+     "done|AB-2 chiqishi → Kabel №2 fazasi (tayyor)",
+     "done|AB-3 chiqishi → Kabel №3 fazasi (tayyor)",
+     "part|Hisoblagich 4-qisqich → N shina → uchala kabel noli4/5",
+     "Tarmoq PE → PE shina → uchala kabel PE si0/5"
+    ]
+   }
+  },
+  {
+   "step": "sim nb4 — k3.n",
+   "msgs": [
+    [
+     "N shina, nol uyasi. Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 11 / 12 zanjir tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 11 / 12 zanjir tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "11"
+    },
+    "steps": [
+     "done|Tarmoq fazasi (L) → kirish avtomati L kirishi (tayyor)",
+     "done|Tarmoq noli (N) → kirish avtomati N kirishi (tayyor)",
+     "done|Kirish avtomati L chiqishi → УЗО L kirishi (tayyor)",
+     "done|Kirish avtomati N chiqishi → УЗО N kirishi (tayyor)",
+     "done|УЗО L chiqishi → hisoblagich 1-qisqich (tayyor)",
+     "done|УЗО N chiqishi → hisoblagich 3-qisqich (tayyor)",
+     "done|Hisoblagich 2-qisqich → AB-1, AB-2, AB-3 kirishlari (tayyor)4/4",
+     "done|AB-1 chiqishi → Kabel №1 fazasi (tayyor)",
+     "done|AB-2 chiqishi → Kabel №2 fazasi (tayyor)",
+     "done|AB-3 chiqishi → Kabel №3 fazasi (tayyor)",
+     "done|Hisoblagich 4-qisqich → N shina → uchala kabel noli (tayyor)5/5",
+     "Tarmoq PE → PE shina → uchala kabel PE si0/5"
+    ]
+   }
+  },
+  {
+   "step": "sim src.pe — pb1",
+   "msgs": [
+    [
+     "Tarmoq kabeli, himoya nol (PE). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 11 / 12 zanjir tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Tarmoq fazasi (L) → kirish avtomati L kirishi (tayyor)",
+     "done|Tarmoq noli (N) → kirish avtomati N kirishi (tayyor)",
+     "done|Kirish avtomati L chiqishi → УЗО L kirishi (tayyor)",
+     "done|Kirish avtomati N chiqishi → УЗО N kirishi (tayyor)",
+     "done|УЗО L chiqishi → hisoblagich 1-qisqich (tayyor)",
+     "done|УЗО N chiqishi → hisoblagich 3-qisqich (tayyor)",
+     "done|Hisoblagich 2-qisqich → AB-1, AB-2, AB-3 kirishlari (tayyor)4/4",
+     "done|AB-1 chiqishi → Kabel №1 fazasi (tayyor)",
+     "done|AB-2 chiqishi → Kabel №2 fazasi (tayyor)",
+     "done|AB-3 chiqishi → Kabel №3 fazasi (tayyor)",
+     "done|Hisoblagich 4-qisqich → N shina → uchala kabel noli (tayyor)5/5",
+     "part|Tarmoq PE → PE shina → uchala kabel PE si2/5"
+    ]
+   }
+  },
+  {
+   "step": "sim pb2 — k1.pe",
+   "msgs": [
+    [
+     "PE shina, himoya uyasi. Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 11 / 12 zanjir tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Tarmoq fazasi (L) → kirish avtomati L kirishi (tayyor)",
+     "done|Tarmoq noli (N) → kirish avtomati N kirishi (tayyor)",
+     "done|Kirish avtomati L chiqishi → УЗО L kirishi (tayyor)",
+     "done|Kirish avtomati N chiqishi → УЗО N kirishi (tayyor)",
+     "done|УЗО L chiqishi → hisoblagich 1-qisqich (tayyor)",
+     "done|УЗО N chiqishi → hisoblagich 3-qisqich (tayyor)",
+     "done|Hisoblagich 2-qisqich → AB-1, AB-2, AB-3 kirishlari (tayyor)4/4",
+     "done|AB-1 chiqishi → Kabel №1 fazasi (tayyor)",
+     "done|AB-2 chiqishi → Kabel №2 fazasi (tayyor)",
+     "done|AB-3 chiqishi → Kabel №3 fazasi (tayyor)",
+     "done|Hisoblagich 4-qisqich → N shina → uchala kabel noli (tayyor)5/5",
+     "part|Tarmoq PE → PE shina → uchala kabel PE si3/5"
+    ]
+   }
+  },
+  {
+   "step": "sim pb3 — k2.pe",
+   "msgs": [
+    [
+     "PE shina, himoya uyasi. Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 11 / 12 zanjir tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Tarmoq fazasi (L) → kirish avtomati L kirishi (tayyor)",
+     "done|Tarmoq noli (N) → kirish avtomati N kirishi (tayyor)",
+     "done|Kirish avtomati L chiqishi → УЗО L kirishi (tayyor)",
+     "done|Kirish avtomati N chiqishi → УЗО N kirishi (tayyor)",
+     "done|УЗО L chiqishi → hisoblagich 1-qisqich (tayyor)",
+     "done|УЗО N chiqishi → hisoblagich 3-qisqich (tayyor)",
+     "done|Hisoblagich 2-qisqich → AB-1, AB-2, AB-3 kirishlari (tayyor)4/4",
+     "done|AB-1 chiqishi → Kabel №1 fazasi (tayyor)",
+     "done|AB-2 chiqishi → Kabel №2 fazasi (tayyor)",
+     "done|AB-3 chiqishi → Kabel №3 fazasi (tayyor)",
+     "done|Hisoblagich 4-qisqich → N shina → uchala kabel noli (tayyor)5/5",
+     "part|Tarmoq PE → PE shina → uchala kabel PE si4/5"
+    ]
+   }
+  },
+  {
+   "step": "sim pb4 — k3.pe",
+   "msgs": [
+    [
+     "PE shina, himoya uyasi. Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sxema to'g'ri yig'ildi. Kuchlanish berib ko'ring.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sxema to'g'ri yig'ildi. Kuchlanish berib ko'ring.",
+     "c": "ok"
+    },
+    "power": {
+     "t": "Kuchlanish berish",
+     "c": "btn pri"
+    },
+    "pdone": {
+     "t": "12"
+    },
+    "hint": {
+     "t": "Maslahat",
+     "d": 1,
+     "c": "btn"
+    },
+    "steps": [
+     "done|Tarmoq fazasi (L) → kirish avtomati L kirishi (tayyor)",
+     "done|Tarmoq noli (N) → kirish avtomati N kirishi (tayyor)",
+     "done|Kirish avtomati L chiqishi → УЗО L kirishi (tayyor)",
+     "done|Kirish avtomati N chiqishi → УЗО N kirishi (tayyor)",
+     "done|УЗО L chiqishi → hisoblagich 1-qisqich (tayyor)",
+     "done|УЗО N chiqishi → hisoblagich 3-qisqich (tayyor)",
+     "done|Hisoblagich 2-qisqich → AB-1, AB-2, AB-3 kirishlari (tayyor)4/4",
+     "done|AB-1 chiqishi → Kabel №1 fazasi (tayyor)",
+     "done|AB-2 chiqishi → Kabel №2 fazasi (tayyor)",
+     "done|AB-3 chiqishi → Kabel №3 fazasi (tayyor)",
+     "done|Hisoblagich 4-qisqich → N shina → uchala kabel noli (tayyor)5/5",
+     "done|Tarmoq PE → PE shina → uchala kabel PE si (tayyor)5/5"
+    ]
+   }
+  },
+  {
+   "step": "tugma #power",
+   "msgs": [
+    [
+     "Kuchlanish berildi. Faza simida tok iste'molchiga boradi, nol simida qaytadi. PE da tok yo'q.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Kuchlanish berildi. Faza simida tok iste'molchiga boradi, nol simida qaytadi. PE da tok yo'q.",
+     "c": "ok"
+    },
+    "power": {
+     "t": "O'chirish",
+     "c": "btn pri"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "d": 1,
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "d": 1,
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "h": 1,
+     "d": 1,
+     "c": "btn"
+    },
+    "faults": {},
+    "freset": {
+     "t": "Qayta yoqish",
+     "d": 1,
+     "c": "btn pri"
+    },
+    "fclear": {
+     "t": "Nosozlikni olib tashlash",
+     "d": 1,
+     "c": "btn"
+    },
+    "fnote": {
+     "t": "Hamma himoya qurilmalari yoqilgan.",
+     "c": "fnote"
+    }
+   }
+  },
+  {
+   "step": "bosish k1.l",
+   "msgs": [
+    [
+     "Kuchlanish ostida sxemani o'zgartirib bo'lmaydi. Avval o'chiring.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Kuchlanish ostida sxemani o'zgartirib bo'lmaydi. Avval o'chiring.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "tugma #fshort",
+   "msgs": [
+    [
+     "Kabel №1 da faza va nol tutashdi. Tok keskin oshyapti...",
+     "bad"
+    ],
+    [
+     "AB-1 o'chdi. Qisqa tutashuv toki yuzlab amperga yetdi, C16 avtomatning magnit ajratgichi millisekundlar ichida ishladi. Boshqa guruhlar ishlashda davom etyapti.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "AB-1 o'chdi. Qisqa tutashuv toki yuzlab amperga yetdi, C16 avtomatning magnit ajratgichi millisekundlar ichida ishladi. Boshqa guruhlar ishlashda davom etyapti.",
+     "c": "ok"
+    },
+    "fshort": {
+     "t": "Qisqa tutashuv (L–N)",
+     "d": 1,
+     "c": "btn"
+    },
+    "fleak": {
+     "t": "Sizish toki (L→PE)",
+     "d": 1,
+     "c": "btn"
+    },
+    "freset": {
+     "t": "Qayta yoqish",
+     "c": "btn pri"
+    },
+    "fclear": {
+     "t": "Nosozlikni olib tashlash",
+     "c": "btn"
+    },
+    "fnote": {
+     "t": "AB-1 o'chgan, qolgan guruhlar ishlayapti. Nosozlik hali bartaraf etilmagan.",
+     "c": "fnote"
+    }
+   }
+  },
+  {
+   "step": "tugma #freset",
+   "msgs": [
+    [
+     "Avtomat qayta yoqildi, lekin nosozlik hali bor...",
+     "bad"
+    ],
+    [
+     "AB-1 o'chdi. Qisqa tutashuv toki yuzlab amperga yetdi, C16 avtomatning magnit ajratgichi millisekundlar ichida ishladi. Boshqa guruhlar ishlashda davom etyapti.",
+     "ok"
+    ]
+   ],
+   "state": {}
+  },
+  {
+   "step": "tugma #fclear",
+   "msgs": [
+    [
+     "Nosozlik bartaraf etildi. Endi o'chgan avtomatni qayta yoqish mumkin.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Nosozlik bartaraf etildi. Endi o'chgan avtomatni qayta yoqish mumkin.",
+     "c": "ok"
+    },
+    "fclear": {
+     "t": "Nosozlikni olib tashlash",
+     "d": 1,
+     "c": "btn"
+    },
+    "fnote": {
+     "t": "AB-1 o'chgan, qolgan guruhlar ishlayapti.",
+     "c": "fnote"
+    }
+   }
+  },
+  {
+   "step": "tugma #freset",
+   "msgs": [
+    [
+     "Himoya qurilmalari qayta yoqildi, kuchlanish tiklandi.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Himoya qurilmalari qayta yoqildi, kuchlanish tiklandi.",
+     "c": "ok"
+    },
+    "fshort": {
+     "t": "Qisqa tutashuv (L–N)",
+     "c": "btn"
+    },
+    "fleak": {
+     "t": "Sizish toki (L→PE)",
+     "c": "btn"
+    },
+    "freset": {
+     "t": "Qayta yoqish",
+     "d": 1,
+     "c": "btn pri"
+    },
+    "fnote": {
+     "t": "Hamma himoya qurilmalari yoqilgan.",
+     "c": "fnote"
+    }
+   }
+  },
+  {
+   "step": "tanlash #fg = 1",
+   "msgs": [],
+   "state": {
+    "fg": {
+     "t": "1",
+     "c": "sel"
+    }
+   }
+  },
+  {
+   "step": "tugma #fleak",
+   "msgs": [
+    [
+     "Kabel №2 da faza simi asbob korpusiga tushdi. Sizish toki oqyapti...",
+     "bad"
+    ],
+    [
+     "УЗО o'chdi. Fazadan oqib chiqqan tok nol orqali qaytmadi, farq 30 mA dan oshdi. Avtomatlar ishlamadi: tok ularning nominalidan ancha kichik. УЗО hisoblagichdan oldin turgani uchun butun shit o'chdi.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "УЗО o'chdi. Fazadan oqib chiqqan tok nol orqali qaytmadi, farq 30 mA dan oshdi. Avtomatlar ishlamadi: tok ularning nominalidan ancha kichik. УЗО hisoblagichdan oldin turgani uchun butun shit o'chdi.",
+     "c": "ok"
+    },
+    "fshort": {
+     "t": "Qisqa tutashuv (L–N)",
+     "d": 1,
+     "c": "btn"
+    },
+    "fleak": {
+     "t": "Sizish toki (L→PE)",
+     "d": 1,
+     "c": "btn"
+    },
+    "ftest": {
+     "t": "УЗО Test tugmasi",
+     "d": 1,
+     "c": "btn"
+    },
+    "freset": {
+     "t": "Qayta yoqish",
+     "c": "btn pri"
+    },
+    "fclear": {
+     "t": "Nosozlikni olib tashlash",
+     "c": "btn"
+    },
+    "fnote": {
+     "t": "УЗО o'chgan: butun shitda kuchlanish yo'q. Nosozlik hali bartaraf etilmagan.",
+     "c": "fnote"
+    }
+   }
+  },
+  {
+   "step": "tugma #freset",
+   "msgs": [
+    [
+     "Avtomat qayta yoqildi, lekin nosozlik hali bor...",
+     "bad"
+    ],
+    [
+     "УЗО o'chdi. Fazadan oqib chiqqan tok nol orqali qaytmadi, farq 30 mA dan oshdi. Avtomatlar ishlamadi: tok ularning nominalidan ancha kichik. УЗО hisoblagichdan oldin turgani uchun butun shit o'chdi.",
+     "ok"
+    ]
+   ],
+   "state": {}
+  },
+  {
+   "step": "tugma #fclear",
+   "msgs": [
+    [
+     "Nosozlik bartaraf etildi. Endi o'chgan avtomatni qayta yoqish mumkin.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Nosozlik bartaraf etildi. Endi o'chgan avtomatni qayta yoqish mumkin.",
+     "c": "ok"
+    },
+    "fclear": {
+     "t": "Nosozlikni olib tashlash",
+     "d": 1,
+     "c": "btn"
+    },
+    "fnote": {
+     "t": "УЗО o'chgan: butun shitda kuchlanish yo'q.",
+     "c": "fnote"
+    }
+   }
+  },
+  {
+   "step": "tugma #freset",
+   "msgs": [
+    [
+     "Himoya qurilmalari qayta yoqildi, kuchlanish tiklandi.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Himoya qurilmalari qayta yoqildi, kuchlanish tiklandi.",
+     "c": "ok"
+    },
+    "fshort": {
+     "t": "Qisqa tutashuv (L–N)",
+     "c": "btn"
+    },
+    "fleak": {
+     "t": "Sizish toki (L→PE)",
+     "c": "btn"
+    },
+    "ftest": {
+     "t": "УЗО Test tugmasi",
+     "c": "btn"
+    },
+    "freset": {
+     "t": "Qayta yoqish",
+     "d": 1,
+     "c": "btn pri"
+    },
+    "fnote": {
+     "t": "Hamma himoya qurilmalari yoqilgan.",
+     "c": "fnote"
+    }
+   }
+  },
+  {
+   "step": "tugma #ftest",
+   "msgs": [
+    [
+     "Test tugmasi sun'iy sizish toki hosil qildi va УЗО o'chdi. Uni oyiga bir marta shunday tekshirib turing.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Test tugmasi sun'iy sizish toki hosil qildi va УЗО o'chdi. Uni oyiga bir marta shunday tekshirib turing.",
+     "c": "ok"
+    },
+    "fshort": {
+     "t": "Qisqa tutashuv (L–N)",
+     "d": 1,
+     "c": "btn"
+    },
+    "fleak": {
+     "t": "Sizish toki (L→PE)",
+     "d": 1,
+     "c": "btn"
+    },
+    "ftest": {
+     "t": "УЗО Test tugmasi",
+     "d": 1,
+     "c": "btn"
+    },
+    "freset": {
+     "t": "Qayta yoqish",
+     "c": "btn pri"
+    },
+    "fnote": {
+     "t": "УЗО o'chgan: butun shitda kuchlanish yo'q.",
+     "c": "fnote"
+    }
+   }
+  },
+  {
+   "step": "tugma #freset",
+   "msgs": [
+    [
+     "Himoya qurilmalari qayta yoqildi, kuchlanish tiklandi.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Himoya qurilmalari qayta yoqildi, kuchlanish tiklandi.",
+     "c": "ok"
+    },
+    "fshort": {
+     "t": "Qisqa tutashuv (L–N)",
+     "c": "btn"
+    },
+    "fleak": {
+     "t": "Sizish toki (L→PE)",
+     "c": "btn"
+    },
+    "ftest": {
+     "t": "УЗО Test tugmasi",
+     "c": "btn"
+    },
+    "freset": {
+     "t": "Qayta yoqish",
+     "d": 1,
+     "c": "btn pri"
+    },
+    "fnote": {
+     "t": "Hamma himoya qurilmalari yoqilgan.",
+     "c": "fnote"
+    }
+   }
+  },
+  {
+   "step": "tanlash #fg = 2",
+   "msgs": [],
+   "state": {
+    "fg": {
+     "t": "2",
+     "c": "sel"
+    }
+   }
+  },
+  {
+   "step": "tugma #fshort",
+   "msgs": [
+    [
+     "Kabel №3 da faza va nol tutashdi. Tok keskin oshyapti...",
+     "bad"
+    ],
+    [
+     "AB-3 o'chdi. Qisqa tutashuv toki yuzlab amperga yetdi, C16 avtomatning magnit ajratgichi millisekundlar ichida ishladi. Boshqa guruhlar ishlashda davom etyapti.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "AB-3 o'chdi. Qisqa tutashuv toki yuzlab amperga yetdi, C16 avtomatning magnit ajratgichi millisekundlar ichida ishladi. Boshqa guruhlar ishlashda davom etyapti.",
+     "c": "ok"
+    },
+    "fshort": {
+     "t": "Qisqa tutashuv (L–N)",
+     "d": 1,
+     "c": "btn"
+    },
+    "fleak": {
+     "t": "Sizish toki (L→PE)",
+     "d": 1,
+     "c": "btn"
+    },
+    "freset": {
+     "t": "Qayta yoqish",
+     "c": "btn pri"
+    },
+    "fclear": {
+     "t": "Nosozlikni olib tashlash",
+     "c": "btn"
+    },
+    "fnote": {
+     "t": "AB-3 o'chgan, qolgan guruhlar ishlayapti. Nosozlik hali bartaraf etilmagan.",
+     "c": "fnote"
+    }
+   }
+  },
+  {
+   "step": "tugma #power",
+   "msgs": [
+    [
+     "Kuchlanish o'chirildi. Sxemani o'zgartirishingiz mumkin.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Kuchlanish o'chirildi. Sxemani o'zgartirishingiz mumkin."
+    },
+    "power": {
+     "t": "Kuchlanish berish",
+     "c": "btn pri"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "h": 1,
+     "c": "btn"
+    },
+    "faults": {
+     "h": 1
+    }
+   }
+  },
+  {
+   "step": "tugma #clear",
+   "msgs": [
+    [
+     "Sxema tozalandi. Tarmoq simlaridan boshlang.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sxema tozalandi. Tarmoq simlaridan boshlang."
+    },
+    "power": {
+     "t": "Kuchlanish berish",
+     "d": 1,
+     "c": "btn pri"
+    },
+    "pdone": {
+     "t": "0"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "d": 1,
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "d": 1,
+     "c": "btn"
+    },
+    "hint": {
+     "t": "Maslahat",
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "h": 1,
+     "d": 1,
+     "c": "btn"
+    },
+    "steps": [
+     "Tarmoq fazasi (L) → kirish avtomati L kirishi",
+     "Tarmoq noli (N) → kirish avtomati N kirishi",
+     "Kirish avtomati L chiqishi → УЗО L kirishi",
+     "Kirish avtomati N chiqishi → УЗО N kirishi",
+     "УЗО L chiqishi → hisoblagich 1-qisqich",
+     "УЗО N chiqishi → hisoblagich 3-qisqich",
+     "Hisoblagich 2-qisqich → AB-1, AB-2, AB-3 kirishlari0/4",
+     "AB-1 chiqishi → Kabel №1 fazasi",
+     "AB-2 chiqishi → Kabel №2 fazasi",
+     "AB-3 chiqishi → Kabel №3 fazasi",
+     "Hisoblagich 4-qisqich → N shina → uchala kabel noli0/5",
+     "Tarmoq PE → PE shina → uchala kabel PE si0/5"
+    ]
+   }
+  }
+ ],
+ "exam": [
+  {
+   "step": "ochilish",
+   "msgs": [],
+   "state": {
+    "status2": {
+     "t": "Namuna: tarmoq L va N simlari kirish avtomatiga ulangan. Endi avtomat pastki vintlarini УЗО ga ulang."
+    },
+    "power": {
+     "t": "Kuchlanish berish",
+     "d": 1,
+     "c": "btn pri"
+    },
+    "prog": {},
+    "pdone": {
+     "t": "2"
+    },
+    "exam": {
+     "h": 1
+    },
+    "wcount": {
+     "t": "0"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "c": "btn"
+    },
+    "hint": {
+     "t": "Maslahat",
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "h": 1,
+     "c": "btn"
+    },
+    "m-learn": {
+     "t": "O'rganish",
+     "p": "true"
+    },
+    "m-exam": {
+     "t": "Imtihon",
+     "p": "false"
+    },
+    "faults": {
+     "h": 1
+    },
+    "fshort": {
+     "t": "Qisqa tutashuv (L–N)",
+     "c": "btn"
+    },
+    "fleak": {
+     "t": "Sizish toki (L→PE)",
+     "c": "btn"
+    },
+    "ftest": {
+     "t": "УЗО Test tugmasi",
+     "c": "btn"
+    },
+    "freset": {
+     "t": "Qayta yoqish",
+     "c": "btn pri"
+    },
+    "fclear": {
+     "t": "Nosozlikni olib tashlash",
+     "c": "btn"
+    },
+    "fnote": {
+     "c": "fnote"
+    },
+    "fg": {
+     "t": "0",
+     "c": "sel"
+    },
+    "steps": [
+     "done|Tarmoq fazasi (L) → kirish avtomati L kirishi (tayyor)",
+     "done|Tarmoq noli (N) → kirish avtomati N kirishi (tayyor)",
+     "Kirish avtomati L chiqishi → УЗО L kirishi",
+     "Kirish avtomati N chiqishi → УЗО N kirishi",
+     "УЗО L chiqishi → hisoblagich 1-qisqich",
+     "УЗО N chiqishi → hisoblagich 3-qisqich",
+     "Hisoblagich 2-qisqich → AB-1, AB-2, AB-3 kirishlari0/4",
+     "AB-1 chiqishi → Kabel №1 fazasi",
+     "AB-2 chiqishi → Kabel №2 fazasi",
+     "AB-3 chiqishi → Kabel №3 fazasi",
+     "Hisoblagich 4-qisqich → N shina → uchala kabel noli0/5",
+     "Tarmoq PE → PE shina → uchala kabel PE si0/5"
+    ],
+    "report": []
+   }
+  },
+  {
+   "step": "tugma #m-exam",
+   "msgs": [
+    [
+     "Imtihon rejimi: xohlagan simni ulang, tayyor bo'lgach Tekshirish ni bosing.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Imtihon rejimi: xohlagan simni ulang, tayyor bo'lgach Tekshirish ni bosing."
+    },
+    "prog": {
+     "h": 1
+    },
+    "exam": {},
+    "undo": {
+     "t": "Orqaga",
+     "d": 1,
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "d": 1,
+     "c": "btn"
+    },
+    "hint": {
+     "t": "Maslahat",
+     "h": 1,
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "d": 1,
+     "c": "btn"
+    },
+    "m-learn": {
+     "t": "O'rganish",
+     "p": "false"
+    },
+    "m-exam": {
+     "t": "Imtihon",
+     "p": "true"
+    }
+   }
+  },
+  {
+   "step": "sim src.l — ab.ni",
+   "msgs": [
+    [
+     "Tarmoq kabeli, faza (L). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 1 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 1 ta."
+    },
+    "wcount": {
+     "t": "1"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "c": "btn"
+    }
+   }
+  },
+  {
+   "step": "sim src.l — ab.li",
+   "msgs": [
+    [
+     "Tarmoq kabeli, faza (L). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 2 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 2 ta."
+    },
+    "wcount": {
+     "t": "2"
+    }
+   }
+  },
+  {
+   "step": "sim ab.lo — ab.no",
+   "msgs": [
+    [
+     "Kirish avtomati, pastki faza (L). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 3 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 3 ta."
+    },
+    "wcount": {
+     "t": "3"
+    }
+   }
+  },
+  {
+   "step": "sim src.pe — pb1",
+   "msgs": [
+    [
+     "Tarmoq kabeli, himoya nol (PE). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 4 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 4 ta."
+    },
+    "wcount": {
+     "t": "4"
+    }
+   }
+  },
+  {
+   "step": "tugma #check",
+   "msgs": [
+    [
+     "Tekshiruv: 3 ta muammo topildi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Tekshiruv: 3 ta muammo topildi.",
+     "c": "bad"
+    },
+    "report": [
+     "Xato sim: Tarmoq kabeli, faza (L) va Kirish avtomati, yuqori nol (N). Faza (L) va nol (N) ulandi: bu qisqa tutashuv, avtomat darhol o'chadi.",
+     "Xato sim: Kirish avtomati, pastki faza (L) va Kirish avtomati, pastki nol (N). Faza (L) va nol (N) ulandi: bu qisqa tutashuv, avtomat darhol o'chadi.",
+     "Yana 11 ta zanjir to'liq emas."
+    ]
+   }
+  },
+  {
+   "step": "tugma #clear",
+   "msgs": [
+    [
+     "Sxema tozalandi. Tarmoq simlaridan boshlang.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sxema tozalandi. Tarmoq simlaridan boshlang."
+    },
+    "wcount": {
+     "t": "0"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "d": 1,
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "d": 1,
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "d": 1,
+     "c": "btn"
+    },
+    "report": []
+   }
+  },
+  {
+   "step": "sim src.l — ab.li",
+   "msgs": [
+    [
+     "Tarmoq kabeli, faza (L). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 1 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 1 ta."
+    },
+    "wcount": {
+     "t": "1"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "c": "btn"
+    }
+   }
+  },
+  {
+   "step": "sim src.n — ab.ni",
+   "msgs": [
+    [
+     "Tarmoq kabeli, ishchi nol (N). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 2 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 2 ta."
+    },
+    "wcount": {
+     "t": "2"
+    }
+   }
+  },
+  {
+   "step": "sim ab.lo — rcd.li",
+   "msgs": [
+    [
+     "Kirish avtomati, pastki faza (L). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 3 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 3 ta."
+    },
+    "wcount": {
+     "t": "3"
+    }
+   }
+  },
+  {
+   "step": "sim ab.no — rcd.ni",
+   "msgs": [
+    [
+     "Kirish avtomati, pastki nol (N). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 4 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 4 ta."
+    },
+    "wcount": {
+     "t": "4"
+    }
+   }
+  },
+  {
+   "step": "sim rcd.lo — m.1",
+   "msgs": [
+    [
+     "УЗО, pastki faza (L). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 5 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 5 ta."
+    },
+    "wcount": {
+     "t": "5"
+    }
+   }
+  },
+  {
+   "step": "sim rcd.no — m.3",
+   "msgs": [
+    [
+     "УЗО, pastki nol (N). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 6 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 6 ta."
+    },
+    "wcount": {
+     "t": "6"
+    }
+   }
+  },
+  {
+   "step": "sim m.2 — ab1.i",
+   "msgs": [
+    [
+     "Hisoblagich, 2-qisqich: faza chiqishi. Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 7 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 7 ta."
+    },
+    "wcount": {
+     "t": "7"
+    }
+   }
+  },
+  {
+   "step": "sim ab1.i — ab2.i",
+   "msgs": [
+    [
+     "AB-1, yuqori qisqich (kirish). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 8 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 8 ta."
+    },
+    "wcount": {
+     "t": "8"
+    }
+   }
+  },
+  {
+   "step": "sim ab2.i — ab3.i",
+   "msgs": [
+    [
+     "AB-2, yuqori qisqich (kirish). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 9 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 9 ta."
+    },
+    "wcount": {
+     "t": "9"
+    }
+   }
+  },
+  {
+   "step": "sim ab1.o — k1.l",
+   "msgs": [
+    [
+     "AB-1, pastki qisqich (chiqish). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 10 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 10 ta."
+    },
+    "wcount": {
+     "t": "10"
+    }
+   }
+  },
+  {
+   "step": "sim ab2.o — k2.l",
+   "msgs": [
+    [
+     "AB-2, pastki qisqich (chiqish). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 11 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 11 ta."
+    },
+    "wcount": {
+     "t": "11"
+    }
+   }
+  },
+  {
+   "step": "sim ab3.o — k3.l",
+   "msgs": [
+    [
+     "AB-3, pastki qisqich (chiqish). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 12 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 12 ta."
+    },
+    "wcount": {
+     "t": "12"
+    }
+   }
+  },
+  {
+   "step": "sim m.4 — nb1",
+   "msgs": [
+    [
+     "Hisoblagich, 4-qisqich: nol chiqishi. Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 13 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 13 ta."
+    },
+    "wcount": {
+     "t": "13"
+    }
+   }
+  },
+  {
+   "step": "sim nb2 — k1.n",
+   "msgs": [
+    [
+     "N shina, nol uyasi. Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 14 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 14 ta."
+    },
+    "wcount": {
+     "t": "14"
+    }
+   }
+  },
+  {
+   "step": "sim nb3 — k2.n",
+   "msgs": [
+    [
+     "N shina, nol uyasi. Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 15 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 15 ta."
+    },
+    "wcount": {
+     "t": "15"
+    }
+   }
+  },
+  {
+   "step": "sim nb4 — k3.n",
+   "msgs": [
+    [
+     "N shina, nol uyasi. Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 16 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 16 ta."
+    },
+    "wcount": {
+     "t": "16"
+    }
+   }
+  },
+  {
+   "step": "sim src.pe — pb1",
+   "msgs": [
+    [
+     "Tarmoq kabeli, himoya nol (PE). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 17 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 17 ta."
+    },
+    "wcount": {
+     "t": "17"
+    }
+   }
+  },
+  {
+   "step": "sim pb2 — k1.pe",
+   "msgs": [
+    [
+     "PE shina, himoya uyasi. Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 18 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 18 ta."
+    },
+    "wcount": {
+     "t": "18"
+    }
+   }
+  },
+  {
+   "step": "sim pb3 — k2.pe",
+   "msgs": [
+    [
+     "PE shina, himoya uyasi. Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 19 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 19 ta."
+    },
+    "wcount": {
+     "t": "19"
+    }
+   }
+  },
+  {
+   "step": "sim pb4 — k3.pe",
+   "msgs": [
+    [
+     "PE shina, himoya uyasi. Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 20 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 20 ta."
+    },
+    "wcount": {
+     "t": "20"
+    },
+    "hint": {
+     "t": "Maslahat",
+     "h": 1,
+     "d": 1,
+     "c": "btn"
+    }
+   }
+  },
+  {
+   "step": "sim src.l — src.n",
+   "msgs": [
+    [
+     "Tarmoq kabeli, faza (L). Boshqa vintga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 21 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 21 ta."
+    },
+    "wcount": {
+     "t": "21"
+    },
+    "hint": {
+     "t": "Maslahat",
+     "h": 1,
+     "c": "btn"
+    }
+   }
+  },
+  {
+   "step": "tugma #check",
+   "msgs": [
+    [
+     "Tekshiruv: 1 ta muammo topildi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Tekshiruv: 1 ta muammo topildi.",
+     "c": "bad"
+    },
+    "report": [
+     "Xato sim: Tarmoq kabeli, faza (L) va Tarmoq kabeli, ishchi nol (N). Faza (L) va nol (N) ulandi: bu qisqa tutashuv, avtomat darhol o'chadi."
+    ]
+   }
+  },
+  {
+   "step": "tugma #undo",
+   "msgs": [
+    [
+     "Oxirgi sim olib tashlandi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Oxirgi sim olib tashlandi."
+    },
+    "wcount": {
+     "t": "20"
+    },
+    "hint": {
+     "t": "Maslahat",
+     "h": 1,
+     "d": 1,
+     "c": "btn"
+    },
+    "report": []
+   }
+  },
+  {
+   "step": "tugma #check",
+   "msgs": [
+    [
+     "Sxema to'g'ri va to'liq. Kuchlanish berishingiz mumkin.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sxema to'g'ri va to'liq. Kuchlanish berishingiz mumkin.",
+     "c": "ok"
+    },
+    "power": {
+     "t": "Kuchlanish berish",
+     "c": "btn pri"
+    }
+   }
+  },
+  {
+   "step": "tugma #power",
+   "msgs": [
+    [
+     "Kuchlanish berildi. Faza simida tok iste'molchiga boradi, nol simida qaytadi. PE da tok yo'q.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Kuchlanish berildi. Faza simida tok iste'molchiga boradi, nol simida qaytadi. PE da tok yo'q.",
+     "c": "ok"
+    },
+    "power": {
+     "t": "O'chirish",
+     "c": "btn pri"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "d": 1,
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "d": 1,
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "d": 1,
+     "c": "btn"
+    },
+    "faults": {},
+    "freset": {
+     "t": "Qayta yoqish",
+     "d": 1,
+     "c": "btn pri"
+    },
+    "fclear": {
+     "t": "Nosozlikni olib tashlash",
+     "d": 1,
+     "c": "btn"
+    },
+    "fnote": {
+     "t": "Hamma himoya qurilmalari yoqilgan.",
+     "c": "fnote"
+    }
+   }
+  },
+  {
+   "step": "tugma #power",
+   "msgs": [
+    [
+     "Kuchlanish o'chirildi. Sxemani o'zgartirishingiz mumkin.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Kuchlanish o'chirildi. Sxemani o'zgartirishingiz mumkin."
+    },
+    "power": {
+     "t": "Kuchlanish berish",
+     "c": "btn pri"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "c": "btn"
+    },
+    "faults": {
+     "h": 1
+    }
+   }
+  },
+  {
+   "step": "tugma #m-learn",
+   "msgs": [
+    [
+     "O'rganish rejimi: noto'g'ri ulanish darhol tushuntiriladi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "O'rganish rejimi: noto'g'ri ulanish darhol tushuntiriladi."
+    },
+    "power": {
+     "t": "Kuchlanish berish",
+     "d": 1,
+     "c": "btn pri"
+    },
+    "prog": {},
+    "pdone": {
+     "t": "0"
+    },
+    "exam": {
+     "h": 1
+    },
+    "undo": {
+     "t": "Orqaga",
+     "d": 1,
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "d": 1,
+     "c": "btn"
+    },
+    "hint": {
+     "t": "Maslahat",
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "h": 1,
+     "d": 1,
+     "c": "btn"
+    },
+    "m-learn": {
+     "t": "O'rganish",
+     "p": "true"
+    },
+    "m-exam": {
+     "t": "Imtihon",
+     "p": "false"
+    },
+    "steps": [
+     "Tarmoq fazasi (L) → kirish avtomati L kirishi",
+     "Tarmoq noli (N) → kirish avtomati N kirishi",
+     "Kirish avtomati L chiqishi → УЗО L kirishi",
+     "Kirish avtomati N chiqishi → УЗО N kirishi",
+     "УЗО L chiqishi → hisoblagich 1-qisqich",
+     "УЗО N chiqishi → hisoblagich 3-qisqich",
+     "Hisoblagich 2-qisqich → AB-1, AB-2, AB-3 kirishlari0/4",
+     "AB-1 chiqishi → Kabel №1 fazasi",
+     "AB-2 chiqishi → Kabel №2 fazasi",
+     "AB-3 chiqishi → Kabel №3 fazasi",
+     "Hisoblagich 4-qisqich → N shina → uchala kabel noli0/5",
+     "Tarmoq PE → PE shina → uchala kabel PE si0/5"
+    ]
+   }
+  }
+ ]
+}

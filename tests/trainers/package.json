@@ -1,0 +1,14 @@
+{
+  "name": "trainer-tests",
+  "private": true,
+  "type": "module",
+  "description": "3D trenajyorlar (07–11) uchun funksional va tezlik sinovlari. Ishga tushirish: npm install && npm test; o'lchov: npm run measure",
+  "scripts": {
+    "test": "node --test functional.test.mjs",
+    "measure": "node measure.mjs"
+  },
+  "devDependencies": {
+    "playwright-core": "1.63.0",
+    "three": "0.128.0"
+  }
+}

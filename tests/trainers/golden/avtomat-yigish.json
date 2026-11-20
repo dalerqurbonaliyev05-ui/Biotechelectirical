@@ -1,0 +1,2499 @@
+{
+ "learn": [
+  {
+   "step": "ochilish",
+   "msgs": [],
+   "state": {
+    "status2": {
+     "t": "Stoldagi detallardan birini tanlang va avtomat ichidagi joyiga qo'ying. Boshlash uchun «Maslahat» ni bosing."
+    },
+    "pdone": {
+     "t": "0"
+    },
+    "info": {
+     "t": "Detal haqida Ro'yxatdan yoki stoldan detalni tanlang: uning nomi va vazifasi shu yerda chiqadi.",
+     "c": "card"
+    },
+    "result": {
+     "h": 1,
+     "c": "result"
+    },
+    "test": {
+     "h": 1
+    },
+    "tstate": {
+     "c": "tstate"
+    },
+    "t-handle": {
+     "t": "Dastakni yoqish",
+     "d": 1,
+     "c": "btn pri"
+    },
+    "t-over": {
+     "t": "Ortiqcha yuklanish",
+     "d": 1,
+     "c": "btn warn"
+    },
+    "t-short": {
+     "t": "Qisqa tutashuv",
+     "d": 1,
+     "c": "btn warn"
+    },
+    "cover": {
+     "t": "Qopqoqni yopish",
+     "d": 1,
+     "c": "btn"
+    },
+    "hint": {
+     "t": "Maslahat",
+     "c": "btn"
+    },
+    "reset": {
+     "t": "Boshidan",
+     "c": "btn"
+    },
+    "m-learn": {
+     "t": "O'rganish",
+     "p": "true"
+    },
+    "m-exam": {
+     "t": "Imtihon",
+     "p": "false"
+    },
+    "plist": [
+     "1Pastki vintli klemmastolda",
+     "2Yuqori vintli klemmastolda",
+     "3Harakatlanuvchi kontaktstolda",
+     "4Yoy so'ndirish kamerasistolda",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "6Elektromagnit qismi (g'altak)stolda",
+     "7Elektromagnit yadrosistolda",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "tugma #hint",
+   "msgs": [
+    [
+     "Maslahat: 1 · Pastki vintli klemma. Ko'k soya uning o'rnini ko'rsatadi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Maslahat: 1 · Pastki vintli klemma. Ko'k soya uning o'rnini ko'rsatadi."
+    },
+    "info": {
+     "t": "1Pastki vintli klemmaSimni vint bilan qisadigan klemma. Tok shu yerdan issiqlik qismiga (8) o'tadi.",
+     "c": "card"
+    },
+    "plist": [
+     "sel|1Pastki vintli klemmastolda",
+     "2Yuqori vintli klemmastolda",
+     "3Harakatlanuvchi kontaktstolda",
+     "4Yoy so'ndirish kamerasistolda",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "6Elektromagnit qismi (g'altak)stolda",
+     "7Elektromagnit yadrosistolda",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detalni (0,-37) ga qo'yish",
+   "msgs": [
+    [
+     "Bu yer emas. Pastki vintli klemma boshqa joyga qo'yiladi: tanlaganda ko'k soya o'rnini ko'rsatadi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Bu yer emas. Pastki vintli klemma boshqa joyga qo'yiladi: tanlaganda ko'k soya o'rnini ko'rsatadi.",
+     "c": "bad"
+    },
+    "plist": [
+     "1Pastki vintli klemmastolda",
+     "2Yuqori vintli klemmastolda",
+     "3Harakatlanuvchi kontaktstolda",
+     "4Yoy so'ndirish kamerasistolda",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "6Elektromagnit qismi (g'altak)stolda",
+     "7Elektromagnit yadrosistolda",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detal tanlash arm",
+   "msgs": [
+    [
+     "3 · Harakatlanuvchi kontakt: endi uning joyini bosing yoki sudrab olib boring. Ko'k soya o'rnini ko'rsatadi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "3 · Harakatlanuvchi kontakt: endi uning joyini bosing yoki sudrab olib boring. Ko'k soya o'rnini ko'rsatadi."
+    },
+    "info": {
+     "t": "3Harakatlanuvchi kontaktKumush qoplamali kontakt. Qo'zg'almas kontaktga tegib zanjirni yopadi, ajralib zanjirni uzadi.",
+     "c": "card"
+    },
+    "plist": [
+     "1Pastki vintli klemmastolda",
+     "2Yuqori vintli klemmastolda",
+     "sel|3Harakatlanuvchi kontaktstolda",
+     "4Yoy so'ndirish kamerasistolda",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "6Elektromagnit qismi (g'altak)stolda",
+     "7Elektromagnit yadrosistolda",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detalni joyiga qo'yish arm",
+   "msgs": [
+    [
+     "Kontakt juftining ikkinchi yarmi yuqori klemmada turadi, shuning uchun avval o'sha klemmani o'rnating. Hozircha yetishmaydi: 2 (Yuqori vintli klemma).",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Kontakt juftining ikkinchi yarmi yuqori klemmada turadi, shuning uchun avval o'sha klemmani o'rnating. Hozircha yetishmaydi: 2 (Yuqori vintli klemma).",
+     "c": "bad"
+    },
+    "plist": [
+     "1Pastki vintli klemmastolda",
+     "2Yuqori vintli klemmastolda",
+     "3Harakatlanuvchi kontaktstolda",
+     "4Yoy so'ndirish kamerasistolda",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "6Elektromagnit qismi (g'altak)stolda",
+     "7Elektromagnit yadrosistolda",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detal tanlash t1",
+   "msgs": [
+    [
+     "1 · Pastki vintli klemma: endi uning joyini bosing yoki sudrab olib boring. Ko'k soya o'rnini ko'rsatadi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "1 · Pastki vintli klemma: endi uning joyini bosing yoki sudrab olib boring. Ko'k soya o'rnini ko'rsatadi."
+    },
+    "info": {
+     "t": "1Pastki vintli klemmaSimni vint bilan qisadigan klemma. Tok shu yerdan issiqlik qismiga (8) o'tadi.",
+     "c": "card"
+    },
+    "plist": [
+     "sel|1Pastki vintli klemmastolda",
+     "2Yuqori vintli klemmastolda",
+     "3Harakatlanuvchi kontaktstolda",
+     "4Yoy so'ndirish kamerasistolda",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "6Elektromagnit qismi (g'altak)stolda",
+     "7Elektromagnit yadrosistolda",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detalni (36.4,-20) ga qo'yish",
+   "msgs": [
+    [
+     "Bu yer emas. Pastki vintli klemma boshqa joyga qo'yiladi: tanlaganda ko'k soya o'rnini ko'rsatadi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Bu yer emas. Pastki vintli klemma boshqa joyga qo'yiladi: tanlaganda ko'k soya o'rnini ko'rsatadi.",
+     "c": "bad"
+    },
+    "plist": [
+     "1Pastki vintli klemmastolda",
+     "2Yuqori vintli klemmastolda",
+     "3Harakatlanuvchi kontaktstolda",
+     "4Yoy so'ndirish kamerasistolda",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "6Elektromagnit qismi (g'altak)stolda",
+     "7Elektromagnit yadrosistolda",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detal tanlash t1",
+   "msgs": [
+    [
+     "1 · Pastki vintli klemma: endi uning joyini bosing yoki sudrab olib boring. Ko'k soya o'rnini ko'rsatadi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "1 · Pastki vintli klemma: endi uning joyini bosing yoki sudrab olib boring. Ko'k soya o'rnini ko'rsatadi."
+    },
+    "plist": [
+     "sel|1Pastki vintli klemmastolda",
+     "2Yuqori vintli klemmastolda",
+     "3Harakatlanuvchi kontaktstolda",
+     "4Yoy so'ndirish kamerasistolda",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "6Elektromagnit qismi (g'altak)stolda",
+     "7Elektromagnit yadrosistolda",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detalni joyiga qo'yish t1",
+   "msgs": [
+    [
+     "Joyiga tushmoqda...",
+     ""
+    ],
+    [
+     "1 · Pastki vintli klemma o'rnatildi. 1 / 12.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "1 · Pastki vintli klemma o'rnatildi. 1 / 12.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "1"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "2Yuqori vintli klemmastolda",
+     "3Harakatlanuvchi kontaktstolda",
+     "4Yoy so'ndirish kamerasistolda",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "6Elektromagnit qismi (g'altak)stolda",
+     "7Elektromagnit yadrosistolda",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detal tanlash t2",
+   "msgs": [
+    [
+     "2 · Yuqori vintli klemma: endi uning joyini bosing yoki sudrab olib boring. Ko'k soya o'rnini ko'rsatadi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "2 · Yuqori vintli klemma: endi uning joyini bosing yoki sudrab olib boring. Ko'k soya o'rnini ko'rsatadi."
+    },
+    "info": {
+     "t": "2Yuqori vintli klemmaIkkinchi klemma. Undan tok qo'zg'almas kontaktga o'tadi. Kontakt juftining yarmi shu klemmaga o'rnatilgan.",
+     "c": "card"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "sel|2Yuqori vintli klemmastolda",
+     "3Harakatlanuvchi kontaktstolda",
+     "4Yoy so'ndirish kamerasistolda",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "6Elektromagnit qismi (g'altak)stolda",
+     "7Elektromagnit yadrosistolda",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detalni joyiga qo'yish t2",
+   "msgs": [
+    [
+     "Joyiga tushmoqda...",
+     ""
+    ],
+    [
+     "2 · Yuqori vintli klemma o'rnatildi. 2 / 12.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "2 · Yuqori vintli klemma o'rnatildi. 2 / 12.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "2"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "3Harakatlanuvchi kontaktstolda",
+     "4Yoy so'ndirish kamerasistolda",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "6Elektromagnit qismi (g'altak)stolda",
+     "7Elektromagnit yadrosistolda",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detal tanlash chute",
+   "msgs": [
+    [
+     "4 · Yoy so'ndirish kamerasi: endi uning joyini bosing yoki sudrab olib boring. Ko'k soya o'rnini ko'rsatadi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "4 · Yoy so'ndirish kamerasi: endi uning joyini bosing yoki sudrab olib boring. Ko'k soya o'rnini ko'rsatadi."
+    },
+    "info": {
+     "t": "4Yoy so'ndirish kamerasiKontaktlar ajralganda yoy hosil bo'ladi. Po'lat plastinalar uni bir nechta qisqa yoyga bo'ladi, sovitadi va so'ndiradi.",
+     "c": "card"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "3Harakatlanuvchi kontaktstolda",
+     "sel|4Yoy so'ndirish kamerasistolda",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "6Elektromagnit qismi (g'altak)stolda",
+     "7Elektromagnit yadrosistolda",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detalni joyiga qo'yish chute",
+   "msgs": [
+    [
+     "Joyiga tushmoqda...",
+     ""
+    ],
+    [
+     "4 · Yoy so'ndirish kamerasi o'rnatildi. 3 / 12.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "4 · Yoy so'ndirish kamerasi o'rnatildi. 3 / 12.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "3"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "3Harakatlanuvchi kontaktstolda",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "6Elektromagnit qismi (g'altak)stolda",
+     "7Elektromagnit yadrosistolda",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detal tanlash arm",
+   "msgs": [
+    [
+     "3 · Harakatlanuvchi kontakt: endi uning joyini bosing yoki sudrab olib boring. Ko'k soya o'rnini ko'rsatadi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "3 · Harakatlanuvchi kontakt: endi uning joyini bosing yoki sudrab olib boring. Ko'k soya o'rnini ko'rsatadi."
+    },
+    "info": {
+     "t": "3Harakatlanuvchi kontaktKumush qoplamali kontakt. Qo'zg'almas kontaktga tegib zanjirni yopadi, ajralib zanjirni uzadi.",
+     "c": "card"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "sel|3Harakatlanuvchi kontaktstolda",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "6Elektromagnit qismi (g'altak)stolda",
+     "7Elektromagnit yadrosistolda",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detalni joyiga qo'yish arm",
+   "msgs": [
+    [
+     "Joyiga tushmoqda...",
+     ""
+    ],
+    [
+     "3 · Harakatlanuvchi kontakt o'rnatildi. 4 / 12.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "3 · Harakatlanuvchi kontakt o'rnatildi. 4 / 12.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "4"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "done |3Harakatlanuvchi kontakttayyor",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "6Elektromagnit qismi (g'altak)stolda",
+     "7Elektromagnit yadrosistolda",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detal tanlash coil",
+   "msgs": [
+    [
+     "6 · Elektromagnit qismi (g'altak): endi uning joyini bosing yoki sudrab olib boring. Ko'k soya o'rnini ko'rsatadi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "6 · Elektromagnit qismi (g'altak): endi uning joyini bosing yoki sudrab olib boring. Ko'k soya o'rnini ko'rsatadi."
+    },
+    "info": {
+     "t": "6Elektromagnit qismi (g'altak)Qisqa tutashuvda tok keskin oshadi va g'altak kuchli magnit maydon hosil qiladi. U yadroni tortib mexanizmni zarbdan o'chiradi.",
+     "c": "card"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "done |3Harakatlanuvchi kontakttayyor",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "sel|6Elektromagnit qismi (g'altak)stolda",
+     "7Elektromagnit yadrosistolda",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detalni joyiga qo'yish coil",
+   "msgs": [
+    [
+     "Joyiga tushmoqda...",
+     ""
+    ],
+    [
+     "6 · Elektromagnit qismi (g'altak) o'rnatildi. 5 / 12.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "6 · Elektromagnit qismi (g'altak) o'rnatildi. 5 / 12.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "5"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "done |3Harakatlanuvchi kontakttayyor",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "done |6Elektromagnit qismi (g'altak)tayyor",
+     "7Elektromagnit yadrosistolda",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detal tanlash core",
+   "msgs": [
+    [
+     "7 · Elektromagnit yadrosi: endi uning joyini bosing yoki sudrab olib boring. Ko'k soya o'rnini ko'rsatadi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "7 · Elektromagnit yadrosi: endi uning joyini bosing yoki sudrab olib boring. Ko'k soya o'rnini ko'rsatadi."
+    },
+    "info": {
+     "t": "7Elektromagnit yadrosiG'altak ichida prujina bilan ushlab turilgan po'lat yadro. Qisqa tutashuvda sakrab chiqib, mexanizmni uradi.",
+     "c": "card"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "done |3Harakatlanuvchi kontakttayyor",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "done |6Elektromagnit qismi (g'altak)tayyor",
+     "sel|7Elektromagnit yadrosistolda",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detalni joyiga qo'yish core",
+   "msgs": [
+    [
+     "Joyiga tushmoqda...",
+     ""
+    ],
+    [
+     "7 · Elektromagnit yadrosi o'rnatildi. 6 / 12.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "7 · Elektromagnit yadrosi o'rnatildi. 6 / 12.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "6"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "done |3Harakatlanuvchi kontakttayyor",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "done |6Elektromagnit qismi (g'altak)tayyor",
+     "done |7Elektromagnit yadrositayyor",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detal tanlash bi",
+   "msgs": [
+    [
+     "8 · Issiqlik qismi (bimetall plastinka): endi uning joyini bosing yoki sudrab olib boring. Ko'k soya o'rnini ko'rsatadi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "8 · Issiqlik qismi (bimetall plastinka): endi uning joyini bosing yoki sudrab olib boring. Ko'k soya o'rnini ko'rsatadi."
+    },
+    "info": {
+     "t": "8Issiqlik qismi (bimetall plastinka)Ikki xil metalldan yopishtirilgan plastinka. Ortiqcha tok uni qizdiradi, u egiladi va mexanizmni bosib avtomatni o'chiradi.",
+     "c": "card"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "done |3Harakatlanuvchi kontakttayyor",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "done |6Elektromagnit qismi (g'altak)tayyor",
+     "done |7Elektromagnit yadrositayyor",
+     "sel|8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detalni joyiga qo'yish bi",
+   "msgs": [
+    [
+     "Joyiga tushmoqda...",
+     ""
+    ],
+    [
+     "8 · Issiqlik qismi (bimetall plastinka) o'rnatildi. 7 / 12.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "8 · Issiqlik qismi (bimetall plastinka) o'rnatildi. 7 / 12.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "7"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "done |3Harakatlanuvchi kontakttayyor",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "done |6Elektromagnit qismi (g'altak)tayyor",
+     "done |7Elektromagnit yadrositayyor",
+     "done |8Issiqlik qismi (bimetall plastinka)tayyor",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detal tanlash shA",
+   "msgs": [
+    [
+     "5 · Moslashuvchan o'tkazgich (chap): endi uning joyini bosing yoki sudrab olib boring. Ko'k soya o'rnini ko'rsatadi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "5 · Moslashuvchan o'tkazgich (chap): endi uning joyini bosing yoki sudrab olib boring. Ko'k soya o'rnini ko'rsatadi."
+    },
+    "info": {
+     "t": "5Moslashuvchan o'tkazgich (chap)Mis simlardan to'qilgan egiluvchan o'tkazgich. Bimetall plastinka bilan g'altakni ulaydi va plastinka egilganda uzilmaydi.",
+     "c": "card"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "done |3Harakatlanuvchi kontakttayyor",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "sel|5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "done |6Elektromagnit qismi (g'altak)tayyor",
+     "done |7Elektromagnit yadrositayyor",
+     "done |8Issiqlik qismi (bimetall plastinka)tayyor",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detalni joyiga qo'yish shA",
+   "msgs": [
+    [
+     "Joyiga tushmoqda...",
+     ""
+    ],
+    [
+     "5 · Moslashuvchan o'tkazgich (chap) o'rnatildi. 8 / 12.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "5 · Moslashuvchan o'tkazgich (chap) o'rnatildi. 8 / 12.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "8"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "done |3Harakatlanuvchi kontakttayyor",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "done |5Moslashuvchan o'tkazgich (chap)tayyor",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "done |6Elektromagnit qismi (g'altak)tayyor",
+     "done |7Elektromagnit yadrositayyor",
+     "done |8Issiqlik qismi (bimetall plastinka)tayyor",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detal tanlash shB",
+   "msgs": [
+    [
+     "5 · Moslashuvchan o'tkazgich (o'ng): endi uning joyini bosing yoki sudrab olib boring. Ko'k soya o'rnini ko'rsatadi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "5 · Moslashuvchan o'tkazgich (o'ng): endi uning joyini bosing yoki sudrab olib boring. Ko'k soya o'rnini ko'rsatadi."
+    },
+    "info": {
+     "t": "5Moslashuvchan o'tkazgich (o'ng)G'altakdan harakatlanuvchi kontakt tutqichiga boradi. Tutqich qimirlaganda u bemalol egiladi.",
+     "c": "card"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "done |3Harakatlanuvchi kontakttayyor",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "done |5Moslashuvchan o'tkazgich (chap)tayyor",
+     "sel|5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "done |6Elektromagnit qismi (g'altak)tayyor",
+     "done |7Elektromagnit yadrositayyor",
+     "done |8Issiqlik qismi (bimetall plastinka)tayyor",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detalni joyiga qo'yish shB",
+   "msgs": [
+    [
+     "Joyiga tushmoqda...",
+     ""
+    ],
+    [
+     "5 · Moslashuvchan o'tkazgich (o'ng) o'rnatildi. 9 / 12.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "5 · Moslashuvchan o'tkazgich (o'ng) o'rnatildi. 9 / 12.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "9"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "done |3Harakatlanuvchi kontakttayyor",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "done |5Moslashuvchan o'tkazgich (chap)tayyor",
+     "done |5Moslashuvchan o'tkazgich (o'ng)tayyor",
+     "done |6Elektromagnit qismi (g'altak)tayyor",
+     "done |7Elektromagnit yadrositayyor",
+     "done |8Issiqlik qismi (bimetall plastinka)tayyor",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detal tanlash mech",
+   "msgs": [
+    [
+     "9 · Boshqarish mexanizmi: endi uning joyini bosing yoki sudrab olib boring. Ko'k soya o'rnini ko'rsatadi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "9 · Boshqarish mexanizmi: endi uning joyini bosing yoki sudrab olib boring. Ko'k soya o'rnini ko'rsatadi."
+    },
+    "info": {
+     "t": "9Boshqarish mexanizmiKulachok, ikki bo'g'inli tortqi va ilgak (qulf). Qo'lda yoqilganda kontaktni qisadi, o'chirish signalida ilgak bo'shaydi va kontakt prujina bilan ochiladi.",
+     "c": "card"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "done |3Harakatlanuvchi kontakttayyor",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "done |5Moslashuvchan o'tkazgich (chap)tayyor",
+     "done |5Moslashuvchan o'tkazgich (o'ng)tayyor",
+     "done |6Elektromagnit qismi (g'altak)tayyor",
+     "done |7Elektromagnit yadrositayyor",
+     "done |8Issiqlik qismi (bimetall plastinka)tayyor",
+     "sel|9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detalni joyiga qo'yish mech",
+   "msgs": [
+    [
+     "Joyiga tushmoqda...",
+     ""
+    ],
+    [
+     "9 · Boshqarish mexanizmi o'rnatildi. 10 / 12.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "9 · Boshqarish mexanizmi o'rnatildi. 10 / 12.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "10"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "done |3Harakatlanuvchi kontakttayyor",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "done |5Moslashuvchan o'tkazgich (chap)tayyor",
+     "done |5Moslashuvchan o'tkazgich (o'ng)tayyor",
+     "done |6Elektromagnit qismi (g'altak)tayyor",
+     "done |7Elektromagnit yadrositayyor",
+     "done |8Issiqlik qismi (bimetall plastinka)tayyor",
+     "done |9Boshqarish mexanizmitayyor",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detal tanlash handle",
+   "msgs": [
+    [
+     "10 · Boshqaruv dastagi: endi uning joyini bosing yoki sudrab olib boring. Ko'k soya o'rnini ko'rsatadi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "10 · Boshqaruv dastagi: endi uning joyini bosing yoki sudrab olib boring. Ko'k soya o'rnini ko'rsatadi."
+    },
+    "info": {
+     "t": "10Boshqaruv dastagiSariq dasta. Tepaga yoki pastga surib avtomat qo'lda yoqiladi va o'chiriladi. Ish tugagach o'rta holatda qolsa, avtomat o'zi o'chgan bo'ladi.",
+     "c": "card"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "done |3Harakatlanuvchi kontakttayyor",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "done |5Moslashuvchan o'tkazgich (chap)tayyor",
+     "done |5Moslashuvchan o'tkazgich (o'ng)tayyor",
+     "done |6Elektromagnit qismi (g'altak)tayyor",
+     "done |7Elektromagnit yadrositayyor",
+     "done |8Issiqlik qismi (bimetall plastinka)tayyor",
+     "done |9Boshqarish mexanizmitayyor",
+     "sel|10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detalni joyiga qo'yish handle",
+   "msgs": [
+    [
+     "Joyiga tushmoqda...",
+     ""
+    ],
+    [
+     "10 · Boshqaruv dastagi o'rnatildi. 11 / 12.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "10 · Boshqaruv dastagi o'rnatildi. 11 / 12.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "11"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "done |3Harakatlanuvchi kontakttayyor",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "done |5Moslashuvchan o'tkazgich (chap)tayyor",
+     "done |5Moslashuvchan o'tkazgich (o'ng)tayyor",
+     "done |6Elektromagnit qismi (g'altak)tayyor",
+     "done |7Elektromagnit yadrositayyor",
+     "done |8Issiqlik qismi (bimetall plastinka)tayyor",
+     "done |9Boshqarish mexanizmitayyor",
+     "done |10Boshqaruv dastagitayyor",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detal tanlash din",
+   "msgs": [
+    [
+     "11 · Mandal (DIN rayka uchun): endi uning joyini bosing yoki sudrab olib boring. Ko'k soya o'rnini ko'rsatadi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "11 · Mandal (DIN rayka uchun): endi uning joyini bosing yoki sudrab olib boring. Ko'k soya o'rnini ko'rsatadi."
+    },
+    "info": {
+     "t": "11Mandal (DIN rayka uchun)Prujinali mandal. Avtomatni DIN raykaga bosib qo'yadi va rayka qirrasini ushlab turadi. Tortib chiqarilsa avtomat tushadi.",
+     "c": "card"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "done |3Harakatlanuvchi kontakttayyor",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "done |5Moslashuvchan o'tkazgich (chap)tayyor",
+     "done |5Moslashuvchan o'tkazgich (o'ng)tayyor",
+     "done |6Elektromagnit qismi (g'altak)tayyor",
+     "done |7Elektromagnit yadrositayyor",
+     "done |8Issiqlik qismi (bimetall plastinka)tayyor",
+     "done |9Boshqarish mexanizmitayyor",
+     "done |10Boshqaruv dastagitayyor",
+     "sel|11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detalni joyiga qo'yish din",
+   "msgs": [
+    [
+     "Joyiga tushmoqda...",
+     ""
+    ],
+    [
+     "Avtomat to'liq yig'ildi. Sinov stendida uni yoqib, himoyani tekshiring.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Avtomat to'liq yig'ildi. Sinov stendida uni yoqib, himoyani tekshiring.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "12"
+    },
+    "result": {
+     "t": "Avtomat yig'ildi. Vaqt: M:SS, xatolar: 3.",
+     "c": "result"
+    },
+    "test": {},
+    "tstate": {
+     "t": "Avtomat o'chiq: kontaktlar ochiq. Dastakni yoqing, tok yo'li ko'rinadi.",
+     "c": "tstate"
+    },
+    "t-handle": {
+     "t": "Dastakni yoqish",
+     "c": "btn pri"
+    },
+    "cover": {
+     "t": "Qopqoqni yopish",
+     "c": "btn"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "done |3Harakatlanuvchi kontakttayyor",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "done |5Moslashuvchan o'tkazgich (chap)tayyor",
+     "done |5Moslashuvchan o'tkazgich (o'ng)tayyor",
+     "done |6Elektromagnit qismi (g'altak)tayyor",
+     "done |7Elektromagnit yadrositayyor",
+     "done |8Issiqlik qismi (bimetall plastinka)tayyor",
+     "done |9Boshqarish mexanizmitayyor",
+     "done |10Boshqaruv dastagitayyor",
+     "done |11Mandal (DIN rayka uchun)tayyor"
+    ]
+   }
+  },
+  {
+   "step": "tugma #cover",
+   "msgs": [
+    [
+     "Shaffof qopqoq yopildi: ichki detallar ko'rinib turadi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Shaffof qopqoq yopildi: ichki detallar ko'rinib turadi."
+    },
+    "cover": {
+     "t": "Qopqoqni ochish",
+     "c": "btn"
+    }
+   }
+  },
+  {
+   "step": "tugma #cover",
+   "msgs": [
+    [
+     "Qopqoq ochildi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Qopqoq ochildi."
+    },
+    "cover": {
+     "t": "Qopqoqni yopish",
+     "c": "btn"
+    }
+   }
+  },
+  {
+   "step": "tugma #t-handle",
+   "msgs": [
+    [
+     "Avtomat yoqildi: kulachok tortqini to'g'rilab, kontaktni qo'zg'almas kontaktga bosdi.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Avtomat yoqildi: kulachok tortqini to'g'rilab, kontaktni qo'zg'almas kontaktga bosdi.",
+     "c": "ok"
+    },
+    "tstate": {
+     "t": "Kontaktlar yopiq. Tok yo'li: yuqori klemma, kontakt, tutqich, g'altak, bimetall, pastki klemma.",
+     "c": "tstate"
+    },
+    "t-handle": {
+     "t": "Dastakni o'chirish",
+     "c": "btn pri"
+    },
+    "t-over": {
+     "t": "Ortiqcha yuklanish",
+     "c": "btn warn"
+    },
+    "t-short": {
+     "t": "Qisqa tutashuv",
+     "c": "btn warn"
+    }
+   }
+  },
+  {
+   "step": "tugma #t-over",
+   "msgs": [
+    [
+     "Zanjirga me'yoridan ortiq yuklama ulandi. Bimetall plastinka isiy boshladi...",
+     ""
+    ],
+    [
+     "Issiqlik himoyasi ishladi: bimetall egilib mexanizmni bosdi, ilgak bo'shadi, prujina kontaktni ochdi. Bu bir necha soniyadan daqiqagacha davom etadi.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Issiqlik himoyasi ishladi: bimetall egilib mexanizmni bosdi, ilgak bo'shadi, prujina kontaktni ochdi. Bu bir necha soniyadan daqiqagacha davom etadi.",
+     "c": "ok"
+    },
+    "tstate": {
+     "t": "Avtomat o'zi o'chdi: dasta o'rta holatda. Qayta yoqish uchun avval dastani qaytaring.",
+     "c": "tstate"
+    },
+    "t-handle": {
+     "t": "Dastakni qaytarish (reset)",
+     "c": "btn pri"
+    },
+    "t-over": {
+     "t": "Ortiqcha yuklanish",
+     "d": 1,
+     "c": "btn warn"
+    },
+    "t-short": {
+     "t": "Qisqa tutashuv",
+     "d": 1,
+     "c": "btn warn"
+    }
+   }
+  },
+  {
+   "step": "tugma #t-handle",
+   "msgs": [
+    [
+     "Dasta o'chiq holatga qaytdi: mexanizm qayta qulflandi. Endi yoqishingiz mumkin.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Dasta o'chiq holatga qaytdi: mexanizm qayta qulflandi. Endi yoqishingiz mumkin.",
+     "c": "ok"
+    },
+    "tstate": {
+     "t": "Avtomat o'chiq: kontaktlar ochiq. Dastakni yoqing, tok yo'li ko'rinadi.",
+     "c": "tstate"
+    },
+    "t-handle": {
+     "t": "Dastakni yoqish",
+     "c": "btn pri"
+    }
+   }
+  },
+  {
+   "step": "tugma #t-handle",
+   "msgs": [
+    [
+     "Avtomat yoqildi: kulachok tortqini to'g'rilab, kontaktni qo'zg'almas kontaktga bosdi.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Avtomat yoqildi: kulachok tortqini to'g'rilab, kontaktni qo'zg'almas kontaktga bosdi.",
+     "c": "ok"
+    },
+    "tstate": {
+     "t": "Kontaktlar yopiq. Tok yo'li: yuqori klemma, kontakt, tutqich, g'altak, bimetall, pastki klemma.",
+     "c": "tstate"
+    },
+    "t-handle": {
+     "t": "Dastakni o'chirish",
+     "c": "btn pri"
+    },
+    "t-over": {
+     "t": "Ortiqcha yuklanish",
+     "c": "btn warn"
+    },
+    "t-short": {
+     "t": "Qisqa tutashuv",
+     "c": "btn warn"
+    }
+   }
+  },
+  {
+   "step": "tugma #t-short",
+   "msgs": [
+    [
+     "Qisqa tutashuv! Tok keskin oshdi...",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Qisqa tutashuv! Tok keskin oshdi...",
+     "c": "bad"
+    },
+    "tstate": {
+     "t": "Avtomat o'zi o'chdi: dasta o'rta holatda. Qayta yoqish uchun avval dastani qaytaring.",
+     "c": "tstate"
+    },
+    "t-handle": {
+     "t": "Dastakni qaytarish (reset)",
+     "c": "btn pri"
+    },
+    "t-over": {
+     "t": "Ortiqcha yuklanish",
+     "d": 1,
+     "c": "btn warn"
+    },
+    "t-short": {
+     "t": "Qisqa tutashuv",
+     "d": 1,
+     "c": "btn warn"
+    }
+   }
+  },
+  {
+   "step": "tugma #t-handle",
+   "msgs": [
+    [
+     "Dasta o'chiq holatga qaytdi: mexanizm qayta qulflandi. Endi yoqishingiz mumkin.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Dasta o'chiq holatga qaytdi: mexanizm qayta qulflandi. Endi yoqishingiz mumkin.",
+     "c": "ok"
+    },
+    "tstate": {
+     "t": "Avtomat o'chiq: kontaktlar ochiq. Dastakni yoqing, tok yo'li ko'rinadi.",
+     "c": "tstate"
+    },
+    "t-handle": {
+     "t": "Dastakni yoqish",
+     "c": "btn pri"
+    }
+   }
+  },
+  {
+   "step": "tugma #t-handle",
+   "msgs": [
+    [
+     "Avtomat yoqildi: kulachok tortqini to'g'rilab, kontaktni qo'zg'almas kontaktga bosdi.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Avtomat yoqildi: kulachok tortqini to'g'rilab, kontaktni qo'zg'almas kontaktga bosdi.",
+     "c": "ok"
+    },
+    "tstate": {
+     "t": "Kontaktlar yopiq. Tok yo'li: yuqori klemma, kontakt, tutqich, g'altak, bimetall, pastki klemma.",
+     "c": "tstate"
+    },
+    "t-handle": {
+     "t": "Dastakni o'chirish",
+     "c": "btn pri"
+    },
+    "t-over": {
+     "t": "Ortiqcha yuklanish",
+     "c": "btn warn"
+    },
+    "t-short": {
+     "t": "Qisqa tutashuv",
+     "c": "btn warn"
+    }
+   }
+  },
+  {
+   "step": "tugma #t-handle",
+   "msgs": [
+    [
+     "Avtomat qo'lda o'chirildi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Avtomat qo'lda o'chirildi."
+    },
+    "tstate": {
+     "t": "Avtomat o'chiq: kontaktlar ochiq. Dastakni yoqing, tok yo'li ko'rinadi.",
+     "c": "tstate"
+    },
+    "t-handle": {
+     "t": "Dastakni yoqish",
+     "c": "btn pri"
+    },
+    "t-over": {
+     "t": "Ortiqcha yuklanish",
+     "d": 1,
+     "c": "btn warn"
+    },
+    "t-short": {
+     "t": "Qisqa tutashuv",
+     "d": 1,
+     "c": "btn warn"
+    }
+   }
+  },
+  {
+   "step": "tugma #reset",
+   "msgs": [
+    [
+     "Hamma detallar stolga qaytarildi. Qaytadan yig'ing.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Hamma detallar stolga qaytarildi. Qaytadan yig'ing."
+    },
+    "pdone": {
+     "t": "0"
+    },
+    "info": {
+     "t": "Detal haqidaRo'yxatdan yoki stoldan detalni tanlang: uning nomi va vazifasi shu yerda chiqadi.",
+     "c": "card"
+    },
+    "result": {
+     "t": "Avtomat yig'ildi. Vaqt: M:SS, xatolar: 3.",
+     "h": 1,
+     "c": "result"
+    },
+    "test": {
+     "h": 1
+    },
+    "cover": {
+     "t": "Qopqoqni yopish",
+     "d": 1,
+     "c": "btn"
+    },
+    "plist": [
+     "1Pastki vintli klemmastolda",
+     "2Yuqori vintli klemmastolda",
+     "3Harakatlanuvchi kontaktstolda",
+     "4Yoy so'ndirish kamerasistolda",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "6Elektromagnit qismi (g'altak)stolda",
+     "7Elektromagnit yadrosistolda",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  }
+ ],
+ "exam": [
+  {
+   "step": "ochilish",
+   "msgs": [],
+   "state": {
+    "status2": {
+     "t": "Stoldagi detallardan birini tanlang va avtomat ichidagi joyiga qo'ying. Boshlash uchun «Maslahat» ni bosing."
+    },
+    "pdone": {
+     "t": "0"
+    },
+    "info": {
+     "t": "Detal haqida Ro'yxatdan yoki stoldan detalni tanlang: uning nomi va vazifasi shu yerda chiqadi.",
+     "c": "card"
+    },
+    "result": {
+     "h": 1,
+     "c": "result"
+    },
+    "test": {
+     "h": 1
+    },
+    "tstate": {
+     "c": "tstate"
+    },
+    "t-handle": {
+     "t": "Dastakni yoqish",
+     "d": 1,
+     "c": "btn pri"
+    },
+    "t-over": {
+     "t": "Ortiqcha yuklanish",
+     "d": 1,
+     "c": "btn warn"
+    },
+    "t-short": {
+     "t": "Qisqa tutashuv",
+     "d": 1,
+     "c": "btn warn"
+    },
+    "cover": {
+     "t": "Qopqoqni yopish",
+     "d": 1,
+     "c": "btn"
+    },
+    "hint": {
+     "t": "Maslahat",
+     "c": "btn"
+    },
+    "reset": {
+     "t": "Boshidan",
+     "c": "btn"
+    },
+    "m-learn": {
+     "t": "O'rganish",
+     "p": "true"
+    },
+    "m-exam": {
+     "t": "Imtihon",
+     "p": "false"
+    },
+    "plist": [
+     "1Pastki vintli klemmastolda",
+     "2Yuqori vintli klemmastolda",
+     "3Harakatlanuvchi kontaktstolda",
+     "4Yoy so'ndirish kamerasistolda",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "6Elektromagnit qismi (g'altak)stolda",
+     "7Elektromagnit yadrosistolda",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "tugma #m-exam",
+   "msgs": [
+    [
+     "Imtihon rejimi: soyasiz, maslahatsiz yig'ing. Vaqt va xatolar hisoblanadi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Imtihon rejimi: soyasiz, maslahatsiz yig'ing. Vaqt va xatolar hisoblanadi."
+    },
+    "hint": {
+     "t": "Maslahat",
+     "h": 1,
+     "c": "btn"
+    },
+    "m-learn": {
+     "t": "O'rganish",
+     "p": "false"
+    },
+    "m-exam": {
+     "t": "Imtihon",
+     "p": "true"
+    }
+   }
+  },
+  {
+   "step": "detal tanlash mech",
+   "msgs": [
+    [
+     "9 · Boshqarish mexanizmi: uning joyini toping.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "9 · Boshqarish mexanizmi: uning joyini toping."
+    },
+    "info": {
+     "t": "9Boshqarish mexanizmiKulachok, ikki bo'g'inli tortqi va ilgak (qulf). Qo'lda yoqilganda kontaktni qisadi, o'chirish signalida ilgak bo'shaydi va kontakt prujina bilan ochiladi.",
+     "c": "card"
+    },
+    "plist": [
+     "1Pastki vintli klemmastolda",
+     "2Yuqori vintli klemmastolda",
+     "3Harakatlanuvchi kontaktstolda",
+     "4Yoy so'ndirish kamerasistolda",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "6Elektromagnit qismi (g'altak)stolda",
+     "7Elektromagnit yadrosistolda",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "sel|9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detalni joyiga qo'yish mech",
+   "msgs": [
+    [
+     "Hozir bu detalni o'rnatib bo'lmaydi: avval boshqa detal kerak.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Hozir bu detalni o'rnatib bo'lmaydi: avval boshqa detal kerak.",
+     "c": "bad"
+    },
+    "plist": [
+     "1Pastki vintli klemmastolda",
+     "2Yuqori vintli klemmastolda",
+     "3Harakatlanuvchi kontaktstolda",
+     "4Yoy so'ndirish kamerasistolda",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "6Elektromagnit qismi (g'altak)stolda",
+     "7Elektromagnit yadrosistolda",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detal tanlash t1",
+   "msgs": [
+    [
+     "1 · Pastki vintli klemma: uning joyini toping.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "1 · Pastki vintli klemma: uning joyini toping."
+    },
+    "info": {
+     "t": "1Pastki vintli klemmaSimni vint bilan qisadigan klemma. Tok shu yerdan issiqlik qismiga (8) o'tadi.",
+     "c": "card"
+    },
+    "plist": [
+     "sel|1Pastki vintli klemmastolda",
+     "2Yuqori vintli klemmastolda",
+     "3Harakatlanuvchi kontaktstolda",
+     "4Yoy so'ndirish kamerasistolda",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "6Elektromagnit qismi (g'altak)stolda",
+     "7Elektromagnit yadrosistolda",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detalni (0,30) ga qo'yish",
+   "msgs": [
+    [
+     "Noto'g'ri joy.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Noto'g'ri joy.",
+     "c": "bad"
+    },
+    "plist": [
+     "1Pastki vintli klemmastolda",
+     "2Yuqori vintli klemmastolda",
+     "3Harakatlanuvchi kontaktstolda",
+     "4Yoy so'ndirish kamerasistolda",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "6Elektromagnit qismi (g'altak)stolda",
+     "7Elektromagnit yadrosistolda",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detal tanlash t1",
+   "msgs": [
+    [
+     "1 · Pastki vintli klemma: uning joyini toping.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "1 · Pastki vintli klemma: uning joyini toping."
+    },
+    "plist": [
+     "sel|1Pastki vintli klemmastolda",
+     "2Yuqori vintli klemmastolda",
+     "3Harakatlanuvchi kontaktstolda",
+     "4Yoy so'ndirish kamerasistolda",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "6Elektromagnit qismi (g'altak)stolda",
+     "7Elektromagnit yadrosistolda",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detalni joyiga qo'yish t1",
+   "msgs": [
+    [
+     "Joyiga tushmoqda...",
+     ""
+    ],
+    [
+     "1 · Pastki vintli klemma o'rnatildi. 1 / 12.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "1 · Pastki vintli klemma o'rnatildi. 1 / 12.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "1"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "2Yuqori vintli klemmastolda",
+     "3Harakatlanuvchi kontaktstolda",
+     "4Yoy so'ndirish kamerasistolda",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "6Elektromagnit qismi (g'altak)stolda",
+     "7Elektromagnit yadrosistolda",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detal tanlash t2",
+   "msgs": [
+    [
+     "2 · Yuqori vintli klemma: uning joyini toping.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "2 · Yuqori vintli klemma: uning joyini toping."
+    },
+    "info": {
+     "t": "2Yuqori vintli klemmaIkkinchi klemma. Undan tok qo'zg'almas kontaktga o'tadi. Kontakt juftining yarmi shu klemmaga o'rnatilgan.",
+     "c": "card"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "sel|2Yuqori vintli klemmastolda",
+     "3Harakatlanuvchi kontaktstolda",
+     "4Yoy so'ndirish kamerasistolda",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "6Elektromagnit qismi (g'altak)stolda",
+     "7Elektromagnit yadrosistolda",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detalni joyiga qo'yish t2",
+   "msgs": [
+    [
+     "Joyiga tushmoqda...",
+     ""
+    ],
+    [
+     "2 · Yuqori vintli klemma o'rnatildi. 2 / 12.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "2 · Yuqori vintli klemma o'rnatildi. 2 / 12.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "2"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "3Harakatlanuvchi kontaktstolda",
+     "4Yoy so'ndirish kamerasistolda",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "6Elektromagnit qismi (g'altak)stolda",
+     "7Elektromagnit yadrosistolda",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detal tanlash chute",
+   "msgs": [
+    [
+     "4 · Yoy so'ndirish kamerasi: uning joyini toping.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "4 · Yoy so'ndirish kamerasi: uning joyini toping."
+    },
+    "info": {
+     "t": "4Yoy so'ndirish kamerasiKontaktlar ajralganda yoy hosil bo'ladi. Po'lat plastinalar uni bir nechta qisqa yoyga bo'ladi, sovitadi va so'ndiradi.",
+     "c": "card"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "3Harakatlanuvchi kontaktstolda",
+     "sel|4Yoy so'ndirish kamerasistolda",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "6Elektromagnit qismi (g'altak)stolda",
+     "7Elektromagnit yadrosistolda",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detalni joyiga qo'yish chute",
+   "msgs": [
+    [
+     "Joyiga tushmoqda...",
+     ""
+    ],
+    [
+     "4 · Yoy so'ndirish kamerasi o'rnatildi. 3 / 12.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "4 · Yoy so'ndirish kamerasi o'rnatildi. 3 / 12.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "3"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "3Harakatlanuvchi kontaktstolda",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "6Elektromagnit qismi (g'altak)stolda",
+     "7Elektromagnit yadrosistolda",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detal tanlash arm",
+   "msgs": [
+    [
+     "3 · Harakatlanuvchi kontakt: uning joyini toping.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "3 · Harakatlanuvchi kontakt: uning joyini toping."
+    },
+    "info": {
+     "t": "3Harakatlanuvchi kontaktKumush qoplamali kontakt. Qo'zg'almas kontaktga tegib zanjirni yopadi, ajralib zanjirni uzadi.",
+     "c": "card"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "sel|3Harakatlanuvchi kontaktstolda",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "6Elektromagnit qismi (g'altak)stolda",
+     "7Elektromagnit yadrosistolda",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detalni joyiga qo'yish arm",
+   "msgs": [
+    [
+     "Joyiga tushmoqda...",
+     ""
+    ],
+    [
+     "3 · Harakatlanuvchi kontakt o'rnatildi. 4 / 12.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "3 · Harakatlanuvchi kontakt o'rnatildi. 4 / 12.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "4"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "done |3Harakatlanuvchi kontakttayyor",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "6Elektromagnit qismi (g'altak)stolda",
+     "7Elektromagnit yadrosistolda",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detal tanlash coil",
+   "msgs": [
+    [
+     "6 · Elektromagnit qismi (g'altak): uning joyini toping.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "6 · Elektromagnit qismi (g'altak): uning joyini toping."
+    },
+    "info": {
+     "t": "6Elektromagnit qismi (g'altak)Qisqa tutashuvda tok keskin oshadi va g'altak kuchli magnit maydon hosil qiladi. U yadroni tortib mexanizmni zarbdan o'chiradi.",
+     "c": "card"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "done |3Harakatlanuvchi kontakttayyor",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "sel|6Elektromagnit qismi (g'altak)stolda",
+     "7Elektromagnit yadrosistolda",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detalni joyiga qo'yish coil",
+   "msgs": [
+    [
+     "Joyiga tushmoqda...",
+     ""
+    ],
+    [
+     "6 · Elektromagnit qismi (g'altak) o'rnatildi. 5 / 12.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "6 · Elektromagnit qismi (g'altak) o'rnatildi. 5 / 12.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "5"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "done |3Harakatlanuvchi kontakttayyor",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "done |6Elektromagnit qismi (g'altak)tayyor",
+     "7Elektromagnit yadrosistolda",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detal tanlash core",
+   "msgs": [
+    [
+     "7 · Elektromagnit yadrosi: uning joyini toping.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "7 · Elektromagnit yadrosi: uning joyini toping."
+    },
+    "info": {
+     "t": "7Elektromagnit yadrosiG'altak ichida prujina bilan ushlab turilgan po'lat yadro. Qisqa tutashuvda sakrab chiqib, mexanizmni uradi.",
+     "c": "card"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "done |3Harakatlanuvchi kontakttayyor",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "done |6Elektromagnit qismi (g'altak)tayyor",
+     "sel|7Elektromagnit yadrosistolda",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detalni joyiga qo'yish core",
+   "msgs": [
+    [
+     "Joyiga tushmoqda...",
+     ""
+    ],
+    [
+     "7 · Elektromagnit yadrosi o'rnatildi. 6 / 12.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "7 · Elektromagnit yadrosi o'rnatildi. 6 / 12.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "6"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "done |3Harakatlanuvchi kontakttayyor",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "done |6Elektromagnit qismi (g'altak)tayyor",
+     "done |7Elektromagnit yadrositayyor",
+     "8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detal tanlash bi",
+   "msgs": [
+    [
+     "8 · Issiqlik qismi (bimetall plastinka): uning joyini toping.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "8 · Issiqlik qismi (bimetall plastinka): uning joyini toping."
+    },
+    "info": {
+     "t": "8Issiqlik qismi (bimetall plastinka)Ikki xil metalldan yopishtirilgan plastinka. Ortiqcha tok uni qizdiradi, u egiladi va mexanizmni bosib avtomatni o'chiradi.",
+     "c": "card"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "done |3Harakatlanuvchi kontakttayyor",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "done |6Elektromagnit qismi (g'altak)tayyor",
+     "done |7Elektromagnit yadrositayyor",
+     "sel|8Issiqlik qismi (bimetall plastinka)stolda",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detalni joyiga qo'yish bi",
+   "msgs": [
+    [
+     "Joyiga tushmoqda...",
+     ""
+    ],
+    [
+     "8 · Issiqlik qismi (bimetall plastinka) o'rnatildi. 7 / 12.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "8 · Issiqlik qismi (bimetall plastinka) o'rnatildi. 7 / 12.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "7"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "done |3Harakatlanuvchi kontakttayyor",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "done |6Elektromagnit qismi (g'altak)tayyor",
+     "done |7Elektromagnit yadrositayyor",
+     "done |8Issiqlik qismi (bimetall plastinka)tayyor",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detal tanlash shA",
+   "msgs": [
+    [
+     "5 · Moslashuvchan o'tkazgich (chap): uning joyini toping.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "5 · Moslashuvchan o'tkazgich (chap): uning joyini toping."
+    },
+    "info": {
+     "t": "5Moslashuvchan o'tkazgich (chap)Mis simlardan to'qilgan egiluvchan o'tkazgich. Bimetall plastinka bilan g'altakni ulaydi va plastinka egilganda uzilmaydi.",
+     "c": "card"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "done |3Harakatlanuvchi kontakttayyor",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "sel|5Moslashuvchan o'tkazgich (chap)stolda",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "done |6Elektromagnit qismi (g'altak)tayyor",
+     "done |7Elektromagnit yadrositayyor",
+     "done |8Issiqlik qismi (bimetall plastinka)tayyor",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detalni joyiga qo'yish shA",
+   "msgs": [
+    [
+     "Joyiga tushmoqda...",
+     ""
+    ],
+    [
+     "5 · Moslashuvchan o'tkazgich (chap) o'rnatildi. 8 / 12.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "5 · Moslashuvchan o'tkazgich (chap) o'rnatildi. 8 / 12.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "8"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "done |3Harakatlanuvchi kontakttayyor",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "done |5Moslashuvchan o'tkazgich (chap)tayyor",
+     "5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "done |6Elektromagnit qismi (g'altak)tayyor",
+     "done |7Elektromagnit yadrositayyor",
+     "done |8Issiqlik qismi (bimetall plastinka)tayyor",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detal tanlash shB",
+   "msgs": [
+    [
+     "5 · Moslashuvchan o'tkazgich (o'ng): uning joyini toping.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "5 · Moslashuvchan o'tkazgich (o'ng): uning joyini toping."
+    },
+    "info": {
+     "t": "5Moslashuvchan o'tkazgich (o'ng)G'altakdan harakatlanuvchi kontakt tutqichiga boradi. Tutqich qimirlaganda u bemalol egiladi.",
+     "c": "card"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "done |3Harakatlanuvchi kontakttayyor",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "done |5Moslashuvchan o'tkazgich (chap)tayyor",
+     "sel|5Moslashuvchan o'tkazgich (o'ng)stolda",
+     "done |6Elektromagnit qismi (g'altak)tayyor",
+     "done |7Elektromagnit yadrositayyor",
+     "done |8Issiqlik qismi (bimetall plastinka)tayyor",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detalni joyiga qo'yish shB",
+   "msgs": [
+    [
+     "Joyiga tushmoqda...",
+     ""
+    ],
+    [
+     "5 · Moslashuvchan o'tkazgich (o'ng) o'rnatildi. 9 / 12.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "5 · Moslashuvchan o'tkazgich (o'ng) o'rnatildi. 9 / 12.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "9"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "done |3Harakatlanuvchi kontakttayyor",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "done |5Moslashuvchan o'tkazgich (chap)tayyor",
+     "done |5Moslashuvchan o'tkazgich (o'ng)tayyor",
+     "done |6Elektromagnit qismi (g'altak)tayyor",
+     "done |7Elektromagnit yadrositayyor",
+     "done |8Issiqlik qismi (bimetall plastinka)tayyor",
+     "9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detal tanlash mech",
+   "msgs": [
+    [
+     "9 · Boshqarish mexanizmi: uning joyini toping.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "9 · Boshqarish mexanizmi: uning joyini toping."
+    },
+    "info": {
+     "t": "9Boshqarish mexanizmiKulachok, ikki bo'g'inli tortqi va ilgak (qulf). Qo'lda yoqilganda kontaktni qisadi, o'chirish signalida ilgak bo'shaydi va kontakt prujina bilan ochiladi.",
+     "c": "card"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "done |3Harakatlanuvchi kontakttayyor",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "done |5Moslashuvchan o'tkazgich (chap)tayyor",
+     "done |5Moslashuvchan o'tkazgich (o'ng)tayyor",
+     "done |6Elektromagnit qismi (g'altak)tayyor",
+     "done |7Elektromagnit yadrositayyor",
+     "done |8Issiqlik qismi (bimetall plastinka)tayyor",
+     "sel|9Boshqarish mexanizmistolda",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detalni joyiga qo'yish mech",
+   "msgs": [
+    [
+     "Joyiga tushmoqda...",
+     ""
+    ],
+    [
+     "9 · Boshqarish mexanizmi o'rnatildi. 10 / 12.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "9 · Boshqarish mexanizmi o'rnatildi. 10 / 12.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "10"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "done |3Harakatlanuvchi kontakttayyor",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "done |5Moslashuvchan o'tkazgich (chap)tayyor",
+     "done |5Moslashuvchan o'tkazgich (o'ng)tayyor",
+     "done |6Elektromagnit qismi (g'altak)tayyor",
+     "done |7Elektromagnit yadrositayyor",
+     "done |8Issiqlik qismi (bimetall plastinka)tayyor",
+     "done |9Boshqarish mexanizmitayyor",
+     "10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detal tanlash handle",
+   "msgs": [
+    [
+     "10 · Boshqaruv dastagi: uning joyini toping.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "10 · Boshqaruv dastagi: uning joyini toping."
+    },
+    "info": {
+     "t": "10Boshqaruv dastagiSariq dasta. Tepaga yoki pastga surib avtomat qo'lda yoqiladi va o'chiriladi. Ish tugagach o'rta holatda qolsa, avtomat o'zi o'chgan bo'ladi.",
+     "c": "card"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "done |3Harakatlanuvchi kontakttayyor",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "done |5Moslashuvchan o'tkazgich (chap)tayyor",
+     "done |5Moslashuvchan o'tkazgich (o'ng)tayyor",
+     "done |6Elektromagnit qismi (g'altak)tayyor",
+     "done |7Elektromagnit yadrositayyor",
+     "done |8Issiqlik qismi (bimetall plastinka)tayyor",
+     "done |9Boshqarish mexanizmitayyor",
+     "sel|10Boshqaruv dastagistolda",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detalni joyiga qo'yish handle",
+   "msgs": [
+    [
+     "Joyiga tushmoqda...",
+     ""
+    ],
+    [
+     "10 · Boshqaruv dastagi o'rnatildi. 11 / 12.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "10 · Boshqaruv dastagi o'rnatildi. 11 / 12.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "11"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "done |3Harakatlanuvchi kontakttayyor",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "done |5Moslashuvchan o'tkazgich (chap)tayyor",
+     "done |5Moslashuvchan o'tkazgich (o'ng)tayyor",
+     "done |6Elektromagnit qismi (g'altak)tayyor",
+     "done |7Elektromagnit yadrositayyor",
+     "done |8Issiqlik qismi (bimetall plastinka)tayyor",
+     "done |9Boshqarish mexanizmitayyor",
+     "done |10Boshqaruv dastagitayyor",
+     "11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detal tanlash din",
+   "msgs": [
+    [
+     "11 · Mandal (DIN rayka uchun): uning joyini toping.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "11 · Mandal (DIN rayka uchun): uning joyini toping."
+    },
+    "info": {
+     "t": "11Mandal (DIN rayka uchun)Prujinali mandal. Avtomatni DIN raykaga bosib qo'yadi va rayka qirrasini ushlab turadi. Tortib chiqarilsa avtomat tushadi.",
+     "c": "card"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "done |3Harakatlanuvchi kontakttayyor",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "done |5Moslashuvchan o'tkazgich (chap)tayyor",
+     "done |5Moslashuvchan o'tkazgich (o'ng)tayyor",
+     "done |6Elektromagnit qismi (g'altak)tayyor",
+     "done |7Elektromagnit yadrositayyor",
+     "done |8Issiqlik qismi (bimetall plastinka)tayyor",
+     "done |9Boshqarish mexanizmitayyor",
+     "done |10Boshqaruv dastagitayyor",
+     "sel|11Mandal (DIN rayka uchun)stolda"
+    ]
+   }
+  },
+  {
+   "step": "detalni joyiga qo'yish din",
+   "msgs": [
+    [
+     "Joyiga tushmoqda...",
+     ""
+    ],
+    [
+     "Avtomat to'liq yig'ildi. Sinov stendida uni yoqib, himoyani tekshiring.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Avtomat to'liq yig'ildi. Sinov stendida uni yoqib, himoyani tekshiring.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "12"
+    },
+    "result": {
+     "t": "Avtomat yig'ildi. Vaqt: M:SS, xatolar: 2.",
+     "c": "result"
+    },
+    "test": {},
+    "tstate": {
+     "t": "Avtomat o'chiq: kontaktlar ochiq. Dastakni yoqing, tok yo'li ko'rinadi.",
+     "c": "tstate"
+    },
+    "t-handle": {
+     "t": "Dastakni yoqish",
+     "c": "btn pri"
+    },
+    "cover": {
+     "t": "Qopqoqni yopish",
+     "c": "btn"
+    },
+    "plist": [
+     "done |1Pastki vintli klemmatayyor",
+     "done |2Yuqori vintli klemmatayyor",
+     "done |3Harakatlanuvchi kontakttayyor",
+     "done |4Yoy so'ndirish kamerasitayyor",
+     "done |5Moslashuvchan o'tkazgich (chap)tayyor",
+     "done |5Moslashuvchan o'tkazgich (o'ng)tayyor",
+     "done |6Elektromagnit qismi (g'altak)tayyor",
+     "done |7Elektromagnit yadrositayyor",
+     "done |8Issiqlik qismi (bimetall plastinka)tayyor",
+     "done |9Boshqarish mexanizmitayyor",
+     "done |10Boshqaruv dastagitayyor",
+     "done |11Mandal (DIN rayka uchun)tayyor"
+    ]
+   }
+  },
+  {
+   "step": "tugma #m-learn",
+   "msgs": [
+    [
+     "O'rganish rejimi: tanlangan detalning o'rni ko'k soya bilan ko'rsatiladi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "O'rganish rejimi: tanlangan detalning o'rni ko'k soya bilan ko'rsatiladi."
+    },
+    "hint": {
+     "t": "Maslahat",
+     "c": "btn"
+    },
+    "m-learn": {
+     "t": "O'rganish",
+     "p": "true"
+    },
+    "m-exam": {
+     "t": "Imtihon",
+     "p": "false"
+    }
+   }
+  }
+ ]
+}

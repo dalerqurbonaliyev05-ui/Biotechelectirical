@@ -1,0 +1,3422 @@
+{
+ "learn": [
+  {
+   "step": "ochilish",
+   "msgs": [],
+   "state": {
+    "status2": {
+     "t": "Namuna: manba L hisoblagichning 1-qisqichiga ulangan. Endi manba N ni 3-qisqichga ulang."
+    },
+    "power": {
+     "t": "Kuchlanish berish",
+     "d": 1,
+     "c": "btn pri"
+    },
+    "prog": {},
+    "pdone": {
+     "t": "0"
+    },
+    "exam": {
+     "h": 1
+    },
+    "wcount": {
+     "t": "0"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "c": "btn"
+    },
+    "hint": {
+     "t": "Maslahat",
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "h": 1,
+     "c": "btn"
+    },
+    "m-learn": {
+     "t": "O'rganish",
+     "p": "true"
+    },
+    "m-exam": {
+     "t": "Imtihon",
+     "p": "false"
+    },
+    "ctl": {
+     "h": 1
+    },
+    "uv": {
+     "t": "230 V"
+    },
+    "u": {
+     "t": "230"
+    },
+    "r-u": {
+     "t": "230 V"
+    },
+    "r-kv": {
+     "t": "o'chiq"
+    },
+    "r-ub": {
+     "t": "0 V"
+    },
+    "r-i": {
+     "t": "0.0 A"
+    },
+    "r-p": {
+     "t": "0.00 kW"
+    },
+    "r-x1": {
+     "t": "0.0 A"
+    },
+    "r-x2": {
+     "t": "0.0 A"
+    },
+    "r-x3": {
+     "t": "0.0 A"
+    },
+    "b-qf1": {
+     "t": "QF1",
+     "d": 1,
+     "c": "btn",
+     "p": "false"
+    },
+    "b-d1": {
+     "t": "D1",
+     "d": 1,
+     "c": "btn",
+     "p": "false"
+    },
+    "b-d2": {
+     "t": "D2",
+     "d": 1,
+     "c": "btn",
+     "p": "false"
+    },
+    "b-d3": {
+     "t": "D3",
+     "d": 1,
+     "c": "btn",
+     "p": "false"
+    },
+    "b-qf2": {
+     "t": "QF2",
+     "d": 1,
+     "c": "btn",
+     "p": "false"
+    },
+    "b-sw": {
+     "t": "Kalit",
+     "c": "btn",
+     "p": "false"
+    },
+    "t-d1": {
+     "t": "D1 · T",
+     "d": 1,
+     "c": "btn"
+    },
+    "t-d2": {
+     "t": "D2 · T",
+     "d": 1,
+     "c": "btn"
+    },
+    "t-d3": {
+     "t": "D3 · T",
+     "d": 1,
+     "c": "btn"
+    },
+    "a-x1": {
+     "t": "kettle"
+    },
+    "a-x2": {
+     "t": "tv"
+    },
+    "a-x3": {
+     "t": "none"
+    },
+    "steps": [
+     "part|Manba L → hisoblagich 1, manba N → hisoblagich 31/2",
+     "Hisoblagich 2 → QF1 (1, L), hisoblagich 4 → QF1 (3, N)0/2",
+     "QF1 chiqishi → kuchlanish relesi IN: L → L, N → N0/2",
+     "Rele OUT L → D1, D2, D3 ning L kirishi va QF2 (faza shinasi)0/4",
+     "Rele OUT N → D1, D2, D3 ning N kirishi (nol shinasi)0/3",
+     "D1 chiqishi → X1 rozetka: L → L, N → N0/2",
+     "D2 chiqishi → X2 rozetka: L → L, N → N0/2",
+     "D3 chiqishi → X3 rozetka: L → L, N → N0/2",
+     "Himoya yerlash: manba E → X1, X2, X3 ning ⏚ qisqichi0/3",
+     "QF2 chiqishi (2) → kalit L",
+     "Kalit L1 → lampa L",
+     "Rele OUT N → lampa N"
+    ],
+    "report": []
+   }
+  },
+  {
+   "step": "bosish mt.3",
+   "msgs": [
+    [
+     "Hisoblagich 3: nol kirishi (manbadan). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Hisoblagich 3: nol kirishi (manbadan). Boshqa klemmaga sudrang yoki ikkinchisini bosing."
+    }
+   }
+  },
+  {
+   "step": "bosish mt.3",
+   "msgs": [
+    [
+     "Hisoblagich 3: nol kirishi (manbadan). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Klemma halqasini bosib boshqasiga sudrang yoki ikkita klemmani ketma-ket bosing.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Klemma halqasini bosib boshqasiga sudrang yoki ikkita klemmani ketma-ket bosing."
+    }
+   }
+  },
+  {
+   "step": "sim sw.l2 — lamp.l",
+   "msgs": [
+    [
+     "Kalit: L2 (ikkinchi chiqish, bu sxemada ishlatilmaydi). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Kalit L2 ikki joydan boshqarish (prohodnoy) sxemasi uchun; bu yerda ishlatilmaydi. Lampa L1 ga ulanadi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Kalit L2 ikki joydan boshqarish (prohodnoy) sxemasi uchun; bu yerda ishlatilmaydi. Lampa L1 ga ulanadi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim d1.l1 — d1.l2",
+   "msgs": [
+    [
+     "D1: L kirish. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Bir qurilmaning ikki klemmasini o'zaro ulash tokni qurilmadan chetlab o'tkazadi. D1 L kirishi faza shinasidan (rele OUT L yoki qo'shni difavtomat L) keladi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Bir qurilmaning ikki klemmasini o'zaro ulash tokni qurilmadan chetlab o'tkazadi. D1 L kirishi faza shinasidan (rele OUT L yoki qo'shni difavtomat L) keladi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim src.e — x1.l",
+   "msgs": [
+    [
+     "Manba E (himoya yerlash) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Himoya yerlash (PE) faza yoki nolga ulanmaydi: odamni tok urishidan himoya qiluvchi sim tok o'tkazmasligi kerak. E faqat rozetkalarning ⏚ qisqichiga boradi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Himoya yerlash (PE) faza yoki nolga ulanmaydi: odamni tok urishidan himoya qiluvchi sim tok o'tkazmasligi kerak. E faqat rozetkalarning ⏚ qisqichiga boradi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim sw.l — lamp.n",
+   "msgs": [
+    [
+     "Kalit: L (faza kirishi). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Kalit faqat fazani (L) uzadi. Nolni uzsangiz, lampa o'chgan bo'lsa ham patronda 220 V qoladi — lampani almashtirayotganda tok urishi mumkin.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Kalit faqat fazani (L) uzadi. Nolni uzsangiz, lampa o'chgan bo'lsa ham patronda 220 V qoladi — lampani almashtirayotganda tok urishi mumkin.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim src.n — mt.1",
+   "msgs": [
+    [
+     "Manba N (nol) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Faza (L) va nol (N) bir nuqtaga tushib qoladi: bu qisqa tutashuv. Manba N hisoblagichning 3-qisqichiga (nol kirishi) ulanadi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Faza (L) va nol (N) bir nuqtaga tushib qoladi: bu qisqa tutashuv. Manba N hisoblagichning 3-qisqichiga (nol kirishi) ulanadi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim src.n — mt.4",
+   "msgs": [
+    [
+     "Manba N (nol) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Hisoblagich 4 — nol chiqishi: QF1 ning 3 (N) qisqichiga boradi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Hisoblagich 4 — nol chiqishi: QF1 ning 3 (N) qisqichiga boradi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim d1.l2 — d2.l2",
+   "msgs": [
+    [
+     "D1: L chiqish (rozetkaga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Difavtomatlarning chiqishlari bir-biriga ulanmaydi: har biri o'z rozetkasini himoya qiladi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Difavtomatlarning chiqishlari bir-biriga ulanmaydi: har biri o'z rozetkasini himoya qiladi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim d1.l2 — x2.l",
+   "msgs": [
+    [
+     "D1: L chiqish (rozetkaga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Har bir difavtomat o'z rozetkasiga ulanadi: D1 → X1, D2 → X2, D3 → X3.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Har bir difavtomat o'z rozetkasiga ulanadi: D1 → X1, D2 → X2, D3 → X3.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim d1.n2 — kv.no",
+   "msgs": [
+    [
+     "D1: N chiqish (rozetkaga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "RCBO chiqishidagi N faqat o'z rozetkasiga boradi. Agar uni umumiy nol shinasiga ulasangiz, RCBO kirgan va qaytgan tokni solishtira olmaydi va asossiz o'chadi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "RCBO chiqishidagi N faqat o'z rozetkasiga boradi. Agar uni umumiy nol shinasiga ulasangiz, RCBO kirgan va qaytgan tokni solishtira olmaydi va asossiz o'chadi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim d1.l2 — kv.lo",
+   "msgs": [
+    [
+     "D1: L chiqish (rozetkaga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Difavtomat chiqishini kirish shinasiga ulash uni chetlab o'tadi: rozetka himoyasiz qoladi. D1 L chiqishi faqat X1 rozetkaning L qisqichiga boradi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Difavtomat chiqishini kirish shinasiga ulash uni chetlab o'tadi: rozetka himoyasiz qoladi. D1 L chiqishi faqat X1 rozetkaning L qisqichiga boradi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim x1.l — kv.lo",
+   "msgs": [
+    [
+     "X1 rozetkasi: L (faza). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Rozetka umumiy shinaga to'g'ridan ulanmaydi: L va N difavtomatning pastki chiqishidan keladi, aks holda 30 mA sizish himoyasi ishlamaydi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Rozetka umumiy shinaga to'g'ridan ulanmaydi: L va N difavtomatning pastki chiqishidan keladi, aks holda 30 mA sizish himoyasi ishlamaydi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim kv.lo — qf1.l2",
+   "msgs": [
+    [
+     "Kuchlanish relesi: OUT L (chiqish). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Rele kuchlanishi: pastki IN qisqichlariga QF1 dan keladi, yuqori OUT qisqichlaridan iste'molchilarga ketadi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Rele kuchlanishi: pastki IN qisqichlariga QF1 dan keladi, yuqori OUT qisqichlaridan iste'molchilarga ketadi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim kv.li — d1.l1",
+   "msgs": [
+    [
+     "Kuchlanish relesi: IN L (kirish). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Rele kuchlanishi: pastki IN — kirish (QF1 dan), yuqori OUT — chiqish (difavtomatlar va yoritishga). Rele IN L (pastda) QF1 ning 2-chiqishidan keladi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Rele kuchlanishi: pastki IN — kirish (QF1 dan), yuqori OUT — chiqish (difavtomatlar va yoritishga). Rele IN L (pastda) QF1 ning 2-chiqishidan keladi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim lamp.n — x1.n",
+   "msgs": [
+    [
+     "Lampa patroni: N (nol). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Rozetka umumiy shinaga to'g'ridan ulanmaydi: L va N difavtomatning pastki chiqishidan keladi, aks holda 30 mA sizish himoyasi ishlamaydi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Rozetka umumiy shinaga to'g'ridan ulanmaydi: L va N difavtomatning pastki chiqishidan keladi, aks holda 30 mA sizish himoyasi ishlamaydi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim lamp.l — qf2.l1",
+   "msgs": [
+    [
+     "Lampa patroni: L (kalitdan keladigan faza). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Lampaga faza kalit orqali keladi: QF2 → kalit L, kalit L1 → lampa L. Kalitni chetlab o'tsangiz lampani o'chirib bo'lmaydi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Lampaga faza kalit orqali keladi: QF2 → kalit L, kalit L1 → lampa L. Kalitni chetlab o'tsangiz lampani o'chirib bo'lmaydi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim qf1.l1 — kv.li",
+   "msgs": [
+    [
+     "QF1: 1 (L) kirish. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Rele kuchlanishi: pastki IN — kirish (QF1 dan), yuqori OUT — chiqish (difavtomatlar va yoritishga). QF1 1 (L) — hisoblagichning 2-qisqichidan keladi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Rele kuchlanishi: pastki IN — kirish (QF1 dan), yuqori OUT — chiqish (difavtomatlar va yoritishga). QF1 1 (L) — hisoblagichning 2-qisqichidan keladi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim qf2.l2 — lamp.l",
+   "msgs": [
+    [
+     "QF2: 2 (L) chiqish. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Lampaga faza kalit orqali keladi: QF2 → kalit L, kalit L1 → lampa L. Kalitni chetlab o'tsangiz lampani o'chirib bo'lmaydi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Lampaga faza kalit orqali keladi: QF2 → kalit L, kalit L1 → lampa L. Kalitni chetlab o'tsangiz lampani o'chirib bo'lmaydi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim mt.2 — kv.li",
+   "msgs": [
+    [
+     "Hisoblagich 2: faza chiqishi (avtomatga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Hisoblagich 2 — faza chiqishi: QF1 ning 1 (L) qisqichiga boradi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Hisoblagich 2 — faza chiqishi: QF1 ning 1 (L) qisqichiga boradi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim src.n — mt.3",
+   "msgs": [
+    [
+     "Manba N (nol) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 1 / 12 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 1 / 12 bosqich tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "1"
+    },
+    "r-u": {
+     "t": "0 V"
+    },
+    "steps": [
+     "done|Manba L → hisoblagich 1, manba N → hisoblagich 3 (tayyor)2/2",
+     "Hisoblagich 2 → QF1 (1, L), hisoblagich 4 → QF1 (3, N)0/2",
+     "QF1 chiqishi → kuchlanish relesi IN: L → L, N → N0/2",
+     "Rele OUT L → D1, D2, D3 ning L kirishi va QF2 (faza shinasi)0/4",
+     "Rele OUT N → D1, D2, D3 ning N kirishi (nol shinasi)0/3",
+     "D1 chiqishi → X1 rozetka: L → L, N → N0/2",
+     "D2 chiqishi → X2 rozetka: L → L, N → N0/2",
+     "D3 chiqishi → X3 rozetka: L → L, N → N0/2",
+     "Himoya yerlash: manba E → X1, X2, X3 ning ⏚ qisqichi0/3",
+     "QF2 chiqishi (2) → kalit L",
+     "Kalit L1 → lampa L",
+     "Rele OUT N → lampa N"
+    ]
+   }
+  },
+  {
+   "step": "tugma #undo",
+   "msgs": [
+    [
+     "Oxirgi sim olib tashlandi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Oxirgi sim olib tashlandi."
+    },
+    "pdone": {
+     "t": "0"
+    },
+    "steps": [
+     "part|Manba L → hisoblagich 1, manba N → hisoblagich 31/2",
+     "Hisoblagich 2 → QF1 (1, L), hisoblagich 4 → QF1 (3, N)0/2",
+     "QF1 chiqishi → kuchlanish relesi IN: L → L, N → N0/2",
+     "Rele OUT L → D1, D2, D3 ning L kirishi va QF2 (faza shinasi)0/4",
+     "Rele OUT N → D1, D2, D3 ning N kirishi (nol shinasi)0/3",
+     "D1 chiqishi → X1 rozetka: L → L, N → N0/2",
+     "D2 chiqishi → X2 rozetka: L → L, N → N0/2",
+     "D3 chiqishi → X3 rozetka: L → L, N → N0/2",
+     "Himoya yerlash: manba E → X1, X2, X3 ning ⏚ qisqichi0/3",
+     "QF2 chiqishi (2) → kalit L",
+     "Kalit L1 → lampa L",
+     "Rele OUT N → lampa N"
+    ]
+   }
+  },
+  {
+   "step": "tugma #hint",
+   "msgs": [
+    [
+     "Maslahat: Manba L → hisoblagich 1, manba N → hisoblagich 3",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Maslahat: Manba L → hisoblagich 1, manba N → hisoblagich 3"
+    }
+   }
+  },
+  {
+   "step": "sim src.n — mt.3",
+   "msgs": [
+    [
+     "Manba N (nol) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 1 / 12 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 1 / 12 bosqich tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "1"
+    },
+    "steps": [
+     "done|Manba L → hisoblagich 1, manba N → hisoblagich 3 (tayyor)2/2",
+     "Hisoblagich 2 → QF1 (1, L), hisoblagich 4 → QF1 (3, N)0/2",
+     "QF1 chiqishi → kuchlanish relesi IN: L → L, N → N0/2",
+     "Rele OUT L → D1, D2, D3 ning L kirishi va QF2 (faza shinasi)0/4",
+     "Rele OUT N → D1, D2, D3 ning N kirishi (nol shinasi)0/3",
+     "D1 chiqishi → X1 rozetka: L → L, N → N0/2",
+     "D2 chiqishi → X2 rozetka: L → L, N → N0/2",
+     "D3 chiqishi → X3 rozetka: L → L, N → N0/2",
+     "Himoya yerlash: manba E → X1, X2, X3 ning ⏚ qisqichi0/3",
+     "QF2 chiqishi (2) → kalit L",
+     "Kalit L1 → lampa L",
+     "Rele OUT N → lampa N"
+    ]
+   }
+  },
+  {
+   "step": "sim mt.2 — qf1.l1",
+   "msgs": [
+    [
+     "Hisoblagich 2: faza chiqishi (avtomatga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 1 / 12 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Manba L → hisoblagich 1, manba N → hisoblagich 3 (tayyor)2/2",
+     "part|Hisoblagich 2 → QF1 (1, L), hisoblagich 4 → QF1 (3, N)1/2",
+     "QF1 chiqishi → kuchlanish relesi IN: L → L, N → N0/2",
+     "Rele OUT L → D1, D2, D3 ning L kirishi va QF2 (faza shinasi)0/4",
+     "Rele OUT N → D1, D2, D3 ning N kirishi (nol shinasi)0/3",
+     "D1 chiqishi → X1 rozetka: L → L, N → N0/2",
+     "D2 chiqishi → X2 rozetka: L → L, N → N0/2",
+     "D3 chiqishi → X3 rozetka: L → L, N → N0/2",
+     "Himoya yerlash: manba E → X1, X2, X3 ning ⏚ qisqichi0/3",
+     "QF2 chiqishi (2) → kalit L",
+     "Kalit L1 → lampa L",
+     "Rele OUT N → lampa N"
+    ]
+   }
+  },
+  {
+   "step": "sim mt.4 — qf1.n1",
+   "msgs": [
+    [
+     "Hisoblagich 4: nol chiqishi (avtomatga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 2 / 12 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 2 / 12 bosqich tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "2"
+    },
+    "steps": [
+     "done|Manba L → hisoblagich 1, manba N → hisoblagich 3 (tayyor)2/2",
+     "done|Hisoblagich 2 → QF1 (1, L), hisoblagich 4 → QF1 (3, N) (tayyor)2/2",
+     "QF1 chiqishi → kuchlanish relesi IN: L → L, N → N0/2",
+     "Rele OUT L → D1, D2, D3 ning L kirishi va QF2 (faza shinasi)0/4",
+     "Rele OUT N → D1, D2, D3 ning N kirishi (nol shinasi)0/3",
+     "D1 chiqishi → X1 rozetka: L → L, N → N0/2",
+     "D2 chiqishi → X2 rozetka: L → L, N → N0/2",
+     "D3 chiqishi → X3 rozetka: L → L, N → N0/2",
+     "Himoya yerlash: manba E → X1, X2, X3 ning ⏚ qisqichi0/3",
+     "QF2 chiqishi (2) → kalit L",
+     "Kalit L1 → lampa L",
+     "Rele OUT N → lampa N"
+    ]
+   }
+  },
+  {
+   "step": "sim qf1.l2 — kv.li",
+   "msgs": [
+    [
+     "QF1: 2 (L) chiqish. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 2 / 12 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Manba L → hisoblagich 1, manba N → hisoblagich 3 (tayyor)2/2",
+     "done|Hisoblagich 2 → QF1 (1, L), hisoblagich 4 → QF1 (3, N) (tayyor)2/2",
+     "part|QF1 chiqishi → kuchlanish relesi IN: L → L, N → N1/2",
+     "Rele OUT L → D1, D2, D3 ning L kirishi va QF2 (faza shinasi)0/4",
+     "Rele OUT N → D1, D2, D3 ning N kirishi (nol shinasi)0/3",
+     "D1 chiqishi → X1 rozetka: L → L, N → N0/2",
+     "D2 chiqishi → X2 rozetka: L → L, N → N0/2",
+     "D3 chiqishi → X3 rozetka: L → L, N → N0/2",
+     "Himoya yerlash: manba E → X1, X2, X3 ning ⏚ qisqichi0/3",
+     "QF2 chiqishi (2) → kalit L",
+     "Kalit L1 → lampa L",
+     "Rele OUT N → lampa N"
+    ]
+   }
+  },
+  {
+   "step": "sim qf1.n2 — kv.ni",
+   "msgs": [
+    [
+     "QF1: 4 (N) chiqish. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 3 / 12 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 3 / 12 bosqich tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "3"
+    },
+    "steps": [
+     "done|Manba L → hisoblagich 1, manba N → hisoblagich 3 (tayyor)2/2",
+     "done|Hisoblagich 2 → QF1 (1, L), hisoblagich 4 → QF1 (3, N) (tayyor)2/2",
+     "done|QF1 chiqishi → kuchlanish relesi IN: L → L, N → N (tayyor)2/2",
+     "Rele OUT L → D1, D2, D3 ning L kirishi va QF2 (faza shinasi)0/4",
+     "Rele OUT N → D1, D2, D3 ning N kirishi (nol shinasi)0/3",
+     "D1 chiqishi → X1 rozetka: L → L, N → N0/2",
+     "D2 chiqishi → X2 rozetka: L → L, N → N0/2",
+     "D3 chiqishi → X3 rozetka: L → L, N → N0/2",
+     "Himoya yerlash: manba E → X1, X2, X3 ning ⏚ qisqichi0/3",
+     "QF2 chiqishi (2) → kalit L",
+     "Kalit L1 → lampa L",
+     "Rele OUT N → lampa N"
+    ]
+   }
+  },
+  {
+   "step": "sim kv.lo — d1.l1",
+   "msgs": [
+    [
+     "Kuchlanish relesi: OUT L (chiqish). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 3 / 12 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Manba L → hisoblagich 1, manba N → hisoblagich 3 (tayyor)2/2",
+     "done|Hisoblagich 2 → QF1 (1, L), hisoblagich 4 → QF1 (3, N) (tayyor)2/2",
+     "done|QF1 chiqishi → kuchlanish relesi IN: L → L, N → N (tayyor)2/2",
+     "part|Rele OUT L → D1, D2, D3 ning L kirishi va QF2 (faza shinasi)1/4",
+     "Rele OUT N → D1, D2, D3 ning N kirishi (nol shinasi)0/3",
+     "D1 chiqishi → X1 rozetka: L → L, N → N0/2",
+     "D2 chiqishi → X2 rozetka: L → L, N → N0/2",
+     "D3 chiqishi → X3 rozetka: L → L, N → N0/2",
+     "Himoya yerlash: manba E → X1, X2, X3 ning ⏚ qisqichi0/3",
+     "QF2 chiqishi (2) → kalit L",
+     "Kalit L1 → lampa L",
+     "Rele OUT N → lampa N"
+    ]
+   }
+  },
+  {
+   "step": "sim d1.l1 — d2.l1",
+   "msgs": [
+    [
+     "D1: L kirish. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 3 / 12 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Manba L → hisoblagich 1, manba N → hisoblagich 3 (tayyor)2/2",
+     "done|Hisoblagich 2 → QF1 (1, L), hisoblagich 4 → QF1 (3, N) (tayyor)2/2",
+     "done|QF1 chiqishi → kuchlanish relesi IN: L → L, N → N (tayyor)2/2",
+     "part|Rele OUT L → D1, D2, D3 ning L kirishi va QF2 (faza shinasi)2/4",
+     "Rele OUT N → D1, D2, D3 ning N kirishi (nol shinasi)0/3",
+     "D1 chiqishi → X1 rozetka: L → L, N → N0/2",
+     "D2 chiqishi → X2 rozetka: L → L, N → N0/2",
+     "D3 chiqishi → X3 rozetka: L → L, N → N0/2",
+     "Himoya yerlash: manba E → X1, X2, X3 ning ⏚ qisqichi0/3",
+     "QF2 chiqishi (2) → kalit L",
+     "Kalit L1 → lampa L",
+     "Rele OUT N → lampa N"
+    ]
+   }
+  },
+  {
+   "step": "sim d2.l1 — d3.l1",
+   "msgs": [
+    [
+     "D2: L kirish. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 3 / 12 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Manba L → hisoblagich 1, manba N → hisoblagich 3 (tayyor)2/2",
+     "done|Hisoblagich 2 → QF1 (1, L), hisoblagich 4 → QF1 (3, N) (tayyor)2/2",
+     "done|QF1 chiqishi → kuchlanish relesi IN: L → L, N → N (tayyor)2/2",
+     "part|Rele OUT L → D1, D2, D3 ning L kirishi va QF2 (faza shinasi)3/4",
+     "Rele OUT N → D1, D2, D3 ning N kirishi (nol shinasi)0/3",
+     "D1 chiqishi → X1 rozetka: L → L, N → N0/2",
+     "D2 chiqishi → X2 rozetka: L → L, N → N0/2",
+     "D3 chiqishi → X3 rozetka: L → L, N → N0/2",
+     "Himoya yerlash: manba E → X1, X2, X3 ning ⏚ qisqichi0/3",
+     "QF2 chiqishi (2) → kalit L",
+     "Kalit L1 → lampa L",
+     "Rele OUT N → lampa N"
+    ]
+   }
+  },
+  {
+   "step": "sim d3.l1 — qf2.l1",
+   "msgs": [
+    [
+     "D3: L kirish. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 4 / 12 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 4 / 12 bosqich tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "4"
+    },
+    "steps": [
+     "done|Manba L → hisoblagich 1, manba N → hisoblagich 3 (tayyor)2/2",
+     "done|Hisoblagich 2 → QF1 (1, L), hisoblagich 4 → QF1 (3, N) (tayyor)2/2",
+     "done|QF1 chiqishi → kuchlanish relesi IN: L → L, N → N (tayyor)2/2",
+     "done|Rele OUT L → D1, D2, D3 ning L kirishi va QF2 (faza shinasi) (tayyor)4/4",
+     "Rele OUT N → D1, D2, D3 ning N kirishi (nol shinasi)0/3",
+     "D1 chiqishi → X1 rozetka: L → L, N → N0/2",
+     "D2 chiqishi → X2 rozetka: L → L, N → N0/2",
+     "D3 chiqishi → X3 rozetka: L → L, N → N0/2",
+     "Himoya yerlash: manba E → X1, X2, X3 ning ⏚ qisqichi0/3",
+     "QF2 chiqishi (2) → kalit L",
+     "Kalit L1 → lampa L",
+     "Rele OUT N → lampa N"
+    ]
+   }
+  },
+  {
+   "step": "sim kv.no — d1.n1",
+   "msgs": [
+    [
+     "Kuchlanish relesi: OUT N (chiqish). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 4 / 12 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Manba L → hisoblagich 1, manba N → hisoblagich 3 (tayyor)2/2",
+     "done|Hisoblagich 2 → QF1 (1, L), hisoblagich 4 → QF1 (3, N) (tayyor)2/2",
+     "done|QF1 chiqishi → kuchlanish relesi IN: L → L, N → N (tayyor)2/2",
+     "done|Rele OUT L → D1, D2, D3 ning L kirishi va QF2 (faza shinasi) (tayyor)4/4",
+     "part|Rele OUT N → D1, D2, D3 ning N kirishi (nol shinasi)1/3",
+     "D1 chiqishi → X1 rozetka: L → L, N → N0/2",
+     "D2 chiqishi → X2 rozetka: L → L, N → N0/2",
+     "D3 chiqishi → X3 rozetka: L → L, N → N0/2",
+     "Himoya yerlash: manba E → X1, X2, X3 ning ⏚ qisqichi0/3",
+     "QF2 chiqishi (2) → kalit L",
+     "Kalit L1 → lampa L",
+     "Rele OUT N → lampa N"
+    ]
+   }
+  },
+  {
+   "step": "sim d1.n1 — d2.n1",
+   "msgs": [
+    [
+     "D1: N kirish. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 4 / 12 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Manba L → hisoblagich 1, manba N → hisoblagich 3 (tayyor)2/2",
+     "done|Hisoblagich 2 → QF1 (1, L), hisoblagich 4 → QF1 (3, N) (tayyor)2/2",
+     "done|QF1 chiqishi → kuchlanish relesi IN: L → L, N → N (tayyor)2/2",
+     "done|Rele OUT L → D1, D2, D3 ning L kirishi va QF2 (faza shinasi) (tayyor)4/4",
+     "part|Rele OUT N → D1, D2, D3 ning N kirishi (nol shinasi)2/3",
+     "D1 chiqishi → X1 rozetka: L → L, N → N0/2",
+     "D2 chiqishi → X2 rozetka: L → L, N → N0/2",
+     "D3 chiqishi → X3 rozetka: L → L, N → N0/2",
+     "Himoya yerlash: manba E → X1, X2, X3 ning ⏚ qisqichi0/3",
+     "QF2 chiqishi (2) → kalit L",
+     "Kalit L1 → lampa L",
+     "Rele OUT N → lampa N"
+    ]
+   }
+  },
+  {
+   "step": "sim d2.n1 — d3.n1",
+   "msgs": [
+    [
+     "D2: N kirish. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 5 / 12 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 5 / 12 bosqich tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "5"
+    },
+    "steps": [
+     "done|Manba L → hisoblagich 1, manba N → hisoblagich 3 (tayyor)2/2",
+     "done|Hisoblagich 2 → QF1 (1, L), hisoblagich 4 → QF1 (3, N) (tayyor)2/2",
+     "done|QF1 chiqishi → kuchlanish relesi IN: L → L, N → N (tayyor)2/2",
+     "done|Rele OUT L → D1, D2, D3 ning L kirishi va QF2 (faza shinasi) (tayyor)4/4",
+     "done|Rele OUT N → D1, D2, D3 ning N kirishi (nol shinasi) (tayyor)3/3",
+     "D1 chiqishi → X1 rozetka: L → L, N → N0/2",
+     "D2 chiqishi → X2 rozetka: L → L, N → N0/2",
+     "D3 chiqishi → X3 rozetka: L → L, N → N0/2",
+     "Himoya yerlash: manba E → X1, X2, X3 ning ⏚ qisqichi0/3",
+     "QF2 chiqishi (2) → kalit L",
+     "Kalit L1 → lampa L",
+     "Rele OUT N → lampa N"
+    ]
+   }
+  },
+  {
+   "step": "sim d3.n1 — lamp.n",
+   "msgs": [
+    [
+     "D3: N kirish. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 6 / 12 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 6 / 12 bosqich tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "6"
+    },
+    "steps": [
+     "done|Manba L → hisoblagich 1, manba N → hisoblagich 3 (tayyor)2/2",
+     "done|Hisoblagich 2 → QF1 (1, L), hisoblagich 4 → QF1 (3, N) (tayyor)2/2",
+     "done|QF1 chiqishi → kuchlanish relesi IN: L → L, N → N (tayyor)2/2",
+     "done|Rele OUT L → D1, D2, D3 ning L kirishi va QF2 (faza shinasi) (tayyor)4/4",
+     "done|Rele OUT N → D1, D2, D3 ning N kirishi (nol shinasi) (tayyor)3/3",
+     "D1 chiqishi → X1 rozetka: L → L, N → N0/2",
+     "D2 chiqishi → X2 rozetka: L → L, N → N0/2",
+     "D3 chiqishi → X3 rozetka: L → L, N → N0/2",
+     "Himoya yerlash: manba E → X1, X2, X3 ning ⏚ qisqichi0/3",
+     "QF2 chiqishi (2) → kalit L",
+     "Kalit L1 → lampa L",
+     "done|Rele OUT N → lampa N (tayyor)"
+    ]
+   }
+  },
+  {
+   "step": "sim d1.l2 — x1.l",
+   "msgs": [
+    [
+     "D1: L chiqish (rozetkaga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 6 / 12 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Manba L → hisoblagich 1, manba N → hisoblagich 3 (tayyor)2/2",
+     "done|Hisoblagich 2 → QF1 (1, L), hisoblagich 4 → QF1 (3, N) (tayyor)2/2",
+     "done|QF1 chiqishi → kuchlanish relesi IN: L → L, N → N (tayyor)2/2",
+     "done|Rele OUT L → D1, D2, D3 ning L kirishi va QF2 (faza shinasi) (tayyor)4/4",
+     "done|Rele OUT N → D1, D2, D3 ning N kirishi (nol shinasi) (tayyor)3/3",
+     "part|D1 chiqishi → X1 rozetka: L → L, N → N1/2",
+     "D2 chiqishi → X2 rozetka: L → L, N → N0/2",
+     "D3 chiqishi → X3 rozetka: L → L, N → N0/2",
+     "Himoya yerlash: manba E → X1, X2, X3 ning ⏚ qisqichi0/3",
+     "QF2 chiqishi (2) → kalit L",
+     "Kalit L1 → lampa L",
+     "done|Rele OUT N → lampa N (tayyor)"
+    ]
+   }
+  },
+  {
+   "step": "sim d1.n2 — x1.n",
+   "msgs": [
+    [
+     "D1: N chiqish (rozetkaga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 7 / 12 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 7 / 12 bosqich tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "7"
+    },
+    "steps": [
+     "done|Manba L → hisoblagich 1, manba N → hisoblagich 3 (tayyor)2/2",
+     "done|Hisoblagich 2 → QF1 (1, L), hisoblagich 4 → QF1 (3, N) (tayyor)2/2",
+     "done|QF1 chiqishi → kuchlanish relesi IN: L → L, N → N (tayyor)2/2",
+     "done|Rele OUT L → D1, D2, D3 ning L kirishi va QF2 (faza shinasi) (tayyor)4/4",
+     "done|Rele OUT N → D1, D2, D3 ning N kirishi (nol shinasi) (tayyor)3/3",
+     "done|D1 chiqishi → X1 rozetka: L → L, N → N (tayyor)2/2",
+     "D2 chiqishi → X2 rozetka: L → L, N → N0/2",
+     "D3 chiqishi → X3 rozetka: L → L, N → N0/2",
+     "Himoya yerlash: manba E → X1, X2, X3 ning ⏚ qisqichi0/3",
+     "QF2 chiqishi (2) → kalit L",
+     "Kalit L1 → lampa L",
+     "done|Rele OUT N → lampa N (tayyor)"
+    ]
+   }
+  },
+  {
+   "step": "sim d2.l2 — x2.l",
+   "msgs": [
+    [
+     "D2: L chiqish (rozetkaga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 7 / 12 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Manba L → hisoblagich 1, manba N → hisoblagich 3 (tayyor)2/2",
+     "done|Hisoblagich 2 → QF1 (1, L), hisoblagich 4 → QF1 (3, N) (tayyor)2/2",
+     "done|QF1 chiqishi → kuchlanish relesi IN: L → L, N → N (tayyor)2/2",
+     "done|Rele OUT L → D1, D2, D3 ning L kirishi va QF2 (faza shinasi) (tayyor)4/4",
+     "done|Rele OUT N → D1, D2, D3 ning N kirishi (nol shinasi) (tayyor)3/3",
+     "done|D1 chiqishi → X1 rozetka: L → L, N → N (tayyor)2/2",
+     "part|D2 chiqishi → X2 rozetka: L → L, N → N1/2",
+     "D3 chiqishi → X3 rozetka: L → L, N → N0/2",
+     "Himoya yerlash: manba E → X1, X2, X3 ning ⏚ qisqichi0/3",
+     "QF2 chiqishi (2) → kalit L",
+     "Kalit L1 → lampa L",
+     "done|Rele OUT N → lampa N (tayyor)"
+    ]
+   }
+  },
+  {
+   "step": "sim d2.n2 — x2.n",
+   "msgs": [
+    [
+     "D2: N chiqish (rozetkaga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 8 / 12 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 8 / 12 bosqich tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "8"
+    },
+    "steps": [
+     "done|Manba L → hisoblagich 1, manba N → hisoblagich 3 (tayyor)2/2",
+     "done|Hisoblagich 2 → QF1 (1, L), hisoblagich 4 → QF1 (3, N) (tayyor)2/2",
+     "done|QF1 chiqishi → kuchlanish relesi IN: L → L, N → N (tayyor)2/2",
+     "done|Rele OUT L → D1, D2, D3 ning L kirishi va QF2 (faza shinasi) (tayyor)4/4",
+     "done|Rele OUT N → D1, D2, D3 ning N kirishi (nol shinasi) (tayyor)3/3",
+     "done|D1 chiqishi → X1 rozetka: L → L, N → N (tayyor)2/2",
+     "done|D2 chiqishi → X2 rozetka: L → L, N → N (tayyor)2/2",
+     "D3 chiqishi → X3 rozetka: L → L, N → N0/2",
+     "Himoya yerlash: manba E → X1, X2, X3 ning ⏚ qisqichi0/3",
+     "QF2 chiqishi (2) → kalit L",
+     "Kalit L1 → lampa L",
+     "done|Rele OUT N → lampa N (tayyor)"
+    ]
+   }
+  },
+  {
+   "step": "sim d3.l2 — x3.l",
+   "msgs": [
+    [
+     "D3: L chiqish (rozetkaga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 8 / 12 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Manba L → hisoblagich 1, manba N → hisoblagich 3 (tayyor)2/2",
+     "done|Hisoblagich 2 → QF1 (1, L), hisoblagich 4 → QF1 (3, N) (tayyor)2/2",
+     "done|QF1 chiqishi → kuchlanish relesi IN: L → L, N → N (tayyor)2/2",
+     "done|Rele OUT L → D1, D2, D3 ning L kirishi va QF2 (faza shinasi) (tayyor)4/4",
+     "done|Rele OUT N → D1, D2, D3 ning N kirishi (nol shinasi) (tayyor)3/3",
+     "done|D1 chiqishi → X1 rozetka: L → L, N → N (tayyor)2/2",
+     "done|D2 chiqishi → X2 rozetka: L → L, N → N (tayyor)2/2",
+     "part|D3 chiqishi → X3 rozetka: L → L, N → N1/2",
+     "Himoya yerlash: manba E → X1, X2, X3 ning ⏚ qisqichi0/3",
+     "QF2 chiqishi (2) → kalit L",
+     "Kalit L1 → lampa L",
+     "done|Rele OUT N → lampa N (tayyor)"
+    ]
+   }
+  },
+  {
+   "step": "sim d3.n2 — x3.n",
+   "msgs": [
+    [
+     "D3: N chiqish (rozetkaga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 9 / 12 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 9 / 12 bosqich tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "9"
+    },
+    "steps": [
+     "done|Manba L → hisoblagich 1, manba N → hisoblagich 3 (tayyor)2/2",
+     "done|Hisoblagich 2 → QF1 (1, L), hisoblagich 4 → QF1 (3, N) (tayyor)2/2",
+     "done|QF1 chiqishi → kuchlanish relesi IN: L → L, N → N (tayyor)2/2",
+     "done|Rele OUT L → D1, D2, D3 ning L kirishi va QF2 (faza shinasi) (tayyor)4/4",
+     "done|Rele OUT N → D1, D2, D3 ning N kirishi (nol shinasi) (tayyor)3/3",
+     "done|D1 chiqishi → X1 rozetka: L → L, N → N (tayyor)2/2",
+     "done|D2 chiqishi → X2 rozetka: L → L, N → N (tayyor)2/2",
+     "done|D3 chiqishi → X3 rozetka: L → L, N → N (tayyor)2/2",
+     "Himoya yerlash: manba E → X1, X2, X3 ning ⏚ qisqichi0/3",
+     "QF2 chiqishi (2) → kalit L",
+     "Kalit L1 → lampa L",
+     "done|Rele OUT N → lampa N (tayyor)"
+    ]
+   }
+  },
+  {
+   "step": "sim src.e — x1.pe",
+   "msgs": [
+    [
+     "Manba E (himoya yerlash) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 9 / 12 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Manba L → hisoblagich 1, manba N → hisoblagich 3 (tayyor)2/2",
+     "done|Hisoblagich 2 → QF1 (1, L), hisoblagich 4 → QF1 (3, N) (tayyor)2/2",
+     "done|QF1 chiqishi → kuchlanish relesi IN: L → L, N → N (tayyor)2/2",
+     "done|Rele OUT L → D1, D2, D3 ning L kirishi va QF2 (faza shinasi) (tayyor)4/4",
+     "done|Rele OUT N → D1, D2, D3 ning N kirishi (nol shinasi) (tayyor)3/3",
+     "done|D1 chiqishi → X1 rozetka: L → L, N → N (tayyor)2/2",
+     "done|D2 chiqishi → X2 rozetka: L → L, N → N (tayyor)2/2",
+     "done|D3 chiqishi → X3 rozetka: L → L, N → N (tayyor)2/2",
+     "part|Himoya yerlash: manba E → X1, X2, X3 ning ⏚ qisqichi1/3",
+     "QF2 chiqishi (2) → kalit L",
+     "Kalit L1 → lampa L",
+     "done|Rele OUT N → lampa N (tayyor)"
+    ]
+   }
+  },
+  {
+   "step": "sim x1.pe — x2.pe",
+   "msgs": [
+    [
+     "X1 rozetkasi: ⏚ yerlash. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 9 / 12 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Manba L → hisoblagich 1, manba N → hisoblagich 3 (tayyor)2/2",
+     "done|Hisoblagich 2 → QF1 (1, L), hisoblagich 4 → QF1 (3, N) (tayyor)2/2",
+     "done|QF1 chiqishi → kuchlanish relesi IN: L → L, N → N (tayyor)2/2",
+     "done|Rele OUT L → D1, D2, D3 ning L kirishi va QF2 (faza shinasi) (tayyor)4/4",
+     "done|Rele OUT N → D1, D2, D3 ning N kirishi (nol shinasi) (tayyor)3/3",
+     "done|D1 chiqishi → X1 rozetka: L → L, N → N (tayyor)2/2",
+     "done|D2 chiqishi → X2 rozetka: L → L, N → N (tayyor)2/2",
+     "done|D3 chiqishi → X3 rozetka: L → L, N → N (tayyor)2/2",
+     "part|Himoya yerlash: manba E → X1, X2, X3 ning ⏚ qisqichi2/3",
+     "QF2 chiqishi (2) → kalit L",
+     "Kalit L1 → lampa L",
+     "done|Rele OUT N → lampa N (tayyor)"
+    ]
+   }
+  },
+  {
+   "step": "sim x2.pe — x3.pe",
+   "msgs": [
+    [
+     "X2 rozetkasi: ⏚ yerlash. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 10 / 12 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 10 / 12 bosqich tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "10"
+    },
+    "steps": [
+     "done|Manba L → hisoblagich 1, manba N → hisoblagich 3 (tayyor)2/2",
+     "done|Hisoblagich 2 → QF1 (1, L), hisoblagich 4 → QF1 (3, N) (tayyor)2/2",
+     "done|QF1 chiqishi → kuchlanish relesi IN: L → L, N → N (tayyor)2/2",
+     "done|Rele OUT L → D1, D2, D3 ning L kirishi va QF2 (faza shinasi) (tayyor)4/4",
+     "done|Rele OUT N → D1, D2, D3 ning N kirishi (nol shinasi) (tayyor)3/3",
+     "done|D1 chiqishi → X1 rozetka: L → L, N → N (tayyor)2/2",
+     "done|D2 chiqishi → X2 rozetka: L → L, N → N (tayyor)2/2",
+     "done|D3 chiqishi → X3 rozetka: L → L, N → N (tayyor)2/2",
+     "done|Himoya yerlash: manba E → X1, X2, X3 ning ⏚ qisqichi (tayyor)3/3",
+     "QF2 chiqishi (2) → kalit L",
+     "Kalit L1 → lampa L",
+     "done|Rele OUT N → lampa N (tayyor)"
+    ]
+   }
+  },
+  {
+   "step": "sim qf2.l2 — sw.l",
+   "msgs": [
+    [
+     "QF2: 2 (L) chiqish. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 11 / 12 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 11 / 12 bosqich tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "11"
+    },
+    "steps": [
+     "done|Manba L → hisoblagich 1, manba N → hisoblagich 3 (tayyor)2/2",
+     "done|Hisoblagich 2 → QF1 (1, L), hisoblagich 4 → QF1 (3, N) (tayyor)2/2",
+     "done|QF1 chiqishi → kuchlanish relesi IN: L → L, N → N (tayyor)2/2",
+     "done|Rele OUT L → D1, D2, D3 ning L kirishi va QF2 (faza shinasi) (tayyor)4/4",
+     "done|Rele OUT N → D1, D2, D3 ning N kirishi (nol shinasi) (tayyor)3/3",
+     "done|D1 chiqishi → X1 rozetka: L → L, N → N (tayyor)2/2",
+     "done|D2 chiqishi → X2 rozetka: L → L, N → N (tayyor)2/2",
+     "done|D3 chiqishi → X3 rozetka: L → L, N → N (tayyor)2/2",
+     "done|Himoya yerlash: manba E → X1, X2, X3 ning ⏚ qisqichi (tayyor)3/3",
+     "done|QF2 chiqishi (2) → kalit L (tayyor)",
+     "Kalit L1 → lampa L",
+     "done|Rele OUT N → lampa N (tayyor)"
+    ]
+   }
+  },
+  {
+   "step": "sim sw.l1 — lamp.l",
+   "msgs": [
+    [
+     "Kalit: L1 (yoqilganda L bilan tutashadi). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sxema to'g'ri yig'ildi. Kuchlanish bering, so'ng avtomatlarni yoqing.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sxema to'g'ri yig'ildi. Kuchlanish bering, so'ng avtomatlarni yoqing.",
+     "c": "ok"
+    },
+    "power": {
+     "t": "Kuchlanish berish",
+     "c": "btn pri"
+    },
+    "pdone": {
+     "t": "12"
+    },
+    "hint": {
+     "t": "Maslahat",
+     "d": 1,
+     "c": "btn"
+    },
+    "steps": [
+     "done|Manba L → hisoblagich 1, manba N → hisoblagich 3 (tayyor)2/2",
+     "done|Hisoblagich 2 → QF1 (1, L), hisoblagich 4 → QF1 (3, N) (tayyor)2/2",
+     "done|QF1 chiqishi → kuchlanish relesi IN: L → L, N → N (tayyor)2/2",
+     "done|Rele OUT L → D1, D2, D3 ning L kirishi va QF2 (faza shinasi) (tayyor)4/4",
+     "done|Rele OUT N → D1, D2, D3 ning N kirishi (nol shinasi) (tayyor)3/3",
+     "done|D1 chiqishi → X1 rozetka: L → L, N → N (tayyor)2/2",
+     "done|D2 chiqishi → X2 rozetka: L → L, N → N (tayyor)2/2",
+     "done|D3 chiqishi → X3 rozetka: L → L, N → N (tayyor)2/2",
+     "done|Himoya yerlash: manba E → X1, X2, X3 ning ⏚ qisqichi (tayyor)3/3",
+     "done|QF2 chiqishi (2) → kalit L (tayyor)",
+     "done|Kalit L1 → lampa L (tayyor)",
+     "done|Rele OUT N → lampa N (tayyor)"
+    ]
+   }
+  },
+  {
+   "step": "tugma #b-qf1",
+   "note": "disabled",
+   "msgs": [],
+   "state": {}
+  },
+  {
+   "step": "tugma #power",
+   "msgs": [
+    [
+     "Kuchlanish berildi: hisoblagichga 220 V keldi. Endi QF1 ni yoqing — kuchlanish relesi tarmoqni tekshiradi.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Kuchlanish berildi: hisoblagichga 220 V keldi. Endi QF1 ni yoqing — kuchlanish relesi tarmoqni tekshiradi.",
+     "c": "ok"
+    },
+    "power": {
+     "t": "O'chirish",
+     "c": "btn pri"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "d": 1,
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "d": 1,
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "h": 1,
+     "d": 1,
+     "c": "btn"
+    },
+    "ctl": {},
+    "r-u": {
+     "t": "230 V"
+    },
+    "b-qf1": {
+     "t": "QF1",
+     "c": "btn",
+     "p": "false"
+    },
+    "b-d1": {
+     "t": "D1",
+     "c": "btn",
+     "p": "false"
+    },
+    "b-d2": {
+     "t": "D2",
+     "c": "btn",
+     "p": "false"
+    },
+    "b-d3": {
+     "t": "D3",
+     "c": "btn",
+     "p": "false"
+    },
+    "b-qf2": {
+     "t": "QF2",
+     "c": "btn",
+     "p": "false"
+    },
+    "t-d1": {
+     "t": "D1 · T",
+     "c": "btn"
+    },
+    "t-d2": {
+     "t": "D2 · T",
+     "c": "btn"
+    },
+    "t-d3": {
+     "t": "D3 · T",
+     "c": "btn"
+    }
+   }
+  },
+  {
+   "step": "bosish x1.l",
+   "msgs": [
+    [
+     "Kuchlanish ostida sxemani o'zgartirib bo'lmaydi. Avval o'chiring.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Kuchlanish ostida sxemani o'zgartirib bo'lmaydi. Avval o'chiring.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "tugma #b-qf1",
+   "msgs": [
+    [
+     "QF1 yoqildi.",
+     ""
+    ],
+    [
+     "Kuchlanish relesi tarmoqni tekshiryapti: U = 230 V me'yorda. 3 soniya kutib iste'molchilarni ulaydi (real relelarda bu vaqt 5–600 s qilib sozlanadi).",
+     ""
+    ],
+    [
+     "Kuchlanish relesi ichki kontaktini yopdi: faza va nol shinalariga 230 V berildi. Endi difavtomatlar va QF2 ni yoqing.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Kuchlanish relesi ichki kontaktini yopdi: faza va nol shinalariga 230 V berildi. Endi difavtomatlar va QF2 ni yoqing.",
+     "c": "ok"
+    },
+    "r-kv": {
+     "t": "ulangan",
+     "c": "on"
+    },
+    "r-ub": {
+     "t": "230 V",
+     "c": "on"
+    },
+    "b-qf1": {
+     "t": "QF1",
+     "c": "btn",
+     "p": "true"
+    }
+   }
+  },
+  {
+   "step": "tugma #b-d1",
+   "msgs": [
+    [
+     "D1 yoqildi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "D1 yoqildi."
+    },
+    "r-i": {
+     "t": "8.7 A"
+    },
+    "r-p": {
+     "t": "2.00 kW"
+    },
+    "r-x1": {
+     "t": "8.7 A"
+    },
+    "b-d1": {
+     "t": "D1",
+     "c": "btn",
+     "p": "true"
+    }
+   }
+  },
+  {
+   "step": "tugma #b-d2",
+   "msgs": [
+    [
+     "D2 yoqildi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "D2 yoqildi."
+    },
+    "r-i": {
+     "t": "9.3 A"
+    },
+    "r-p": {
+     "t": "2.15 kW"
+    },
+    "r-x2": {
+     "t": "0.7 A"
+    },
+    "b-d2": {
+     "t": "D2",
+     "c": "btn",
+     "p": "true"
+    }
+   }
+  },
+  {
+   "step": "tugma #b-d3",
+   "msgs": [
+    [
+     "D3 yoqildi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "D3 yoqildi."
+    },
+    "b-d3": {
+     "t": "D3",
+     "c": "btn",
+     "p": "true"
+    }
+   }
+  },
+  {
+   "step": "tugma #b-qf2",
+   "msgs": [
+    [
+     "QF2 yoqildi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "QF2 yoqildi."
+    },
+    "b-qf2": {
+     "t": "QF2",
+     "c": "btn",
+     "p": "true"
+    }
+   }
+  },
+  {
+   "step": "tugma #b-sw",
+   "msgs": [
+    [
+     "Kalit yoqildi: L va L1 tutashdi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Kalit yoqildi: L va L1 tutashdi."
+    },
+    "r-i": {
+     "t": "9.8 A"
+    },
+    "r-p": {
+     "t": "2.25 kW"
+    },
+    "b-sw": {
+     "t": "Kalit",
+     "c": "btn",
+     "p": "true"
+    }
+   }
+  },
+  {
+   "step": "tanlash #a-x1 = kettle",
+   "msgs": [
+    [
+     "X1 rozetkaga ulandi: Choynak 2,0 kW.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "X1 rozetkaga ulandi: Choynak 2,0 kW."
+    }
+   }
+  },
+  {
+   "step": "tanlash #a-x2 = tv",
+   "msgs": [
+    [
+     "X2 rozetkaga ulandi: Televizor 0,15 kW.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "X2 rozetkaga ulandi: Televizor 0,15 kW."
+    }
+   }
+  },
+  {
+   "step": "tugma #t-d1",
+   "msgs": [
+    [
+     "T tugmasi ichki rezistor orqali 30 mA dan ortiq sun'iy sizish hosil qildi — D1 o'chdi. Bu tekshiruvni oyiga bir marta qilish tavsiya etiladi.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "T tugmasi ichki rezistor orqali 30 mA dan ortiq sun'iy sizish hosil qildi — D1 o'chdi. Bu tekshiruvni oyiga bir marta qilish tavsiya etiladi.",
+     "c": "ok"
+    },
+    "r-i": {
+     "t": "1.1 A"
+    },
+    "r-p": {
+     "t": "0.25 kW"
+    },
+    "r-x1": {
+     "t": "0.0 A"
+    },
+    "b-d1": {
+     "t": "D1",
+     "c": "btn",
+     "p": "false"
+    }
+   }
+  },
+  {
+   "step": "tugma #b-d1",
+   "msgs": [
+    [
+     "D1 yoqildi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "D1 yoqildi."
+    },
+    "r-i": {
+     "t": "9.8 A"
+    },
+    "r-p": {
+     "t": "2.25 kW"
+    },
+    "r-x1": {
+     "t": "8.7 A"
+    },
+    "b-d1": {
+     "t": "D1",
+     "c": "btn",
+     "p": "true"
+    }
+   }
+  },
+  {
+   "step": "tanlash #a-x3 = leak",
+   "msgs": [
+    [
+     "X3 rozetkaga ulandi: Nosoz choynak: korpusga sizish 50 mA.",
+     ""
+    ],
+    [
+     "X3: choynak korpusiga 50 mA tok sizyapti (PE orqali yerga). D3 kirgan va qaytgan tok farqini sezib o'chdi — odamni tok urishidan saqlaydi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "X3: choynak korpusiga 50 mA tok sizyapti (PE orqali yerga). D3 kirgan va qaytgan tok farqini sezib o'chdi — odamni tok urishidan saqlaydi.",
+     "c": "bad"
+    },
+    "b-d3": {
+     "t": "D3",
+     "c": "btn",
+     "p": "false"
+    },
+    "a-x3": {
+     "t": "leak"
+    }
+   }
+  },
+  {
+   "step": "tanlash #a-x3 = none",
+   "msgs": [],
+   "state": {
+    "a-x3": {
+     "t": "none"
+    }
+   }
+  },
+  {
+   "step": "tugma #b-d3",
+   "msgs": [
+    [
+     "D3 yoqildi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "D3 yoqildi."
+    },
+    "b-d3": {
+     "t": "D3",
+     "c": "btn",
+     "p": "true"
+    }
+   }
+  },
+  {
+   "step": "tanlash #a-x3 = short",
+   "msgs": [
+    [
+     "X3 rozetkaga ulandi: Shnuri shikastlangan fen: qisqa tutashuv.",
+     ""
+    ],
+    [
+     "X3: shnurda qisqa tutashuv! Tok yuzlab amperga yetdi va D3 ning elektromagnit ajratgichi millisekundlarda o'chirdi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "X3: shnurda qisqa tutashuv! Tok yuzlab amperga yetdi va D3 ning elektromagnit ajratgichi millisekundlarda o'chirdi.",
+     "c": "bad"
+    },
+    "b-d3": {
+     "t": "D3",
+     "c": "btn",
+     "p": "false"
+    },
+    "a-x3": {
+     "t": "short"
+    }
+   }
+  },
+  {
+   "step": "tanlash #a-x3 = none",
+   "msgs": [],
+   "state": {
+    "a-x3": {
+     "t": "none"
+    }
+   }
+  },
+  {
+   "step": "tugma #b-d3",
+   "msgs": [
+    [
+     "D3 yoqildi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "D3 yoqildi."
+    },
+    "b-d3": {
+     "t": "D3",
+     "c": "btn",
+     "p": "true"
+    }
+   }
+  },
+  {
+   "step": "tanlash #a-x2 = strip",
+   "msgs": [
+    [
+     "X2 rozetkaga ulandi: Uzaytirgich: choynak + isitgich 4,5 kW.",
+     ""
+    ],
+    [
+     "X2: 19.6 A — D2 (16 A) uchun ortiqcha yuk. Issiqlik ajratgichi (bimetall) qizib avtomatni o'chirdi. Vaqt namoyish uchun tezlashtirilgan.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "X2: 19.6 A — D2 (16 A) uchun ortiqcha yuk. Issiqlik ajratgichi (bimetall) qizib avtomatni o'chirdi. Vaqt namoyish uchun tezlashtirilgan.",
+     "c": "bad"
+    },
+    "r-i": {
+     "t": "9.1 A"
+    },
+    "r-p": {
+     "t": "2.10 kW"
+    },
+    "r-x2": {
+     "t": "0.0 A"
+    },
+    "b-d2": {
+     "t": "D2",
+     "c": "btn",
+     "p": "false"
+    },
+    "a-x2": {
+     "t": "strip"
+    }
+   }
+  },
+  {
+   "step": "tanlash #a-x2 = none",
+   "msgs": [],
+   "state": {
+    "a-x2": {
+     "t": "none"
+    }
+   }
+  },
+  {
+   "step": "tugma #b-d2",
+   "msgs": [
+    [
+     "D2 yoqildi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "D2 yoqildi."
+    },
+    "b-d2": {
+     "t": "D2",
+     "c": "btn",
+     "p": "true"
+    }
+   }
+  },
+  {
+   "step": "tanlash #a-x1 = oven",
+   "msgs": [
+    [
+     "X1 rozetkaga ulandi: Duxovka 3,5 kW.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "X1 rozetkaga ulandi: Duxovka 3,5 kW."
+    },
+    "r-i": {
+     "t": "15.7 A"
+    },
+    "r-p": {
+     "t": "3.60 kW"
+    },
+    "r-x1": {
+     "t": "15.2 A"
+    },
+    "a-x1": {
+     "t": "oven"
+    }
+   }
+  },
+  {
+   "step": "tanlash #a-x2 = oven",
+   "msgs": [
+    [
+     "X2 rozetkaga ulandi: Duxovka 3,5 kW.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "X2 rozetkaga ulandi: Duxovka 3,5 kW."
+    },
+    "r-i": {
+     "t": "30.9 A"
+    },
+    "r-p": {
+     "t": "7.10 kW"
+    },
+    "r-x2": {
+     "t": "15.2 A"
+    },
+    "a-x2": {
+     "t": "oven"
+    }
+   }
+  },
+  {
+   "step": "tanlash #a-x3 = oven",
+   "msgs": [
+    [
+     "X3 rozetkaga ulandi: Duxovka 3,5 kW.",
+     ""
+    ],
+    [
+     "Umumiy tok 46.1 A — kirish avtomati QF1 (32 A) uchun ortiqcha. U butun uyni uzdi: hamma kuchli asboblarni bir vaqtda yoqmang. Vaqt tezlashtirilgan.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Umumiy tok 46.1 A — kirish avtomati QF1 (32 A) uchun ortiqcha. U butun uyni uzdi: hamma kuchli asboblarni bir vaqtda yoqmang. Vaqt tezlashtirilgan.",
+     "c": "bad"
+    },
+    "r-i": {
+     "t": "0.0 A"
+    },
+    "r-p": {
+     "t": "0.00 kW"
+    },
+    "r-x1": {
+     "t": "0.0 A"
+    },
+    "r-x2": {
+     "t": "0.0 A"
+    },
+    "b-qf1": {
+     "t": "QF1",
+     "c": "btn",
+     "p": "false"
+    },
+    "a-x3": {
+     "t": "oven"
+    }
+   }
+  },
+  {
+   "step": "tanlash #a-x1 = none",
+   "msgs": [],
+   "state": {
+    "r-kv": {
+     "t": "o'chiq"
+    },
+    "r-ub": {
+     "t": "0 V"
+    },
+    "a-x1": {
+     "t": "none"
+    }
+   }
+  },
+  {
+   "step": "tanlash #a-x2 = none",
+   "msgs": [],
+   "state": {
+    "a-x2": {
+     "t": "none"
+    }
+   }
+  },
+  {
+   "step": "tanlash #a-x3 = none",
+   "msgs": [],
+   "state": {
+    "a-x3": {
+     "t": "none"
+    }
+   }
+  },
+  {
+   "step": "tugma #b-qf1",
+   "msgs": [
+    [
+     "QF1 yoqildi.",
+     ""
+    ],
+    [
+     "Kuchlanish relesi tarmoqni tekshiryapti: U = 230 V me'yorda. 3 soniya kutib iste'molchilarni ulaydi (real relelarda bu vaqt 5–600 s qilib sozlanadi).",
+     ""
+    ],
+    [
+     "Kuchlanish relesi ichki kontaktini yopdi: faza va nol shinalariga 230 V berildi. Endi difavtomatlar va QF2 ni yoqing.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Kuchlanish relesi ichki kontaktini yopdi: faza va nol shinalariga 230 V berildi. Endi difavtomatlar va QF2 ni yoqing.",
+     "c": "ok"
+    },
+    "r-kv": {
+     "t": "ulangan",
+     "c": "on"
+    },
+    "r-ub": {
+     "t": "230 V",
+     "c": "on"
+    },
+    "r-i": {
+     "t": "0.4 A"
+    },
+    "r-p": {
+     "t": "0.10 kW"
+    },
+    "b-qf1": {
+     "t": "QF1",
+     "c": "btn",
+     "p": "true"
+    }
+   }
+  },
+  {
+   "step": "surgich #u = 260",
+   "msgs": [
+    [
+     "Kuchlanish 260 V — 250 V dan yuqori! Rele iste'molchilarni darhol uzdi: bunday kuchlanishda televizor, muzlatgich kabi asboblar kuyishi mumkin.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Kuchlanish 260 V — 250 V dan yuqori! Rele iste'molchilarni darhol uzdi: bunday kuchlanishda televizor, muzlatgich kabi asboblar kuyishi mumkin.",
+     "c": "bad"
+    },
+    "uv": {
+     "t": "260 V"
+    },
+    "u": {
+     "t": "260"
+    },
+    "r-u": {
+     "t": "260 V"
+    },
+    "r-kv": {
+     "t": "U yuqori!",
+     "c": "bad"
+    },
+    "r-ub": {
+     "t": "0 V"
+    },
+    "r-i": {
+     "t": "0.0 A"
+    },
+    "r-p": {
+     "t": "0.00 kW"
+    }
+   }
+  },
+  {
+   "step": "surgich #u = 170",
+   "msgs": [
+    [
+     "Kuchlanish 170 V — 180 V dan past! Rele iste'molchilarni uzdi: past kuchlanishda dvigatelli asboblar (muzlatgich, nasos) qizib ishdan chiqadi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Kuchlanish 170 V — 180 V dan past! Rele iste'molchilarni uzdi: past kuchlanishda dvigatelli asboblar (muzlatgich, nasos) qizib ishdan chiqadi.",
+     "c": "bad"
+    },
+    "uv": {
+     "t": "170 V"
+    },
+    "u": {
+     "t": "170"
+    },
+    "r-u": {
+     "t": "170 V"
+    },
+    "r-kv": {
+     "t": "U past!",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "surgich #u = 230",
+   "msgs": [
+    [
+     "Kuchlanish relesi tarmoqni tekshiryapti: U = 230 V me'yorda. 3 soniya kutib iste'molchilarni ulaydi (real relelarda bu vaqt 5–600 s qilib sozlanadi).",
+     ""
+    ],
+    [
+     "Kuchlanish relesi ichki kontaktini yopdi: faza va nol shinalariga 230 V berildi. Endi difavtomatlar va QF2 ni yoqing.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Kuchlanish relesi ichki kontaktini yopdi: faza va nol shinalariga 230 V berildi. Endi difavtomatlar va QF2 ni yoqing.",
+     "c": "ok"
+    },
+    "uv": {
+     "t": "230 V"
+    },
+    "u": {
+     "t": "230"
+    },
+    "r-u": {
+     "t": "230 V"
+    },
+    "r-kv": {
+     "t": "ulangan",
+     "c": "on"
+    },
+    "r-ub": {
+     "t": "230 V",
+     "c": "on"
+    },
+    "r-i": {
+     "t": "0.4 A"
+    },
+    "r-p": {
+     "t": "0.10 kW"
+    }
+   }
+  },
+  {
+   "step": "tugma #b-sw",
+   "msgs": [
+    [
+     "Kalit o'chirildi: lampa fazadan uzildi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Kalit o'chirildi: lampa fazadan uzildi."
+    },
+    "r-i": {
+     "t": "0.0 A"
+    },
+    "r-p": {
+     "t": "0.00 kW"
+    },
+    "b-sw": {
+     "t": "Kalit",
+     "c": "btn",
+     "p": "false"
+    }
+   }
+  },
+  {
+   "step": "tugma #power",
+   "msgs": [
+    [
+     "Kuchlanish o'chirildi. Sxemani o'zgartirishingiz mumkin.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Kuchlanish o'chirildi. Sxemani o'zgartirishingiz mumkin."
+    },
+    "power": {
+     "t": "Kuchlanish berish",
+     "c": "btn pri"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "h": 1,
+     "c": "btn"
+    },
+    "ctl": {
+     "h": 1
+    },
+    "r-kv": {
+     "t": "o'chiq"
+    },
+    "b-qf1": {
+     "t": "QF1",
+     "d": 1,
+     "c": "btn",
+     "p": "false"
+    },
+    "b-d1": {
+     "t": "D1",
+     "d": 1,
+     "c": "btn",
+     "p": "false"
+    },
+    "b-d2": {
+     "t": "D2",
+     "d": 1,
+     "c": "btn",
+     "p": "false"
+    },
+    "b-d3": {
+     "t": "D3",
+     "d": 1,
+     "c": "btn",
+     "p": "false"
+    },
+    "b-qf2": {
+     "t": "QF2",
+     "d": 1,
+     "c": "btn",
+     "p": "false"
+    },
+    "t-d1": {
+     "t": "D1 · T",
+     "d": 1,
+     "c": "btn"
+    },
+    "t-d2": {
+     "t": "D2 · T",
+     "d": 1,
+     "c": "btn"
+    },
+    "t-d3": {
+     "t": "D3 · T",
+     "d": 1,
+     "c": "btn"
+    }
+   }
+  }
+ ],
+ "exam": [
+  {
+   "step": "ochilish",
+   "msgs": [],
+   "state": {
+    "status2": {
+     "t": "Namuna: manba L hisoblagichning 1-qisqichiga ulangan. Endi manba N ni 3-qisqichga ulang."
+    },
+    "power": {
+     "t": "Kuchlanish berish",
+     "d": 1,
+     "c": "btn pri"
+    },
+    "prog": {},
+    "pdone": {
+     "t": "0"
+    },
+    "exam": {
+     "h": 1
+    },
+    "wcount": {
+     "t": "0"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "c": "btn"
+    },
+    "hint": {
+     "t": "Maslahat",
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "h": 1,
+     "c": "btn"
+    },
+    "m-learn": {
+     "t": "O'rganish",
+     "p": "true"
+    },
+    "m-exam": {
+     "t": "Imtihon",
+     "p": "false"
+    },
+    "ctl": {
+     "h": 1
+    },
+    "uv": {
+     "t": "230 V"
+    },
+    "u": {
+     "t": "230"
+    },
+    "r-u": {
+     "t": "230 V"
+    },
+    "r-kv": {
+     "t": "o'chiq"
+    },
+    "r-ub": {
+     "t": "0 V"
+    },
+    "r-i": {
+     "t": "0.0 A"
+    },
+    "r-p": {
+     "t": "0.00 kW"
+    },
+    "r-x1": {
+     "t": "0.0 A"
+    },
+    "r-x2": {
+     "t": "0.0 A"
+    },
+    "r-x3": {
+     "t": "0.0 A"
+    },
+    "b-qf1": {
+     "t": "QF1",
+     "d": 1,
+     "c": "btn",
+     "p": "false"
+    },
+    "b-d1": {
+     "t": "D1",
+     "d": 1,
+     "c": "btn",
+     "p": "false"
+    },
+    "b-d2": {
+     "t": "D2",
+     "d": 1,
+     "c": "btn",
+     "p": "false"
+    },
+    "b-d3": {
+     "t": "D3",
+     "d": 1,
+     "c": "btn",
+     "p": "false"
+    },
+    "b-qf2": {
+     "t": "QF2",
+     "d": 1,
+     "c": "btn",
+     "p": "false"
+    },
+    "b-sw": {
+     "t": "Kalit",
+     "c": "btn",
+     "p": "false"
+    },
+    "t-d1": {
+     "t": "D1 · T",
+     "d": 1,
+     "c": "btn"
+    },
+    "t-d2": {
+     "t": "D2 · T",
+     "d": 1,
+     "c": "btn"
+    },
+    "t-d3": {
+     "t": "D3 · T",
+     "d": 1,
+     "c": "btn"
+    },
+    "a-x1": {
+     "t": "kettle"
+    },
+    "a-x2": {
+     "t": "tv"
+    },
+    "a-x3": {
+     "t": "none"
+    },
+    "steps": [
+     "part|Manba L → hisoblagich 1, manba N → hisoblagich 31/2",
+     "Hisoblagich 2 → QF1 (1, L), hisoblagich 4 → QF1 (3, N)0/2",
+     "QF1 chiqishi → kuchlanish relesi IN: L → L, N → N0/2",
+     "Rele OUT L → D1, D2, D3 ning L kirishi va QF2 (faza shinasi)0/4",
+     "Rele OUT N → D1, D2, D3 ning N kirishi (nol shinasi)0/3",
+     "D1 chiqishi → X1 rozetka: L → L, N → N0/2",
+     "D2 chiqishi → X2 rozetka: L → L, N → N0/2",
+     "D3 chiqishi → X3 rozetka: L → L, N → N0/2",
+     "Himoya yerlash: manba E → X1, X2, X3 ning ⏚ qisqichi0/3",
+     "QF2 chiqishi (2) → kalit L",
+     "Kalit L1 → lampa L",
+     "Rele OUT N → lampa N"
+    ],
+    "report": []
+   }
+  },
+  {
+   "step": "tugma #m-exam",
+   "msgs": [
+    [
+     "Imtihon rejimi: xohlagan simni ulang, tayyor bo'lgach Tekshirish ni bosing.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Imtihon rejimi: xohlagan simni ulang, tayyor bo'lgach Tekshirish ni bosing."
+    },
+    "prog": {
+     "h": 1
+    },
+    "exam": {},
+    "undo": {
+     "t": "Orqaga",
+     "d": 1,
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "d": 1,
+     "c": "btn"
+    },
+    "hint": {
+     "t": "Maslahat",
+     "h": 1,
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "d": 1,
+     "c": "btn"
+    },
+    "m-learn": {
+     "t": "O'rganish",
+     "p": "false"
+    },
+    "m-exam": {
+     "t": "Imtihon",
+     "p": "true"
+    },
+    "r-u": {
+     "t": "0 V"
+    }
+   }
+  },
+  {
+   "step": "sim src.l — mt.3",
+   "msgs": [
+    [
+     "Manba L (faza) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 1 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 1 ta."
+    },
+    "wcount": {
+     "t": "1"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "c": "btn"
+    }
+   }
+  },
+  {
+   "step": "sim src.e — x1.n",
+   "msgs": [
+    [
+     "Manba E (himoya yerlash) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 2 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 2 ta."
+    },
+    "wcount": {
+     "t": "2"
+    }
+   }
+  },
+  {
+   "step": "sim d1.l2 — x1.l",
+   "msgs": [
+    [
+     "D1: L chiqish (rozetkaga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 3 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 3 ta."
+    },
+    "wcount": {
+     "t": "3"
+    }
+   }
+  },
+  {
+   "step": "tugma #check",
+   "msgs": [
+    [
+     "Tekshiruv: 2 ta xato sim, 12 ta bajarilmagan bosqich.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Tekshiruv: 2 ta xato sim, 12 ta bajarilmagan bosqich.",
+     "c": "bad"
+    },
+    "report": [
+     "Xato sim: Manba L (faza) rozetkasi va Hisoblagich 3: nol kirishi (manbadan). Faza (L) va nol (N) bir nuqtaga tushib qoladi: bu qisqa tutashuv. Manba L hisoblagichning 1-qisqichiga (faza kirishi) ulanadi.",
+     "Xato sim: Manba E (himoya yerlash) rozetkasi va X1 rozetkasi: N (nol). Himoya yerlash (PE) faza yoki nolga ulanmaydi: odamni tok urishidan himoya qiluvchi sim tok o'tkazmasligi kerak. E faqat rozetkalarning ⏚ qisqichiga boradi.",
+     "Bajarilmagan: Manba L → hisoblagich 1, manba N → hisoblagich 3",
+     "Bajarilmagan: Hisoblagich 2 → QF1 (1, L), hisoblagich 4 → QF1 (3, N)",
+     "Bajarilmagan: QF1 chiqishi → kuchlanish relesi IN: L → L, N → N",
+     "Bajarilmagan: Rele OUT L → D1, D2, D3 ning L kirishi va QF2 (faza shinasi)",
+     "Bajarilmagan: Rele OUT N → D1, D2, D3 ning N kirishi (nol shinasi)",
+     "Bajarilmagan: D1 chiqishi → X1 rozetka: L → L, N → N",
+     "Yana 6 ta bosqich bajarilmagan."
+    ]
+   }
+  },
+  {
+   "step": "tugma #clear",
+   "msgs": [
+    [
+     "Sxema tozalandi. Manba simlaridan boshlang.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sxema tozalandi. Manba simlaridan boshlang."
+    },
+    "wcount": {
+     "t": "0"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "d": 1,
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "d": 1,
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "d": 1,
+     "c": "btn"
+    },
+    "report": []
+   }
+  },
+  {
+   "step": "sim src.l — mt.1",
+   "msgs": [
+    [
+     "Manba L (faza) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 1 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 1 ta."
+    },
+    "wcount": {
+     "t": "1"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "c": "btn"
+    }
+   }
+  },
+  {
+   "step": "sim src.n — mt.3",
+   "msgs": [
+    [
+     "Manba N (nol) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 2 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 2 ta."
+    },
+    "wcount": {
+     "t": "2"
+    }
+   }
+  },
+  {
+   "step": "sim mt.2 — qf1.l1",
+   "msgs": [
+    [
+     "Hisoblagich 2: faza chiqishi (avtomatga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 3 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 3 ta."
+    },
+    "wcount": {
+     "t": "3"
+    }
+   }
+  },
+  {
+   "step": "sim mt.4 — qf1.n1",
+   "msgs": [
+    [
+     "Hisoblagich 4: nol chiqishi (avtomatga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 4 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 4 ta."
+    },
+    "wcount": {
+     "t": "4"
+    }
+   }
+  },
+  {
+   "step": "sim qf1.l2 — kv.li",
+   "msgs": [
+    [
+     "QF1: 2 (L) chiqish. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 5 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 5 ta."
+    },
+    "wcount": {
+     "t": "5"
+    }
+   }
+  },
+  {
+   "step": "sim qf1.n2 — kv.ni",
+   "msgs": [
+    [
+     "QF1: 4 (N) chiqish. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 6 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 6 ta."
+    },
+    "wcount": {
+     "t": "6"
+    }
+   }
+  },
+  {
+   "step": "sim kv.lo — d1.l1",
+   "msgs": [
+    [
+     "Kuchlanish relesi: OUT L (chiqish). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 7 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 7 ta."
+    },
+    "wcount": {
+     "t": "7"
+    }
+   }
+  },
+  {
+   "step": "sim d1.l1 — d2.l1",
+   "msgs": [
+    [
+     "D1: L kirish. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 8 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 8 ta."
+    },
+    "wcount": {
+     "t": "8"
+    }
+   }
+  },
+  {
+   "step": "sim d2.l1 — d3.l1",
+   "msgs": [
+    [
+     "D2: L kirish. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 9 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 9 ta."
+    },
+    "wcount": {
+     "t": "9"
+    }
+   }
+  },
+  {
+   "step": "sim d3.l1 — qf2.l1",
+   "msgs": [
+    [
+     "D3: L kirish. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 10 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 10 ta."
+    },
+    "wcount": {
+     "t": "10"
+    }
+   }
+  },
+  {
+   "step": "sim kv.no — d1.n1",
+   "msgs": [
+    [
+     "Kuchlanish relesi: OUT N (chiqish). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 11 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 11 ta."
+    },
+    "wcount": {
+     "t": "11"
+    }
+   }
+  },
+  {
+   "step": "sim d1.n1 — d2.n1",
+   "msgs": [
+    [
+     "D1: N kirish. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 12 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 12 ta."
+    },
+    "wcount": {
+     "t": "12"
+    }
+   }
+  },
+  {
+   "step": "sim d2.n1 — d3.n1",
+   "msgs": [
+    [
+     "D2: N kirish. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 13 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 13 ta."
+    },
+    "wcount": {
+     "t": "13"
+    }
+   }
+  },
+  {
+   "step": "sim d3.n1 — lamp.n",
+   "msgs": [
+    [
+     "D3: N kirish. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 14 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 14 ta."
+    },
+    "wcount": {
+     "t": "14"
+    }
+   }
+  },
+  {
+   "step": "sim d1.l2 — x1.l",
+   "msgs": [
+    [
+     "D1: L chiqish (rozetkaga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 15 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 15 ta."
+    },
+    "wcount": {
+     "t": "15"
+    }
+   }
+  },
+  {
+   "step": "sim d1.n2 — x1.n",
+   "msgs": [
+    [
+     "D1: N chiqish (rozetkaga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 16 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 16 ta."
+    },
+    "wcount": {
+     "t": "16"
+    }
+   }
+  },
+  {
+   "step": "sim d2.l2 — x2.l",
+   "msgs": [
+    [
+     "D2: L chiqish (rozetkaga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 17 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 17 ta."
+    },
+    "wcount": {
+     "t": "17"
+    }
+   }
+  },
+  {
+   "step": "sim d2.n2 — x2.n",
+   "msgs": [
+    [
+     "D2: N chiqish (rozetkaga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 18 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 18 ta."
+    },
+    "wcount": {
+     "t": "18"
+    }
+   }
+  },
+  {
+   "step": "sim d3.l2 — x3.l",
+   "msgs": [
+    [
+     "D3: L chiqish (rozetkaga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 19 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 19 ta."
+    },
+    "wcount": {
+     "t": "19"
+    }
+   }
+  },
+  {
+   "step": "sim d3.n2 — x3.n",
+   "msgs": [
+    [
+     "D3: N chiqish (rozetkaga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 20 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 20 ta."
+    },
+    "wcount": {
+     "t": "20"
+    }
+   }
+  },
+  {
+   "step": "sim src.e — x1.pe",
+   "msgs": [
+    [
+     "Manba E (himoya yerlash) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 21 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 21 ta."
+    },
+    "wcount": {
+     "t": "21"
+    }
+   }
+  },
+  {
+   "step": "sim x1.pe — x2.pe",
+   "msgs": [
+    [
+     "X1 rozetkasi: ⏚ yerlash. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 22 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 22 ta."
+    },
+    "wcount": {
+     "t": "22"
+    }
+   }
+  },
+  {
+   "step": "sim x2.pe — x3.pe",
+   "msgs": [
+    [
+     "X2 rozetkasi: ⏚ yerlash. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 23 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 23 ta."
+    },
+    "wcount": {
+     "t": "23"
+    }
+   }
+  },
+  {
+   "step": "sim qf2.l2 — sw.l",
+   "msgs": [
+    [
+     "QF2: 2 (L) chiqish. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 24 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 24 ta."
+    },
+    "wcount": {
+     "t": "24"
+    }
+   }
+  },
+  {
+   "step": "sim sw.l1 — lamp.l",
+   "msgs": [
+    [
+     "Kalit: L1 (yoqilganda L bilan tutashadi). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 25 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 25 ta."
+    },
+    "wcount": {
+     "t": "25"
+    },
+    "hint": {
+     "t": "Maslahat",
+     "h": 1,
+     "d": 1,
+     "c": "btn"
+    }
+   }
+  },
+  {
+   "step": "tugma #check",
+   "msgs": [
+    [
+     "Sxema to'g'ri va to'liq. Kuchlanish berishingiz mumkin.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sxema to'g'ri va to'liq. Kuchlanish berishingiz mumkin.",
+     "c": "ok"
+    },
+    "power": {
+     "t": "Kuchlanish berish",
+     "c": "btn pri"
+    }
+   }
+  },
+  {
+   "step": "tugma #power",
+   "msgs": [
+    [
+     "Kuchlanish berildi: hisoblagichga 220 V keldi. Endi QF1 ni yoqing — kuchlanish relesi tarmoqni tekshiradi.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Kuchlanish berildi: hisoblagichga 220 V keldi. Endi QF1 ni yoqing — kuchlanish relesi tarmoqni tekshiradi.",
+     "c": "ok"
+    },
+    "power": {
+     "t": "O'chirish",
+     "c": "btn pri"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "d": 1,
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "d": 1,
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "d": 1,
+     "c": "btn"
+    },
+    "ctl": {},
+    "r-u": {
+     "t": "230 V"
+    },
+    "b-qf1": {
+     "t": "QF1",
+     "c": "btn",
+     "p": "false"
+    },
+    "b-d1": {
+     "t": "D1",
+     "c": "btn",
+     "p": "false"
+    },
+    "b-d2": {
+     "t": "D2",
+     "c": "btn",
+     "p": "false"
+    },
+    "b-d3": {
+     "t": "D3",
+     "c": "btn",
+     "p": "false"
+    },
+    "b-qf2": {
+     "t": "QF2",
+     "c": "btn",
+     "p": "false"
+    },
+    "t-d1": {
+     "t": "D1 · T",
+     "c": "btn"
+    },
+    "t-d2": {
+     "t": "D2 · T",
+     "c": "btn"
+    },
+    "t-d3": {
+     "t": "D3 · T",
+     "c": "btn"
+    }
+   }
+  },
+  {
+   "step": "tugma #power",
+   "msgs": [
+    [
+     "Kuchlanish o'chirildi. Sxemani o'zgartirishingiz mumkin.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Kuchlanish o'chirildi. Sxemani o'zgartirishingiz mumkin."
+    },
+    "power": {
+     "t": "Kuchlanish berish",
+     "c": "btn pri"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "c": "btn"
+    },
+    "ctl": {
+     "h": 1
+    },
+    "b-qf1": {
+     "t": "QF1",
+     "d": 1,
+     "c": "btn",
+     "p": "false"
+    },
+    "b-d1": {
+     "t": "D1",
+     "d": 1,
+     "c": "btn",
+     "p": "false"
+    },
+    "b-d2": {
+     "t": "D2",
+     "d": 1,
+     "c": "btn",
+     "p": "false"
+    },
+    "b-d3": {
+     "t": "D3",
+     "d": 1,
+     "c": "btn",
+     "p": "false"
+    },
+    "b-qf2": {
+     "t": "QF2",
+     "d": 1,
+     "c": "btn",
+     "p": "false"
+    },
+    "t-d1": {
+     "t": "D1 · T",
+     "d": 1,
+     "c": "btn"
+    },
+    "t-d2": {
+     "t": "D2 · T",
+     "d": 1,
+     "c": "btn"
+    },
+    "t-d3": {
+     "t": "D3 · T",
+     "d": 1,
+     "c": "btn"
+    }
+   }
+  },
+  {
+   "step": "tugma #m-learn",
+   "msgs": [
+    [
+     "O'rganish rejimi: noto'g'ri ulanish darhol tushuntiriladi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "O'rganish rejimi: noto'g'ri ulanish darhol tushuntiriladi."
+    },
+    "power": {
+     "t": "Kuchlanish berish",
+     "d": 1,
+     "c": "btn pri"
+    },
+    "prog": {},
+    "exam": {
+     "h": 1
+    },
+    "undo": {
+     "t": "Orqaga",
+     "d": 1,
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "d": 1,
+     "c": "btn"
+    },
+    "hint": {
+     "t": "Maslahat",
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "h": 1,
+     "d": 1,
+     "c": "btn"
+    },
+    "m-learn": {
+     "t": "O'rganish",
+     "p": "true"
+    },
+    "m-exam": {
+     "t": "Imtihon",
+     "p": "false"
+    },
+    "r-u": {
+     "t": "0 V"
+    },
+    "steps": [
+     "Manba L → hisoblagich 1, manba N → hisoblagich 30/2",
+     "Hisoblagich 2 → QF1 (1, L), hisoblagich 4 → QF1 (3, N)0/2",
+     "QF1 chiqishi → kuchlanish relesi IN: L → L, N → N0/2",
+     "Rele OUT L → D1, D2, D3 ning L kirishi va QF2 (faza shinasi)0/4",
+     "Rele OUT N → D1, D2, D3 ning N kirishi (nol shinasi)0/3",
+     "D1 chiqishi → X1 rozetka: L → L, N → N0/2",
+     "D2 chiqishi → X2 rozetka: L → L, N → N0/2",
+     "D3 chiqishi → X3 rozetka: L → L, N → N0/2",
+     "Himoya yerlash: manba E → X1, X2, X3 ning ⏚ qisqichi0/3",
+     "QF2 chiqishi (2) → kalit L",
+     "Kalit L1 → lampa L",
+     "Rele OUT N → lampa N"
+    ]
+   }
+  }
+ ]
+}

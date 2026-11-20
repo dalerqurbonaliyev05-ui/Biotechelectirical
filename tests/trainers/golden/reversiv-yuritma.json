@@ -1,0 +1,3961 @@
+{
+ "learn": [
+  {
+   "step": "ochilish",
+   "msgs": [],
+   "state": {
+    "status2": {
+     "t": "Namuna: manba L1 avtomat QF ning 1-qisqichiga ulangan. Endi L2 ni 3 ga, L3 ni 5 ga ulang."
+    },
+    "power": {
+     "t": "Kuchlanish berish",
+     "d": 1,
+     "c": "btn pri"
+    },
+    "prog": {},
+    "pdone": {
+     "t": "0"
+    },
+    "exam": {
+     "h": 1
+    },
+    "wcount": {
+     "t": "0"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "c": "btn"
+    },
+    "hint": {
+     "t": "Maslahat",
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "h": 1,
+     "c": "btn"
+    },
+    "m-learn": {
+     "t": "O'rganish",
+     "p": "true"
+    },
+    "m-exam": {
+     "t": "Imtihon",
+     "p": "false"
+    },
+    "ctl": {
+     "h": 1
+    },
+    "r-qf": {
+     "t": "o'chiq"
+    },
+    "r-mot": {
+     "t": "to'xtagan"
+    },
+    "r-s": {
+     "t": "— / —"
+    },
+    "r-k": {
+     "t": "— / —"
+    },
+    "r-km1": {
+     "t": "uzilgan"
+    },
+    "r-km2": {
+     "t": "uzilgan"
+    },
+    "b-qf": {
+     "t": "QF ni yoqish",
+     "d": 1,
+     "c": "btn pri"
+    },
+    "t-m1": {
+     "t": "S1 oldiga metall",
+     "d": 1,
+     "c": "btn",
+     "p": "false"
+    },
+    "t-m2": {
+     "t": "S2 oldiga metall",
+     "d": 1,
+     "c": "btn",
+     "p": "false"
+    },
+    "t-f2": {
+     "t": "S2 sensori ishdan chiqdi",
+     "d": 1,
+     "c": "btn",
+     "p": "false"
+    },
+    "fnote": {
+     "c": "fnote"
+    },
+    "steps": [
+     "part|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari1/3",
+     "QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L30/3",
+     "KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L30/3",
+     "KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W10/3",
+     "KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U10/3",
+     "Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi)0/2",
+     "Ta'minot bloki: manba L → L, manba N → N0/2",
+     "+24 V (+V) → ikkala sensorning jigarrang (BN) simi0/2",
+     "0 V (−V) → ikkala sensorning ko'k (BU) simi0/2",
+     "S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V0/2",
+     "S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V0/2",
+     "Faza L → K1 va K2 ning 9 (COM) kontaktlari0/2",
+     "KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish)0/3",
+     "KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A10/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N0/2"
+    ],
+    "report": []
+   }
+  },
+  {
+   "step": "bosish km1.l1",
+   "msgs": [
+    [
+     "KM1 (oldinga) 1/L1: L1 fazasi kirishi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "KM1 (oldinga) 1/L1: L1 fazasi kirishi. Boshqa klemmaga sudrang yoki ikkinchisini bosing."
+    }
+   }
+  },
+  {
+   "step": "bosish km1.l1",
+   "msgs": [
+    [
+     "KM1 (oldinga) 1/L1: L1 fazasi kirishi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Klemma halqasini bosib boshqasiga sudrang yoki ikkita klemmani ketma-ket bosing.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Klemma halqasini bosib boshqasiga sudrang yoki ikkita klemmani ketma-ket bosing."
+    }
+   }
+  },
+  {
+   "step": "sim km1.71 — km1.72",
+   "msgs": [
+    [
+     "KM1 (oldinga) yordamchi kontakti 71 (NC, yopiq). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "KM1 (oldinga) yordamchi kontakti 71 (NC, yopiq): bu klemma bu sxemada ishlatilmaydi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "KM1 (oldinga) yordamchi kontakti 71 (NC, yopiq): bu klemma bu sxemada ishlatilmaydi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim km1.71 — psu.l",
+   "msgs": [
+    [
+     "KM1 (oldinga) yordamchi kontakti 71 (NC, yopiq). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "KM1 (oldinga) yordamchi kontakti 71 (NC, yopiq): bu klemma bu sxemada ishlatilmaydi. Blokning L qisqichi manba L ga ulanadi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "KM1 (oldinga) yordamchi kontakti 71 (NC, yopiq): bu klemma bu sxemada ishlatilmaydi. Blokning L qisqichi manba L ga ulanadi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim psu.vp1 — psu.vm1",
+   "msgs": [
+    [
+     "Ta'minot bloki: +V (+24 V) chiqish. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "+V va −V ni tutashtirish blokning chiqishini qisqa tutashtiradi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "+V va −V ni tutashtirish blokning chiqishini qisqa tutashtiradi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim km1.l1 — km1.t1",
+   "msgs": [
+    [
+     "KM1 (oldinga) 1/L1: L1 fazasi kirishi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Bir qurilmaning ikki klemmasini o'zaro ulash tokni qurilmadan chetlab o'tkazadi. KM1 1/L1 QF ning 2-chiqishidan keladi (KM2 1/L1 bilan parallel).",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Bir qurilmaning ikki klemmasini o'zaro ulash tokni qurilmadan chetlab o'tkazadi. KM1 1/L1 QF ning 2-chiqishidan keladi (KM2 1/L1 bilan parallel).",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim src.l — psu.vp1",
+   "msgs": [
+    [
+     "Manba L (220 V, boshqaruv fazasi) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "~220/380 V ni 24 V zanjirga ulab bo'lmaydi: sensor, rele g'altagi va blok chiqishi kuyadi. Kuch va boshqaruv zanjirlarini aralashtirmang. 220 V faza L ta'minot blokining L qisqichiga va K1, K2 relelarning 9 (COM) kontaktlariga boradi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "~220/380 V ni 24 V zanjirga ulab bo'lmaydi: sensor, rele g'altagi va blok chiqishi kuyadi. Kuch va boshqaruv zanjirlarini aralashtirmang. 220 V faza L ta'minot blokining L qisqichiga va K1, K2 relelarning 9 (COM) kontaktlariga boradi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim src.e — qf.1",
+   "msgs": [
+    [
+     "Manba PE (E, himoya yerlash) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Himoya yerlash (PE) tok o'tkazuvchi klemmalarga ulanmaydi: E faqat blokning ⏚ qisqichiga va motor korpusiga boradi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Himoya yerlash (PE) tok o'tkazuvchi klemmalarga ulanmaydi: E faqat blokning ⏚ qisqichiga va motor korpusiga boradi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim km2.t1 — mot.u",
+   "msgs": [
+    [
+     "KM2 (orqaga) 2/T1: chiqish (motorga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "KM2 motorni teskari aylantirishi uchun ikki fazani almashtiradi: T1→W1, T2→V1, T3→U1. Agar KM1 dagidek ulasangiz, motor ikkala kontaktorda ham bir tomonga aylanadi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "KM2 motorni teskari aylantirishi uchun ikki fazani almashtiradi: T1→W1, T2→V1, T3→U1. Agar KM1 dagidek ulasangiz, motor ikkala kontaktorda ham bir tomonga aylanadi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim km1.t1 — mot.v",
+   "msgs": [
+    [
+     "KM1 (oldinga) 2/T1: chiqish (motorga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "KM1 (oldinga) to'g'ri tartibda ulanadi: T1→U1, T2→V1, T3→W1.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "KM1 (oldinga) to'g'ri tartibda ulanadi: T1→U1, T2→V1, T3→W1.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim km1.t1 — km2.t2",
+   "msgs": [
+    [
+     "KM1 (oldinga) 2/T1: chiqish (motorga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Kontaktor chiqishlari motor klemmalari orqali tutashadi: KM1 T1/T2/T3 → U1/V1/W1, KM2 esa almashtirib T1→W1, T2→V1, T3→U1. KM1 2/T1 motorning U1 qisqichiga boradi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Kontaktor chiqishlari motor klemmalari orqali tutashadi: KM1 T1/T2/T3 → U1/V1/W1, KM2 esa almashtirib T1→W1, T2→V1, T3→U1. KM1 2/T1 motorning U1 qisqichiga boradi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim qf.2 — km1.l2",
+   "msgs": [
+    [
+     "QF 2-qisqich: L1 fazasi chiqishi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Bu qisqich L2 uchun mo'ljallangan. Bu yerga L1 ni ulasangiz, L2 bilan bir nuqtada fazalararo qisqa tutashuv bo'ladi va QF darhol o'chadi. QF chiqishi 2 (L1) KM1 va KM2 ning 1/L1 qisqichlariga boradi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Bu qisqich L2 uchun mo'ljallangan. Bu yerga L1 ni ulasangiz, L2 bilan bir nuqtada fazalararo qisqa tutashuv bo'ladi va QF darhol o'chadi. QF chiqishi 2 (L1) KM1 va KM2 ning 1/L1 qisqichlariga boradi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim s1.bn — psu.vm1",
+   "msgs": [
+    [
+     "S1 sensori, jigarrang (BN) sim: +24 V ta'minot. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "+24 V ni 0 V ga ulash blok chiqishini qisqa tutashtiradi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "+24 V ni 0 V ga ulash blok chiqishini qisqa tutashtiradi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim km1.a1 — k1.no2",
+   "msgs": [
+    [
+     "KM1 (oldinga) A1: g'altak (~220 V) boshi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Rele kontaktidan g'altakka to'g'ridan ulash blokirovkani chetlab o'tadi. Ikkala kontaktor bir vaqtda ulanib qolsa fazalararo qisqa tutashuv bo'ladi. G'altakka zanjir ikkinchi kontaktorning NC (61–62) kontakti orqali keladi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Rele kontaktidan g'altakka to'g'ridan ulash blokirovkani chetlab o'tadi. Ikkala kontaktor bir vaqtda ulanib qolsa fazalararo qisqa tutashuv bo'ladi. G'altakka zanjir ikkinchi kontaktorning NC (61–62) kontakti orqali keladi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim s1.bk — k2.a1",
+   "msgs": [
+    [
+     "S1 sensori, qora (BK) sim: chiqish signali (PNP). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Har bir sensor o'z relesini boshqaradi: S1 → K1, S2 → K2.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Har bir sensor o'z relesini boshqaradi: S1 → K1, S2 → K2.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim s1.bk — k1.a2",
+   "msgs": [
+    [
+     "S1 sensori, qora (BK) sim: chiqish signali (PNP). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sensorning qora (BK) chiqishi rele g'altagining 13 (A1+) qisqichiga ulanadi, 14 (A2−) esa 0 V ga. S1 ning qora (chiqish) simi K1 relening 13 (A1+) qisqichiga ulanadi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sensorning qora (BK) chiqishi rele g'altagining 13 (A1+) qisqichiga ulanadi, 14 (A2−) esa 0 V ga. S1 ning qora (chiqish) simi K1 relening 13 (A1+) qisqichiga ulanadi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim k2.nc1 — km2.54",
+   "msgs": [
+    [
+     "K2 rele, 1 (NC): 1-guruhning yopiq kontakti. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "KM1 va KM2 zanjirlari alohida: bir kontaktor zanjirini ikkinchisiga ulasangiz ikkalasi birga ulanib qoladi. K2 ning 1 (NC) kontakti KM1 zanjiriga boradi: K1 ning 12 (COM) va KM1 ning 53 qisqichiga.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "KM1 va KM2 zanjirlari alohida: bir kontaktor zanjirini ikkinchisiga ulasangiz ikkalasi birga ulanib qoladi. K2 ning 1 (NC) kontakti KM1 zanjiriga boradi: K1 ning 12 (COM) va KM1 ning 53 qisqichiga.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim k2.nc1 — km1.54",
+   "msgs": [
+    [
+     "K2 rele, 1 (NC): 1-guruhning yopiq kontakti. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Zanjir ketma-ketligi buziladi: L → (boshqa rele NC) → (o'z rele NO va o'zini ushlab turuvchi 53–54) → (boshqa kontaktor NC 61–62) → A1. K2 ning 1 (NC) kontakti KM1 zanjiriga boradi: K1 ning 12 (COM) va KM1 ning 53 qisqichiga.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Zanjir ketma-ketligi buziladi: L → (boshqa rele NC) → (o'z rele NO va o'zini ushlab turuvchi 53–54) → (boshqa kontaktor NC 61–62) → A1. K2 ning 1 (NC) kontakti KM1 zanjiriga boradi: K1 ning 12 (COM) va KM1 ning 53 qisqichiga.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim src.l — km1.a2",
+   "msgs": [
+    [
+     "Manba L (220 V, boshqaruv fazasi) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Bu ikki klemma o'zaro ulanmaydi. 220 V faza L ta'minot blokining L qisqichiga va K1, K2 relelarning 9 (COM) kontaktlariga boradi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Bu ikki klemma o'zaro ulanmaydi. 220 V faza L ta'minot blokining L qisqichiga va K1, K2 relelarning 9 (COM) kontaktlariga boradi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim src.l2 — qf.3",
+   "msgs": [
+    [
+     "Manba L2 (380 V, B fazasi) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 0 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 0 / 17 bosqich tayyor.",
+     "c": "ok"
+    },
+    "steps": [
+     "part|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari2/3",
+     "QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L30/3",
+     "KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L30/3",
+     "KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W10/3",
+     "KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U10/3",
+     "Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi)0/2",
+     "Ta'minot bloki: manba L → L, manba N → N0/2",
+     "+24 V (+V) → ikkala sensorning jigarrang (BN) simi0/2",
+     "0 V (−V) → ikkala sensorning ko'k (BU) simi0/2",
+     "S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V0/2",
+     "S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V0/2",
+     "Faza L → K1 va K2 ning 9 (COM) kontaktlari0/2",
+     "KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish)0/3",
+     "KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A10/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N0/2"
+    ]
+   }
+  },
+  {
+   "step": "sim qf.3 — src.l2",
+   "msgs": [
+    [
+     "QF 3-qisqich: L2 fazasi kirishi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Bu ikki klemma allaqachon ulangan.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Bu ikki klemma allaqachon ulangan."
+    }
+   }
+  },
+  {
+   "step": "tugma #undo",
+   "msgs": [
+    [
+     "Oxirgi sim olib tashlandi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Oxirgi sim olib tashlandi."
+    },
+    "steps": [
+     "part|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari1/3",
+     "QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L30/3",
+     "KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L30/3",
+     "KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W10/3",
+     "KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U10/3",
+     "Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi)0/2",
+     "Ta'minot bloki: manba L → L, manba N → N0/2",
+     "+24 V (+V) → ikkala sensorning jigarrang (BN) simi0/2",
+     "0 V (−V) → ikkala sensorning ko'k (BU) simi0/2",
+     "S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V0/2",
+     "S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V0/2",
+     "Faza L → K1 va K2 ning 9 (COM) kontaktlari0/2",
+     "KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish)0/3",
+     "KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A10/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N0/2"
+    ]
+   }
+  },
+  {
+   "step": "tugma #hint",
+   "msgs": [
+    [
+     "Maslahat: Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Maslahat: Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari"
+    }
+   }
+  },
+  {
+   "step": "sim src.l2 — qf.3",
+   "msgs": [
+    [
+     "Manba L2 (380 V, B fazasi) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 0 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 0 / 17 bosqich tayyor.",
+     "c": "ok"
+    },
+    "steps": [
+     "part|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari2/3",
+     "QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L30/3",
+     "KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L30/3",
+     "KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W10/3",
+     "KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U10/3",
+     "Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi)0/2",
+     "Ta'minot bloki: manba L → L, manba N → N0/2",
+     "+24 V (+V) → ikkala sensorning jigarrang (BN) simi0/2",
+     "0 V (−V) → ikkala sensorning ko'k (BU) simi0/2",
+     "S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V0/2",
+     "S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V0/2",
+     "Faza L → K1 va K2 ning 9 (COM) kontaktlari0/2",
+     "KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish)0/3",
+     "KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A10/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N0/2"
+    ]
+   }
+  },
+  {
+   "step": "sim src.l3 — qf.5",
+   "msgs": [
+    [
+     "Manba L3 (380 V, C fazasi) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 1 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 1 / 17 bosqich tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "1"
+    },
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L30/3",
+     "KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L30/3",
+     "KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W10/3",
+     "KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U10/3",
+     "Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi)0/2",
+     "Ta'minot bloki: manba L → L, manba N → N0/2",
+     "+24 V (+V) → ikkala sensorning jigarrang (BN) simi0/2",
+     "0 V (−V) → ikkala sensorning ko'k (BU) simi0/2",
+     "S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V0/2",
+     "S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V0/2",
+     "Faza L → K1 va K2 ning 9 (COM) kontaktlari0/2",
+     "KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish)0/3",
+     "KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A10/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N0/2"
+    ]
+   }
+  },
+  {
+   "step": "sim qf.2 — km1.l1",
+   "msgs": [
+    [
+     "QF 2-qisqich: L1 fazasi chiqishi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 1 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "part|QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L31/3",
+     "KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L30/3",
+     "KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W10/3",
+     "KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U10/3",
+     "Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi)0/2",
+     "Ta'minot bloki: manba L → L, manba N → N0/2",
+     "+24 V (+V) → ikkala sensorning jigarrang (BN) simi0/2",
+     "0 V (−V) → ikkala sensorning ko'k (BU) simi0/2",
+     "S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V0/2",
+     "S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V0/2",
+     "Faza L → K1 va K2 ning 9 (COM) kontaktlari0/2",
+     "KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish)0/3",
+     "KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A10/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N0/2"
+    ]
+   }
+  },
+  {
+   "step": "sim km1.l1 — km2.l1",
+   "msgs": [
+    [
+     "KM1 (oldinga) 1/L1: L1 fazasi kirishi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 1 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "part|QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L31/3",
+     "part|KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L31/3",
+     "KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W10/3",
+     "KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U10/3",
+     "Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi)0/2",
+     "Ta'minot bloki: manba L → L, manba N → N0/2",
+     "+24 V (+V) → ikkala sensorning jigarrang (BN) simi0/2",
+     "0 V (−V) → ikkala sensorning ko'k (BU) simi0/2",
+     "S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V0/2",
+     "S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V0/2",
+     "Faza L → K1 va K2 ning 9 (COM) kontaktlari0/2",
+     "KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish)0/3",
+     "KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A10/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N0/2"
+    ]
+   }
+  },
+  {
+   "step": "sim qf.4 — km1.l2",
+   "msgs": [
+    [
+     "QF 4-qisqich: L2 fazasi chiqishi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 1 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "part|QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L32/3",
+     "part|KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L31/3",
+     "KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W10/3",
+     "KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U10/3",
+     "Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi)0/2",
+     "Ta'minot bloki: manba L → L, manba N → N0/2",
+     "+24 V (+V) → ikkala sensorning jigarrang (BN) simi0/2",
+     "0 V (−V) → ikkala sensorning ko'k (BU) simi0/2",
+     "S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V0/2",
+     "S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V0/2",
+     "Faza L → K1 va K2 ning 9 (COM) kontaktlari0/2",
+     "KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish)0/3",
+     "KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A10/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N0/2"
+    ]
+   }
+  },
+  {
+   "step": "sim km1.l2 — km2.l2",
+   "msgs": [
+    [
+     "KM1 (oldinga) 3/L2: L2 fazasi kirishi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 1 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "part|QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L32/3",
+     "part|KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L32/3",
+     "KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W10/3",
+     "KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U10/3",
+     "Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi)0/2",
+     "Ta'minot bloki: manba L → L, manba N → N0/2",
+     "+24 V (+V) → ikkala sensorning jigarrang (BN) simi0/2",
+     "0 V (−V) → ikkala sensorning ko'k (BU) simi0/2",
+     "S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V0/2",
+     "S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V0/2",
+     "Faza L → K1 va K2 ning 9 (COM) kontaktlari0/2",
+     "KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish)0/3",
+     "KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A10/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N0/2"
+    ]
+   }
+  },
+  {
+   "step": "sim qf.6 — km1.l3",
+   "msgs": [
+    [
+     "QF 6-qisqich: L3 fazasi chiqishi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 2 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 2 / 17 bosqich tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "2"
+    },
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "done|QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L3 (tayyor)3/3",
+     "part|KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L32/3",
+     "KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W10/3",
+     "KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U10/3",
+     "Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi)0/2",
+     "Ta'minot bloki: manba L → L, manba N → N0/2",
+     "+24 V (+V) → ikkala sensorning jigarrang (BN) simi0/2",
+     "0 V (−V) → ikkala sensorning ko'k (BU) simi0/2",
+     "S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V0/2",
+     "S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V0/2",
+     "Faza L → K1 va K2 ning 9 (COM) kontaktlari0/2",
+     "KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish)0/3",
+     "KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A10/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N0/2"
+    ]
+   }
+  },
+  {
+   "step": "sim km1.l3 — km2.l3",
+   "msgs": [
+    [
+     "KM1 (oldinga) 5/L3: L3 fazasi kirishi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 3 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 3 / 17 bosqich tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "3"
+    },
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "done|QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L3 (tayyor)3/3",
+     "done|KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L3 (tayyor)3/3",
+     "KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W10/3",
+     "KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U10/3",
+     "Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi)0/2",
+     "Ta'minot bloki: manba L → L, manba N → N0/2",
+     "+24 V (+V) → ikkala sensorning jigarrang (BN) simi0/2",
+     "0 V (−V) → ikkala sensorning ko'k (BU) simi0/2",
+     "S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V0/2",
+     "S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V0/2",
+     "Faza L → K1 va K2 ning 9 (COM) kontaktlari0/2",
+     "KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish)0/3",
+     "KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A10/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N0/2"
+    ]
+   }
+  },
+  {
+   "step": "sim km1.t1 — km2.t3",
+   "msgs": [
+    [
+     "KM1 (oldinga) 2/T1: chiqish (motorga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 3 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {}
+  },
+  {
+   "step": "sim km2.t3 — mot.u",
+   "msgs": [
+    [
+     "KM2 (orqaga) 6/T3: chiqish (motorga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 3 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "done|QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L3 (tayyor)3/3",
+     "done|KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L3 (tayyor)3/3",
+     "part|KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W11/3",
+     "part|KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U11/3",
+     "Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi)0/2",
+     "Ta'minot bloki: manba L → L, manba N → N0/2",
+     "+24 V (+V) → ikkala sensorning jigarrang (BN) simi0/2",
+     "0 V (−V) → ikkala sensorning ko'k (BU) simi0/2",
+     "S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V0/2",
+     "S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V0/2",
+     "Faza L → K1 va K2 ning 9 (COM) kontaktlari0/2",
+     "KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish)0/3",
+     "KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A10/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N0/2"
+    ]
+   }
+  },
+  {
+   "step": "sim km1.t2 — km2.t2",
+   "msgs": [
+    [
+     "KM1 (oldinga) 4/T2: chiqish (motorga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 3 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {}
+  },
+  {
+   "step": "sim km2.t2 — mot.v",
+   "msgs": [
+    [
+     "KM2 (orqaga) 4/T2: chiqish (motorga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 3 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "done|QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L3 (tayyor)3/3",
+     "done|KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L3 (tayyor)3/3",
+     "part|KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W12/3",
+     "part|KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U12/3",
+     "Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi)0/2",
+     "Ta'minot bloki: manba L → L, manba N → N0/2",
+     "+24 V (+V) → ikkala sensorning jigarrang (BN) simi0/2",
+     "0 V (−V) → ikkala sensorning ko'k (BU) simi0/2",
+     "S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V0/2",
+     "S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V0/2",
+     "Faza L → K1 va K2 ning 9 (COM) kontaktlari0/2",
+     "KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish)0/3",
+     "KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A10/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N0/2"
+    ]
+   }
+  },
+  {
+   "step": "sim km1.t3 — km2.t1",
+   "msgs": [
+    [
+     "KM1 (oldinga) 6/T3: chiqish (motorga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 3 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {}
+  },
+  {
+   "step": "sim km2.t1 — mot.w",
+   "msgs": [
+    [
+     "KM2 (orqaga) 2/T1: chiqish (motorga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 5 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 5 / 17 bosqich tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "5"
+    },
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "done|QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L3 (tayyor)3/3",
+     "done|KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L3 (tayyor)3/3",
+     "done|KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W1 (tayyor)3/3",
+     "done|KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U1 (tayyor)3/3",
+     "Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi)0/2",
+     "Ta'minot bloki: manba L → L, manba N → N0/2",
+     "+24 V (+V) → ikkala sensorning jigarrang (BN) simi0/2",
+     "0 V (−V) → ikkala sensorning ko'k (BU) simi0/2",
+     "S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V0/2",
+     "S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V0/2",
+     "Faza L → K1 va K2 ning 9 (COM) kontaktlari0/2",
+     "KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish)0/3",
+     "KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A10/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N0/2"
+    ]
+   }
+  },
+  {
+   "step": "sim src.e — psu.pe",
+   "msgs": [
+    [
+     "Manba PE (E, himoya yerlash) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 5 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "done|QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L3 (tayyor)3/3",
+     "done|KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L3 (tayyor)3/3",
+     "done|KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W1 (tayyor)3/3",
+     "done|KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U1 (tayyor)3/3",
+     "part|Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi)1/2",
+     "Ta'minot bloki: manba L → L, manba N → N0/2",
+     "+24 V (+V) → ikkala sensorning jigarrang (BN) simi0/2",
+     "0 V (−V) → ikkala sensorning ko'k (BU) simi0/2",
+     "S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V0/2",
+     "S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V0/2",
+     "Faza L → K1 va K2 ning 9 (COM) kontaktlari0/2",
+     "KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish)0/3",
+     "KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A10/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N0/2"
+    ]
+   }
+  },
+  {
+   "step": "sim psu.pe — mot.pe",
+   "msgs": [
+    [
+     "Ta'minot bloki: ⏚ yerlash qisqichi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 6 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 6 / 17 bosqich tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "6"
+    },
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "done|QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L3 (tayyor)3/3",
+     "done|KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L3 (tayyor)3/3",
+     "done|KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W1 (tayyor)3/3",
+     "done|KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U1 (tayyor)3/3",
+     "done|Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi) (tayyor)2/2",
+     "Ta'minot bloki: manba L → L, manba N → N0/2",
+     "+24 V (+V) → ikkala sensorning jigarrang (BN) simi0/2",
+     "0 V (−V) → ikkala sensorning ko'k (BU) simi0/2",
+     "S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V0/2",
+     "S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V0/2",
+     "Faza L → K1 va K2 ning 9 (COM) kontaktlari0/2",
+     "KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish)0/3",
+     "KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A10/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N0/2"
+    ]
+   }
+  },
+  {
+   "step": "sim src.l — psu.l",
+   "msgs": [
+    [
+     "Manba L (220 V, boshqaruv fazasi) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 6 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "done|QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L3 (tayyor)3/3",
+     "done|KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L3 (tayyor)3/3",
+     "done|KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W1 (tayyor)3/3",
+     "done|KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U1 (tayyor)3/3",
+     "done|Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi) (tayyor)2/2",
+     "part|Ta'minot bloki: manba L → L, manba N → N1/2",
+     "+24 V (+V) → ikkala sensorning jigarrang (BN) simi0/2",
+     "0 V (−V) → ikkala sensorning ko'k (BU) simi0/2",
+     "S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V0/2",
+     "S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V0/2",
+     "Faza L → K1 va K2 ning 9 (COM) kontaktlari0/2",
+     "KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish)0/3",
+     "KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A10/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N0/2"
+    ]
+   }
+  },
+  {
+   "step": "sim psu.l — k1.c1",
+   "msgs": [
+    [
+     "Ta'minot bloki: AC kirish L (~220 V). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 6 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "done|QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L3 (tayyor)3/3",
+     "done|KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L3 (tayyor)3/3",
+     "done|KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W1 (tayyor)3/3",
+     "done|KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U1 (tayyor)3/3",
+     "done|Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi) (tayyor)2/2",
+     "part|Ta'minot bloki: manba L → L, manba N → N1/2",
+     "+24 V (+V) → ikkala sensorning jigarrang (BN) simi0/2",
+     "0 V (−V) → ikkala sensorning ko'k (BU) simi0/2",
+     "S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V0/2",
+     "S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V0/2",
+     "part|Faza L → K1 va K2 ning 9 (COM) kontaktlari1/2",
+     "KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish)0/3",
+     "KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A10/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N0/2"
+    ]
+   }
+  },
+  {
+   "step": "sim k1.c1 — k2.c1",
+   "msgs": [
+    [
+     "K1 rele, 9 (COM): 1-guruhning umumiy kontakti. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 7 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 7 / 17 bosqich tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "7"
+    },
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "done|QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L3 (tayyor)3/3",
+     "done|KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L3 (tayyor)3/3",
+     "done|KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W1 (tayyor)3/3",
+     "done|KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U1 (tayyor)3/3",
+     "done|Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi) (tayyor)2/2",
+     "part|Ta'minot bloki: manba L → L, manba N → N1/2",
+     "+24 V (+V) → ikkala sensorning jigarrang (BN) simi0/2",
+     "0 V (−V) → ikkala sensorning ko'k (BU) simi0/2",
+     "S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V0/2",
+     "S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V0/2",
+     "done|Faza L → K1 va K2 ning 9 (COM) kontaktlari (tayyor)2/2",
+     "KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish)0/3",
+     "KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A10/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N0/2"
+    ]
+   }
+  },
+  {
+   "step": "sim src.n — psu.n",
+   "msgs": [
+    [
+     "Manba N (nol) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 8 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 8 / 17 bosqich tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "8"
+    },
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "done|QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L3 (tayyor)3/3",
+     "done|KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L3 (tayyor)3/3",
+     "done|KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W1 (tayyor)3/3",
+     "done|KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U1 (tayyor)3/3",
+     "done|Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi) (tayyor)2/2",
+     "done|Ta'minot bloki: manba L → L, manba N → N (tayyor)2/2",
+     "+24 V (+V) → ikkala sensorning jigarrang (BN) simi0/2",
+     "0 V (−V) → ikkala sensorning ko'k (BU) simi0/2",
+     "S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V0/2",
+     "S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V0/2",
+     "done|Faza L → K1 va K2 ning 9 (COM) kontaktlari (tayyor)2/2",
+     "KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish)0/3",
+     "KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A10/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N0/2"
+    ]
+   }
+  },
+  {
+   "step": "sim psu.n — km1.a2",
+   "msgs": [
+    [
+     "Ta'minot bloki: AC kirish N. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 8 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "done|QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L3 (tayyor)3/3",
+     "done|KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L3 (tayyor)3/3",
+     "done|KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W1 (tayyor)3/3",
+     "done|KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U1 (tayyor)3/3",
+     "done|Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi) (tayyor)2/2",
+     "done|Ta'minot bloki: manba L → L, manba N → N (tayyor)2/2",
+     "+24 V (+V) → ikkala sensorning jigarrang (BN) simi0/2",
+     "0 V (−V) → ikkala sensorning ko'k (BU) simi0/2",
+     "S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V0/2",
+     "S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V0/2",
+     "done|Faza L → K1 va K2 ning 9 (COM) kontaktlari (tayyor)2/2",
+     "KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish)0/3",
+     "KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A10/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "part|Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N1/2"
+    ]
+   }
+  },
+  {
+   "step": "sim km1.a2 — km2.a2",
+   "msgs": [
+    [
+     "KM1 (oldinga) A2: g'altak oxiri (N ga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 9 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 9 / 17 bosqich tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "9"
+    },
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "done|QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L3 (tayyor)3/3",
+     "done|KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L3 (tayyor)3/3",
+     "done|KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W1 (tayyor)3/3",
+     "done|KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U1 (tayyor)3/3",
+     "done|Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi) (tayyor)2/2",
+     "done|Ta'minot bloki: manba L → L, manba N → N (tayyor)2/2",
+     "+24 V (+V) → ikkala sensorning jigarrang (BN) simi0/2",
+     "0 V (−V) → ikkala sensorning ko'k (BU) simi0/2",
+     "S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V0/2",
+     "S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V0/2",
+     "done|Faza L → K1 va K2 ning 9 (COM) kontaktlari (tayyor)2/2",
+     "KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish)0/3",
+     "KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A10/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "done|Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N (tayyor)2/2"
+    ]
+   }
+  },
+  {
+   "step": "sim psu.vp1 — psu.vp2",
+   "msgs": [
+    [
+     "Ta'minot bloki: +V (+24 V) chiqish. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 9 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {}
+  },
+  {
+   "step": "sim psu.vp2 — s1.bn",
+   "msgs": [
+    [
+     "Ta'minot bloki: +V (+24 V) chiqish, ikkinchi qisqich. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 9 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "done|QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L3 (tayyor)3/3",
+     "done|KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L3 (tayyor)3/3",
+     "done|KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W1 (tayyor)3/3",
+     "done|KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U1 (tayyor)3/3",
+     "done|Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi) (tayyor)2/2",
+     "done|Ta'minot bloki: manba L → L, manba N → N (tayyor)2/2",
+     "part|+24 V (+V) → ikkala sensorning jigarrang (BN) simi1/2",
+     "0 V (−V) → ikkala sensorning ko'k (BU) simi0/2",
+     "S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V0/2",
+     "S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V0/2",
+     "done|Faza L → K1 va K2 ning 9 (COM) kontaktlari (tayyor)2/2",
+     "KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish)0/3",
+     "KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A10/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "done|Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N (tayyor)2/2"
+    ]
+   }
+  },
+  {
+   "step": "sim s1.bn — s2.bn",
+   "msgs": [
+    [
+     "S1 sensori, jigarrang (BN) sim: +24 V ta'minot. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 10 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 10 / 17 bosqich tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "10"
+    },
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "done|QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L3 (tayyor)3/3",
+     "done|KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L3 (tayyor)3/3",
+     "done|KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W1 (tayyor)3/3",
+     "done|KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U1 (tayyor)3/3",
+     "done|Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi) (tayyor)2/2",
+     "done|Ta'minot bloki: manba L → L, manba N → N (tayyor)2/2",
+     "done|+24 V (+V) → ikkala sensorning jigarrang (BN) simi (tayyor)2/2",
+     "0 V (−V) → ikkala sensorning ko'k (BU) simi0/2",
+     "S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V0/2",
+     "S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V0/2",
+     "done|Faza L → K1 va K2 ning 9 (COM) kontaktlari (tayyor)2/2",
+     "KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish)0/3",
+     "KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A10/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "done|Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N (tayyor)2/2"
+    ]
+   }
+  },
+  {
+   "step": "sim psu.vm1 — psu.vm2",
+   "msgs": [
+    [
+     "Ta'minot bloki: −V (0 V) chiqish. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 10 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {}
+  },
+  {
+   "step": "sim psu.vm2 — s1.bu",
+   "msgs": [
+    [
+     "Ta'minot bloki: −V (0 V) chiqish, ikkinchi qisqich. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 10 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "done|QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L3 (tayyor)3/3",
+     "done|KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L3 (tayyor)3/3",
+     "done|KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W1 (tayyor)3/3",
+     "done|KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U1 (tayyor)3/3",
+     "done|Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi) (tayyor)2/2",
+     "done|Ta'minot bloki: manba L → L, manba N → N (tayyor)2/2",
+     "done|+24 V (+V) → ikkala sensorning jigarrang (BN) simi (tayyor)2/2",
+     "part|0 V (−V) → ikkala sensorning ko'k (BU) simi1/2",
+     "S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V0/2",
+     "S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V0/2",
+     "done|Faza L → K1 va K2 ning 9 (COM) kontaktlari (tayyor)2/2",
+     "KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish)0/3",
+     "KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A10/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "done|Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N (tayyor)2/2"
+    ]
+   }
+  },
+  {
+   "step": "sim s1.bu — s2.bu",
+   "msgs": [
+    [
+     "S1 sensori, ko'k (BU) sim: 0 V. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 11 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 11 / 17 bosqich tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "11"
+    },
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "done|QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L3 (tayyor)3/3",
+     "done|KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L3 (tayyor)3/3",
+     "done|KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W1 (tayyor)3/3",
+     "done|KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U1 (tayyor)3/3",
+     "done|Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi) (tayyor)2/2",
+     "done|Ta'minot bloki: manba L → L, manba N → N (tayyor)2/2",
+     "done|+24 V (+V) → ikkala sensorning jigarrang (BN) simi (tayyor)2/2",
+     "done|0 V (−V) → ikkala sensorning ko'k (BU) simi (tayyor)2/2",
+     "S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V0/2",
+     "S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V0/2",
+     "done|Faza L → K1 va K2 ning 9 (COM) kontaktlari (tayyor)2/2",
+     "KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish)0/3",
+     "KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A10/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "done|Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N (tayyor)2/2"
+    ]
+   }
+  },
+  {
+   "step": "sim s2.bu — k1.a2",
+   "msgs": [
+    [
+     "S2 sensori, ko'k (BU) sim: 0 V. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 11 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "done|QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L3 (tayyor)3/3",
+     "done|KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L3 (tayyor)3/3",
+     "done|KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W1 (tayyor)3/3",
+     "done|KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U1 (tayyor)3/3",
+     "done|Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi) (tayyor)2/2",
+     "done|Ta'minot bloki: manba L → L, manba N → N (tayyor)2/2",
+     "done|+24 V (+V) → ikkala sensorning jigarrang (BN) simi (tayyor)2/2",
+     "done|0 V (−V) → ikkala sensorning ko'k (BU) simi (tayyor)2/2",
+     "part|S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V1/2",
+     "S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V0/2",
+     "done|Faza L → K1 va K2 ning 9 (COM) kontaktlari (tayyor)2/2",
+     "KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish)0/3",
+     "KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A10/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "done|Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N (tayyor)2/2"
+    ]
+   }
+  },
+  {
+   "step": "sim k1.a2 — k2.a2",
+   "msgs": [
+    [
+     "K1 rele, 14 (A2−): g'altak, 0 V tomoni. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 11 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "done|QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L3 (tayyor)3/3",
+     "done|KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L3 (tayyor)3/3",
+     "done|KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W1 (tayyor)3/3",
+     "done|KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U1 (tayyor)3/3",
+     "done|Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi) (tayyor)2/2",
+     "done|Ta'minot bloki: manba L → L, manba N → N (tayyor)2/2",
+     "done|+24 V (+V) → ikkala sensorning jigarrang (BN) simi (tayyor)2/2",
+     "done|0 V (−V) → ikkala sensorning ko'k (BU) simi (tayyor)2/2",
+     "part|S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V1/2",
+     "part|S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V1/2",
+     "done|Faza L → K1 va K2 ning 9 (COM) kontaktlari (tayyor)2/2",
+     "KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish)0/3",
+     "KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A10/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "done|Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N (tayyor)2/2"
+    ]
+   }
+  },
+  {
+   "step": "sim s1.bk — k1.a1",
+   "msgs": [
+    [
+     "S1 sensori, qora (BK) sim: chiqish signali (PNP). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 12 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 12 / 17 bosqich tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "12"
+    },
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "done|QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L3 (tayyor)3/3",
+     "done|KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L3 (tayyor)3/3",
+     "done|KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W1 (tayyor)3/3",
+     "done|KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U1 (tayyor)3/3",
+     "done|Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi) (tayyor)2/2",
+     "done|Ta'minot bloki: manba L → L, manba N → N (tayyor)2/2",
+     "done|+24 V (+V) → ikkala sensorning jigarrang (BN) simi (tayyor)2/2",
+     "done|0 V (−V) → ikkala sensorning ko'k (BU) simi (tayyor)2/2",
+     "done|S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V (tayyor)2/2",
+     "part|S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V1/2",
+     "done|Faza L → K1 va K2 ning 9 (COM) kontaktlari (tayyor)2/2",
+     "KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish)0/3",
+     "KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A10/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "done|Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N (tayyor)2/2"
+    ]
+   }
+  },
+  {
+   "step": "sim s2.bk — k2.a1",
+   "msgs": [
+    [
+     "S2 sensori, qora (BK) sim: chiqish signali (PNP). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 13 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 13 / 17 bosqich tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "13"
+    },
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "done|QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L3 (tayyor)3/3",
+     "done|KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L3 (tayyor)3/3",
+     "done|KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W1 (tayyor)3/3",
+     "done|KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U1 (tayyor)3/3",
+     "done|Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi) (tayyor)2/2",
+     "done|Ta'minot bloki: manba L → L, manba N → N (tayyor)2/2",
+     "done|+24 V (+V) → ikkala sensorning jigarrang (BN) simi (tayyor)2/2",
+     "done|0 V (−V) → ikkala sensorning ko'k (BU) simi (tayyor)2/2",
+     "done|S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V (tayyor)2/2",
+     "done|S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V (tayyor)2/2",
+     "done|Faza L → K1 va K2 ning 9 (COM) kontaktlari (tayyor)2/2",
+     "KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish)0/3",
+     "KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A10/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "done|Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N (tayyor)2/2"
+    ]
+   }
+  },
+  {
+   "step": "sim k2.nc1 — k1.c2",
+   "msgs": [
+    [
+     "K2 rele, 1 (NC): 1-guruhning yopiq kontakti. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 13 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "done|QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L3 (tayyor)3/3",
+     "done|KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L3 (tayyor)3/3",
+     "done|KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W1 (tayyor)3/3",
+     "done|KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U1 (tayyor)3/3",
+     "done|Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi) (tayyor)2/2",
+     "done|Ta'minot bloki: manba L → L, manba N → N (tayyor)2/2",
+     "done|+24 V (+V) → ikkala sensorning jigarrang (BN) simi (tayyor)2/2",
+     "done|0 V (−V) → ikkala sensorning ko'k (BU) simi (tayyor)2/2",
+     "done|S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V (tayyor)2/2",
+     "done|S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V (tayyor)2/2",
+     "done|Faza L → K1 va K2 ning 9 (COM) kontaktlari (tayyor)2/2",
+     "part|KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish)1/3",
+     "KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A10/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "done|Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N (tayyor)2/2"
+    ]
+   }
+  },
+  {
+   "step": "sim k1.c2 — km1.53",
+   "msgs": [
+    [
+     "K1 rele, 12 (COM): 2-guruhning umumiy kontakti. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 13 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "done|QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L3 (tayyor)3/3",
+     "done|KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L3 (tayyor)3/3",
+     "done|KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W1 (tayyor)3/3",
+     "done|KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U1 (tayyor)3/3",
+     "done|Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi) (tayyor)2/2",
+     "done|Ta'minot bloki: manba L → L, manba N → N (tayyor)2/2",
+     "done|+24 V (+V) → ikkala sensorning jigarrang (BN) simi (tayyor)2/2",
+     "done|0 V (−V) → ikkala sensorning ko'k (BU) simi (tayyor)2/2",
+     "done|S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V (tayyor)2/2",
+     "done|S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V (tayyor)2/2",
+     "done|Faza L → K1 va K2 ning 9 (COM) kontaktlari (tayyor)2/2",
+     "part|KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish)2/3",
+     "KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A10/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "done|Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N (tayyor)2/2"
+    ]
+   }
+  },
+  {
+   "step": "sim k1.no2 — km1.54",
+   "msgs": [
+    [
+     "K1 rele, 8 (NO): 2-guruhning ochiq kontakti. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 14 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 14 / 17 bosqich tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "14"
+    },
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "done|QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L3 (tayyor)3/3",
+     "done|KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L3 (tayyor)3/3",
+     "done|KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W1 (tayyor)3/3",
+     "done|KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U1 (tayyor)3/3",
+     "done|Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi) (tayyor)2/2",
+     "done|Ta'minot bloki: manba L → L, manba N → N (tayyor)2/2",
+     "done|+24 V (+V) → ikkala sensorning jigarrang (BN) simi (tayyor)2/2",
+     "done|0 V (−V) → ikkala sensorning ko'k (BU) simi (tayyor)2/2",
+     "done|S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V (tayyor)2/2",
+     "done|S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V (tayyor)2/2",
+     "done|Faza L → K1 va K2 ning 9 (COM) kontaktlari (tayyor)2/2",
+     "done|KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish) (tayyor)3/3",
+     "KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A10/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "done|Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N (tayyor)2/2"
+    ]
+   }
+  },
+  {
+   "step": "sim km1.54 — km2.61",
+   "msgs": [
+    [
+     "KM1 (oldinga) yordamchi kontakti 54 (NO, ochiq). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 14 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "done|QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L3 (tayyor)3/3",
+     "done|KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L3 (tayyor)3/3",
+     "done|KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W1 (tayyor)3/3",
+     "done|KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U1 (tayyor)3/3",
+     "done|Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi) (tayyor)2/2",
+     "done|Ta'minot bloki: manba L → L, manba N → N (tayyor)2/2",
+     "done|+24 V (+V) → ikkala sensorning jigarrang (BN) simi (tayyor)2/2",
+     "done|0 V (−V) → ikkala sensorning ko'k (BU) simi (tayyor)2/2",
+     "done|S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V (tayyor)2/2",
+     "done|S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V (tayyor)2/2",
+     "done|Faza L → K1 va K2 ning 9 (COM) kontaktlari (tayyor)2/2",
+     "done|KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish) (tayyor)3/3",
+     "part|KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A11/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "done|Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N (tayyor)2/2"
+    ]
+   }
+  },
+  {
+   "step": "sim km2.62 — km1.a1",
+   "msgs": [
+    [
+     "KM2 (orqaga) yordamchi kontakti 62 (NC, yopiq). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 15 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 15 / 17 bosqich tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "15"
+    },
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "done|QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L3 (tayyor)3/3",
+     "done|KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L3 (tayyor)3/3",
+     "done|KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W1 (tayyor)3/3",
+     "done|KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U1 (tayyor)3/3",
+     "done|Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi) (tayyor)2/2",
+     "done|Ta'minot bloki: manba L → L, manba N → N (tayyor)2/2",
+     "done|+24 V (+V) → ikkala sensorning jigarrang (BN) simi (tayyor)2/2",
+     "done|0 V (−V) → ikkala sensorning ko'k (BU) simi (tayyor)2/2",
+     "done|S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V (tayyor)2/2",
+     "done|S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V (tayyor)2/2",
+     "done|Faza L → K1 va K2 ning 9 (COM) kontaktlari (tayyor)2/2",
+     "done|KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish) (tayyor)3/3",
+     "done|KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A1 (tayyor)2/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "done|Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N (tayyor)2/2"
+    ]
+   }
+  },
+  {
+   "step": "sim k1.nc1 — k2.c2",
+   "msgs": [
+    [
+     "K1 rele, 1 (NC): 1-guruhning yopiq kontakti. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 15 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "done|QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L3 (tayyor)3/3",
+     "done|KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L3 (tayyor)3/3",
+     "done|KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W1 (tayyor)3/3",
+     "done|KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U1 (tayyor)3/3",
+     "done|Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi) (tayyor)2/2",
+     "done|Ta'minot bloki: manba L → L, manba N → N (tayyor)2/2",
+     "done|+24 V (+V) → ikkala sensorning jigarrang (BN) simi (tayyor)2/2",
+     "done|0 V (−V) → ikkala sensorning ko'k (BU) simi (tayyor)2/2",
+     "done|S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V (tayyor)2/2",
+     "done|S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V (tayyor)2/2",
+     "done|Faza L → K1 va K2 ning 9 (COM) kontaktlari (tayyor)2/2",
+     "done|KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish) (tayyor)3/3",
+     "done|KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A1 (tayyor)2/2",
+     "part|KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel1/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "done|Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N (tayyor)2/2"
+    ]
+   }
+  },
+  {
+   "step": "sim k2.c2 — km2.53",
+   "msgs": [
+    [
+     "K2 rele, 12 (COM): 2-guruhning umumiy kontakti. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 15 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "done|QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L3 (tayyor)3/3",
+     "done|KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L3 (tayyor)3/3",
+     "done|KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W1 (tayyor)3/3",
+     "done|KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U1 (tayyor)3/3",
+     "done|Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi) (tayyor)2/2",
+     "done|Ta'minot bloki: manba L → L, manba N → N (tayyor)2/2",
+     "done|+24 V (+V) → ikkala sensorning jigarrang (BN) simi (tayyor)2/2",
+     "done|0 V (−V) → ikkala sensorning ko'k (BU) simi (tayyor)2/2",
+     "done|S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V (tayyor)2/2",
+     "done|S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V (tayyor)2/2",
+     "done|Faza L → K1 va K2 ning 9 (COM) kontaktlari (tayyor)2/2",
+     "done|KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish) (tayyor)3/3",
+     "done|KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A1 (tayyor)2/2",
+     "part|KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel2/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "done|Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N (tayyor)2/2"
+    ]
+   }
+  },
+  {
+   "step": "sim k2.no2 — km2.54",
+   "msgs": [
+    [
+     "K2 rele, 8 (NO): 2-guruhning ochiq kontakti. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 16 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 16 / 17 bosqich tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "16"
+    },
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "done|QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L3 (tayyor)3/3",
+     "done|KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L3 (tayyor)3/3",
+     "done|KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W1 (tayyor)3/3",
+     "done|KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U1 (tayyor)3/3",
+     "done|Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi) (tayyor)2/2",
+     "done|Ta'minot bloki: manba L → L, manba N → N (tayyor)2/2",
+     "done|+24 V (+V) → ikkala sensorning jigarrang (BN) simi (tayyor)2/2",
+     "done|0 V (−V) → ikkala sensorning ko'k (BU) simi (tayyor)2/2",
+     "done|S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V (tayyor)2/2",
+     "done|S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V (tayyor)2/2",
+     "done|Faza L → K1 va K2 ning 9 (COM) kontaktlari (tayyor)2/2",
+     "done|KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish) (tayyor)3/3",
+     "done|KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A1 (tayyor)2/2",
+     "done|KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel (tayyor)3/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "done|Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N (tayyor)2/2"
+    ]
+   }
+  },
+  {
+   "step": "sim km2.54 — km1.61",
+   "msgs": [
+    [
+     "KM2 (orqaga) yordamchi kontakti 54 (NO, ochiq). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 16 / 17 bosqich tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "done|QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L3 (tayyor)3/3",
+     "done|KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L3 (tayyor)3/3",
+     "done|KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W1 (tayyor)3/3",
+     "done|KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U1 (tayyor)3/3",
+     "done|Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi) (tayyor)2/2",
+     "done|Ta'minot bloki: manba L → L, manba N → N (tayyor)2/2",
+     "done|+24 V (+V) → ikkala sensorning jigarrang (BN) simi (tayyor)2/2",
+     "done|0 V (−V) → ikkala sensorning ko'k (BU) simi (tayyor)2/2",
+     "done|S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V (tayyor)2/2",
+     "done|S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V (tayyor)2/2",
+     "done|Faza L → K1 va K2 ning 9 (COM) kontaktlari (tayyor)2/2",
+     "done|KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish) (tayyor)3/3",
+     "done|KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A1 (tayyor)2/2",
+     "done|KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel (tayyor)3/3",
+     "part|KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A11/2",
+     "done|Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N (tayyor)2/2"
+    ]
+   }
+  },
+  {
+   "step": "sim km1.62 — km2.a1",
+   "msgs": [
+    [
+     "KM1 (oldinga) yordamchi kontakti 62 (NC, yopiq). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sxema to'g'ri yig'ildi. Kuchlanish bering, so'ng avtomat QF ni yoqing.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sxema to'g'ri yig'ildi. Kuchlanish bering, so'ng avtomat QF ni yoqing.",
+     "c": "ok"
+    },
+    "power": {
+     "t": "Kuchlanish berish",
+     "c": "btn pri"
+    },
+    "pdone": {
+     "t": "17"
+    },
+    "hint": {
+     "t": "Maslahat",
+     "d": 1,
+     "c": "btn"
+    },
+    "steps": [
+     "done|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari (tayyor)3/3",
+     "done|QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L3 (tayyor)3/3",
+     "done|KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L3 (tayyor)3/3",
+     "done|KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W1 (tayyor)3/3",
+     "done|KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U1 (tayyor)3/3",
+     "done|Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi) (tayyor)2/2",
+     "done|Ta'minot bloki: manba L → L, manba N → N (tayyor)2/2",
+     "done|+24 V (+V) → ikkala sensorning jigarrang (BN) simi (tayyor)2/2",
+     "done|0 V (−V) → ikkala sensorning ko'k (BU) simi (tayyor)2/2",
+     "done|S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V (tayyor)2/2",
+     "done|S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V (tayyor)2/2",
+     "done|Faza L → K1 va K2 ning 9 (COM) kontaktlari (tayyor)2/2",
+     "done|KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish) (tayyor)3/3",
+     "done|KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A1 (tayyor)2/2",
+     "done|KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel (tayyor)3/3",
+     "done|KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A1 (tayyor)2/2",
+     "done|Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N (tayyor)2/2"
+    ]
+   }
+  },
+  {
+   "step": "tugma #b-qf",
+   "note": "disabled",
+   "msgs": [],
+   "state": {}
+  },
+  {
+   "step": "tugma #power",
+   "msgs": [
+    [
+     "Kuchlanish berildi: blok 24 V chiqardi, boshqaruv zanjiri ishlayapti. Motor aylanishi uchun avtomat QF ni yoqing.",
+     "ok"
+    ],
+    [
+     "KM1 ulandi, lekin QF o'chiq: motorga 380 V kelmayapti. QF ni yoqing.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "KM1 ulandi, lekin QF o'chiq: motorga 380 V kelmayapti. QF ni yoqing.",
+     "c": "ok"
+    },
+    "power": {
+     "t": "O'chirish",
+     "c": "btn pri"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "d": 1,
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "d": 1,
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "h": 1,
+     "d": 1,
+     "c": "btn"
+    },
+    "ctl": {},
+    "r-s": {
+     "t": "faol / —",
+     "c": "on"
+    },
+    "r-k": {
+     "t": "tortilgan / —",
+     "c": "on"
+    },
+    "r-km1": {
+     "t": "ulangan",
+     "c": "on"
+    },
+    "b-qf": {
+     "t": "QF ni yoqish",
+     "c": "btn pri"
+    },
+    "t-m1": {
+     "t": "S1 oldiga metall",
+     "c": "btn",
+     "p": "false"
+    },
+    "t-m2": {
+     "t": "S2 oldiga metall",
+     "c": "btn",
+     "p": "false"
+    },
+    "t-f2": {
+     "t": "S2 sensori ishdan chiqdi",
+     "c": "btn",
+     "p": "false"
+    }
+   }
+  },
+  {
+   "step": "bosish mot.u",
+   "msgs": [
+    [
+     "Kuchlanish ostida sxemani o'zgartirib bo'lmaydi. Avval o'chiring.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Kuchlanish ostida sxemani o'zgartirib bo'lmaydi. Avval o'chiring.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "tugma #b-qf",
+   "msgs": [
+    [
+     "QF yoqildi: kuch zanjiriga 380 V berildi. Ulangan kontaktor motorni aylantiradi.",
+     "ok"
+    ],
+    [
+     "S2 aravachani sezdi → K2 tortildi: K2 ning NC kontakti KM1 ni uzdi, KM1 ning 61–62 kontakti yopilgach KM2 ulandi. Motor teskari aylanyapti, aravacha S1 tomon qaytmoqda.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "S2 aravachani sezdi → K2 tortildi: K2 ning NC kontakti KM1 ni uzdi, KM1 ning 61–62 kontakti yopilgach KM2 ulandi. Motor teskari aylanyapti, aravacha S1 tomon qaytmoqda.",
+     "c": "ok"
+    },
+    "r-qf": {
+     "t": "yoqilgan",
+     "c": "on"
+    },
+    "r-mot": {
+     "t": "oldinga",
+     "c": "on"
+    },
+    "r-s": {
+     "t": "— / faol",
+     "c": "on"
+    },
+    "r-k": {
+     "t": "— / tortilgan",
+     "c": "on"
+    },
+    "r-km1": {
+     "t": "uzilgan"
+    },
+    "r-km2": {
+     "t": "ulangan",
+     "c": "on"
+    },
+    "b-qf": {
+     "t": "QF ni o'chirish",
+     "c": "btn pri"
+    }
+   }
+  },
+  {
+   "step": "tugma #b-qf",
+   "msgs": [
+    [
+     "QF o'chirildi: motor kuch zanjiridan uzildi. Boshqaruv zanjiri (220 V va 24 V) ishlashda davom etadi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "QF o'chirildi: motor kuch zanjiridan uzildi. Boshqaruv zanjiri (220 V va 24 V) ishlashda davom etadi."
+    },
+    "r-qf": {
+     "t": "o'chiq"
+    },
+    "r-mot": {
+     "t": "to'xtagan"
+    },
+    "r-s": {
+     "t": "— / —"
+    },
+    "r-k": {
+     "t": "— / —"
+    },
+    "b-qf": {
+     "t": "QF ni yoqish",
+     "c": "btn pri"
+    }
+   }
+  },
+  {
+   "step": "tugma #b-qf",
+   "msgs": [
+    [
+     "QF yoqildi: kuch zanjiriga 380 V berildi. Ulangan kontaktor motorni aylantiradi.",
+     "ok"
+    ],
+    [
+     "KM1 ulandi: motor oldinga aylanib aravacha S2 tomon ketyapti. S1 dan chiqqach K1 qo'yib yuboradi, lekin KM1 o'zining 53–54 kontakti orqali ulanib turadi.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "KM1 ulandi: motor oldinga aylanib aravacha S2 tomon ketyapti. S1 dan chiqqach K1 qo'yib yuboradi, lekin KM1 o'zining 53–54 kontakti orqali ulanib turadi.",
+     "c": "ok"
+    },
+    "r-qf": {
+     "t": "yoqilgan",
+     "c": "on"
+    },
+    "r-mot": {
+     "t": "orqaga",
+     "c": "on"
+    },
+    "r-s": {
+     "t": "faol / —",
+     "c": "on"
+    },
+    "r-k": {
+     "t": "tortilgan / —",
+     "c": "on"
+    },
+    "r-km1": {
+     "t": "ulangan",
+     "c": "on"
+    },
+    "r-km2": {
+     "t": "uzilgan"
+    },
+    "b-qf": {
+     "t": "QF ni o'chirish",
+     "c": "btn pri"
+    }
+   }
+  },
+  {
+   "step": "tugma #t-m1",
+   "msgs": [
+    [
+     "S1 oldiga metall plastina qo'yildi: S1 doim faol, K1 tortilgan.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "S1 oldiga metall plastina qo'yildi: S1 doim faol, K1 tortilgan."
+    },
+    "r-mot": {
+     "t": "oldinga",
+     "c": "on"
+    },
+    "t-m1": {
+     "t": "S1 oldiga metall",
+     "c": "btn",
+     "p": "true"
+    }
+   }
+  },
+  {
+   "step": "tugma #t-m2",
+   "msgs": [
+    [
+     "Ikkala sensor ham faol: K1 ning NC kontakti KM2 zanjirini, K2 ning NC kontakti KM1 zanjirini uzadi. Ikkala kontaktor o'chadi, motor to'xtaydi. Bu himoya: ikki buyruq bir vaqtda kelsa, hech biri bajarilmaydi.",
+     "ok"
+    ],
+    [
+     "Ikkala sensor faol: KM1 ham, KM2 ham uzildi. Motor to'xtadi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Ikkala sensor faol: KM1 ham, KM2 ham uzildi. Motor to'xtadi."
+    },
+    "r-mot": {
+     "t": "to'xtagan"
+    },
+    "r-s": {
+     "t": "faol / faol",
+     "c": "on"
+    },
+    "r-k": {
+     "t": "tortilgan / tortilgan",
+     "c": "on"
+    },
+    "r-km1": {
+     "t": "uzilgan"
+    },
+    "t-m2": {
+     "t": "S2 oldiga metall",
+     "c": "btn",
+     "p": "true"
+    }
+   }
+  },
+  {
+   "step": "tugma #t-m1",
+   "msgs": [
+    [
+     "S1 oldidagi metall olindi.",
+     ""
+    ],
+    [
+     "S2 aravachani sezdi → K2 tortildi: K2 ning NC kontakti KM1 ni uzdi, KM1 ning 61–62 kontakti yopilgach KM2 ulandi. Motor teskari aylanyapti, aravacha S1 tomon qaytmoqda.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "S2 aravachani sezdi → K2 tortildi: K2 ning NC kontakti KM1 ni uzdi, KM1 ning 61–62 kontakti yopilgach KM2 ulandi. Motor teskari aylanyapti, aravacha S1 tomon qaytmoqda.",
+     "c": "ok"
+    },
+    "r-mot": {
+     "t": "orqaga",
+     "c": "on"
+    },
+    "r-s": {
+     "t": "— / faol",
+     "c": "on"
+    },
+    "r-k": {
+     "t": "— / tortilgan",
+     "c": "on"
+    },
+    "r-km2": {
+     "t": "ulangan",
+     "c": "on"
+    },
+    "t-m1": {
+     "t": "S1 oldiga metall",
+     "c": "btn",
+     "p": "false"
+    }
+   }
+  },
+  {
+   "step": "tugma #t-m2",
+   "msgs": [
+    [
+     "S2 oldidagi metall olindi.",
+     ""
+    ],
+    [
+     "KM1 ulandi: motor oldinga aylanib aravacha S2 tomon ketyapti. S1 dan chiqqach K1 qo'yib yuboradi, lekin KM1 o'zining 53–54 kontakti orqali ulanib turadi.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "KM1 ulandi: motor oldinga aylanib aravacha S2 tomon ketyapti. S1 dan chiqqach K1 qo'yib yuboradi, lekin KM1 o'zining 53–54 kontakti orqali ulanib turadi.",
+     "c": "ok"
+    },
+    "r-s": {
+     "t": "faol / —",
+     "c": "on"
+    },
+    "r-k": {
+     "t": "tortilgan / —",
+     "c": "on"
+    },
+    "r-km1": {
+     "t": "ulangan",
+     "c": "on"
+    },
+    "r-km2": {
+     "t": "uzilgan"
+    },
+    "t-m2": {
+     "t": "S2 oldiga metall",
+     "c": "btn",
+     "p": "false"
+    }
+   }
+  },
+  {
+   "step": "tugma #t-f2",
+   "msgs": [
+    [
+     "S2 sensori ishdan chiqdi (simi uzildi deb faraz qiling). Aravacha S2 ga yetganda nima bo'lishini kuzating.",
+     "bad"
+    ],
+    [
+     "Diqqat: aravacha chekkaga tiralib qoldi, motor aylana olmayapti, tok keskin oshmoqda...",
+     "bad"
+    ],
+    [
+     "QF o'chdi! Aravacha chekkaga tiralib motor tiqilib qoldi, tok nominaldan 5–7 marta oshdi va avtomat himoyasi ishladi. Sababi: S2 ishlamadi, motorni teskari buradigan buyruq kelmadi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "QF o'chdi! Aravacha chekkaga tiralib motor tiqilib qoldi, tok nominaldan 5–7 marta oshdi va avtomat himoyasi ishladi. Sababi: S2 ishlamadi, motorni teskari buradigan buyruq kelmadi.",
+     "c": "bad"
+    },
+    "r-qf": {
+     "t": "o'chdi (himoya)",
+     "c": "bad"
+    },
+    "r-mot": {
+     "t": "to'xtagan"
+    },
+    "r-s": {
+     "t": "— / —"
+    },
+    "r-k": {
+     "t": "— / —"
+    },
+    "b-qf": {
+     "t": "QF ni yoqish",
+     "c": "btn pri"
+    },
+    "t-f2": {
+     "t": "S2 sensori ishdan chiqdi",
+     "c": "btn",
+     "p": "true"
+    },
+    "fnote": {
+     "t": "Real stendda bunday holatdan chekka o'chirgichlar (SQ) va motorning issiqlik relesi (KK) himoya qiladi. Sensorni tuzatib, QF ni qayta yoqing.",
+     "c": "fnote"
+    }
+   }
+  },
+  {
+   "step": "tugma #t-f2",
+   "msgs": [
+    [
+     "S2 sensori tuzatildi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "S2 sensori tuzatildi."
+    },
+    "t-f2": {
+     "t": "S2 sensori ishdan chiqdi",
+     "c": "btn",
+     "p": "false"
+    }
+   }
+  },
+  {
+   "step": "tugma #power",
+   "msgs": [
+    [
+     "Kuchlanish o'chirildi. Sxemani o'zgartirishingiz mumkin.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Kuchlanish o'chirildi. Sxemani o'zgartirishingiz mumkin."
+    },
+    "power": {
+     "t": "Kuchlanish berish",
+     "c": "btn pri"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "h": 1,
+     "c": "btn"
+    },
+    "ctl": {
+     "h": 1
+    },
+    "r-qf": {
+     "t": "o'chiq"
+    },
+    "r-km1": {
+     "t": "uzilgan"
+    },
+    "b-qf": {
+     "t": "QF ni yoqish",
+     "d": 1,
+     "c": "btn pri"
+    },
+    "t-m1": {
+     "t": "S1 oldiga metall",
+     "d": 1,
+     "c": "btn",
+     "p": "false"
+    },
+    "t-m2": {
+     "t": "S2 oldiga metall",
+     "d": 1,
+     "c": "btn",
+     "p": "false"
+    },
+    "t-f2": {
+     "t": "S2 sensori ishdan chiqdi",
+     "d": 1,
+     "c": "btn",
+     "p": "false"
+    },
+    "fnote": {
+     "c": "fnote"
+    }
+   }
+  }
+ ],
+ "exam": [
+  {
+   "step": "ochilish",
+   "msgs": [],
+   "state": {
+    "status2": {
+     "t": "Namuna: manba L1 avtomat QF ning 1-qisqichiga ulangan. Endi L2 ni 3 ga, L3 ni 5 ga ulang."
+    },
+    "power": {
+     "t": "Kuchlanish berish",
+     "d": 1,
+     "c": "btn pri"
+    },
+    "prog": {},
+    "pdone": {
+     "t": "0"
+    },
+    "exam": {
+     "h": 1
+    },
+    "wcount": {
+     "t": "0"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "c": "btn"
+    },
+    "hint": {
+     "t": "Maslahat",
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "h": 1,
+     "c": "btn"
+    },
+    "m-learn": {
+     "t": "O'rganish",
+     "p": "true"
+    },
+    "m-exam": {
+     "t": "Imtihon",
+     "p": "false"
+    },
+    "ctl": {
+     "h": 1
+    },
+    "r-qf": {
+     "t": "o'chiq"
+    },
+    "r-mot": {
+     "t": "to'xtagan"
+    },
+    "r-s": {
+     "t": "— / —"
+    },
+    "r-k": {
+     "t": "— / —"
+    },
+    "r-km1": {
+     "t": "uzilgan"
+    },
+    "r-km2": {
+     "t": "uzilgan"
+    },
+    "b-qf": {
+     "t": "QF ni yoqish",
+     "d": 1,
+     "c": "btn pri"
+    },
+    "t-m1": {
+     "t": "S1 oldiga metall",
+     "d": 1,
+     "c": "btn",
+     "p": "false"
+    },
+    "t-m2": {
+     "t": "S2 oldiga metall",
+     "d": 1,
+     "c": "btn",
+     "p": "false"
+    },
+    "t-f2": {
+     "t": "S2 sensori ishdan chiqdi",
+     "d": 1,
+     "c": "btn",
+     "p": "false"
+    },
+    "fnote": {
+     "c": "fnote"
+    },
+    "steps": [
+     "part|Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari1/3",
+     "QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L30/3",
+     "KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L30/3",
+     "KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W10/3",
+     "KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U10/3",
+     "Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi)0/2",
+     "Ta'minot bloki: manba L → L, manba N → N0/2",
+     "+24 V (+V) → ikkala sensorning jigarrang (BN) simi0/2",
+     "0 V (−V) → ikkala sensorning ko'k (BU) simi0/2",
+     "S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V0/2",
+     "S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V0/2",
+     "Faza L → K1 va K2 ning 9 (COM) kontaktlari0/2",
+     "KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish)0/3",
+     "KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A10/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N0/2"
+    ],
+    "report": []
+   }
+  },
+  {
+   "step": "tugma #m-exam",
+   "msgs": [
+    [
+     "Imtihon rejimi: xohlagan simni ulang, tayyor bo'lgach Tekshirish ni bosing.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Imtihon rejimi: xohlagan simni ulang, tayyor bo'lgach Tekshirish ni bosing."
+    },
+    "prog": {
+     "h": 1
+    },
+    "exam": {},
+    "undo": {
+     "t": "Orqaga",
+     "d": 1,
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "d": 1,
+     "c": "btn"
+    },
+    "hint": {
+     "t": "Maslahat",
+     "h": 1,
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "d": 1,
+     "c": "btn"
+    },
+    "m-learn": {
+     "t": "O'rganish",
+     "p": "false"
+    },
+    "m-exam": {
+     "t": "Imtihon",
+     "p": "true"
+    }
+   }
+  },
+  {
+   "step": "sim src.l1 — qf.3",
+   "msgs": [
+    [
+     "Manba L1 (380 V, A fazasi) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 1 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 1 ta."
+    },
+    "wcount": {
+     "t": "1"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "c": "btn"
+    }
+   }
+  },
+  {
+   "step": "sim km2.t1 — mot.u",
+   "msgs": [
+    [
+     "KM2 (orqaga) 2/T1: chiqish (motorga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 2 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 2 ta."
+    },
+    "wcount": {
+     "t": "2"
+    }
+   }
+  },
+  {
+   "step": "sim src.e — psu.pe",
+   "msgs": [
+    [
+     "Manba PE (E, himoya yerlash) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 3 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 3 ta."
+    },
+    "wcount": {
+     "t": "3"
+    }
+   }
+  },
+  {
+   "step": "tugma #check",
+   "msgs": [
+    [
+     "Tekshiruv: 2 ta xato sim, 17 ta bajarilmagan bosqich.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Tekshiruv: 2 ta xato sim, 17 ta bajarilmagan bosqich.",
+     "c": "bad"
+    },
+    "report": [
+     "Xato sim: Manba L1 (380 V, A fazasi) rozetkasi va QF 3-qisqich: L2 fazasi kirishi. Bu qisqich L2 uchun mo'ljallangan. Bu yerga L1 ni ulasangiz, L2 bilan bir nuqtada fazalararo qisqa tutashuv bo'ladi va QF darhol o'chadi. L1 rozetkasi avtomat QF ning 1-qisqichiga ulanadi.",
+     "Xato sim: KM2 (orqaga) 2/T1: chiqish (motorga) va XM:1 — motor kabeli, U1 (jigarrang tomir). KM2 motorni teskari aylantirishi uchun ikki fazani almashtiradi: T1→W1, T2→V1, T3→U1. Agar KM1 dagidek ulasangiz, motor ikkala kontaktorda ham bir tomonga aylanadi.",
+     "Bajarilmagan: Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari",
+     "Bajarilmagan: QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L3",
+     "Bajarilmagan: KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L3",
+     "Bajarilmagan: KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W1",
+     "Bajarilmagan: KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U1",
+     "Bajarilmagan: Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi)",
+     "Yana 11 ta bosqich bajarilmagan."
+    ]
+   }
+  },
+  {
+   "step": "tugma #clear",
+   "msgs": [
+    [
+     "Sxema tozalandi. Manba simlaridan boshlang.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sxema tozalandi. Manba simlaridan boshlang."
+    },
+    "wcount": {
+     "t": "0"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "d": 1,
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "d": 1,
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "d": 1,
+     "c": "btn"
+    },
+    "report": []
+   }
+  },
+  {
+   "step": "sim src.l1 — qf.1",
+   "msgs": [
+    [
+     "Manba L1 (380 V, A fazasi) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 1 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 1 ta."
+    },
+    "wcount": {
+     "t": "1"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "c": "btn"
+    }
+   }
+  },
+  {
+   "step": "sim src.l2 — qf.3",
+   "msgs": [
+    [
+     "Manba L2 (380 V, B fazasi) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 2 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 2 ta."
+    },
+    "wcount": {
+     "t": "2"
+    }
+   }
+  },
+  {
+   "step": "sim src.l3 — qf.5",
+   "msgs": [
+    [
+     "Manba L3 (380 V, C fazasi) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 3 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 3 ta."
+    },
+    "wcount": {
+     "t": "3"
+    }
+   }
+  },
+  {
+   "step": "sim qf.2 — km1.l1",
+   "msgs": [
+    [
+     "QF 2-qisqich: L1 fazasi chiqishi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 4 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 4 ta."
+    },
+    "wcount": {
+     "t": "4"
+    }
+   }
+  },
+  {
+   "step": "sim km1.l1 — km2.l1",
+   "msgs": [
+    [
+     "KM1 (oldinga) 1/L1: L1 fazasi kirishi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 5 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 5 ta."
+    },
+    "wcount": {
+     "t": "5"
+    }
+   }
+  },
+  {
+   "step": "sim qf.4 — km1.l2",
+   "msgs": [
+    [
+     "QF 4-qisqich: L2 fazasi chiqishi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 6 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 6 ta."
+    },
+    "wcount": {
+     "t": "6"
+    }
+   }
+  },
+  {
+   "step": "sim km1.l2 — km2.l2",
+   "msgs": [
+    [
+     "KM1 (oldinga) 3/L2: L2 fazasi kirishi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 7 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 7 ta."
+    },
+    "wcount": {
+     "t": "7"
+    }
+   }
+  },
+  {
+   "step": "sim qf.6 — km1.l3",
+   "msgs": [
+    [
+     "QF 6-qisqich: L3 fazasi chiqishi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 8 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 8 ta."
+    },
+    "wcount": {
+     "t": "8"
+    }
+   }
+  },
+  {
+   "step": "sim km1.l3 — km2.l3",
+   "msgs": [
+    [
+     "KM1 (oldinga) 5/L3: L3 fazasi kirishi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 9 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 9 ta."
+    },
+    "wcount": {
+     "t": "9"
+    }
+   }
+  },
+  {
+   "step": "sim km1.t1 — km2.t3",
+   "msgs": [
+    [
+     "KM1 (oldinga) 2/T1: chiqish (motorga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 10 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 10 ta."
+    },
+    "wcount": {
+     "t": "10"
+    }
+   }
+  },
+  {
+   "step": "sim km2.t3 — mot.u",
+   "msgs": [
+    [
+     "KM2 (orqaga) 6/T3: chiqish (motorga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 11 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 11 ta."
+    },
+    "wcount": {
+     "t": "11"
+    }
+   }
+  },
+  {
+   "step": "sim km1.t2 — km2.t2",
+   "msgs": [
+    [
+     "KM1 (oldinga) 4/T2: chiqish (motorga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 12 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 12 ta."
+    },
+    "wcount": {
+     "t": "12"
+    }
+   }
+  },
+  {
+   "step": "sim km2.t2 — mot.v",
+   "msgs": [
+    [
+     "KM2 (orqaga) 4/T2: chiqish (motorga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 13 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 13 ta."
+    },
+    "wcount": {
+     "t": "13"
+    }
+   }
+  },
+  {
+   "step": "sim km1.t3 — km2.t1",
+   "msgs": [
+    [
+     "KM1 (oldinga) 6/T3: chiqish (motorga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 14 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 14 ta."
+    },
+    "wcount": {
+     "t": "14"
+    }
+   }
+  },
+  {
+   "step": "sim km2.t1 — mot.w",
+   "msgs": [
+    [
+     "KM2 (orqaga) 2/T1: chiqish (motorga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 15 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 15 ta."
+    },
+    "wcount": {
+     "t": "15"
+    }
+   }
+  },
+  {
+   "step": "sim src.e — psu.pe",
+   "msgs": [
+    [
+     "Manba PE (E, himoya yerlash) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 16 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 16 ta."
+    },
+    "wcount": {
+     "t": "16"
+    }
+   }
+  },
+  {
+   "step": "sim psu.pe — mot.pe",
+   "msgs": [
+    [
+     "Ta'minot bloki: ⏚ yerlash qisqichi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 17 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 17 ta."
+    },
+    "wcount": {
+     "t": "17"
+    }
+   }
+  },
+  {
+   "step": "sim src.l — psu.l",
+   "msgs": [
+    [
+     "Manba L (220 V, boshqaruv fazasi) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 18 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 18 ta."
+    },
+    "wcount": {
+     "t": "18"
+    }
+   }
+  },
+  {
+   "step": "sim psu.l — k1.c1",
+   "msgs": [
+    [
+     "Ta'minot bloki: AC kirish L (~220 V). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 19 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 19 ta."
+    },
+    "wcount": {
+     "t": "19"
+    }
+   }
+  },
+  {
+   "step": "sim k1.c1 — k2.c1",
+   "msgs": [
+    [
+     "K1 rele, 9 (COM): 1-guruhning umumiy kontakti. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 20 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 20 ta."
+    },
+    "wcount": {
+     "t": "20"
+    }
+   }
+  },
+  {
+   "step": "sim src.n — psu.n",
+   "msgs": [
+    [
+     "Manba N (nol) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 21 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 21 ta."
+    },
+    "wcount": {
+     "t": "21"
+    }
+   }
+  },
+  {
+   "step": "sim psu.n — km1.a2",
+   "msgs": [
+    [
+     "Ta'minot bloki: AC kirish N. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 22 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 22 ta."
+    },
+    "wcount": {
+     "t": "22"
+    }
+   }
+  },
+  {
+   "step": "sim km1.a2 — km2.a2",
+   "msgs": [
+    [
+     "KM1 (oldinga) A2: g'altak oxiri (N ga). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 23 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 23 ta."
+    },
+    "wcount": {
+     "t": "23"
+    }
+   }
+  },
+  {
+   "step": "sim psu.vp1 — psu.vp2",
+   "msgs": [
+    [
+     "Ta'minot bloki: +V (+24 V) chiqish. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 24 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 24 ta."
+    },
+    "wcount": {
+     "t": "24"
+    }
+   }
+  },
+  {
+   "step": "sim psu.vp2 — s1.bn",
+   "msgs": [
+    [
+     "Ta'minot bloki: +V (+24 V) chiqish, ikkinchi qisqich. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 25 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 25 ta."
+    },
+    "wcount": {
+     "t": "25"
+    }
+   }
+  },
+  {
+   "step": "sim s1.bn — s2.bn",
+   "msgs": [
+    [
+     "S1 sensori, jigarrang (BN) sim: +24 V ta'minot. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 26 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 26 ta."
+    },
+    "wcount": {
+     "t": "26"
+    }
+   }
+  },
+  {
+   "step": "sim psu.vm1 — psu.vm2",
+   "msgs": [
+    [
+     "Ta'minot bloki: −V (0 V) chiqish. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 27 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 27 ta."
+    },
+    "wcount": {
+     "t": "27"
+    }
+   }
+  },
+  {
+   "step": "sim psu.vm2 — s1.bu",
+   "msgs": [
+    [
+     "Ta'minot bloki: −V (0 V) chiqish, ikkinchi qisqich. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 28 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 28 ta."
+    },
+    "wcount": {
+     "t": "28"
+    }
+   }
+  },
+  {
+   "step": "sim s1.bu — s2.bu",
+   "msgs": [
+    [
+     "S1 sensori, ko'k (BU) sim: 0 V. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 29 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 29 ta."
+    },
+    "wcount": {
+     "t": "29"
+    }
+   }
+  },
+  {
+   "step": "sim s2.bu — k1.a2",
+   "msgs": [
+    [
+     "S2 sensori, ko'k (BU) sim: 0 V. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 30 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 30 ta."
+    },
+    "wcount": {
+     "t": "30"
+    }
+   }
+  },
+  {
+   "step": "sim k1.a2 — k2.a2",
+   "msgs": [
+    [
+     "K1 rele, 14 (A2−): g'altak, 0 V tomoni. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 31 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 31 ta."
+    },
+    "wcount": {
+     "t": "31"
+    }
+   }
+  },
+  {
+   "step": "sim s1.bk — k1.a1",
+   "msgs": [
+    [
+     "S1 sensori, qora (BK) sim: chiqish signali (PNP). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 32 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 32 ta."
+    },
+    "wcount": {
+     "t": "32"
+    }
+   }
+  },
+  {
+   "step": "sim s2.bk — k2.a1",
+   "msgs": [
+    [
+     "S2 sensori, qora (BK) sim: chiqish signali (PNP). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 33 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 33 ta."
+    },
+    "wcount": {
+     "t": "33"
+    }
+   }
+  },
+  {
+   "step": "sim k2.nc1 — k1.c2",
+   "msgs": [
+    [
+     "K2 rele, 1 (NC): 1-guruhning yopiq kontakti. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 34 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 34 ta."
+    },
+    "wcount": {
+     "t": "34"
+    }
+   }
+  },
+  {
+   "step": "sim k1.c2 — km1.53",
+   "msgs": [
+    [
+     "K1 rele, 12 (COM): 2-guruhning umumiy kontakti. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 35 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 35 ta."
+    },
+    "wcount": {
+     "t": "35"
+    }
+   }
+  },
+  {
+   "step": "sim k1.no2 — km1.54",
+   "msgs": [
+    [
+     "K1 rele, 8 (NO): 2-guruhning ochiq kontakti. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 36 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 36 ta."
+    },
+    "wcount": {
+     "t": "36"
+    }
+   }
+  },
+  {
+   "step": "sim km1.54 — km2.61",
+   "msgs": [
+    [
+     "KM1 (oldinga) yordamchi kontakti 54 (NO, ochiq). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 37 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 37 ta."
+    },
+    "wcount": {
+     "t": "37"
+    }
+   }
+  },
+  {
+   "step": "sim km2.62 — km1.a1",
+   "msgs": [
+    [
+     "KM2 (orqaga) yordamchi kontakti 62 (NC, yopiq). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 38 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 38 ta."
+    },
+    "wcount": {
+     "t": "38"
+    }
+   }
+  },
+  {
+   "step": "sim k1.nc1 — k2.c2",
+   "msgs": [
+    [
+     "K1 rele, 1 (NC): 1-guruhning yopiq kontakti. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 39 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 39 ta."
+    },
+    "wcount": {
+     "t": "39"
+    }
+   }
+  },
+  {
+   "step": "sim k2.c2 — km2.53",
+   "msgs": [
+    [
+     "K2 rele, 12 (COM): 2-guruhning umumiy kontakti. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 40 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 40 ta."
+    },
+    "wcount": {
+     "t": "40"
+    }
+   }
+  },
+  {
+   "step": "sim k2.no2 — km2.54",
+   "msgs": [
+    [
+     "K2 rele, 8 (NO): 2-guruhning ochiq kontakti. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 41 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 41 ta."
+    },
+    "wcount": {
+     "t": "41"
+    }
+   }
+  },
+  {
+   "step": "sim km2.54 — km1.61",
+   "msgs": [
+    [
+     "KM2 (orqaga) yordamchi kontakti 54 (NO, ochiq). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 42 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 42 ta."
+    },
+    "wcount": {
+     "t": "42"
+    }
+   }
+  },
+  {
+   "step": "sim km1.62 — km2.a1",
+   "msgs": [
+    [
+     "KM1 (oldinga) yordamchi kontakti 62 (NC, yopiq). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 43 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 43 ta."
+    },
+    "wcount": {
+     "t": "43"
+    },
+    "hint": {
+     "t": "Maslahat",
+     "h": 1,
+     "d": 1,
+     "c": "btn"
+    }
+   }
+  },
+  {
+   "step": "tugma #check",
+   "msgs": [
+    [
+     "Sxema to'g'ri va to'liq. Kuchlanish berishingiz mumkin.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sxema to'g'ri va to'liq. Kuchlanish berishingiz mumkin.",
+     "c": "ok"
+    },
+    "power": {
+     "t": "Kuchlanish berish",
+     "c": "btn pri"
+    }
+   }
+  },
+  {
+   "step": "tugma #power",
+   "msgs": [
+    [
+     "Kuchlanish berildi: blok 24 V chiqardi, boshqaruv zanjiri ishlayapti. Motor aylanishi uchun avtomat QF ni yoqing.",
+     "ok"
+    ],
+    [
+     "KM1 ulandi, lekin QF o'chiq: motorga 380 V kelmayapti. QF ni yoqing.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "KM1 ulandi, lekin QF o'chiq: motorga 380 V kelmayapti. QF ni yoqing.",
+     "c": "ok"
+    },
+    "power": {
+     "t": "O'chirish",
+     "c": "btn pri"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "d": 1,
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "d": 1,
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "d": 1,
+     "c": "btn"
+    },
+    "ctl": {},
+    "r-s": {
+     "t": "faol / —",
+     "c": "on"
+    },
+    "r-k": {
+     "t": "tortilgan / —",
+     "c": "on"
+    },
+    "r-km1": {
+     "t": "ulangan",
+     "c": "on"
+    },
+    "b-qf": {
+     "t": "QF ni yoqish",
+     "c": "btn pri"
+    },
+    "t-m1": {
+     "t": "S1 oldiga metall",
+     "c": "btn",
+     "p": "false"
+    },
+    "t-m2": {
+     "t": "S2 oldiga metall",
+     "c": "btn",
+     "p": "false"
+    },
+    "t-f2": {
+     "t": "S2 sensori ishdan chiqdi",
+     "c": "btn",
+     "p": "false"
+    }
+   }
+  },
+  {
+   "step": "tugma #power",
+   "msgs": [
+    [
+     "Kuchlanish o'chirildi. Sxemani o'zgartirishingiz mumkin.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Kuchlanish o'chirildi. Sxemani o'zgartirishingiz mumkin."
+    },
+    "power": {
+     "t": "Kuchlanish berish",
+     "c": "btn pri"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "c": "btn"
+    },
+    "ctl": {
+     "h": 1
+    },
+    "r-s": {
+     "t": "— / —"
+    },
+    "r-k": {
+     "t": "— / —"
+    },
+    "r-km1": {
+     "t": "uzilgan"
+    },
+    "b-qf": {
+     "t": "QF ni yoqish",
+     "d": 1,
+     "c": "btn pri"
+    },
+    "t-m1": {
+     "t": "S1 oldiga metall",
+     "d": 1,
+     "c": "btn",
+     "p": "false"
+    },
+    "t-m2": {
+     "t": "S2 oldiga metall",
+     "d": 1,
+     "c": "btn",
+     "p": "false"
+    },
+    "t-f2": {
+     "t": "S2 sensori ishdan chiqdi",
+     "d": 1,
+     "c": "btn",
+     "p": "false"
+    }
+   }
+  },
+  {
+   "step": "tugma #m-learn",
+   "msgs": [
+    [
+     "O'rganish rejimi: noto'g'ri ulanish darhol tushuntiriladi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "O'rganish rejimi: noto'g'ri ulanish darhol tushuntiriladi."
+    },
+    "power": {
+     "t": "Kuchlanish berish",
+     "d": 1,
+     "c": "btn pri"
+    },
+    "prog": {},
+    "exam": {
+     "h": 1
+    },
+    "undo": {
+     "t": "Orqaga",
+     "d": 1,
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "d": 1,
+     "c": "btn"
+    },
+    "hint": {
+     "t": "Maslahat",
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "h": 1,
+     "d": 1,
+     "c": "btn"
+    },
+    "m-learn": {
+     "t": "O'rganish",
+     "p": "true"
+    },
+    "m-exam": {
+     "t": "Imtihon",
+     "p": "false"
+    },
+    "steps": [
+     "Manba L1, L2, L3 → avtomat QF ning 1, 3, 5 qisqichlari0/3",
+     "QF chiqishi 2, 4, 6 → KM1 ning 1/L1, 3/L2, 5/L30/3",
+     "KM2 kirishi KM1 kirishiga parallel: L1–L1, L2–L2, L3–L30/3",
+     "KM1 chiqishi → XM (motor): T1→U1, T2→V1, T3→W10/3",
+     "KM2 chiqishi → XM, fazalarni almashtirib: T1→W1, T2→V1, T3→U10/3",
+     "Himoya yerlash: manba E → blok ⏚ va XM:PE (motor korpusi)0/2",
+     "Ta'minot bloki: manba L → L, manba N → N0/2",
+     "+24 V (+V) → ikkala sensorning jigarrang (BN) simi0/2",
+     "0 V (−V) → ikkala sensorning ko'k (BU) simi0/2",
+     "S1 qora (BK) → K1 g'altagi 13 (A1+), K1 14 (A2−) → 0 V0/2",
+     "S2 qora (BK) → K2 g'altagi 13 (A1+), K2 14 (A2−) → 0 V0/2",
+     "Faza L → K1 va K2 ning 9 (COM) kontaktlari0/2",
+     "KM1 yurgizish: K2 1 (NC) → K1 12 (COM); K1 8 (NO) ga KM1 53–54 parallel (o'zini ushlab turish)0/3",
+     "KM1 blokirovkasi: K1 8 → KM2 61–62 (NC) → KM1 A10/2",
+     "KM2 yurgizish: K1 1 (NC) → K2 12 (COM); K2 8 (NO) ga KM2 53–54 parallel0/3",
+     "KM2 blokirovkasi: K2 8 → KM1 61–62 (NC) → KM2 A10/2",
+     "Kontaktor g'altaklari: KM1 A2 va KM2 A2 → N0/2"
+    ]
+   }
+  }
+ ]
+}

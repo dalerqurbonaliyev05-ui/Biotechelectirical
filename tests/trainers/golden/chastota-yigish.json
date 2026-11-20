@@ -1,0 +1,2813 @@
+{
+ "learn": [
+  {
+   "step": "ochilish",
+   "msgs": [],
+   "state": {
+    "status2": {
+     "t": "Namuna: manba L1 o'zgartirgichning R klemmasiga ulangan. Endi L2 ni S ga, L3 ni T ga ulang."
+    },
+    "power": {
+     "t": "Kuchlanish berish",
+     "d": 1,
+     "c": "btn pri"
+    },
+    "prog": {},
+    "pdone": {
+     "t": "1"
+    },
+    "exam": {
+     "h": 1
+    },
+    "wcount": {
+     "t": "0"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "c": "btn"
+    },
+    "hint": {
+     "t": "Maslahat",
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "h": 1,
+     "c": "btn"
+    },
+    "m-learn": {
+     "t": "O'rganish",
+     "p": "true"
+    },
+    "m-exam": {
+     "t": "Imtihon",
+     "p": "false"
+    },
+    "ctl": {
+     "h": 1
+    },
+    "potv": {
+     "t": "36.0 Hz"
+    },
+    "pot": {
+     "t": "72"
+    },
+    "r-state": {
+     "t": "-"
+    },
+    "b-start": {
+     "t": "START",
+     "d": 1,
+     "c": "big go"
+    },
+    "b-stop": {
+     "t": "STOP",
+     "d": 1,
+     "c": "big stp"
+    },
+    "f-ol": {
+     "t": "Motor ortiqcha yuki",
+     "d": 1,
+     "c": "btn"
+    },
+    "f-pl": {
+     "t": "Kirish fazasi uzildi",
+     "d": 1,
+     "c": "btn"
+    },
+    "f-oc": {
+     "t": "Chiqishda qisqa tutashuv",
+     "d": 1,
+     "c": "btn"
+    },
+    "f-reset": {
+     "t": "Xatoni tiklash (RESET)",
+     "d": 1,
+     "c": "btn pri"
+    },
+    "fnote": {
+     "c": "fnote"
+    },
+    "steps": [
+     "done|Manba L1 → o'zgartirgich R klemmasi (tayyor)",
+     "Manba L2 → o'zgartirgich S klemmasi",
+     "Manba L3 → o'zgartirgich T klemmasi",
+     "Himoya yerlash: manba E → o'zgartirgich ⊕ va motor korpusi0/2",
+     "O'zgartirgich U → motor U1",
+     "O'zgartirgich V → motor V1",
+     "O'zgartirgich W → motor W1",
+     "Tormoz rezistori: P va PB klemmalariga (har biri bir uchiga)0/2",
+     "Potensiometr 3-uchi (CW) → +10 V",
+     "Potensiometr sirpanchisi (2) → AI",
+     "Potensiometr 1-uchi (CCW) → GND",
+     "START tugmasi, NO kontakt (23–24): M0 va COM orasiga0/2",
+     "STOP tugmasi, NC kontakt (11–12): M2 va COM orasiga0/2"
+    ],
+    "report": []
+   }
+  },
+  {
+   "step": "bosish vfd.s",
+   "msgs": [
+    [
+     "S: tarmoq kirishi (L2). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "S: tarmoq kirishi (L2). Boshqa klemmaga sudrang yoki ikkinchisini bosing."
+    }
+   }
+  },
+  {
+   "step": "bosish vfd.s",
+   "msgs": [
+    [
+     "S: tarmoq kirishi (L2). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Klemma halqasini bosib boshqasiga sudrang yoki ikkita klemmani ketma-ket bosing.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Klemma halqasini bosib boshqasiga sudrang yoki ikkita klemmani ketma-ket bosing."
+    }
+   }
+  },
+  {
+   "step": "sim vfd.r — vfd.s",
+   "msgs": [
+    [
+     "R: tarmoq kirishi (L1). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Bir qurilmaning ikki klemmasini o'zaro ulash tokni qurilmadan chetlab o'tkazadi. Zanjir qurilma ichidan o'tishi kerak.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Bir qurilmaning ikki klemmasini o'zaro ulash tokni qurilmadan chetlab o'tkazadi. Zanjir qurilma ichidan o'tishi kerak.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim src.l1 — src.l2",
+   "msgs": [
+    [
+     "Manba L1 (380 V, A fazasi) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Bir qurilmaning ikki klemmasini o'zaro ulash tokni qurilmadan chetlab o'tkazadi. Zanjir qurilma ichidan o'tishi kerak.",
+     "bad"
+    ]
+   ],
+   "state": {}
+  },
+  {
+   "step": "sim src.l — vfd.s",
+   "msgs": [
+    [
+     "Manba L (220 V, bir fazali) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Bu bir fazali 220 V manba. O'zgartirgichning R, S, T kirishi 3 fazali 380 V uchun: bir faza ulansa «kirish fazasi yo'q» xatosi chiqadi. Bu sxemada L, N ishlatilmaydi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Bu bir fazali 220 V manba. O'zgartirgichning R, S, T kirishi 3 fazali 380 V uchun: bir faza ulansa «kirish fazasi yo'q» xatosi chiqadi. Bu sxemada L, N ishlatilmaydi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim src.l2 — vfd.u",
+   "msgs": [
+    [
+     "Manba L2 (380 V, B fazasi) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Tarmoqni o'zgartirgich chiqishiga (U, V, W) yoki motorga to'g'ridan ulab bo'lmaydi: chiqishga tarmoq tushsa o'zgartirgich zumda kuyadi. Tarmoq faqat R, S, T ga ulanadi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Tarmoqni o'zgartirgich chiqishiga (U, V, W) yoki motorga to'g'ridan ulab bo'lmaydi: chiqishga tarmoq tushsa o'zgartirgich zumda kuyadi. Tarmoq faqat R, S, T ga ulanadi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim src.l2 — vfd.m0",
+   "msgs": [
+    [
+     "Manba L2 (380 V, B fazasi) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "380 V ni boshqaruv zanjiriga ulash o'zgartirgichni kuydiradi: boshqaruv klemmalari faqat past kuchlanish uchun.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "380 V ni boshqaruv zanjiriga ulash o'zgartirgichni kuydiradi: boshqaruv klemmalari faqat past kuchlanish uchun.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim src.l2 — vfd.t",
+   "msgs": [
+    [
+     "Manba L2 (380 V, B fazasi) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Kirishda fazalar tartibi elektr jihatdan ahamiyatsiz, lekin bu mashqda standart tartib: L1→R, L2→S, L3→T.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Kirishda fazalar tartibi elektr jihatdan ahamiyatsiz, lekin bu mashqda standart tartib: L1→R, L2→S, L3→T.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim src.e — vfd.u",
+   "msgs": [
+    [
+     "Manba PE (E, himoya yerlash) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Himoya yerlash (PE) faqat korpus va yerlash klemmalariga ulanadi: manba E → o'zgartirgich ⊕ va motor korpusi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Himoya yerlash (PE) faqat korpus va yerlash klemmalariga ulanadi: manba E → o'zgartirgich ⊕ va motor korpusi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim src.e — src.l1",
+   "msgs": [
+    [
+     "Manba PE (E, himoya yerlash) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Bir qurilmaning ikki klemmasini o'zaro ulash tokni qurilmadan chetlab o'tkazadi. Zanjir qurilma ichidan o'tishi kerak.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Bir qurilmaning ikki klemmasini o'zaro ulash tokni qurilmadan chetlab o'tkazadi. Zanjir qurilma ichidan o'tishi kerak.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim vfd.s — mot.u",
+   "msgs": [
+    [
+     "S: tarmoq kirishi (L2). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Kirish va chiqishni bir-biriga ulash tarmoqni to'g'ridan motorga uzatadi: o'zgartirgich chetlab o'tiladi va buziladi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Kirish va chiqishni bir-biriga ulash tarmoqni to'g'ridan motorga uzatadi: o'zgartirgich chetlab o'tiladi va buziladi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim vfd.u — mot.v",
+   "msgs": [
+    [
+     "U: motor chiqishi (U). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Fazalar nomi bilan mos ulanadi: U→U1, V→V1, W→W1. Ikki simni almashtirsangiz motor teskari tomonga aylanadi (REV).",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Fazalar nomi bilan mos ulanadi: U→U1, V→V1, W→W1. Ikki simni almashtirsangiz motor teskari tomonga aylanadi (REV).",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim vfd.u — res.1",
+   "msgs": [
+    [
+     "U: motor chiqishi (U). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "O'zgartirgichning U, V, W chiqishlari faqat motorning U1, V1, W1 klemmalariga ulanadi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "O'zgartirgichning U, V, W chiqishlari faqat motorning U1, V1, W1 klemmalariga ulanadi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim res.1 — vfd.m0",
+   "msgs": [
+    [
+     "Tormoz rezistorining chap uchi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "P va PB faqat tormoz rezistoriga ulanadi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "P va PB faqat tormoz rezistoriga ulanadi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim res.1 — pot.1",
+   "msgs": [
+    [
+     "Tormoz rezistorining chap uchi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "P va PB faqat tormoz rezistoriga ulanadi.",
+     "bad"
+    ]
+   ],
+   "state": {}
+  },
+  {
+   "step": "sim res.1 — vfd.ra",
+   "msgs": [
+    [
+     "Tormoz rezistorining chap uchi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Tormoz rezistorining ikki uchi P va PB klemmalariga ulanadi, har biri bittadan.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Tormoz rezistorining ikki uchi P va PB klemmalariga ulanadi, har biri bittadan.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim pot.1 — bs.23",
+   "msgs": [
+    [
+     "Potensiometr 1-uchi (CCW chetki holat). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Potensiometr va tugmalar bir-biriga ulanmaydi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Potensiometr va tugmalar bir-biriga ulanmaydi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim bs.11 — vfd.m0",
+   "msgs": [
+    [
+     "START tugmasi, NC kontakt bloki, 11-qisqich. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "START tugmasining NC (11–12) kontakti normal holatda yopiq: M0 doim ulangan bo'lib o'zgartirgich o'zi yurib ketadi. START uchun NO (23–24) kontakt ishlatiladi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "START tugmasining NC (11–12) kontakti normal holatda yopiq: M0 doim ulangan bo'lib o'zgartirgich o'zi yurib ketadi. START uchun NO (23–24) kontakt ishlatiladi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim bs.11 — vfd.com",
+   "msgs": [
+    [
+     "START tugmasi, NC kontakt bloki, 11-qisqich. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "START tugmasi uchun NO (23–24) kontakt ishlatiladi, NC (11–12) emas.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "START tugmasi uchun NO (23–24) kontakt ishlatiladi, NC (11–12) emas.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim bs.23 — vfd.m2",
+   "msgs": [
+    [
+     "START tugmasi, NO kontakt bloki, 23-qisqich. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "START tugmasi M0 (FWD) va COM orasiga ulanadi, NO (23–24) kontakt orqali.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "START tugmasi M0 (FWD) va COM orasiga ulanadi, NO (23–24) kontakt orqali.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim bt.23 — vfd.m2",
+   "msgs": [
+    [
+     "STOP tugmasi, NO kontakt bloki, 23-qisqich. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "STOP tugmasi NC (11–12) kontakti orqali ulanadi: M2 normal holatda COM ga ulangan bo'lishi kerak. NO kontaktda o'zgartirgich hech qachon yurmaydi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "STOP tugmasi NC (11–12) kontakti orqali ulanadi: M2 normal holatda COM ga ulangan bo'lishi kerak. NO kontaktda o'zgartirgich hech qachon yurmaydi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim bt.23 — vfd.com",
+   "msgs": [
+    [
+     "STOP tugmasi, NO kontakt bloki, 23-qisqich. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "STOP tugmasi uchun NC (11–12) kontakt ishlatiladi, NO emas.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "STOP tugmasi uchun NC (11–12) kontakt ishlatiladi, NO emas.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim bt.11 — vfd.m0",
+   "msgs": [
+    [
+     "STOP tugmasi, NC kontakt bloki, 11-qisqich. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "STOP tugmasi M2 (STOP) va COM orasiga ulanadi, NC (11–12) kontakt orqali.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "STOP tugmasi M2 (STOP) va COM orasiga ulanadi, NC (11–12) kontakt orqali.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim vfd.v10 — pot.1",
+   "msgs": [
+    [
+     "+10 V: potensiometr ta'minoti. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "+10 V potensiometrning 3-uchiga, GND 1-uchiga, AI esa o'rta (2) uchiga ulanadi. M0 START ga, M2 STOP ga ulanadi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "+10 V potensiometrning 3-uchiga, GND 1-uchiga, AI esa o'rta (2) uchiga ulanadi. M0 START ga, M2 STOP ga ulanadi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim vfd.m0 — bs.23",
+   "msgs": [
+    [
+     "M0 (FWD): oldinga yurgizish kirishi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 1 / 13 ulanish tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 1 / 13 ulanish tayyor.",
+     "c": "ok"
+    },
+    "steps": [
+     "done|Manba L1 → o'zgartirgich R klemmasi (tayyor)",
+     "Manba L2 → o'zgartirgich S klemmasi",
+     "Manba L3 → o'zgartirgich T klemmasi",
+     "Himoya yerlash: manba E → o'zgartirgich ⊕ va motor korpusi0/2",
+     "O'zgartirgich U → motor U1",
+     "O'zgartirgich V → motor V1",
+     "O'zgartirgich W → motor W1",
+     "Tormoz rezistori: P va PB klemmalariga (har biri bir uchiga)0/2",
+     "Potensiometr 3-uchi (CW) → +10 V",
+     "Potensiometr sirpanchisi (2) → AI",
+     "Potensiometr 1-uchi (CCW) → GND",
+     "part|START tugmasi, NO kontakt (23–24): M0 va COM orasiga1/2",
+     "STOP tugmasi, NC kontakt (11–12): M2 va COM orasiga0/2"
+    ]
+   }
+  },
+  {
+   "step": "sim bs.23 — vfd.com",
+   "msgs": [
+    [
+     "START tugmasi, NO kontakt bloki, 23-qisqich. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "M0 va COM/GND bir nuqtada tutashib qoladi: bu qisqa tutashuv. Har bir signal o'z klemmasiga ulanadi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "M0 va COM/GND bir nuqtada tutashib qoladi: bu qisqa tutashuv. Har bir signal o'z klemmasiga ulanadi.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "sim bs.24 — vfd.gnd",
+   "msgs": [
+    [
+     "START tugmasi, NO kontakt bloki, 24-qisqich. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 2 / 13 ulanish tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 2 / 13 ulanish tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "2"
+    },
+    "steps": [
+     "done|Manba L1 → o'zgartirgich R klemmasi (tayyor)",
+     "Manba L2 → o'zgartirgich S klemmasi",
+     "Manba L3 → o'zgartirgich T klemmasi",
+     "Himoya yerlash: manba E → o'zgartirgich ⊕ va motor korpusi0/2",
+     "O'zgartirgich U → motor U1",
+     "O'zgartirgich V → motor V1",
+     "O'zgartirgich W → motor W1",
+     "Tormoz rezistori: P va PB klemmalariga (har biri bir uchiga)0/2",
+     "Potensiometr 3-uchi (CW) → +10 V",
+     "Potensiometr sirpanchisi (2) → AI",
+     "Potensiometr 1-uchi (CCW) → GND",
+     "done|START tugmasi, NO kontakt (23–24): M0 va COM orasiga (tayyor)2/2",
+     "STOP tugmasi, NC kontakt (11–12): M2 va COM orasiga0/2"
+    ]
+   }
+  },
+  {
+   "step": "sim bs.24 — vfd.com",
+   "msgs": [
+    [
+     "START tugmasi, NO kontakt bloki, 24-qisqich. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 2 / 13 ulanish tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {}
+  },
+  {
+   "step": "tugma #undo",
+   "msgs": [
+    [
+     "Oxirgi sim olib tashlandi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Oxirgi sim olib tashlandi."
+    }
+   }
+  },
+  {
+   "step": "sim src.l1 — vfd.r",
+   "msgs": [
+    [
+     "Manba L1 (380 V, A fazasi) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Bu ikki klemma allaqachon ulangan.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Bu ikki klemma allaqachon ulangan."
+    }
+   }
+  },
+  {
+   "step": "tugma #hint",
+   "msgs": [
+    [
+     "Maslahat: Manba L2 → o'zgartirgich S klemmasi",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Maslahat: Manba L2 → o'zgartirgich S klemmasi"
+    }
+   }
+  },
+  {
+   "step": "sim src.l2 — vfd.s",
+   "msgs": [
+    [
+     "Manba L2 (380 V, B fazasi) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 3 / 13 ulanish tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 3 / 13 ulanish tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "3"
+    },
+    "steps": [
+     "done|Manba L1 → o'zgartirgich R klemmasi (tayyor)",
+     "done|Manba L2 → o'zgartirgich S klemmasi (tayyor)",
+     "Manba L3 → o'zgartirgich T klemmasi",
+     "Himoya yerlash: manba E → o'zgartirgich ⊕ va motor korpusi0/2",
+     "O'zgartirgich U → motor U1",
+     "O'zgartirgich V → motor V1",
+     "O'zgartirgich W → motor W1",
+     "Tormoz rezistori: P va PB klemmalariga (har biri bir uchiga)0/2",
+     "Potensiometr 3-uchi (CW) → +10 V",
+     "Potensiometr sirpanchisi (2) → AI",
+     "Potensiometr 1-uchi (CCW) → GND",
+     "done|START tugmasi, NO kontakt (23–24): M0 va COM orasiga (tayyor)2/2",
+     "STOP tugmasi, NC kontakt (11–12): M2 va COM orasiga0/2"
+    ]
+   }
+  },
+  {
+   "step": "sim src.l3 — vfd.t",
+   "msgs": [
+    [
+     "Manba L3 (380 V, C fazasi) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 4 / 13 ulanish tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 4 / 13 ulanish tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "4"
+    },
+    "steps": [
+     "done|Manba L1 → o'zgartirgich R klemmasi (tayyor)",
+     "done|Manba L2 → o'zgartirgich S klemmasi (tayyor)",
+     "done|Manba L3 → o'zgartirgich T klemmasi (tayyor)",
+     "Himoya yerlash: manba E → o'zgartirgich ⊕ va motor korpusi0/2",
+     "O'zgartirgich U → motor U1",
+     "O'zgartirgich V → motor V1",
+     "O'zgartirgich W → motor W1",
+     "Tormoz rezistori: P va PB klemmalariga (har biri bir uchiga)0/2",
+     "Potensiometr 3-uchi (CW) → +10 V",
+     "Potensiometr sirpanchisi (2) → AI",
+     "Potensiometr 1-uchi (CCW) → GND",
+     "done|START tugmasi, NO kontakt (23–24): M0 va COM orasiga (tayyor)2/2",
+     "STOP tugmasi, NC kontakt (11–12): M2 va COM orasiga0/2"
+    ]
+   }
+  },
+  {
+   "step": "sim src.e — vfd.pe",
+   "msgs": [
+    [
+     "Manba PE (E, himoya yerlash) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 4 / 13 ulanish tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Manba L1 → o'zgartirgich R klemmasi (tayyor)",
+     "done|Manba L2 → o'zgartirgich S klemmasi (tayyor)",
+     "done|Manba L3 → o'zgartirgich T klemmasi (tayyor)",
+     "part|Himoya yerlash: manba E → o'zgartirgich ⊕ va motor korpusi1/2",
+     "O'zgartirgich U → motor U1",
+     "O'zgartirgich V → motor V1",
+     "O'zgartirgich W → motor W1",
+     "Tormoz rezistori: P va PB klemmalariga (har biri bir uchiga)0/2",
+     "Potensiometr 3-uchi (CW) → +10 V",
+     "Potensiometr sirpanchisi (2) → AI",
+     "Potensiometr 1-uchi (CCW) → GND",
+     "done|START tugmasi, NO kontakt (23–24): M0 va COM orasiga (tayyor)2/2",
+     "STOP tugmasi, NC kontakt (11–12): M2 va COM orasiga0/2"
+    ]
+   }
+  },
+  {
+   "step": "sim src.e — mot.pe",
+   "msgs": [
+    [
+     "Manba PE (E, himoya yerlash) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 5 / 13 ulanish tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 5 / 13 ulanish tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "5"
+    },
+    "steps": [
+     "done|Manba L1 → o'zgartirgich R klemmasi (tayyor)",
+     "done|Manba L2 → o'zgartirgich S klemmasi (tayyor)",
+     "done|Manba L3 → o'zgartirgich T klemmasi (tayyor)",
+     "done|Himoya yerlash: manba E → o'zgartirgich ⊕ va motor korpusi (tayyor)2/2",
+     "O'zgartirgich U → motor U1",
+     "O'zgartirgich V → motor V1",
+     "O'zgartirgich W → motor W1",
+     "Tormoz rezistori: P va PB klemmalariga (har biri bir uchiga)0/2",
+     "Potensiometr 3-uchi (CW) → +10 V",
+     "Potensiometr sirpanchisi (2) → AI",
+     "Potensiometr 1-uchi (CCW) → GND",
+     "done|START tugmasi, NO kontakt (23–24): M0 va COM orasiga (tayyor)2/2",
+     "STOP tugmasi, NC kontakt (11–12): M2 va COM orasiga0/2"
+    ]
+   }
+  },
+  {
+   "step": "sim vfd.u — mot.u",
+   "msgs": [
+    [
+     "U: motor chiqishi (U). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 6 / 13 ulanish tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 6 / 13 ulanish tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "6"
+    },
+    "steps": [
+     "done|Manba L1 → o'zgartirgich R klemmasi (tayyor)",
+     "done|Manba L2 → o'zgartirgich S klemmasi (tayyor)",
+     "done|Manba L3 → o'zgartirgich T klemmasi (tayyor)",
+     "done|Himoya yerlash: manba E → o'zgartirgich ⊕ va motor korpusi (tayyor)2/2",
+     "done|O'zgartirgich U → motor U1 (tayyor)",
+     "O'zgartirgich V → motor V1",
+     "O'zgartirgich W → motor W1",
+     "Tormoz rezistori: P va PB klemmalariga (har biri bir uchiga)0/2",
+     "Potensiometr 3-uchi (CW) → +10 V",
+     "Potensiometr sirpanchisi (2) → AI",
+     "Potensiometr 1-uchi (CCW) → GND",
+     "done|START tugmasi, NO kontakt (23–24): M0 va COM orasiga (tayyor)2/2",
+     "STOP tugmasi, NC kontakt (11–12): M2 va COM orasiga0/2"
+    ]
+   }
+  },
+  {
+   "step": "sim vfd.v — mot.v",
+   "msgs": [
+    [
+     "V: motor chiqishi (V). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 7 / 13 ulanish tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 7 / 13 ulanish tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "7"
+    },
+    "steps": [
+     "done|Manba L1 → o'zgartirgich R klemmasi (tayyor)",
+     "done|Manba L2 → o'zgartirgich S klemmasi (tayyor)",
+     "done|Manba L3 → o'zgartirgich T klemmasi (tayyor)",
+     "done|Himoya yerlash: manba E → o'zgartirgich ⊕ va motor korpusi (tayyor)2/2",
+     "done|O'zgartirgich U → motor U1 (tayyor)",
+     "done|O'zgartirgich V → motor V1 (tayyor)",
+     "O'zgartirgich W → motor W1",
+     "Tormoz rezistori: P va PB klemmalariga (har biri bir uchiga)0/2",
+     "Potensiometr 3-uchi (CW) → +10 V",
+     "Potensiometr sirpanchisi (2) → AI",
+     "Potensiometr 1-uchi (CCW) → GND",
+     "done|START tugmasi, NO kontakt (23–24): M0 va COM orasiga (tayyor)2/2",
+     "STOP tugmasi, NC kontakt (11–12): M2 va COM orasiga0/2"
+    ]
+   }
+  },
+  {
+   "step": "sim vfd.w — mot.w",
+   "msgs": [
+    [
+     "W: motor chiqishi (W). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 8 / 13 ulanish tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 8 / 13 ulanish tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "8"
+    },
+    "steps": [
+     "done|Manba L1 → o'zgartirgich R klemmasi (tayyor)",
+     "done|Manba L2 → o'zgartirgich S klemmasi (tayyor)",
+     "done|Manba L3 → o'zgartirgich T klemmasi (tayyor)",
+     "done|Himoya yerlash: manba E → o'zgartirgich ⊕ va motor korpusi (tayyor)2/2",
+     "done|O'zgartirgich U → motor U1 (tayyor)",
+     "done|O'zgartirgich V → motor V1 (tayyor)",
+     "done|O'zgartirgich W → motor W1 (tayyor)",
+     "Tormoz rezistori: P va PB klemmalariga (har biri bir uchiga)0/2",
+     "Potensiometr 3-uchi (CW) → +10 V",
+     "Potensiometr sirpanchisi (2) → AI",
+     "Potensiometr 1-uchi (CCW) → GND",
+     "done|START tugmasi, NO kontakt (23–24): M0 va COM orasiga (tayyor)2/2",
+     "STOP tugmasi, NC kontakt (11–12): M2 va COM orasiga0/2"
+    ]
+   }
+  },
+  {
+   "step": "sim vfd.p — res.1",
+   "msgs": [
+    [
+     "P: tormoz rezistori (+). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 8 / 13 ulanish tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Manba L1 → o'zgartirgich R klemmasi (tayyor)",
+     "done|Manba L2 → o'zgartirgich S klemmasi (tayyor)",
+     "done|Manba L3 → o'zgartirgich T klemmasi (tayyor)",
+     "done|Himoya yerlash: manba E → o'zgartirgich ⊕ va motor korpusi (tayyor)2/2",
+     "done|O'zgartirgich U → motor U1 (tayyor)",
+     "done|O'zgartirgich V → motor V1 (tayyor)",
+     "done|O'zgartirgich W → motor W1 (tayyor)",
+     "part|Tormoz rezistori: P va PB klemmalariga (har biri bir uchiga)1/2",
+     "Potensiometr 3-uchi (CW) → +10 V",
+     "Potensiometr sirpanchisi (2) → AI",
+     "Potensiometr 1-uchi (CCW) → GND",
+     "done|START tugmasi, NO kontakt (23–24): M0 va COM orasiga (tayyor)2/2",
+     "STOP tugmasi, NC kontakt (11–12): M2 va COM orasiga0/2"
+    ]
+   }
+  },
+  {
+   "step": "sim vfd.pb — res.2",
+   "msgs": [
+    [
+     "PB: tormoz rezistori (-). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 9 / 13 ulanish tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 9 / 13 ulanish tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "9"
+    },
+    "steps": [
+     "done|Manba L1 → o'zgartirgich R klemmasi (tayyor)",
+     "done|Manba L2 → o'zgartirgich S klemmasi (tayyor)",
+     "done|Manba L3 → o'zgartirgich T klemmasi (tayyor)",
+     "done|Himoya yerlash: manba E → o'zgartirgich ⊕ va motor korpusi (tayyor)2/2",
+     "done|O'zgartirgich U → motor U1 (tayyor)",
+     "done|O'zgartirgich V → motor V1 (tayyor)",
+     "done|O'zgartirgich W → motor W1 (tayyor)",
+     "done|Tormoz rezistori: P va PB klemmalariga (har biri bir uchiga) (tayyor)2/2",
+     "Potensiometr 3-uchi (CW) → +10 V",
+     "Potensiometr sirpanchisi (2) → AI",
+     "Potensiometr 1-uchi (CCW) → GND",
+     "done|START tugmasi, NO kontakt (23–24): M0 va COM orasiga (tayyor)2/2",
+     "STOP tugmasi, NC kontakt (11–12): M2 va COM orasiga0/2"
+    ]
+   }
+  },
+  {
+   "step": "sim vfd.v10 — pot.3",
+   "msgs": [
+    [
+     "+10 V: potensiometr ta'minoti. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 10 / 13 ulanish tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 10 / 13 ulanish tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "10"
+    },
+    "steps": [
+     "done|Manba L1 → o'zgartirgich R klemmasi (tayyor)",
+     "done|Manba L2 → o'zgartirgich S klemmasi (tayyor)",
+     "done|Manba L3 → o'zgartirgich T klemmasi (tayyor)",
+     "done|Himoya yerlash: manba E → o'zgartirgich ⊕ va motor korpusi (tayyor)2/2",
+     "done|O'zgartirgich U → motor U1 (tayyor)",
+     "done|O'zgartirgich V → motor V1 (tayyor)",
+     "done|O'zgartirgich W → motor W1 (tayyor)",
+     "done|Tormoz rezistori: P va PB klemmalariga (har biri bir uchiga) (tayyor)2/2",
+     "done|Potensiometr 3-uchi (CW) → +10 V (tayyor)",
+     "Potensiometr sirpanchisi (2) → AI",
+     "Potensiometr 1-uchi (CCW) → GND",
+     "done|START tugmasi, NO kontakt (23–24): M0 va COM orasiga (tayyor)2/2",
+     "STOP tugmasi, NC kontakt (11–12): M2 va COM orasiga0/2"
+    ]
+   }
+  },
+  {
+   "step": "sim vfd.ai — pot.2",
+   "msgs": [
+    [
+     "AI: analog kirish (chastota zadatchigi). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 11 / 13 ulanish tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 11 / 13 ulanish tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "11"
+    },
+    "steps": [
+     "done|Manba L1 → o'zgartirgich R klemmasi (tayyor)",
+     "done|Manba L2 → o'zgartirgich S klemmasi (tayyor)",
+     "done|Manba L3 → o'zgartirgich T klemmasi (tayyor)",
+     "done|Himoya yerlash: manba E → o'zgartirgich ⊕ va motor korpusi (tayyor)2/2",
+     "done|O'zgartirgich U → motor U1 (tayyor)",
+     "done|O'zgartirgich V → motor V1 (tayyor)",
+     "done|O'zgartirgich W → motor W1 (tayyor)",
+     "done|Tormoz rezistori: P va PB klemmalariga (har biri bir uchiga) (tayyor)2/2",
+     "done|Potensiometr 3-uchi (CW) → +10 V (tayyor)",
+     "done|Potensiometr sirpanchisi (2) → AI (tayyor)",
+     "Potensiometr 1-uchi (CCW) → GND",
+     "done|START tugmasi, NO kontakt (23–24): M0 va COM orasiga (tayyor)2/2",
+     "STOP tugmasi, NC kontakt (11–12): M2 va COM orasiga0/2"
+    ]
+   }
+  },
+  {
+   "step": "sim vfd.gnd — pot.1",
+   "msgs": [
+    [
+     "GND: analog kirish umumiy nuqtasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 12 / 13 ulanish tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 12 / 13 ulanish tayyor.",
+     "c": "ok"
+    },
+    "pdone": {
+     "t": "12"
+    },
+    "steps": [
+     "done|Manba L1 → o'zgartirgich R klemmasi (tayyor)",
+     "done|Manba L2 → o'zgartirgich S klemmasi (tayyor)",
+     "done|Manba L3 → o'zgartirgich T klemmasi (tayyor)",
+     "done|Himoya yerlash: manba E → o'zgartirgich ⊕ va motor korpusi (tayyor)2/2",
+     "done|O'zgartirgich U → motor U1 (tayyor)",
+     "done|O'zgartirgich V → motor V1 (tayyor)",
+     "done|O'zgartirgich W → motor W1 (tayyor)",
+     "done|Tormoz rezistori: P va PB klemmalariga (har biri bir uchiga) (tayyor)2/2",
+     "done|Potensiometr 3-uchi (CW) → +10 V (tayyor)",
+     "done|Potensiometr sirpanchisi (2) → AI (tayyor)",
+     "done|Potensiometr 1-uchi (CCW) → GND (tayyor)",
+     "done|START tugmasi, NO kontakt (23–24): M0 va COM orasiga (tayyor)2/2",
+     "STOP tugmasi, NC kontakt (11–12): M2 va COM orasiga0/2"
+    ]
+   }
+  },
+  {
+   "step": "sim vfd.m0 — bs.23",
+   "msgs": [
+    [
+     "M0 (FWD): oldinga yurgizish kirishi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Bu ikki klemma allaqachon ulangan.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Bu ikki klemma allaqachon ulangan."
+    }
+   }
+  },
+  {
+   "step": "sim vfd.com — bs.24",
+   "msgs": [
+    [
+     "COM: boshqaruv kirishlarining umumiy nuqtasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 12 / 13 ulanish tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "To'g'ri ulandi. 12 / 13 ulanish tayyor.",
+     "c": "ok"
+    }
+   }
+  },
+  {
+   "step": "sim vfd.m2 — bt.11",
+   "msgs": [
+    [
+     "M2 (STOP): to'xtatish kirishi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "To'g'ri ulandi. 12 / 13 ulanish tayyor.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "steps": [
+     "done|Manba L1 → o'zgartirgich R klemmasi (tayyor)",
+     "done|Manba L2 → o'zgartirgich S klemmasi (tayyor)",
+     "done|Manba L3 → o'zgartirgich T klemmasi (tayyor)",
+     "done|Himoya yerlash: manba E → o'zgartirgich ⊕ va motor korpusi (tayyor)2/2",
+     "done|O'zgartirgich U → motor U1 (tayyor)",
+     "done|O'zgartirgich V → motor V1 (tayyor)",
+     "done|O'zgartirgich W → motor W1 (tayyor)",
+     "done|Tormoz rezistori: P va PB klemmalariga (har biri bir uchiga) (tayyor)2/2",
+     "done|Potensiometr 3-uchi (CW) → +10 V (tayyor)",
+     "done|Potensiometr sirpanchisi (2) → AI (tayyor)",
+     "done|Potensiometr 1-uchi (CCW) → GND (tayyor)",
+     "done|START tugmasi, NO kontakt (23–24): M0 va COM orasiga (tayyor)2/2",
+     "part|STOP tugmasi, NC kontakt (11–12): M2 va COM orasiga1/2"
+    ]
+   }
+  },
+  {
+   "step": "sim vfd.com — bt.12",
+   "msgs": [
+    [
+     "COM: boshqaruv kirishlarining umumiy nuqtasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sxema to'g'ri yig'ildi. Kuchlanish berib ko'ring.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sxema to'g'ri yig'ildi. Kuchlanish berib ko'ring.",
+     "c": "ok"
+    },
+    "power": {
+     "t": "Kuchlanish berish",
+     "c": "btn pri"
+    },
+    "pdone": {
+     "t": "13"
+    },
+    "hint": {
+     "t": "Maslahat",
+     "d": 1,
+     "c": "btn"
+    },
+    "steps": [
+     "done|Manba L1 → o'zgartirgich R klemmasi (tayyor)",
+     "done|Manba L2 → o'zgartirgich S klemmasi (tayyor)",
+     "done|Manba L3 → o'zgartirgich T klemmasi (tayyor)",
+     "done|Himoya yerlash: manba E → o'zgartirgich ⊕ va motor korpusi (tayyor)2/2",
+     "done|O'zgartirgich U → motor U1 (tayyor)",
+     "done|O'zgartirgich V → motor V1 (tayyor)",
+     "done|O'zgartirgich W → motor W1 (tayyor)",
+     "done|Tormoz rezistori: P va PB klemmalariga (har biri bir uchiga) (tayyor)2/2",
+     "done|Potensiometr 3-uchi (CW) → +10 V (tayyor)",
+     "done|Potensiometr sirpanchisi (2) → AI (tayyor)",
+     "done|Potensiometr 1-uchi (CCW) → GND (tayyor)",
+     "done|START tugmasi, NO kontakt (23–24): M0 va COM orasiga (tayyor)2/2",
+     "done|STOP tugmasi, NC kontakt (11–12): M2 va COM orasiga (tayyor)2/2"
+    ]
+   }
+  },
+  {
+   "step": "tugma #power",
+   "msgs": [
+    [
+     "Kuchlanish berildi: o'zgartirgich ekrani yondi. Hozir u tayyor holatda. START tugmasini bosing.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Kuchlanish berildi: o'zgartirgich ekrani yondi. Hozir u tayyor holatda. START tugmasini bosing.",
+     "c": "ok"
+    },
+    "power": {
+     "t": "O'chirish",
+     "c": "btn pri"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "d": 1,
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "d": 1,
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "h": 1,
+     "d": 1,
+     "c": "btn"
+    },
+    "ctl": {},
+    "r-state": {
+     "t": "tayyor"
+    },
+    "b-start": {
+     "t": "START",
+     "c": "big go"
+    },
+    "b-stop": {
+     "t": "STOP",
+     "c": "big stp"
+    },
+    "f-ol": {
+     "t": "Motor ortiqcha yuki",
+     "c": "btn"
+    },
+    "f-pl": {
+     "t": "Kirish fazasi uzildi",
+     "c": "btn"
+    },
+    "f-oc": {
+     "t": "Chiqishda qisqa tutashuv",
+     "c": "btn"
+    }
+   }
+  },
+  {
+   "step": "bosish mot.u",
+   "msgs": [
+    [
+     "Kuchlanish ostida sxemani o'zgartirib bo'lmaydi. Avval o'chiring.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Kuchlanish ostida sxemani o'zgartirib bo'lmaydi. Avval o'chiring.",
+     "c": "bad"
+    }
+   }
+  },
+  {
+   "step": "tugma #f-ol",
+   "msgs": [
+    [
+     "Ortiqcha yuk motor aylanayotganda sinaladi. Avval START bilan motorni yurgizing.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Ortiqcha yuk motor aylanayotganda sinaladi. Avval START bilan motorni yurgizing."
+    }
+   }
+  },
+  {
+   "step": "bosib turish #b-start",
+   "msgs": [
+    [
+     "START: M0 va COM qisqa vaqt tutashdi, o'zgartirgich buyruqni eslab qoldi va motorni tezlatyapti.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "START: M0 va COM qisqa vaqt tutashdi, o'zgartirgich buyruqni eslab qoldi va motorni tezlatyapti.",
+     "c": "ok"
+    },
+    "r-state": {
+     "t": "tezlanish"
+    },
+    "b-start": {
+     "t": "START",
+     "c": "big go on"
+    }
+   }
+  },
+  {
+   "step": "qo'yib yuborish #b-start",
+   "msgs": [],
+   "state": {
+    "r-state": {
+     "t": "ishlayapti"
+    },
+    "b-start": {
+     "t": "START",
+     "c": "big go"
+    }
+   }
+  },
+  {
+   "step": "bosib turish #b-stop",
+   "msgs": [
+    [
+     "STOP: M2 va COM orasi uzildi, o'zgartirgich chastotani pasaytirib motorni to'xtatyapti.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "STOP: M2 va COM orasi uzildi, o'zgartirgich chastotani pasaytirib motorni to'xtatyapti.",
+     "c": "ok"
+    },
+    "r-state": {
+     "t": "to'xtayapti"
+    },
+    "b-stop": {
+     "t": "STOP",
+     "c": "big stp on"
+    }
+   }
+  },
+  {
+   "step": "qo'yib yuborish #b-stop",
+   "msgs": [
+    [
+     "STOP qo'yib yuborildi. Qayta yurgizish uchun START ni bosing.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "STOP qo'yib yuborildi. Qayta yurgizish uchun START ni bosing."
+    },
+    "r-state": {
+     "t": "tayyor"
+    },
+    "b-stop": {
+     "t": "STOP",
+     "c": "big stp"
+    }
+   }
+  },
+  {
+   "step": "bosib turish #b-start",
+   "msgs": [
+    [
+     "START: M0 va COM qisqa vaqt tutashdi, o'zgartirgich buyruqni eslab qoldi va motorni tezlatyapti.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "START: M0 va COM qisqa vaqt tutashdi, o'zgartirgich buyruqni eslab qoldi va motorni tezlatyapti.",
+     "c": "ok"
+    },
+    "r-state": {
+     "t": "tezlanish"
+    },
+    "b-start": {
+     "t": "START",
+     "c": "big go on"
+    }
+   }
+  },
+  {
+   "step": "qo'yib yuborish #b-start",
+   "msgs": [],
+   "state": {
+    "r-state": {
+     "t": "ishlayapti"
+    },
+    "b-start": {
+     "t": "START",
+     "c": "big go"
+    }
+   }
+  },
+  {
+   "step": "tugma #f-ol",
+   "msgs": [
+    [
+     "E.OL: motor toki nominaldan oshdi, o'zgartirgichning issiqlik himoyasi chiqishni uzdi. Motor inersiya bilan to'xtayapti.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "E.OL: motor toki nominaldan oshdi, o'zgartirgichning issiqlik himoyasi chiqishni uzdi. Motor inersiya bilan to'xtayapti.",
+     "c": "bad"
+    },
+    "r-state": {
+     "t": "E.OL",
+     "c": "bad"
+    },
+    "f-ol": {
+     "t": "Motor ortiqcha yuki",
+     "d": 1,
+     "c": "btn"
+    },
+    "f-pl": {
+     "t": "Kirish fazasi uzildi",
+     "d": 1,
+     "c": "btn"
+    },
+    "f-oc": {
+     "t": "Chiqishda qisqa tutashuv",
+     "d": 1,
+     "c": "btn"
+    },
+    "f-reset": {
+     "t": "Xatoni tiklash (RESET)",
+     "c": "btn pri"
+    },
+    "fnote": {
+     "t": "Xato sababini bartaraf etib «Xatoni tiklash» ni bosing, so'ng START bilan qayta yurgizing.",
+     "c": "fnote"
+    }
+   }
+  },
+  {
+   "step": "tugma #f-reset",
+   "msgs": [
+    [
+     "Xato tiklandi. O'zgartirgich tayyor: START bilan qayta yurgizing.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Xato tiklandi. O'zgartirgich tayyor: START bilan qayta yurgizing.",
+     "c": "ok"
+    },
+    "r-state": {
+     "t": "tayyor"
+    },
+    "f-ol": {
+     "t": "Motor ortiqcha yuki",
+     "c": "btn"
+    },
+    "f-pl": {
+     "t": "Kirish fazasi uzildi",
+     "c": "btn"
+    },
+    "f-oc": {
+     "t": "Chiqishda qisqa tutashuv",
+     "c": "btn"
+    },
+    "f-reset": {
+     "t": "Xatoni tiklash (RESET)",
+     "d": 1,
+     "c": "btn pri"
+    },
+    "fnote": {
+     "c": "fnote"
+    }
+   }
+  },
+  {
+   "step": "tugma #f-oc",
+   "msgs": [
+    [
+     "Chiqishdagi qisqa tutashuv motor yurib turganda yaqqol ko'rinadi. Avval START bosing.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Chiqishdagi qisqa tutashuv motor yurib turganda yaqqol ko'rinadi. Avval START bosing."
+    }
+   }
+  },
+  {
+   "step": "bosib turish #b-start",
+   "msgs": [
+    [
+     "START: M0 va COM qisqa vaqt tutashdi, o'zgartirgich buyruqni eslab qoldi va motorni tezlatyapti.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "START: M0 va COM qisqa vaqt tutashdi, o'zgartirgich buyruqni eslab qoldi va motorni tezlatyapti.",
+     "c": "ok"
+    },
+    "r-state": {
+     "t": "tezlanish"
+    },
+    "b-start": {
+     "t": "START",
+     "c": "big go on"
+    }
+   }
+  },
+  {
+   "step": "qo'yib yuborish #b-start",
+   "msgs": [],
+   "state": {
+    "r-state": {
+     "t": "ishlayapti"
+    },
+    "b-start": {
+     "t": "START",
+     "c": "big go"
+    }
+   }
+  },
+  {
+   "step": "tugma #f-oc",
+   "msgs": [
+    [
+     "E.OC: chiqishda qisqa tutashuv, tok keskin oshdi. Tranzistorlarni himoya qiluvchi sxema mikrosekundlarda chiqishni uzdi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "E.OC: chiqishda qisqa tutashuv, tok keskin oshdi. Tranzistorlarni himoya qiluvchi sxema mikrosekundlarda chiqishni uzdi.",
+     "c": "bad"
+    },
+    "r-state": {
+     "t": "E.OC",
+     "c": "bad"
+    },
+    "f-ol": {
+     "t": "Motor ortiqcha yuki",
+     "d": 1,
+     "c": "btn"
+    },
+    "f-pl": {
+     "t": "Kirish fazasi uzildi",
+     "d": 1,
+     "c": "btn"
+    },
+    "f-oc": {
+     "t": "Chiqishda qisqa tutashuv",
+     "d": 1,
+     "c": "btn"
+    },
+    "f-reset": {
+     "t": "Xatoni tiklash (RESET)",
+     "c": "btn pri"
+    },
+    "fnote": {
+     "t": "Xato sababini bartaraf etib «Xatoni tiklash» ni bosing, so'ng START bilan qayta yurgizing.",
+     "c": "fnote"
+    }
+   }
+  },
+  {
+   "step": "bosib turish #b-start",
+   "msgs": [
+    [
+     "O'zgartirgichda xato (E.OC). Avval «Xatoni tiklash» ni bosing.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "O'zgartirgichda xato (E.OC). Avval «Xatoni tiklash» ni bosing.",
+     "c": "bad"
+    },
+    "b-start": {
+     "t": "START",
+     "c": "big go on"
+    }
+   }
+  },
+  {
+   "step": "qo'yib yuborish #b-start",
+   "msgs": [],
+   "state": {
+    "b-start": {
+     "t": "START",
+     "c": "big go"
+    }
+   }
+  },
+  {
+   "step": "tugma #f-reset",
+   "msgs": [
+    [
+     "Xato tiklandi. O'zgartirgich tayyor: START bilan qayta yurgizing.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Xato tiklandi. O'zgartirgich tayyor: START bilan qayta yurgizing.",
+     "c": "ok"
+    },
+    "r-state": {
+     "t": "tayyor"
+    },
+    "f-ol": {
+     "t": "Motor ortiqcha yuki",
+     "c": "btn"
+    },
+    "f-pl": {
+     "t": "Kirish fazasi uzildi",
+     "c": "btn"
+    },
+    "f-oc": {
+     "t": "Chiqishda qisqa tutashuv",
+     "c": "btn"
+    },
+    "f-reset": {
+     "t": "Xatoni tiklash (RESET)",
+     "d": 1,
+     "c": "btn pri"
+    },
+    "fnote": {
+     "c": "fnote"
+    }
+   }
+  },
+  {
+   "step": "tugma #f-pl",
+   "msgs": [
+    [
+     "E.PL: L3 fazasi uzildi. O'zgartirgich kirish fazasi yo'qligini aniqlab chiqishni uzdi. Himoyasiz bo'lsa kondensatorlar va ko'prik haddan tashqari yuklanardi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "E.PL: L3 fazasi uzildi. O'zgartirgich kirish fazasi yo'qligini aniqlab chiqishni uzdi. Himoyasiz bo'lsa kondensatorlar va ko'prik haddan tashqari yuklanardi.",
+     "c": "bad"
+    },
+    "r-state": {
+     "t": "E.PL",
+     "c": "bad"
+    },
+    "f-ol": {
+     "t": "Motor ortiqcha yuki",
+     "d": 1,
+     "c": "btn"
+    },
+    "f-pl": {
+     "t": "Kirish fazasi uzildi",
+     "d": 1,
+     "c": "btn"
+    },
+    "f-oc": {
+     "t": "Chiqishda qisqa tutashuv",
+     "d": 1,
+     "c": "btn"
+    },
+    "f-reset": {
+     "t": "Xatoni tiklash (RESET)",
+     "c": "btn pri"
+    },
+    "fnote": {
+     "t": "Xato sababini bartaraf etib «Xatoni tiklash» ni bosing, so'ng START bilan qayta yurgizing.",
+     "c": "fnote"
+    }
+   }
+  },
+  {
+   "step": "tugma #f-reset",
+   "msgs": [
+    [
+     "Xato tiklandi. O'zgartirgich tayyor: START bilan qayta yurgizing.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Xato tiklandi. O'zgartirgich tayyor: START bilan qayta yurgizing.",
+     "c": "ok"
+    },
+    "r-state": {
+     "t": "tayyor"
+    },
+    "f-ol": {
+     "t": "Motor ortiqcha yuki",
+     "c": "btn"
+    },
+    "f-pl": {
+     "t": "Kirish fazasi uzildi",
+     "c": "btn"
+    },
+    "f-oc": {
+     "t": "Chiqishda qisqa tutashuv",
+     "c": "btn"
+    },
+    "f-reset": {
+     "t": "Xatoni tiklash (RESET)",
+     "d": 1,
+     "c": "btn pri"
+    },
+    "fnote": {
+     "c": "fnote"
+    }
+   }
+  },
+  {
+   "step": "surgich #pot = 0",
+   "msgs": [],
+   "state": {
+    "potv": {
+     "t": "0.0 Hz"
+    },
+    "pot": {
+     "t": "0"
+    }
+   }
+  },
+  {
+   "step": "bosib turish #b-start",
+   "msgs": [
+    [
+     "START: M0 va COM tutashdi, lekin zadatchik nolda. Potensiometr dastasini buring.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "START: M0 va COM tutashdi, lekin zadatchik nolda. Potensiometr dastasini buring."
+    },
+    "r-state": {
+     "t": "ishlayapti"
+    },
+    "b-start": {
+     "t": "START",
+     "c": "big go on"
+    }
+   }
+  },
+  {
+   "step": "qo'yib yuborish #b-start",
+   "msgs": [],
+   "state": {
+    "b-start": {
+     "t": "START",
+     "c": "big go"
+    }
+   }
+  },
+  {
+   "step": "bosib turish #b-stop",
+   "msgs": [
+    [
+     "STOP: M2 va COM orasi uzildi, o'zgartirgich chastotani pasaytirib motorni to'xtatyapti.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "STOP: M2 va COM orasi uzildi, o'zgartirgich chastotani pasaytirib motorni to'xtatyapti.",
+     "c": "ok"
+    },
+    "r-state": {
+     "t": "tayyor"
+    },
+    "b-stop": {
+     "t": "STOP",
+     "c": "big stp on"
+    }
+   }
+  },
+  {
+   "step": "qo'yib yuborish #b-stop",
+   "msgs": [
+    [
+     "STOP qo'yib yuborildi. Qayta yurgizish uchun START ni bosing.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "STOP qo'yib yuborildi. Qayta yurgizish uchun START ni bosing."
+    },
+    "b-stop": {
+     "t": "STOP",
+     "c": "big stp"
+    }
+   }
+  },
+  {
+   "step": "surgich #pot = 100",
+   "msgs": [],
+   "state": {
+    "potv": {
+     "t": "50.0 Hz"
+    },
+    "pot": {
+     "t": "100"
+    }
+   }
+  },
+  {
+   "step": "tugma #power",
+   "msgs": [
+    [
+     "Kuchlanish o'chirildi. Sxemani o'zgartirishingiz mumkin.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Kuchlanish o'chirildi. Sxemani o'zgartirishingiz mumkin."
+    },
+    "power": {
+     "t": "Kuchlanish berish",
+     "c": "btn pri"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "h": 1,
+     "c": "btn"
+    },
+    "ctl": {
+     "h": 1
+    },
+    "r-state": {
+     "t": "-"
+    },
+    "b-start": {
+     "t": "START",
+     "d": 1,
+     "c": "big go"
+    },
+    "b-stop": {
+     "t": "STOP",
+     "d": 1,
+     "c": "big stp"
+    },
+    "f-ol": {
+     "t": "Motor ortiqcha yuki",
+     "d": 1,
+     "c": "btn"
+    },
+    "f-pl": {
+     "t": "Kirish fazasi uzildi",
+     "d": 1,
+     "c": "btn"
+    },
+    "f-oc": {
+     "t": "Chiqishda qisqa tutashuv",
+     "d": 1,
+     "c": "btn"
+    }
+   }
+  }
+ ],
+ "exam": [
+  {
+   "step": "ochilish",
+   "msgs": [],
+   "state": {
+    "status2": {
+     "t": "Namuna: manba L1 o'zgartirgichning R klemmasiga ulangan. Endi L2 ni S ga, L3 ni T ga ulang."
+    },
+    "power": {
+     "t": "Kuchlanish berish",
+     "d": 1,
+     "c": "btn pri"
+    },
+    "prog": {},
+    "pdone": {
+     "t": "1"
+    },
+    "exam": {
+     "h": 1
+    },
+    "wcount": {
+     "t": "0"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "c": "btn"
+    },
+    "hint": {
+     "t": "Maslahat",
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "h": 1,
+     "c": "btn"
+    },
+    "m-learn": {
+     "t": "O'rganish",
+     "p": "true"
+    },
+    "m-exam": {
+     "t": "Imtihon",
+     "p": "false"
+    },
+    "ctl": {
+     "h": 1
+    },
+    "potv": {
+     "t": "36.0 Hz"
+    },
+    "pot": {
+     "t": "72"
+    },
+    "r-state": {
+     "t": "-"
+    },
+    "b-start": {
+     "t": "START",
+     "d": 1,
+     "c": "big go"
+    },
+    "b-stop": {
+     "t": "STOP",
+     "d": 1,
+     "c": "big stp"
+    },
+    "f-ol": {
+     "t": "Motor ortiqcha yuki",
+     "d": 1,
+     "c": "btn"
+    },
+    "f-pl": {
+     "t": "Kirish fazasi uzildi",
+     "d": 1,
+     "c": "btn"
+    },
+    "f-oc": {
+     "t": "Chiqishda qisqa tutashuv",
+     "d": 1,
+     "c": "btn"
+    },
+    "f-reset": {
+     "t": "Xatoni tiklash (RESET)",
+     "d": 1,
+     "c": "btn pri"
+    },
+    "fnote": {
+     "c": "fnote"
+    },
+    "steps": [
+     "done|Manba L1 → o'zgartirgich R klemmasi (tayyor)",
+     "Manba L2 → o'zgartirgich S klemmasi",
+     "Manba L3 → o'zgartirgich T klemmasi",
+     "Himoya yerlash: manba E → o'zgartirgich ⊕ va motor korpusi0/2",
+     "O'zgartirgich U → motor U1",
+     "O'zgartirgich V → motor V1",
+     "O'zgartirgich W → motor W1",
+     "Tormoz rezistori: P va PB klemmalariga (har biri bir uchiga)0/2",
+     "Potensiometr 3-uchi (CW) → +10 V",
+     "Potensiometr sirpanchisi (2) → AI",
+     "Potensiometr 1-uchi (CCW) → GND",
+     "START tugmasi, NO kontakt (23–24): M0 va COM orasiga0/2",
+     "STOP tugmasi, NC kontakt (11–12): M2 va COM orasiga0/2"
+    ],
+    "report": []
+   }
+  },
+  {
+   "step": "tugma #m-exam",
+   "msgs": [
+    [
+     "Imtihon rejimi: xohlagan simni ulang, tayyor bo'lgach Tekshirish ni bosing.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Imtihon rejimi: xohlagan simni ulang, tayyor bo'lgach Tekshirish ni bosing."
+    },
+    "prog": {
+     "h": 1
+    },
+    "exam": {},
+    "undo": {
+     "t": "Orqaga",
+     "d": 1,
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "d": 1,
+     "c": "btn"
+    },
+    "hint": {
+     "t": "Maslahat",
+     "h": 1,
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "d": 1,
+     "c": "btn"
+    },
+    "m-learn": {
+     "t": "O'rganish",
+     "p": "false"
+    },
+    "m-exam": {
+     "t": "Imtihon",
+     "p": "true"
+    }
+   }
+  },
+  {
+   "step": "sim src.l1 — vfd.s",
+   "msgs": [
+    [
+     "Manba L1 (380 V, A fazasi) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 1 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 1 ta."
+    },
+    "wcount": {
+     "t": "1"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "c": "btn"
+    }
+   }
+  },
+  {
+   "step": "sim src.l2 — vfd.r",
+   "msgs": [
+    [
+     "Manba L2 (380 V, B fazasi) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 2 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 2 ta."
+    },
+    "wcount": {
+     "t": "2"
+    }
+   }
+  },
+  {
+   "step": "sim vfd.u — mot.u",
+   "msgs": [
+    [
+     "U: motor chiqishi (U). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 3 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 3 ta."
+    },
+    "wcount": {
+     "t": "3"
+    }
+   }
+  },
+  {
+   "step": "sim bs.11 — vfd.m0",
+   "msgs": [
+    [
+     "START tugmasi, NC kontakt bloki, 11-qisqich. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 4 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 4 ta."
+    },
+    "wcount": {
+     "t": "4"
+    }
+   }
+  },
+  {
+   "step": "tugma #check",
+   "msgs": [
+    [
+     "Tekshiruv: 4 ta muammo topildi.",
+     "bad"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Tekshiruv: 4 ta muammo topildi.",
+     "c": "bad"
+    },
+    "report": [
+     "Xato sim: Manba L1 (380 V, A fazasi) rozetkasi va S: tarmoq kirishi (L2). Kirishda fazalar tartibi elektr jihatdan ahamiyatsiz, lekin bu mashqda standart tartib: L1→R, L2→S, L3→T.",
+     "Xato sim: Manba L2 (380 V, B fazasi) rozetkasi va R: tarmoq kirishi (L1). Kirishda fazalar tartibi elektr jihatdan ahamiyatsiz, lekin bu mashqda standart tartib: L1→R, L2→S, L3→T.",
+     "Xato sim: M0 (FWD): oldinga yurgizish kirishi va START tugmasi, NC kontakt bloki, 11-qisqich. START tugmasining NC (11–12) kontakti normal holatda yopiq: M0 doim ulangan bo'lib o'zgartirgich o'zi yurib ketadi. START uchun NO (23–24) kontakt ishlatiladi.",
+     "Yana 12 ta ulanish to'liq emas."
+    ]
+   }
+  },
+  {
+   "step": "tugma #clear",
+   "msgs": [
+    [
+     "Sxema tozalandi. Manba simlaridan boshlang.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sxema tozalandi. Manba simlaridan boshlang."
+    },
+    "wcount": {
+     "t": "0"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "d": 1,
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "d": 1,
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "d": 1,
+     "c": "btn"
+    },
+    "report": []
+   }
+  },
+  {
+   "step": "sim src.l1 — vfd.r",
+   "msgs": [
+    [
+     "Manba L1 (380 V, A fazasi) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 1 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 1 ta."
+    },
+    "wcount": {
+     "t": "1"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "c": "btn"
+    }
+   }
+  },
+  {
+   "step": "sim src.l2 — vfd.s",
+   "msgs": [
+    [
+     "Manba L2 (380 V, B fazasi) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 2 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 2 ta."
+    },
+    "wcount": {
+     "t": "2"
+    }
+   }
+  },
+  {
+   "step": "sim src.l3 — vfd.t",
+   "msgs": [
+    [
+     "Manba L3 (380 V, C fazasi) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 3 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 3 ta."
+    },
+    "wcount": {
+     "t": "3"
+    }
+   }
+  },
+  {
+   "step": "sim src.e — vfd.pe",
+   "msgs": [
+    [
+     "Manba PE (E, himoya yerlash) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 4 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 4 ta."
+    },
+    "wcount": {
+     "t": "4"
+    }
+   }
+  },
+  {
+   "step": "sim src.e — mot.pe",
+   "msgs": [
+    [
+     "Manba PE (E, himoya yerlash) rozetkasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 5 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 5 ta."
+    },
+    "wcount": {
+     "t": "5"
+    }
+   }
+  },
+  {
+   "step": "sim vfd.u — mot.u",
+   "msgs": [
+    [
+     "U: motor chiqishi (U). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 6 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 6 ta."
+    },
+    "wcount": {
+     "t": "6"
+    }
+   }
+  },
+  {
+   "step": "sim vfd.v — mot.v",
+   "msgs": [
+    [
+     "V: motor chiqishi (V). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 7 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 7 ta."
+    },
+    "wcount": {
+     "t": "7"
+    }
+   }
+  },
+  {
+   "step": "sim vfd.w — mot.w",
+   "msgs": [
+    [
+     "W: motor chiqishi (W). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 8 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 8 ta."
+    },
+    "wcount": {
+     "t": "8"
+    }
+   }
+  },
+  {
+   "step": "sim vfd.p — res.1",
+   "msgs": [
+    [
+     "P: tormoz rezistori (+). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 9 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 9 ta."
+    },
+    "wcount": {
+     "t": "9"
+    }
+   }
+  },
+  {
+   "step": "sim vfd.pb — res.2",
+   "msgs": [
+    [
+     "PB: tormoz rezistori (-). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 10 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 10 ta."
+    },
+    "wcount": {
+     "t": "10"
+    }
+   }
+  },
+  {
+   "step": "sim vfd.v10 — pot.3",
+   "msgs": [
+    [
+     "+10 V: potensiometr ta'minoti. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 11 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 11 ta."
+    },
+    "wcount": {
+     "t": "11"
+    }
+   }
+  },
+  {
+   "step": "sim vfd.ai — pot.2",
+   "msgs": [
+    [
+     "AI: analog kirish (chastota zadatchigi). Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 12 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 12 ta."
+    },
+    "wcount": {
+     "t": "12"
+    }
+   }
+  },
+  {
+   "step": "sim vfd.gnd — pot.1",
+   "msgs": [
+    [
+     "GND: analog kirish umumiy nuqtasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 13 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 13 ta."
+    },
+    "wcount": {
+     "t": "13"
+    }
+   }
+  },
+  {
+   "step": "sim vfd.m0 — bs.23",
+   "msgs": [
+    [
+     "M0 (FWD): oldinga yurgizish kirishi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 14 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 14 ta."
+    },
+    "wcount": {
+     "t": "14"
+    }
+   }
+  },
+  {
+   "step": "sim vfd.com — bs.24",
+   "msgs": [
+    [
+     "COM: boshqaruv kirishlarining umumiy nuqtasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 15 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 15 ta."
+    },
+    "wcount": {
+     "t": "15"
+    }
+   }
+  },
+  {
+   "step": "sim vfd.m2 — bt.11",
+   "msgs": [
+    [
+     "M2 (STOP): to'xtatish kirishi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 16 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 16 ta."
+    },
+    "wcount": {
+     "t": "16"
+    }
+   }
+  },
+  {
+   "step": "sim vfd.com — bt.12",
+   "msgs": [
+    [
+     "COM: boshqaruv kirishlarining umumiy nuqtasi. Boshqa klemmaga sudrang yoki ikkinchisini bosing.",
+     ""
+    ],
+    [
+     "Sim ulandi. Jami 17 ta.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sim ulandi. Jami 17 ta."
+    },
+    "wcount": {
+     "t": "17"
+    },
+    "hint": {
+     "t": "Maslahat",
+     "h": 1,
+     "d": 1,
+     "c": "btn"
+    }
+   }
+  },
+  {
+   "step": "tugma #check",
+   "msgs": [
+    [
+     "Sxema to'g'ri va to'liq. Kuchlanish berishingiz mumkin.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Sxema to'g'ri va to'liq. Kuchlanish berishingiz mumkin.",
+     "c": "ok"
+    },
+    "power": {
+     "t": "Kuchlanish berish",
+     "c": "btn pri"
+    }
+   }
+  },
+  {
+   "step": "tugma #power",
+   "msgs": [
+    [
+     "Kuchlanish berildi: o'zgartirgich ekrani yondi. Hozir u tayyor holatda. START tugmasini bosing.",
+     "ok"
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Kuchlanish berildi: o'zgartirgich ekrani yondi. Hozir u tayyor holatda. START tugmasini bosing.",
+     "c": "ok"
+    },
+    "power": {
+     "t": "O'chirish",
+     "c": "btn pri"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "d": 1,
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "d": 1,
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "d": 1,
+     "c": "btn"
+    },
+    "ctl": {},
+    "r-state": {
+     "t": "tayyor"
+    },
+    "b-start": {
+     "t": "START",
+     "c": "big go"
+    },
+    "b-stop": {
+     "t": "STOP",
+     "c": "big stp"
+    },
+    "f-ol": {
+     "t": "Motor ortiqcha yuki",
+     "c": "btn"
+    },
+    "f-pl": {
+     "t": "Kirish fazasi uzildi",
+     "c": "btn"
+    },
+    "f-oc": {
+     "t": "Chiqishda qisqa tutashuv",
+     "c": "btn"
+    }
+   }
+  },
+  {
+   "step": "tugma #power",
+   "msgs": [
+    [
+     "Kuchlanish o'chirildi. Sxemani o'zgartirishingiz mumkin.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "Kuchlanish o'chirildi. Sxemani o'zgartirishingiz mumkin."
+    },
+    "power": {
+     "t": "Kuchlanish berish",
+     "c": "btn pri"
+    },
+    "undo": {
+     "t": "Orqaga",
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "c": "btn"
+    },
+    "ctl": {
+     "h": 1
+    },
+    "r-state": {
+     "t": "-"
+    },
+    "b-start": {
+     "t": "START",
+     "d": 1,
+     "c": "big go"
+    },
+    "b-stop": {
+     "t": "STOP",
+     "d": 1,
+     "c": "big stp"
+    },
+    "f-ol": {
+     "t": "Motor ortiqcha yuki",
+     "d": 1,
+     "c": "btn"
+    },
+    "f-pl": {
+     "t": "Kirish fazasi uzildi",
+     "d": 1,
+     "c": "btn"
+    },
+    "f-oc": {
+     "t": "Chiqishda qisqa tutashuv",
+     "d": 1,
+     "c": "btn"
+    }
+   }
+  },
+  {
+   "step": "tugma #m-learn",
+   "msgs": [
+    [
+     "O'rganish rejimi: noto'g'ri ulanish darhol tushuntiriladi.",
+     ""
+    ]
+   ],
+   "state": {
+    "status2": {
+     "t": "O'rganish rejimi: noto'g'ri ulanish darhol tushuntiriladi."
+    },
+    "power": {
+     "t": "Kuchlanish berish",
+     "d": 1,
+     "c": "btn pri"
+    },
+    "prog": {},
+    "pdone": {
+     "t": "0"
+    },
+    "exam": {
+     "h": 1
+    },
+    "undo": {
+     "t": "Orqaga",
+     "d": 1,
+     "c": "btn"
+    },
+    "clear": {
+     "t": "Tozalash",
+     "d": 1,
+     "c": "btn"
+    },
+    "hint": {
+     "t": "Maslahat",
+     "c": "btn"
+    },
+    "check": {
+     "t": "Tekshirish",
+     "h": 1,
+     "d": 1,
+     "c": "btn"
+    },
+    "m-learn": {
+     "t": "O'rganish",
+     "p": "true"
+    },
+    "m-exam": {
+     "t": "Imtihon",
+     "p": "false"
+    },
+    "steps": [
+     "Manba L1 → o'zgartirgich R klemmasi",
+     "Manba L2 → o'zgartirgich S klemmasi",
+     "Manba L3 → o'zgartirgich T klemmasi",
+     "Himoya yerlash: manba E → o'zgartirgich ⊕ va motor korpusi0/2",
+     "O'zgartirgich U → motor U1",
+     "O'zgartirgich V → motor V1",
+     "O'zgartirgich W → motor W1",
+     "Tormoz rezistori: P va PB klemmalariga (har biri bir uchiga)0/2",
+     "Potensiometr 3-uchi (CW) → +10 V",
+     "Potensiometr sirpanchisi (2) → AI",
+     "Potensiometr 1-uchi (CCW) → GND",
+     "START tugmasi, NO kontakt (23–24): M0 va COM orasiga0/2",
+     "STOP tugmasi, NC kontakt (11–12): M2 va COM orasiga0/2"
+    ]
+   }
+  }
+ ]
+}
