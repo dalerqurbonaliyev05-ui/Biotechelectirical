@@ -1,0 +1,4 @@
+{
+  "_izoh": "Katalogdagi sxemalar ro‘yxati. Har bir id uchun schemes/<id>.json fayli bo‘lishi kerak. Yangi sxema faqat egasi «qo‘sh» deganda qo‘shiladi (CLAUDE.md).",
+  "sxemalar": ["yoritish-01"]
+}

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Laboratoriya mashqi | EnergyVibe</title>
+<meta name="description" content="Elektr sxemalarini 2D va 3D ko‘rinishda yig‘ish, tekshirish va o‘rganish uchun trenajor.">
+<meta name="theme-color" content="#6d4aff">
+<link rel="icon" type="image/png" href="/rasmlar1/rasm5/rasm4.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Manrope:wght@500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/laboratoriya/lab.css">
+<script type="importmap">{"imports": {"three": "/laboratoriya/vendor/three/three.module.min.js", "three/addons/": "/laboratoriya/vendor/three/addons/"}}</script>
+</head>
+<body>
+<a class="skip-link" href="#main">↓</a>
+<header class="navbar">
+  <div class="nav-pill">
+    <a class="nav-logo" href="/" aria-label="EnergyVibe">
+      <svg class="logo-mark" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M13.5 2 5 13.5h5.5L9.5 22 19 9.8h-5.6L13.5 2Z" fill="currentColor"/></svg>
+      <span>ENERGY<b>VIBE</b></span>
+    </a>
+    <nav class="nav-menu" id="nav-menu" aria-label="Menyu">
+      <a href="/" data-i18n="nav.home">Bosh sahifa</a>
+      <a href="/#tools" data-i18n="nav.tools">Vositalar</a>
+      <a href="/#apps" data-i18n="nav.apps">Ilovalar</a>
+      <a href="/laboratoriya/" aria-current="page" data-i18n="nav.lab">Laboratoriya</a>
+    </nav>
+    <div class="nav-right">
+      <div class="lang-switch" role="group" aria-label="Til / Language / Язык">
+        <button type="button" class="lang-btn" data-lang="uz" aria-pressed="true">UZ</button>
+        <button type="button" class="lang-btn" data-lang="ru" aria-pressed="false">RU</button>
+        <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <button type="button" class="hamburger" id="hamburger" data-i18n-aria="nav.menu" aria-label="Menyu" aria-expanded="false" aria-controls="nav-menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="main" class="wrap">
+  <div class="m-head">
+    <div>
+      <a class="m-orqaga" href="/laboratoriya/" data-i18n="mashq.orqaga">← Laboratoriya</a>
+      <h1 id="m-nomi">…</h1>
+      <div class="m-meta" id="m-meta"></div>
+    </div>
+    <div class="seg" id="rejim" role="group" aria-label="2D / 3D">
+      <button type="button" data-rejim="2d" aria-pressed="true" data-i18n="rejim.2d">2D sxema</button>
+      <button type="button" data-rejim="3d" aria-pressed="false" data-i18n="rejim.3d">3D montaj</button>
+    </div>
+  </div>
+
+  <p class="m-task"><b data-i18n="mashq.topshiriq">Topshiriq</b>: <span id="m-topshiriq"></span></p>
+
+  <div class="m-bar" id="m-bar" data-daraja="info" role="status" aria-live="polite">
+    <span class="m-dot"></span>
+    <p id="holat"></p>
+    <div class="m-stats">
+      <div class="stat"><b id="st-ball">100</b><span data-i18n="stat.ball">Ball</span></div>
+      <div class="stat"><b id="st-vaqt">0:00</b><span data-i18n="stat.vaqt">Vaqt</span></div>
+      <div class="stat"><b id="st-xato">0</b><span data-i18n="stat.xato">Xatolar</span></div>
+    </div>
+  </div>
+
+  <div class="m-grid">
+    <div class="m-stage">
+      <div class="stage" id="stage-2d"></div>
+      <div class="stage" id="stage-3d" hidden></div>
+    </div>
+    <aside class="m-side">
+      <section class="panel">
+        <h2 data-i18n="rang.sarlavha">Sim rangi</h2>
+        <div class="ranglar" id="ranglar" role="group"></div>
+      </section>
+      <section class="panel">
+        <h2 data-i18n="panel.boshqaruv">Boshqaruv</h2>
+        <div class="tugmalar">
+          <button type="button" class="btn quvvat" id="b-quvvat" aria-pressed="false">⚡ <span data-i18n="btn.quvvat_ber">Tokni berish</span></button>
+          <button type="button" class="btn pri" id="b-tekshir">✓ <span data-i18n="btn.tekshir">Tekshirish</span></button>
+          <div class="ikki">
+            <button type="button" class="btn" id="b-maslahat">💡 <span data-i18n="btn.maslahat">Maslahat</span></button>
+            <button type="button" class="btn yumshoq" id="b-qayta">↺ <span data-i18n="btn.qayta">Qaytadan boshlash</span></button>
+          </div>
+          <button type="button" class="btn yumshoq" id="b-javob" data-i18n="btn.javob">To‘g‘ri javobni ko‘rsatish</button>
+        </div>
+      </section>
+      <section class="panel" id="p-natija" hidden>
+        <h2 data-i18n="panel.natija">Tekshiruv natijasi</h2>
+        <ul class="natijalar" id="natijalar"></ul>
+      </section>
+      <section class="panel" id="p-maslahat" hidden>
+        <h2 data-i18n="panel.maslahatlar">Maslahatlar</h2>
+        <ol class="maslahatlar" id="maslahatlar"></ol>
+      </section>
+      <section class="panel">
+        <h2 data-i18n="panel.holat">Elementlar holati</h2>
+        <ul class="holat-royxat" id="el-holat"></ul>
+      </section>
+    </aside>
+  </div>
+</main>
+
+<dialog id="dlg-tasdiq">
+  <form method="dialog" class="dlg">
+    <p id="tasdiq-matn"></p>
+    <div class="dlg-tugma">
+      <button class="btn" value="yoq" data-i18n="btn.yoq">Bekor qilish</button>
+      <button class="btn pri" value="ha" data-i18n="btn.ha">Ha, davom etish</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="dlg-natija">
+  <form method="dialog" class="dlg">
+    <h2 data-i18n="natija.sarlavha">Sxema to‘g‘ri yig‘ildi!</h2>
+    <p data-i18n="natija.matn">Lampa kalit bilan yonib-o‘chadi, hech qanday ogohlantirish yo‘q.</p>
+    <div class="natija-ball" id="n-ball">100</div>
+    <div class="natija-jadval" id="n-jadval"></div>
+    <div class="dlg-tugma">
+      <a class="btn" href="/laboratoriya/" data-i18n="btn.katalog">Katalogga qaytish</a>
+      <button class="btn pri" value="ok" data-i18n="btn.yopish">Yopish</button>
+    </div>
+  </form>
+</dialog>
+<script type="module" src="/laboratoriya/mashq.js"></script>
+</body>
+</html>

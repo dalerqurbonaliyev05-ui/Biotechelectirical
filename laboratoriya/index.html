@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Laboratoriya | EnergyVibe</title>
+<meta name="description" content="Elektr sxemalarini 2D va 3D ko‘rinishda yig‘ish, tekshirish va o‘rganish uchun trenajor.">
+<meta name="theme-color" content="#6d4aff">
+<link rel="icon" type="image/png" href="/rasmlar1/rasm5/rasm4.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Manrope:wght@500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/laboratoriya/lab.css">
+</head>
+<body>
+<a class="skip-link" href="#main">↓</a>
+<header class="navbar">
+  <div class="nav-pill">
+    <a class="nav-logo" href="/" aria-label="EnergyVibe">
+      <svg class="logo-mark" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M13.5 2 5 13.5h5.5L9.5 22 19 9.8h-5.6L13.5 2Z" fill="currentColor"/></svg>
+      <span>ENERGY<b>VIBE</b></span>
+    </a>
+    <nav class="nav-menu" id="nav-menu" aria-label="Menyu">
+      <a href="/" data-i18n="nav.home">Bosh sahifa</a>
+      <a href="/#tools" data-i18n="nav.tools">Vositalar</a>
+      <a href="/#apps" data-i18n="nav.apps">Ilovalar</a>
+      <a href="/laboratoriya/" aria-current="page" data-i18n="nav.lab">Laboratoriya</a>
+    </nav>
+    <div class="nav-right">
+      <div class="lang-switch" role="group" aria-label="Til / Language / Язык">
+        <button type="button" class="lang-btn" data-lang="uz" aria-pressed="true">UZ</button>
+        <button type="button" class="lang-btn" data-lang="ru" aria-pressed="false">RU</button>
+        <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <button type="button" class="hamburger" id="hamburger" data-i18n-aria="nav.menu" aria-label="Menyu" aria-expanded="false" aria-controls="nav-menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="main" class="wrap">
+  <section class="k-hero">
+    <p class="eyebrow" data-i18n="lab.eyebrow">Elektr sxemalari trenajori</p>
+    <h1><span data-i18n="lab.title">Laboratoriya</span></h1>
+    <p data-i18n="lab.lead">Elektr sxemalarini 2D va 3D ko‘rinishda o‘zing yig‘, tekshir va o‘rgan</p>
+  </section>
+
+  <section class="filtrlar" aria-label="Filtr">
+    <div class="filtr">
+      <span class="filtr-nom" data-i18n="filtr.yonalish">Yo‘nalish</span>
+      <div class="chips" id="f-yonalish"></div>
+    </div>
+    <div class="filtr">
+      <span class="filtr-nom" data-i18n="filtr.daraja">Daraja</span>
+      <div class="chips" id="f-daraja"></div>
+    </div>
+    <div class="filtr">
+      <span class="filtr-nom" data-i18n="filtr.rejim">Rejim</span>
+      <div class="chips" id="f-rejim"></div>
+    </div>
+  </section>
+
+  <section class="karta-grid" id="kartalar" aria-live="polite">
+    <p class="bosh-holat" data-i18n="katalog.yuklanmoqda">Sxemalar yuklanmoqda…</p>
+  </section>
+</main>
+<script type="module" src="/laboratoriya/katalog.js"></script>
+</body>
+</html>

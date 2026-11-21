@@ -230,11 +230,26 @@
       "destination": "/hgi-2/",
       "permanent": true
     }
+,
+    {
+      "source": "/laboratoriya",
+      "destination": "/laboratoriya/",
+      "permanent": true
+    }
   ],
   "rewrites": [
     {
       "source": "/elektr-uy/admin/:path*",
       "destination": "/elektr-uy/admin/index.html"
+    }
+,
+    {
+      "source": "/laboratoriya/:id([a-z0-9]+(?:-[a-z0-9]+)*)",
+      "destination": "/laboratoriya/mashq.html"
+    },
+    {
+      "source": "/laboratoriya/:id([a-z0-9]+(?:-[a-z0-9]+)*)/",
+      "destination": "/laboratoriya/mashq.html"
     }
   ],
   "headers": [
