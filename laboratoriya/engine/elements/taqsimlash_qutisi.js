@@ -152,8 +152,8 @@ export default {
         rsh.moveTo(0, 0); rsh.lineTo(0.03, 0); rsh.lineTo(0.033, 0.003); rsh.lineTo(0.031, 0.007); rsh.lineTo(0.006, 0.006); rsh.lineTo(0, 0.004); rsh.lineTo(0, 0);
         const rg = new THREE.ExtrudeGeometry(rsh, { depth: 0.014, bevelEnabled: true, bevelThickness: 0.0006, bevelSize: 0.0005, bevelSegments: 1 });
         // shakl x → dunyo z (oldinga), shakl y → dunyo y, cho‘zilish → dunyo x
-        rg.applyMatrix4(new THREE.Matrix4().makeBasis(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1, 0), new THREE.Vector3(1, 0, 0)));
-        rg.translate(x - 0.007, cy + 0.011, 0.016);
+        rg.applyMatrix4(new THREE.Matrix4().makeBasis(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1, 0), new THREE.Vector3(-1, 0, 0)));
+        rg.translate(x + 0.007, cy + 0.011, 0.016);
         g.add(new THREE.Mesh(rg, dastakMat));
         // Sim kirish teshigi (kvadrat) va test teshigi
         const teshik = c.quti(0.0075, 0.0075, 0.0015, teshikMat);

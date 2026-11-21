@@ -44,9 +44,11 @@ export default {
   model3d(c) {
     const { THREE, param } = c;
     const g = new THREE.Group();
-    const W = 0.029; // kenglik (x)
-    const oq = c.mat(0xf3f3ef, { roughness: 0.42 });
-    const qora = c.mat(0x1d2024, { roughness: 0.85 });
+    const W = 0.029; // kenglik (x); masshtab bilan haqiqiy 17,5 mm modulga mos
+    // Termoreaktiv plastik: oq, yarim yaltiroq, ustida yupqa lak qatlami
+    const oq = new THREE.MeshPhysicalMaterial({ color: 0xf3f2ec, roughness: 0.42, clearcoat: 0.35, clearcoatRoughness: 0.45, envMapIntensity: 0.7 });
+    const qora = c.mat(0x15171a, { roughness: 0.9 });
+    const metall = c.mat(0xc4c8ce, { metalness: 0.9, roughness: 0.3 });
 
     // Yon profil (z — chuqurlik, y — balandlik), x bo‘ylab cho‘ziladi
     const pr = new THREE.Shape();
@@ -54,62 +56,105 @@ export default {
       [0.115, 0.037], [0.111, 0.041], [0.088, 0.041], [0.073, 0.05], [0.073, 0.071], [0.068, 0.075], [0, 0.075]];
     pr.moveTo(P[0][0], P[0][1]);
     P.slice(1).forEach(([z, y]) => pr.lineTo(z, y));
-    const geo = new THREE.ExtrudeGeometry(pr, { depth: W - 0.0016, bevelEnabled: true, bevelThickness: 0.0008, bevelSize: 0.0006, bevelSegments: 2 });
-    // shakl x → dunyo z, shakl y → dunyo y, cho‘zilish → dunyo x
-    geo.applyMatrix4(new THREE.Matrix4().makeBasis(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1, 0), new THREE.Vector3(1, 0, 0)));
-    geo.translate(-(W - 0.0016) / 2, 0, 0);
+    const geo = new THREE.ExtrudeGeometry(pr, { depth: W - 0.0016, bevelEnabled: true, bevelThickness: 0.0008, bevelSize: 0.0006, bevelSegments: 3 });
+    // shakl x → dunyo z, shakl y → dunyo y, cho‘zilish → −x (o‘ng qo‘l bazisi)
+    geo.applyMatrix4(new THREE.Matrix4().makeBasis(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1, 0), new THREE.Vector3(-1, 0, 0)));
+    geo.translate((W - 0.0016) / 2, 0, 0);
     g.add(new THREE.Mesh(geo, oq));
 
-    // Old panel markirovkasi
-    const tex = c.tekstura(116, 300, (x, Wp, Hp) => {
-      x.fillStyle = '#f3f3ef'; x.fillRect(0, 0, Wp, Hp);
-      x.fillStyle = '#1b1b1f'; x.textAlign = 'center';
-      x.font = '700 15px Arial, sans-serif'; x.fillText('I-ON', Wp / 2, 26);
-      x.fillStyle = '#2a2d33'; x.fillRect(30, 50, 56, 112);
-      x.fillStyle = '#1b1b1f';
-      x.font = '700 15px Arial, sans-serif'; x.fillText('O-OFF', Wp / 2, 182);
-      x.font = '800 38px Arial, sans-serif'; x.fillText(`${param.xarakteristika}${param.nominal}`, Wp / 2, 232);
-      x.lineWidth = 2; x.strokeStyle = '#1b1b1f'; x.strokeRect(30, 246, 56, 22);
-      x.font = '700 15px Arial, sans-serif'; x.fillText('4500', Wp / 2, 263);
-      x.font = '600 12px Arial, sans-serif'; x.fillText('230/400V~', Wp / 2, 288);
+    // Old panel markirovkasi (yuqori aniqlik): ON/OFF, IEC belgisi, nominal, uzish qobiliyati, standart
+    const tex = c.tekstura(232, 592, (x, Wp, Hp) => {
+      x.fillStyle = '#f3f2ec'; x.fillRect(0, 0, Wp, Hp);
+      x.fillStyle = '#0b0b0d'; x.textAlign = 'center';
+      x.font = '800 26px Arial, sans-serif'; x.fillText('I  ON', Wp / 2, 46);
+      // richag uyasi atrofidagi soya
+      const gr = x.createLinearGradient(0, 96, 0, 330);
+      gr.addColorStop(0, '#0c0d0f'); gr.addColorStop(0.5, '#25282d'); gr.addColorStop(1, '#0c0d0f');
+      x.fillStyle = gr;
+      x.beginPath(); x.roundRect(58, 96, 116, 236, 10); x.fill();
+      x.fillStyle = '#18181c';
+      x.font = '800 26px Arial, sans-serif'; x.fillText('O  OFF', Wp / 2, 370);
+      x.font = '900 80px Arial, sans-serif'; x.fillText(`${param.xarakteristika}${param.nominal}`, Wp / 2, 458);
+      x.lineWidth = 3; x.strokeStyle = '#18181c'; x.strokeRect(62, 478, 108, 40);
+      x.font = '800 30px Arial, sans-serif'; x.fillText('4500', Wp / 2, 508);
+      x.font = '700 20px Arial, sans-serif'; x.fillText('230/400V ~', Wp / 2, 546);
+      x.font = '500 13px Arial, sans-serif'; x.fillText('IEC/EN 60898-1', Wp / 2, 572);
+      // avtomat sxematik belgisi (chapda)
+      x.lineWidth = 2.5;
+      x.beginPath(); x.moveTo(26, 398); x.lineTo(26, 420); x.lineTo(16, 438); x.moveTo(26, 446); x.lineTo(26, 466);
+      x.moveTo(21, 415); x.lineTo(31, 425); x.moveTo(31, 415); x.lineTo(21, 425); x.stroke();
+      x.strokeRect(198, 410, 14, 22);
     });
-    const old = new THREE.Mesh(new THREE.PlaneGeometry(W - 0.002, 0.074), new THREE.MeshStandardMaterial({ map: tex, roughness: 0.45 }));
-    old.position.z = 0.1152;
+    tex.anisotropy = 8;
+    const old = new THREE.Mesh(new THREE.PlaneGeometry(W - 0.002, 0.074), new THREE.MeshPhysicalMaterial({ map: tex, roughness: 0.45, clearcoat: 0.2, clearcoatRoughness: 0.5, envMapIntensity: 0.5 }));
+    old.position.z = 0.1162;
     g.add(old);
+    // Shaffof yorliq qopqog‘i (nominal ustida)
+    const qopqoq = new THREE.Mesh(c.ekstr(c.shakl(W - 0.005, 0.024, 0.002), 0.0016, 0.0005), new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.05, transparent: true, opacity: 0.22, clearcoat: 1, depthWrite: false }));
+    qopqoq.position.set(0, -0.022, 0.1162);
+    qopqoq.userData.soyasiz = true;
+    g.add(qopqoq);
 
-    // Richag (dastak): o‘q atrofida aylanadi
+    // Richag uyasi (chuqurcha) va qovurg‘ali richag
+    const uya = c.quti(0.0145, 0.03, 0.006, qora);
+    uya.position.set(0, 0.0105, 0.1145);
+    g.add(uya);
     const pivot = new THREE.Group();
-    pivot.position.set(0, 0.0105, 0.112);
-    const dastak = new THREE.Mesh(c.ekstr(c.shakl(0.0128, 0.0095, 0.0028), 0.019, 0.0012), c.mat(0x2f3338, { roughness: 0.5 }));
+    pivot.position.set(0, 0.0105, 0.111);
+    const dastakMat = new THREE.MeshPhysicalMaterial({ color: 0x2c3036, roughness: 0.45, clearcoat: 0.4, clearcoatRoughness: 0.3 });
+    const dastak = new THREE.Mesh(c.ekstr(c.shakl(0.0126, 0.0095, 0.0028), 0.02, 0.0012), dastakMat);
     dastak.position.z = -0.003;
-    const uchi = new THREE.Mesh(c.ekstr(c.shakl(0.0134, 0.0102, 0.003), 0.003, 0.0008), c.mat(0x41464d, { roughness: 0.4 }));
-    uchi.position.z = 0.0145;
-    pivot.add(dastak, uchi);
+    pivot.add(dastak);
+    for (let i = 0; i < 4; i++) {
+      const q = c.quti(0.0118, 0.0007, 0.0012, c.mat(0x3c4148, { roughness: 0.5 }));
+      q.position.set(0, 0.0049, 0.003 + i * 0.0035);
+      pivot.add(q);
+    }
+    const uchi = new THREE.Mesh(c.ekstr(c.shakl(0.0132, 0.0104, 0.003), 0.003, 0.0009), dastakMat);
+    uchi.position.z = 0.0155;
+    pivot.add(uchi);
     g.add(pivot);
 
-    // Holat oynachasi (qizil — yoqilgan, yashil — o‘chgan)
-    const oyna = c.quti(0.01, 0.0042, 0.0012, c.mat(0x2fa35a, { roughness: 0.3 }));
-    oyna.position.set(0, -0.0035, 0.1157);
+    // Holat oynachasi (qizil — yoqilgan, yashil — o‘chgan), shisha ostida
+    const oyna = c.quti(0.011, 0.0045, 0.0012, c.mat(0x2fa35a, { roughness: 0.3 }));
+    oyna.position.set(0, -0.0038, 0.1166);
     g.add(oyna);
 
-    // DIN qisqichi (pastda, ko‘k tortgich)
-    const qisqich = c.quti(0.012, 0.012, 0.006, c.mat(0x2b5fb3, { roughness: 0.5 }));
-    qisqich.position.set(0, -0.078, 0.02);
-    g.add(qisqich);
+    // Yon parchinlar (korpus ikki yarmini biriktiradi)
+    for (const sx of [-1, 1]) for (const [y, z] of [[0.045, 0.035], [-0.045, 0.035], [0, 0.095]]) {
+      const pr2 = new THREE.Mesh(new THREE.CylinderGeometry(0.0028, 0.0028, 0.0008, 16), metall);
+      pr2.rotation.z = Math.PI / 2;
+      pr2.position.set(sx * (W / 2 + 0.0002), y, z);
+      g.add(pr2);
+    }
 
-    // Klemmalar: yelkadagi chuqur quduqda vint, chetida sim kirish teshigi
+    // DIN qisqichi (pastda, tortgichli) va reykaga ilinadigan tirqish
+    const qisqich = new THREE.Mesh(c.ekstr(c.shakl(0.012, 0.014, 0.002), 0.006, 0.0008), c.mat(0x9aa0a8, { roughness: 0.55 }));
+    qisqich.position.set(0, -0.079, 0.012);
+    g.add(qisqich);
+    const tirqish = c.quti(0.005, 0.0025, 0.0012, qora);
+    tirqish.position.set(0, -0.083, 0.0185);
+    g.add(tirqish);
+
+    // Klemmalar: yelkadagi chuqurchada metall qisqich va vint; chetida sim kirish teshigi (ichida qisqich ko‘rinadi)
     const klemmalar = {};
     [['in', 1], ['out', -1]].forEach(([id, sg]) => {
       const quduq = c.quti(0.017, 0.013, 0.004, qora);
       quduq.position.set(0, sg * 0.061, 0.0718);
       g.add(quduq);
+      const plast = c.quti(0.012, 0.0095, 0.0008, metall);
+      plast.position.set(0, sg * 0.061, 0.0738);
+      g.add(plast);
       const v = c.vint(0.0045);
-      v.position.set(0, sg * 0.061, 0.0735);
+      v.position.set(0, sg * 0.061, 0.0745);
       g.add(v);
-      const kirish = c.quti(0.014, 0.002, 0.012, qora);
+      const kirish = c.quti(0.015, 0.0022, 0.013, qora);
       kirish.position.set(0, sg * 0.0752, 0.05);
       g.add(kirish);
-      klemmalar[id] = { pos: [0, sg * 0.061, 0.077], dir: [0, sg * 0.6, 0.8] };
+      const kafas = c.quti(0.011, 0.0012, 0.009, metall);
+      kafas.position.set(0, sg * 0.0757, 0.05);
+      g.add(kafas);
+      klemmalar[id] = { pos: [0, sg * 0.061, 0.078], dir: [0, sg * 0.6, 0.8] };
     });
     g.add(c.yorliq('1', { x: 0.026, y: 0.064, z: 0.07, olcham: 0.016 }));
     g.add(c.yorliq('2', { x: 0.026, y: -0.064, z: 0.07, olcham: 0.016 }));

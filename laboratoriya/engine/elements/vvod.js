@@ -44,8 +44,8 @@ export default {
       P.slice(1).forEach(([z, y]) => pr.lineTo(z, y));
       const bw = 0.0215;
       const geo = new THREE.ExtrudeGeometry(pr, { depth: bw - 0.001, bevelEnabled: true, bevelThickness: 0.0005, bevelSize: 0.0004, bevelSegments: 1 });
-      geo.applyMatrix4(new THREE.Matrix4().makeBasis(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1, 0), new THREE.Vector3(1, 0, 0)));
-      geo.translate(x - (bw - 0.001) / 2, 0, 0);
+      geo.applyMatrix4(new THREE.Matrix4().makeBasis(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1, 0), new THREE.Vector3(-1, 0, 0)));
+      geo.translate(x + (bw - 0.001) / 2, 0, 0);
       let mat = korpus[i];
       if (!mat) {
         const tex = c.peTekstura().clone();

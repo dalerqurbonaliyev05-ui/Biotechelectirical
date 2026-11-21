@@ -2,6 +2,7 @@
 // Klemmaga bosib sim tortiladi, simlar tanlangan rangdagi egri chiziq (tube) bo‘lib ko‘rinadi.
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { RANGLAR } from './ranglar.js';
 import { t } from './i18n.js';
 
@@ -48,7 +49,10 @@ export class View3D {
 
     this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true });
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    this.renderer.toneMapping = THREE.NoToneMapping;
+    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    this.renderer.toneMappingExposure = 1.2;
+    this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0xdfe3e8);
     this.camera = new THREE.PerspectiveCamera(48, 1, 0.02, 30);
@@ -67,7 +71,20 @@ export class View3D {
     this.xonaQur();
     this.bezaklarQur();
     this.elementlarQur();
+    // Muhit yoritilishi: metall va plastik yuzalarda real aks
+    const pmrem = new THREE.PMREMGenerator(this.renderer);
+    this.scene.environment = pmrem.fromScene(new RoomEnvironment(this.renderer), 0.04).texture;
+    pmrem.dispose();
+    this.soyalarniSozla();
     this.scene.updateMatrixWorld(true);
+    // Passiv elementlar (taqsimlash qutisi) chegarasi — sim yo‘lini qurish uchun
+    this.qutiChegara = new Map();
+    for (const el of this.lab.els) {
+      if (!el.def.passiv) continue;
+      const bx = new THREE.Box3();
+      this.modellar.get(el.id).obj.traverse((o) => { if (o.isMesh && !o.userData.tur && !o.material.isMeshBasicMaterial) bx.expandByObject(o); });
+      this.qutiChegara.set(el.id, bx);
+    }
     this.simlarQur();
     this.holatYangila();
 
@@ -93,7 +110,7 @@ export class View3D {
   // ---------- materiallar va yordamchilar ----------
   mat(hex, o = {}) {
     const key = `${hex}|${o.roughness ?? ''}|${o.metalness ?? ''}`;
-    if (!this.kesh.has(key)) this.kesh.set(key, new THREE.MeshStandardMaterial({ color: hex, roughness: o.roughness ?? 0.6, metalness: o.metalness ?? 0 }));
+    if (!this.kesh.has(key)) this.kesh.set(key, new THREE.MeshStandardMaterial({ color: hex, roughness: o.roughness ?? 0.6, metalness: o.metalness ?? 0, envMapIntensity: 0.7 }));
     return this.kesh.get(key);
   }
 
@@ -209,36 +226,290 @@ export class View3D {
   }
 
   // ---------- sahna ----------
+  // ---------- xona (Blender'dagi kabi: real o‘lchamlar, protsedural teksturalar, oyna orqali kunduzgi yorug‘lik, soyalar) ----------
+  shuvoqTekstura(asos) {
+    return this.tekstura(512, 512, (x, w, h) => {
+      x.fillStyle = asos; x.fillRect(0, 0, w, h);
+      // Bo‘yalgan shuvoq: mayda notekisliklar va yumshoq dog‘lar
+      for (let i = 0; i < 2600; i++) {
+        const r = Math.random() * 2.2 + 0.4;
+        x.fillStyle = Math.random() < 0.5 ? 'rgba(255,255,255,0.10)' : 'rgba(120,105,85,0.07)';
+        x.beginPath(); x.arc(Math.random() * w, Math.random() * h, r, 0, 7); x.fill();
+      }
+      for (let i = 0; i < 40; i++) {
+        const g = x.createRadialGradient(0, 0, 0, 0, 0, 60);
+        g.addColorStop(0, Math.random() < 0.5 ? 'rgba(255,255,255,0.06)' : 'rgba(110,95,75,0.045)');
+        g.addColorStop(1, 'rgba(0,0,0,0)');
+        x.save(); x.translate(Math.random() * w, Math.random() * h); x.fillStyle = g; x.fillRect(-60, -60, 120, 120); x.restore();
+      }
+    });
+  }
+
+  laminatTekstura() {
+    // 1024 px = 2 m; taxtalar 0,2 m eni, uzunligi har xil, tolalari va choklari bilan
+    return this.tekstura(1024, 1024, (x, w, h) => {
+      const qator = 102.4;
+      for (let r = 0; r < 10; r++) {
+        let pos = -Math.random() * 600;
+        while (pos < w) {
+          const uz = 420 + Math.random() * 300;
+          const t = 0.93 + Math.random() * 0.11;
+          x.fillStyle = `rgb(${Math.round(176 * t)},${Math.round(132 * t)},${Math.round(92 * t)})`;
+          x.fillRect(pos, r * qator, uz, qator);
+          for (let k = 0; k < 26; k++) {
+            x.strokeStyle = `rgba(${Math.random() < 0.5 ? '90,55,25' : '230,200,160'},${0.04 + Math.random() * 0.06})`;
+            x.lineWidth = 0.6 + Math.random() * 1.6;
+            const y = r * qator + Math.random() * qator;
+            x.beginPath(); x.moveTo(pos, y);
+            x.bezierCurveTo(pos + uz * 0.3, y + (Math.random() - 0.5) * 8, pos + uz * 0.7, y + (Math.random() - 0.5) * 8, pos + uz, y + (Math.random() - 0.5) * 4);
+            x.stroke();
+          }
+          x.fillStyle = 'rgba(60,38,20,0.4)';
+          x.fillRect(pos, r * qator, 1.5, qator);
+          pos += uz;
+        }
+        x.fillStyle = 'rgba(60,38,20,0.5)';
+        x.fillRect(0, r * qator, w, 1.5);
+      }
+    });
+  }
+
+  // Burchaklardagi yumshoq soya (ambient occlusion imitatsiyasi)
+  aoTasma(uz, en, pos, bx, by) {
+    if (!this._aoTex) {
+      this._aoTex = this.tekstura(4, 128, (x, w, h) => {
+        const g = x.createLinearGradient(0, 0, 0, h);
+        g.addColorStop(0, 'rgba(40,30,20,0.30)'); g.addColorStop(0.35, 'rgba(40,30,20,0.10)'); g.addColorStop(1, 'rgba(40,30,20,0)');
+        x.fillStyle = g; x.fillRect(0, 0, w, h);
+      });
+    }
+    // bx — tasma uzunligi yo‘nalishi, by — qorong‘i chetdan ochiq tomonga teskari yo‘nalish (tekstura tepasi qorong‘i)
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(uz, en), new THREE.MeshBasicMaterial({ map: this._aoTex, transparent: true, depthWrite: false }));
+    const X = new THREE.Vector3(...bx), Y = new THREE.Vector3(...by);
+    m.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(X, Y, X.clone().cross(Y)));
+    m.position.set(...pos);
+    m.userData.soyasiz = true;
+    m.renderOrder = 1;
+    this.scene.add(m);
+  }
+
+  profilBoylab(P, uz, mat, basis, pos) {
+    const sh = new THREE.Shape();
+    sh.moveTo(P[0][0], P[0][1]);
+    P.slice(1).forEach(([a, b]) => sh.lineTo(a, b));
+    const geo = new THREE.ExtrudeGeometry(sh, { depth: uz, bevelEnabled: false, curveSegments: 6 });
+    geo.applyMatrix4(new THREE.Matrix4().makeBasis(...basis));
+    const m = new THREE.Mesh(geo, mat);
+    m.position.set(...pos);
+    this.scene.add(m);
+    return m;
+  }
+
   xonaQur() {
     const { kenglik: W, balandlik: H, chuqurlik: D } = this.xona;
-    const tekis = (w, h, rang, o = {}) => new THREE.Mesh(new THREE.PlaneGeometry(w, h), this.mat(rang, { roughness: o.r ?? 0.92 }));
-    const pol = tekis(W, D, 0xc8ae8c, { r: 0.75 });
-    pol.rotation.x = -Math.PI / 2; pol.position.set(0, 0, D / 2);
-    const devor = tekis(W, H, 0xf2efe8); devor.position.set(0, H / 2, 0);
-    const chap = tekis(D, H, 0xe8e4dc); chap.rotation.y = Math.PI / 2; chap.position.set(-W / 2, H / 2, D / 2);
-    const ong = tekis(D, H, 0xe8e4dc); ong.rotation.y = -Math.PI / 2; ong.position.set(W / 2, H / 2, D / 2);
-    const shift = tekis(W, D, 0xfbfbfa); shift.rotation.x = Math.PI / 2; shift.position.set(0, H, D / 2);
-    this.scene.add(pol, devor, chap, ong, shift);
-    const plintus = new THREE.Mesh(new THREE.BoxGeometry(W, 0.07, 0.014), this.mat(0xffffff));
-    plintus.position.set(0, 0.035, 0.007);
-    this.scene.add(plintus);
-    // Eshik (kalit odatda eshik yonida bo‘ladi)
+    const V = (x, y, z) => new THREE.Vector3(x, y, z);
+    // Materiallar
+    const shuvoq = this.shuvoqTekstura('#f1ece3');
+    shuvoq.wrapS = shuvoq.wrapT = THREE.RepeatWrapping;
+    shuvoq.repeat.set(1 / 1.4, 1 / 1.4); // UV metrlarda
+    const devorMat = new THREE.MeshStandardMaterial({ map: shuvoq, roughness: 0.93, envMapIntensity: 0.35 });
+    const shiftTex = this.shuvoqTekstura('#f6f4ef');
+    shiftTex.wrapS = shiftTex.wrapT = THREE.RepeatWrapping;
+    shiftTex.repeat.set(1 / 1.6, 1 / 1.6);
+    const shiftMat = new THREE.MeshStandardMaterial({ map: shiftTex, roughness: 0.95, envMapIntensity: 0.3 });
+    const lam = this.laminatTekstura();
+    lam.wrapS = lam.wrapT = THREE.RepeatWrapping;
+    lam.repeat.set(0.5, 0.5);
+    const polMat = new THREE.MeshStandardMaterial({ map: lam, roughness: 0.48, envMapIntensity: 0.6 });
+    const oqBoyoq = new THREE.MeshStandardMaterial({ color: 0xfbfbf8, roughness: 0.38, envMapIntensity: 0.6 });
+
+    // Yuzalar: UV = metr (ShapeGeometry), shuning uchun teksturalar masshtabi bir xil
+    const yuza = (w, h, mat, teshiklar = []) => {
+      const sh = new THREE.Shape();
+      sh.moveTo(0, 0); sh.lineTo(w, 0); sh.lineTo(w, h); sh.lineTo(0, h); sh.lineTo(0, 0);
+      for (const [x0, y0, tw, th] of teshiklar) {
+        const t = new THREE.Path();
+        t.moveTo(x0, y0); t.lineTo(x0, y0 + th); t.lineTo(x0 + tw, y0 + th); t.lineTo(x0 + tw, y0); t.lineTo(x0, y0);
+        sh.holes.push(t);
+      }
+      return new THREE.Mesh(new THREE.ShapeGeometry(sh), mat);
+    };
+    const orqa = yuza(W, H, devorMat);
+    orqa.position.set(-W / 2, 0, 0);
+    // Chap devorda deraza teshigi
+    const oyna = { z: 2.05, y: 0.88, en: 1.36, bal: 1.5 };
+    const chap = yuza(D, H, devorMat, [[D - oyna.z - oyna.en / 2, oyna.y, oyna.en, oyna.bal]]);
+    chap.rotation.y = Math.PI / 2;
+    chap.position.set(-W / 2, 0, D);
+    const ong = yuza(D, H, devorMat);
+    ong.rotation.y = -Math.PI / 2;
+    ong.position.set(W / 2, 0, 0);
+    const pol = yuza(W, D, polMat);
+    pol.rotation.x = -Math.PI / 2;
+    pol.position.set(-W / 2, 0, D);
+    const shift = yuza(W, D, shiftMat);
+    shift.rotation.x = Math.PI / 2;
+    shift.position.set(-W / 2, H, 0);
+    this.scene.add(orqa, chap, ong, pol, shift);
+    // Deraza o‘ymasi qalinligi (otkos), devor tashqi qatlami
+    const qal = 0.28;
+    const otkos = (w, h, d, x, y, z) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), devorMat); m.position.set(x, y, z); this.scene.add(m); };
+    otkos(qal, 0.02, oyna.en, -W / 2 - qal / 2, oyna.y - 0.01, oyna.z);
+    otkos(qal, 0.02, oyna.en, -W / 2 - qal / 2, oyna.y + oyna.bal + 0.01, oyna.z);
+    otkos(qal, oyna.bal, 0.02, -W / 2 - qal / 2, oyna.y + oyna.bal / 2, oyna.z - oyna.en / 2 - 0.01);
+    otkos(qal, oyna.bal, 0.02, -W / 2 - qal / 2, oyna.y + oyna.bal / 2, oyna.z + oyna.en / 2 + 0.01);
+    // Plastik rom: tashqi rom, o‘rtadagi impost, ikki tabaqa, shisha
+    const rom = new THREE.Group();
+    const romMat = new THREE.MeshStandardMaterial({ color: 0xfafafa, roughness: 0.32, envMapIntensity: 0.8 });
+    const brus = (w, h, d, x, y, z) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), romMat); m.position.set(x, y, z); rom.add(m); };
+    const t = 0.065;
+    brus(0.07, t, oyna.en, 0, -oyna.bal / 2 + t / 2, 0);
+    brus(0.07, t, oyna.en, 0, oyna.bal / 2 - t / 2, 0);
+    brus(0.07, oyna.bal, t, 0, 0, -oyna.en / 2 + t / 2);
+    brus(0.07, oyna.bal, t, 0, 0, oyna.en / 2 - t / 2);
+    brus(0.07, oyna.bal, 0.08, 0, 0, 0);
+    for (const sz of [-1, 1]) {
+      const cz = sz * oyna.en / 4;
+      const sw = oyna.en / 2 - t - 0.04;
+      const sh = oyna.bal - 2 * t;
+      brus(0.075, 0.05, sw, 0.012, sh / 2 - 0.025, cz);
+      brus(0.075, 0.05, sw, 0.012, -sh / 2 + 0.025, cz);
+      brus(0.075, sh, 0.05, 0.012, 0, cz - sw / 2 + 0.025);
+      brus(0.075, sh, 0.05, 0.012, 0, cz + sw / 2 - 0.025);
+      const shisha = new THREE.Mesh(new THREE.PlaneGeometry(sw - 0.1, sh - 0.1), new THREE.MeshStandardMaterial({ color: 0xcfe6f2, roughness: 0.02, metalness: 0, transparent: true, opacity: 0.18, envMapIntensity: 1.2, depthWrite: false }));
+      shisha.rotation.y = Math.PI / 2;
+      shisha.position.set(0.01, 0, cz);
+      shisha.userData.soyasiz = true;
+      rom.add(shisha);
+      const dasta = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.12, 0.02), new THREE.MeshStandardMaterial({ color: 0xf2f2f2, roughness: 0.3 }));
+      dasta.position.set(0.055, 0.02, cz + sz * (sw / 2 - 0.05));
+      rom.add(dasta);
+    }
+    rom.position.set(-W / 2 - 0.2, oyna.y + oyna.bal / 2, oyna.z);
+    this.scene.add(rom);
+    // Deraza tokchasi (podokonnik)
+    const tokcha = new THREE.Mesh(new THREE.BoxGeometry(0.36, 0.025, oyna.en + 0.16), oqBoyoq);
+    tokcha.position.set(-W / 2 - 0.08 + 0.02, oyna.y - 0.0125, oyna.z);
+    this.scene.add(tokcha);
+    // Tashqi osmon (oyna ortida)
+    const osmon = new THREE.Mesh(new THREE.PlaneGeometry(6, 4), new THREE.MeshBasicMaterial({
+      map: this.tekstura(16, 256, (x, w, h) => {
+        const g = x.createLinearGradient(0, 0, 0, h);
+        g.addColorStop(0, '#8fbce6'); g.addColorStop(0.6, '#cfe3f3'); g.addColorStop(1, '#eef3f1');
+        x.fillStyle = g; x.fillRect(0, 0, w, h);
+      }),
+    }));
+    osmon.rotation.y = Math.PI / 2;
+    osmon.position.set(-W / 2 - 1.6, 1.6, oyna.z);
+    osmon.userData.soyasiz = true;
+    this.scene.add(osmon);
+    // Radiator (alyuminiy seksiyalar) deraza ostida
+    const rad = new THREE.Group();
+    const radMat = new THREE.MeshStandardMaterial({ color: 0xf7f7f5, roughness: 0.3, metalness: 0.1, envMapIntensity: 0.8 });
+    for (let i = 0; i < 10; i++) {
+      const sek = new THREE.Mesh(this.ekstr(this.shakl(0.075, 0.56, 0.02), 0.07, 0.006), radMat);
+      sek.rotation.y = Math.PI / 2;
+      sek.position.set(0, 0, -0.4 + i * 0.08 + 0.04);
+      rad.add(sek);
+    }
+    const quvur = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 1.4, 16), radMat);
+    quvur.rotation.x = Math.PI / 2; quvur.position.set(0.03, -0.24, 0);
+    rad.add(quvur);
+    rad.position.set(-W / 2 + 0.06, 0.42, oyna.z);
+    this.scene.add(rad);
+
+    // Plintus va karniz (profil bo‘ylab cho‘zilgan)
+    const plintP = [[0, 0], [0.016, 0], [0.016, 0.062], [0.01, 0.075], [0.004, 0.08], [0, 0.08]];
+    const karnizP = [[0, 0], [0.075, 0], [0.075, -0.008], [0.06, -0.012], [0.03, -0.03], [0.014, -0.06], [0.008, -0.075], [0, -0.075]];
+    // orqa devor: shakl x → z, shakl y → y, cho‘zilish → −x (o‘ng qo‘l bazisi)
+    const bOrqa = [V(0, 0, 1), V(0, 1, 0), V(-1, 0, 0)];
+    this.profilBoylab(plintP, W, oqBoyoq, bOrqa, [W / 2, 0, 0]);
+    this.profilBoylab(karnizP, W, oqBoyoq, bOrqa, [W / 2, H, 0]);
+    // chap devor: shakl x → x, cho‘zilish → z
+    const bChap = [V(1, 0, 0), V(0, 1, 0), V(0, 0, 1)];
+    this.profilBoylab(plintP, D, oqBoyoq, bChap, [-W / 2, 0, 0]);
+    this.profilBoylab(karnizP, D, oqBoyoq, bChap, [-W / 2, H, 0]);
+    // o‘ng devor: shakl x → −x, cho‘zilish → −z
+    const bOng = [V(-1, 0, 0), V(0, 1, 0), V(0, 0, -1)];
+    this.profilBoylab(karnizP, D, oqBoyoq, bOng, [W / 2, H, D]);
+    this.profilBoylab(plintP, D, oqBoyoq, bOng, [W / 2, 0, D]);
+    // Burchak soyalari (ambient occlusion imitatsiyasi)
+    this.aoTasma(W, 0.35, [0, H - 0.075 - 0.175, 0.002], [1, 0, 0], [0, 1, 0]);
+    this.aoTasma(W, 0.25, [0, 0.08 + 0.125, 0.002], [-1, 0, 0], [0, -1, 0]);
+    this.aoTasma(H, 0.3, [-W / 2 + 0.15, H / 2, 0.003], [0, 1, 0], [-1, 0, 0]);
+    this.aoTasma(H, 0.3, [W / 2 - 0.15, H / 2, 0.003], [0, -1, 0], [1, 0, 0]);
+    this.aoTasma(H, 0.3, [-W / 2 + 0.002, H / 2, 0.15], [0, -1, 0], [0, 0, -1]);
+    this.aoTasma(D, 0.35, [-W / 2 + 0.002, H - 0.075 - 0.175, D / 2], [0, 0, -1], [0, 1, 0]);
+
+    // Panelli eshik: nalichnik, ikki bo‘rtiq panel, ilgaklar, dastak-ruchka
     const eshik = new THREE.Group();
-    const rom = new THREE.Mesh(new THREE.BoxGeometry(0.98, 2.1, 0.03), this.mat(0xe7e2da));
-    rom.position.set(0, 1.05, 0.015);
-    const tabaqa = new THREE.Mesh(new THREE.BoxGeometry(0.86, 2.02, 0.04), this.mat(0xb98a5e, { roughness: 0.55 }));
-    tabaqa.position.set(0, 1.01, 0.03);
-    const tutqich = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.02, 0.03), this.mat(0xc7cbd1, { metalness: 0.8, roughness: 0.3 }));
-    tutqich.position.set(-0.33, 1.0, 0.065);
-    eshik.add(rom, tabaqa, tutqich);
-    eshik.position.set(1.25, 0, 0);
+    const yogoch = this.tekstura(256, 512, (x, w, h) => {
+      x.fillStyle = '#9c6c44'; x.fillRect(0, 0, w, h);
+      for (let i = 0; i < 90; i++) {
+        x.strokeStyle = `rgba(${Math.random() < 0.5 ? '70,40,18' : '200,150,105'},${0.06 + Math.random() * 0.1})`;
+        x.lineWidth = 0.5 + Math.random() * 2;
+        const xx = Math.random() * w;
+        x.beginPath(); x.moveTo(xx, 0); x.bezierCurveTo(xx + (Math.random() - 0.5) * 20, h * 0.3, xx + (Math.random() - 0.5) * 20, h * 0.7, xx + (Math.random() - 0.5) * 10, h); x.stroke();
+      }
+    });
+    const eshikMat = new THREE.MeshStandardMaterial({ map: yogoch, roughness: 0.5, envMapIntensity: 0.5 });
+    const nalMat = new THREE.MeshStandardMaterial({ map: yogoch, color: 0xe8ddd0, roughness: 0.5, envMapIntensity: 0.5 });
+    const EW = 0.86, EH = 2.03;
+    const tab = new THREE.Mesh(new THREE.BoxGeometry(EW, EH, 0.04), eshikMat);
+    tab.position.set(0, EH / 2, 0.02);
+    eshik.add(tab);
+    for (const [py, ph] of [[1.42, 0.95], [0.5, 0.72]]) {
+      const panel = new THREE.Mesh(this.ekstr(this.shakl(EW - 0.22, ph, 0.01), 0.012, 0.006), eshikMat);
+      panel.position.set(0, py, 0.036);
+      eshik.add(panel);
+    }
+    for (const [x, y, w, h] of [[-EW / 2 - 0.035, EH / 2 + 0.035, 0.07, EH + 0.07], [EW / 2 + 0.035, EH / 2 + 0.035, 0.07, EH + 0.07], [0, EH + 0.035, EW + 0.14, 0.07]]) {
+      const n = new THREE.Mesh(this.ekstr(this.shakl(w, h, 0.004), 0.018, 0.004), nalMat);
+      n.position.set(x, y, 0);
+      eshik.add(n);
+    }
+    const xrom = new THREE.MeshStandardMaterial({ color: 0xd9dde2, metalness: 1, roughness: 0.22 });
+    const rozet = new THREE.Mesh(new THREE.CylinderGeometry(0.026, 0.026, 0.01, 32), xrom);
+    rozet.rotation.x = Math.PI / 2; rozet.position.set(-EW / 2 + 0.07, 1.0, 0.045);
+    const dasta = new THREE.Mesh(new THREE.CapsuleGeometry(0.008, 0.11, 6, 12), xrom);
+    dasta.rotation.z = Math.PI / 2; dasta.position.set(-EW / 2 + 0.115, 1.0, 0.068);
+    const boyin = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, 0.025, 12), xrom);
+    boyin.rotation.x = Math.PI / 2; boyin.position.set(-EW / 2 + 0.07, 1.0, 0.056);
+    eshik.add(rozet, dasta, boyin);
+    for (const y of [0.25, 1.8]) {
+      const ilgak = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, 0.1, 12), xrom);
+      ilgak.position.set(EW / 2 + 0.002, y, 0.04);
+      eshik.add(ilgak);
+    }
+    eshik.position.set(1.3, 0, 0);
     this.scene.add(eshik);
 
-    this.hemi = new THREE.HemisphereLight(0xffffff, 0xe6dccb, 1.2);
-    this.ambient = new THREE.AmbientLight(0xffffff, 0.55);
-    this.quyosh = new THREE.DirectionalLight(0xffffff, 1.25);
-    this.quyosh.position.set(1.2, 2.2, 3.5);
-    this.scene.add(this.hemi, this.ambient, this.quyosh);
+    // Yoritish: oyna orqali kunduzgi quyosh (soyali), muhit yoritilishi, yumshoq to‘ldiruvchi
+    this.hemi = new THREE.HemisphereLight(0xeef4ff, 0xe0d2bc, 0.8);
+    this.ambient = new THREE.AmbientLight(0xffffff, 0.0);
+    this.quyosh = new THREE.DirectionalLight(0xfff0d8, 3.2);
+    this.quyosh.position.set(-W / 2 - 2.6, 3.1, oyna.z + 0.6);
+    this.quyosh.target.position.set(0.2, 0.2, 1.6);
+    this.quyosh.castShadow = true;
+    const xarita = window.innerWidth < 700 ? 1024 : 2048; // telefonlarda yengilroq
+    this.quyosh.shadow.mapSize.set(xarita, xarita);
+    const sc = this.quyosh.shadow.camera;
+    sc.left = -3; sc.right = 3; sc.top = 3; sc.bottom = -3; sc.near = 0.5; sc.far = 9;
+    this.quyosh.shadow.bias = -0.0004;
+    this.quyosh.shadow.normalBias = 0.02;
+    this.quyosh.shadow.radius = 5;
+    this.oldNur = new THREE.DirectionalLight(0xfffaf2, 0.75); // xona ichidagi yoyilgan yorug‘lik (devorga yumshoq soya)
+    this.oldNur.position.set(1.4, 2.9, 3.6);
+    this.oldNur.target.position.set(-0.3, 1.4, 0);
+    this.oldNur.castShadow = true;
+    this.oldNur.shadow.mapSize.set(xarita, xarita);
+    const oc = this.oldNur.shadow.camera;
+    oc.left = -1.8; oc.right = 1.8; oc.top = 1.6; oc.bottom = -1.6; oc.near = 1; oc.far = 8;
+    this.oldNur.shadow.bias = -0.0003;
+    this.oldNur.shadow.normalBias = 0.01;
+    this.oldNur.shadow.radius = 7;
+    this.scene.add(this.oldNur.target);
+    this.scene.add(this.hemi, this.ambient, this.quyosh, this.quyosh.target, this.oldNur);
   }
 
   // Shit korpusi: oq bo‘yalgan metall quti, eshigi ochiq, ichida perforatsiyali DIN-reyka (TH35).
@@ -357,6 +628,26 @@ export class View3D {
     }
   }
 
+  soyalarniSozla() {
+    this.scene.traverse((o) => {
+      if (o.isPointLight && o.parent !== this.scene) {
+        o.shadow.mapSize.set(512, 512);
+        o.shadow.bias = -0.003;
+        o.shadow.radius = 4;
+        o.shadow.camera.near = 0.03;
+      }
+      if (!o.isMesh) return;
+      const m = o.material;
+      const asos = o.userData.soyasiz || m.isMeshBasicMaterial || (m.transparent && m.opacity === 0);
+      o.castShadow = !asos && !(m.transparent && m.opacity < 0.5);
+      o.receiveShadow = !asos;
+    });
+    // Yorug‘lik manbai bo‘lgan qurilma (lampa) o‘ziga soya tashlamasin — artefaktlarning oldini olish
+    for (const m of this.modellar.values()) {
+      if (m.yorugl) m.obj.traverse((o) => { if (o.isMesh) { o.castShadow = false; o.receiveShadow = false; } });
+    }
+  }
+
   // ---------- simlar ----------
   kNuqta(full) {
     const k = this.kl.get(full);
@@ -383,14 +674,28 @@ export class View3D {
     }
     const zr = 0.105 + (idx % 8) * 0.0065;
     const dx = ((idx % 7) - 3) * 0.0075;
+    const k5 = (idx % 5) * 0.008;
     const shitlar = (this.s3.bezaklar || []).filter((b) => b.tur === 'shit_korpus');
-    const zanjir = (k) => {
+    const zanjir = (k, full, boshqa) => {
       const ao = k.p.clone().addScaledVector(k.d, 0.045);
       const res = [k.p, ao];
+      const qb = this.qutiChegara.get(full.split('.')[0]);
       const shit = shitlar.find((b) => Math.abs(ao.x - b.pozitsiya[0]) < b.olcham[0] / 2 && Math.abs(ao.y - b.pozitsiya[1]) < b.olcham[1] / 2);
-      if (shit) {
-        const y = shit.pozitsiya[1] - shit.olcham[1] / 2 - 0.035 - (idx % 5) * 0.011;
+      if (qb) {
+        // Taqsimlash qutisi: sim qutining yuqori yoki pastki chetidan chiqadi (membrana orqali)
+        const y = boshqa.p.y > (qb.min.y + qb.max.y) / 2 ? qb.max.y + 0.03 + k5 : qb.min.y - 0.03 - k5;
         res.push(V(ao.x, ao.y, zr), V(ao.x, y, zr));
+      } else if (shit) {
+        const tepa = shit.pozitsiya[1] + shit.olcham[1] / 2, past = shit.pozitsiya[1] - shit.olcham[1] / 2;
+        const reyka = shit.pozitsiya[1] + (shit.din?.[0] ?? 0);
+        if (boshqa.p.y > tepa) {
+          // Shit ichida: qurilmalar ostidan o‘ng yon kanalga, so‘ng yuqoridan chiqish
+          const yb = Math.max(past + 0.025, reyka - 0.14 - (idx % 5) * 0.007);
+          const kx = shit.pozitsiya[0] + shit.olcham[0] / 2 - 0.028 - (idx % 6) * 0.006;
+          res.push(V(ao.x, ao.y, zr), V(ao.x, yb, zr), V(kx, yb, zr), V(kx, tepa + 0.035 + k5, zr));
+        } else {
+          res.push(V(ao.x, ao.y, zr), V(ao.x, past - 0.035 - k5, zr));
+        }
       } else if (ao.z > 0.3 && ao.y > H - 0.3) {
         const y = H - 0.018 - (idx % 5) * 0.007;
         res.push(V(ao.x, y, ao.z), V(ao.x, y, zr));
@@ -399,11 +704,13 @@ export class View3D {
       }
       return res;
     };
-    const za = zanjir(A), zb = zanjir(B).reverse();
+    const za = zanjir(A, s.a, B), zb = zanjir(B, s.b, A).reverse();
     const LA = za[za.length - 1], FB = zb[0];
     const orta = [];
     if (Math.abs(LA.x - FB.x) > 0.01 && Math.abs(LA.y - FB.y) > 0.01) {
-      orta.push(V(FB.x + dx, LA.y, zr), V(FB.x + dx, FB.y, zr));
+      // Gorizontal qism doim yuqoriroq sathda yuradi (qurilmalar ustidan kesib o‘tmaslik uchun)
+      if (LA.y >= FB.y) orta.push(V(FB.x + dx, LA.y, zr), V(FB.x + dx, FB.y, zr));
+      else orta.push(V(LA.x + dx, LA.y, zr), V(LA.x + dx, FB.y, zr));
     }
     return new THREE.CatmullRomCurve3(this.yumaloq([...za, ...orta, ...zb]), false, 'centripetal');
   }
@@ -453,6 +760,8 @@ export class View3D {
       const mesh = new THREE.Mesh(new THREE.TubeGeometry(curve, seg, 0.0034, 8, false), mat);
       const hit = new THREE.Mesh(new THREE.TubeGeometry(curve, Math.max(12, seg >> 1), 0.011, 6, false), hitMat);
       hit.userData = { tur: 'sim', id: s.id };
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
       this.scene.add(mesh, hit);
       this.simObj.set(s.id, { mesh, hit, curve, mat, len });
     });
@@ -469,9 +778,9 @@ export class View3D {
       if (yonadi) yorug = true;
       m.yangila?.(lab.holat[el.id] || {}, { yonadi });
     }
-    this.hemi.intensity = yorug ? 1.3 : 1.05;
-    this.ambient.intensity = yorug ? 0.6 : 0.45;
-    this.hemi.color.set(yorug ? 0xfff1dc : 0xffffff);
+    this.hemi.intensity = yorug ? 1.0 : 0.8;
+    this.hemi.color.set(yorug ? 0xfff1dc : 0xeaf2ff);
+    for (const m of this.modellar.values()) if (m.yorugl) m.yorugl.castShadow = m.yorugl.intensity > 0;
     for (const [full, k] of this.kl) {
       const r = lab.klemma(full);
       const n = lab.simlarSoni(full);
