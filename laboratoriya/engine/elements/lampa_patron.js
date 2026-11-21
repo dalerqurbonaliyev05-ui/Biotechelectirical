@@ -38,45 +38,86 @@ export default {
       <text class="e-sub" x="56" y="-26">${param.quvvat} W</text>`;
   },
 
+  // Shiftga o‘rnatilgan patron: gumbazsimon shift rozetkasi, qovurg‘ali karbolit E27 patron, metall rezba,
+  // A60 shakldagi shisha lampa ichida filament tolalari. Klemmnik rozetkaning pastida, devor tomonida.
   model3d(c) {
     const { THREE } = c;
     const g = new THREE.Group(); // nol nuqta — shift sathi, lampa pastga osilib turadi
-    const oq = c.mat(0xf4f4f2, { roughness: 0.5 });
-    const asos = new THREE.Mesh(new THREE.CylinderGeometry(0.085, 0.085, 0.034, 40), oq);
-    asos.position.y = -0.017;
-    g.add(asos);
-    const patron = new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.024, 0.07, 24), c.mat(0x30333a, { roughness: 0.6 }));
-    patron.position.y = -0.07;
-    g.add(patron);
-    const rezba = new THREE.Mesh(new THREE.CylinderGeometry(0.016, 0.016, 0.02, 20), c.mat(0xb9bcc2, { metalness: 0.8, roughness: 0.3 }));
-    rezba.position.y = -0.112;
-    g.add(rezba);
-    const shishaMat = new THREE.MeshStandardMaterial({ color: 0xfdfaf0, emissive: 0xffc46b, emissiveIntensity: 0, roughness: 0.15, transparent: true, opacity: 0.92 });
-    const lampa = new THREE.Mesh(new THREE.SphereGeometry(0.042, 32, 20), shishaMat);
-    lampa.position.y = -0.16;
-    g.add(lampa);
-    const boyin = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.03, 0.03, 24), shishaMat);
-    boyin.position.y = -0.128;
-    g.add(boyin);
+    const V2 = (x, y) => new THREE.Vector2(x, y);
+    // Shift rozetkasi (gumbaz)
+    const gumbaz = [V2(0, 0), V2(0.085, 0), V2(0.086, -0.004), V2(0.083, -0.014), V2(0.07, -0.027), V2(0.045, -0.035), V2(0.026, -0.037), V2(0, -0.037)];
+    g.add(new THREE.Mesh(new THREE.LatheGeometry(gumbaz, 48), c.mat(0xf4f4f1, { roughness: 0.4 })));
+    // Patron (karbolit, qovurg‘ali)
+    const patronP = [V2(0, -0.035), V2(0.016, -0.035), V2(0.018, -0.04)];
+    for (let i = 0; i < 6; i++) {
+      const y = -0.042 - i * 0.008;
+      patronP.push(V2(0.0215, y), V2(0.0215, y - 0.005), V2(0.0198, y - 0.006));
+    }
+    patronP.push(V2(0.0205, -0.092), V2(0.0185, -0.095), V2(0.0155, -0.095));
+    g.add(new THREE.Mesh(new THREE.LatheGeometry(patronP, 40), c.mat(0x2a2c30, { roughness: 0.55 })));
+    // Metall rezba (E27)
+    const rezbaP = [];
+    for (let i = 0; i <= 40; i++) {
+      const y = -0.094 - (i / 40) * 0.022;
+      rezbaP.push(V2(0.0138 + 0.0009 * Math.sin((i / 40) * Math.PI * 2 * 4.5), y));
+    }
+    const metall = c.mat(0xc8ccd2, { metalness: 0.9, roughness: 0.25 });
+    g.add(new THREE.Mesh(new THREE.LatheGeometry(rezbaP, 32), metall));
+    // Shisha (A60): bo‘yindan kengayib, pastda yumaloq
+    const shishaP = [];
+    for (let i = 0; i <= 28; i++) {
+      const u = i / 28;
+      const y = -0.115 - u * 0.105;
+      let r;
+      if (u < 0.3) r = 0.0135 + (0.041 - 0.0135) * Math.sin((u / 0.3) * Math.PI / 2) ** 1.6;
+      else r = 0.041 * Math.sqrt(Math.max(0, 1 - ((u - 0.3) / 0.7) ** 2.2));
+      shishaP.push(V2(Math.max(0.0005, r), y));
+    }
+    shishaP.push(V2(0, -0.22));
+    const shishaMat = new THREE.MeshStandardMaterial({ color: 0xfdfaf2, emissive: 0xffc46b, emissiveIntensity: 0, roughness: 0.08, metalness: 0, transparent: true, opacity: 0.42, depthWrite: false });
+    const shisha = new THREE.Mesh(new THREE.LatheGeometry(shishaP, 40), shishaMat);
+    shisha.renderOrder = 3;
+    g.add(shisha);
+    // Ichki shtativ va filament tolalari
+    const shtativ = new THREE.Mesh(new THREE.CylinderGeometry(0.0018, 0.004, 0.04, 10), new THREE.MeshStandardMaterial({ color: 0xe8f0f2, transparent: true, opacity: 0.6, roughness: 0.1 }));
+    shtativ.position.y = -0.135;
+    g.add(shtativ);
+    const filMat = new THREE.MeshStandardMaterial({ color: 0xd9a24a, emissive: 0xffa53a, emissiveIntensity: 0, roughness: 0.6 });
+    for (let i = 0; i < 4; i++) {
+      const a = (i / 4) * Math.PI * 2 + Math.PI / 4;
+      const egri = new THREE.CatmullRomCurve3([
+        new THREE.Vector3(0.003 * Math.cos(a), -0.152, 0.003 * Math.sin(a)),
+        new THREE.Vector3(0.012 * Math.cos(a), -0.168, 0.012 * Math.sin(a)),
+        new THREE.Vector3(0.016 * Math.cos(a), -0.19, 0.016 * Math.sin(a)),
+      ]);
+      g.add(new THREE.Mesh(new THREE.TubeGeometry(egri, 12, 0.0009, 6, false), filMat));
+    }
     const yorugl = new THREE.PointLight(0xffd59a, 0, 9, 1.6);
     yorugl.position.y = -0.17;
     g.add(yorugl);
-    // Klemmalar asosning pastki yuzasida, devor tomonida
+    // Klemmnik (oq plastik, 3 qutb) rozetka ostida, devor tomonida; vintlar pastga qaragan
     const klemmalar = {};
+    const kk = new THREE.Mesh(c.ekstr(c.shakl(0.12, 0.024, 0.003), 0.01, 0.0008), c.mat(0xf0efeb, { roughness: 0.5 }));
+    kk.rotation.x = Math.PI / 2;
+    kk.position.set(0, -0.035, -0.03);
+    g.add(kk);
     const rangi = { markaz: 0x7b4a26, rezba: 0x1f6fd6, PE: 'pe' };
     [['markaz', -0.042], ['rezba', 0], ['PE', 0.042]].forEach(([id, x]) => {
-      const tag = c.quti(0.022, 0.004, 0.014, rangi[id] === 'pe' ? c.peMat() : c.mat(rangi[id]));
-      tag.position.set(x, -0.036, 0.03);
+      const tag = c.quti(0.02, 0.0012, 0.006, rangi[id] === 'pe' ? c.peMat() : c.mat(rangi[id]));
+      tag.position.set(x, -0.0456, -0.0405);
       g.add(tag);
-      const v = c.vint();
+      const lap = c.quti(0.014, 0.0008, 0.012, c.mat(0xc9a24a, { metalness: 0.75, roughness: 0.32 }));
+      lap.position.set(x, -0.0453, -0.028);
+      g.add(lap);
+      const v = c.vint(0.0042);
       v.rotation.x = Math.PI / 2; // pastga qaragan vint
-      v.position.set(x, -0.036, -0.03);
+      v.position.set(x, -0.0458, -0.028);
       g.add(v);
-      klemmalar[id] = { pos: [x, -0.04, -0.03], dir: [0, -0.5, -0.86] };
+      klemmalar[id] = { pos: [x, -0.049, -0.028], dir: [0, -0.5, -0.86] };
     });
-    g.add(c.yorliq('L', { x: -0.042, y: -0.052, z: 0.032, olcham: 0.016 }));
-    g.add(c.yorliq('N', { x: 0, y: -0.052, z: 0.032, olcham: 0.016 }));
-    g.add(c.yorliq('PE', { x: 0.042, y: -0.052, z: 0.032, olcham: 0.016 }));
+    g.add(c.yorliq('L', { x: -0.042, y: -0.056, z: -0.044, olcham: 0.013 }));
+    g.add(c.yorliq('N', { x: 0, y: -0.056, z: -0.044, olcham: 0.013 }));
+    g.add(c.yorliq('PE', { x: 0.042, y: -0.056, z: -0.044, olcham: 0.013 }));
     g.add(c.yorliq(c.el.id, { x: 0.11, y: -0.06, z: 0, olcham: 0.026 }));
     return {
       obj: g,
@@ -84,7 +125,9 @@ export default {
       bosish: [],
       yorugl,
       yangila(h, { yonadi }) {
-        shishaMat.emissiveIntensity = yonadi ? 1.6 : 0;
+        shishaMat.emissiveIntensity = yonadi ? 0.9 : 0;
+        shishaMat.opacity = yonadi ? 0.75 : 0.42;
+        filMat.emissiveIntensity = yonadi ? 4 : 0;
         yorugl.intensity = yonadi ? 2.2 : 0;
       },
     };

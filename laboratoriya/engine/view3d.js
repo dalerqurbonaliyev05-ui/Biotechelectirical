@@ -143,15 +143,54 @@ export class View3D {
     return s;
   }
 
-  vint() {
+  // Krest shlitsli (Pozidriv) vint: yarim sferik bosh, ikki kesishgan shlits.
+  vint(r = 0.0052) {
     const g = new THREE.Group();
-    const bosh = new THREE.Mesh(new THREE.CylinderGeometry(0.0055, 0.0055, 0.003, 16), this.mat(0xc7cbd1, { metalness: 0.85, roughness: 0.3 }));
+    const metal = this.mat(0xc9cdd3, { metalness: 0.9, roughness: 0.28 });
+    const bosh = new THREE.Mesh(new THREE.SphereGeometry(r, 20, 8, 0, Math.PI * 2, 0, Math.PI / 2), metal);
     bosh.rotation.x = Math.PI / 2;
+    bosh.scale.set(1, 0.42, 1);
     g.add(bosh);
-    const shlis = new THREE.Mesh(new THREE.BoxGeometry(0.0085, 0.0012, 0.001), this.mat(0x3b3f45));
-    shlis.position.z = 0.0016;
-    g.add(shlis);
+    const shlisMat = this.mat(0x2e3238, { roughness: 0.8 });
+    for (const rot of [0, Math.PI / 2]) {
+      const sh = new THREE.Mesh(new THREE.BoxGeometry(r * 1.45, r * 0.26, r * 0.5), shlisMat);
+      sh.position.z = r * 0.32;
+      sh.rotation.z = rot + Math.PI / 4;
+      g.add(sh);
+    }
     return g;
+  }
+
+  /** Burchaklari yumaloq to‘rtburchak shakli (markazi 0,0). */
+  shakl(w, h, r) {
+    const s = new THREE.Shape();
+    const x = -w / 2, y = -h / 2;
+    r = Math.min(r, w / 2, h / 2);
+    s.moveTo(x + r, y);
+    s.lineTo(x + w - r, y); s.quadraticCurveTo(x + w, y, x + w, y + r);
+    s.lineTo(x + w, y + h - r); s.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    s.lineTo(x + r, y + h); s.quadraticCurveTo(x, y + h, x, y + h - r);
+    s.lineTo(x, y + r); s.quadraticCurveTo(x, y, x + r, y);
+    return s;
+  }
+
+  /** Shaklni z o‘qi bo‘ylab qalinlik bilan cho‘zadi (old yuzasi z = d da), qirralari biroz yumaloq. */
+  ekstr(shakl, d, qirra = 0.0008, egriSeg = 6) {
+    const b = Math.min(qirra, d / 3);
+    const geo = new THREE.ExtrudeGeometry(shakl, { depth: d - 2 * b, bevelEnabled: b > 0, bevelThickness: b, bevelSize: b, bevelSegments: 2, curveSegments: egriSeg });
+    geo.translate(0, 0, b);
+    return geo;
+  }
+
+  /** Kanvasga chizilgan tekstura (yozuv, belgi, shkala). */
+  tekstura(wPx, hPx, chiz) {
+    const c = document.createElement('canvas');
+    c.width = wPx; c.height = hPx;
+    chiz(c.getContext('2d'), wPx, hPx);
+    const tex = new THREE.CanvasTexture(c);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    tex.anisotropy = 4;
+    return tex;
   }
 
   ctx(el) {
@@ -159,8 +198,12 @@ export class View3D {
       THREE, el, param: el.param, xona: this.xona,
       mat: (h, o) => this.mat(h, o),
       peMat: () => this.peMat(),
+      peTekstura: () => this.peTekstura(),
       quti: (w, h, d, m) => new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m),
-      vint: () => this.vint(),
+      vint: (r) => this.vint(r),
+      shakl: (w, h, r) => this.shakl(w, h, r),
+      ekstr: (sh, d, q, seg) => this.ekstr(sh, d, q, seg),
+      tekstura: (w, h, f) => this.tekstura(w, h, f),
       yorliq: (m, o) => this.yorliq(m, o),
     };
   }
@@ -198,26 +241,85 @@ export class View3D {
     this.scene.add(this.hemi, this.ambient, this.quyosh);
   }
 
+  // Shit korpusi: oq bo‘yalgan metall quti, eshigi ochiq, ichida perforatsiyali DIN-reyka (TH35).
   bezaklarQur() {
     for (const b of this.s3.bezaklar || []) {
       if (b.tur !== 'shit_korpus') continue;
       const [w, h, d] = b.olcham;
       const g = new THREE.Group();
-      const kul = this.mat(0xdfe2e6, { roughness: 0.5, metalness: 0.2 });
-      const orqa = new THREE.Mesh(new THREE.BoxGeometry(w, h, 0.006), kul);
-      orqa.position.z = 0.003;
+      const boyoq = this.mat(0xf1f1ee, { roughness: 0.42, metalness: 0.15 });
+      const ichki = this.mat(0xe4e5e2, { roughness: 0.6, metalness: 0.1 });
+      const T = 0.008;
+      const orqa = new THREE.Mesh(new THREE.BoxGeometry(w - 0.004, h - 0.004, 0.004), ichki);
+      orqa.position.z = 0.002;
       g.add(orqa);
-      const T = 0.012;
-      for (const [x, y, ww, hh] of [[0, h / 2 - T / 2, w, T], [0, -h / 2 + T / 2, w, T], [-w / 2 + T / 2, 0, T, h], [w / 2 - T / 2, 0, T, h]]) {
-        const m = new THREE.Mesh(new THREE.BoxGeometry(ww, hh, d), kul);
-        m.position.set(x, y, d / 2);
-        g.add(m);
+      // Yon devorlar: yumaloq burchakli ramka
+      const devor = this.shakl(w, h, 0.012);
+      devor.holes.push(this.shakl(w - 2 * T, h - 2 * T, 0.006));
+      const korpus = new THREE.Mesh(this.ekstr(devor, d, 0.0015), boyoq);
+      g.add(korpus);
+      // Old gardish (eshik yopiladigan qirra)
+      const gardish = this.shakl(w + 0.004, h + 0.004, 0.013);
+      gardish.holes.push(this.shakl(w - 2 * T - 0.016, h - 2 * T - 0.016, 0.004));
+      const gm = new THREE.Mesh(this.ekstr(gardish, 0.004, 0.001), boyoq);
+      gm.position.z = d - 0.004;
+      g.add(gm);
+      // Kabel kirish teshiklari (tepada va pastda)
+      const teshik = this.mat(0x3a3d42, { roughness: 0.9 });
+      for (const [x, y] of [[-w * 0.22, h / 2], [w * 0.22, h / 2], [-w * 0.22, -h / 2], [0, -h / 2], [w * 0.22, -h / 2]]) {
+        const t = new THREE.Mesh(new THREE.CylinderGeometry(0.011, 0.011, 0.002, 20), teshik);
+        t.position.set(x, y + Math.sign(y) * 0.0005, d * 0.45);
+        g.add(t);
       }
+      // TH35 DIN-reyka: shlyapa profili, perforatsiya bilan
+      const reykaMat = this.mat(0xc3c8cf, { metalness: 0.85, roughness: 0.32 });
       for (const y of b.din || [0]) {
-        const reyka = new THREE.Mesh(new THREE.BoxGeometry(w - 0.03, 0.035, 0.008), this.mat(0xb3b9c1, { metalness: 0.8, roughness: 0.35 }));
-        reyka.position.set(0, y, 0.01);
-        g.add(reyka);
+        // Profil (mm): o‘rtasi devorga tegadi, 7,5 mm chiqib turgan gardishlarga qurilmalar ilinadi.
+        const P = [[-12.5, 0], [12.5, 0], [12.5, 6.5], [17.5, 6.5], [17.5, 7.5], [11.5, 7.5], [11.5, 1], [-11.5, 1], [-11.5, 7.5], [-17.5, 7.5], [-17.5, 6.5], [-12.5, 6.5]];
+        const pr = new THREE.Shape();
+        pr.moveTo(P[0][0] / 1000, P[0][1] / 1000);
+        P.slice(1).forEach(([px, py]) => pr.lineTo(px / 1000, py / 1000));
+        const rw = w - 2 * T - 0.012;
+        const geo = new THREE.ExtrudeGeometry(pr, { depth: rw, bevelEnabled: false });
+        // shakl x → dunyo y, shakl y → dunyo z (chuqurlik), cho‘zilish → dunyo x
+        geo.applyMatrix4(new THREE.Matrix4().makeBasis(new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, 1), new THREE.Vector3(1, 0, 0)));
+        geo.translate(-rw / 2, y, 0.004);
+        g.add(new THREE.Mesh(geo, reykaMat));
+        for (let x = -rw / 2 + 0.012; x < rw / 2 - 0.01; x += 0.025) {
+          const tir = new THREE.Mesh(new THREE.BoxGeometry(0.013, 0.0055, 0.0004), teshik);
+          tir.position.set(x, y, 0.0052);
+          g.add(tir);
+        }
       }
+      // Ochiq eshik (chap tomonda, ilmoqlarda)
+      const eshik = new THREE.Group();
+      const tabaqa = new THREE.Mesh(this.ekstr(this.shakl(w + 0.004, h + 0.004, 0.013), 0.012, 0.0015), boyoq);
+      tabaqa.position.set((w + 0.004) / 2, 0, -0.012);
+      eshik.add(tabaqa);
+      const qulf = new THREE.Mesh(new THREE.CylinderGeometry(0.007, 0.007, 0.006, 20), this.mat(0x9aa0a8, { metalness: 0.8, roughness: 0.3 }));
+      qulf.rotation.x = Math.PI / 2;
+      qulf.position.set(w - 0.012, 0, -0.015);
+      eshik.add(qulf);
+      eshik.position.set(-w / 2 - 0.002, 0, d);
+      eshik.rotation.y = -1.95;
+      g.add(eshik);
+      for (const y of [h * 0.32, -h * 0.32]) {
+        const ilmoq = new THREE.Mesh(new THREE.CylinderGeometry(0.0035, 0.0035, 0.03, 12), this.mat(0xb9bec5, { metalness: 0.85, roughness: 0.3 }));
+        ilmoq.position.set(-w / 2 - 0.002, y, d);
+        g.add(ilmoq);
+      }
+      // Ogohlantirish belgisi (chaqmoq) eshik tashqi tomonida
+      const belgi = this.tekstura(128, 112, (x, W, H) => {
+        x.fillStyle = '#f6c400';
+        x.beginPath(); x.moveTo(W / 2, 6); x.lineTo(W - 6, H - 6); x.lineTo(6, H - 6); x.closePath(); x.fill();
+        x.lineWidth = 7; x.strokeStyle = '#111'; x.lineJoin = 'round'; x.stroke();
+        x.fillStyle = '#111';
+        x.beginPath(); x.moveTo(70, 30); x.lineTo(50, 70); x.lineTo(64, 70); x.lineTo(56, 98); x.lineTo(80, 58); x.lineTo(66, 58); x.lineTo(74, 30); x.closePath(); x.fill();
+      });
+      const bm = new THREE.Mesh(new THREE.PlaneGeometry(0.06, 0.0525), new THREE.MeshStandardMaterial({ map: belgi, transparent: true, roughness: 0.5 }));
+      bm.rotation.y = Math.PI;
+      bm.position.set((w + 0.004) / 2, h * 0.18, -0.0125);
+      eshik.add(bm);
       g.position.set(...b.pozitsiya);
       this.scene.add(g);
     }
