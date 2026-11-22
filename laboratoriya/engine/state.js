@@ -45,6 +45,8 @@ export class Lab {
     this.belgilangan = { simlar: new Set(), klemmalar: new Set() };
     this.ball = { maslahat: 0, javob: false, xato: 0, boshlanish: Date.now(), tugadi: null };
     this.simN = 0;
+    this.tarix = { orqa: [], oldinga: [] };
+    if (!this.joy2d) this.joy2d = {};
     this.hisobla(false);
   }
 
@@ -149,6 +151,7 @@ export class Lab {
       }
     }
     const s = { id: `s${++this.simN}`, a, b, rang };
+    this.tarixgaYoz();
     this.simlar.push(s);
     this.belgilangan = { simlar: new Set(), klemmalar: new Set() };
     this.emit('xabar', { matn: t('h.ulandi', { a: this.klemmaNomi(a), b: this.klemmaNomi(b) }), daraja: 'info' });
@@ -167,6 +170,7 @@ export class Lab {
   }
 
   simOchir(id) {
+    this.tarixgaYoz();
     this.simlar = this.simlar.filter((s) => s.id !== id);
     this.tanlanganSim = null;
     this.belgilangan.simlar.delete(id);
@@ -240,6 +244,7 @@ export class Lab {
   javobniKorsat() {
     this.ball.javob = true;
     for (const el of this.els) this.holat[el.id] = el.def.boshlangich(el.param);
+    this.tarixgaYoz();
     this.simlar = togriSimlar(this.sxema).map((s) => ({ ...s, id: `s${++this.simN}` }));
     this.tanlangan = null;
     this.tanlanganSim = null;
@@ -249,16 +254,50 @@ export class Lab {
   }
 
   qayta() {
+    this.joy2d = {};
     this.yangidan();
     this.qoralamaniSaqla();
     this.emit('xabar', { matn: t('h.qayta'), daraja: 'info' });
     this.emit('ozgardi', { sabab: 'qayta' });
   }
 
+  // ---------- qaytarish / takrorlash (simlar) ----------
+  tarixgaYoz() {
+    this.tarix.orqa.push(JSON.stringify(this.simlar));
+    if (this.tarix.orqa.length > 100) this.tarix.orqa.shift();
+    this.tarix.oldinga = [];
+  }
+
+  qaytar() {
+    if (!this.tarix.orqa.length) return;
+    this.tarix.oldinga.push(JSON.stringify(this.simlar));
+    this.simlar = JSON.parse(this.tarix.orqa.pop());
+    this.tanlangan = null; this.tanlanganSim = null;
+    this.ozgardi('sim');
+  }
+
+  takrorla() {
+    if (!this.tarix.oldinga.length) return;
+    this.tarix.orqa.push(JSON.stringify(this.simlar));
+    this.simlar = JSON.parse(this.tarix.oldinga.pop());
+    this.tanlangan = null; this.tanlanganSim = null;
+    this.ozgardi('sim');
+  }
+
+  // ---------- 2D joylashuv (elementni surish) ----------
+  joy(id) { return this.joy2d[id] || this.elMap.get(id).pozitsiya2d; }
+
+  elementniSur(id, x, y) {
+    this.joy2d[id] = [Math.round(x), Math.round(y)];
+    this.emit('ozgardi', { sabab: 'joy' });
+  }
+
+  joylarniTikla() { this.joy2d = {}; this.qoralamaniSaqla(); this.emit('ozgardi', { sabab: 'joy' }); }
+
   // ---------- qoralama (sahifa yangilansa ish yo‘qolmasin) ----------
   qoralamaniSaqla() {
     try {
-      localStorage.setItem(QORALAMA_KEY(this.sxema.id), JSON.stringify({ v: this.sxema.versiya || 1, simlar: this.simlar, simN: this.simN, ball: this.ball }));
+      localStorage.setItem(QORALAMA_KEY(this.sxema.id), JSON.stringify({ v: this.sxema.versiya || 1, simlar: this.simlar, simN: this.simN, ball: this.ball, joy2d: this.joy2d }));
     } catch (e) { /* e’tiborsiz */ }
   }
 
@@ -268,6 +307,7 @@ export class Lab {
       if (!q || q.v !== (this.sxema.versiya || 1) || !Array.isArray(q.simlar)) return;
       this.simlar = q.simlar.filter((s) => this.klemma(s.a) && this.klemma(s.b) && RANGLAR[s.rang]);
       this.simN = q.simN || this.simlar.length;
+      if (q.joy2d && typeof q.joy2d === 'object') this.joy2d = q.joy2d;
       if (q.ball && typeof q.ball.boshlanish === 'number') this.ball = { ...this.ball, ...q.ball };
       this.hisobla(false);
     } catch (e) { /* buzilgan qoralama — e’tiborsiz */ }

@@ -8,8 +8,8 @@ export default {
   standart: { nominal: 10, xarakteristika: 'C' },
 
   klemmalar: () => [
-    { id: 'in', yorliq: '1', nomi: { uz: 'kirish (1)', ru: 'вход (1)', en: 'line (1)' }, xy: [0, -64], dir2d: [0, -1], maks: 2 },
-    { id: 'out', yorliq: '2', nomi: { uz: 'chiqish (2)', ru: 'выход (2)', en: 'load (2)' }, xy: [0, 64], dir2d: [0, 1], maks: 2 },
+    { id: 'in', yorliq: '1', nomi: { uz: 'kirish (1)', ru: 'вход (1)', en: 'line (1)' }, xy: [0, -60], dir2d: [0, -1], maks: 2 },
+    { id: 'out', yorliq: '2', nomi: { uz: 'chiqish (2)', ru: 'выход (2)', en: 'load (2)' }, xy: [0, 60], dir2d: [0, 1], maks: 2 },
   ],
 
   boshlangich: () => ({ yoqilgan: false }),
@@ -18,25 +18,20 @@ export default {
   bosiladi: true,
   bosish: (h) => ({ ...h, yoqilgan: !h.yoqilgan }),
 
+  // 2D: modulli avtomatning old ko‘rinishi (oq korpus, richag, holat oynachasi, nominal)
   svg({ el, holat, param }) {
     const on = holat.yoqilgan;
-    // GOST 2.755: kontakt + "×" (avtomat belgisi), yonida issiqlik/elektromagnit ajratgich.
-    const pichoq = on
-      ? '<line class="e-ln" x1="0" y1="24" x2="0" y2="-24"/>'
-      : '<line class="e-ln" x1="0" y1="24" x2="-20" y2="-16"/>';
     return `
-      <rect class="e-hit" x="-34" y="-50" width="78" height="100" rx="8"/>
-      <line class="e-ln" x1="0" y1="-64" x2="0" y2="-24"/>
-      <line class="e-ln" x1="-6" y1="-30" x2="6" y2="-18"/>
-      <line class="e-ln" x1="6" y1="-30" x2="-6" y2="-18"/>
-      ${pichoq}
-      <line class="e-ln" x1="0" y1="24" x2="0" y2="64"/>
-      <circle class="e-dot" cx="0" cy="24" r="3"/>
-      <line class="e-ln e-thin" x1="-10" y1="0" x2="-26" y2="0" stroke-dasharray="4 3"/>
-      <rect class="e-body" x="-40" y="-8" width="14" height="16"/>
-      <text class="e-lbl" x="14" y="-34">${el.id}</text>
-      <text class="e-sub" x="14" y="-16">${param.xarakteristika}${param.nominal}</text>
-      <text class="e-state ${on ? 'on' : 'off'}" x="14" y="42">${on ? 'I' : 'O'}</text>`;
+      <rect class="d-body" x="-30" y="-78" width="60" height="156" rx="5"/>
+      <rect class="d-face" x="-26" y="-42" width="52" height="84" rx="3"/>
+      <text class="d-txt d-mini" x="0" y="-32" text-anchor="middle">I ON</text>
+      <rect class="d-slot" x="-10" y="-26" width="20" height="34" rx="3"/>
+      <rect class="d-tog" x="-8" y="${on ? -24 : -8}" width="16" height="14" rx="2"/>
+      <rect x="-8" y="12" width="16" height="6" rx="1" fill="${on ? '#e5484d' : '#22a35a'}"/>
+      <text class="d-txt d-katta" x="0" y="36" text-anchor="middle">${param.xarakteristika}${param.nominal}</text>
+      <text class="d-txt d-mini" x="-20" y="-64">1</text>
+      <text class="d-txt d-mini" x="-20" y="70">2</text>
+      <text class="d-lbl" x="0" y="100" text-anchor="middle">${el.id} · ${on ? 'ON' : 'OFF'}</text>`;
   },
 
   // Real modulli avtomat (17,5 × 90 mm, DIN-reykaga): pog‘onali yon profil, old panelda markirovka,

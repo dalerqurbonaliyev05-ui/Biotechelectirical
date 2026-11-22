@@ -5,7 +5,7 @@
   "daraja": 1,
   "vaqt_min": 10,
   "rejimlar": ["2d", "3d"],
-  "korinish2d": [20, 20, 1000, 480],
+  "korinish2d": [20, 40, 1060, 690],
   "nomi": {
     "uz": "Yoritish 1: bir klavishali kalit orqali lampani boshqarish",
     "ru": "Освещение 1: управление лампой одноклавишным выключателем",
@@ -22,17 +22,17 @@
     "en": "Build a circuit in which the room lamp is controlled by a single-gang switch. Elements: mains input, 1P 10 A breaker, junction box, single-gang switch, lamp. Make every joint inside the junction box and use standard wire colours."
   },
   "elementlar": [
-    {"id": "VVOD", "tur": "vvod", "pozitsiya2d": [80, 300], "pozitsiya3d": [-0.86, 1.5, 0.012]},
+    {"id": "VVOD", "tur": "vvod", "pozitsiya2d": [110, 400], "pozitsiya3d": [-0.86, 1.5, 0.012]},
     {
       "id": "Q1",
       "tur": "avtomat_1p",
       "parametr": {"nominal": 10, "xarakteristika": "C"},
-      "pozitsiya2d": [250, 150],
+      "pozitsiya2d": [270, 250],
       "pozitsiya3d": [-0.64, 1.5, 0.012]
     },
-    {"id": "X1", "tur": "taqsimlash_qutisi", "parametr": {"bloklar": 4, "portlar": 3}, "pozitsiya2d": [540, 340], "pozitsiya3d": [-0.6, 2.06, 0]},
-    {"id": "SA1", "tur": "kalit_1", "pozitsiya2d": [540, 80], "pozitsiya3d": [0.62, 1.0, 0]},
-    {"id": "HL1", "tur": "lampa_patron", "parametr": {"quvvat": 60}, "pozitsiya2d": [880, 310], "pozitsiya3d": [-0.2, 2.7, 0.7]}
+    {"id": "X1", "tur": "taqsimlash_qutisi", "parametr": {"bloklar": 4, "portlar": 3}, "pozitsiya2d": [580, 400], "pozitsiya3d": [-0.6, 2.06, 0]},
+    {"id": "SA1", "tur": "kalit_1", "pozitsiya2d": [920, 170], "pozitsiya3d": [0.62, 1.0, 0]},
+    {"id": "HL1", "tur": "lampa_patron", "parametr": {"quvvat": 60}, "pozitsiya2d": [920, 600], "pozitsiya3d": [-0.2, 2.7, 0.7]}
   ],
   "togri_ulanishlar": [
     {"nuqtalar": ["VVOD.L", "Q1.in"], "rang": "jigarrang"},

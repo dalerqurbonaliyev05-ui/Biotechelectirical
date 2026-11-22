@@ -137,6 +137,14 @@ export default {
 };
 ```
 
+### 2D ko‘rinish uslubi
+
+Ish maydoni qora nuqtali to‘r; qurilmalar old ko‘rinishda oq korpus sifatida chiziladi. `svg()` ichida tayyor sinflardan foydalaning:
+`d-body` (oq korpus), `d-face` (old panel), `d-slot`/`d-tog` (richag), `d-brass` (mis klemma plastinasi), `d-quti` (to‘q quti),
+`d-wago` (klemma bloki), `d-kolba` (lampa, `on` bilan yonadi), `d-txt`/`d-mini`/`d-katta` (korpusdagi yozuv), `d-lbl` (element ostidagi kulrang nom).
+Klemma doirachalarini dvigatel o‘zi chizadi — `klemmalar()` dagi `xy` korpusdagi vint joyiga to‘g‘ri kelsin, `dir2d` sim qaysi tomonga chiqishini bildiradi.
+Talaba elementni surib joyini o‘zgartira oladi; JSON'dagi `pozitsiya2d` — boshlang‘ich joy, `korinish2d` — "ekranga sig‘dirish" chegarasi.
+
 Element qo‘shilgach, uni ishlatadigan sxema uchun `tests/laboratoriya/` ga to‘g‘ri yechim va bir nechta xato testi yozing.
 
 ## Natijalar

@@ -12,23 +12,26 @@ let xato = false;
 
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
+// Kartochka rasmlari: qora to‘r ustidagi oq qurilmalar (yo‘nalish bo‘yicha)
 const RASM = {
-  yoritish: `<svg viewBox="0 0 300 150" aria-hidden="true">
-    <path d="M30 105 H95 M125 105 H180 V58 M180 58 V40" stroke="#1b1440" stroke-width="3" fill="none" stroke-linecap="round"/>
-    <circle cx="95" cy="105" r="4" fill="#1b1440"/><path d="M95 105 L122 92" stroke="#1b1440" stroke-width="3" stroke-linecap="round"/>
-    <circle cx="210" cy="64" r="34" fill="#ffe27a" opacity=".55"/>
-    <circle cx="210" cy="64" r="20" fill="#fff" stroke="#1b1440" stroke-width="3"/>
-    <path d="M196 50 L224 78 M224 50 L196 78" stroke="#1b1440" stroke-width="3"/>
-    <path d="M180 40 H210 V44 M230 64 H262 V105 H200" stroke="#1f6fd6" stroke-width="3" fill="none" stroke-linecap="round"/>
-    <text x="30" y="96" font-family="JetBrains Mono, monospace" font-size="13" font-weight="700" fill="#57507a">L</text>
-    <text x="100" y="128" font-family="JetBrains Mono, monospace" font-size="13" font-weight="700" fill="#57507a">SA1</text>
-    <text x="236" y="34" font-family="JetBrains Mono, monospace" font-size="13" font-weight="700" fill="#57507a">HL1</text>
+  yoritish: `<svg viewBox="0 0 320 170" aria-hidden="true">
+    <rect x="20" y="38" width="26" height="100" rx="3" fill="#f4f4f2"/>
+    <circle cx="33" cy="60" r="6" fill="#7b4a26"/><circle cx="33" cy="88" r="6" fill="#1f6fd6"/><circle cx="33" cy="116" r="6" fill="#e2c300"/>
+    <rect x="80" y="30" width="28" height="70" rx="3" fill="#f4f4f2"/><rect x="89" y="46" width="10" height="16" fill="#1d1f24"/><rect x="89" y="66" width="10" height="3" fill="#e5484d"/>
+    <rect x="140" y="62" width="70" height="70" rx="8" fill="#17181c" stroke="#4b4e57"/>
+    <rect x="150" y="76" width="50" height="12" rx="2" fill="#e9edf1"/><rect x="150" y="96" width="50" height="12" rx="2" fill="#e9edf1"/><rect x="150" y="116" width="50" height="10" rx="2" fill="#e9edf1"/>
+    <rect x="236" y="18" width="50" height="50" rx="7" fill="#f4f4f2"/><rect x="246" y="26" width="30" height="34" rx="4" fill="#e3e3de"/>
+    <circle cx="262" cy="122" r="30" fill="#ffcf40" opacity=".35"/><circle cx="262" cy="122" r="18" fill="#ffe27a"/><rect x="248" y="92" width="28" height="10" rx="2" fill="#f4f4f2"/>
+    <path d="M46 60 H64 V22 H94 V30" fill="none" stroke="#7b4a26" stroke-width="2.4"/>
+    <path d="M94 100 V112 H130 V82 H150" fill="none" stroke="#7b4a26" stroke-width="2.4"/>
+    <path d="M200 82 H222 V76 H250 V68" fill="none" stroke="#7b4a26" stroke-width="2.4"/>
+    <path d="M46 88 H58 V150 H300 V108 H276 V102" fill="none" stroke="#1f6fd6" stroke-width="2.4"/>
+    <path d="M200 102 H230 V96 H256 V92" fill="none" stroke="#7b4a26" stroke-width="2.4"/>
   </svg>`,
 };
 
 function chip(guruh, qiymat, matn) {
-  const on = filtr[guruh] === qiymat;
-  return `<button type="button" class="chip" data-g="${guruh}" data-v="${qiymat ?? ''}" aria-pressed="${on}">${esc(matn)}</button>`;
+  return `<button type="button" class="chip" data-g="${guruh}" data-v="${qiymat ?? ''}" aria-pressed="${filtr[guruh] === qiymat}">${esc(matn)}</button>`;
 }
 
 function filtrlarniChiz() {
@@ -37,9 +40,12 @@ function filtrlarniChiz() {
   document.getElementById('f-rejim').innerHTML = chip('rejim', null, t('filtr.hammasi')) + REJIMLAR.map((r) => chip('rejim', r, r.toUpperCase())).join('');
 }
 
-function darajaBelgi(n) {
-  return `<span class="daraja" title="${esc(t('karta.daraja', { n }))}" aria-label="${esc(t('karta.daraja', { n }))}">${[1, 2, 3, 4, 5].map((i) => `<i class="${i <= n ? 'on' : ''}"></i>`).join('')}</span>`;
+function lentaniChiz() {
+  const items = ['k.t1', 'k.t2', 'k.t3', 'k.t4', 'k.t5'].map((k, i) => `<span><small>0${i + 1}</small>${esc(t(k))}</span>`).join('');
+  document.getElementById('ticker').innerHTML = items.repeat(4);
 }
+
+const darajaBelgi = (n) => `<span class="daraja" title="${esc(t('karta.daraja', { n }))}" aria-label="${esc(t('karta.daraja', { n }))}">${[1, 2, 3, 4, 5].map((i) => `<i class="${i <= n ? 'on' : ''}"></i>`).join('')}</span>`;
 
 function kartalarniChiz() {
   const root = document.getElementById('kartalar');
@@ -57,14 +63,14 @@ function kartalarniChiz() {
       ${n?.bajarildi ? `<span class="bajarildi">${esc(t('karta.bajarildi'))}</span>` : ''}
       <div class="karta-rasm">${RASM[s.yonalish] || ''}</div>
       <div class="karta-tana">
-        <h2>${esc(tx(s.nomi))}</h2>
+        <span class="eyebrow acc">// ${esc(t(`yon.${s.yonalish}`))}</span>
+        <h3>${esc(tx(s.nomi))}</h3>
         <p>${esc(tx(s.qisqacha))}</p>
         ${n?.bajarildi ? `<span class="karta-eng">${esc(t('karta.eng', { b: n.eng ?? n.ball }))}</span>` : ''}
         <div class="karta-meta">
-          <span class="tag">${esc(t(`yon.${s.yonalish}`))}</span>
           ${darajaBelgi(s.daraja)}
-          <span class="tag vaqt">${esc(t('karta.vaqt', { n: s.vaqt_min }))}</span>
-          ${(s.rejimlar || []).map((r) => `<span class="tag rejim">${r.toUpperCase()}</span>`).join('')}
+          <span class="tag">${esc(t('karta.vaqt', { n: s.vaqt_min }))}</span>
+          ${(s.rejimlar || []).map((r) => `<span class="tag">${r.toUpperCase()}</span>`).join('')}
         </div>
         <span class="karta-go">${esc(t(n?.bajarildi ? 'karta.davom' : 'karta.ochish'))}</span>
       </div>
@@ -83,7 +89,7 @@ document.querySelector('.filtrlar').addEventListener('click', (e) => {
   kartalarniChiz();
 });
 
-tilniKuzat(() => { filtrlarniChiz(); kartalarniChiz(); });
+tilniKuzat(() => { filtrlarniChiz(); kartalarniChiz(); lentaniChiz(); });
 sahifaBoshlash();
 
 (async () => {
@@ -92,6 +98,7 @@ sahifaBoshlash();
     const { sxemalar: idlar } = await r.json();
     const hammasi = await Promise.all(idlar.map((id) => fetch(`/laboratoriya/schemes/${encodeURIComponent(id)}.json`).then((x) => (x.ok ? x.json() : null)).catch(() => null)));
     sxemalar = hammasi.filter(Boolean);
+    if (sxemalar[0]) document.querySelectorAll('[data-birinchi]').forEach((a) => { a.href = `/laboratoriya/${encodeURIComponent(sxemalar[0].id)}`; });
   } catch (e) {
     xato = true;
   }

@@ -7,22 +7,23 @@ export default {
   nomi: { uz: 'Tarmoq kirishi 220 V', ru: 'Ввод сети 220 В', en: 'Mains input 220 V' },
 
   klemmalar: () => [
-    { id: 'L', yorliq: 'L', nomi: { uz: 'faza (L)', ru: 'фаза (L)', en: 'phase (L)' }, xy: [44, -80], dir2d: [1, 0], maks: 2 },
-    { id: 'N', yorliq: 'N', nomi: { uz: 'nol (N)', ru: 'ноль (N)', en: 'neutral (N)' }, xy: [44, 0], dir2d: [1, 0], maks: 2 },
-    { id: 'PE', yorliq: 'PE', nomi: { uz: 'himoya (PE)', ru: 'защитный (PE)', en: 'protective earth (PE)' }, xy: [44, 80], dir2d: [1, 0], maks: 2 },
+    { id: 'L', yorliq: 'L', nomi: { uz: 'faza (L)', ru: 'фаза (L)', en: 'phase (L)' }, xy: [0, -80], dir2d: [1, 0], maks: 2 },
+    { id: 'N', yorliq: 'N', nomi: { uz: 'nol (N)', ru: 'ноль (N)', en: 'neutral (N)' }, xy: [0, 0], dir2d: [1, 0], maks: 2 },
+    { id: 'PE', yorliq: 'PE', nomi: { uz: 'himoya (PE)', ru: 'защитный (PE)', en: 'protective earth (PE)' }, xy: [0, 80], dir2d: [1, 0], maks: 2 },
   ],
 
   boshlangich: () => ({}),
   ichki: () => [],
   manba: { L: 'L', N: 'N', PE: 'PE' },
 
-  svg: () => `
-    <rect class="e-body" x="-34" y="-104" width="40" height="208" rx="8"/>
-    <text class="e-sub" x="-14" y="0" text-anchor="middle" transform="rotate(-90 -14 0)">~ 220 V · 50 Hz</text>
-    <line class="e-ln" x1="6" y1="-80" x2="44" y2="-80"/>
-    <line class="e-ln" x1="6" y1="0" x2="44" y2="0"/>
-    <line class="e-ln e-pe" x1="6" y1="80" x2="44" y2="80"/>
-    <text class="e-lbl" x="-14" y="-114" text-anchor="middle">VVOD</text>`,
+  // 2D: manba shinasi (oq vertikal plastina, rangli klemma uyalari)
+  svg: ({ el }) => `
+    <rect class="d-body" x="-24" y="-122" width="48" height="244" rx="5"/>
+    <text class="d-txt" x="0" y="-104" text-anchor="middle">~220V</text>
+    <circle r="13" cy="-80" fill="#7b4a26"/><text class="d-txt" x="0" y="-56" text-anchor="middle">L</text>
+    <circle r="13" cy="0" fill="#1f6fd6"/><text class="d-txt" x="0" y="24" text-anchor="middle">N</text>
+    <circle r="13" cy="80" fill="url(#pe-chiziq)"/><text class="d-txt" x="0" y="104" text-anchor="middle">PE</text>
+    <text class="d-lbl" x="0" y="146" text-anchor="middle">${el.id} · 220 V</text>`,
 
   // DIN-reykadagi uchta modulli vintli klemma bloki (L — kulrang, N — ko‘k, PE — sariq-yashil),
   // yuqoridan kiruvchi kabel: tashqi qobiq kesilgan, uchta rangli tomir yuqori vintlarga ulangan.

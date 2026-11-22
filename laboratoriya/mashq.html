@@ -5,121 +5,132 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Laboratoriya mashqi | EnergyVibe</title>
 <meta name="description" content="Elektr sxemalarini 2D va 3D ko‘rinishda yig‘ish, tekshirish va o‘rganish uchun trenajor.">
-<meta name="theme-color" content="#6d4aff">
+<meta name="theme-color" content="#09090b">
 <link rel="icon" type="image/png" href="/rasmlar1/rasm5/rasm4.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Manrope:wght@500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/laboratoriya/lab.css">
 <script type="importmap">{"imports": {"three": "/laboratoriya/vendor/three/three.module.min.js", "three/addons/": "/laboratoriya/vendor/three/addons/"}}</script>
 </head>
-<body>
-<a class="skip-link" href="#main">↓</a>
-<header class="navbar">
-  <div class="nav-pill">
-    <a class="nav-logo" href="/" aria-label="EnergyVibe">
-      <svg class="logo-mark" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M13.5 2 5 13.5h5.5L9.5 22 19 9.8h-5.6L13.5 2Z" fill="currentColor"/></svg>
-      <span>ENERGY<b>VIBE</b></span>
-    </a>
-    <nav class="nav-menu" id="nav-menu" aria-label="Menyu">
-      <a href="/" data-i18n="nav.home">Bosh sahifa</a>
-      <a href="/#tools" data-i18n="nav.tools">Vositalar</a>
-      <a href="/#apps" data-i18n="nav.apps">Ilovalar</a>
-      <a href="/laboratoriya/" aria-current="page" data-i18n="nav.lab">Laboratoriya</a>
-    </nav>
-    <div class="nav-right">
-      <div class="lang-switch" role="group" aria-label="Til / Language / Язык">
-        <button type="button" class="lang-btn" data-lang="uz" aria-pressed="true">UZ</button>
-        <button type="button" class="lang-btn" data-lang="ru" aria-pressed="false">RU</button>
-        <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
-      </div>
-      <button type="button" class="hamburger" id="hamburger" data-i18n-aria="nav.menu" aria-label="Menyu" aria-expanded="false" aria-controls="nav-menu"><span></span><span></span><span></span></button>
+<body class="app">
+<a class="skip-link" href="#ws">↓</a>
+
+<header class="app-head">
+  <a class="btn sm" href="/laboratoriya/" data-i18n="mashq.orqaga">← Laboratoriya</a>
+  <a class="logo" href="/" aria-label="EnergyVibe">
+    <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#09090b"/><path d="M13.2 4.5 7.6 13h4l-1 6.5L16.4 11h-4l.8-6.5Z" fill="#fff"/></svg>
+    <span>ENERGYVIBE <i>/ LAB</i></span>
+  </a>
+  <div class="app-head-r">
+    <span id="m-nomi"></span>
+    <div class="lang-switch" role="group" aria-label="Til / Language / Язык">
+      <button type="button" class="lang-btn" data-lang="uz" aria-pressed="true">UZ</button>
+      <button type="button" class="lang-btn" data-lang="ru" aria-pressed="false">RU</button>
+      <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
     </div>
   </div>
 </header>
 
-<main id="main" class="wrap">
-  <div class="m-head">
-    <div>
-      <a class="m-orqaga" href="/laboratoriya/" data-i18n="mashq.orqaga">← Laboratoriya</a>
-      <h1 id="m-nomi">…</h1>
-      <div class="m-meta" id="m-meta"></div>
-    </div>
+<div class="toolbar" role="toolbar">
+  <div class="tb-grp">
+    <button type="button" class="ikon" id="tb-zoomout" data-i18n-title="tb.zoomout"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5 21 21M8 11h6"/></svg></button>
+    <button type="button" class="ikon" id="tb-zoomin" data-i18n-title="tb.zoomin"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5 21 21M8 11h6M11 8v6"/></svg></button>
+    <button type="button" class="ikon" id="tb-fit" data-i18n-title="tb.fit"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/><circle cx="12" cy="12" r="2.2"/></svg></button>
+  </div>
+  <div class="tb-grp">
+    <button type="button" class="ikon" id="tb-del" data-i18n-title="tb.del"><svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button>
+    <button type="button" class="ikon" id="tb-undo" data-i18n-title="tb.undo"><svg viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg></button>
+    <button type="button" class="ikon" id="tb-redo" data-i18n-title="tb.redo"><svg viewBox="0 0 24 24"><path d="m15 14 5-5-5-5"/><path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13"/></svg></button>
+    <button type="button" class="ikon" id="tb-joy" data-i18n-title="tb.joy"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6"/><rect x="14" y="4" width="6" height="6"/><rect x="4" y="14" width="6" height="6"/><rect x="14" y="14" width="6" height="6"/></svg></button>
+  </div>
+  <div class="tb-grp">
     <div class="seg" id="rejim" role="group" aria-label="2D / 3D">
-      <button type="button" data-rejim="2d" aria-pressed="true" data-i18n="rejim.2d">2D sxema</button>
-      <button type="button" data-rejim="3d" aria-pressed="false" data-i18n="rejim.3d">3D montaj</button>
+      <button type="button" data-rejim="2d" aria-pressed="true">2D</button>
+      <button type="button" data-rejim="3d" aria-pressed="false">3D</button>
     </div>
   </div>
+  <div class="tb-bo"></div>
+  <div class="tb-grp">
+    <div class="stat"><b id="st-ball">100</b><span data-i18n="stat.ball">Ball</span></div>
+    <div class="stat"><b id="st-vaqt">0:00</b><span data-i18n="stat.vaqt">Vaqt</span></div>
+    <div class="stat"><b id="st-xato">0</b><span data-i18n="stat.xato">Xatolar</span></div>
+  </div>
+  <div class="tb-grp">
+    <button type="button" class="ikon chegara" id="tb-yordam" data-i18n-title="tb.yordam">?</button>
+    <button type="button" class="btn urgu" id="b-topshiriq" aria-pressed="false" data-i18n="btn.topshiriq">Topshiriq</button>
+    <button type="button" class="btn oq" id="b-tekshir" data-i18n="btn.tekshir">Tekshirish</button>
+    <button type="button" class="btn yashil" id="b-quvvat" aria-pressed="false">▶ <span data-i18n="btn.sim_on">Tok berish</span></button>
+    <button type="button" class="ikon" id="tb-full" data-i18n-title="tb.full"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+  </div>
+</div>
 
-  <p class="m-task"><b data-i18n="mashq.topshiriq">Topshiriq</b>: <span id="m-topshiriq"></span></p>
+<main class="ws" id="ws">
+  <div class="stage" id="stage-2d"></div>
+  <div class="stage" id="stage-3d" hidden></div>
 
-  <div class="m-bar" id="m-bar" data-daraja="info" role="status" aria-live="polite">
-    <span class="m-dot"></span>
-    <p id="holat"></p>
-    <div class="m-stats">
-      <div class="stat"><b id="st-ball">100</b><span data-i18n="stat.ball">Ball</span></div>
-      <div class="stat"><b id="st-vaqt">0:00</b><span data-i18n="stat.vaqt">Vaqt</span></div>
-      <div class="stat"><b id="st-xato">0</b><span data-i18n="stat.xato">Xatolar</span></div>
-    </div>
+  <div class="toast" id="m-bar" data-daraja="info" role="status" aria-live="polite"><span class="m-dot"></span><p id="holat"></p></div>
+
+  <div class="help-pop" id="help" hidden>
+    <h3 data-i18n="yordam.sarlavha">Boshqaruv</h3>
+    <ul>
+      <li data-i18n="y.1"></li><li data-i18n="y.2"></li><li data-i18n="y.3"></li>
+      <li data-i18n="y.4"></li><li data-i18n="y.5"></li><li data-i18n="y.6"></li>
+    </ul>
   </div>
 
-  <div class="m-grid">
-    <div class="m-stage">
-      <div class="stage" id="stage-2d"></div>
-      <div class="stage" id="stage-3d" hidden></div>
-    </div>
-    <aside class="m-side">
-      <section class="panel">
-        <h2 data-i18n="rang.sarlavha">Sim rangi</h2>
-        <div class="ranglar" id="ranglar" role="group"></div>
-      </section>
-      <section class="panel">
-        <h2 data-i18n="panel.boshqaruv">Boshqaruv</h2>
-        <div class="tugmalar">
-          <button type="button" class="btn quvvat" id="b-quvvat" aria-pressed="false">⚡ <span data-i18n="btn.quvvat_ber">Tokni berish</span></button>
-          <button type="button" class="btn pri" id="b-tekshir">✓ <span data-i18n="btn.tekshir">Tekshirish</span></button>
-          <div class="ikki">
-            <button type="button" class="btn" id="b-maslahat">💡 <span data-i18n="btn.maslahat">Maslahat</span></button>
-            <button type="button" class="btn yumshoq" id="b-qayta">↺ <span data-i18n="btn.qayta">Qaytadan boshlash</span></button>
-          </div>
-          <button type="button" class="btn yumshoq" id="b-javob" data-i18n="btn.javob">To‘g‘ri javobni ko‘rsatish</button>
-        </div>
-      </section>
-      <section class="panel" id="p-natija" hidden>
-        <h2 data-i18n="panel.natija">Tekshiruv natijasi</h2>
-        <ul class="natijalar" id="natijalar"></ul>
-      </section>
-      <section class="panel" id="p-maslahat" hidden>
-        <h2 data-i18n="panel.maslahatlar">Maslahatlar</h2>
-        <ol class="maslahatlar" id="maslahatlar"></ol>
-      </section>
-      <section class="panel">
-        <h2 data-i18n="panel.holat">Elementlar holati</h2>
-        <ul class="holat-royxat" id="el-holat"></ul>
-      </section>
-    </aside>
-  </div>
+  <aside class="side" id="side" aria-label="Topshiriq">
+    <section class="side-blok">
+      <span class="eyebrow acc">// <span data-i18n="mashq.topshiriq">Topshiriq</span></span>
+      <h2 id="m-sarlavha">…</h2>
+      <div class="m-meta" id="m-meta"></div>
+      <p class="matn" id="m-topshiriq"></p>
+      <div class="side-amal">
+        <button type="button" class="btn sm" id="b-maslahat" data-i18n="btn.maslahat">Maslahat</button>
+        <button type="button" class="btn sm" id="b-qayta" data-i18n="btn.qayta">Qaytadan boshlash</button>
+        <button type="button" class="btn sm keng" id="b-javob" data-i18n="btn.javob">To‘g‘ri javobni ko‘rsatish</button>
+      </div>
+    </section>
+    <section class="side-blok" id="p-natija" hidden>
+      <span class="eyebrow">// <span data-i18n="panel.natija">Tekshiruv natijasi</span></span>
+      <ul class="natijalar" id="natijalar"></ul>
+    </section>
+    <section class="side-blok" id="p-maslahat" hidden>
+      <span class="eyebrow">// <span data-i18n="panel.maslahatlar">Maslahatlar</span></span>
+      <ol class="maslahatlar" id="maslahatlar"></ol>
+    </section>
+    <section class="side-blok">
+      <span class="eyebrow">// <span data-i18n="panel.holat">Elementlar holati</span></span>
+      <ul class="holat-royxat" id="el-holat"></ul>
+    </section>
+  </aside>
 </main>
+
+<footer class="bottombar">
+  <div class="bb-grp" id="ranglar" role="group"><span class="bb-lbl" data-i18n="bar.rang">Sim</span></div>
+  <div class="bb-grp" id="el-chips"><span class="bb-lbl" data-i18n="bar.el">Elementlar</span></div>
+</footer>
 
 <dialog id="dlg-tasdiq">
   <form method="dialog" class="dlg">
     <p id="tasdiq-matn"></p>
     <div class="dlg-tugma">
       <button class="btn" value="yoq" data-i18n="btn.yoq">Bekor qilish</button>
-      <button class="btn pri" value="ha" data-i18n="btn.ha">Ha, davom etish</button>
+      <button class="btn oq" value="ha" data-i18n="btn.ha">Ha, davom etish</button>
     </div>
   </form>
 </dialog>
 
 <dialog id="dlg-natija">
   <form method="dialog" class="dlg">
+    <span class="eyebrow acc">// <span data-i18n="panel.natija">Natija</span></span>
     <h2 data-i18n="natija.sarlavha">Sxema to‘g‘ri yig‘ildi!</h2>
     <p data-i18n="natija.matn">Lampa kalit bilan yonib-o‘chadi, hech qanday ogohlantirish yo‘q.</p>
     <div class="natija-ball" id="n-ball">100</div>
     <div class="natija-jadval" id="n-jadval"></div>
     <div class="dlg-tugma">
       <a class="btn" href="/laboratoriya/" data-i18n="btn.katalog">Katalogga qaytish</a>
-      <button class="btn pri" value="ok" data-i18n="btn.yopish">Yopish</button>
+      <button class="btn oq" value="ok" data-i18n="btn.yopish">Yopish</button>
     </div>
   </form>
 </dialog>

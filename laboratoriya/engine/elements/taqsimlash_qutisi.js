@@ -58,17 +58,21 @@ export default {
     return res;
   },
 
+  // 2D: ochiq taqsimlash qutisi, ichida Wago klemma bloklari (to‘q sariq richaglar)
   svg({ el, param }) {
     const { w, h } = olcham2d(param);
-    let s = `<rect class="e-quti" x="${-w / 2}" y="${-h / 2}" width="${w}" height="${h}" rx="14"/>
-      <text class="e-lbl" x="${-w / 2 + 10}" y="${-h / 2 - 10}">${el.id}</text>`;
+    let s = `<rect class="d-quti" x="${-w / 2}" y="${-h / 2}" width="${w}" height="${h}" rx="14"/>
+      <text class="d-lbl" x="${-w / 2}" y="${-h / 2 - 12}">${el.id} · JB</text>`;
     bloklar(param).forEach((portlar, bi) => {
       const y = (bi - (param.bloklar - 1) / 2) * QATOR_2D + 10;
       const x0 = (0 - (param.portlar - 1) / 2) * QADAM_2D + 14;
       const x1 = (param.portlar - 1 - (param.portlar - 1) / 2) * QADAM_2D + 14;
-      s += `<rect class="e-blok" x="${x0 - 22}" y="${y - 15}" width="${x1 - x0 + 44}" height="30" rx="7"/>
-        <line class="e-shina" x1="${x0}" y1="${y}" x2="${x1}" y2="${y}"/>
-        <text class="e-sub" x="${x0 - 34}" y="${y + 5}" text-anchor="end">${portlar[0][0]}</text>`;
+      s += `<rect class="d-wago" x="${x0 - 22}" y="${y - 16}" width="${x1 - x0 + 44}" height="32" rx="5"/>`;
+      portlar.forEach((_, pi) => {
+        const x = x0 + pi * QADAM_2D;
+        s += `<rect x="${x - 9}" y="${y - 22}" width="18" height="7" rx="2" fill="#ff7a00"/>`;
+      });
+      s += `<text class="d-lbl" x="${x0 - 32}" y="${y + 4}" text-anchor="end">${portlar[0][0]}</text>`;
     });
     return s;
   },

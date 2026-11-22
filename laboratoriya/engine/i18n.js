@@ -243,6 +243,83 @@ const L = {
   },
 };
 
+// Qayta dizayn (ish maydoni va katalog) uchun matnlar
+Object.assign(L.uz, {
+  'tb.panel': 'Yon panel', 'tb.zoomout': 'Kichiklashtirish', 'tb.zoomin': 'Kattalashtirish', 'tb.fit': 'Ekranga sig‘dirish',
+  'tb.del': 'Tanlangan simni o‘chirish', 'tb.undo': 'Ortga qaytarish', 'tb.redo': 'Qayta bajarish', 'tb.joy': 'Elementlar joyini tiklash',
+  'tb.full': 'To‘liq ekran', 'tb.yordam': 'Yordam',
+  'btn.topshiriq': 'Topshiriq', 'btn.sim_on': 'Tok berish', 'btn.sim_off': 'Tokni o‘chirish',
+  'bar.rang': 'Sim', 'bar.el': 'Elementlar',
+  'yordam.sarlavha': 'Boshqaruv',
+  'y.1': 'Klemmani bosing, so‘ng ikkinchi klemmani — tanlangan rangdagi sim tortiladi.',
+  'y.2': 'Simni bosing — tanlanadi; yana bosing yoki Delete — o‘chadi.',
+  'y.3': 'Avtomat va kalitni bosing — yoqiladi/o‘chadi. Elementni surib joyini o‘zgartiring.',
+  'y.4': 'G‘ildirak yoki ikki barmoq — masshtab; bo‘sh joyni surish — siljitish.',
+  'y.5': 'Ctrl+Z — ortga, Ctrl+Y — qayta bajarish, F — ekranga sig‘dirish, Esc — tanlovni bekor qilish.',
+  'y.6': '«Tok berish» bilan sxemani sinang, «Tekshirish» bilan baholang.',
+  'k.nav_cta': 'Boshlash', 'k.h1a': 'Elektr sxemalarini', 'k.h1b': 'brauzerda yig‘ing.',
+  'k.lead': 'Klemmadan klemmaga sim torting, tokni bering va natijani ko‘ring: lampa yonadi, qisqa tutashuvda avtomat o‘chadi, xatolar aniq ko‘rsatiladi. Kompyuter va telefonda ishlaydi.',
+  'k.cta1': 'Mashqni boshlash →', 'k.cta2': 'Sxemalar',
+  'k.t1': '2D sxema', 'k.t2': '3D montaj', 'k.t3': 'Jonli simulyatsiya', 'k.t4': 'Xatolarni aniqlash', 'k.t5': 'UZ · RU · EN',
+  'k.sec': '// Sxemalar', 'k.sec_h': 'Sxemani tanlang.', 'k.sec_p': 'Har bir sxema — real montaj qoidalari asosidagi mashq. Bajarilganlari belgilanadi.',
+  'k.f_sec': '// Imkoniyatlar', 'k.f_h': 'Ichida nimalar bor',
+  'k.f1t': '// Jonli simulyatsiya', 'k.f1h': 'Tok oqimi', 'k.f1p': 'Sim torting, tokni bering: simlar bo‘ylab tok yuguradi, lampa yonadi, kalit uni boshqaradi.',
+  'k.f2t': '// Xatolarni aniqlash', 'k.f2h': 'Aqlli tekshiruv', 'k.f2p': 'Qisqa tutashuv, ochiq zanjir, nolni uzayotgan kalit, faza rezbada, PE yo‘q, noto‘g‘ri rang — har biri alohida tushuntiriladi.',
+  'k.f3t': '// 2D va 3D', 'k.f3h': 'Ikki ko‘rinish', 'k.f3p': '2D ish maydonida yig‘ing, 3D xonada real montajni ko‘ring — ikkalasi bitta holatda ishlaydi.',
+  'k.end_sec': '// Boshlash', 'k.end_h': 'Bugun mashq qiling.', 'k.end_p': 'Ro‘yxatdan o‘tish shart emas. Natijalaringiz brauzeringizda saqlanadi.',
+  'k.foot': 'EnergyVibe Laboratoriya',
+});
+Object.assign(L.ru, {
+  'tb.panel': 'Боковая панель', 'tb.zoomout': 'Уменьшить', 'tb.zoomin': 'Увеличить', 'tb.fit': 'Вписать в экран',
+  'tb.del': 'Удалить выбранный провод', 'tb.undo': 'Отменить', 'tb.redo': 'Повторить', 'tb.joy': 'Сбросить расположение элементов',
+  'tb.full': 'Полный экран', 'tb.yordam': 'Справка',
+  'btn.topshiriq': 'Задание', 'btn.sim_on': 'Подать ток', 'btn.sim_off': 'Снять ток',
+  'bar.rang': 'Провод', 'bar.el': 'Элементы',
+  'yordam.sarlavha': 'Управление',
+  'y.1': 'Нажмите клемму, затем вторую — будет проложен провод выбранного цвета.',
+  'y.2': 'Нажмите провод — он выделится; нажмите ещё раз или Delete — удалится.',
+  'y.3': 'Нажмите автомат или выключатель — включится/отключится. Перетащите элемент, чтобы переместить.',
+  'y.4': 'Колесо или два пальца — масштаб; перетаскивание пустого места — сдвиг.',
+  'y.5': 'Ctrl+Z — отменить, Ctrl+Y — повторить, F — вписать в экран, Esc — снять выделение.',
+  'y.6': 'Проверьте схему кнопкой «Подать ток», оцените — «Проверить».',
+  'k.nav_cta': 'Начать', 'k.h1a': 'Собирайте электросхемы', 'k.h1b': 'прямо в браузере.',
+  'k.lead': 'Прокладывайте провода от клеммы к клемме, подавайте ток и смотрите результат: лампа загорается, при КЗ срабатывает автомат, ошибки объясняются. Работает на компьютере и телефоне.',
+  'k.cta1': 'Начать упражнение →', 'k.cta2': 'Схемы',
+  'k.t1': '2D схема', 'k.t2': '3D монтаж', 'k.t3': 'Живая симуляция', 'k.t4': 'Поиск ошибок', 'k.t5': 'UZ · RU · EN',
+  'k.sec': '// Схемы', 'k.sec_h': 'Выберите схему.', 'k.sec_p': 'Каждая схема — упражнение по реальным правилам монтажа. Выполненные отмечаются.',
+  'k.f_sec': '// Возможности', 'k.f_h': 'Что внутри',
+  'k.f1t': '// Живая симуляция', 'k.f1h': 'Ток в цепи', 'k.f1p': 'Проложите провода и подайте ток: по проводам бежит ток, лампа горит, выключатель ею управляет.',
+  'k.f2t': '// Поиск ошибок', 'k.f2h': 'Умная проверка', 'k.f2p': 'КЗ, обрыв, выключатель в нуле, фаза на резьбе, нет PE, неверный цвет — каждая ошибка объясняется отдельно.',
+  'k.f3t': '// 2D и 3D', 'k.f3h': 'Два вида', 'k.f3p': 'Собирайте в 2D, смотрите реальный монтаж в 3D-комнате — оба вида работают с одним состоянием.',
+  'k.end_sec': '// Начать', 'k.end_h': 'Тренируйтесь сегодня.', 'k.end_p': 'Регистрация не нужна. Результаты сохраняются в вашем браузере.',
+  'k.foot': 'EnergyVibe Лаборатория',
+});
+Object.assign(L.en, {
+  'tb.panel': 'Side panel', 'tb.zoomout': 'Zoom out', 'tb.zoomin': 'Zoom in', 'tb.fit': 'Fit to screen',
+  'tb.del': 'Delete selected wire', 'tb.undo': 'Undo', 'tb.redo': 'Redo', 'tb.joy': 'Reset element positions',
+  'tb.full': 'Full screen', 'tb.yordam': 'Help',
+  'btn.topshiriq': 'Task', 'btn.sim_on': 'Simulate', 'btn.sim_off': 'Stop',
+  'bar.rang': 'Wire', 'bar.el': 'Elements',
+  'yordam.sarlavha': 'Controls',
+  'y.1': 'Tap a terminal, then a second one — a wire of the selected colour is run.',
+  'y.2': 'Tap a wire to select it; tap again or press Delete to remove it.',
+  'y.3': 'Tap the breaker or switch to operate it. Drag an element to move it.',
+  'y.4': 'Wheel or two fingers — zoom; drag empty space — pan.',
+  'y.5': 'Ctrl+Z — undo, Ctrl+Y — redo, F — fit to screen, Esc — clear selection.',
+  'y.6': 'Try the circuit with “Simulate”, grade it with “Check”.',
+  'k.nav_cta': 'Start', 'k.h1a': 'Wire electrical circuits', 'k.h1b': 'in the browser.',
+  'k.lead': 'Run wires terminal to terminal, apply power and watch what happens: the lamp lights, a short trips the breaker, mistakes are explained. Works on desktop and mobile.',
+  'k.cta1': 'Start practising →', 'k.cta2': 'Circuits',
+  'k.t1': '2D diagram', 'k.t2': '3D wiring', 'k.t3': 'Live simulation', 'k.t4': 'Fault finding', 'k.t5': 'UZ · RU · EN',
+  'k.sec': '// Circuits', 'k.sec_h': 'Pick a circuit.', 'k.sec_p': 'Each circuit is an exercise built on real installation rules. Completed ones are marked.',
+  'k.f_sec': '// Features', 'k.f_h': 'What’s inside',
+  'k.f1t': '// Live simulation', 'k.f1h': 'Current flow', 'k.f1p': 'Run the wires and apply power: current flows along them, the lamp lights and the switch controls it.',
+  'k.f2t': '// Fault finding', 'k.f2h': 'Smart checking', 'k.f2p': 'Short circuit, open circuit, switched neutral, phase on the shell, missing PE, wrong colour — each is explained separately.',
+  'k.f3t': '// 2D and 3D', 'k.f3h': 'Two views', 'k.f3p': 'Build in 2D, see the real installation in a 3D room — both share one state.',
+  'k.end_sec': '// Get started', 'k.end_h': 'Practise today.', 'k.end_p': 'No sign-up needed. Your results are saved in your browser.',
+  'k.foot': 'EnergyVibe Laboratory',
+});
+
 let joriy = 'uz';
 const kuzatuvchilar = new Set();
 
@@ -267,6 +344,7 @@ export function tilniOrnat(lang) {
   document.documentElement.lang = lang;
   document.querySelectorAll('[data-i18n]').forEach((el) => { el.textContent = t(el.dataset.i18n); });
   document.querySelectorAll('[data-i18n-aria]').forEach((el) => { el.setAttribute('aria-label', t(el.dataset.i18nAria)); });
+  document.querySelectorAll('[data-i18n-title]').forEach((el) => { const v = t(el.dataset.i18nTitle); el.setAttribute('title', v); el.setAttribute('aria-label', v); });
   document.querySelectorAll('.lang-btn').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
   try { localStorage.setItem(LANG_KEY, lang); } catch (e) { /* xotira yopiq bo‘lishi mumkin */ }
   kuzatuvchilar.forEach((f) => f(lang));

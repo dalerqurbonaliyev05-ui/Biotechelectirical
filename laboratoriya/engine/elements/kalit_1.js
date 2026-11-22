@@ -6,8 +6,8 @@ export default {
   nomi: { uz: 'Bir klavishali kalit', ru: 'Одноклавишный выключатель', en: 'Single-gang switch' },
 
   klemmalar: () => [
-    { id: 'L', yorliq: 'L', nomi: { uz: 'kirish (L)', ru: 'вход (L)', en: 'input (L)' }, xy: [-52, 34], dir2d: [0, 1], maks: 2 },
-    { id: 'L1', yorliq: 'L1', nomi: { uz: 'chiqish (L1)', ru: 'выход (L1)', en: 'output (L1)' }, xy: [52, 34], dir2d: [0, 1], maks: 2 },
+    { id: 'L', yorliq: 'L', nomi: { uz: 'kirish (L)', ru: 'вход (L)', en: 'input (L)' }, xy: [-24, 66], dir2d: [0, 1], maks: 2 },
+    { id: 'L1', yorliq: 'L1', nomi: { uz: 'chiqish (L1)', ru: 'выход (L1)', en: 'output (L1)' }, xy: [24, 66], dir2d: [0, 1], maks: 2 },
   ],
 
   boshlangich: () => ({ yoqilgan: false }),
@@ -15,20 +15,19 @@ export default {
   bosiladi: true,
   bosish: (h) => ({ ...h, yoqilgan: !h.yoqilgan }),
 
+  // 2D: devor kaliti old ko‘rinishi (ramka, klavisha), pastida mexanizm klemmalari
   svg({ el, holat }) {
     const on = holat.yoqilgan;
-    // GOST 21.614: kalit — sharnirli kontakt, uchida qisqa ko‘ndalang chiziq.
-    const pichoq = on
-      ? '<line class="e-ln" x1="-20" y1="0" x2="20" y2="0"/><line class="e-ln" x1="20" y1="-7" x2="20" y2="7"/>'
-      : '<line class="e-ln" x1="-20" y1="0" x2="14" y2="-20"/><line class="e-ln" x1="10" y1="-26" x2="18" y2="-14"/>';
     return `
-      <rect class="e-hit" x="-44" y="-40" width="88" height="62" rx="8"/>
-      <path class="e-ln" d="M-52 34 V0 H-20"/>
-      <circle class="e-dot" cx="-20" cy="0" r="3"/>
-      ${pichoq}
-      <path class="e-ln" d="M24 0 H52 V34"/>
-      <text class="e-lbl" x="0" y="-30" text-anchor="middle">${el.id}</text>
-      <text class="e-state ${on ? 'on' : 'off'}" x="38" y="-12">${on ? 'I' : 'O'}</text>`;
+      <rect class="d-brass" x="-46" y="52" width="92" height="28" rx="4"/>
+      <text class="d-txt d-mini" x="-38" y="92">L</text>
+      <text class="d-txt d-mini" x="30" y="92">L1</text>
+      <rect class="d-body" x="-50" y="-52" width="100" height="104" rx="12"/>
+      <rect class="d-face" x="-32" y="-36" width="64" height="72" rx="6"/>
+      <rect x="-32" y="${on ? -36 : 0}" width="64" height="36" rx="6" fill="#d9d9d4"/>
+      <line x1="-32" y1="0" x2="32" y2="0" stroke="#c4c4bf" stroke-width="1.5"/>
+      <circle cx="0" cy="${on ? -22 : 22}" r="3" fill="${on ? '#e5484d' : '#9aa0a8'}"/>
+      <text class="d-lbl" x="0" y="112" text-anchor="middle">${el.id} · ${on ? 'ON' : 'OFF'}</text>`;
   },
 
   // Devorga o‘rnatilgan kalit: yumaloq burchakli ramka, katta klavisha (ikki tomonga qiyshayadi),

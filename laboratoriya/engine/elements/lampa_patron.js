@@ -9,33 +9,26 @@ export default {
   standart: { quvvat: 60 },
 
   klemmalar: () => [
-    { id: 'markaz', yorliq: 'L', nomi: { uz: 'markaziy kontakt', ru: 'центральный контакт', en: 'centre contact' }, xy: [-84, -40], dir2d: [-1, 0], maks: 2 },
-    { id: 'rezba', yorliq: 'N', nomi: { uz: 'rezba kontakti', ru: 'резьбовой контакт', en: 'screw-shell contact' }, xy: [-84, 40], dir2d: [-1, 0], maks: 2 },
-    { id: 'PE', yorliq: 'PE', nomi: { uz: 'korpus (PE)', ru: 'корпус (PE)', en: 'housing (PE)' }, xy: [-84, 92], dir2d: [-1, 0], maks: 2 },
+    { id: 'markaz', yorliq: 'L', nomi: { uz: 'markaziy kontakt', ru: 'центральный контакт', en: 'centre contact' }, xy: [-32, -70], dir2d: [0, -1], maks: 2 },
+    { id: 'rezba', yorliq: 'N', nomi: { uz: 'rezba kontakti', ru: 'резьбовой контакт', en: 'screw-shell contact' }, xy: [0, -70], dir2d: [0, -1], maks: 2 },
+    { id: 'PE', yorliq: 'PE', nomi: { uz: 'korpus (PE)', ru: 'корпус (PE)', en: 'housing (PE)' }, xy: [32, -70], dir2d: [0, -1], maks: 2 },
   ],
 
   boshlangich: () => ({}),
   ichki: () => [],
   yuklama: { faza: 'markaz', nol: 'rezba', korpus: 'PE' },
 
+  // 2D: lampa (yuqorida klemmnik, patron, shisha kolba; yonganda nur sochadi)
   svg({ el, yonadi, param }) {
-    const nur = yonadi
-      ? [0, 45, 90, 135, 180, 225, 270, 315].map((a) => {
-          const r = (a * Math.PI) / 180;
-          return `<line class="e-nur" x1="${(38 * Math.cos(r)).toFixed(1)}" y1="${(38 * Math.sin(r)).toFixed(1)}" x2="${(52 * Math.cos(r)).toFixed(1)}" y2="${(52 * Math.sin(r)).toFixed(1)}"/>`;
-        }).join('')
-      : '';
     return `
-      <rect class="e-korpus" x="-46" y="-64" width="92" height="128" rx="6"/>
-      <path class="e-ln" d="M-84 -40 H0 V-26"/>
-      <path class="e-ln" d="M-84 40 H0 V26"/>
-      <path class="e-ln e-pe" d="M-84 92 H0 V64"/>
-      ${nur}
-      <circle class="e-lampa ${yonadi ? 'on' : ''}" cx="0" cy="0" r="26"/>
-      <line class="e-ln" x1="-18.4" y1="-18.4" x2="18.4" y2="18.4"/>
-      <line class="e-ln" x1="18.4" y1="-18.4" x2="-18.4" y2="18.4"/>
-      <text class="e-lbl" x="56" y="-44">${el.id}</text>
-      <text class="e-sub" x="56" y="-26">${param.quvvat} W</text>`;
+      <rect class="d-body" x="-52" y="-84" width="104" height="30" rx="5"/>
+      <text class="d-txt d-mini" x="-32" y="-50" text-anchor="middle">L</text>
+      <text class="d-txt d-mini" x="0" y="-50" text-anchor="middle">N</text>
+      <text class="d-txt d-mini" x="32" y="-50" text-anchor="middle">PE</text>
+      <rect x="-15" y="-44" width="30" height="20" rx="3" fill="#3a3d44"/>
+      <circle class="d-kolba ${yonadi ? 'on' : ''}" cx="0" cy="12" r="40"/>
+      <path d="M-12 -6 C-12 14 -4 20 0 20 C4 20 12 14 12 -6" fill="none" stroke="${yonadi ? '#ff9d00' : '#b9bcc2'}" stroke-width="2"/>
+      <text class="d-lbl" x="0" y="74" text-anchor="middle">${el.id} · ${param.quvvat} W</text>`;
   },
 
   // Shiftga o‘rnatilgan patron: gumbazsimon shift rozetkasi, qovurg‘ali karbolit E27 patron, metall rezba,

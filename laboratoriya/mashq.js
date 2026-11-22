@@ -1,4 +1,4 @@
-// Mashq sahifasi: /laboratoriya/<sxema-id>. Har qanday sxema JSON'i shu umumiy sahifada ishlaydi.
+// Mashq sahifasi: /laboratoriya/<sxema-id>. Har qanday sxema JSON'i shu umumiy ish maydonida ishlaydi.
 import { sahifaBoshlash } from './engine/sahifa.js';
 import { t, tx, tilniKuzat } from './engine/i18n.js';
 import { Lab, JARIMA } from './engine/state.js';
@@ -16,12 +16,11 @@ function sxemaId() {
   return qism[qism.length - 1];
 }
 
-function vaqtMatn(s) {
-  const m = Math.floor(s / 60), c = s % 60;
-  return `${m}:${String(c).padStart(2, '0')}`;
-}
+const vaqtMatn = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+const darajaHtml = (n) => `<span class="daraja" title="${esc(t('karta.daraja', { n }))}" aria-label="${esc(t('karta.daraja', { n }))}">${[1, 2, 3, 4, 5].map((i) => `<i class="${i <= n ? 'on' : ''}"></i>`).join('')}</span>`;
 
 let lab, v2d, v3d = null, v3dYuklanmoqda = null, rejim = '2d';
+let oxirgiTekshiruv = null;
 
 function holatXabari(matn, daraja = 'info') {
   $('holat').textContent = matn;
@@ -40,25 +39,23 @@ function parametr(p) {
   return res;
 }
 
-let oxirgiTekshiruv = null;
+function panelniOch(och = true) {
+  $('side').classList.toggle('open', och);
+  $('ws').classList.toggle('yon-ochiq', och);
+  $('b-topshiriq').setAttribute('aria-pressed', String(och));
+  // Keng ekranda panel kanvasni toraytiradi — sxemani qayta sig‘diramiz
+  if (v2d && window.innerWidth > 1100) requestAnimationFrame(() => v2d.sigdir());
+}
+
 function natijalarniChiz() {
   const r = oxirgiTekshiruv;
   $('p-natija').hidden = !r;
   if (!r) return;
-  if (r.togri) {
-    $('natijalar').innerHTML = `<li class="xabar ok">${esc(t('chk.togri'))}</li>`;
-    return;
-  }
+  if (r.togri) { $('natijalar').innerHTML = `<li class="xabar ok">${esc(t('chk.togri'))}</li>`; return; }
   $('natijalar').innerHTML = r.xatolar.map((x) => {
     const sub = x.joy ? t(x.joy.kalit, parametr(x.joy.p)) : x.qoshimcha ? t(x.qoshimcha) : '';
     return `<li class="xabar ${x.daraja}">${esc(t(x.kalit, parametr(x.p)))}${sub ? `<small>${esc(sub)}</small>` : ''}</li>`;
   }).join('') + (r.xatolar[0]?.tur !== 'bosh' && !lab.ball.tugadi ? `<li class="xabar ogoh"><small>${esc(t('chk.minus'))}</small></li>` : '');
-}
-
-function maslahatlarniChiz() {
-  const list = lab.maslahatlarRoyxati();
-  $('p-maslahat').hidden = !list.length;
-  $('maslahatlar').innerHTML = list.map((m) => `<li>${esc(m)}</li>`).join('');
 }
 
 function panelniYangila() {
@@ -67,9 +64,11 @@ function panelniYangila() {
   const q = lab.quvvatBormi();
   const b = $('b-quvvat');
   b.setAttribute('aria-pressed', String(q));
-  b.querySelector('span').dataset.i18n = q ? 'btn.quvvat_ol' : 'btn.quvvat_ber';
-  b.querySelector('span').textContent = t(q ? 'btn.quvvat_ol' : 'btn.quvvat_ber');
+  b.innerHTML = `${q ? '■' : '▶'} <span data-i18n="${q ? 'btn.sim_off' : 'btn.sim_on'}">${esc(t(q ? 'btn.sim_off' : 'btn.sim_on'))}</span>`;
   $('ranglar').querySelectorAll('[data-rang]').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.rang === lab.rang)));
+  $('tb-del').disabled = !lab.tanlanganSim;
+  $('tb-undo').disabled = !lab.tarix.orqa.length;
+  $('tb-redo').disabled = !lab.tarix.oldinga.length;
   $('el-holat').innerHTML = lab.els.filter((e) => e.def.bosiladi || e.def.yuklama).map((e) => {
     let s, cls = '';
     if (e.def.yuklama) {
@@ -83,21 +82,23 @@ function panelniYangila() {
     }
     return `<li class="${cls}"><span>${esc(e.id)} · ${esc(tx(e.def.nomi))}</span><span>${esc(s)}</span></li>`;
   }).join('');
-  maslahatlarniChiz();
+  const list = lab.maslahatlarRoyxati();
+  $('p-maslahat').hidden = !list.length;
+  $('maslahatlar').innerHTML = list.map((m) => `<li>${esc(m)}</li>`).join('');
 }
 
 function matnlarniYangila() {
   const s = lab.sxema;
   $('m-nomi').textContent = tx(s.nomi);
+  $('m-sarlavha').textContent = tx(s.nomi);
   document.title = `${tx(s.nomi)} | EnergyVibe`;
   $('m-topshiriq').textContent = tx(s.topshiriq);
-  $('m-meta').innerHTML = `<span class="tag">${esc(t(`yon.${s.yonalish}`))}</span>
-    <span class="daraja" aria-label="${esc(t('karta.daraja', { n: s.daraja }))}" title="${esc(t('karta.daraja', { n: s.daraja }))}">${[1, 2, 3, 4, 5].map((i) => `<i class="${i <= s.daraja ? 'on' : ''}"></i>`).join('')}</span>
-    <span class="tag vaqt">${esc(t('karta.vaqt', { n: s.vaqt_min }))}</span>`;
-  $('ranglar').innerHTML = Object.entries(RANGLAR).map(([id, r]) => {
-    const fon = r.hex2 ? `repeating-linear-gradient(90deg, ${r.hex} 0 6px, ${r.hex2} 6px 12px)` : r.hex;
+  $('m-meta').innerHTML = `<span class="tag acc">${esc(t(`yon.${s.yonalish}`))}</span>${darajaHtml(s.daraja)}<span class="tag">${esc(t('karta.vaqt', { n: s.vaqt_min }))}</span>`;
+  $('ranglar').innerHTML = `<span class="bb-lbl">${esc(t('bar.rang'))}</span>` + Object.entries(RANGLAR).map(([id, r]) => {
+    const fon = r.hex2 ? `repeating-linear-gradient(135deg, ${r.hex} 0 4px, ${r.hex2} 4px 8px)` : r.hex;
     return `<button type="button" class="rang-btn" data-rang="${id}" aria-pressed="${lab.rang === id}"><i style="background:${fon}"></i>${esc(tx(r.nomi))}</button>`;
   }).join('');
+  $('el-chips').innerHTML = `<span class="bb-lbl">${esc(t('bar.el'))}</span>` + lab.els.map((e) => `<button type="button" class="el-chip" data-fokus="${e.id}">${esc(e.id)}<small>${esc(tx(e.def.nomi))}</small></button>`).join('');
   panelniYangila();
   natijalarniChiz();
 }
@@ -127,6 +128,7 @@ async function rejimniOrnat(r) {
   document.querySelectorAll('#rejim [data-rejim]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.rejim === r)));
   $('stage-2d').hidden = r !== '2d';
   $('stage-3d').hidden = r !== '3d';
+  ['tb-zoomout', 'tb-zoomin', 'tb-fit', 'tb-joy'].forEach((id) => { $(id).disabled = r !== '2d'; });
   v2d.korinsin(r === '2d');
   if (r === '3d') {
     if (!v3d) await uchOlchamYukla();
@@ -150,6 +152,8 @@ function uchOlchamYukla() {
   return v3dYuklanmoqda;
 }
 
+function yozuvMaydonimi(e) { return /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName) || e.target.isContentEditable; }
+
 async function boshlash() {
   sahifaBoshlash();
   const id = sxemaId();
@@ -160,11 +164,10 @@ async function boshlash() {
     if (!r.ok) throw new Error(String(r.status));
     sxema = await r.json();
   } catch (e) {
-    $('m-nomi').textContent = t('mashq.topilmadi');
-    document.querySelector('.m-grid').hidden = true;
-    document.querySelector('.m-task').hidden = true;
-    $('m-bar').hidden = true;
-    $('rejim').hidden = true;
+    $('stage-2d').innerHTML = `<div class="stage-xabar">${esc(t('mashq.topilmadi'))}</div>`;
+    holatXabari(t('mashq.topilmadi'), 'xato');
+    document.querySelector('.toolbar').hidden = true;
+    document.querySelector('.bottombar').hidden = true;
     return;
   }
 
@@ -176,31 +179,60 @@ async function boshlash() {
   lab.on((tur, d) => {
     if (tur === 'xabar') holatXabari(d.matn, d.daraja);
     if (tur === 'ozgardi') panelniYangila();
-    if (tur === 'tekshiruv') { oxirgiTekshiruv = d; natijalarniChiz(); }
+    if (tur === 'tekshiruv') { oxirgiTekshiruv = d; natijalarniChiz(); if (!d.togri) panelniOch(true); }
     if (tur === 'tugadi') natijaniKorsat(d);
   });
 
-  $('ranglar').addEventListener('click', (e) => { const b = e.target.closest('[data-rang]'); if (b) lab.setRang(b.dataset.rang); });
+  // Asboblar paneli
+  $('tb-zoomin').addEventListener('click', () => v2d.masshtab(1.25));
+  $('tb-zoomout').addEventListener('click', () => v2d.masshtab(0.8));
+  $('tb-fit').addEventListener('click', () => v2d.sigdir());
+  $('tb-del').addEventListener('click', () => { if (lab.tanlanganSim) lab.simOchir(lab.tanlanganSim); });
+  $('tb-undo').addEventListener('click', () => lab.qaytar());
+  $('tb-redo').addEventListener('click', () => lab.takrorla());
+  $('tb-joy').addEventListener('click', () => { lab.joylarniTikla(); v2d.sigdir(); });
+  $('tb-full').addEventListener('click', () => {
+    if (document.fullscreenElement) document.exitFullscreen?.();
+    else document.documentElement.requestFullscreen?.().catch(() => {});
+  });
+  $('tb-yordam').addEventListener('click', () => { $('help').hidden = !$('help').hidden; });
+  $('b-topshiriq').addEventListener('click', () => panelniOch(!$('side').classList.contains('open')));
   $('b-quvvat').addEventListener('click', () => lab.quvvatAlmashtir());
   $('b-tekshir').addEventListener('click', () => {
     const r = lab.tekshir();
     if (r.togri) holatXabari(t('chk.togri'), 'ok');
     else holatXabari(t(r.xatolar[0].kalit, parametr(r.xatolar[0].p)), r.xatolar[0].daraja);
   });
-  $('b-maslahat').addEventListener('click', () => {
-    const m = lab.maslahat();
-    holatXabari(m.matn, m.yangi ? 'ogoh' : 'info');
-  });
+  $('b-maslahat').addEventListener('click', () => { const m = lab.maslahat(); holatXabari(m.matn, m.yangi ? 'ogoh' : 'info'); });
   $('b-javob').addEventListener('click', async () => { if (await sora(t('tasdiq.javob'))) { oxirgiTekshiruv = null; natijalarniChiz(); lab.javobniKorsat(); } });
-  $('b-qayta').addEventListener('click', async () => { if (await sora(t('tasdiq.qayta'))) { oxirgiTekshiruv = null; natijalarniChiz(); lab.qayta(); } });
+  $('b-qayta').addEventListener('click', async () => { if (await sora(t('tasdiq.qayta'))) { oxirgiTekshiruv = null; natijalarniChiz(); lab.qayta(); v2d.sigdir(); } });
   document.querySelectorAll('#rejim [data-rejim]').forEach((b) => b.addEventListener('click', () => rejimniOrnat(b.dataset.rejim)));
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') lab.bosh(); });
+
+  // Pastki panel
+  $('ranglar').addEventListener('click', (e) => { const b = e.target.closest('[data-rang]'); if (b) lab.setRang(b.dataset.rang); });
+  $('el-chips').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-fokus]');
+    if (!b) return;
+    if (rejim === '3d') v3d?.fokus(b.dataset.fokus); else v2d.fokus(b.dataset.fokus);
+  });
+
+  // Klaviatura
+  document.addEventListener('keydown', (e) => {
+    if (yozuvMaydonimi(e) || document.querySelector('dialog[open]')) return;
+    const ctrl = e.ctrlKey || e.metaKey;
+    if (e.key === 'Escape') { lab.bosh(); $('help').hidden = true; }
+    else if ((e.key === 'Delete' || e.key === 'Backspace') && lab.tanlanganSim) { e.preventDefault(); lab.simOchir(lab.tanlanganSim); }
+    else if (ctrl && e.key.toLowerCase() === 'z' && !e.shiftKey) { e.preventDefault(); lab.qaytar(); }
+    else if (ctrl && (e.key.toLowerCase() === 'y' || (e.key.toLowerCase() === 'z' && e.shiftKey))) { e.preventDefault(); lab.takrorla(); }
+    else if (!ctrl && e.key.toLowerCase() === 'f' && rejim === '2d') v2d.sigdir();
+  });
 
   tilniKuzat(() => { matnlarniYangila(); v2d.chiz(); });
   matnlarniYangila();
   holatXabari(t('h.boshla'));
   setInterval(() => { $('st-vaqt').textContent = vaqtMatn(lab.vaqt()); }, 1000);
   $('st-vaqt').textContent = vaqtMatn(lab.vaqt());
+  if (window.innerWidth > 1100) panelniOch(true);
 
   let saqlangan = null;
   try { saqlangan = localStorage.getItem(REJIM_KEY); } catch (e) { /* e’tiborsiz */ }
