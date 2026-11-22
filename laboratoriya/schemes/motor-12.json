@@ -1,0 +1,90 @@
+{
+  "versiya": 1,
+  "id": "motor-12",
+  "yonalish": "motorlar",
+  "daraja": 3,
+  "vaqt_min": 20,
+  "rejimlar": ["2d"],
+  "nomi": {
+    "uz": "Motor 12: darvoza motori — bir fazali reversiv",
+    "ru": "Двигатель 12: привод ворот — однофазный реверс",
+    "en": "Motor 12: gate motor — single-phase reversing"
+  },
+  "qisqacha": {
+    "uz": "Selektor «I» — ochish (KM1), «II» — yopish (KM2); kontaktorlar o‘zaro bloklangan.",
+    "ru": "Селектор «I» — открыть (KM1), «II» — закрыть (KM2); контакторы взаимно заблокированы.",
+    "en": "Selector \"I\" — open (KM1), \"II\" — close (KM2); the contactors are interlocked."
+  },
+  "topshiriq": {
+    "uz": "Kondensatorli bir fazali motorning yo‘nalishi faza qaysi chulg‘am uchiga (L1 yoki L2) berilishiga bog‘liq. Selektor «I» holatida KM1 fazani M1.L1 ga, «II» holatida KM2 fazani M1.L2 ga beradi. Har bir kontaktor g‘altagi ikkinchisining 21–22 (NC) kontakti orqali ulanadi.",
+    "ru": "Направление конденсаторного однофазного двигателя зависит от того, на какой конец обмотки (L1 или L2) подана фаза. В положении «I» KM1 подаёт фазу на M1.L1, в «II» KM2 — на M1.L2. Катушка каждого контактора — через НЗ 21–22 другого.",
+    "en": "The direction of a single-phase capacitor motor depends on which winding end (L1 or L2) gets the phase. In \"I\" KM1 feeds M1.L1, in \"II\" KM2 feeds M1.L2. Each contactor coil goes through the other one's NC 21–22."
+  },
+  "elementlar": [
+    {"id": "VVOD", "tur": "vvod", "pozitsiya2d": [80, 330]},
+    {"id": "QF1", "tur": "avtomat", "pozitsiya2d": [280, 180], "parametr": {"qutb": 2, "nominal": 16, "yorliqlar": ["L", "N"]}},
+    {"id": "SA1", "tur": "tanlagich", "pozitsiya2d": [600, 180]},
+    {"id": "KM1", "tur": "kontaktor", "pozitsiya2d": [300, 500]},
+    {"id": "KM2", "tur": "kontaktor", "pozitsiya2d": [640, 500]},
+    {"id": "M1", "tur": "motor_1f", "pozitsiya2d": [470, 800]}
+  ],
+  "togri_ulanishlar": [
+    {"nuqtalar": ["VVOD.L", "QF1.1"], "rang": "jigarrang"},
+    {"nuqtalar": ["VVOD.N", "QF1.3"], "rang": "kok"},
+    {"nuqtalar": ["QF1.2", "SA1.13", "SA1.23", "KM1.L1", "KM2.L1"], "rang": "jigarrang"},
+    {"nuqtalar": ["SA1.14", "KM2.21"], "rang": "qora"},
+    {"nuqtalar": ["KM2.22", "KM1.A1"], "rang": "qora"},
+    {"nuqtalar": ["SA1.24", "KM1.21"], "rang": "qora"},
+    {"nuqtalar": ["KM1.22", "KM2.A1"], "rang": "qora"},
+    {"nuqtalar": ["KM1.T1", "M1.L1"], "rang": "jigarrang"},
+    {"nuqtalar": ["KM2.T1", "M1.L2"], "rang": "jigarrang"},
+    {"nuqtalar": ["QF1.4", "KM1.A2", "KM2.A2", "M1.N"], "rang": "kok"},
+    {"nuqtalar": ["VVOD.PE", "M1.PE"], "rang": "sariq_yashil"}
+  ],
+  "ssenariylar": [
+    {
+      "nomi": {
+        "uz": "Ochish",
+        "ru": "Открыть",
+        "en": "Open"
+      },
+      "qadamlar": [
+        {"amal": "SA1", "qiymat": "I"},
+        {"kutilgan": {"M1": "oldinga", "KM1": "tortilgan", "KM2": "qoyilgan"}},
+        {"amal": "SA1", "qiymat": "0"},
+        {"kutilgan": {"M1": "toxtagan"}}
+      ]
+    },
+    {
+      "nomi": {
+        "uz": "Yopish",
+        "ru": "Закрыть",
+        "en": "Close"
+      },
+      "qadamlar": [
+        {"amal": "SA1", "qiymat": "II"},
+        {"kutilgan": {"M1": "teskari", "KM2": "tortilgan", "KM1": "qoyilgan"}},
+        {"amal": "SA1", "qiymat": "0"},
+        {"kutilgan": {"M1": "toxtagan"}}
+      ]
+    }
+  ],
+  "xato_qoidalari": [{"tur": "pe_ulangan", "klemmalar": ["M1.PE"]}, {"tur": "sim_rangi"}],
+  "maslahatlar": {
+    "uz": [
+      "QF1.2 dagi faza: selektorning 13 va 23 klemmalari hamda ikkala kontaktorning L1 klemmasi.",
+      "SA1.14 → KM2.21, KM2.22 → KM1.A1; SA1.24 → KM1.21, KM1.22 → KM2.A1.",
+      "KM1.T1 → M1.L1, KM2.T1 → M1.L2; nol (QF1.4) → KM1.A2, KM2.A2 va M1.N."
+    ],
+    "ru": [
+      "Фаза с QF1.2: клеммы 13 и 23 селектора и L1 обоих контакторов.",
+      "SA1.14 → KM2.21, KM2.22 → KM1.A1; SA1.24 → KM1.21, KM1.22 → KM2.A1.",
+      "KM1.T1 → M1.L1, KM2.T1 → M1.L2; ноль (QF1.4) → KM1.A2, KM2.A2 и M1.N."
+    ],
+    "en": [
+      "Phase at QF1.2: selector terminals 13 and 23 and L1 of both contactors.",
+      "SA1.14 → KM2.21, KM2.22 → KM1.A1; SA1.24 → KM1.21, KM1.22 → KM2.A1.",
+      "KM1.T1 → M1.L1, KM2.T1 → M1.L2; neutral (QF1.4) → KM1.A2, KM2.A2 and M1.N."
+    ]
+  }
+}

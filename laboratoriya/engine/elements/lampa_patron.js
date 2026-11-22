@@ -17,6 +17,14 @@ export default {
   boshlangich: () => ({}),
   ichki: () => [],
   yuklama: { faza: 'markaz', nol: 'rezba', korpus: 'PE' },
+  yuklamalar: (h, param) => [{ a: 'markaz', b: 'rezba', R: (230 * 230) / (param.quvvat || 60), nom: 'lampa' }],
+  hisobla(ctx) {
+    const U = ctx.kuchlanish('markaz', 'rezba');
+    const yonadi = U >= 180 && U <= 270;
+    const kuydi = U > 300;
+    const fz = (k) => ['A', 'B', 'C'].includes(ctx.fazasi(k) || '');
+    return { natija: { yonadi, kuydi, U, fazaMarkazda: fz('markaz'), fazaRezbada: fz('rezba'), holatlar: [kuydi ? 'kuydi' : yonadi ? 'yonadi' : 'ochgan'] } };
+  },
 
   // 2D: lampa (yuqorida klemmnik, patron, shisha kolba; yonganda nur sochadi)
   svg({ el, yonadi, param }) {

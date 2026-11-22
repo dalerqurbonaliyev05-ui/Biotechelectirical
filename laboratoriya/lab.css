@@ -198,6 +198,17 @@ body.app { height: 100dvh; overflow: hidden; display: grid; grid-template-rows: 
 .v2d .d-txt { font: 700 11px var(--mono); fill: #1b1b1f; letter-spacing: .04em; pointer-events: none; }
 .v2d .d-mini { font-size: 9.5px; font-weight: 600; fill: #4a4a52; }
 .v2d .d-katta { font-size: 15px; font-weight: 800; }
+.v2d .d-oq { fill: #f4f4f5; }
+.v2d .d-btn { cursor: pointer; }
+.v2d .d-btn:hover { filter: brightness(1.15); }
+.v2d .d-aylan, .karta-rasm .d-aylan { animation: aylan .5s linear infinite; transform-box: view-box; transform-origin: 0 0; }
+.v2d .d-aylan.teskari { animation-direction: reverse; }
+.v2d .d-yur { animation: yur 1.6s linear infinite; }
+.v2d .d-yur.teskari { animation-direction: reverse; }
+.v2d .d-oqim { stroke-dasharray: 4 6; animation: oqim 0.6s linear infinite; }
+@keyframes aylan { to { transform: rotate(360deg); } }
+@keyframes yur { from { transform: translateX(-30px); } to { transform: translateX(30px); } }
+.holat-royxat li.xato span:last-child { color: var(--bad); }
 .v2d .d-lbl { font: 500 11px var(--mono); fill: #8e8e98; letter-spacing: .06em; pointer-events: none; }
 .v2d .d-kolba { fill: #f4f4f2; stroke: #c9c9c4; stroke-width: 1.5; transition: fill .3s; }
 .v2d .d-kolba.on { fill: #ffe27a; stroke: #ffb020; }

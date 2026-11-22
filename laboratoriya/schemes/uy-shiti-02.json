@@ -1,0 +1,88 @@
+{
+  "versiya": 1,
+  "id": "uy-shiti-02",
+  "yonalish": "uy_shiti",
+  "daraja": 3,
+  "vaqt_min": 18,
+  "rejimlar": ["2d"],
+  "nomi": {
+    "uz": "Uy shiti 2: mehmonxona xonasi — karta kaliti",
+    "ru": "Домашний щит 2: гостиничный номер — карточный выключатель",
+    "en": "Home panel 2: hotel room key-card switch"
+  },
+  "qisqacha": {
+    "uz": "Karta qo‘yilganda modulli kontaktor rozetka va yoritish guruhlarini yoqadi.",
+    "ru": "Карта вставлена — модульный контактор включает розетки и освещение.",
+    "en": "With the card inserted a modular contactor powers the socket and lighting groups."
+  },
+  "topshiriq": {
+    "uz": "Karta kaliti (SA1) modulli kontaktor (KM1) g‘altagini boshqarsin. KM1 kontaktlari orqali faza va nol QF2 (rozetka) va QF3 (yoritish) avtomatlariga borsin. Karta olinganda xona to‘liq o‘chishi kerak.",
+    "ru": "Карточный выключатель SA1 управляет катушкой модульного контактора KM1. Через контакты KM1 фаза и ноль идут на автоматы QF2 (розетка) и QF3 (освещение). Без карты номер полностью обесточен.",
+    "en": "The key-card switch SA1 controls the coil of modular contactor KM1. Through KM1 contacts the phase and neutral go to breakers QF2 (socket) and QF3 (lighting). Without the card the room is fully off."
+  },
+  "elementlar": [
+    {"id": "VVOD", "tur": "vvod", "pozitsiya2d": [80, 330]},
+    {"id": "QF1", "tur": "avtomat", "pozitsiya2d": [280, 150], "parametr": {"qutb": 2, "nominal": 32, "yorliqlar": ["L", "N"]}},
+    {"id": "SA1", "tur": "karta_kalit", "pozitsiya2d": [280, 560]},
+    {"id": "KM1", "tur": "modulli_kontaktor", "pozitsiya2d": [560, 170]},
+    {"id": "QF2", "tur": "avtomat", "pozitsiya2d": [520, 520], "parametr": {"qutb": 2, "nominal": 16, "yorliqlar": ["L", "N"]}},
+    {"id": "QF3", "tur": "avtomat", "pozitsiya2d": [780, 520], "parametr": {"qutb": 2, "nominal": 10, "yorliqlar": ["L", "N"]}},
+    {"id": "XS1", "tur": "rozetka", "pozitsiya2d": [520, 820]},
+    {"id": "HL1", "tur": "lampochka", "pozitsiya2d": [800, 820]}
+  ],
+  "togri_ulanishlar": [
+    {"nuqtalar": ["VVOD.L", "QF1.1"], "rang": "jigarrang"},
+    {"nuqtalar": ["VVOD.N", "QF1.3"], "rang": "kok"},
+    {"nuqtalar": ["QF1.2", "SA1.L", "KM1.1"], "rang": "jigarrang"},
+    {"nuqtalar": ["QF1.4", "SA1.N", "KM1.A2", "KM1.3"], "rang": "kok"},
+    {"nuqtalar": ["SA1.L1", "KM1.A1"], "rang": "jigarrang"},
+    {"nuqtalar": ["KM1.2", "QF2.1", "QF3.1"], "rang": "jigarrang"},
+    {"nuqtalar": ["KM1.4", "QF2.3", "QF3.3"], "rang": "kok"},
+    {"nuqtalar": ["QF2.2", "XS1.L"], "rang": "jigarrang"},
+    {"nuqtalar": ["QF2.4", "XS1.N"], "rang": "kok"},
+    {"nuqtalar": ["QF3.2", "HL1.L"], "rang": "jigarrang"},
+    {"nuqtalar": ["QF3.4", "HL1.N"], "rang": "kok"},
+    {"nuqtalar": ["VVOD.PE", "XS1.PE"], "rang": "sariq_yashil"}
+  ],
+  "ssenariylar": [
+    {
+      "nomi": {
+        "uz": "Karta yo‘q",
+        "ru": "Без карты",
+        "en": "No card"
+      },
+      "qadamlar": [{"kutilgan": {"XS1": "kuchlanish_yoq", "HL1": "ochgan", "KM1": "qoyilgan"}}]
+    },
+    {
+      "nomi": {
+        "uz": "Karta qo‘yildi va olindi",
+        "ru": "Карта вставлена и вынута",
+        "en": "Card in and out"
+      },
+      "qadamlar": [
+        {"amal": "SA1", "qiymat": "qoy"},
+        {"kutilgan": {"KM1": "tortilgan", "XS1": "kuchlanish_bor", "HL1": "yonadi"}},
+        {"amal": "SA1", "qiymat": "ol"},
+        {"kutilgan": {"XS1": "kuchlanish_yoq", "HL1": "ochgan"}}
+      ]
+    }
+  ],
+  "xato_qoidalari": [{"tur": "pe_ulangan", "klemmalar": ["XS1.PE"]}, {"tur": "sim_rangi"}],
+  "maslahatlar": {
+    "uz": [
+      "QF1 chiqishi: faza → karta kalitining L klemmasi va KM1 ning 1-kontakti; nol → SA1.N, KM1.A2 va KM1 ning 3-kontakti.",
+      "Karta kalitining L1 chiqishi KM1 g‘altagining A1 klemmasiga boradi.",
+      "KM1 ning 2 va 4 chiqishlari QF2 va QF3 avtomatlarining kirishlariga; ulardan rozetka va lampaga."
+    ],
+    "ru": [
+      "Выход QF1: фаза → клемма L карточного выключателя и контакт 1 KM1; ноль → SA1.N, KM1.A2 и контакт 3 KM1.",
+      "Выход L1 карточного выключателя — на клемму A1 катушки KM1.",
+      "Выходы 2 и 4 KM1 — на входы QF2 и QF3; от них — розетка и лампа."
+    ],
+    "en": [
+      "QF1 output: phase → card switch L and KM1 contact 1; neutral → SA1.N, KM1.A2 and KM1 contact 3.",
+      "The card switch output L1 goes to coil terminal A1 of KM1.",
+      "KM1 outputs 2 and 4 go to the QF2 and QF3 inputs; from them to the socket and lamp."
+    ]
+  }
+}

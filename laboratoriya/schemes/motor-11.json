@@ -1,0 +1,131 @@
+{
+  "versiya": 1,
+  "rang_rejimi": "3f",
+  "rejimlar": ["2d"],
+  "id": "motor-11",
+  "yonalish": "motorlar",
+  "daraja": 5,
+  "vaqt_min": 50,
+  "nomi": {
+    "uz": "Motor 11: reversiv yulduz–uchburchak",
+    "ru": "Двигатель 11: реверсивный пуск звезда–треугольник",
+    "en": "Motor 11: reversing star–delta"
+  },
+  "qisqacha": {
+    "uz": "Oldinga/orqaga (KM1/KM2) va avtomatik yulduz→uchburchak (KM3/KM4, KT1).",
+    "ru": "Вперёд/назад (KM1/KM2) и автоматический переход звезда→треугольник (KM3/KM4, KT1).",
+    "en": "Forward/reverse (KM1/KM2) and automatic star→delta (KM3/KM4, KT1)."
+  },
+  "topshiriq": {
+    "uz": "KM1 — oldinga, KM2 — orqaga (L1/L3 almashadi), o‘zaro bloklangan. KM1 yoki KM2 ning 33–34 kontaktlari (parallel) KT1 ni va yulduz/uchburchak zanjirini ta’minlaydi: KT1 15–16 → KM4.41–42 → KM3 (yulduz); KT1 15–18 → KM3.41–42 → KM4 (uchburchak).",
+    "ru": "KM1 — вперёд, KM2 — назад (L1/L3 меняются), взаимно заблокированы. Контакты 33–34 KM1 или KM2 (параллельно) питают KT1 и цепь звезда/треугольник: KT1 15–16 → KM4.41–42 → KM3 (звезда); KT1 15–18 → KM3.41–42 → KM4 (треугольник).",
+    "en": "KM1 forward, KM2 reverse (L1/L3 swapped), interlocked. KM1 or KM2 contacts 33–34 (in parallel) feed KT1 and the star/delta circuit: KT1 15–16 → KM4.41–42 → KM3 (star); KT1 15–18 → KM3.41–42 → KM4 (delta)."
+  },
+  "elementlar": [
+    {"id": "VVOD", "tur": "manba_3f", "pozitsiya2d": [380, 60]},
+    {"id": "QF1", "tur": "avtomat", "pozitsiya2d": [300, 230], "parametr": {"qutb": 3, "nominal": 32}},
+    {"id": "KM1", "tur": "kontaktor", "pozitsiya2d": [160, 480]},
+    {"id": "KM2", "tur": "kontaktor", "pozitsiya2d": [440, 480]},
+    {"id": "KK1", "tur": "issiqlik_relesi", "pozitsiya2d": [300, 720]},
+    {"id": "KM4", "tur": "kontaktor", "pozitsiya2d": [640, 760]},
+    {"id": "KM3", "tur": "kontaktor", "pozitsiya2d": [940, 800]},
+    {"id": "M1", "tur": "motor_6", "pozitsiya2d": [520, 1010]},
+    {"id": "SB1", "tur": "tugma", "pozitsiya2d": [1000, 260], "parametr": {"rang": "qizil"}},
+    {"id": "SB2", "tur": "tugma", "pozitsiya2d": [1000, 420], "parametr": {"rang": "yashil"}},
+    {"id": "SB3", "tur": "tugma", "pozitsiya2d": [1180, 420], "parametr": {"rang": "yashil"}},
+    {"id": "KT1", "tur": "vaqt_relesi", "pozitsiya2d": [1360, 420], "parametr": {"kechikish": 5}}
+  ],
+  "togri_ulanishlar": [
+    {"nuqtalar": ["VVOD.L1", "QF1.1"], "rang": "sariq"},
+    {"nuqtalar": ["VVOD.L2", "QF1.3"], "rang": "yashil"},
+    {"nuqtalar": ["VVOD.L3", "QF1.5"], "rang": "qizil"},
+    {"nuqtalar": ["QF1.2", "KM1.L1", "KM2.L1", "KK1.95"], "rang": "sariq"},
+    {"nuqtalar": ["QF1.4", "KM1.L2", "KM2.L2"], "rang": "yashil"},
+    {"nuqtalar": ["QF1.6", "KM1.L3", "KM2.L3"], "rang": "qizil"},
+    {"nuqtalar": ["KM1.T1", "KM2.T3", "KK1.L1"], "rang": "sariq"},
+    {"nuqtalar": ["KM1.T2", "KM2.T2", "KK1.L2"], "rang": "yashil"},
+    {"nuqtalar": ["KM1.T3", "KM2.T1", "KK1.L3"], "rang": "qizil"},
+    {"nuqtalar": ["KK1.T1", "M1.U1", "KM4.L1"], "rang": "sariq"},
+    {"nuqtalar": ["KK1.T2", "M1.V1", "KM4.L2"], "rang": "yashil"},
+    {"nuqtalar": ["KK1.T3", "M1.W1", "KM4.L3"], "rang": "qizil"},
+    {"nuqtalar": ["KM4.T1", "M1.W2", "KM3.L3"], "rang": "kulrang"},
+    {"nuqtalar": ["KM4.T2", "M1.U2", "KM3.L1"], "rang": "kulrang"},
+    {"nuqtalar": ["KM4.T3", "M1.V2", "KM3.L2"], "rang": "kulrang"},
+    {"nuqtalar": ["KM3.T1", "KM3.T2", "KM3.T3"], "rang": "kulrang"},
+    {"nuqtalar": ["KK1.96", "SB1.11"], "rang": "qora"},
+    {"nuqtalar": ["SB1.12", "SB2.23", "KM1.13", "SB3.23", "KM2.13", "KM1.33", "KM2.33"], "rang": "qora"},
+    {"nuqtalar": ["SB2.24", "KM1.14", "KM2.21"], "rang": "qora"},
+    {"nuqtalar": ["KM2.22", "KM1.A1"], "rang": "qora"},
+    {"nuqtalar": ["SB3.24", "KM2.14", "KM1.21"], "rang": "qora"},
+    {"nuqtalar": ["KM1.22", "KM2.A1"], "rang": "qora"},
+    {"nuqtalar": ["KM1.34", "KM2.34", "KT1.A1", "KT1.15"], "rang": "qora"},
+    {"nuqtalar": ["KT1.16", "KM4.41"], "rang": "qora"},
+    {"nuqtalar": ["KM4.42", "KM3.A1"], "rang": "qora"},
+    {"nuqtalar": ["KT1.18", "KM3.41"], "rang": "qora"},
+    {"nuqtalar": ["KM3.42", "KM4.A1"], "rang": "qora"},
+    {"nuqtalar": ["KM1.A2", "KM2.A2", "KM3.A2", "KM4.A2", "KT1.A2", "VVOD.N"], "rang": "kok"},
+    {"nuqtalar": ["VVOD.PE", "M1.PE"], "rang": "sariq_yashil"}
+  ],
+  "ssenariylar": [
+    {
+      "nomi": {
+        "uz": "Oldinga: yulduz → uchburchak",
+        "ru": "Вперёд: звезда → треугольник",
+        "en": "Forward: star → delta"
+      },
+      "qadamlar": [
+        {"amal": "SB2", "qiymat": "bos"},
+        {"kutilgan": {"M1": "yulduz"}},
+        {"kutilgan": {"M1": "oldinga"}},
+        {"kut": 6},
+        {"kutilgan": {"M1": "uchburchak"}},
+        {"kutilgan": {"M1": "oldinga"}},
+        {"amal": "SB1", "qiymat": "bos"},
+        {"kutilgan": {"M1": "toxtagan"}}
+      ]
+    },
+    {
+      "nomi": {
+        "uz": "Orqaga: yulduz → uchburchak",
+        "ru": "Назад: звезда → треугольник",
+        "en": "Reverse: star → delta"
+      },
+      "qadamlar": [
+        {"amal": "SB3", "qiymat": "bos"},
+        {"kutilgan": {"M1": "yulduz"}},
+        {"kutilgan": {"M1": "teskari"}},
+        {"kut": 6},
+        {"kutilgan": {"M1": "uchburchak"}},
+        {"kutilgan": {"M1": "teskari"}},
+        {"amal": "SB1", "qiymat": "bos"},
+        {"kutilgan": {"M1": "toxtagan"}}
+      ]
+    },
+    {
+      "nomi": {
+        "uz": "Blokirovka",
+        "ru": "Блокировка",
+        "en": "Interlock"
+      },
+      "qadamlar": [{"amal": "SB2", "qiymat": "bos"}, {"amal": "SB3", "qiymat": "bos"}, {"kutilgan": {"M1": "oldinga", "KM2": "qoyilgan"}}]
+    }
+  ],
+  "xato_qoidalari": [{"tur": "pe_ulangan", "klemmalar": ["M1.PE"]}, {"tur": "sim_rangi"}],
+  "maslahatlar": {
+    "uz": [
+      "KM1 va KM2 chiqishlari KK1 ga 4-sxemadagidek fazalarni almashtirib ulanadi (KM2.T1 ↔ L3, KM2.T3 ↔ L1).",
+      "Yulduz/uchburchak zanjiri 9-sxemadagidek: KM4 — uchburchak, KM3 — yulduz.",
+      "KM1.34 + KM2.34 → KT1.A1 va KT1.15; KT1.16 → KM4.41 → KM4.42 → KM3.A1; KT1.18 → KM3.41 → KM3.42 → KM4.A1."
+    ],
+    "ru": [
+      "Выходы KM1 и KM2 подключаются к KK1 со сменой фаз, как в схеме 4 (KM2.T1 ↔ L3, KM2.T3 ↔ L1).",
+      "Цепь звезда/треугольник как в схеме 9: KM4 — треугольник, KM3 — звезда.",
+      "KM1.34 + KM2.34 → KT1.A1 и KT1.15; KT1.16 → KM4.41 → KM4.42 → KM3.A1; KT1.18 → KM3.41 → KM3.42 → KM4.A1."
+    ],
+    "en": [
+      "KM1 and KM2 outputs go to KK1 with the phase swap as in circuit 4 (KM2.T1 ↔ L3, KM2.T3 ↔ L1).",
+      "Star/delta part as in circuit 9: KM4 delta, KM3 star.",
+      "KM1.34 + KM2.34 → KT1.A1 and KT1.15; KT1.16 → KM4.41 → KM4.42 → KM3.A1; KT1.18 → KM3.41 → KM3.42 → KM4.A1."
+    ]
+  }
+}

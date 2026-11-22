@@ -1,0 +1,91 @@
+{
+  "versiya": 1,
+  "id": "olchash-01",
+  "yonalish": "olchash",
+  "daraja": 3,
+  "vaqt_min": 18,
+  "rejimlar": ["2d"],
+  "rang_rejimi": "3f",
+  "nomi": {
+    "uz": "O‘lchash 1: motor zanjirida voltmetr va ampermetr",
+    "ru": "Измерения 1: вольтметр и амперметр в цепи двигателя",
+    "en": "Measurement 1: voltmeter and ammeter in a motor circuit"
+  },
+  "qisqacha": {
+    "uz": "DOL sxemasi: liniya kuchlanishini voltmetr, motor tokini ampermetr ko‘rsatadi.",
+    "ru": "Схема DOL: вольтметр показывает линейное напряжение, амперметр — ток двигателя.",
+    "en": "DOL circuit: the voltmeter shows line voltage, the ammeter the motor current."
+  },
+  "topshiriq": {
+    "uz": "Motorni KM1 kontaktori orqali Start/Stop tugmalari bilan boshqaring. Voltmetr PV1 L1 va L2 fazalari orasidagi kuchlanishni o‘lchasin (QF1 chiqishida). Ampermetr PA1 L1 fazasiga ketma-ket (KM1.T1 va motor U klemmasi orasida) ulansin.",
+    "ru": "Управляйте двигателем через KM1 кнопками Пуск/Стоп. Вольтметр PV1 измеряет напряжение между L1 и L2 (на выходе QF1). Амперметр PA1 включается последовательно в фазу L1 (между KM1.T1 и клеммой U двигателя).",
+    "en": "Control the motor through KM1 with Start/Stop buttons. Voltmeter PV1 measures the voltage between L1 and L2 (at the QF1 output). Ammeter PA1 is in series with phase L1 (between KM1.T1 and motor terminal U)."
+  },
+  "elementlar": [
+    {"id": "VVOD", "tur": "manba_3f", "pozitsiya2d": [280, 60]},
+    {"id": "QF1", "tur": "avtomat", "pozitsiya2d": [200, 240], "parametr": {"qutb": 3, "nominal": 16}},
+    {"id": "PV1", "tur": "voltmetr", "pozitsiya2d": [500, 250]},
+    {"id": "KM1", "tur": "kontaktor", "pozitsiya2d": [230, 500]},
+    {"id": "PA1", "tur": "ampermetr", "pozitsiya2d": [520, 720]},
+    {"id": "M1", "tur": "motor_3f", "pozitsiya2d": [230, 900]},
+    {"id": "SB1", "tur": "tugma", "pozitsiya2d": [780, 320], "parametr": {"rang": "qizil"}},
+    {"id": "SB2", "tur": "tugma", "pozitsiya2d": [780, 480], "parametr": {"rang": "yashil"}}
+  ],
+  "togri_ulanishlar": [
+    {"nuqtalar": ["VVOD.L1", "QF1.1"], "rang": "sariq"},
+    {"nuqtalar": ["VVOD.L2", "QF1.3"], "rang": "yashil"},
+    {"nuqtalar": ["VVOD.L3", "QF1.5"], "rang": "qizil"},
+    {"nuqtalar": ["QF1.2", "KM1.L1", "SB1.11", "PV1.1"], "rang": "sariq"},
+    {"nuqtalar": ["QF1.4", "KM1.L2", "PV1.2"], "rang": "yashil"},
+    {"nuqtalar": ["QF1.6", "KM1.L3"], "rang": "qizil"},
+    {"nuqtalar": ["KM1.T1", "PA1.1"], "rang": "sariq"},
+    {"nuqtalar": ["PA1.2", "M1.U"], "rang": "sariq"},
+    {"nuqtalar": ["KM1.T2", "M1.V"], "rang": "yashil"},
+    {"nuqtalar": ["KM1.T3", "M1.W"], "rang": "qizil"},
+    {"nuqtalar": ["SB1.12", "SB2.23", "KM1.13"], "rang": "qora"},
+    {"nuqtalar": ["SB2.24", "KM1.14", "KM1.A1"], "rang": "qora"},
+    {"nuqtalar": ["KM1.A2", "VVOD.N"], "rang": "kok"},
+    {"nuqtalar": ["VVOD.PE", "M1.PE"], "rang": "sariq_yashil"}
+  ],
+  "ssenariylar": [
+    {
+      "nomi": {
+        "uz": "Motor to‘xtagan",
+        "ru": "Двигатель остановлен",
+        "en": "Motor stopped"
+      },
+      "qadamlar": [{"kutilgan": {"PV1": "kuchlanish_bor", "PA1": "tok_yoq", "M1": "toxtagan"}}]
+    },
+    {
+      "nomi": {
+        "uz": "Ishga tushirish va to‘xtatish",
+        "ru": "Пуск и останов",
+        "en": "Start and stop"
+      },
+      "qadamlar": [
+        {"amal": "SB2", "qiymat": "bos"},
+        {"kutilgan": {"M1": "ishlaydi", "PA1": "tok_bor"}},
+        {"amal": "SB1", "qiymat": "bos"},
+        {"kutilgan": {"M1": "toxtagan", "PA1": "tok_yoq"}}
+      ]
+    }
+  ],
+  "xato_qoidalari": [{"tur": "pe_ulangan", "klemmalar": ["M1.PE"]}, {"tur": "sim_rangi"}],
+  "maslahatlar": {
+    "uz": [
+      "Voltmetr parallel ulanadi: PV1.1 → QF1.2 (L1), PV1.2 → QF1.4 (L2).",
+      "Ampermetr ketma-ket ulanadi: KM1.T1 → PA1.1, PA1.2 → M1.U.",
+      "Boshqaruv: QF1.2 → SB1 (11–12) → SB2.23 va KM1.13; SB2.24 → KM1.14 va KM1.A1; KM1.A2 → N."
+    ],
+    "ru": [
+      "Вольтметр включается параллельно: PV1.1 → QF1.2 (L1), PV1.2 → QF1.4 (L2).",
+      "Амперметр — последовательно: KM1.T1 → PA1.1, PA1.2 → M1.U.",
+      "Управление: QF1.2 → SB1 (11–12) → SB2.23 и KM1.13; SB2.24 → KM1.14 и KM1.A1; KM1.A2 → N."
+    ],
+    "en": [
+      "The voltmeter is in parallel: PV1.1 → QF1.2 (L1), PV1.2 → QF1.4 (L2).",
+      "The ammeter is in series: KM1.T1 → PA1.1, PA1.2 → M1.U.",
+      "Control: QF1.2 → SB1 (11–12) → SB2.23 and KM1.13; SB2.24 → KM1.14 and KM1.A1; KM1.A2 → N."
+    ]
+  }
+}

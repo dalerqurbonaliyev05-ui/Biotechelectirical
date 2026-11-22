@@ -1,6 +1,6 @@
 // Umumiy holat: simlar, elementlar holati, tanlov, ball. 2D va 3D ko‘rinishlar shu BITTA holatni ishlatadi.
 import { tayyorla, boshlangichHolat, simulyatsiya, klemmaTop } from './simulator.js';
-import { tekshir, togriSimlar } from './checker.js';
+import { tekshir, togriSimlar, amalQoll } from './checker.js';
 import { t, tx } from './i18n.js';
 import { RANGLAR } from './ranglar.js';
 
@@ -45,6 +45,7 @@ export class Lab {
     this.belgilangan = { simlar: new Set(), klemmalar: new Set() };
     this.ball = { maslahat: 0, javob: false, xato: 0, boshlanish: Date.now(), tugadi: null };
     this.simN = 0;
+    this.simVaqt = 0;
     this.tarix = { orqa: [], oldinga: [] };
     if (!this.joy2d) this.joy2d = {};
     this.hisobla(false);
@@ -81,31 +82,42 @@ export class Lab {
   // ---------- simulyatsiya ----------
   hisobla(xabar = true) {
     const oldin = this.sim;
-    this._ochdi = false;
-    let sim = simulyatsiya(this.els, this.simlar, this.holat);
-    if (sim.qisqa && sim.ochirilsin.length) {
-      // Avtomat qisqa tutashuvni sezib o‘chib ketadi.
-      for (const id of sim.ochirilsin) this.holat[id] = { ...this.holat[id], yoqilgan: false };
+    const sim = simulyatsiya(this.els, this.simlar, this.holat, { vaqt: this.simVaqt || 0 });
+    this.holat = sim.holatlar; // kontaktor, rele, taymer va o‘chib ketgan avtomat holatlari
+    this.sim = sim;
+    if (sim.ochirilsin.length) {
       const joy = sim.ochirilsin[0];
-      sim = simulyatsiya(this.els, this.simlar, this.holat);
-      this.sim = sim;
-      this._ochdi = true;
       if (xabar) this.emit('qisqa', { el: joy, tur: 'ochdi' });
       if (xabar) this.emit('xabar', { matn: t('h.qisqa', { q: joy }), daraja: 'xato' });
-    } else {
-      this.sim = sim;
-      if (sim.qisqa && sim.chetlab && xabar) {
+      return;
+    }
+    if (sim.qisqa && sim.chetlab) {
+      if (xabar) {
         this.emit('qisqa', { el: null, tur: 'chetlab' });
         this.emit('xabar', { matn: t('h.qisqa_chetlab'), daraja: 'xato' });
       }
+      return;
     }
-    if (xabar && oldin && !oldin.qisqa && !(sim.qisqa || this.sim.qisqa) && !this._ochdi) {
-      for (const [id, y] of Object.entries(this.sim.yuklamalar)) {
-        const old = oldin.yuklamalar[id]?.yonadi;
-        if (y.yonadi && !old) this.emit('xabar', { matn: t('h.yondi'), daraja: 'ok' });
-        if (!y.yonadi && old && !this.sim.qisqa) this.emit('xabar', { matn: t('h.ochdi'), daraja: 'info' });
-      }
+    if (!xabar || !oldin || oldin.qisqa) return;
+    const kuygan = Object.entries(sim.natija).find(([id, n]) => n.holatlar?.includes('kuydi') && !oldin.natija[id]?.holatlar?.includes('kuydi'));
+    if (kuygan) { this.emit('xabar', { matn: t('h.kuydi', { e: kuygan[0] }), daraja: 'xato' }); return; }
+    for (const [id, y] of Object.entries(sim.natija)) {
+      const old = oldin.natija[id] || {};
+      if (y.yonadi && !old.yonadi) this.emit('xabar', { matn: t('h.yondi_el', { e: id }), daraja: 'ok' });
+      else if (!y.yonadi && old.yonadi) this.emit('xabar', { matn: t('h.ochdi_el', { e: id }), daraja: 'info' });
+      const yangi = y.holatlar?.includes('ishlaydi'), eski = old.holatlar?.includes('ishlaydi');
+      if (yangi && !eski) this.emit('xabar', { matn: t('h.ishladi', { e: id, s: (y.holatlar || []).filter((x) => x !== 'ishlaydi').map((x) => t(`st.${x}`)).join(', ') }), daraja: 'ok' });
+      else if (!yangi && eski) this.emit('xabar', { matn: t('h.toxtadi', { e: id }), daraja: 'info' });
     }
+  }
+
+  /** Vaqt relesi kabi elementlar hisoblayotgan bo‘lsa, simulyatsiya vaqtini oldinga suradi. */
+  vaqtQadam(dt) {
+    const kutmoqda = this.sim && Object.values(this.sim.natija).some((n) => n.kutmoqda);
+    this.simVaqt = (this.simVaqt || 0) + dt;
+    if (!kutmoqda) return;
+    this.hisobla();
+    this.emit('ozgardi', { sabab: 'vaqt' });
   }
 
   ozgardi(sabab) {
@@ -185,12 +197,24 @@ export class Lab {
     this.emit('ozgardi', { sabab: 'tanlov' });
   }
 
-  elementBosish(id) {
+  /**
+   * Elementni bosish. tugma — element ichidagi tugma (data-amal), tur: 'bos' (bosib turish), 'qoyib_yubor' yoki 'almash'.
+   */
+  elementBosish(id, tugma, tur = 'almash') {
     const el = this.elMap.get(id);
-    if (!el || !el.def.bosiladi) return;
-    this.holat[id] = el.def.bosish(this.holat[id]);
-    const h = this.holat[id];
-    this.emit('xabar', { matn: t('h.element', { e: id, s: t(h.yoqilgan ? 's.yoqilgan' : 's.ochgan') }), daraja: 'info' });
+    if (!el) return;
+    const h = this.holat[id] || {};
+    let yangi;
+    if (tur === 'bos') yangi = amalQoll(el, h, 'bosib_tur', tugma);
+    else if (tur === 'qoyib_yubor') yangi = amalQoll(el, h, 'qoyib_yubor', tugma);
+    else if (!tugma && el.def.bosish) yangi = el.def.bosish(h, el.param);
+    else if (el.def.amal || tugma) yangi = amalQoll(el, h, 'almash', tugma);
+    else return;
+    this.holat[id] = yangi;
+    if (tur !== 'qoyib_yubor') {
+      const s = 'yoqilgan' in yangi ? t(yangi.yoqilgan ? 's.yoqilgan' : 's.ochgan') : yangi.poz ? yangi.poz : null;
+      if (s) this.emit('xabar', { matn: t('h.element', { e: id, s }), daraja: 'info' });
+    }
     this.ozgardi('holat');
   }
 

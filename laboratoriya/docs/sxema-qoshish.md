@@ -14,7 +14,7 @@ laboratoriya/
   lab.css                       # bo‘lim stillari
   engine/
     elements/                   # elementlar kutubxonasi (har biri: 2D belgi + 3D model + klemmalar + xatti-harakat)
-    simulator.js                # union-find bilan potensial nuqtalar, tok oqimi, qisqa tutashuv
+    simulator.js                # tugun potensiallari (fazorlar), yuklamalar toki, qisqa tutashuv, holatli elementlar
     checker.js                  # xato turlarini aniqlovchi tekshiruvchi + to‘g‘ri yechim generatori
     state.js                    # umumiy holat (2D va 3D bitta holatni ishlatadi), ball, localStorage
     view2d.js                   # SVG ko‘rinish
@@ -22,8 +22,8 @@ laboratoriya/
     i18n.js                     # uz/ru/en matnlar
     ranglar.js                  # sim ranglari va ularning L/N/PE ga mosligi
   schemes/
-    royxat.json                 # katalogdagi sxemalar ro‘yxati
-    yoritish-01.json
+    royxat.json                 # katalogdagi sxemalar ro‘yxati (tartib = katalogdagi tartib)
+    yoritish-01.json …          # har bir sxema — bitta JSON
   vendor/three/                 # three.js 0.160.0 (importmap orqali)
 ```
 
@@ -146,6 +146,68 @@ Klemma doirachalarini dvigatel o‘zi chizadi — `klemmalar()` dagi `xy` korpus
 Talaba elementni surib joyini o‘zgartira oladi; JSON'dagi `pozitsiya2d` — boshlang‘ich joy, `korinish2d` — "ekranga sig‘dirish" chegarasi.
 
 Element qo‘shilgach, uni ishlatadigan sxema uchun `tests/laboratoriya/` ga to‘g‘ri yechim va bir nechta xato testi yozing.
+
+## Simulyatsiya (dvigatel v2) va ssenariylar
+
+Simulyator tarmoqni tugunlarga ajratadi (union-find), so‘ng har bir tugun kuchlanishini **kompleks fazor** sifatida
+hisoblaydi: L1/L2/L3 — 230 V, 120° siljish bilan; N va PE — 0 V. Yuklamalar (lampa, g‘altak, motor chulg‘ami) —
+qarshilik. Holatli elementlar (kontaktor, rele, vaqt relesi, issiqlik relesi, avtomat) qayta-qayta hisoblanib,
+barqaror holatga keltiriladi (40 iteratsiya; barqarorlashmasa — «tebranish» xatosi).
+
+- **Qisqa tutashuv**: faza–faza, faza–N yoki faza–PE bitta tugunda. Uni uzadigan eng kichik nominalli avtomat o‘chadi;
+  himoyasiz qisqa tutashuv — alohida xato.
+- **Kuyish**: g‘altak 1,35·Un dan yuqori kuchlanishda kuyadi (masalan, 230 V g‘altakka 400 V berilsa) va qayta tortilmaydi.
+- **Vaqt**: mashq sahifasi har 0,2 s da `vaqtQadam()` chaqiradi — vaqt relesi va taymerlar real vaqtda ishlaydi.
+
+### Sxema JSON'idagi qo‘shimcha maydonlar
+
+| Maydon | Ma’nosi |
+|---|---|
+| `rejimlar` | `["2d"]` yoki `["2d","3d"]`. 3D model hozircha faqat `yoritish-01` uchun bor. |
+| `rang_rejimi` | `"3f"` — uch fazali sxemalar: faza simi uchun jigarrang, qora, kulrang (va boshqaruv zanjiri uchun qizil, sariq, yashil) ruxsat etiladi. |
+| `ssenariylar` | Sxemaning ishlashini tekshiruvchi ketma-ketliklar (pastda). |
+| `topologiya` | `true` bo‘lsa, aniq xato topilmaganda ulanishlar `togri_ulanishlar` bilan solishtiriladi. Standart: faqat `maqsad` bor sxemalarda (yoritish-01); ssenariyli sxemalarda ishlash bo‘yicha tekshiriladi, shuning uchun boshqacha, lekin to‘g‘ri yig‘ilgan sxema ham qabul qilinadi. |
+
+### `ssenariylar`
+
+```json
+"ssenariylar": [{
+  "nomi": {"uz": "Ishga tushirish va to‘xtatish", "ru": "Пуск и останов", "en": "Start and stop"},
+  "qadamlar": [
+    {"kutilgan": {"M1": "toxtagan"}},
+    {"amal": "SB2", "qiymat": "bos"},
+    {"kutilgan": {"M1": "ishlaydi", "KM1": "tortilgan"}},
+    {"kut": 5},
+    {"kutilgan": {"M1": "uchburchak", "KM2": "!tortilgan"}}
+  ]
+}]
+```
+
+- Har bir ssenariy boshida barcha avtomatlar yoqiladi.
+- `amal` + `qiymat`: `bos` (lahzali tugmani bosib qo‘yib yuborish), `yoq`/`och` (avtomat, kalit), selektor uchun pozitsiya (`"I"`, `"0"`, `"II"`),
+  elementning o‘z amallari (`test`, `reset`, `karta`, `suv`, `k1`, …).
+- `kut`: sekund — simulyatsiya vaqti oldinga suriladi (vaqt relesi uchun).
+- `kutilgan`: element → holat belgisi; oldida `!` — «bu holat bo‘lmasligi kerak».
+- Holat belgilari (`engine/i18n.js` dagi `st.*`): `yonadi`, `ochgan`, `ishlaydi`, `toxtagan`, `oldinga`, `teskari`, `yulduz`, `uchburchak`,
+  `tortilgan`, `qoyilgan`, `hisoblamoqda`, `ochiq`, `yopiq`, `kuchlanish_bor`, `kuchlanish_yoq`, `tok_bor`, `ishladi`, `normal`, `kuydi`,
+  `bosilgan`, `suv_yuqori`, `suv_past`, `karta_bor`, `karta_yoq`, `poz_I`, `poz_0`, `poz_II` va h.k.
+
+### Element API (v2) — qo‘shimcha xususiyatlar
+
+```js
+yuklamalar: (h, p) => [{ a: 'A1', b: 'A2', R: 2000, nom: 'galtak' }],   // qarshilik sifatidagi iste’molchilar
+kichikR: (h, p) => [['1', '2']],          // nol qarshilikli zanjir (ampermetr, hisoblagich) — tok o‘lchanadi
+manba: (h, p, id) => ...,                  // tarmoq manbai (A/B/C fazalar, N, PE)
+hisobla(ctx, h, p) {                       // ctx: vaqt, kuchlanish(a,b), fazor(a,b), tok(nom), fazasi(t)
+  return { holat: { ...h, tortilgan: true }, natija: { holatlar: ['tortilgan'] } };
+},
+tugmalar: { bos: 'lahzali' },              // data-amal="bos" → bosib turilganda ishlaydi; 'almash' — har bosishda almashadi
+amal(h, qiymat, tugma, p) { ... },          // ssenariy va 2D tugmalar shu orqali holatni o‘zgartiradi
+svg({ el, holat, param, yonadi, natija })  // natija — hisobla() qaytargan natija
+```
+
+2D'da bosiladigan qism `<g data-amal="...">` bilan belgilanadi. Animatsiya sinflari: `d-aylan` (parrak), `d-yur` (konveyer),
+`d-oqim` (suv oqimi), `teskari` — teskari yo‘nalish.
 
 ## Natijalar
 

@@ -1,0 +1,91 @@
+{
+  "versiya": 1,
+  "rang_rejimi": "3f",
+  "rejimlar": ["2d"],
+  "id": "motor-06",
+  "yonalish": "motorlar",
+  "daraja": 4,
+  "vaqt_min": 30,
+  "nomi": {
+    "uz": "Motor 6: ikki motorni vaqt relesi bilan ketma-ket ishga tushirish",
+    "ru": "Двигатель 6: последовательный пуск двух двигателей с реле времени",
+    "en": "Motor 6: sequential start of two motors with a timer"
+  },
+  "qisqacha": {
+    "uz": "Start bosilganda M1 ishga tushadi, 5 soniyadan keyin vaqt relesi M2 ni yoqadi.",
+    "ru": "По Пуску запускается M1, через 5 с реле времени включает M2.",
+    "en": "Start runs M1; after 5 s the timer starts M2."
+  },
+  "topshiriq": {
+    "uz": "Start (SB2) bosilganda KM1 yoqilib o‘zini ushlab qolsin va vaqt relesi KT1 hisoblashni boshlasin. 5 soniyadan so‘ng KT1 ning 15–18 kontakti KM2 ni yoqsin. Stop (SB1) ikkala motorni to‘xtatadi.",
+    "ru": "По кнопке Пуск (SB2) KM1 включается с самоподхватом и запускает реле времени KT1. Через 5 с контакт KT1 15–18 включает KM2. Стоп (SB1) останавливает оба двигателя.",
+    "en": "Pressing Start (SB2) closes KM1 with a holding contact and starts timer KT1. After 5 s KT1 contact 15–18 closes KM2. Stop (SB1) stops both motors."
+  },
+  "elementlar": [
+    {"id": "VVOD", "tur": "manba_3f", "pozitsiya2d": [340, 60]},
+    {"id": "QF1", "tur": "avtomat", "pozitsiya2d": [240, 230], "parametr": {"qutb": 3, "nominal": 25}},
+    {"id": "KM1", "tur": "kontaktor", "pozitsiya2d": [180, 490]},
+    {"id": "KM2", "tur": "kontaktor", "pozitsiya2d": [480, 490]},
+    {"id": "M1", "tur": "motor_3f", "pozitsiya2d": [180, 780]},
+    {"id": "M2", "tur": "motor_3f", "pozitsiya2d": [480, 780]},
+    {"id": "SB1", "tur": "tugma", "pozitsiya2d": [800, 300], "parametr": {"rang": "qizil"}},
+    {"id": "SB2", "tur": "tugma", "pozitsiya2d": [800, 460], "parametr": {"rang": "yashil"}},
+    {"id": "KT1", "tur": "vaqt_relesi", "pozitsiya2d": [1000, 460], "parametr": {"kechikish": 5}}
+  ],
+  "togri_ulanishlar": [
+    {"nuqtalar": ["VVOD.L1", "QF1.1"], "rang": "sariq"},
+    {"nuqtalar": ["VVOD.L2", "QF1.3"], "rang": "yashil"},
+    {"nuqtalar": ["VVOD.L3", "QF1.5"], "rang": "qizil"},
+    {"nuqtalar": ["QF1.2", "KM1.L1", "KM2.L1", "SB1.11"], "rang": "sariq"},
+    {"nuqtalar": ["QF1.4", "KM1.L2", "KM2.L2"], "rang": "yashil"},
+    {"nuqtalar": ["QF1.6", "KM1.L3", "KM2.L3"], "rang": "qizil"},
+    {"nuqtalar": ["KM1.T1", "M1.U"], "rang": "sariq"},
+    {"nuqtalar": ["KM1.T2", "M1.V"], "rang": "yashil"},
+    {"nuqtalar": ["KM1.T3", "M1.W"], "rang": "qizil"},
+    {"nuqtalar": ["KM2.T1", "M2.U"], "rang": "sariq"},
+    {"nuqtalar": ["KM2.T2", "M2.V"], "rang": "yashil"},
+    {"nuqtalar": ["KM2.T3", "M2.W"], "rang": "qizil"},
+    {"nuqtalar": ["SB1.12", "SB2.23", "KM1.13"], "rang": "qora"},
+    {"nuqtalar": ["SB2.24", "KM1.14", "KM1.A1", "KT1.A1", "KT1.15"], "rang": "qora"},
+    {"nuqtalar": ["KT1.18", "KM2.A1"], "rang": "qora"},
+    {"nuqtalar": ["KM1.A2", "KM2.A2", "KT1.A2", "VVOD.N"], "rang": "kok"},
+    {"nuqtalar": ["VVOD.PE", "M1.PE", "M2.PE"], "rang": "sariq_yashil"}
+  ],
+  "ssenariylar": [
+    {
+      "nomi": {
+        "uz": "Ketma-ket ishga tushirish",
+        "ru": "Последовательный пуск",
+        "en": "Sequential start"
+      },
+      "qadamlar": [
+        {"amal": "SB2", "qiymat": "bos"},
+        {"kutilgan": {"M1": "ishlaydi", "M2": "toxtagan"}},
+        {"kut": 2},
+        {"kutilgan": {"M2": "toxtagan"}},
+        {"kut": 4},
+        {"kutilgan": {"M1": "ishlaydi", "M2": "ishlaydi"}},
+        {"amal": "SB1", "qiymat": "bos"},
+        {"kutilgan": {"M1": "toxtagan", "M2": "toxtagan"}}
+      ]
+    }
+  ],
+  "xato_qoidalari": [{"tur": "pe_ulangan", "klemmalar": ["M1.PE", "M2.PE"]}, {"tur": "sim_rangi"}],
+  "maslahatlar": {
+    "uz": [
+      "Ikkala kontaktorning L1–L3 klemmalari QF1 chiqishlariga parallel ulanadi.",
+      "SB2.24 nuqtasi: KM1.14, KM1.A1, KT1.A1 va KT1.15 (vaqt relesining umumiy kontakti).",
+      "KT1.18 (kechikib yopiladigan) → KM2.A1. Barcha A2 klemmalari → N."
+    ],
+    "ru": [
+      "L1–L3 обоих контакторов параллельно на выходы QF1.",
+      "Точка SB2.24: KM1.14, KM1.A1, KT1.A1 и KT1.15 (общий контакт реле).",
+      "KT1.18 (замыкается с задержкой) → KM2.A1. Все A2 → N."
+    ],
+    "en": [
+      "L1–L3 of both contactors go in parallel to the QF1 outputs.",
+      "Node SB2.24: KM1.14, KM1.A1, KT1.A1 and KT1.15 (timer common).",
+      "KT1.18 (delayed close) → KM2.A1. All A2 terminals → N."
+    ]
+  }
+}

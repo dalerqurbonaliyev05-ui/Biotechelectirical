@@ -3,7 +3,7 @@
 // kalit nolni uzishi, faza rezbada, PE yo‘qligi, sim rangi, qutini chetlab o‘tish va h.k.
 // Natijadagi parametrlar: {k: 'Q1.in'} — bitta klemma, {kl: [...]} — klemmalar, {sl: [...]} — simlar ro‘yxati.
 import { tayyorla, boshlangichHolat, simulyatsiya, simRollari, tarmoq, manbalar } from './simulator.js';
-import { ROL_RANGLARI } from './ranglar.js';
+import { ROL_RANGLARI, ROL_RANGLARI_3F } from './ranglar.js';
 
 const XATO = 'xato';
 const OGOH = 'ogoh';
@@ -82,7 +82,8 @@ export const QOIDALAR = {
 
   // L — jigarrang/qora, N — ko‘k, PE — sariq-yashil.
   sim_rangi(ctx, q) {
-    const ruxsat = { ...ROL_RANGLARI, ...(ctx.sxema.ranglar || {}), ...(q.ranglar || {}) };
+    const asos = ctx.sxema.rang_rejimi === '3f' ? ROL_RANGLARI_3F : ROL_RANGLARI;
+    const ruxsat = { ...asos, ...(ctx.sxema.ranglar || {}), ...(q.ranglar || {}) };
     const rollar = simRollari(ctx.els, ctx.simlar, ctx.boshlangich);
     const notogri = ctx.simlar.filter((s) => {
       const r = rollar.get(s.id);
@@ -149,6 +150,98 @@ function topologiya(ctx) {
   return res;
 }
 
+/** Element holatiga amal qo‘llash (sinov ssenariysi va foydalanuvchi bosishi uchun umumiy). */
+export function amalQoll(el, h, qiymat, tugma) {
+  const d = el.def;
+  h = h || {};
+  if (d.amal) return d.amal(h, qiymat, tugma, el.param);
+  if (qiymat === 'yoq') return { ...h, yoqilgan: true };
+  if (qiymat === 'och') return { ...h, yoqilgan: false };
+  if (d.bosish) return d.bosish(h, el.param);
+  return h;
+}
+
+/**
+ * Bitta sinov ssenariysini bajaradi: boshlang‘ich holat (barcha himoya avtomatlari yoqilgan) → qadamlar.
+ * Qadam turlari: {amal: "SB2", qiymat: "bos"|"bosib_tur"|"qoyib_yubor"|"yoq"|"och"|<holat nomi>, tugma?},
+ *                {kut: sekund}, {kutilgan: {"M1": "ishlaydi", "HL1": "!yonadi"}}.
+ * Natija: {ok} | {qisqa, qadam} | {xato: true, qadam, el, kut, bor} | {tebranish: true}
+ */
+export function ssenariyIshla(els, simlar, ss) {
+  let h = boshlangichHolat(els);
+  for (const el of els) if (el.def.himoya) h[el.id] = { ...h[el.id], yoqilgan: true };
+  for (const [id, v] of Object.entries(ss.boshlangich || {})) h[id] = { ...h[id], ...v };
+  let vaqt = 0;
+  let sim = simulyatsiya(els, simlar, h, { vaqt });
+  h = sim.holatlar;
+  const kuygan = () => Object.entries(sim.natija).find(([, n]) => n.holatlar?.includes('kuydi'))?.[0];
+  const muammo = (i) => {
+    if (sim.qisqa) return { qisqa: sim.qisqa, chetlab: sim.chetlab, qadam: i };
+    if (sim.tebranish) return { tebranish: true, qadam: i };
+    const k = kuygan();
+    return k ? { kuydi: k, qadam: i } : null;
+  };
+  let m = muammo(-1);
+  if (m) return m;
+  for (let i = 0; i < ss.qadamlar.length; i++) {
+    const q = ss.qadamlar[i];
+    if (q.amal) {
+      const el = els.find((e) => e.id === q.amal);
+      if (!el) continue;
+      const qiymatlar = q.qiymat === 'bos' ? ['bosib_tur', 'qoyib_yubor'] : [q.qiymat];
+      for (const v of qiymatlar) {
+        h = { ...h, [el.id]: amalQoll(el, h[el.id], v, q.tugma) };
+        sim = simulyatsiya(els, simlar, h, { vaqt });
+        h = sim.holatlar;
+        m = muammo(i);
+        if (m) return m;
+      }
+    }
+    if (q.kut) {
+      const n = Math.max(1, Math.ceil(q.kut / 0.5));
+      for (let k = 0; k < n; k++) {
+        vaqt += q.kut / n;
+        sim = simulyatsiya(els, simlar, h, { vaqt });
+        h = sim.holatlar;
+        m = muammo(i);
+        if (m) return m;
+      }
+    }
+    if (q.kutilgan) {
+      for (const [id, kut] of Object.entries(q.kutilgan)) {
+        const bor = sim.natija[id]?.holatlar || [];
+        const ok = kut.startsWith('!') ? !bor.includes(kut.slice(1)) : bor.includes(kut);
+        if (!ok) return { xato: true, qadam: i, el: id, kut, bor };
+      }
+    }
+  }
+  return { ok: true };
+}
+
+function ssenariylarniTekshir(ctx) {
+  const res = [];
+  for (const ss of ctx.sxema.ssenariylar || []) {
+    const r = ssenariyIshla(ctx.els, ctx.simlar, ss);
+    if (r.qisqa) {
+      res.push({
+        tur: 'qisqa_tutashuv', daraja: XATO,
+        kalit: r.qisqa.tur === 'L-N' ? 'chk.qisqa_LN' : r.qisqa.tur === 'L-PE' ? 'chk.qisqa_LPE' : 'chk.qisqa_LL',
+        qoshimcha: r.chetlab ? 'chk.qisqa_chetlab' : null, p: {}, ss: ss.nomi,
+      });
+      return res; // qisqa tutashuv — eng jiddiy xato
+    }
+    if (r.tebranish) { res.push({ tur: 'tebranish', daraja: XATO, kalit: 'chk.tebranish', p: { ss: { tx: ss.nomi } } }); continue; }
+    if (r.kuydi) { res.push({ tur: 'kuydi', daraja: XATO, kalit: 'chk.kuydi', p: { ss: { tx: ss.nomi }, el: r.kuydi } }); continue; }
+    if (r.xato) {
+      res.push({
+        tur: 'ssenariy', daraja: XATO, kalit: 'chk.ss',
+        p: { ss: { tx: ss.nomi }, el: r.el, kut: { st: r.kut.replace(/^!/, '') }, bor: { stl: r.bor }, yoq: r.kut.startsWith('!') ? 'yoq' : '' },
+      });
+    }
+  }
+  return res;
+}
+
 /**
  * Asosiy tekshiruv. Natija: { togri: boolean, xatolar: [...] }.
  * Sxema faqat barcha qoidalar bajarilganda to‘g‘ri hisoblanadi.
@@ -196,6 +289,13 @@ export function tekshir(sxema, simlar) {
   const tur = new Set();
   const unikal = xatolar.filter((x) => (tur.has(x.tur) ? false : tur.add(x.tur)));
 
+  // 2b) Ketma-ket sinov ssenariylari (yangi sxemalar)
+  if (sxema.ssenariylar) {
+    const ss = ssenariylarniTekshir(ctx);
+    if (ss[0]?.tur === 'qisqa_tutashuv') return { togri: false, xatolar: ss };
+    unikal.push(...ss);
+  }
+
   // 3) Xavfsizlik va montaj qoidalari.
   for (const q of sxema.xato_qoidalari || []) {
     const f = QOIDALAR[q.tur];
@@ -203,7 +303,7 @@ export function tekshir(sxema, simlar) {
   }
 
   // 4) Hech narsa topilmagan bo‘lsa — potensial nuqtalarni to‘g‘ri yechim bilan solishtirish.
-  if (!unikal.length) unikal.push(...topologiya(ctx));
+  if (!unikal.length && (sxema.topologiya ?? !!sxema.maqsad)) unikal.push(...topologiya(ctx));
 
   return { togri: unikal.length === 0, xatolar: unikal };
 }

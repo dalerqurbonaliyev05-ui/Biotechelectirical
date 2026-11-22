@@ -1,0 +1,95 @@
+{
+  "versiya": 1,
+  "rang_rejimi": "3f",
+  "rejimlar": ["2d"],
+  "id": "motor-01",
+  "yonalish": "motorlar",
+  "daraja": 2,
+  "vaqt_min": 15,
+  "nomi": {
+    "uz": "Motor 1: to‘g‘ridan-to‘g‘ri ishga tushirish (DOL)",
+    "ru": "Двигатель 1: прямой пуск (DOL)",
+    "en": "Motor 1: direct-on-line start (DOL)"
+  },
+  "qisqacha": {
+    "uz": "Kontaktor, Start/Stop tugmalari va o‘zini ushlab turish kontakti — asosiy motor sxemasi.",
+    "ru": "Контактор, кнопки Пуск/Стоп и самоподхват — базовая схема двигателя.",
+    "en": "Contactor, Start/Stop buttons and a holding contact — the basic motor circuit."
+  },
+  "topshiriq": {
+    "uz": "Uch fazali motorni avtomat QF1 va kontaktor KM1 orqali ulang. Boshqaruv: L1 faza → Stop (SB1, NC) → Start (SB2, NO) → KM1 g‘altagi → N. Start tugmasiga parallel KM1 ning 13–14 kontaktini ulang (o‘zini ushlab turish).",
+    "ru": "Подключите трёхфазный двигатель через автомат QF1 и контактор KM1. Управление: фаза L1 → Стоп (SB1, НЗ) → Пуск (SB2, НО) → катушка KM1 → N. Параллельно кнопке Пуск подключите контакт KM1 13–14 (самоподхват).",
+    "en": "Connect the three-phase motor through breaker QF1 and contactor KM1. Control: phase L1 → Stop (SB1, NC) → Start (SB2, NO) → KM1 coil → N. Put KM1 contact 13–14 in parallel with Start (holding contact)."
+  },
+  "elementlar": [
+    {"id": "VVOD", "tur": "manba_3f", "pozitsiya2d": [280, 60]},
+    {"id": "QF1", "tur": "avtomat", "pozitsiya2d": [200, 240], "parametr": {"qutb": 3, "nominal": 16}},
+    {"id": "KM1", "tur": "kontaktor", "pozitsiya2d": [230, 500]},
+    {"id": "M1", "tur": "motor_3f", "pozitsiya2d": [230, 800]},
+    {"id": "SB1", "tur": "tugma", "pozitsiya2d": [600, 320], "parametr": {"rang": "qizil"}},
+    {"id": "SB2", "tur": "tugma", "pozitsiya2d": [600, 480], "parametr": {"rang": "yashil"}}
+  ],
+  "togri_ulanishlar": [
+    {"nuqtalar": ["VVOD.L1", "QF1.1"], "rang": "sariq"},
+    {"nuqtalar": ["VVOD.L2", "QF1.3"], "rang": "yashil"},
+    {"nuqtalar": ["VVOD.L3", "QF1.5"], "rang": "qizil"},
+    {"nuqtalar": ["QF1.2", "KM1.L1", "SB1.11"], "rang": "sariq"},
+    {"nuqtalar": ["QF1.4", "KM1.L2"], "rang": "yashil"},
+    {"nuqtalar": ["QF1.6", "KM1.L3"], "rang": "qizil"},
+    {"nuqtalar": ["KM1.T1", "M1.U"], "rang": "sariq"},
+    {"nuqtalar": ["KM1.T2", "M1.V"], "rang": "yashil"},
+    {"nuqtalar": ["KM1.T3", "M1.W"], "rang": "qizil"},
+    {"nuqtalar": ["SB1.12", "SB2.23", "KM1.13"], "rang": "qora"},
+    {"nuqtalar": ["SB2.24", "KM1.14", "KM1.A1"], "rang": "qora"},
+    {"nuqtalar": ["KM1.A2", "VVOD.N"], "rang": "kok"},
+    {"nuqtalar": ["VVOD.PE", "M1.PE"], "rang": "sariq_yashil"}
+  ],
+  "ssenariylar": [
+    {
+      "nomi": {
+        "uz": "Ishga tushirish va to‘xtatish",
+        "ru": "Пуск и останов",
+        "en": "Start and stop"
+      },
+      "qadamlar": [
+        {"kutilgan": {"M1": "toxtagan"}},
+        {"amal": "SB2", "qiymat": "bos"},
+        {"kutilgan": {"M1": "ishlaydi", "KM1": "tortilgan"}},
+        {"amal": "SB1", "qiymat": "bos"},
+        {"kutilgan": {"M1": "toxtagan", "KM1": "qoyilgan"}}
+      ]
+    },
+    {
+      "nomi": {
+        "uz": "Kuchlanish yo‘qolib qaytganda",
+        "ru": "Пропадание и возврат напряжения",
+        "en": "Power loss and return"
+      },
+      "qadamlar": [
+        {"amal": "SB2", "qiymat": "bos"},
+        {"amal": "QF1", "qiymat": "och"},
+        {"kutilgan": {"M1": "toxtagan"}},
+        {"amal": "QF1", "qiymat": "yoq"},
+        {"kutilgan": {"M1": "toxtagan"}}
+      ]
+    }
+  ],
+  "xato_qoidalari": [{"tur": "pe_ulangan", "klemmalar": ["M1.PE"]}, {"tur": "sim_rangi"}],
+  "maslahatlar": {
+    "uz": [
+      "Kuch zanjiri: VVOD → QF1 (1-3-5) → QF1 (2-4-6) → KM1 (L1-L2-L3) → KM1 (T1-T2-T3) → motor U, V, W.",
+      "Boshqaruv fazasi QF1.2 dan olinadi: QF1.2 → SB1.11; SB1.12 → SB2.23.",
+      "SB2.24 → KM1.A1; KM1.A2 → N. KM1.13 ni SB2.23 ga, KM1.14 ni SB2.24 ga ulang — o‘zini ushlab turish."
+    ],
+    "ru": [
+      "Силовая цепь: VVOD → QF1 (1-3-5) → QF1 (2-4-6) → KM1 (L1-L2-L3) → KM1 (T1-T2-T3) → U, V, W двигателя.",
+      "Фаза управления — с QF1.2: QF1.2 → SB1.11; SB1.12 → SB2.23.",
+      "SB2.24 → KM1.A1; KM1.A2 → N. KM1.13 к SB2.23, KM1.14 к SB2.24 — самоподхват."
+    ],
+    "en": [
+      "Power: VVOD → QF1 (1-3-5) → QF1 (2-4-6) → KM1 (L1-L2-L3) → KM1 (T1-T2-T3) → motor U, V, W.",
+      "Control phase from QF1.2: QF1.2 → SB1.11; SB1.12 → SB2.23.",
+      "SB2.24 → KM1.A1; KM1.A2 → N. KM1.13 to SB2.23, KM1.14 to SB2.24 — holding contact."
+    ]
+  }
+}

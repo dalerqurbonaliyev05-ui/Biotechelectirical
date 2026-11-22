@@ -1,0 +1,123 @@
+{
+  "versiya": 1,
+  "id": "avtomatika-01",
+  "yonalish": "avtomatika",
+  "daraja": 4,
+  "vaqt_min": 25,
+  "rejimlar": ["2d"],
+  "nomi": {
+    "uz": "Avtomatika 1: solenoid klapan — taymer va qo‘lda boshqarish",
+    "ru": "Автоматика 1: электромагнитный клапан — таймер и ручное управление",
+    "en": "Automation 1: solenoid valve — timer and manual control"
+  },
+  "qisqacha": {
+    "uz": "Avariya tugmasi, selektor (qo‘lda/avto), qulflanadigan tugma, vaqt kaliti, rele va klapan.",
+    "ru": "Аварийная кнопка, селектор (ручн./авто), кнопка с фиксацией, таймер, реле и клапан.",
+    "en": "E-stop, hand/auto selector, latching button, time switch, relay and valve."
+  },
+  "topshiriq": {
+    "uz": "Klapan (YV1) rele K1 kontakti orqali yoqiladi. Rele g‘altagi: I holatda (qo‘lda) qulflanadigan tugma SB1 orqali, II holatda (avto) vaqt kaliti KT1 kontakti orqali. Avariya tugmasi SB0 butun boshqaruvni uzadi. HL1 klapan ochiqligini ko‘rsatadi.",
+    "ru": "Клапан YV1 включается через контакт реле K1. Катушка реле: в положении I (ручн.) — через кнопку с фиксацией SB1, в положении II (авто) — через контакт таймера KT1. Аварийная кнопка SB0 отключает всё управление. HL1 показывает открытый клапан.",
+    "en": "Valve YV1 is switched by relay K1. The relay coil is fed in position I (hand) through latching button SB1 and in position II (auto) through the time-switch contact KT1. E-stop SB0 cuts all control. HL1 shows the valve is open."
+  },
+  "elementlar": [
+    {"id": "VVOD", "tur": "vvod", "pozitsiya2d": [80, 330]},
+    {
+      "id": "FU1",
+      "tur": "avtomat",
+      "pozitsiya2d": [280, 150],
+      "parametr": {"qutb": 2, "korinish": "saqlagich", "nominal": 6, "yorliqlar": ["L", "N"]}
+    },
+    {"id": "SB0", "tur": "tugma", "pozitsiya2d": [520, 140], "parametr": {"rang": "qizil", "tur": "avariya"}},
+    {"id": "SA1", "tur": "tanlagich", "pozitsiya2d": [720, 140]},
+    {"id": "SB1", "tur": "tugma", "pozitsiya2d": [920, 140], "parametr": {"rang": "yashil", "tur": "qulflanadigan"}},
+    {"id": "KT1", "tur": "vaqt_kaliti", "pozitsiya2d": [960, 400]},
+    {"id": "K1", "tur": "rele", "pozitsiya2d": [640, 440]},
+    {"id": "YV1", "tur": "solenoid", "pozitsiya2d": [420, 720]},
+    {"id": "HL1", "tur": "signal_lampa", "pozitsiya2d": [720, 720], "parametr": {"rang": "moviy"}}
+  ],
+  "togri_ulanishlar": [
+    {"nuqtalar": ["VVOD.L", "FU1.1"], "rang": "jigarrang"},
+    {"nuqtalar": ["VVOD.N", "FU1.3"], "rang": "kok"},
+    {"nuqtalar": ["FU1.2", "SB0.11", "KT1.L"], "rang": "jigarrang"},
+    {"nuqtalar": ["SB0.12", "SA1.13", "SA1.23", "K1.11"], "rang": "qora"},
+    {"nuqtalar": ["SA1.14", "SB1.23"], "rang": "qora"},
+    {"nuqtalar": ["SB1.24", "KT1.2", "K1.A1"], "rang": "qora"},
+    {"nuqtalar": ["SA1.24", "KT1.1"], "rang": "qora"},
+    {"nuqtalar": ["K1.14", "YV1.L", "HL1.X1"], "rang": "qora"},
+    {"nuqtalar": ["FU1.4", "KT1.N", "K1.A2", "YV1.N", "HL1.X2"], "rang": "kok"},
+    {"nuqtalar": ["VVOD.PE", "YV1.PE"], "rang": "sariq_yashil"}
+  ],
+  "ssenariylar": [
+    {
+      "nomi": {
+        "uz": "Qo‘lda rejim",
+        "ru": "Ручной режим",
+        "en": "Hand mode"
+      },
+      "qadamlar": [
+        {"amal": "SA1", "qiymat": "I"},
+        {"kutilgan": {"YV1": "yopiq"}},
+        {"amal": "SB1", "qiymat": "bos"},
+        {"kutilgan": {"YV1": "ochiq", "HL1": "yonadi"}},
+        {"amal": "SB1", "qiymat": "bos"},
+        {"kutilgan": {"YV1": "yopiq", "HL1": "ochgan"}}
+      ]
+    },
+    {
+      "nomi": {
+        "uz": "Avtomatik rejim (taymer)",
+        "ru": "Автоматический режим (таймер)",
+        "en": "Auto mode (timer)"
+      },
+      "qadamlar": [
+        {"amal": "SA1", "qiymat": "II"},
+        {"kutilgan": {"YV1": "yopiq"}},
+        {"amal": "KT1", "qiymat": "yoq"},
+        {"kutilgan": {"YV1": "ochiq"}},
+        {"amal": "KT1", "qiymat": "och"},
+        {"kutilgan": {"YV1": "yopiq"}}
+      ]
+    },
+    {
+      "nomi": {
+        "uz": "Avariya to‘xtatish",
+        "ru": "Аварийная остановка",
+        "en": "Emergency stop"
+      },
+      "qadamlar": [
+        {"amal": "SA1", "qiymat": "I"},
+        {"amal": "SB1", "qiymat": "bos"},
+        {"kutilgan": {"YV1": "ochiq"}},
+        {"amal": "SB0", "qiymat": "bos"},
+        {"kutilgan": {"YV1": "yopiq", "HL1": "ochgan"}}
+      ]
+    },
+    {
+      "nomi": {
+        "uz": "0 holatda",
+        "ru": "Положение 0",
+        "en": "Position 0"
+      },
+      "qadamlar": [{"amal": "SB1", "qiymat": "bos"}, {"amal": "KT1", "qiymat": "yoq"}, {"kutilgan": {"YV1": "yopiq"}}]
+    }
+  ],
+  "xato_qoidalari": [{"tur": "pe_ulangan", "klemmalar": ["YV1.PE"]}, {"tur": "sim_rangi"}],
+  "maslahatlar": {
+    "uz": [
+      "Saqlagich chiqishidagi faza: avariya tugmasining NC kontakti (11) va vaqt kalitining L klemmasi.",
+      "SB0.12 dan: selektorning ikkala bloki (13 va 23) va rele kontaktining umumiy 11-klemmasi.",
+      "SA1.14 → SB1 (23–24) → K1.A1; SA1.24 → KT1 kontakti (1–2) → K1.A1. K1.14 → klapan va signal lampa."
+    ],
+    "ru": [
+      "Фаза с предохранителя: НЗ контакт аварийной кнопки (11) и клемма L таймера.",
+      "С SB0.12: оба блока селектора (13 и 23) и общий контакт реле 11.",
+      "SA1.14 → SB1 (23–24) → K1.A1; SA1.24 → контакт таймера (1–2) → K1.A1. K1.14 → клапан и сигнальная лампа."
+    ],
+    "en": [
+      "Phase from the fuse: E-stop NC contact (11) and the time-switch terminal L.",
+      "From SB0.12: both selector blocks (13 and 23) and relay common 11.",
+      "SA1.14 → SB1 (23–24) → K1.A1; SA1.24 → time-switch contact (1–2) → K1.A1. K1.14 → valve and pilot light."
+    ]
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "versiya": 1,
+  "id": "yoritish-02",
+  "yonalish": "yoritish",
+  "daraja": 1,
+  "vaqt_min": 8,
+  "rejimlar": ["2d"],
+  "nomi": {
+    "uz": "Yoritish 2: kuch avtomati (MCCB) va kalit orqali lampa",
+    "ru": "Освещение 2: лампа через силовой автомат (MCCB) и выключатель",
+    "en": "Lighting 2: lamp via a moulded-case breaker and a switch"
+  },
+  "qisqacha": {
+    "uz": "Ikki qutbli kuch avtomati, bir klavishali kalit va lampadan oddiy zanjir.",
+    "ru": "Простая цепь: двухполюсный автомат, выключатель и лампа.",
+    "en": "A simple circuit: two-pole breaker, switch and lamp."
+  },
+  "topshiriq": {
+    "uz": "Tarmoqni ikki qutbli kuch avtomati (QF1) orqali ulang. Faza kalit (SA1) orqali lampaga, nol esa to‘g‘ridan-to‘g‘ri lampaga borsin. Kalit faza simini uzishi shart.",
+    "ru": "Подключите сеть через двухполюсный автомат QF1. Фаза идёт к лампе через выключатель SA1, ноль — напрямую к лампе. Выключатель должен разрывать фазу.",
+    "en": "Feed the circuit through the two-pole breaker QF1. The phase goes to the lamp through switch SA1, the neutral straight to the lamp. The switch must break the phase."
+  },
+  "elementlar": [
+    {"id": "VVOD", "tur": "vvod", "pozitsiya2d": [100, 300]},
+    {"id": "QF1", "tur": "avtomat", "pozitsiya2d": [320, 240], "parametr": {"qutb": 2, "korinish": "mccb", "nominal": 25, "yorliqlar": ["L", "N"]}},
+    {"id": "SA1", "tur": "kalit_1", "pozitsiya2d": [600, 200]},
+    {"id": "HL1", "tur": "lampochka", "pozitsiya2d": [820, 440]}
+  ],
+  "togri_ulanishlar": [
+    {"nuqtalar": ["VVOD.L", "QF1.1"], "rang": "jigarrang"},
+    {"nuqtalar": ["VVOD.N", "QF1.3"], "rang": "kok"},
+    {"nuqtalar": ["QF1.2", "SA1.L"], "rang": "jigarrang"},
+    {"nuqtalar": ["SA1.L1", "HL1.L"], "rang": "jigarrang"},
+    {"nuqtalar": ["HL1.N", "QF1.4"], "rang": "kok"}
+  ],
+  "ssenariylar": [
+    {
+      "nomi": {
+        "uz": "Kalit bilan yoqish",
+        "ru": "Включение выключателем",
+        "en": "Switching on"
+      },
+      "qadamlar": [
+        {"kutilgan": {"HL1": "ochgan"}},
+        {"amal": "SA1", "qiymat": "yoq"},
+        {"kutilgan": {"HL1": "yonadi"}},
+        {"amal": "SA1", "qiymat": "och"},
+        {"kutilgan": {"HL1": "ochgan"}}
+      ]
+    },
+    {
+      "nomi": {
+        "uz": "Avtomat o‘chirilganda",
+        "ru": "При отключённом автомате",
+        "en": "Breaker off"
+      },
+      "qadamlar": [{"amal": "SA1", "qiymat": "yoq"}, {"amal": "QF1", "qiymat": "och"}, {"kutilgan": {"HL1": "ochgan"}}]
+    }
+  ],
+  "xato_qoidalari": [{"tur": "kalit_fazada", "kalit": "SA1", "yuklama": "HL1"}, {"tur": "sim_rangi"}],
+  "maslahatlar": {
+    "uz": [
+      "VVOD.L → QF1 ning 1-klemmasi, VVOD.N → QF1 ning 3-klemmasi.",
+      "QF1 ning 2-klemmasidan fazani kalitning L klemmasiga olib boring.",
+      "Kalitning L1 chiqishi → lampaning L klemmasi; lampaning N klemmasi → QF1 ning 4-klemmasi."
+    ],
+    "ru": [
+      "VVOD.L → клемма 1 QF1, VVOD.N → клемма 3 QF1.",
+      "С клеммы 2 QF1 подайте фазу на клемму L выключателя.",
+      "Выход L1 выключателя → клемма L лампы; клемма N лампы → клемма 4 QF1."
+    ],
+    "en": [
+      "VVOD.L → QF1 terminal 1, VVOD.N → QF1 terminal 3.",
+      "Take the phase from QF1 terminal 2 to the switch terminal L.",
+      "Switch output L1 → lamp terminal L; lamp terminal N → QF1 terminal 4."
+    ]
+  }
+}

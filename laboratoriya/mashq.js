@@ -34,6 +34,9 @@ function parametr(p) {
       if (v.k) res[k] = lab.klemmaNomi(v.k);
       else if (v.kl) res[k] = v.kl.map((x) => lab.klemmaNomi(x)).join(', ');
       else if (v.sl) res[k] = v.sl.map((x) => lab.simNomi(x)).join('; ');
+      else if (v.tx) res[k] = tx(v.tx);
+      else if (v.st) res[k] = t(`st.${v.st}`);
+      else if (v.stl) res[k] = v.stl.length ? v.stl.map((x) => t(`st.${x}`)).join(', ') : '—';
     } else res[k] = v;
   }
   return res;
@@ -69,18 +72,15 @@ function panelniYangila() {
   $('tb-del').disabled = !lab.tanlanganSim;
   $('tb-undo').disabled = !lab.tarix.orqa.length;
   $('tb-redo').disabled = !lab.tarix.oldinga.length;
-  $('el-holat').innerHTML = lab.els.filter((e) => e.def.bosiladi || e.def.yuklama).map((e) => {
-    let s, cls = '';
-    if (e.def.yuklama) {
-      const y = lab.sim.yuklamalar[e.id]?.yonadi;
-      s = t(y ? 's.yonadi' : 's.ochiq_lampa');
-      cls = y ? 'yonadi on' : '';
-    } else {
-      const on = lab.holat[e.id]?.yoqilgan;
-      s = t(on ? 's.yoqilgan' : 's.ochgan');
-      cls = on ? 'on' : '';
-    }
-    return `<li class="${cls}"><span>${esc(e.id)} · ${esc(tx(e.def.nomi))}</span><span>${esc(s)}</span></li>`;
+  const ON = ['yonadi', 'ishlaydi', 'tortilgan', 'yoqilgan', 'ochiq', 'kuchlanish_bor', 'tok_bor', 'bosilgan', 'karta_bor', 'suv_yuqori'];
+  $('el-holat').innerHTML = lab.els.map((e) => {
+    let hol = lab.sim.natija[e.id]?.holatlar;
+    if (!hol && 'yoqilgan' in (lab.holat[e.id] || {})) hol = [lab.holat[e.id].yoqilgan ? 'yoqilgan' : 'ochgan'];
+    if (!hol?.length) return '';
+    const on = ON.includes(hol[0]);
+    const xato = hol.includes('kuydi') || hol.includes('faza_yetishmaydi') || hol.includes('ishladi');
+    const qoldi = lab.sim.natija[e.id]?.kutmoqda ? ` ${lab.sim.natija[e.id].qoldi.toFixed(1)} s` : '';
+    return `<li class="${on ? 'on' : ''}${xato ? ' xato' : ''}${hol[0] === 'yonadi' ? ' yonadi' : ''}"><span>${esc(e.id)} · ${esc(tx(e.def.nomi))}</span><span>${esc(hol.map((x) => t(`st.${x}`)).join(', '))}${qoldi}</span></li>`;
   }).join('');
   const list = lab.maslahatlarRoyxati();
   $('p-maslahat').hidden = !list.length;
@@ -231,6 +231,7 @@ async function boshlash() {
   matnlarniYangila();
   holatXabari(t('h.boshla'));
   setInterval(() => { $('st-vaqt').textContent = vaqtMatn(lab.vaqt()); }, 1000);
+  setInterval(() => lab.vaqtQadam(0.2), 200); // vaqt relesi va taymerlar uchun simulyatsiya vaqti
   $('st-vaqt').textContent = vaqtMatn(lab.vaqt());
   if (window.innerWidth > 1100) panelniOch(true);
 

@@ -1,0 +1,104 @@
+{
+  "versiya": 1,
+  "id": "uy-shiti-01",
+  "yonalish": "uy_shiti",
+  "daraja": 3,
+  "vaqt_min": 20,
+  "rejimlar": ["2d"],
+  "nomi": {
+    "uz": "Uy shiti 1: hisoblagich, difavtomat, rozetka, yoritish va ventilyator",
+    "ru": "Домашний щит 1: счётчик, дифавтомат, розетка, освещение и вентилятор",
+    "en": "Home panel 1: meter, RCBO, socket, lighting and fan"
+  },
+  "qisqacha": {
+    "uz": "Kvartira shiti: yoritish guruhi va difavtomat bilan himoyalangan rozetka/ventilyator guruhi.",
+    "ru": "Квартирный щит: группа освещения и группа розетки/вентилятора через дифавтомат.",
+    "en": "Flat panel: a lighting group and a socket/fan group protected by an RCBO."
+  },
+  "topshiriq": {
+    "uz": "Tarmoq → hisoblagich (PI1) → kirish avtomati (QF1). Yoritish: QF1 dan SA1, SA2 kalitlari orqali HL1, HL2 lampalariga. Rozetka va ventilyator — difavtomat (QF2) orqali; ventilyator SA3 kaliti bilan yoqiladi. Rozetka va ventilyatorning PE klemmalari himoya o‘tkazgichiga ulanadi.",
+    "ru": "Сеть → счётчик PI1 → вводной автомат QF1. Освещение: от QF1 через выключатели SA1, SA2 к лампам HL1, HL2. Розетка и вентилятор — через дифавтомат QF2; вентилятор включается выключателем SA3. PE розетки и вентилятора — на защитный проводник.",
+    "en": "Mains → meter PI1 → main breaker QF1. Lighting: from QF1 through switches SA1, SA2 to lamps HL1, HL2. Socket and fan via RCBO QF2; the fan is switched by SA3. The socket and fan PE terminals go to the protective conductor."
+  },
+  "elementlar": [
+    {"id": "VVOD", "tur": "vvod", "pozitsiya2d": [80, 330]},
+    {"id": "PI1", "tur": "hisoblagich_1f", "pozitsiya2d": [280, 150]},
+    {"id": "QF1", "tur": "avtomat", "pozitsiya2d": [480, 150], "parametr": {"qutb": 2, "nominal": 25, "yorliqlar": ["L", "N"]}},
+    {"id": "QF2", "tur": "difavtomat", "pozitsiya2d": [700, 150]},
+    {"id": "SA1", "tur": "kalit_1", "pozitsiya2d": [380, 520]},
+    {"id": "SA2", "tur": "kalit_1", "pozitsiya2d": [560, 520]},
+    {"id": "HL1", "tur": "lampochka", "pozitsiya2d": [380, 780]},
+    {"id": "HL2", "tur": "lampochka", "pozitsiya2d": [560, 780]},
+    {"id": "XS1", "tur": "rozetka", "pozitsiya2d": [860, 460]},
+    {"id": "SA3", "tur": "kalit_1", "pozitsiya2d": [1060, 460]},
+    {"id": "M1", "tur": "ventilyator", "pozitsiya2d": [1060, 760]}
+  ],
+  "togri_ulanishlar": [
+    {"nuqtalar": ["VVOD.L", "PI1.1"], "rang": "jigarrang"},
+    {"nuqtalar": ["VVOD.N", "PI1.4"], "rang": "kok"},
+    {"nuqtalar": ["PI1.3", "QF1.1"], "rang": "jigarrang"},
+    {"nuqtalar": ["PI1.6", "QF1.3"], "rang": "kok"},
+    {"nuqtalar": ["QF1.2", "QF2.1", "SA1.L", "SA2.L"], "rang": "jigarrang"},
+    {"nuqtalar": ["QF1.4", "QF2.N1", "HL1.N", "HL2.N"], "rang": "kok"},
+    {"nuqtalar": ["SA1.L1", "HL1.L"], "rang": "jigarrang"},
+    {"nuqtalar": ["SA2.L1", "HL2.L"], "rang": "jigarrang"},
+    {"nuqtalar": ["QF2.2", "XS1.L", "SA3.L"], "rang": "jigarrang"},
+    {"nuqtalar": ["SA3.L1", "M1.L"], "rang": "jigarrang"},
+    {"nuqtalar": ["QF2.N2", "XS1.N", "M1.N"], "rang": "kok"},
+    {"nuqtalar": ["VVOD.PE", "XS1.PE", "M1.PE"], "rang": "sariq_yashil"}
+  ],
+  "ssenariylar": [
+    {
+      "nomi": {
+        "uz": "Kuchlanish berilganda",
+        "ru": "После подачи напряжения",
+        "en": "Power on"
+      },
+      "qadamlar": [{"kutilgan": {"XS1": "kuchlanish_bor", "HL1": "ochgan", "HL2": "ochgan", "M1": "toxtagan"}}]
+    },
+    {
+      "nomi": {
+        "uz": "Yoritish",
+        "ru": "Освещение",
+        "en": "Lighting"
+      },
+      "qadamlar": [
+        {"amal": "SA1", "qiymat": "yoq"},
+        {"kutilgan": {"HL1": "yonadi", "HL2": "ochgan"}},
+        {"amal": "SA2", "qiymat": "yoq"},
+        {"kutilgan": {"HL2": "yonadi", "PI1": "ishlaydi"}}
+      ]
+    },
+    {
+      "nomi": {
+        "uz": "Ventilyator",
+        "ru": "Вентилятор",
+        "en": "Fan"
+      },
+      "qadamlar": [{"amal": "SA3", "qiymat": "yoq"}, {"kutilgan": {"M1": "ishlaydi"}}, {"amal": "SA3", "qiymat": "och"}, {"kutilgan": {"M1": "toxtagan"}}]
+    }
+  ],
+  "xato_qoidalari": [
+    {"tur": "kalit_fazada", "kalit": "SA1", "yuklama": "HL1"},
+    {"tur": "kalit_fazada", "kalit": "SA2", "yuklama": "HL2"},
+    {"tur": "pe_ulangan", "klemmalar": ["XS1.PE", "M1.PE"]},
+    {"tur": "sim_rangi"}
+  ],
+  "maslahatlar": {
+    "uz": [
+      "VVOD → hisoblagich (1 va 4) → hisoblagich chiqishlari (3 va 6) → QF1 kirishi.",
+      "QF1 chiqishidagi faza: difavtomat kirishiga va SA1, SA2 kalitlariga; nol: difavtomatga va lampalarning N klemmalariga.",
+      "Difavtomat chiqishi: faza → rozetka va SA3; nol → rozetka va ventilyator. PE → rozetka va ventilyator korpusi."
+    ],
+    "ru": [
+      "VVOD → счётчик (1 и 4) → выходы счётчика (3 и 6) → вход QF1.",
+      "Фаза с выхода QF1: на дифавтомат и выключатели SA1, SA2; ноль: на дифавтомат и клеммы N ламп.",
+      "Выход дифавтомата: фаза → розетка и SA3; ноль → розетка и вентилятор. PE → розетка и корпус вентилятора."
+    ],
+    "en": [
+      "VVOD → meter (1 and 4) → meter outputs (3 and 6) → QF1 input.",
+      "Phase from QF1: to the RCBO and switches SA1, SA2; neutral: to the RCBO and the lamp N terminals.",
+      "RCBO output: phase → socket and SA3; neutral → socket and fan. PE → socket and fan frame."
+    ]
+  }
+}

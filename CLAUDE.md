@@ -15,7 +15,8 @@ Statik sayt (HTML/CSS/JS, bundler yo‘q), Vercel'da joylashgan. Bosh sahifa: `i
 
 **Yangi sxema, modul yoki "Tez orada" kartochkasi FAQAT sayt egasi aniq «qo‘sh» deb buyruq berganda qo‘shiladi.**
 O‘z tashabbusi bilan, "namuna uchun" yoki boshqa vazifa bilan birga sxema qo‘shilmaydi.
-Hozir katalogda faqat bitta sxema bor: `yoritish-01` (Yoritish 1: bir klavishali kalit orqali lampani boshqarish).
+Hozir katalogdagi sxemalar (egasi «qo‘sh» deb buyurgan): `yoritish-01..04`, `uy-shiti-01..02`, `motor-01..13`,
+`avtomatika-01`, `olchash-01` — jami 21 ta. 3D faqat `yoritish-01` da, qolganlari 2D. Ro‘yxat: `laboratoriya/schemes/royxat.json`.
 
 ### Boshqa qoidalar
 

@@ -1,0 +1,97 @@
+{
+  "versiya": 1,
+  "rang_rejimi": "3f",
+  "rejimlar": ["2d"],
+  "id": "motor-13",
+  "yonalish": "motorlar",
+  "daraja": 4,
+  "vaqt_min": 25,
+  "nomi": {
+    "uz": "Motor 13: chastota o‘zgartirgich va radio pult",
+    "ru": "Двигатель 13: частотный преобразователь и радиопульт",
+    "en": "Motor 13: VFD and radio remote"
+  },
+  "qisqacha": {
+    "uz": "Pultning ▲/▼ tugmalari chastota o‘zgartirgichning DI1/DI2 kirishlari orqali motorni oldinga/orqaga yurgizadi.",
+    "ru": "Кнопки ▲/▼ пульта через входы DI1/DI2 преобразователя вращают двигатель вперёд/назад.",
+    "en": "The ▲/▼ remote buttons run the motor forward/reverse through the drive inputs DI1/DI2."
+  },
+  "topshiriq": {
+    "uz": "Chastota o‘zgartirgich (UZ1) QF1 orqali uch fazali tarmoqqa (R, S, T), motor esa uning U, V, W chiqishlariga ulanadi. Radio pult qabul qilgichi QF2 dan (L, N) ta’minlanadi. Uning COM chiqishi UZ1.COM ga, K1 — DI1 (oldinga), K2 — DI2 (orqaga).",
+    "ru": "Преобразователь UZ1 подключается к сети через QF1 (R, S, T), двигатель — к его выходам U, V, W. Приёмник радиопульта питается от QF2 (L, N). Его COM — на UZ1.COM, K1 — на DI1 (вперёд), K2 — на DI2 (назад).",
+    "en": "Drive UZ1 is fed from the mains through QF1 (R, S, T), the motor from its outputs U, V, W. The remote receiver is supplied from QF2 (L, N). Its COM goes to UZ1.COM, K1 to DI1 (forward), K2 to DI2 (reverse)."
+  },
+  "elementlar": [
+    {"id": "VVOD", "tur": "manba_3f", "pozitsiya2d": [320, 60]},
+    {"id": "QF1", "tur": "avtomat", "pozitsiya2d": [200, 230], "parametr": {"qutb": 3, "nominal": 16}},
+    {"id": "QF2", "tur": "avtomat", "pozitsiya2d": [520, 230], "parametr": {"qutb": 2, "nominal": 6, "yorliqlar": ["L", "N"]}},
+    {"id": "UZ1", "tur": "chastota_ozgartirgich", "pozitsiya2d": [230, 540]},
+    {"id": "A1", "tur": "radio_pult", "pozitsiya2d": [640, 560]},
+    {"id": "M1", "tur": "motor_3f", "pozitsiya2d": [220, 880]}
+  ],
+  "togri_ulanishlar": [
+    {"nuqtalar": ["VVOD.L1", "QF1.1", "QF2.1"], "rang": "sariq"},
+    {"nuqtalar": ["VVOD.L2", "QF1.3"], "rang": "yashil"},
+    {"nuqtalar": ["VVOD.L3", "QF1.5"], "rang": "qizil"},
+    {"nuqtalar": ["VVOD.N", "QF2.3"], "rang": "kok"},
+    {"nuqtalar": ["QF1.2", "UZ1.R"], "rang": "sariq"},
+    {"nuqtalar": ["QF1.4", "UZ1.S"], "rang": "yashil"},
+    {"nuqtalar": ["QF1.6", "UZ1.T"], "rang": "qizil"},
+    {"nuqtalar": ["UZ1.U", "M1.U"], "rang": "sariq"},
+    {"nuqtalar": ["UZ1.V", "M1.V"], "rang": "yashil"},
+    {"nuqtalar": ["UZ1.W", "M1.W"], "rang": "qizil"},
+    {"nuqtalar": ["VVOD.PE", "UZ1.PE", "M1.PE"], "rang": "sariq_yashil"},
+    {"nuqtalar": ["QF2.2", "A1.L"], "rang": "qora"},
+    {"nuqtalar": ["QF2.4", "A1.N"], "rang": "kok"},
+    {"nuqtalar": ["A1.COM", "UZ1.COM"], "rang": "qora"},
+    {"nuqtalar": ["A1.K1", "UZ1.DI1"], "rang": "qora"},
+    {"nuqtalar": ["A1.K2", "UZ1.DI2"], "rang": "qora"}
+  ],
+  "ssenariylar": [
+    {
+      "nomi": {
+        "uz": "Pult ▲ — oldinga",
+        "ru": "Пульт ▲ — вперёд",
+        "en": "Remote ▲ — forward"
+      },
+      "qadamlar": [
+        {"kutilgan": {"M1": "toxtagan"}},
+        {"amal": "A1", "qiymat": "bosib_tur", "tugma": "k1"},
+        {"kutilgan": {"M1": "oldinga"}},
+        {"amal": "A1", "qiymat": "qoyib_yubor", "tugma": "k1"},
+        {"kutilgan": {"M1": "toxtagan"}}
+      ]
+    },
+    {
+      "nomi": {
+        "uz": "Pult ▼ — orqaga",
+        "ru": "Пульт ▼ — назад",
+        "en": "Remote ▼ — reverse"
+      },
+      "qadamlar": [
+        {"amal": "A1", "qiymat": "bosib_tur", "tugma": "k2"},
+        {"kutilgan": {"M1": "teskari"}},
+        {"amal": "A1", "qiymat": "qoyib_yubor", "tugma": "k2"},
+        {"kutilgan": {"M1": "toxtagan"}}
+      ]
+    }
+  ],
+  "xato_qoidalari": [{"tur": "pe_ulangan", "klemmalar": ["M1.PE", "UZ1.PE"]}, {"tur": "sim_rangi"}],
+  "maslahatlar": {
+    "uz": [
+      "VVOD.L1 dan QF1.1 va QF2.1 ga; VVOD.N → QF2.3. QF1 chiqishlari → UZ1 ning R, S, T klemmalari.",
+      "UZ1 ning U, V, W chiqishlari → motorning U, V, W klemmalari. PE: VVOD → UZ1 → motor.",
+      "Pult: QF2.2 → A1.L, QF2.4 → A1.N; A1.COM → UZ1.COM, A1.K1 → UZ1.DI1, A1.K2 → UZ1.DI2."
+    ],
+    "ru": [
+      "С VVOD.L1 — на QF1.1 и QF2.1; VVOD.N → QF2.3. Выходы QF1 → клеммы R, S, T UZ1.",
+      "Выходы U, V, W UZ1 → клеммы U, V, W двигателя. PE: VVOD → UZ1 → двигатель.",
+      "Пульт: QF2.2 → A1.L, QF2.4 → A1.N; A1.COM → UZ1.COM, A1.K1 → UZ1.DI1, A1.K2 → UZ1.DI2."
+    ],
+    "en": [
+      "From VVOD.L1 to QF1.1 and QF2.1; VVOD.N → QF2.3. QF1 outputs → UZ1 R, S, T.",
+      "UZ1 outputs U, V, W → motor U, V, W. PE: VVOD → UZ1 → motor.",
+      "Remote: QF2.2 → A1.L, QF2.4 → A1.N; A1.COM → UZ1.COM, A1.K1 → UZ1.DI1, A1.K2 → UZ1.DI2."
+    ]
+  }
+}

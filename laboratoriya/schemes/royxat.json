@@ -1,4 +1,26 @@
 {
   "_izoh": "Katalogdagi sxemalar ro‘yxati. Har bir id uchun schemes/<id>.json fayli bo‘lishi kerak. Yangi sxema faqat egasi «qo‘sh» deganda qo‘shiladi (CLAUDE.md).",
-  "sxemalar": ["yoritish-01"]
+  "sxemalar": [
+    "yoritish-01",
+    "yoritish-02",
+    "yoritish-03",
+    "yoritish-04",
+    "uy-shiti-01",
+    "uy-shiti-02",
+    "motor-01",
+    "motor-02",
+    "motor-03",
+    "motor-04",
+    "motor-05",
+    "motor-06",
+    "motor-07",
+    "motor-08",
+    "motor-09",
+    "motor-10",
+    "motor-11",
+    "motor-12",
+    "motor-13",
+    "avtomatika-01",
+    "olchash-01"
+  ]
 }

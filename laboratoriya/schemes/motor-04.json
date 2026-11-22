@@ -1,0 +1,119 @@
+{
+  "versiya": 1,
+  "rang_rejimi": "3f",
+  "rejimlar": ["2d"],
+  "id": "motor-04",
+  "yonalish": "motorlar",
+  "daraja": 4,
+  "vaqt_min": 30,
+  "nomi": {
+    "uz": "Motor 4: reversiv boshqaruv (konveyer) blokirovka bilan",
+    "ru": "Двигатель 4: реверсивное управление (конвейер) с блокировкой",
+    "en": "Motor 4: reversing control (conveyor) with interlock"
+  },
+  "qisqacha": {
+    "uz": "Ikki kontaktor fazalarni almashtiradi; NC kontaktlar bir vaqtda yoqilishiga yo‘l qo‘ymaydi.",
+    "ru": "Два контактора меняют чередование фаз; НЗ контакты не дают включиться одновременно.",
+    "en": "Two contactors swap the phase order; NC contacts stop them closing together."
+  },
+  "topshiriq": {
+    "uz": "KM1 — oldinga, KM2 — orqaga. KM2 chiqishida L1 va L3 fazalari almashtiriladi. Elektr blokirovka: KM1 g‘altagi KM2 ning 21–22 (NC) kontakti orqali, KM2 g‘altagi KM1 ning 21–22 kontakti orqali. Himoya: issiqlik relesi KK1.",
+    "ru": "KM1 — вперёд, KM2 — назад. На выходе KM2 фазы L1 и L3 меняются местами. Электрическая блокировка: катушка KM1 через НЗ 21–22 KM2, катушка KM2 через НЗ 21–22 KM1. Защита — тепловое реле KK1.",
+    "en": "KM1 is forward, KM2 reverse. At the KM2 output phases L1 and L3 are swapped. Electrical interlock: KM1 coil through KM2 NC 21–22, KM2 coil through KM1 NC 21–22. Protection: overload relay KK1."
+  },
+  "elementlar": [
+    {"id": "VVOD", "tur": "manba_3f", "pozitsiya2d": [320, 60]},
+    {"id": "QF1", "tur": "avtomat", "pozitsiya2d": [240, 230], "parametr": {"qutb": 3, "nominal": 16}},
+    {"id": "KM1", "tur": "kontaktor", "pozitsiya2d": [170, 490]},
+    {"id": "KM2", "tur": "kontaktor", "pozitsiya2d": [450, 490]},
+    {"id": "KK1", "tur": "issiqlik_relesi", "pozitsiya2d": [310, 740]},
+    {"id": "M1", "tur": "motor_3f", "pozitsiya2d": [310, 960], "parametr": {"korinish": "konveyer"}},
+    {"id": "SB1", "tur": "tugma", "pozitsiya2d": [760, 320], "parametr": {"rang": "qizil"}},
+    {"id": "SB2", "tur": "tugma", "pozitsiya2d": [760, 480], "parametr": {"rang": "yashil"}},
+    {"id": "SB3", "tur": "tugma", "pozitsiya2d": [940, 480], "parametr": {"rang": "yashil"}}
+  ],
+  "togri_ulanishlar": [
+    {"nuqtalar": ["VVOD.L1", "QF1.1"], "rang": "sariq"},
+    {"nuqtalar": ["VVOD.L2", "QF1.3"], "rang": "yashil"},
+    {"nuqtalar": ["VVOD.L3", "QF1.5"], "rang": "qizil"},
+    {"nuqtalar": ["QF1.2", "KM1.L1", "KM2.L1", "KK1.95"], "rang": "sariq"},
+    {"nuqtalar": ["QF1.4", "KM1.L2", "KM2.L2"], "rang": "yashil"},
+    {"nuqtalar": ["QF1.6", "KM1.L3", "KM2.L3"], "rang": "qizil"},
+    {"nuqtalar": ["KM1.T1", "KM2.T3", "KK1.L1"], "rang": "sariq"},
+    {"nuqtalar": ["KM1.T2", "KM2.T2", "KK1.L2"], "rang": "yashil"},
+    {"nuqtalar": ["KM1.T3", "KM2.T1", "KK1.L3"], "rang": "qizil"},
+    {"nuqtalar": ["KK1.T1", "M1.U"], "rang": "sariq"},
+    {"nuqtalar": ["KK1.T2", "M1.V"], "rang": "yashil"},
+    {"nuqtalar": ["KK1.T3", "M1.W"], "rang": "qizil"},
+    {"nuqtalar": ["KK1.96", "SB1.11"], "rang": "qora"},
+    {"nuqtalar": ["SB1.12", "SB2.23", "KM1.13", "SB3.23", "KM2.13"], "rang": "qora"},
+    {"nuqtalar": ["SB2.24", "KM1.14", "KM2.21"], "rang": "qora"},
+    {"nuqtalar": ["KM2.22", "KM1.A1"], "rang": "qora"},
+    {"nuqtalar": ["SB3.24", "KM2.14", "KM1.21"], "rang": "qora"},
+    {"nuqtalar": ["KM1.22", "KM2.A1"], "rang": "qora"},
+    {"nuqtalar": ["KM1.A2", "KM2.A2", "VVOD.N"], "rang": "kok"},
+    {"nuqtalar": ["VVOD.PE", "M1.PE"], "rang": "sariq_yashil"}
+  ],
+  "ssenariylar": [
+    {
+      "nomi": {
+        "uz": "Oldinga",
+        "ru": "Вперёд",
+        "en": "Forward"
+      },
+      "qadamlar": [
+        {"amal": "SB2", "qiymat": "bos"},
+        {"kutilgan": {"M1": "oldinga", "KM1": "tortilgan"}},
+        {"amal": "SB1", "qiymat": "bos"},
+        {"kutilgan": {"M1": "toxtagan"}}
+      ]
+    },
+    {
+      "nomi": {
+        "uz": "Orqaga",
+        "ru": "Назад",
+        "en": "Reverse"
+      },
+      "qadamlar": [
+        {"amal": "SB3", "qiymat": "bos"},
+        {"kutilgan": {"M1": "teskari", "KM2": "tortilgan"}},
+        {"amal": "SB1", "qiymat": "bos"},
+        {"kutilgan": {"M1": "toxtagan"}}
+      ]
+    },
+    {
+      "nomi": {
+        "uz": "Blokirovka",
+        "ru": "Блокировка",
+        "en": "Interlock"
+      },
+      "qadamlar": [{"amal": "SB2", "qiymat": "bos"}, {"amal": "SB3", "qiymat": "bos"}, {"kutilgan": {"M1": "oldinga", "KM2": "qoyilgan"}}]
+    },
+    {
+      "nomi": {
+        "uz": "Ortiqcha yuk",
+        "ru": "Перегрузка",
+        "en": "Overload"
+      },
+      "qadamlar": [{"amal": "SB3", "qiymat": "bos"}, {"amal": "KK1", "qiymat": "test"}, {"kutilgan": {"M1": "toxtagan"}}]
+    }
+  ],
+  "xato_qoidalari": [{"tur": "pe_ulangan", "klemmalar": ["M1.PE"]}, {"tur": "sim_rangi"}],
+  "maslahatlar": {
+    "uz": [
+      "QF1 chiqishlari ikkala kontaktorning L1, L2, L3 klemmalariga parallel boradi.",
+      "Fazalarni almashtirish: KM1.T1 + KM2.T3 → KK1.1; KM1.T2 + KM2.T2 → KK1.3; KM1.T3 + KM2.T1 → KK1.5.",
+      "Blokirovka: SB2.24 → KM2.21, KM2.22 → KM1.A1; SB3.24 → KM1.21, KM1.22 → KM2.A1."
+    ],
+    "ru": [
+      "Выходы QF1 параллельно на L1, L2, L3 обоих контакторов.",
+      "Смена фаз: KM1.T1 + KM2.T3 → KK1.1; KM1.T2 + KM2.T2 → KK1.3; KM1.T3 + KM2.T1 → KK1.5.",
+      "Блокировка: SB2.24 → KM2.21, KM2.22 → KM1.A1; SB3.24 → KM1.21, KM1.22 → KM2.A1."
+    ],
+    "en": [
+      "QF1 outputs go in parallel to L1, L2, L3 of both contactors.",
+      "Phase swap: KM1.T1 + KM2.T3 → KK1.1; KM1.T2 + KM2.T2 → KK1.3; KM1.T3 + KM2.T1 → KK1.5.",
+      "Interlock: SB2.24 → KM2.21, KM2.22 → KM1.A1; SB3.24 → KM1.21, KM1.22 → KM2.A1."
+    ]
+  }
+}

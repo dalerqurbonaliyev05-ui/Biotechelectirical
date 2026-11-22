@@ -1,0 +1,86 @@
+{
+  "versiya": 1,
+  "rang_rejimi": "3f",
+  "rejimlar": ["2d"],
+  "id": "motor-03",
+  "yonalish": "motorlar",
+  "daraja": 3,
+  "vaqt_min": 18,
+  "nomi": {
+    "uz": "Motor 3: ikki joydan boshqarish",
+    "ru": "Двигатель 3: управление из двух мест",
+    "en": "Motor 3: control from two places"
+  },
+  "qisqacha": {
+    "uz": "Ikkita Stop ketma-ket, ikkita Start parallel — motor ikki postdan boshqariladi.",
+    "ru": "Два Стопа последовательно, два Пуска параллельно — управление с двух постов.",
+    "en": "Two Stops in series, two Starts in parallel — two control stations."
+  },
+  "topshiriq": {
+    "uz": "Motorni ikki postdan boshqaring: 1-post SB1 (Stop), SB2 (Start); 2-post SB3 (Stop), SB4 (Start). Stop tugmalari ketma-ket, Start tugmalari va KM1 13–14 kontakti parallel ulanadi.",
+    "ru": "Управляйте двигателем с двух постов: пост 1 — SB1 (Стоп), SB2 (Пуск); пост 2 — SB3 (Стоп), SB4 (Пуск). Кнопки Стоп — последовательно, кнопки Пуск и контакт KM1 13–14 — параллельно.",
+    "en": "Control the motor from two stations: station 1 — SB1 (Stop), SB2 (Start); station 2 — SB3 (Stop), SB4 (Start). Stop buttons in series, Start buttons and KM1 13–14 in parallel."
+  },
+  "elementlar": [
+    {"id": "VVOD", "tur": "manba_3f", "pozitsiya2d": [280, 60]},
+    {"id": "QF1", "tur": "avtomat", "pozitsiya2d": [200, 240], "parametr": {"qutb": 3, "nominal": 16}},
+    {"id": "KM1", "tur": "kontaktor", "pozitsiya2d": [230, 500]},
+    {"id": "M1", "tur": "motor_3f", "pozitsiya2d": [230, 800]},
+    {"id": "SB1", "tur": "tugma", "pozitsiya2d": [580, 320], "parametr": {"rang": "qizil"}},
+    {"id": "SB2", "tur": "tugma", "pozitsiya2d": [580, 480], "parametr": {"rang": "yashil"}},
+    {"id": "SB3", "tur": "tugma", "pozitsiya2d": [780, 320], "parametr": {"rang": "qizil"}},
+    {"id": "SB4", "tur": "tugma", "pozitsiya2d": [780, 480], "parametr": {"rang": "yashil"}}
+  ],
+  "togri_ulanishlar": [
+    {"nuqtalar": ["VVOD.L1", "QF1.1"], "rang": "sariq"},
+    {"nuqtalar": ["VVOD.L2", "QF1.3"], "rang": "yashil"},
+    {"nuqtalar": ["VVOD.L3", "QF1.5"], "rang": "qizil"},
+    {"nuqtalar": ["QF1.2", "KM1.L1", "SB1.11"], "rang": "sariq"},
+    {"nuqtalar": ["QF1.4", "KM1.L2"], "rang": "yashil"},
+    {"nuqtalar": ["QF1.6", "KM1.L3"], "rang": "qizil"},
+    {"nuqtalar": ["KM1.T1", "M1.U"], "rang": "sariq"},
+    {"nuqtalar": ["KM1.T2", "M1.V"], "rang": "yashil"},
+    {"nuqtalar": ["KM1.T3", "M1.W"], "rang": "qizil"},
+    {"nuqtalar": ["SB1.12", "SB3.11"], "rang": "qora"},
+    {"nuqtalar": ["SB3.12", "SB2.23", "SB4.23", "KM1.13"], "rang": "qora"},
+    {"nuqtalar": ["SB2.24", "SB4.24", "KM1.14", "KM1.A1"], "rang": "qora"},
+    {"nuqtalar": ["KM1.A2", "VVOD.N"], "rang": "kok"},
+    {"nuqtalar": ["VVOD.PE", "M1.PE"], "rang": "sariq_yashil"}
+  ],
+  "ssenariylar": [
+    {
+      "nomi": {
+        "uz": "1-postdan ishga tushirish, 2-postdan to‘xtatish",
+        "ru": "Пуск с поста 1, стоп с поста 2",
+        "en": "Start at 1, stop at 2"
+      },
+      "qadamlar": [{"amal": "SB2", "qiymat": "bos"}, {"kutilgan": {"M1": "ishlaydi"}}, {"amal": "SB3", "qiymat": "bos"}, {"kutilgan": {"M1": "toxtagan"}}]
+    },
+    {
+      "nomi": {
+        "uz": "2-postdan ishga tushirish, 1-postdan to‘xtatish",
+        "ru": "Пуск с поста 2, стоп с поста 1",
+        "en": "Start at 2, stop at 1"
+      },
+      "qadamlar": [{"amal": "SB4", "qiymat": "bos"}, {"kutilgan": {"M1": "ishlaydi"}}, {"amal": "SB1", "qiymat": "bos"}, {"kutilgan": {"M1": "toxtagan"}}]
+    }
+  ],
+  "xato_qoidalari": [{"tur": "pe_ulangan", "klemmalar": ["M1.PE"]}, {"tur": "sim_rangi"}],
+  "maslahatlar": {
+    "uz": [
+      "Stop tugmalari ketma-ket: QF1.2 → SB1 (11–12) → SB3 (11–12).",
+      "SB3.12 nuqtasi: SB2.23, SB4.23 va KM1.13.",
+      "Chiqish nuqtasi: SB2.24, SB4.24, KM1.14 va KM1.A1. KM1.A2 → N."
+    ],
+    "ru": [
+      "Кнопки Стоп последовательно: QF1.2 → SB1 (11–12) → SB3 (11–12).",
+      "Точка SB3.12: SB2.23, SB4.23 и KM1.13.",
+      "Выходная точка: SB2.24, SB4.24, KM1.14 и KM1.A1. KM1.A2 → N."
+    ],
+    "en": [
+      "Stop buttons in series: QF1.2 → SB1 (11–12) → SB3 (11–12).",
+      "Node SB3.12: SB2.23, SB4.23 and KM1.13.",
+      "Output node: SB2.24, SB4.24, KM1.14 and KM1.A1. KM1.A2 → N."
+    ]
+  }
+}

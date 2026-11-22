@@ -1,0 +1,101 @@
+{
+  "versiya": 1,
+  "id": "yoritish-03",
+  "yonalish": "yoritish",
+  "daraja": 2,
+  "vaqt_min": 12,
+  "rejimlar": ["2d"],
+  "nomi": {
+    "uz": "Yoritish 3: o‘tish kalitlari bilan navbatli yoritish",
+    "ru": "Освещение 3: поочерёдное включение проходными выключателями",
+    "en": "Lighting 3: priority lighting with two-way switches"
+  },
+  "qisqacha": {
+    "uz": "To‘rtta o‘tish kaliti zanjiri: bir vaqtda faqat bitta lampa yonadi.",
+    "ru": "Цепочка из четырёх проходных выключателей: одновременно горит только одна лампа.",
+    "en": "A chain of four two-way switches: only one lamp is lit at a time."
+  },
+  "topshiriq": {
+    "uz": "To‘rtta o‘tish kalitini zanjir qilib ulang: har bir kalitning L2 chiqishi o‘z lampasiga, L1 chiqishi keyingi kalitning L kirishiga boradi; oxirgi kalitning L1 chiqishi 5-lampaga. Barcha lampalarning N klemmasi umumiy nolga ulanadi.",
+    "ru": "Соедините четыре проходных выключателя цепочкой: выход L2 каждого — к своей лампе, L1 — на вход L следующего; L1 последнего — к 5-й лампе. Клеммы N всех ламп — на общий ноль.",
+    "en": "Chain four two-way switches: each L2 output goes to its own lamp, L1 to the next switch input L; the last L1 goes to lamp 5. All lamp N terminals go to the common neutral."
+  },
+  "elementlar": [
+    {"id": "VVOD", "tur": "vvod", "pozitsiya2d": [80, 330]},
+    {"id": "QF1", "tur": "avtomat_1p", "pozitsiya2d": [240, 150]},
+    {"id": "SA1", "tur": "kalit_2y", "pozitsiya2d": [440, 140]},
+    {"id": "SA2", "tur": "kalit_2y", "pozitsiya2d": [440, 370]},
+    {"id": "SA3", "tur": "kalit_2y", "pozitsiya2d": [440, 600]},
+    {"id": "SA4", "tur": "kalit_2y", "pozitsiya2d": [440, 830]},
+    {"id": "HL1", "tur": "lampochka", "pozitsiya2d": [720, 140]},
+    {"id": "HL2", "tur": "lampochka", "pozitsiya2d": [720, 370]},
+    {"id": "HL3", "tur": "lampochka", "pozitsiya2d": [720, 600]},
+    {"id": "HL4", "tur": "lampochka", "pozitsiya2d": [720, 830]},
+    {"id": "HL5", "tur": "lampochka", "pozitsiya2d": [720, 1060]}
+  ],
+  "togri_ulanishlar": [
+    {"nuqtalar": ["VVOD.L", "QF1.in"], "rang": "jigarrang"},
+    {"nuqtalar": ["QF1.out", "SA1.L"], "rang": "jigarrang"},
+    {"nuqtalar": ["SA1.L2", "HL1.L"], "rang": "jigarrang"},
+    {"nuqtalar": ["SA1.L1", "SA2.L"], "rang": "jigarrang"},
+    {"nuqtalar": ["SA2.L2", "HL2.L"], "rang": "jigarrang"},
+    {"nuqtalar": ["SA2.L1", "SA3.L"], "rang": "jigarrang"},
+    {"nuqtalar": ["SA3.L2", "HL3.L"], "rang": "jigarrang"},
+    {"nuqtalar": ["SA3.L1", "SA4.L"], "rang": "jigarrang"},
+    {"nuqtalar": ["SA4.L2", "HL4.L"], "rang": "jigarrang"},
+    {"nuqtalar": ["SA4.L1", "HL5.L"], "rang": "jigarrang"},
+    {"nuqtalar": ["VVOD.N", "HL1.N", "HL2.N", "HL3.N", "HL4.N", "HL5.N"], "rang": "kok"}
+  ],
+  "ssenariylar": [
+    {
+      "nomi": {
+        "uz": "Boshlang‘ich holat",
+        "ru": "Исходное положение",
+        "en": "Initial position"
+      },
+      "qadamlar": [{"kutilgan": {"HL5": "yonadi", "HL1": "ochgan", "HL2": "ochgan", "HL3": "ochgan", "HL4": "ochgan"}}]
+    },
+    {
+      "nomi": {
+        "uz": "2-kalit L2 holatida",
+        "ru": "Выключатель 2 в положении L2",
+        "en": "Switch 2 to L2"
+      },
+      "qadamlar": [{"amal": "SA2", "qiymat": "L2"}, {"kutilgan": {"HL2": "yonadi", "HL1": "ochgan", "HL3": "ochgan", "HL5": "ochgan"}}]
+    },
+    {
+      "nomi": {
+        "uz": "1-kalit L2 holatida",
+        "ru": "Выключатель 1 в положении L2",
+        "en": "Switch 1 to L2"
+      },
+      "qadamlar": [{"amal": "SA1", "qiymat": "L2"}, {"kutilgan": {"HL1": "yonadi", "HL2": "ochgan", "HL5": "ochgan"}}]
+    },
+    {
+      "nomi": {
+        "uz": "Avtomat o‘chirilganda",
+        "ru": "При отключённом автомате",
+        "en": "Breaker off"
+      },
+      "qadamlar": [{"amal": "QF1", "qiymat": "och"}, {"kutilgan": {"HL5": "ochgan"}}]
+    }
+  ],
+  "xato_qoidalari": [{"tur": "sim_rangi"}],
+  "maslahatlar": {
+    "uz": [
+      "Faza: VVOD.L → QF1 (1) → QF1 (2) → SA1 ning L klemmasi.",
+      "SAx ning L2 chiqishi → HLx lampasining L klemmasi; L1 chiqishi → keyingi kalitning L klemmasi.",
+      "Barcha lampalarning N klemmalarini ketma-ket bir-biriga va VVOD.N ga ulang."
+    ],
+    "ru": [
+      "Фаза: VVOD.L → QF1 (1) → QF1 (2) → клемма L выключателя SA1.",
+      "Выход L2 выключателя SAx → клемма L лампы HLx; выход L1 → клемма L следующего выключателя.",
+      "Клеммы N всех ламп соедините цепочкой и с VVOD.N."
+    ],
+    "en": [
+      "Phase: VVOD.L → QF1 (1) → QF1 (2) → switch SA1 terminal L.",
+      "SAx output L2 → lamp HLx terminal L; output L1 → next switch terminal L.",
+      "Chain all lamp N terminals together and to VVOD.N."
+    ]
+  }
+}

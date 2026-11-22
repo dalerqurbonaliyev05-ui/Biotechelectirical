@@ -1,0 +1,138 @@
+{
+  "versiya": 1,
+  "rang_rejimi": "3f",
+  "rejimlar": ["2d"],
+  "id": "motor-08",
+  "yonalish": "motorlar",
+  "daraja": 4,
+  "vaqt_min": 40,
+  "nomi": {
+    "uz": "Motor 8: uchta motorni mustaqil boshqarish",
+    "ru": "Двигатель 8: независимое управление тремя двигателями",
+    "en": "Motor 8: independent control of three motors"
+  },
+  "qisqacha": {
+    "uz": "Har bir motor — o‘z avtomati, kontaktori, issiqlik relesi va Start/Stop tugmalari bilan.",
+    "ru": "Каждый двигатель — со своим автоматом, контактором, тепловым реле и кнопками.",
+    "en": "Each motor has its own breaker, contactor, overload relay and buttons."
+  },
+  "topshiriq": {
+    "uz": "Uchta motorni bir-biridan mustaqil boshqaring. QF1–QF3 kirishlari umumiy L1–L3 ga. Har bir motor uchun: QFx → KMx → KKx → Mx; boshqaruv: QFx.2 → KKx (95–96) → Stop → Start (+ KMx 13–14) → KMx.A1. A2 klemmalari umumiy N ga.",
+    "ru": "Управляйте тремя двигателями независимо. Входы QF1–QF3 — на общие L1–L3. Для каждого: QFx → KMx → KKx → Mx; управление: QFx.2 → KKx (95–96) → Стоп → Пуск (+ KMx 13–14) → KMx.A1. A2 — на общий N.",
+    "en": "Control three motors independently. QF1–QF3 inputs go to the common L1–L3. For each: QFx → KMx → KKx → Mx; control: QFx.2 → KKx (95–96) → Stop → Start (+ KMx 13–14) → KMx.A1. A2 terminals to the common N."
+  },
+  "elementlar": [
+    {"id": "VVOD", "tur": "manba_3f", "pozitsiya2d": [560, 60]},
+    {"id": "QF1", "tur": "avtomat", "pozitsiya2d": [200, 240], "parametr": {"qutb": 3, "korinish": "mccb", "nominal": 32}},
+    {"id": "KM1", "tur": "kontaktor", "pozitsiya2d": [200, 500]},
+    {"id": "KK1", "tur": "issiqlik_relesi", "pozitsiya2d": [200, 740]},
+    {"id": "M1", "tur": "motor_3f", "pozitsiya2d": [200, 950]},
+    {"id": "SB1", "tur": "tugma", "pozitsiya2d": [1180, 300], "parametr": {"rang": "qizil"}},
+    {"id": "SB2", "tur": "tugma", "pozitsiya2d": [1180, 460], "parametr": {"rang": "yashil"}},
+    {"id": "QF2", "tur": "avtomat", "pozitsiya2d": [540, 240], "parametr": {"qutb": 3, "korinish": "mccb", "nominal": 32}},
+    {"id": "KM2", "tur": "kontaktor", "pozitsiya2d": [540, 500]},
+    {"id": "KK2", "tur": "issiqlik_relesi", "pozitsiya2d": [540, 740]},
+    {"id": "M2", "tur": "motor_3f", "pozitsiya2d": [540, 950]},
+    {"id": "SB3", "tur": "tugma", "pozitsiya2d": [1340, 300], "parametr": {"rang": "qizil"}},
+    {"id": "SB4", "tur": "tugma", "pozitsiya2d": [1340, 460], "parametr": {"rang": "yashil"}},
+    {"id": "QF3", "tur": "avtomat", "pozitsiya2d": [880, 240], "parametr": {"qutb": 3, "korinish": "mccb", "nominal": 32}},
+    {"id": "KM3", "tur": "kontaktor", "pozitsiya2d": [880, 500]},
+    {"id": "KK3", "tur": "issiqlik_relesi", "pozitsiya2d": [880, 740]},
+    {"id": "M3", "tur": "motor_3f", "pozitsiya2d": [880, 950]},
+    {"id": "SB5", "tur": "tugma", "pozitsiya2d": [1500, 300], "parametr": {"rang": "qizil"}},
+    {"id": "SB6", "tur": "tugma", "pozitsiya2d": [1500, 460], "parametr": {"rang": "yashil"}}
+  ],
+  "togri_ulanishlar": [
+    {"nuqtalar": ["VVOD.L1", "QF1.1", "QF2.1", "QF3.1"], "rang": "sariq"},
+    {"nuqtalar": ["VVOD.L2", "QF1.3", "QF2.3", "QF3.3"], "rang": "yashil"},
+    {"nuqtalar": ["VVOD.L3", "QF1.5", "QF2.5", "QF3.5"], "rang": "qizil"},
+    {"nuqtalar": ["QF1.2", "KM1.L1", "KK1.95"], "rang": "sariq"},
+    {"nuqtalar": ["QF1.4", "KM1.L2"], "rang": "yashil"},
+    {"nuqtalar": ["QF1.6", "KM1.L3"], "rang": "qizil"},
+    {"nuqtalar": ["KM1.T1", "KK1.L1"], "rang": "sariq"},
+    {"nuqtalar": ["KM1.T2", "KK1.L2"], "rang": "yashil"},
+    {"nuqtalar": ["KM1.T3", "KK1.L3"], "rang": "qizil"},
+    {"nuqtalar": ["KK1.T1", "M1.U"], "rang": "sariq"},
+    {"nuqtalar": ["KK1.T2", "M1.V"], "rang": "yashil"},
+    {"nuqtalar": ["KK1.T3", "M1.W"], "rang": "qizil"},
+    {"nuqtalar": ["KK1.96", "SB1.11"], "rang": "qora"},
+    {"nuqtalar": ["SB1.12", "SB2.23", "KM1.13"], "rang": "qora"},
+    {"nuqtalar": ["SB2.24", "KM1.14", "KM1.A1"], "rang": "qora"},
+    {"nuqtalar": ["QF2.2", "KM2.L1", "KK2.95"], "rang": "sariq"},
+    {"nuqtalar": ["QF2.4", "KM2.L2"], "rang": "yashil"},
+    {"nuqtalar": ["QF2.6", "KM2.L3"], "rang": "qizil"},
+    {"nuqtalar": ["KM2.T1", "KK2.L1"], "rang": "sariq"},
+    {"nuqtalar": ["KM2.T2", "KK2.L2"], "rang": "yashil"},
+    {"nuqtalar": ["KM2.T3", "KK2.L3"], "rang": "qizil"},
+    {"nuqtalar": ["KK2.T1", "M2.U"], "rang": "sariq"},
+    {"nuqtalar": ["KK2.T2", "M2.V"], "rang": "yashil"},
+    {"nuqtalar": ["KK2.T3", "M2.W"], "rang": "qizil"},
+    {"nuqtalar": ["KK2.96", "SB3.11"], "rang": "qora"},
+    {"nuqtalar": ["SB3.12", "SB4.23", "KM2.13"], "rang": "qora"},
+    {"nuqtalar": ["SB4.24", "KM2.14", "KM2.A1"], "rang": "qora"},
+    {"nuqtalar": ["QF3.2", "KM3.L1", "KK3.95"], "rang": "sariq"},
+    {"nuqtalar": ["QF3.4", "KM3.L2"], "rang": "yashil"},
+    {"nuqtalar": ["QF3.6", "KM3.L3"], "rang": "qizil"},
+    {"nuqtalar": ["KM3.T1", "KK3.L1"], "rang": "sariq"},
+    {"nuqtalar": ["KM3.T2", "KK3.L2"], "rang": "yashil"},
+    {"nuqtalar": ["KM3.T3", "KK3.L3"], "rang": "qizil"},
+    {"nuqtalar": ["KK3.T1", "M3.U"], "rang": "sariq"},
+    {"nuqtalar": ["KK3.T2", "M3.V"], "rang": "yashil"},
+    {"nuqtalar": ["KK3.T3", "M3.W"], "rang": "qizil"},
+    {"nuqtalar": ["KK3.96", "SB5.11"], "rang": "qora"},
+    {"nuqtalar": ["SB5.12", "SB6.23", "KM3.13"], "rang": "qora"},
+    {"nuqtalar": ["SB6.24", "KM3.14", "KM3.A1"], "rang": "qora"},
+    {"nuqtalar": ["VVOD.N", "KM1.A2", "KM2.A2", "KM3.A2"], "rang": "kok"},
+    {"nuqtalar": ["VVOD.PE", "M1.PE", "M2.PE", "M3.PE"], "rang": "sariq_yashil"}
+  ],
+  "ssenariylar": [
+    {
+      "nomi": {
+        "uz": "Mustaqil ishga tushirish",
+        "ru": "Независимый пуск",
+        "en": "Independent start"
+      },
+      "qadamlar": [
+        {"amal": "SB2", "qiymat": "bos"},
+        {"kutilgan": {"M1": "ishlaydi", "M2": "toxtagan", "M3": "toxtagan"}},
+        {"amal": "SB4", "qiymat": "bos"},
+        {"kutilgan": {"M2": "ishlaydi"}},
+        {"amal": "SB6", "qiymat": "bos"},
+        {"kutilgan": {"M3": "ishlaydi"}},
+        {"amal": "SB1", "qiymat": "bos"},
+        {"kutilgan": {"M1": "toxtagan", "M2": "ishlaydi", "M3": "ishlaydi"}}
+      ]
+    },
+    {
+      "nomi": {
+        "uz": "Bitta motorda ortiqcha yuk",
+        "ru": "Перегрузка одного двигателя",
+        "en": "Overload on one motor"
+      },
+      "qadamlar": [
+        {"amal": "SB2", "qiymat": "bos"},
+        {"amal": "SB6", "qiymat": "bos"},
+        {"amal": "KK3", "qiymat": "test"},
+        {"kutilgan": {"M3": "toxtagan", "M1": "ishlaydi"}}
+      ]
+    }
+  ],
+  "xato_qoidalari": [{"tur": "pe_ulangan", "klemmalar": ["M1.PE", "M2.PE", "M3.PE"]}, {"tur": "sim_rangi"}],
+  "maslahatlar": {
+    "uz": [
+      "VVOD.L1 → QF1.1 → QF2.1 → QF3.1 (shuningdek L2 va L3).",
+      "Har bir guruh: QFx.2 → KMx.L1 va KKx.95; KMx.T → KKx (1-3-5); KKx (2-4-6) → Mx.",
+      "KKx.96 → Stop.11; Stop.12 → Start.23 va KMx.13; Start.24 → KMx.14 va KMx.A1. N: VVOD.N → KM1.A2 → KM2.A2 → KM3.A2."
+    ],
+    "ru": [
+      "VVOD.L1 → QF1.1 → QF2.1 → QF3.1 (так же L2 и L3).",
+      "Каждая группа: QFx.2 → KMx.L1 и KKx.95; KMx.T → KKx (1-3-5); KKx (2-4-6) → Mx.",
+      "KKx.96 → Стоп.11; Стоп.12 → Пуск.23 и KMx.13; Пуск.24 → KMx.14 и KMx.A1. N: VVOD.N → KM1.A2 → KM2.A2 → KM3.A2."
+    ],
+    "en": [
+      "VVOD.L1 → QF1.1 → QF2.1 → QF3.1 (likewise L2 and L3).",
+      "Each group: QFx.2 → KMx.L1 and KKx.95; KMx.T → KKx (1-3-5); KKx (2-4-6) → Mx.",
+      "KKx.96 → Stop.11; Stop.12 → Start.23 and KMx.13; Start.24 → KMx.14 and KMx.A1. N: VVOD.N → KM1.A2 → KM2.A2 → KM3.A2."
+    ]
+  }
+}

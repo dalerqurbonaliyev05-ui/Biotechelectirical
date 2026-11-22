@@ -1,0 +1,106 @@
+{
+  "versiya": 1,
+  "rang_rejimi": "3f",
+  "rejimlar": ["2d"],
+  "id": "motor-10",
+  "yonalish": "motorlar",
+  "daraja": 4,
+  "vaqt_min": 35,
+  "nomi": {
+    "uz": "Motor 10: yulduz–uchburchak (qo‘lda o‘tkazish)",
+    "ru": "Двигатель 10: звезда–треугольник (ручное переключение)",
+    "en": "Motor 10: star–delta (manual change-over)"
+  },
+  "qisqacha": {
+    "uz": "Start — yulduzda ishga tushirish, «Δ» tugmasi — uchburchakka o‘tkazish.",
+    "ru": "Пуск — в звезде, кнопка «Δ» — переход на треугольник.",
+    "en": "Start — run in star, the \"Δ\" button — change to delta."
+  },
+  "topshiriq": {
+    "uz": "SB2 (Start) KM1 va KM2 (yulduz) ni yoqadi. SB3 (Δ) bosilganda uning NC kontakti KM2 ni o‘chiradi, NO kontakti KM3 (uchburchak) ni yoqadi; KM3 13–14 orqali o‘zini ushlab qoladi. KM2 va KM3 NC (41–42) kontaktlari bilan bloklangan.",
+    "ru": "SB2 (Пуск) включает KM1 и KM2 (звезда). При нажатии SB3 (Δ) её НЗ отключает KM2, НО включает KM3 (треугольник); KM3 становится на самоподхват 13–14. KM2 и KM3 заблокированы НЗ 41–42.",
+    "en": "SB2 (Start) closes KM1 and KM2 (star). Pressing SB3 (Δ) its NC drops KM2 and its NO closes KM3 (delta); KM3 holds through 13–14. KM2 and KM3 are interlocked by NC 41–42."
+  },
+  "elementlar": [
+    {"id": "VVOD", "tur": "manba_3f", "pozitsiya2d": [320, 60]},
+    {"id": "QF1", "tur": "avtomat", "pozitsiya2d": [220, 230], "parametr": {"qutb": 3, "nominal": 25}},
+    {"id": "KM1", "tur": "kontaktor", "pozitsiya2d": [180, 480]},
+    {"id": "KK1", "tur": "issiqlik_relesi", "pozitsiya2d": [180, 720]},
+    {"id": "KM3", "tur": "kontaktor", "pozitsiya2d": [500, 700]},
+    {"id": "KM2", "tur": "kontaktor", "pozitsiya2d": [820, 760]},
+    {"id": "M1", "tur": "motor_6", "pozitsiya2d": [420, 980]},
+    {"id": "SB1", "tur": "tugma", "pozitsiya2d": [760, 260], "parametr": {"rang": "qizil"}},
+    {"id": "SB2", "tur": "tugma", "pozitsiya2d": [760, 420], "parametr": {"rang": "yashil"}},
+    {"id": "SB3", "tur": "tugma", "pozitsiya2d": [960, 420], "parametr": {"rang": "sariq"}}
+  ],
+  "togri_ulanishlar": [
+    {"nuqtalar": ["VVOD.L1", "QF1.1"], "rang": "sariq"},
+    {"nuqtalar": ["VVOD.L2", "QF1.3"], "rang": "yashil"},
+    {"nuqtalar": ["VVOD.L3", "QF1.5"], "rang": "qizil"},
+    {"nuqtalar": ["QF1.2", "KM1.L1", "KK1.95"], "rang": "sariq"},
+    {"nuqtalar": ["QF1.4", "KM1.L2"], "rang": "yashil"},
+    {"nuqtalar": ["QF1.6", "KM1.L3"], "rang": "qizil"},
+    {"nuqtalar": ["KM1.T1", "KK1.L1"], "rang": "sariq"},
+    {"nuqtalar": ["KM1.T2", "KK1.L2"], "rang": "yashil"},
+    {"nuqtalar": ["KM1.T3", "KK1.L3"], "rang": "qizil"},
+    {"nuqtalar": ["KK1.T1", "M1.U1", "KM3.L1"], "rang": "sariq"},
+    {"nuqtalar": ["KK1.T2", "M1.V1", "KM3.L2"], "rang": "yashil"},
+    {"nuqtalar": ["KK1.T3", "M1.W1", "KM3.L3"], "rang": "qizil"},
+    {"nuqtalar": ["KM3.T1", "M1.W2", "KM2.L3"], "rang": "kulrang"},
+    {"nuqtalar": ["KM3.T2", "M1.U2", "KM2.L1"], "rang": "kulrang"},
+    {"nuqtalar": ["KM3.T3", "M1.V2", "KM2.L2"], "rang": "kulrang"},
+    {"nuqtalar": ["KM2.T1", "KM2.T2", "KM2.T3"], "rang": "kulrang"},
+    {"nuqtalar": ["KK1.96", "SB1.11"], "rang": "qora"},
+    {"nuqtalar": ["SB1.12", "SB2.23", "KM1.13"], "rang": "qora"},
+    {"nuqtalar": ["SB2.24", "KM1.14", "KM1.A1", "SB3.11", "SB3.23", "KM3.13"], "rang": "qora"},
+    {"nuqtalar": ["SB3.12", "KM3.41"], "rang": "qora"},
+    {"nuqtalar": ["KM3.42", "KM2.A1"], "rang": "qora"},
+    {"nuqtalar": ["SB3.24", "KM3.14", "KM2.41"], "rang": "qora"},
+    {"nuqtalar": ["KM2.42", "KM3.A1"], "rang": "qora"},
+    {"nuqtalar": ["KM1.A2", "KM2.A2", "KM3.A2", "VVOD.N"], "rang": "kok"},
+    {"nuqtalar": ["VVOD.PE", "M1.PE"], "rang": "sariq_yashil"}
+  ],
+  "ssenariylar": [
+    {
+      "nomi": {
+        "uz": "Yulduz → uchburchak",
+        "ru": "Звезда → треугольник",
+        "en": "Star → delta"
+      },
+      "qadamlar": [
+        {"amal": "SB2", "qiymat": "bos"},
+        {"kutilgan": {"M1": "yulduz"}},
+        {"amal": "SB3", "qiymat": "bos"},
+        {"kutilgan": {"M1": "uchburchak", "KM2": "qoyilgan"}},
+        {"amal": "SB1", "qiymat": "bos"},
+        {"kutilgan": {"M1": "toxtagan"}}
+      ]
+    },
+    {
+      "nomi": {
+        "uz": "Δ tugmasi Startsiz",
+        "ru": "Кнопка Δ без пуска",
+        "en": "Δ without start"
+      },
+      "qadamlar": [{"amal": "SB3", "qiymat": "bos"}, {"kutilgan": {"M1": "toxtagan"}}]
+    }
+  ],
+  "xato_qoidalari": [{"tur": "pe_ulangan", "klemmalar": ["M1.PE"]}, {"tur": "sim_rangi"}],
+  "maslahatlar": {
+    "uz": [
+      "Kuch zanjiri 9-sxemadagidek: KM3 chiqishlari T1 → W2, T2 → U2, T3 → V2; KM2 T klemmalari birlashtiriladi.",
+      "SB2.24 nuqtasi: KM1.14, KM1.A1, SB3.11, SB3.23, KM3.13.",
+      "SB3.12 → KM3.41 → KM3.42 → KM2.A1; SB3.24 + KM3.14 → KM2.41 → KM2.42 → KM3.A1."
+    ],
+    "ru": [
+      "Силовая цепь как в схеме 9: выходы KM3 T1 → W2, T2 → U2, T3 → V2; T KM2 объединяются.",
+      "Точка SB2.24: KM1.14, KM1.A1, SB3.11, SB3.23, KM3.13.",
+      "SB3.12 → KM3.41 → KM3.42 → KM2.A1; SB3.24 + KM3.14 → KM2.41 → KM2.42 → KM3.A1."
+    ],
+    "en": [
+      "Power as in circuit 9: KM3 outputs T1 → W2, T2 → U2, T3 → V2; KM2 T terminals are joined.",
+      "Node SB2.24: KM1.14, KM1.A1, SB3.11, SB3.23, KM3.13.",
+      "SB3.12 → KM3.41 → KM3.42 → KM2.A1; SB3.24 + KM3.14 → KM2.41 → KM2.42 → KM3.A1."
+    ]
+  }
+}

@@ -154,7 +154,7 @@ export class View2D {
     this.g.el.innerHTML = lab.els.map((el) => {
       const yonadi = !!sim.yuklamalar[el.id]?.yonadi;
       const [x, y] = lab.joy(el.id);
-      const body = el.def.svg({ el, holat: lab.holat[el.id] || {}, param: el.param, yonadi });
+      const body = el.def.svg({ el, holat: lab.holat[el.id] || {}, param: el.param, yonadi, natija: sim.natija[el.id] || {} });
       const nur = yonadi ? '<circle class="d-nur" cx="0" cy="12" r="70" filter="url(#nur)"/>' : '';
       return `<g class="el el-${el.tur}${el.def.bosiladi ? ' bosiladi' : ''}" data-el="${el.id}" transform="translate(${x} ${y})">${nur}${body}</g>`;
     }).join('');
@@ -227,10 +227,28 @@ export class View2D {
         return;
       }
       const t = e.target;
-      const kl = t.closest('[data-k]'), sm = t.closest('[data-sim]'), el = t.closest('[data-el]');
+      const kl = t.closest('[data-k]');
+      let sm = t.closest('[data-sim]');
+      // Sim tugma yoki kalit ustidan o‘tsa ham, kursor ostidagi boshqaruv organi ustun turadi
+      let am = t.closest('[data-amal]'), el = t.closest('[data-el]');
+      if (!kl && !am && sm) {
+        const ostida = document.elementsFromPoint(e.clientX, e.clientY).filter((x) => svg.contains(x));
+        am = ostida.map((x) => x.closest('[data-amal]')).find(Boolean) || null;
+        const bel = ostida.map((x) => x.closest('[data-el]')).find((x) => x && this.lab.elMap.get(x.dataset.el)?.def.bosiladi);
+        if (am) el = am.closest('[data-el]');
+        else if (bel) el = bel;
+        if (am || bel) sm = null;
+      }
       const w = this.dunyo(e);
       tutish = { sx: e.clientX, sy: e.clientY, wx: w.x, wy: w.y, siljidi: false };
       if (kl) Object.assign(tutish, { tur: 'kl', id: kl.dataset.k });
+      else if (am && el) {
+        const e2 = this.lab.elMap.get(el.dataset.el);
+        const amal = am.dataset.amal;
+        const rejim = e2.def.tugmaRejimi?.(amal, e2.param) || e2.def.tugmalar?.[amal] || 'almash';
+        Object.assign(tutish, { tur: 'amal', id: e2.id, amal, rejim });
+        if (rejim === 'lahzali') this.lab.elementBosish(e2.id, amal, 'bos');
+      }
       else if (sm) Object.assign(tutish, { tur: 'sim', id: sm.dataset.sim });
       else if (el) { const [ox, oy] = this.lab.joy(el.dataset.el); Object.assign(tutish, { tur: 'el', id: el.dataset.el, ox, oy }); }
       else Object.assign(tutish, { tur: 'fon', vx: this.v.x, vy: this.v.y });
@@ -262,6 +280,11 @@ export class View2D {
       if (!tutish) return;
       const t = tutish;
       tutish = null;
+      if (t.tur === 'amal') {
+        if (t.rejim === 'lahzali') this.lab.elementBosish(t.id, t.amal, 'qoyib_yubor');
+        else if (!t.siljidi) this.lab.elementBosish(t.id, t.amal, 'almash');
+        return;
+      }
       if (t.siljidi) { if (t.tur === 'el') this.lab.qoralamaniSaqla(); return; }
       if (t.tur === 'kl') this.lab.klemmaBosish(t.id);
       else if (t.tur === 'sim') this.lab.simBosish(t.id);
@@ -269,7 +292,11 @@ export class View2D {
       else this.lab.bosh();
     };
     svg.addEventListener('pointerup', tugat);
-    svg.addEventListener('pointercancel', (e) => { p.delete(e.pointerId); pinch = null; tutish = null; });
+    svg.addEventListener('pointercancel', (e) => {
+      p.delete(e.pointerId); pinch = null;
+      if (tutish?.tur === 'amal' && tutish.rejim === 'lahzali') this.lab.elementBosish(tutish.id, tutish.amal, 'qoyib_yubor');
+      tutish = null;
+    });
 
     svg.addEventListener('wheel', (e) => {
       e.preventDefault();

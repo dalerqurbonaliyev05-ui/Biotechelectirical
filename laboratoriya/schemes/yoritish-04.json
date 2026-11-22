@@ -1,0 +1,93 @@
+{
+  "versiya": 1,
+  "id": "yoritish-04",
+  "yonalish": "yoritish",
+  "daraja": 4,
+  "vaqt_min": 20,
+  "rejimlar": ["2d"],
+  "nomi": {
+    "uz": "Yoritish 4: lyuminessent lampani ikki joydan boshqarish",
+    "ru": "Освещение 4: люминесцентная лампа с управлением из двух мест",
+    "en": "Lighting 4: fluorescent lamp controlled from two places"
+  },
+  "qisqacha": {
+    "uz": "Hisoblagich, difavtomat, ikkita o‘tish kaliti, drossel va starterli lyuminessent lampa.",
+    "ru": "Счётчик, дифавтомат, два проходных выключателя, дроссель и стартер.",
+    "en": "Meter, RCBO, two two-way switches, ballast and starter."
+  },
+  "topshiriq": {
+    "uz": "Tarmoqni hisoblagich (PI1) va difavtomat (QF1) orqali ulang, yoritish guruhi — QF2. Lampani ikkita o‘tish kaliti (SA1, SA2) bilan ikki joydan boshqaring. Lyuminessent lampa sxemasi: faza → drossel → 1-tola → starter → 2-tola → nol.",
+    "ru": "Подключите сеть через счётчик PI1 и дифавтомат QF1, группа освещения — QF2. Управляйте лампой из двух мест проходными выключателями SA1, SA2. Схема лампы: фаза → дроссель → нить 1 → стартер → нить 2 → ноль.",
+    "en": "Feed the supply through meter PI1 and RCBO QF1; the lighting circuit is QF2. Control the lamp from two places with two-way switches SA1, SA2. Lamp circuit: phase → ballast → filament 1 → starter → filament 2 → neutral."
+  },
+  "elementlar": [
+    {"id": "VVOD", "tur": "vvod", "pozitsiya2d": [80, 330]},
+    {"id": "PI1", "tur": "hisoblagich_1f", "pozitsiya2d": [280, 150]},
+    {"id": "QF1", "tur": "difavtomat", "pozitsiya2d": [480, 150]},
+    {"id": "QF2", "tur": "avtomat_1p", "pozitsiya2d": [660, 150]},
+    {"id": "SA1", "tur": "kalit_2y", "pozitsiya2d": [420, 560]},
+    {"id": "SA2", "tur": "kalit_2y", "pozitsiya2d": [680, 560]},
+    {"id": "LL1", "tur": "drossel", "pozitsiya2d": [960, 330]},
+    {"id": "EL1", "tur": "lyum_lampa", "pozitsiya2d": [1000, 150]},
+    {"id": "SF1", "tur": "starter", "pozitsiya2d": [1240, 360]}
+  ],
+  "togri_ulanishlar": [
+    {"nuqtalar": ["VVOD.L", "PI1.1"], "rang": "jigarrang"},
+    {"nuqtalar": ["VVOD.N", "PI1.4"], "rang": "kok"},
+    {"nuqtalar": ["PI1.3", "QF1.1"], "rang": "jigarrang"},
+    {"nuqtalar": ["PI1.6", "QF1.N1"], "rang": "kok"},
+    {"nuqtalar": ["QF1.2", "QF2.in"], "rang": "jigarrang"},
+    {"nuqtalar": ["QF2.out", "SA1.L"], "rang": "jigarrang"},
+    {"nuqtalar": ["SA1.L1", "SA2.L1"], "rang": "jigarrang"},
+    {"nuqtalar": ["SA1.L2", "SA2.L2"], "rang": "jigarrang"},
+    {"nuqtalar": ["SA2.L", "LL1.1"], "rang": "jigarrang"},
+    {"nuqtalar": ["LL1.2", "EL1.A1"], "rang": "jigarrang"},
+    {"nuqtalar": ["EL1.A2", "SF1.1"], "rang": "qora"},
+    {"nuqtalar": ["SF1.2", "EL1.B1"], "rang": "qora"},
+    {"nuqtalar": ["EL1.B2", "QF1.N2"], "rang": "kok"}
+  ],
+  "ssenariylar": [
+    {
+      "nomi": {
+        "uz": "Lampa yoqilgan holat",
+        "ru": "Лампа включена",
+        "en": "Lamp on"
+      },
+      "qadamlar": [{"kutilgan": {"EL1": "yonadi", "PI1": "ishlaydi"}}]
+    },
+    {
+      "nomi": {
+        "uz": "Birinchi joydan o‘chirish",
+        "ru": "Выключение из первого места",
+        "en": "Off from place 1"
+      },
+      "qadamlar": [{"amal": "SA1", "qiymat": "L2"}, {"kutilgan": {"EL1": "ochgan"}}]
+    },
+    {
+      "nomi": {
+        "uz": "Ikkinchi joydan qayta yoqish",
+        "ru": "Повторное включение из второго места",
+        "en": "On again from place 2"
+      },
+      "qadamlar": [{"amal": "SA1", "qiymat": "L2"}, {"amal": "SA2", "qiymat": "L2"}, {"kutilgan": {"EL1": "yonadi"}}]
+    }
+  ],
+  "xato_qoidalari": [{"tur": "sim_rangi"}],
+  "maslahatlar": {
+    "uz": [
+      "Hisoblagich: 1 — L kirish, 3 — L chiqish, 4 — N kirish, 6 — N chiqish. Chiqishlar difavtomatning kirishiga boradi.",
+      "O‘tish kalitlari: SA1.L ga faza; SA1.L1 ↔ SA2.L1 va SA1.L2 ↔ SA2.L2 (ikki \"yugurdak\" sim); SA2.L — chiqish.",
+      "Lampa: SA2.L → drossel → EL1.A1; EL1.A2 → starter → EL1.B1; EL1.B2 → difavtomatning N chiqishi."
+    ],
+    "ru": [
+      "Счётчик: 1 — вход L, 3 — выход L, 4 — вход N, 6 — выход N. Выходы — на вход дифавтомата.",
+      "Проходные: на SA1.L — фаза; SA1.L1 ↔ SA2.L1 и SA1.L2 ↔ SA2.L2 (два «бегунка»); SA2.L — выход.",
+      "Лампа: SA2.L → дроссель → EL1.A1; EL1.A2 → стартер → EL1.B1; EL1.B2 → выход N дифавтомата."
+    ],
+    "en": [
+      "Meter: 1 — L in, 3 — L out, 4 — N in, 6 — N out. The outputs go to the RCBO input.",
+      "Two-way switches: phase to SA1.L; SA1.L1 ↔ SA2.L1 and SA1.L2 ↔ SA2.L2 (two travellers); SA2.L is the output.",
+      "Lamp: SA2.L → ballast → EL1.A1; EL1.A2 → starter → EL1.B1; EL1.B2 → RCBO N output."
+    ]
+  }
+}

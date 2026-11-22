@@ -1,0 +1,108 @@
+{
+  "versiya": 1,
+  "rang_rejimi": "3f",
+  "rejimlar": ["2d"],
+  "id": "motor-05",
+  "yonalish": "motorlar",
+  "daraja": 3,
+  "vaqt_min": 25,
+  "nomi": {
+    "uz": "Motor 5: nasos — suzgichli datchik, qo‘lda/avto rejim",
+    "ru": "Двигатель 5: насос — поплавковый датчик, ручной/авто режим",
+    "en": "Motor 5: pump — float switch, hand/auto mode"
+  },
+  "qisqacha": {
+    "uz": "Selektor I — qo‘lda (Start/Stop), II — avtomatik (suv sathi yuqori bo‘lsa nasos ishlaydi).",
+    "ru": "Селектор I — ручной (Пуск/Стоп), II — авто (насос работает при высоком уровне).",
+    "en": "Selector I — hand (Start/Stop), II — auto (the pump runs when the level is high)."
+  },
+  "topshiriq": {
+    "uz": "Drenaj nasosi: selektor SA1 «I» holatda Start/Stop tugmalari bilan, «II» holatda suzgich SL1 bilan boshqariladi (suv yuqori — nasos ishlaydi, past — to‘xtaydi). «0» holatda nasos ishlamaydi. Stop (SB1) ikkala rejimda ham zanjirni uzadi.",
+    "ru": "Дренажный насос: селектор SA1 в положении «I» — кнопками Пуск/Стоп, в «II» — поплавком SL1 (уровень высокий — насос работает, низкий — стоит). В «0» насос не работает. Стоп SB1 разрывает цепь в обоих режимах.",
+    "en": "Drainage pump: selector SA1 in \"I\" — Start/Stop buttons, in \"II\" — float SL1 (high level — pump runs, low — stops). In \"0\" the pump is off. Stop SB1 breaks the circuit in both modes."
+  },
+  "elementlar": [
+    {"id": "VVOD", "tur": "manba_3f", "pozitsiya2d": [280, 60]},
+    {"id": "QF1", "tur": "avtomat", "pozitsiya2d": [200, 240], "parametr": {"qutb": 3, "nominal": 16}},
+    {"id": "KM1", "tur": "kontaktor", "pozitsiya2d": [230, 500]},
+    {"id": "M1", "tur": "motor_3f", "pozitsiya2d": [230, 800]},
+    {"id": "SB1", "tur": "tugma", "pozitsiya2d": [560, 240], "parametr": {"rang": "qizil"}},
+    {"id": "SA1", "tur": "tanlagich", "pozitsiya2d": [740, 240]},
+    {"id": "SB2", "tur": "tugma", "pozitsiya2d": [600, 440], "parametr": {"rang": "yashil"}},
+    {"id": "SL1", "tur": "suzgich", "pozitsiya2d": [860, 560]}
+  ],
+  "togri_ulanishlar": [
+    {"nuqtalar": ["VVOD.L1", "QF1.1"], "rang": "sariq"},
+    {"nuqtalar": ["VVOD.L2", "QF1.3"], "rang": "yashil"},
+    {"nuqtalar": ["VVOD.L3", "QF1.5"], "rang": "qizil"},
+    {"nuqtalar": ["QF1.2", "KM1.L1", "SB1.11"], "rang": "sariq"},
+    {"nuqtalar": ["QF1.4", "KM1.L2"], "rang": "yashil"},
+    {"nuqtalar": ["QF1.6", "KM1.L3"], "rang": "qizil"},
+    {"nuqtalar": ["KM1.T1", "M1.U"], "rang": "sariq"},
+    {"nuqtalar": ["KM1.T2", "M1.V"], "rang": "yashil"},
+    {"nuqtalar": ["KM1.T3", "M1.W"], "rang": "qizil"},
+    {"nuqtalar": ["SB1.12", "SA1.13", "SA1.23"], "rang": "qora"},
+    {"nuqtalar": ["SA1.14", "SB2.23", "KM1.13"], "rang": "qora"},
+    {"nuqtalar": ["SB2.24", "KM1.14", "KM1.A1", "SL1.NO"], "rang": "qora"},
+    {"nuqtalar": ["SA1.24", "SL1.COM"], "rang": "qora"},
+    {"nuqtalar": ["KM1.A2", "VVOD.N"], "rang": "kok"},
+    {"nuqtalar": ["VVOD.PE", "M1.PE"], "rang": "sariq_yashil"}
+  ],
+  "ssenariylar": [
+    {
+      "nomi": {
+        "uz": "Qo‘lda rejim",
+        "ru": "Ручной режим",
+        "en": "Hand mode"
+      },
+      "qadamlar": [
+        {"amal": "SA1", "qiymat": "I"},
+        {"amal": "SB2", "qiymat": "bos"},
+        {"kutilgan": {"M1": "ishlaydi"}},
+        {"amal": "SB1", "qiymat": "bos"},
+        {"kutilgan": {"M1": "toxtagan"}}
+      ]
+    },
+    {
+      "nomi": {
+        "uz": "Avtomatik rejim",
+        "ru": "Автоматический режим",
+        "en": "Auto mode"
+      },
+      "qadamlar": [
+        {"amal": "SA1", "qiymat": "II"},
+        {"kutilgan": {"M1": "toxtagan"}},
+        {"amal": "SL1", "qiymat": "yuqori"},
+        {"kutilgan": {"M1": "ishlaydi"}},
+        {"amal": "SL1", "qiymat": "past"},
+        {"kutilgan": {"M1": "toxtagan"}}
+      ]
+    },
+    {
+      "nomi": {
+        "uz": "0 holat",
+        "ru": "Положение 0",
+        "en": "Position 0"
+      },
+      "qadamlar": [{"amal": "SB2", "qiymat": "bos"}, {"amal": "SL1", "qiymat": "yuqori"}, {"kutilgan": {"M1": "toxtagan"}}]
+    }
+  ],
+  "xato_qoidalari": [{"tur": "pe_ulangan", "klemmalar": ["M1.PE"]}, {"tur": "sim_rangi"}],
+  "maslahatlar": {
+    "uz": [
+      "QF1.2 → SB1 (11–12); SB1.12 dan selektorning ikkala blokiga (13 va 23).",
+      "Qo‘lda: SA1.14 → SB2.23 va KM1.13; SB2.24 → KM1.14 va KM1.A1.",
+      "Avto: SA1.24 → SL1.COM; SL1.NO → KM1.A1. KM1.A2 → N."
+    ],
+    "ru": [
+      "QF1.2 → SB1 (11–12); с SB1.12 — на оба блока селектора (13 и 23).",
+      "Ручной: SA1.14 → SB2.23 и KM1.13; SB2.24 → KM1.14 и KM1.A1.",
+      "Авто: SA1.24 → SL1.COM; SL1.NO → KM1.A1. KM1.A2 → N."
+    ],
+    "en": [
+      "QF1.2 → SB1 (11–12); from SB1.12 to both selector blocks (13 and 23).",
+      "Hand: SA1.14 → SB2.23 and KM1.13; SB2.24 → KM1.14 and KM1.A1.",
+      "Auto: SA1.24 → SL1.COM; SL1.NO → KM1.A1. KM1.A2 → N."
+    ]
+  }
+}
