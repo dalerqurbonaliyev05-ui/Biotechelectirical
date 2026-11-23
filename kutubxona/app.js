@@ -51,8 +51,8 @@ async function loadCatalog() {
 function bookMatches(b, vs, rawLower) {
   if (state.cat !== 'all' && b.category !== state.cat) return false;
   if (!vs.length) return true;
-  const hayLat = (b.title + ' ' + b.code + ' ' + (b.description || '')).toLowerCase();
-  const hayCyr = fold(b.titleOrig + ' ' + b.code);
+  const hayLat = (b.title + ' ' + b.titleOrig + ' ' + b.code + ' ' + (b.description || '') + ' ' + (b.publisher || '')).toLowerCase();
+  const hayCyr = fold(latToCyr(hayLat)); // lotin matn ham kirillga o'girilib solishtiriladi
   return hayLat.includes(rawLower) || vs.some(v => hayCyr.includes(v) || fold(hayLat).includes(v));
 }
 
