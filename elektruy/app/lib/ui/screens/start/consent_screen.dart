@@ -63,7 +63,16 @@ class _ConsentBodyState extends ConsumerState<ConsentBody> {
           value: _privacy,
           onChanged: (v) => setState(() => _privacy = v ?? false),
           title: Text(l.acceptPrivacy),
-          secondary: TextButton(onPressed: () => context.push('/legal/privacy'), child: Text(l.privacyTitle)),
+          // The link goes under the text: as a trailing button a long label (e.g. in Russian)
+          // squeezed the checkbox text into a one-letter column.
+          subtitle: Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: TextButton(
+              onPressed: () => context.push('/legal/privacy'),
+              style: TextButton.styleFrom(padding: EdgeInsets.zero, minimumSize: const Size(0, 40), tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+              child: Text(l.privacyTitle),
+            ),
+          ),
           controlAffinity: ListTileControlAffinity.leading,
         ),
         BottomAction(

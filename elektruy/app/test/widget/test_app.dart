@@ -62,8 +62,10 @@ Future<FakeProjectRepository> pumpTestApp(
   required Map<String, WidgetBuilder> routes,
   ContentBundle? content,
   void Function(FakeProjectRepository repo)? seed,
+  String locale = 'en',
+  ThemeData? theme,
 }) async {
-  SharedPreferences.setMockInitialValues({'locale': 'en', 'language_chosen': true, 'onboarding_done': true});
+  SharedPreferences.setMockInitialValues({'locale': locale, 'language_chosen': true, 'onboarding_done': true});
   final prefs = await SharedPreferences.getInstance();
   final db = unopenedDb();
   final repo = FakeProjectRepository(db);
@@ -88,7 +90,8 @@ Future<FakeProjectRepository> pumpTestApp(
       ],
       child: MaterialApp.router(
         routerConfig: router,
-        locale: const Locale('en'),
+        theme: theme,
+        locale: Locale(locale),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
       ),
