@@ -235,6 +235,11 @@
       "source": "/laboratoriya",
       "destination": "/laboratoriya/",
       "permanent": true
+    },
+    {
+      "source": "/laboratoriya/simulyator",
+      "destination": "/laboratoriya/simulyator/",
+      "permanent": true
     }
   ],
   "rewrites": [
@@ -243,6 +248,10 @@
       "destination": "/elektr-uy/admin/index.html"
     }
 ,
+    {
+      "source": "/laboratoriya/simulyator/",
+      "destination": "/laboratoriya/simulyator/index.html"
+    },
     {
       "source": "/laboratoriya/:id([a-z0-9]+(?:-[a-z0-9]+)*)",
       "destination": "/laboratoriya/mashq.html"

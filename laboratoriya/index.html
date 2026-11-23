@@ -25,6 +25,7 @@
       <a href="/#tools" data-i18n="nav.tools">Vositalar</a>
       <a href="/#apps" data-i18n="nav.apps">Ilovalar</a>
       <a href="/laboratoriya/" aria-current="page" data-i18n="nav.lab">Laboratoriya</a>
+      <a href="/laboratoriya/simulyator/" data-i18n="nav.sim">Simulyator</a>
     </nav>
     <div class="nav-right">
       <div class="lang-switch" role="group" aria-label="Til / Language / Язык">
@@ -32,7 +33,7 @@
         <button type="button" class="lang-btn" data-lang="ru" aria-pressed="false">RU</button>
         <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
       </div>
-      <a class="btn qora" href="#sxemalar" data-i18n="k.nav_cta">Boshlash</a>
+      <a class="btn qora" href="/laboratoriya/simulyator/" data-i18n="k.nav_cta">Simulyator</a>
       <button type="button" class="hamburger" id="hamburger" data-i18n-aria="nav.menu" aria-label="Menyu" aria-expanded="false" aria-controls="nav-menu"><span></span><span></span><span></span></button>
     </div>
   </div>
@@ -45,8 +46,8 @@
       <h1 style="margin-top:18px"><span style="color:var(--ink)" data-i18n="k.h1a">Elektr sxemalarini</span><span data-i18n="k.h1b">brauzerda yig‘ing.</span></h1>
       <p data-i18n="k.lead">Klemmadan klemmaga sim torting, tokni bering va natijani ko‘ring.</p>
       <div class="hero-cta">
-        <a class="btn oq" href="/laboratoriya/yoritish-01" data-birinchi data-i18n="k.cta1">Mashqni boshlash →</a>
-        <a class="btn" href="#sxemalar" data-i18n="k.cta2">Sxemalar</a>
+        <a class="btn oq" href="/laboratoriya/simulyator/" data-i18n="k.cta1">Simulyatorga kirish →</a>
+        <a class="btn" href="/laboratoriya/yoritish-01" data-birinchi data-i18n="k.cta2">Birinchi mashq</a>
       </div>
     </div>
     <div class="hero-art" aria-hidden="true">
@@ -79,20 +80,27 @@
 
   <div class="ticker" aria-hidden="true"><div class="ticker-track" id="ticker"></div></div>
 
-  <section class="sec wrap" id="sxemalar">
-    <div class="sec-head">
-      <span class="eyebrow" data-i18n="k.sec">// Sxemalar</span>
-      <h2 data-i18n="k.sec_h">Sxemani tanlang.</h2>
-      <p data-i18n="k.sec_p">Har bir sxema — real montaj qoidalari asosidagi mashq.</p>
+  <section class="sec wrap" id="simulyator">
+    <a class="sim-banner" href="/laboratoriya/simulyator/">
+      <div class="sim-banner-matn">
+        <span class="eyebrow acc" data-i18n="k.sim_sec">// Simulyator</span>
+        <h2 data-i18n="k.sim_h">Barcha sxemalar — bitta simulyatorda.</h2>
+        <p data-i18n="k.sim_p"></p>
+        <div class="sim-banner-meta"><span class="tag" id="sim-soni">—</span><span class="tag">2D</span><span class="tag">3D</span><span class="tag">UZ · RU · EN</span></div>
+        <span class="btn oq" data-i18n="k.sim_cta">Simulyatorga kirish →</span>
+      </div>
+      <div class="sim-banner-rasm" aria-hidden="true" id="sim-rasm"></div>
+    </a>
+    <div class="sec-head sec-head-chap"><span class="eyebrow" data-i18n="k.sim_yon">Yo‘nalishlar</span></div>
+    <div class="yon-grid" id="yon-plitka"></div>
+  </section>
+
+  <section class="wrap mid">
+    <div>
+      <h2 data-i18n="k.mid_h">Nazariyadan amaliyotga.</h2>
+      <p data-i18n="k.mid_p"></p>
     </div>
-    <div class="filtrlar" aria-label="Filtr">
-      <div class="filtr"><span class="filtr-nom" data-i18n="filtr.yonalish">Yo‘nalish</span><div class="chips" id="f-yonalish"></div></div>
-      <div class="filtr"><span class="filtr-nom" data-i18n="filtr.daraja">Daraja</span><div class="chips" id="f-daraja"></div></div>
-      <div class="filtr"><span class="filtr-nom" data-i18n="filtr.rejim">Rejim</span><div class="chips" id="f-rejim"></div></div>
-    </div>
-    <div class="karta-grid" id="kartalar" aria-live="polite">
-      <p class="bosh-holat" data-i18n="katalog.yuklanmoqda">Sxemalar yuklanmoqda…</p>
-    </div>
+    <a class="btn oq" href="/laboratoriya/simulyator/" data-i18n="k.sim_cta">Simulyatorga kirish →</a>
   </section>
 
   <section class="sec wrap">
@@ -113,9 +121,11 @@
       <h2 data-i18n="k.end_h">Bugun mashq qiling.</h2>
       <p data-i18n="k.end_p">Ro‘yxatdan o‘tish shart emas.</p>
     </div>
-    <a class="btn oq" href="/laboratoriya/yoritish-01" data-birinchi data-i18n="k.cta1">Mashqni boshlash →</a>
+    <a class="btn oq" href="/laboratoriya/simulyator/" data-i18n="k.sim_cta">Simulyatorga kirish →</a>
   </section>
 </main>
+
+<a class="sim-float" id="sim-float" href="/laboratoriya/simulyator/" hidden><span class="sim-float-dot"></span><span data-i18n="k.sim_float">Simulyatorga kirish</span> →</a>
 
 <footer class="site-foot wrap">
   <span>© 2026 <span data-i18n="k.foot">EnergyVibe Laboratoriya</span></span>

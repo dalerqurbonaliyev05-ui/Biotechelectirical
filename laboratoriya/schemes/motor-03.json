@@ -1,7 +1,7 @@
 {
   "versiya": 1,
   "rang_rejimi": "3f",
-  "rejimlar": ["2d"],
+  "rejimlar": ["2d", "3d"],
   "id": "motor-03",
   "yonalish": "motorlar",
   "daraja": 3,
@@ -17,9 +17,9 @@
     "en": "Two Stops in series, two Starts in parallel — two control stations."
   },
   "topshiriq": {
-    "uz": "Motorni ikki postdan boshqaring: 1-post SB1 (Stop), SB2 (Start); 2-post SB3 (Stop), SB4 (Start). Stop tugmalari ketma-ket, Start tugmalari va KM1 13–14 kontakti parallel ulanadi.",
-    "ru": "Управляйте двигателем с двух постов: пост 1 — SB1 (Стоп), SB2 (Пуск); пост 2 — SB3 (Стоп), SB4 (Пуск). Кнопки Стоп — последовательно, кнопки Пуск и контакт KM1 13–14 — параллельно.",
-    "en": "Control the motor from two stations: station 1 — SB1 (Stop), SB2 (Start); station 2 — SB3 (Stop), SB4 (Start). Stop buttons in series, Start buttons and KM1 13–14 in parallel."
+    "uz": "Motorni ikki postdan boshqaring: 1-post SB1 (Stop), SB2 (Start); 2-post SB3 (Stop), SB4 (Start). Stop tugmalari ketma-ket, Start tugmalari va KM1 NO 13–14 kontakti parallel ulanadi.",
+    "ru": "Управляйте двигателем с двух постов: пост 1 — SB1 (Стоп), SB2 (Пуск); пост 2 — SB3 (Стоп), SB4 (Пуск). Кнопки Стоп — последовательно, кнопки Пуск и контакт KM1 NO 13–14 — параллельно.",
+    "en": "Control the motor from two stations: station 1 — SB1 (Stop), SB2 (Start); station 2 — SB3 (Stop), SB4 (Start). Stop buttons in series, Start buttons and KM1 NO 13–14 in parallel."
   },
   "elementlar": [
     {"id": "VVOD", "tur": "manba_3f", "pozitsiya2d": [280, 60]},
@@ -68,19 +68,19 @@
   "xato_qoidalari": [{"tur": "pe_ulangan", "klemmalar": ["M1.PE"]}, {"tur": "sim_rangi"}],
   "maslahatlar": {
     "uz": [
-      "Stop tugmalari ketma-ket: QF1.2 → SB1 (11–12) → SB3 (11–12).",
-      "SB3.12 nuqtasi: SB2.23, SB4.23 va KM1.13.",
-      "Chiqish nuqtasi: SB2.24, SB4.24, KM1.14 va KM1.A1. KM1.A2 → N."
+      "Stop tugmalari ketma-ket: QF1.T1(2) → SB1 (NC 11–12) → SB3 (NC 11–12).",
+      "SB3.12 nuqtasi: SB2.23, SB4.23 va KM1.NO(13).",
+      "Chiqish nuqtasi: SB2.24, SB4.24, KM1.NO(14) va KM1.A1. KM1.A2 → N."
     ],
     "ru": [
-      "Кнопки Стоп последовательно: QF1.2 → SB1 (11–12) → SB3 (11–12).",
-      "Точка SB3.12: SB2.23, SB4.23 и KM1.13.",
-      "Выходная точка: SB2.24, SB4.24, KM1.14 и KM1.A1. KM1.A2 → N."
+      "Кнопки Стоп последовательно: QF1.T1(2) → SB1 (NC 11–12) → SB3 (NC 11–12).",
+      "Точка SB3.12: SB2.23, SB4.23 и KM1.NO(13).",
+      "Выходная точка: SB2.24, SB4.24, KM1.NO(14) и KM1.A1. KM1.A2 → N."
     ],
     "en": [
-      "Stop buttons in series: QF1.2 → SB1 (11–12) → SB3 (11–12).",
-      "Node SB3.12: SB2.23, SB4.23 and KM1.13.",
-      "Output node: SB2.24, SB4.24, KM1.14 and KM1.A1. KM1.A2 → N."
+      "Stop buttons in series: QF1.T1(2) → SB1 (NC 11–12) → SB3 (NC 11–12).",
+      "Node SB3.12: SB2.23, SB4.23 and KM1.NO(13).",
+      "Output node: SB2.24, SB4.24, KM1.NO(14) and KM1.A1. KM1.A2 → N."
     ]
   }
 }

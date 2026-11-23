@@ -9,7 +9,9 @@ Sxema uchun alohida sahifa yoki kod yozilmaydi. Sxema = bitta JSON fayl. Katalog
 
 ```
 laboratoriya/
-  index.html, katalog.js        # katalog (/laboratoriya/)
+  index.html                    # bo‘lim bosh sahifasi (/laboratoriya/): simulyatorga kirish tugmalari, yo‘nalish plitkalari
+  simulyator/index.html         # sxemalar katalogi (/laboratoriya/simulyator/), oq mavzu
+  katalog.js                    # ikkala sahifa uchun: kartochkalar, filtrlar, plitkalar
   mashq.html, mashq.js          # mashq sahifasi (/laboratoriya/<id> → vercel.json rewrite)
   lab.css                       # bo‘lim stillari
   engine/
@@ -18,7 +20,8 @@ laboratoriya/
     checker.js                  # xato turlarini aniqlovchi tekshiruvchi + to‘g‘ri yechim generatori
     state.js                    # umumiy holat (2D va 3D bitta holatni ishlatadi), ball, localStorage
     view2d.js                   # SVG ko‘rinish
-    view3d.js                   # three.js ko‘rinish
+    view3d.js                   # three.js ko‘rinish (sxemada `sahna3d` bo‘lsa — qo‘lda sozlangan xona)
+    view3d-avto.js              # avtomatik 3D: shit (2D tartibida), devor, shift, pol qurilmalari
     i18n.js                     # uz/ru/en matnlar
     ranglar.js                  # sim ranglari va ularning L/N/PE ga mosligi
   schemes/
@@ -163,7 +166,7 @@ barqaror holatga keltiriladi (40 iteratsiya; barqarorlashmasa — «tebranish» 
 
 | Maydon | Ma’nosi |
 |---|---|
-| `rejimlar` | `["2d"]` yoki `["2d","3d"]`. 3D model hozircha faqat `yoritish-01` uchun bor. |
+| `rejimlar` | `["2d","3d"]` — 3D avtomatik quriladi (pastdagi «3D» bo‘limi). |
 | `rang_rejimi` | `"3f"` — uch fazali sxemalar: faza simi uchun jigarrang, qora, kulrang (va boshqaruv zanjiri uchun qizil, sariq, yashil) ruxsat etiladi. |
 | `ssenariylar` | Sxemaning ishlashini tekshiruvchi ketma-ketliklar (pastda). |
 | `topologiya` | `true` bo‘lsa, aniq xato topilmaganda ulanishlar `togri_ulanishlar` bilan solishtiriladi. Standart: faqat `maqsad` bor sxemalarda (yoritish-01); ssenariyli sxemalarda ishlash bo‘yicha tekshiriladi, shuning uchun boshqacha, lekin to‘g‘ri yig‘ilgan sxema ham qabul qilinadi. |
@@ -208,6 +211,23 @@ svg({ el, holat, param, yonadi, natija })  // natija — hisobla() qaytargan nat
 
 2D'da bosiladigan qism `<g data-amal="...">` bilan belgilanadi. Animatsiya sinflari: `d-aylan` (parrak), `d-yur` (konveyer),
 `d-oqim` (suv oqimi), `teskari` — teskari yo‘nalish.
+
+## Klemma yorliqlari (o‘quvchi uchun)
+
+`K(id, yorliq, nomi, …)` dagi `id` — dvigatel va JSON uchun (masalan `13`), `yorliq` — ekranda ko‘rinadigan nom.
+Yorliqlar tushunarli bo‘lsin: `NO`, `NC`, `COM` (rele: `COM1`, `NO1`, `NC1`…), kirish `L1–L3`, chiqish `T1–T3`, g‘altak `A1/A2`.
+Halqa va yozuv rangi yorliqdan avtomatik olinadi (`klemmaTuri` va `KLEMMA_RANG`, `_umumiy.js`): NO — yashil, NC — qizil,
+fazalar — o‘z rangida, N — ko‘k, PE — sariq-yashil, g‘altak — binafsha. Raqam (`13`) `nomi` ichida qoladi va kursor
+olib borilganda ko‘rinadi. Yon klemmalar (kontaktor yordamchi kontaktlari) qatorlarda: har qator — bitta kontaktning chap va o‘ng uchi.
+
+## 3D
+
+Sxemada `sahna3d` bo‘lmasa, 3D avtomatik quriladi (`engine/view3d-avto.js`), JSON'ga hech narsa yozish shart emas:
+- shit qurilmalari devordagi shitga 2D dagi tartibda joylanadi; old yuzasi — 2D rasmining o‘zi (holat o‘zgarsa yangilanadi);
+- lampalar shiftda, kalit/rozetka/ventilyator va h.k. devorda, motorlar polda (`joyTuri` ro‘yxatlari);
+- 2D dagi bosiladigan qismlar (`data-amal`) 3D da ham bosiladi.
+Yangi element turi shitdan tashqarida turishi kerak bo‘lsa — `view3d-avto.js` dagi `SHIFT`/`DEVOR`/`POL` ro‘yxatiga qo‘shing.
+Qo‘lda sozlangan xona kerak bo‘lsa — `sahna3d` va elementlarga `pozitsiya3d` yozing (namuna: `yoritish-01.json`).
 
 ## Natijalar
 

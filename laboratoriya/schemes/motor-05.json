@@ -1,7 +1,7 @@
 {
   "versiya": 1,
   "rang_rejimi": "3f",
-  "rejimlar": ["2d"],
+  "rejimlar": ["2d", "3d"],
   "id": "motor-05",
   "yonalish": "motorlar",
   "daraja": 3,
@@ -90,19 +90,19 @@
   "xato_qoidalari": [{"tur": "pe_ulangan", "klemmalar": ["M1.PE"]}, {"tur": "sim_rangi"}],
   "maslahatlar": {
     "uz": [
-      "QF1.2 → SB1 (11–12); SB1.12 dan selektorning ikkala blokiga (13 va 23).",
-      "Qo‘lda: SA1.14 → SB2.23 va KM1.13; SB2.24 → KM1.14 va KM1.A1.",
-      "Avto: SA1.24 → SL1.COM; SL1.NO → KM1.A1. KM1.A2 → N."
+      "QF1.T1(2) → SB1 (NC 11–12); SB1.12 dan selektorning ikkala blokiga (I (13) va II (23)).",
+      "Qo‘lda: SA1.I(14) → SB2.23 va KM1.NO(13); SB2.24 → KM1.NO(14) va KM1.A1.",
+      "Avto: SA1.II(24) → SL1.COM; SL1.NO → KM1.A1. KM1.A2 → N."
     ],
     "ru": [
-      "QF1.2 → SB1 (11–12); с SB1.12 — на оба блока селектора (13 и 23).",
-      "Ручной: SA1.14 → SB2.23 и KM1.13; SB2.24 → KM1.14 и KM1.A1.",
-      "Авто: SA1.24 → SL1.COM; SL1.NO → KM1.A1. KM1.A2 → N."
+      "QF1.T1(2) → SB1 (NC 11–12); с SB1.12 — на оба блока селектора (I (13) и II (23)).",
+      "Ручной: SA1.I(14) → SB2.23 и KM1.NO(13); SB2.24 → KM1.NO(14) и KM1.A1.",
+      "Авто: SA1.II(24) → SL1.COM; SL1.NO → KM1.A1. KM1.A2 → N."
     ],
     "en": [
-      "QF1.2 → SB1 (11–12); from SB1.12 to both selector blocks (13 and 23).",
-      "Hand: SA1.14 → SB2.23 and KM1.13; SB2.24 → KM1.14 and KM1.A1.",
-      "Auto: SA1.24 → SL1.COM; SL1.NO → KM1.A1. KM1.A2 → N."
+      "QF1.T1(2) → SB1 (NC 11–12); from SB1.12 to both selector blocks (I (13) and II (23)).",
+      "Hand: SA1.I(14) → SB2.23 and KM1.NO(13); SB2.24 → KM1.NO(14) and KM1.A1.",
+      "Auto: SA1.II(24) → SL1.COM; SL1.NO → KM1.A1. KM1.A2 → N."
     ]
   }
 }

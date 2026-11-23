@@ -31,8 +31,11 @@ function qutbKlemmalari(p) {
   for (let i = 0; i < p.qutb; i++) {
     const x = (i - (p.qutb - 1) / 2) * QADAM;
     const y = p.yorliqlar?.[i];
-    res.push(K(String(2 * i + 1), y ? y : String(2 * i + 1), N3(`kirish ${2 * i + 1}${y ? ` (${y})` : ''}`, `вход ${2 * i + 1}`, `line ${2 * i + 1}`), x, -64, 0, -1));
-    res.push(K(String(2 * i + 2), y ? `${y}'` : String(2 * i + 2), N3(`chiqish ${2 * i + 2}${y ? ` (${y})` : ''}`, `выход ${2 * i + 2}`, `load ${2 * i + 2}`), x, 64, 0, 1));
+    // Rasmdagidek nomlar: 3 fazali — kirish L1 L2 L3 (N), chiqish T1 T2 T3 (N); bir fazali — L / N
+    const kir = y || (p.qutb >= 3 ? (i < 3 ? `L${i + 1}` : 'N') : (i === 0 ? 'L' : 'N'));
+    const chiq = y || (p.qutb >= 3 ? (i < 3 ? `T${i + 1}` : 'N') : kir);
+    res.push(K(String(2 * i + 1), kir, N3(`kirish ${kir} (${2 * i + 1})`, `вход ${kir} (${2 * i + 1})`, `line ${kir} (${2 * i + 1})`), x, -64, 0, -1));
+    res.push(K(String(2 * i + 2), chiq, N3(`chiqish ${chiq} (${2 * i + 2})`, `выход ${chiq} (${2 * i + 2})`, `load ${chiq} (${2 * i + 2})`), x, 64, 0, 1));
   }
   return res;
 }
@@ -71,8 +74,8 @@ function avtomatSvg({ el, holat, param }) {
   }
   s += `<rect class="d-slot" x="${-w / 2 + 6}" y="-22" width="${w - 12}" height="34" rx="3"/>
     <rect x="${-w / 2 + 8}" y="${on ? -20 : -4}" width="${w - 16}" height="14" rx="2" fill="#e0b400" stroke="#9c7d00"/>
-    <rect x="-6" y="18" width="12" height="5" fill="${on ? '#e5484d' : '#22a35a'}"/>
-    ${yoz(0, 42, `${param.xarakteristika}${param.nominal}`, 'd-txt d-katta')}${yorliqlar(kl)}`;
+    <rect x="-6" y="16" width="12" height="4" fill="${on ? '#e5484d' : '#22a35a'}"/>
+    ${yoz(0, 35, `${param.xarakteristika}${param.nominal}`, 'd-txt d-katta')}${yorliqlar(kl)}`;
   return s + nomi(100, `${el.id} · ${on ? 'ON' : 'OFF'}`);
 }
 
@@ -110,8 +113,8 @@ export const difavtomat = {
   klemmalar: () => [
     K('1', 'L', N3('kirish L', 'вход L', 'line L'), -17, -64, 0, -1),
     K('N1', 'N', N3('kirish N', 'вход N', 'line N'), 17, -64, 0, -1),
-    K('2', "L'", N3('chiqish L', 'выход L', 'load L'), -17, 64, 0, 1),
-    K('N2', "N'", N3('chiqish N', 'выход N', 'load N'), 17, 64, 0, 1),
+    K('2', 'L', N3('chiqish L', 'выход L', 'load L'), -17, 64, 0, 1),
+    K('N2', 'N', N3('chiqish N', 'выход N', 'load N'), 17, 64, 0, 1),
   ],
   boshlangich: () => ({ yoqilgan: false }),
   ichki: () => [],
@@ -145,10 +148,10 @@ export const hisoblagich_1f = {
   belgi: 'PI',
   nomi: N3('Elektr hisoblagich', 'Электросчётчик', 'Energy meter'),
   klemmalar: () => [
-    K('1', '1', N3('L kirish (1)', 'L вход (1)', 'L in (1)'), -48, 60, 0, 1),
-    K('3', '3', N3('L chiqish (3)', 'L выход (3)', 'L out (3)'), -16, 60, 0, 1),
-    K('4', '4', N3('N kirish (4)', 'N вход (4)', 'N in (4)'), 16, 60, 0, 1),
-    K('6', '6', N3('N chiqish (6)', 'N выход (6)', 'N out (6)'), 48, 60, 0, 1),
+    K('1', 'L in', N3('L kirish (1)', 'L вход (1)', 'L in (1)'), -48, 60, 0, 1),
+    K('3', 'L out', N3('L chiqish (3)', 'L выход (3)', 'L out (3)'), -16, 60, 0, 1),
+    K('4', 'N in', N3('N kirish (4)', 'N вход (4)', 'N in (4)'), 16, 60, 0, 1),
+    K('6', 'N out', N3('N chiqish (6)', 'N выход (6)', 'N out (6)'), 48, 60, 0, 1),
   ],
   boshlangich: () => ({}),
   ichki: () => [],

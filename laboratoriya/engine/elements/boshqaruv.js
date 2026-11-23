@@ -56,10 +56,10 @@ export const tanlagich = {
   nomi: N3('Selektor (aylanma kalit)', 'Переключатель (селектор)', 'Selector switch'),
   standart: { pozitsiyalar: ['I', '0', 'II'] },
   klemmalar: () => [
-    K('13', '13', N3('I holat kontakti 13', 'контакт пол. I 13', 'pos. I contact 13'), -34, 30, -1, 0),
-    K('14', '14', N3('I holat kontakti 14', 'контакт пол. I 14', 'pos. I contact 14'), 34, 30, 1, 0),
-    K('23', '23', N3('II holat kontakti 23', 'контакт пол. II 23', 'pos. II contact 23'), -34, 58, -1, 0),
-    K('24', '24', N3('II holat kontakti 24', 'контакт пол. II 24', 'pos. II contact 24'), 34, 58, 1, 0),
+    K('13', 'I', N3('I holat kontakti 13', 'контакт пол. I 13', 'pos. I contact 13'), -34, 30, -1, 0),
+    K('14', 'I', N3('I holat kontakti 14', 'контакт пол. I 14', 'pos. I contact 14'), 34, 30, 1, 0),
+    K('23', 'II', N3('II holat kontakti 23', 'контакт пол. II 23', 'pos. II contact 23'), -34, 58, -1, 0),
+    K('24', 'II', N3('II holat kontakti 24', 'контакт пол. II 24', 'pos. II contact 24'), 34, 58, 1, 0),
   ],
   boshlangich: (p) => ({ poz: p.pozitsiyalar.includes('0') ? '0' : p.pozitsiyalar[0] }),
   ichki(h, p, hammasi) {

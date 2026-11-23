@@ -1,7 +1,7 @@
 {
   "versiya": 1,
   "rang_rejimi": "3f",
-  "rejimlar": ["2d"],
+  "rejimlar": ["2d", "3d"],
   "id": "motor-11",
   "yonalish": "motorlar",
   "daraja": 5,
@@ -17,9 +17,9 @@
     "en": "Forward/reverse (KM1/KM2) and automatic star→delta (KM3/KM4, KT1)."
   },
   "topshiriq": {
-    "uz": "KM1 — oldinga, KM2 — orqaga (L1/L3 almashadi), o‘zaro bloklangan. KM1 yoki KM2 ning 33–34 kontaktlari (parallel) KT1 ni va yulduz/uchburchak zanjirini ta’minlaydi: KT1 15–16 → KM4.41–42 → KM3 (yulduz); KT1 15–18 → KM3.41–42 → KM4 (uchburchak).",
-    "ru": "KM1 — вперёд, KM2 — назад (L1/L3 меняются), взаимно заблокированы. Контакты 33–34 KM1 или KM2 (параллельно) питают KT1 и цепь звезда/треугольник: KT1 15–16 → KM4.41–42 → KM3 (звезда); KT1 15–18 → KM3.41–42 → KM4 (треугольник).",
-    "en": "KM1 forward, KM2 reverse (L1/L3 swapped), interlocked. KM1 or KM2 contacts 33–34 (in parallel) feed KT1 and the star/delta circuit: KT1 15–16 → KM4.41–42 → KM3 (star); KT1 15–18 → KM3.41–42 → KM4 (delta)."
+    "uz": "KM1 — oldinga, KM2 — orqaga (L1/L3 almashadi), o‘zaro bloklangan. KM1 yoki KM2 ning NO 33–34 kontaktlari (parallel) KT1 ni va yulduz/uchburchak zanjirini ta’minlaydi: KT1 NC 15–16 → KM4 NC 41–42 → KM3 (yulduz); KT1 NO 15–18 → KM3 NC 41–42 → KM4 (uchburchak).",
+    "ru": "KM1 — вперёд, KM2 — назад (L1/L3 меняются), взаимно заблокированы. Контакты NO 33–34 KM1 или KM2 (параллельно) питают KT1 и цепь звезда/треугольник: KT1 NC 15–16 → KM4 NC 41–42 → KM3 (звезда); KT1 NO 15–18 → KM3 NC 41–42 → KM4 (треугольник).",
+    "en": "KM1 forward, KM2 reverse (L1/L3 swapped), interlocked. KM1 or KM2 contacts NO 33–34 (in parallel) feed KT1 and the star/delta circuit: KT1 NC 15–16 → KM4 NC 41–42 → KM3 (star); KT1 NO 15–18 → KM3 NC 41–42 → KM4 (delta)."
   },
   "elementlar": [
     {"id": "VVOD", "tur": "manba_3f", "pozitsiya2d": [380, 60]},
@@ -115,17 +115,17 @@
     "uz": [
       "KM1 va KM2 chiqishlari KK1 ga 4-sxemadagidek fazalarni almashtirib ulanadi (KM2.T1 ↔ L3, KM2.T3 ↔ L1).",
       "Yulduz/uchburchak zanjiri 9-sxemadagidek: KM4 — uchburchak, KM3 — yulduz.",
-      "KM1.34 + KM2.34 → KT1.A1 va KT1.15; KT1.16 → KM4.41 → KM4.42 → KM3.A1; KT1.18 → KM3.41 → KM3.42 → KM4.A1."
+      "KM1.NO(34) + KM2.NO(34) → KT1.A1 va KT1.COM(15); KT1.NC(16) → KM4.NC(41) → KM4.NC(42) → KM3.A1; KT1.NO(18) → KM3.NC(41) → KM3.NC(42) → KM4.A1."
     ],
     "ru": [
       "Выходы KM1 и KM2 подключаются к KK1 со сменой фаз, как в схеме 4 (KM2.T1 ↔ L3, KM2.T3 ↔ L1).",
       "Цепь звезда/треугольник как в схеме 9: KM4 — треугольник, KM3 — звезда.",
-      "KM1.34 + KM2.34 → KT1.A1 и KT1.15; KT1.16 → KM4.41 → KM4.42 → KM3.A1; KT1.18 → KM3.41 → KM3.42 → KM4.A1."
+      "KM1.NO(34) + KM2.NO(34) → KT1.A1 и KT1.COM(15); KT1.NC(16) → KM4.NC(41) → KM4.NC(42) → KM3.A1; KT1.NO(18) → KM3.NC(41) → KM3.NC(42) → KM4.A1."
     ],
     "en": [
       "KM1 and KM2 outputs go to KK1 with the phase swap as in circuit 4 (KM2.T1 ↔ L3, KM2.T3 ↔ L1).",
       "Star/delta part as in circuit 9: KM4 delta, KM3 star.",
-      "KM1.34 + KM2.34 → KT1.A1 and KT1.15; KT1.16 → KM4.41 → KM4.42 → KM3.A1; KT1.18 → KM3.41 → KM3.42 → KM4.A1."
+      "KM1.NO(34) + KM2.NO(34) → KT1.A1 and KT1.COM(15); KT1.NC(16) → KM4.NC(41) → KM4.NC(42) → KM3.A1; KT1.NO(18) → KM3.NC(41) → KM3.NC(42) → KM4.A1."
     ]
   }
 }

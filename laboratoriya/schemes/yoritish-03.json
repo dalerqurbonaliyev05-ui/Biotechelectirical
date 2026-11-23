@@ -4,7 +4,7 @@
   "yonalish": "yoritish",
   "daraja": 2,
   "vaqt_min": 12,
-  "rejimlar": ["2d"],
+  "rejimlar": ["2d", "3d"],
   "nomi": {
     "uz": "Yoritish 3: o‘tish kalitlari bilan navbatli yoritish",
     "ru": "Освещение 3: поочерёдное включение проходными выключателями",

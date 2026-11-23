@@ -98,8 +98,8 @@ export const vaqt_kaliti = {
   klemmalar: () => [
     K('L', 'L', N3('ta’minot L', 'питание L', 'supply L'), -36, 64, 0, 1),
     K('N', 'N', N3('ta’minot N', 'питание N', 'supply N'), -12, 64, 0, 1),
-    K('1', '1', N3('kontakt 1', 'контакт 1', 'contact 1'), 12, 64, 0, 1),
-    K('2', '2', N3('kontakt 2', 'контакт 2', 'contact 2'), 36, 64, 0, 1),
+    K('1', 'NO', N3('NO kontakt (1)', 'НО контакт (1)', 'NO contact (1)'), 12, 64, 0, 1),
+    K('2', 'NO', N3('NO kontakt (2)', 'НО контакт (2)', 'NO contact (2)'), 36, 64, 0, 1),
   ],
   boshlangich: () => ({ jadval: false, tortilgan: false }),
   ichki: (h, p, hammasi) => (h.tortilgan || hammasi ? [['1', '2']] : []),

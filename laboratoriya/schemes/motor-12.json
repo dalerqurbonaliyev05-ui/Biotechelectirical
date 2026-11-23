@@ -4,7 +4,7 @@
   "yonalish": "motorlar",
   "daraja": 3,
   "vaqt_min": 20,
-  "rejimlar": ["2d"],
+  "rejimlar": ["2d", "3d"],
   "nomi": {
     "uz": "Motor 12: darvoza motori — bir fazali reversiv",
     "ru": "Двигатель 12: привод ворот — однофазный реверс",
@@ -16,8 +16,8 @@
     "en": "Selector \"I\" — open (KM1), \"II\" — close (KM2); the contactors are interlocked."
   },
   "topshiriq": {
-    "uz": "Kondensatorli bir fazali motorning yo‘nalishi faza qaysi chulg‘am uchiga (L1 yoki L2) berilishiga bog‘liq. Selektor «I» holatida KM1 fazani M1.L1 ga, «II» holatida KM2 fazani M1.L2 ga beradi. Har bir kontaktor g‘altagi ikkinchisining 21–22 (NC) kontakti orqali ulanadi.",
-    "ru": "Направление конденсаторного однофазного двигателя зависит от того, на какой конец обмотки (L1 или L2) подана фаза. В положении «I» KM1 подаёт фазу на M1.L1, в «II» KM2 — на M1.L2. Катушка каждого контактора — через НЗ 21–22 другого.",
+    "uz": "Kondensatorli bir fazali motorning yo‘nalishi faza qaysi chulg‘am uchiga (L1 yoki L2) berilishiga bog‘liq. Selektor «I» holatida KM1 fazani M1.L1 ga, «II» holatida KM2 fazani M1.L2 ga beradi. Har bir kontaktor g‘altagi ikkinchisining NC 21–22 kontakti orqali ulanadi.",
+    "ru": "Направление конденсаторного однофазного двигателя зависит от того, на какой конец обмотки (L1 или L2) подана фаза. В положении «I» KM1 подаёт фазу на M1.L1, в «II» KM2 — на M1.L2. Катушка каждого контактора — через НЗ NC 21–22 другого.",
     "en": "The direction of a single-phase capacitor motor depends on which winding end (L1 or L2) gets the phase. In \"I\" KM1 feeds M1.L1, in \"II\" KM2 feeds M1.L2. Each contactor coil goes through the other one's NC 21–22."
   },
   "elementlar": [
@@ -72,19 +72,19 @@
   "xato_qoidalari": [{"tur": "pe_ulangan", "klemmalar": ["M1.PE"]}, {"tur": "sim_rangi"}],
   "maslahatlar": {
     "uz": [
-      "QF1.2 dagi faza: selektorning 13 va 23 klemmalari hamda ikkala kontaktorning L1 klemmasi.",
-      "SA1.14 → KM2.21, KM2.22 → KM1.A1; SA1.24 → KM1.21, KM1.22 → KM2.A1.",
-      "KM1.T1 → M1.L1, KM2.T1 → M1.L2; nol (QF1.4) → KM1.A2, KM2.A2 va M1.N."
+      "QF1.L(2) dagi faza: selektorning I (13) va II (23) klemmalari hamda ikkala kontaktorning L1 klemmasi.",
+      "SA1.I(14) → KM2.NC(21), KM2.NC(22) → KM1.A1; SA1.II(24) → KM1.NC(21), KM1.NC(22) → KM2.A1.",
+      "KM1.T1 → M1.L1, KM2.T1 → M1.L2; nol (QF1.N(4)) → KM1.A2, KM2.A2 va M1.N."
     ],
     "ru": [
-      "Фаза с QF1.2: клеммы 13 и 23 селектора и L1 обоих контакторов.",
-      "SA1.14 → KM2.21, KM2.22 → KM1.A1; SA1.24 → KM1.21, KM1.22 → KM2.A1.",
-      "KM1.T1 → M1.L1, KM2.T1 → M1.L2; ноль (QF1.4) → KM1.A2, KM2.A2 и M1.N."
+      "Фаза с QF1.L(2): клеммы I (13) и II (23) селектора и L1 обоих контакторов.",
+      "SA1.I(14) → KM2.NC(21), KM2.NC(22) → KM1.A1; SA1.II(24) → KM1.NC(21), KM1.NC(22) → KM2.A1.",
+      "KM1.T1 → M1.L1, KM2.T1 → M1.L2; ноль (QF1.N(4)) → KM1.A2, KM2.A2 и M1.N."
     ],
     "en": [
-      "Phase at QF1.2: selector terminals 13 and 23 and L1 of both contactors.",
-      "SA1.14 → KM2.21, KM2.22 → KM1.A1; SA1.24 → KM1.21, KM1.22 → KM2.A1.",
-      "KM1.T1 → M1.L1, KM2.T1 → M1.L2; neutral (QF1.4) → KM1.A2, KM2.A2 and M1.N."
+      "Phase at QF1.L(2): selector terminals I (13) and II (23) and L1 of both contactors.",
+      "SA1.I(14) → KM2.NC(21), KM2.NC(22) → KM1.A1; SA1.II(24) → KM1.NC(21), KM1.NC(22) → KM2.A1.",
+      "KM1.T1 → M1.L1, KM2.T1 → M1.L2; neutral (QF1.N(4)) → KM1.A2, KM2.A2 and M1.N."
     ]
   }
 }

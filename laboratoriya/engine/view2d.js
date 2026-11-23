@@ -2,6 +2,7 @@
 // Boshqaruv: g‘ildirak / ikki barmoq — masshtab, bo‘sh joyni surish — siljitish, elementni surish — joyini o‘zgartirish,
 // klemmani bosish — sim tortish, simni bosish — tanlash (yana bosish — o‘chirish).
 import { RANGLAR } from './ranglar.js';
+import { klemmaTuri, KLEMMA_RANG } from './elements/_umumiy.js';
 
 const NS = 'http://www.w3.org/2000/svg';
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -13,7 +14,7 @@ export class View2D {
     root.innerHTML = `
       <svg class="v2d" xmlns="${NS}" role="img" aria-label="2D">
         <defs>
-          <pattern id="nuqta-tor" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1.1" fill="#2c2e34"/></pattern>
+          <pattern id="nuqta-tor" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1.1" fill="#cfd3da"/></pattern>
           <pattern id="pe-chiziq" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" fill="${RANGLAR.sariq_yashil.hex}"/><rect width="4" height="8" fill="${RANGLAR.sariq_yashil.hex2}"/></pattern>
           <filter id="nur" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="14"/></filter>
         </defs>
@@ -173,7 +174,7 @@ export class View2D {
       const n = lab.simlarSoni(full);
       const cls = ['kl', el.def.passiv ? 'kl-port' : '', n ? 'band' : '', lab.tanlangan === full ? 'tanlangan' : '',
         lab.belgilangan.klemmalar.has(full) ? 'belgi' : '', quvvat && sim.fazaBor(full) ? 'faza' : ''].join(' ');
-      return `<g class="${cls}" data-k="${full}" role="button" tabindex="0" aria-label="${esc(lab.klemmaNomi(full))}">
+      return `<g class="${cls}" data-k="${full}" role="button" tabindex="0" aria-label="${esc(lab.klemmaNomi(full))}" style="--kr:${KLEMMA_RANG[klemmaTuri(k.yorliq)]}"><title>${esc(lab.klemmaNomi(full))}</title>
         <circle class="kl-hit" cx="${x}" cy="${y}" r="${hitR}"/><circle class="kl-c" cx="${x}" cy="${y}" r="${el.def.passiv ? 6 : 7}"/><circle class="kl-v" cx="${x}" cy="${y}" r="2.2"/></g>`;
     }).join('')).join('');
     this.g.oqim.innerHTML = '';

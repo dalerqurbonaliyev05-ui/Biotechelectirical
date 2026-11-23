@@ -1,7 +1,7 @@
 {
   "versiya": 1,
   "rang_rejimi": "3f",
-  "rejimlar": ["2d"],
+  "rejimlar": ["2d", "3d"],
   "id": "motor-07",
   "yonalish": "motorlar",
   "daraja": 5,
@@ -17,9 +17,9 @@
     "en": "M1 runs 5 s, then M2 runs 5 s and the cycle ends."
   },
   "topshiriq": {
-    "uz": "Start bosilganda oraliq rele K1 o‘zini ushlab qoladi. K1 ning 21–24 kontakti KT1 ni va KT1 ning 15–16 (NC) orqali KM1 ni yoqadi. 5 soniyadan so‘ng KT1 KM1 ni o‘chirib, 15–18 orqali KM2 va KT2 ni yoqadi. Yana 5 soniyadan so‘ng KT2 ning 15–16 kontakti K1 zanjirini uzadi — hammasi to‘xtaydi.",
-    "ru": "По Пуску промежуточное реле K1 становится на самоподхват. Контакт K1 21–24 включает KT1 и через НЗ KT1 15–16 — KM1. Через 5 с KT1 отключает KM1 и через 15–18 включает KM2 и KT2. Ещё через 5 с НЗ KT2 15–16 разрывает цепь K1 — всё останавливается.",
-    "en": "On Start, relay K1 latches. K1 contact 21–24 energises KT1 and, through KT1 NC 15–16, KM1. After 5 s KT1 drops KM1 and through 15–18 closes KM2 and KT2. After 5 more seconds KT2 NC 15–16 breaks the K1 circuit and everything stops."
+    "uz": "Start bosilganda oraliq rele K1 o‘zini ushlab qoladi. K1 ning NO 21–24 kontakti KT1 ni va KT1 ning NC 15–16 orqali KM1 ni yoqadi. 5 soniyadan so‘ng KT1 KM1 ni o‘chirib, NO 15–18 orqali KM2 va KT2 ni yoqadi. Yana 5 soniyadan so‘ng KT2 ning NC 15–16 kontakti K1 zanjirini uzadi — hammasi to‘xtaydi.",
+    "ru": "По Пуску промежуточное реле K1 становится на самоподхват. Контакт K1 NO 21–24 включает KT1 и через НЗ KT1 NC 15–16 — KM1. Через 5 с KT1 отключает KM1 и через NO 15–18 включает KM2 и KT2. Ещё через 5 с НЗ KT2 NC 15–16 разрывает цепь K1 — всё останавливается.",
+    "en": "On Start, relay K1 latches. K1 contact NO 21–24 energises KT1 and, through KT1 NC 15–16, KM1. After 5 s KT1 drops KM1 and through NO 15–18 closes KM2 and KT2. After 5 more seconds KT2 NC 15–16 breaks the K1 circuit and everything stops."
   },
   "elementlar": [
     {"id": "VVOD", "tur": "manba_3f", "pozitsiya2d": [340, 60]},
@@ -84,18 +84,18 @@
   "xato_qoidalari": [{"tur": "pe_ulangan", "klemmalar": ["M1.PE", "M2.PE"]}, {"tur": "sim_rangi"}],
   "maslahatlar": {
     "uz": [
-      "SB1.12 nuqtasi: SB2.23 va K1 ning ikkala umumiy kontakti (11, 21). SB2.24 → K1.14 va KT2.15; KT2.16 → K1.A1.",
-      "K1.24 → KT1.A1 va KT1.15; KT1.16 (NC) → KM1.A1; KT1.18 (NO) → KM2.A1 va KT2.A1.",
+      "SB1.12 nuqtasi: SB2.23 va K1 ning ikkala umumiy kontakti (COM1, COM2). SB2.24 → K1.NO1(14) va KT2.COM(15); KT2.NC(16) → K1.A1.",
+      "K1.NO2(24) → KT1.A1 va KT1.COM(15); KT1.NC(16) (NC) → KM1.A1; KT1.NO(18) (NO) → KM2.A1 va KT2.A1.",
       "Barcha g‘altaklarning A2 klemmalari umumiy N ga ulanadi."
     ],
     "ru": [
-      "Точка SB1.12: SB2.23 и оба общих контакта K1 (11, 21). SB2.24 → K1.14 и KT2.15; KT2.16 → K1.A1.",
-      "K1.24 → KT1.A1 и KT1.15; KT1.16 (НЗ) → KM1.A1; KT1.18 (НО) → KM2.A1 и KT2.A1.",
+      "Точка SB1.12: SB2.23 и оба общих контакта K1 (COM1, COM2). SB2.24 → K1.NO1(14) и KT2.COM(15); KT2.NC(16) → K1.A1.",
+      "K1.NO2(24) → KT1.A1 и KT1.COM(15); KT1.NC(16) (НЗ) → KM1.A1; KT1.NO(18) (НО) → KM2.A1 и KT2.A1.",
       "Клеммы A2 всех катушек — на общий N."
     ],
     "en": [
-      "Node SB1.12: SB2.23 and both K1 commons (11, 21). SB2.24 → K1.14 and KT2.15; KT2.16 → K1.A1.",
-      "K1.24 → KT1.A1 and KT1.15; KT1.16 (NC) → KM1.A1; KT1.18 (NO) → KM2.A1 and KT2.A1.",
+      "Node SB1.12: SB2.23 and both K1 commons (COM1, COM2). SB2.24 → K1.NO1(14) and KT2.COM(15); KT2.NC(16) → K1.A1.",
+      "K1.NO2(24) → KT1.A1 and KT1.COM(15); KT1.NC(16) (NC) → KM1.A1; KT1.NO(18) (NO) → KM2.A1 and KT2.A1.",
       "All coil A2 terminals go to the common N."
     ]
   }

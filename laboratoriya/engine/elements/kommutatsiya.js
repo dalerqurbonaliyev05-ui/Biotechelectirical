@@ -26,14 +26,15 @@ export const kontaktor = {
     K('T1', 'T1', N3('kuch chiqish T1', 'силовой выход T1', 'main T1'), -30, 86, 0, 1),
     K('T2', 'T2', N3('kuch chiqish T2', 'силовой выход T2', 'main T2'), 0, 86, 0, 1),
     K('T3', 'T3', N3('kuch chiqish T3', 'силовой выход T3', 'main T3'), 30, 86, 0, 1),
-    K('13', '13', N3('NO kontakt 13', 'НО контакт 13', 'NO contact 13'), -88, -40, -1, 0),
-    K('14', '14', N3('NO kontakt 14', 'НО контакт 14', 'NO contact 14'), -88, -14, -1, 0),
-    K('21', '21', N3('NC kontakt 21', 'НЗ контакт 21', 'NC contact 21'), -88, 14, -1, 0),
-    K('22', '22', N3('NC kontakt 22', 'НЗ контакт 22', 'NC contact 22'), -88, 40, -1, 0),
-    K('33', '33', N3('NO kontakt 33', 'НО контакт 33', 'NO contact 33'), 88, -40, 1, 0),
-    K('34', '34', N3('NO kontakt 34', 'НО контакт 34', 'NO contact 34'), 88, -14, 1, 0),
-    K('41', '41', N3('NC kontakt 41', 'НЗ контакт 41', 'NC contact 41'), 88, 14, 1, 0),
-    K('42', '42', N3('NC kontakt 42', 'НЗ контакт 42', 'NC contact 42'), 88, 40, 1, 0),
+    // Yordamchi kontaktlar qatorlarda (rasmdagidek): har bir qator — bitta kontakt, chap va o‘ng uchi
+    K('13', 'NO', N3('1-NO kontakt, chap uchi (13)', 'НО контакт 1, левый (13)', 'NO contact 1, left (13)'), -88, -40, -1, 0),
+    K('14', 'NO', N3('1-NO kontakt, o‘ng uchi (14)', 'НО контакт 1, правый (14)', 'NO contact 1, right (14)'), 88, -40, 1, 0),
+    K('21', 'NC', N3('1-NC kontakt, chap uchi (21)', 'НЗ контакт 1, левый (21)', 'NC contact 1, left (21)'), -88, -14, -1, 0),
+    K('22', 'NC', N3('1-NC kontakt, o‘ng uchi (22)', 'НЗ контакт 1, правый (22)', 'NC contact 1, right (22)'), 88, -14, 1, 0),
+    K('41', 'NC', N3('2-NC kontakt, chap uchi (41)', 'НЗ контакт 2, левый (41)', 'NC contact 2, left (41)'), -88, 14, -1, 0),
+    K('42', 'NC', N3('2-NC kontakt, o‘ng uchi (42)', 'НЗ контакт 2, правый (42)', 'NC contact 2, right (42)'), 88, 14, 1, 0),
+    K('33', 'NO', N3('2-NO kontakt, chap uchi (33)', 'НО контакт 2, левый (33)', 'NO contact 2, left (33)'), -88, 40, -1, 0),
+    K('34', 'NO', N3('2-NO kontakt, o‘ng uchi (34)', 'НО контакт 2, правый (34)', 'NO contact 2, right (34)'), 88, 40, 1, 0),
   ],
   boshlangich: () => ({ tortilgan: false }),
   ichki(h, p, hammasi) {
@@ -63,11 +64,11 @@ export const modulli_kontaktor = {
   standart: { galtak: 230 },
   klemmalar: () => [
     K('A1', 'A1', N3('g‘altak A1', 'катушка A1', 'coil A1'), -30, -66, 0, -1),
-    K('1', '1', N3('kontakt 1', 'контакт 1', 'contact 1'), -10, -66, 0, -1),
-    K('3', '3', N3('kontakt 3', 'контакт 3', 'contact 3'), 10, -66, 0, -1),
+    K('1', 'L1', N3('kirish L1 (1)', 'вход L1 (1)', 'input L1 (1)'), -10, -66, 0, -1),
+    K('3', 'L2', N3('kirish L2 (3)', 'вход L2 (3)', 'input L2 (3)'), 10, -66, 0, -1),
     K('A2', 'A2', N3('g‘altak A2', 'катушка A2', 'coil A2'), 30, -66, 0, -1),
-    K('2', '2', N3('kontakt 2', 'контакт 2', 'contact 2'), -10, 66, 0, 1),
-    K('4', '4', N3('kontakt 4', 'контакт 4', 'contact 4'), 10, 66, 0, 1),
+    K('2', 'T1', N3('chiqish T1 (2)', 'выход T1 (2)', 'output T1 (2)'), -10, 66, 0, 1),
+    K('4', 'T2', N3('chiqish T2 (4)', 'выход T2 (4)', 'output T2 (4)'), 10, 66, 0, 1),
   ],
   boshlangich: () => ({ tortilgan: false }),
   ichki: (h, p, hammasi) => (h.tortilgan || hammasi ? [['1', '2'], ['3', '4']] : []),
@@ -90,14 +91,14 @@ export const rele = {
   nomi: N3('Oraliq rele', 'Промежуточное реле', 'Control relay'),
   standart: { galtak: 230 },
   klemmalar: () => [
-    K('12', '12', N3('NC 12', 'НЗ 12', 'NC 12'), -36, -72, 0, -1),
-    K('14', '14', N3('NO 14', 'НО 14', 'NO 14'), -12, -72, 0, -1),
-    K('22', '22', N3('NC 22', 'НЗ 22', 'NC 22'), 12, -72, 0, -1),
-    K('24', '24', N3('NO 24', 'НО 24', 'NO 24'), 36, -72, 0, -1),
-    K('11', '11', N3('umumiy 11', 'общий 11', 'common 11'), -36, 72, 0, 1),
-    K('21', '21', N3('umumiy 21', 'общий 21', 'common 21'), -12, 72, 0, 1),
-    K('A1', 'A1', N3('g‘altak A1', 'катушка A1', 'coil A1'), 12, 72, 0, 1),
-    K('A2', 'A2', N3('g‘altak A2', 'катушка A2', 'coil A2'), 36, 72, 0, 1),
+    K('12', 'NC1', N3('1-guruh NC (12)', 'группа 1 НЗ (12)', 'group 1 NC (12)'), -51, -72, 0, -1),
+    K('14', 'NO1', N3('1-guruh NO (14)', 'группа 1 НО (14)', 'group 1 NO (14)'), -17, -72, 0, -1),
+    K('22', 'NC2', N3('2-guruh NC (22)', 'группа 2 НЗ (22)', 'group 2 NC (22)'), 17, -72, 0, -1),
+    K('24', 'NO2', N3('2-guruh NO (24)', 'группа 2 НО (24)', 'group 2 NO (24)'), 51, -72, 0, -1),
+    K('11', 'COM1', N3('1-guruh umumiy COM (11)', 'группа 1 общий COM (11)', 'group 1 common COM (11)'), -51, 72, 0, 1),
+    K('21', 'COM2', N3('2-guruh umumiy COM (21)', 'группа 2 общий COM (21)', 'group 2 common COM (21)'), -17, 72, 0, 1),
+    K('A1', 'A1', N3('g‘altak A1', 'катушка A1', 'coil A1'), 17, 72, 0, 1),
+    K('A2', 'A2', N3('g‘altak A2', 'катушка A2', 'coil A2'), 51, 72, 0, 1),
   ],
   boshlangich: () => ({ tortilgan: false }),
   ichki(h, p, hammasi) {
@@ -110,7 +111,7 @@ export const rele = {
   hisobla: galtakHisob,
   svg({ el, holat }) {
     const t = holat.tortilgan;
-    return `<rect x="-52" y="-84" width="104" height="168" rx="6" fill="#2b2e34" stroke="#4a4e57"/>
+    return `<rect x="-70" y="-84" width="140" height="168" rx="6" fill="#2b2e34" stroke="#4a4e57"/>
       <rect x="-38" y="-50" width="76" height="86" rx="6" fill="#dfe9f2" opacity=".85"/>
       <rect x="-24" y="-36" width="48" height="30" rx="3" fill="#c9a24a"/>
       <circle cx="0" cy="16" r="7" fill="${t ? '#22c55e' : '#d93a32'}"/>
@@ -125,9 +126,9 @@ export const vaqt_relesi = {
   nomi: N3('Vaqt relesi (TON)', 'Реле времени (TON)', 'On-delay timer'),
   standart: { kechikish: 5, galtak: 230 },
   klemmalar: () => [
-    K('15', '15', N3('umumiy 15', 'общий 15', 'common 15'), -32, -78, 0, -1),
-    K('16', '16', N3('NC 16 (kechikib ochiladi)', 'НЗ 16 (размык. с задержкой)', 'NC 16 (delayed open)'), 0, -78, 0, -1),
-    K('18', '18', N3('NO 18 (kechikib yopiladi)', 'НО 18 (замык. с задержкой)', 'NO 18 (delayed close)'), 32, -78, 0, -1),
+    K('15', 'COM', N3('umumiy COM (15)', 'общий COM (15)', 'common COM (15)'), -32, -78, 0, -1),
+    K('16', 'NC', N3('NC 16 (kechikib ochiladi)', 'НЗ 16 (размык. с задержкой)', 'NC 16 (delayed open)'), 0, -78, 0, -1),
+    K('18', 'NO', N3('NO 18 (kechikib yopiladi)', 'НО 18 (замык. с задержкой)', 'NO 18 (delayed close)'), 32, -78, 0, -1),
     K('A1', 'A1', N3('g‘altak A1', 'катушка A1', 'coil A1'), -20, 78, 0, 1),
     K('A2', 'A2', N3('g‘altak A2', 'катушка A2', 'coil A2'), 20, 78, 0, 1),
   ],
@@ -170,16 +171,17 @@ export const issiqlik_relesi = {
   belgi: 'KK',
   nomi: N3('Issiqlik relesi', 'Тепловое реле', 'Thermal overload relay'),
   klemmalar: () => [
-    K('L1', '1', N3('kirish 1', 'вход 1', 'in 1'), -32, -60, 0, -1),
-    K('L2', '3', N3('kirish 3', 'вход 3', 'in 3'), 0, -60, 0, -1),
-    K('L3', '5', N3('kirish 5', 'вход 5', 'in 5'), 32, -60, 0, -1),
-    K('T1', '2', N3('chiqish 2', 'выход 2', 'out 2'), -32, 60, 0, 1),
-    K('T2', '4', N3('chiqish 4', 'выход 4', 'out 4'), 0, 60, 0, 1),
-    K('T3', '6', N3('chiqish 6', 'выход 6', 'out 6'), 32, 60, 0, 1),
-    K('95', '95', N3('NC 95', 'НЗ 95', 'NC 95'), 76, -30, 1, 0),
-    K('96', '96', N3('NC 96', 'НЗ 96', 'NC 96'), 76, -6, 1, 0),
-    K('97', '97', N3('NO 97', 'НО 97', 'NO 97'), 76, 18, 1, 0),
-    K('98', '98', N3('NO 98', 'НО 98', 'NO 98'), 76, 42, 1, 0),
+    K('L1', 'L1', N3('kirish L1 (1)', 'вход L1 (1)', 'in L1 (1)'), -32, -60, 0, -1),
+    K('L2', 'L2', N3('kirish L2 (3)', 'вход L2 (3)', 'in L2 (3)'), 0, -60, 0, -1),
+    K('L3', 'L3', N3('kirish L3 (5)', 'вход L3 (5)', 'in L3 (5)'), 32, -60, 0, -1),
+    K('T1', 'T1', N3('chiqish T1 (2)', 'выход T1 (2)', 'out T1 (2)'), -32, 60, 0, 1),
+    K('T2', 'T2', N3('chiqish T2 (4)', 'выход T2 (4)', 'out T2 (4)'), 0, 60, 0, 1),
+    K('T3', 'T3', N3('chiqish T3 (6)', 'выход T3 (6)', 'out T3 (6)'), 32, 60, 0, 1),
+    // Yordamchi kontaktlar qatorlarda: NC (95–96) va NO (97–98), chap va o‘ng uchi
+    K('95', 'NC', N3('NC kontakt, chap uchi (95)', 'НЗ контакт, левый (95)', 'NC contact, left (95)'), -76, 0, -1, 0),
+    K('96', 'NC', N3('NC kontakt, o‘ng uchi (96)', 'НЗ контакт, правый (96)', 'NC contact, right (96)'), 76, 0, 1, 0),
+    K('97', 'NO', N3('NO kontakt, chap uchi (97)', 'НО контакт, левый (97)', 'NO contact, left (97)'), -76, 30, -1, 0),
+    K('98', 'NO', N3('NO kontakt, o‘ng uchi (98)', 'НО контакт, правый (98)', 'NO contact, right (98)'), 76, 30, 1, 0),
   ],
   boshlangich: () => ({ ishladi: false }),
   ichki(h, p, hammasi) {

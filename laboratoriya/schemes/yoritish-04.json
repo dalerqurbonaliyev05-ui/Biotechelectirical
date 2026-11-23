@@ -4,7 +4,7 @@
   "yonalish": "yoritish",
   "daraja": 4,
   "vaqt_min": 20,
-  "rejimlar": ["2d"],
+  "rejimlar": ["2d", "3d"],
   "nomi": {
     "uz": "Yoritish 4: lyuminessent lampani ikki joydan boshqarish",
     "ru": "Освещение 4: люминесцентная лампа с управлением из двух мест",

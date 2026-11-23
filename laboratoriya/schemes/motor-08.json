@@ -1,7 +1,7 @@
 {
   "versiya": 1,
   "rang_rejimi": "3f",
-  "rejimlar": ["2d"],
+  "rejimlar": ["2d", "3d"],
   "id": "motor-08",
   "yonalish": "motorlar",
   "daraja": 4,
@@ -17,9 +17,9 @@
     "en": "Each motor has its own breaker, contactor, overload relay and buttons."
   },
   "topshiriq": {
-    "uz": "Uchta motorni bir-biridan mustaqil boshqaring. QF1–QF3 kirishlari umumiy L1–L3 ga. Har bir motor uchun: QFx → KMx → KKx → Mx; boshqaruv: QFx.2 → KKx (95–96) → Stop → Start (+ KMx 13–14) → KMx.A1. A2 klemmalari umumiy N ga.",
-    "ru": "Управляйте тремя двигателями независимо. Входы QF1–QF3 — на общие L1–L3. Для каждого: QFx → KMx → KKx → Mx; управление: QFx.2 → KKx (95–96) → Стоп → Пуск (+ KMx 13–14) → KMx.A1. A2 — на общий N.",
-    "en": "Control three motors independently. QF1–QF3 inputs go to the common L1–L3. For each: QFx → KMx → KKx → Mx; control: QFx.2 → KKx (95–96) → Stop → Start (+ KMx 13–14) → KMx.A1. A2 terminals to the common N."
+    "uz": "Uchta motorni bir-biridan mustaqil boshqaring. QF1–QF3 kirishlari umumiy L1–L3 ga. Har bir motor uchun: QFx → KMx → KKx → Mx; boshqaruv: QFx.T1(2) → KKx (NC 95–96) → Stop → Start (+ KMx NO 13–14) → KMx.A1. A2 klemmalari umumiy N ga.",
+    "ru": "Управляйте тремя двигателями независимо. Входы QF1–QF3 — на общие L1–L3. Для каждого: QFx → KMx → KKx → Mx; управление: QFx.T1(2) → KKx (NC 95–96) → Стоп → Пуск (+ KMx NO 13–14) → KMx.A1. A2 — на общий N.",
+    "en": "Control three motors independently. QF1–QF3 inputs go to the common L1–L3. For each: QFx → KMx → KKx → Mx; control: QFx.T1(2) → KKx (NC 95–96) → Stop → Start (+ KMx NO 13–14) → KMx.A1. A2 terminals to the common N."
   },
   "elementlar": [
     {"id": "VVOD", "tur": "manba_3f", "pozitsiya2d": [560, 60]},
@@ -120,19 +120,19 @@
   "xato_qoidalari": [{"tur": "pe_ulangan", "klemmalar": ["M1.PE", "M2.PE", "M3.PE"]}, {"tur": "sim_rangi"}],
   "maslahatlar": {
     "uz": [
-      "VVOD.L1 → QF1.1 → QF2.1 → QF3.1 (shuningdek L2 va L3).",
-      "Har bir guruh: QFx.2 → KMx.L1 va KKx.95; KMx.T → KKx (1-3-5); KKx (2-4-6) → Mx.",
-      "KKx.96 → Stop.11; Stop.12 → Start.23 va KMx.13; Start.24 → KMx.14 va KMx.A1. N: VVOD.N → KM1.A2 → KM2.A2 → KM3.A2."
+      "VVOD.L1 → QF1.L1(1) → QF2.L1(1) → QF3.L1(1) (shuningdek L2 va L3).",
+      "Har bir guruh: QFx.T1(2) → KMx.L1 va KKx.NC(95); KMx.T → KKx (L1-L2-L3); KKx (T1-T2-T3) → Mx.",
+      "KKx.NC(96) → Stop.11; Stop.12 → Start.23 va KMx.NO(13); Start.24 → KMx.NO(14) va KMx.A1. N: VVOD.N → KM1.A2 → KM2.A2 → KM3.A2."
     ],
     "ru": [
-      "VVOD.L1 → QF1.1 → QF2.1 → QF3.1 (так же L2 и L3).",
-      "Каждая группа: QFx.2 → KMx.L1 и KKx.95; KMx.T → KKx (1-3-5); KKx (2-4-6) → Mx.",
-      "KKx.96 → Стоп.11; Стоп.12 → Пуск.23 и KMx.13; Пуск.24 → KMx.14 и KMx.A1. N: VVOD.N → KM1.A2 → KM2.A2 → KM3.A2."
+      "VVOD.L1 → QF1.L1(1) → QF2.L1(1) → QF3.L1(1) (так же L2 и L3).",
+      "Каждая группа: QFx.T1(2) → KMx.L1 и KKx.NC(95); KMx.T → KKx (L1-L2-L3); KKx (T1-T2-T3) → Mx.",
+      "KKx.NC(96) → Стоп.11; Стоп.12 → Пуск.23 и KMx.NO(13); Пуск.24 → KMx.NO(14) и KMx.A1. N: VVOD.N → KM1.A2 → KM2.A2 → KM3.A2."
     ],
     "en": [
-      "VVOD.L1 → QF1.1 → QF2.1 → QF3.1 (likewise L2 and L3).",
-      "Each group: QFx.2 → KMx.L1 and KKx.95; KMx.T → KKx (1-3-5); KKx (2-4-6) → Mx.",
-      "KKx.96 → Stop.11; Stop.12 → Start.23 and KMx.13; Start.24 → KMx.14 and KMx.A1. N: VVOD.N → KM1.A2 → KM2.A2 → KM3.A2."
+      "VVOD.L1 → QF1.L1(1) → QF2.L1(1) → QF3.L1(1) (likewise L2 and L3).",
+      "Each group: QFx.T1(2) → KMx.L1 and KKx.NC(95); KMx.T → KKx (L1-L2-L3); KKx (T1-T2-T3) → Mx.",
+      "KKx.NC(96) → Stop.11; Stop.12 → Start.23 and KMx.NO(13); Start.24 → KMx.NO(14) and KMx.A1. N: VVOD.N → KM1.A2 → KM2.A2 → KM3.A2."
     ]
   }
 }
