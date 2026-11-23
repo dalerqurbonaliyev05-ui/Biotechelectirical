@@ -57,6 +57,8 @@ ElektrUy lives inside the existing project **mushuk-it-top-app** (`mjtdilcbwbqpi
   - Command matching is keyword-based in all three languages and unit-tested.
   - Listening pauses while the app speaks, so it does not hear itself.
 - **3D viewer:** Three.js and OrbitControls are bundled by esbuild into one offline HTML asset (`assets/viewer3d/index.html`) and loaded in a WebView. Navigation away from the bundled file is blocked.
+- **3D assembly guide:** `AssemblyBuilder` turns the plan into ordered steps (power off, marking, chases or channels, boxes, one cable step per circuit, junction box, sockets, each switch type, lamps, check). The viewer builds the room up to the current step and shows close-up models of the terminals with real wire colours. The models are teaching sketches, not a specific product's terminal layout.
+- **Safety checklist once a day:** 3 items (breaker off, no voltage checked with a tester, dry hands and insulated tools). Acceptance is stored per phone per calendar day and still logged to `ew_consents`. The "do not switch on" sign is part of the first 3D step.
 - **Offline-first:**
   - Content (lessons, materials, prices, config, legal) ships in the APK and is replaced by the server version after a sync.
   - Projects, progress, consents, safety-gate acknowledgements and reports are stored in drift (SQLite) and an outbox, and pushed when online.

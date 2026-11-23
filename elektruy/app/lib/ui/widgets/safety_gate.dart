@@ -1,14 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../state/providers.dart';
 import '../theme.dart';
 import 'common.dart';
 
-/// Mandatory checklist before every lesson or project execution. The user cannot
-/// continue until every item is ticked; acceptance is logged (ew_consents, type
-/// safety_gate) with the context, even when offline.
+const _gateDateKey = 'safety_gate_date';
+
+String _today([DateTime? now]) {
+  final d = now ?? DateTime.now();
+  return '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
+}
+
+/// Whether the safety checklist was already accepted today on this phone.
+bool safetyGateAcceptedToday(SharedPreferences prefs, [DateTime? now]) => prefs.getString(_gateDateKey) == _today(now);
+
+Future<void> markSafetyGateAccepted(SharedPreferences prefs, [DateTime? now]) => prefs.setString(_gateDateKey, _today(now));
+
+/// Short safety checklist before lessons and project work, shown once a day. The
+/// user cannot continue until every item is ticked; acceptance is logged
+/// (ew_consents, type safety_gate) with the context, even when offline.
 Future<bool> showSafetyGate(BuildContext context, WidgetRef ref, {required Map<String, dynamic> logContext}) async {
+  if (safetyGateAcceptedToday(ref.read(prefsProvider))) return true;
   final ok = await showModalBottomSheet<bool>(
     context: context,
     isScrollControlled: true,
@@ -17,6 +31,7 @@ Future<bool> showSafetyGate(BuildContext context, WidgetRef ref, {required Map<S
     builder: (_) => const _SafetyGateSheet(),
   );
   if (ok == true) {
+    await markSafetyGateAccepted(ref.read(prefsProvider));
     await ref.read(syncProvider).logSafetyGate({...logContext, 'lang': ref.read(langProvider)});
     return true;
   }
@@ -47,7 +62,7 @@ class _SafetyGateSheetState extends ConsumerState<_SafetyGateSheet> {
           Expanded(child: Text(context.l.gateTitle, style: Theme.of(context).textTheme.headlineSmall)),
         ]),
         const SizedBox(height: 8),
-        Text(context.l.gateBody),
+        Text('${context.l.gateBody} ${context.l.gateDailyNote}'),
         const SizedBox(height: 12),
         for (final item in items)
           Card(

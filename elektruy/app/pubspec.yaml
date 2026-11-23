@@ -85,3 +85,9 @@ flutter:
     - assets/illustrations/
     - assets/viewer3d/
     - assets/fonts/
+  fonts:
+    - family: NotoSans
+      fonts:
+        - asset: assets/fonts/NotoSans-Regular.ttf
+        - asset: assets/fonts/NotoSans-Bold.ttf
+          weight: 700

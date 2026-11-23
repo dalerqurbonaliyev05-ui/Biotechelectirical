@@ -250,8 +250,8 @@
   "qUnsure": "Not sure about any of these? Ask an electrician first.",
   "buildPlan": "Build plan",
   "resultTitle": "Wiring plan",
-  "tabPlan": "Plan 2D",
-  "tab3d": "3D",
+  "tabPlan": "Plan",
+  "tab3d": "3D assembly",
   "tabRoute": "Cable route",
   "tabDiagram": "Diagram",
   "tabMaterials": "Materials",
@@ -664,5 +664,118 @@
   },
   "contentUpdated": "Content updated",
   "privacyNote": "Your photos are private. Only you can see them; admins see AI-check photos only if you flag the result.",
-  "offlineModeOn": "Offline mode (no account)"
+  "offlineModeOn": "Offline mode (no account)",
+  "homeNewProjectHint": "Photograph the room — get a plan and a 3D guide",
+  "gateDailyNote": "We ask this once a day.",
+  "asmDiagram": "Diagram",
+  "asmLesson": "Full lesson",
+  "asmReplay": "Replay",
+  "asmDone": "I finished the work",
+  "asmProjectDone": "Project done",
+  "asmSign": "Do not switch on!",
+  "asmSafetyTitle": "Turn off the power",
+  "asmSafetyBody": "In the panel, switch off the breaker for this room and hang a \"Do not switch on\" sign. At the cable entry, check with a tester that there is no voltage.",
+  "asmMarkTitle": "Mark the routes",
+  "asmMarkBody": "With a pencil and a level, draw the routes: only vertical and horizontal lines, horizontal ones 15 cm below the ceiling. Sockets at {socket} cm, switches at {sw} cm from the floor.",
+  "@asmMarkBody": {
+    "placeholders": {
+      "socket": {
+        "type": "int"
+      },
+      "sw": {
+        "type": "int"
+      }
+    }
+  },
+  "asmChaseTitle": "Cut the chases",
+  "asmChaseBody": "First check the wall with a hidden-wiring detector. Cut grooves about 20 mm deep along the lines ({length} m). Wear goggles and a dust mask.",
+  "@asmChaseBody": {
+    "placeholders": {
+      "length": {
+        "type": "String"
+      }
+    }
+  },
+  "asmChannelTitle": "Fix the cable channels",
+  "asmChannelBody": "Fix the channels along the lines every 40–50 cm ({length} m). Cut the corners at 45°.",
+  "@asmChannelBody": {
+    "placeholders": {
+      "length": {
+        "type": "String"
+      }
+    }
+  },
+  "asmBoxesTitle": "Fit the boxes",
+  "asmBoxesBody": "Drill {count} holes with a 68 mm crown and set the boxes in gypsum, flush with the wall.",
+  "@asmBoxesBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "asmBoxesBodyOpen": "Fix {count} surface-mounted boxes on the wall.",
+  "@asmBoxesBodyOpen": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "asmBoxesJunction": "Put the junction box near the ceiling.",
+  "asmCableTitle": "{circuit}: pull the cable",
+  "@asmCableTitle": {
+    "placeholders": {
+      "circuit": {
+        "type": "String"
+      }
+    }
+  },
+  "asmCableBody": "{cable}: {length} m, {count} pieces. Leave 15–20 cm at each box. No joints inside the wall — only in boxes.",
+  "@asmCableBody": {
+    "placeholders": {
+      "cable": {
+        "type": "String"
+      },
+      "length": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "asmJunctionTitle": "Connect the junction box",
+  "asmJunctionBody": "Strip 10–11 mm and join with lever connectors (WAGO): all blue (N) together; the incoming brown (L) with the brown going to the switch; the wire coming back from the switch with the brown going to the lamp.",
+  "asmPeJoin": "All yellow-green (PE) together.",
+  "asmSocketTitle": "Connect the sockets ({count})",
+  "@asmSocketTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "asmSocketBody": "Brown (L) and blue (N) go to the side terminals. Tighten the screws and pull each wire to check it holds.",
+  "asmPeSocket": "Yellow-green (PE) goes to the middle earth terminal.",
+  "asmPeEarth": "Yellow-green (PE) goes to the earth terminal (⏚).",
+  "asmSwitchSingleTitle": "Connect the switch",
+  "asmSwitchSingleBody": "Brown (from L) to terminal L, the second wire to L1 — mark it with brown tape. Insulate the spare wire.",
+  "asmSwitchDoubleTitle": "Connect the double switch",
+  "asmSwitchDoubleBody": "Brown (from L) to the common terminal L. The other two wires go to L1 and L2 — one per lamp group.",
+  "asmSwitchPassTitle": "Connect the pass-through switches",
+  "asmSwitchPassBody": "First switch: L to COM. Join the two switches L1–L1 and L2–L2. COM of the second switch goes to the lamp.",
+  "asmLampTitle": "Connect the lamps ({count})",
+  "@asmLampTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "asmLampBody": "Brown to L, blue to N in the lamp terminal block. Hang the lamp on a hook — never on the wires.",
+  "asmFinishTitle": "Check and switch on",
+  "asmFinishHidden": "Close the chases with plaster.",
+  "asmFinishOpen": "Snap the channel covers on.",
+  "asmFinishBody": "Fit the frames. Check with a multimeter that there is no short circuit. Remove the sign, switch the breaker on and test every socket and switch."
 }

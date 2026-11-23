@@ -55,13 +55,14 @@ void main() {
   setUpAll(() async {
     final m = '$flutterRoot/bin/cache/artifacts/material_fonts';
     await _font('Roboto', ['$m/Roboto-Regular.ttf', '$m/Roboto-Medium.ttf', '$m/Roboto-Bold.ttf']);
+    await _font('NotoSans', ['assets/fonts/NotoSans-Regular.ttf', 'assets/fonts/NotoSans-Bold.ttf']);
     await _font('MaterialIcons', ['$m/MaterialIcons-Regular.otf']);
     // Unstyled text (CustomPainter labels) uses the test default family; give it real glyphs.
     await _font('FlutterTest', ['$m/Roboto-Regular.ttf', '$m/Roboto-Bold.ttf']);
     await _font('Ahem', ['$m/Roboto-Regular.ttf', '$m/Roboto-Bold.ttf']);
   });
 
-  Future<void> shoot(WidgetTester tester, String name, String initial, Map<String, WidgetBuilder> routes, {bool dark = false}) async {
+  Future<void> shoot(WidgetTester tester, String name, String initial, Map<String, WidgetBuilder> routes, {bool dark = false, Future<void> Function()? then}) async {
     tester.view.physicalSize = const Size(1080, 2280);
     tester.view.devicePixelRatio = 3;
     addTearDown(tester.view.reset);
@@ -72,6 +73,7 @@ void main() {
       'voice_guide': false,
       'consent_disclaimer_v': 9,
       'consent_privacy_v': 9,
+      'asm_step_demo': 6,
     });
     final prefs = await SharedPreferences.getInstance();
     final db = unopenedDb();
@@ -102,11 +104,16 @@ void main() {
       ),
     ));
     await tester.pumpAndSettle();
+    if (then != null) {
+      await then();
+      await tester.pumpAndSettle();
+    }
     await expectLater(find.byType(MaterialApp), matchesGoldenFile('out/$name.png'));
   }
 
   testWidgets('home', (t) => shoot(t, 'home', '/', {'/': (_) => const HomeScreen()}));
-  testWidgets('plan', (t) => shoot(t, 'plan', '/', {'/': (_) => const ResultScreen(projectId: 'demo')}));
+  testWidgets('assembly', (t) => shoot(t, 'assembly', '/', {'/': (_) => const ResultScreen(projectId: 'demo')}));
+  testWidgets('plan', (t) => shoot(t, 'plan', '/', {'/': (_) => const ResultScreen(projectId: 'demo')}, then: () => t.tap(find.text('Reja'))));
   testWidgets('questions', (t) => shoot(t, 'questions', '/', {'/': (_) => const WizardScreen(projectId: 'demo', startStep: 3)}));
   testWidgets('lessons', (t) => shoot(t, 'lessons', '/', {'/': (_) => const LessonsScreen()}));
   testWidgets('materials', (t) => shoot(t, 'materials', '/', {'/': (_) => const MaterialsCalcScreen()}));

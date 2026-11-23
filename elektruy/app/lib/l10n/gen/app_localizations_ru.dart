@@ -551,10 +551,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get resultTitle => 'План проводки';
 
   @override
-  String get tabPlan => 'План 2D';
+  String get tabPlan => 'План';
 
   @override
-  String get tab3d => '3D';
+  String get tab3d => '3D монтаж';
 
   @override
   String get tabRoute => 'Трасса';
@@ -1266,4 +1266,155 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get offlineModeOn => 'Офлайн-режим (без аккаунта)';
+
+  @override
+  String get homeNewProjectHint =>
+      'Сфотографируйте комнату — получите план и 3D-инструкцию';
+
+  @override
+  String get gateDailyNote => 'Спрашиваем один раз в день.';
+
+  @override
+  String get asmDiagram => 'Схема';
+
+  @override
+  String get asmLesson => 'Подробный урок';
+
+  @override
+  String get asmReplay => 'Повторить';
+
+  @override
+  String get asmDone => 'Я закончил(а) работу';
+
+  @override
+  String get asmProjectDone => 'Проект завершён';
+
+  @override
+  String get asmSign => 'Не включать!';
+
+  @override
+  String get asmSafetyTitle => 'Отключите питание';
+
+  @override
+  String get asmSafetyBody =>
+      'В щите выключите автомат этой комнаты и повесьте табличку «Не включать». На вводе кабеля проверьте тестером, что напряжения нет.';
+
+  @override
+  String get asmMarkTitle => 'Разметьте трассы';
+
+  @override
+  String asmMarkBody(int socket, int sw) {
+    return 'Карандашом и уровнем начертите трассы: только вертикально и горизонтально, горизонтальные — на 15 см ниже потолка. Розетки на $socket см, выключатели на $sw см от пола.';
+  }
+
+  @override
+  String get asmChaseTitle => 'Прорежьте штробы';
+
+  @override
+  String asmChaseBody(String length) {
+    return 'Сначала проверьте стену детектором скрытой проводки. Прорежьте штробы глубиной ~20 мм по линиям ($length м). Работайте в очках и респираторе.';
+  }
+
+  @override
+  String get asmChannelTitle => 'Закрепите кабель-каналы';
+
+  @override
+  String asmChannelBody(String length) {
+    return 'Закрепите кабель-каналы по линиям через каждые 40–50 см ($length м). Углы режьте под 45°.';
+  }
+
+  @override
+  String get asmBoxesTitle => 'Установите коробки';
+
+  @override
+  String asmBoxesBody(int count) {
+    return 'Просверлите $count отв. коронкой 68 мм и закрепите подрозетники на гипс заподлицо со стеной.';
+  }
+
+  @override
+  String asmBoxesBodyOpen(int count) {
+    return 'Закрепите на стене $count накладных коробок.';
+  }
+
+  @override
+  String get asmBoxesJunction => 'Распаечную коробку — у потолка.';
+
+  @override
+  String asmCableTitle(String circuit) {
+    return '$circuit: протяните кабель';
+  }
+
+  @override
+  String asmCableBody(String cable, String length, int count) {
+    return '$cable: $length м, $count отрезка(ов). В каждой коробке оставьте 15–20 см. Никаких соединений в стене — только в коробках.';
+  }
+
+  @override
+  String get asmJunctionTitle => 'Соедините в распаечной коробке';
+
+  @override
+  String get asmJunctionBody =>
+      'Зачистите 10–11 мм и соедините клеммами WAGO: все синие (N) вместе; коричневый ввода (L) — с коричневым к выключателю; провод от выключателя — с коричневым к светильнику.';
+
+  @override
+  String get asmPeJoin => 'Все жёлто-зелёные (PE) вместе.';
+
+  @override
+  String asmSocketTitle(int count) {
+    return 'Подключите розетки ($count)';
+  }
+
+  @override
+  String get asmSocketBody =>
+      'Коричневый (L) и синий (N) — в боковые клеммы. Затяните винты и подёргайте каждый провод.';
+
+  @override
+  String get asmPeSocket =>
+      'Жёлто-зелёный (PE) — на средний контакт заземления.';
+
+  @override
+  String get asmPeEarth => 'Жёлто-зелёный (PE) — на клемму заземления (⏚).';
+
+  @override
+  String get asmSwitchSingleTitle => 'Подключите выключатель';
+
+  @override
+  String get asmSwitchSingleBody =>
+      'Коричневый (от L) — в клемму L, второй провод — в L1, пометьте его коричневой изолентой. Лишний провод заизолируйте.';
+
+  @override
+  String get asmSwitchDoubleTitle => 'Подключите двухклавишный выключатель';
+
+  @override
+  String get asmSwitchDoubleBody =>
+      'Коричневый (от L) — в общую клемму L. Два других провода — в L1 и L2, по одному на группу ламп.';
+
+  @override
+  String get asmSwitchPassTitle => 'Подключите проходные выключатели';
+
+  @override
+  String get asmSwitchPassBody =>
+      'Первый выключатель: L — в COM. Соедините выключатели L1–L1 и L2–L2. COM второго — к светильнику.';
+
+  @override
+  String asmLampTitle(int count) {
+    return 'Подключите светильники ($count)';
+  }
+
+  @override
+  String get asmLampBody =>
+      'Коричневый — в L, синий — в N на колодке светильника. Вешайте светильник на крюк, не на провода.';
+
+  @override
+  String get asmFinishTitle => 'Проверьте и включите';
+
+  @override
+  String get asmFinishHidden => 'Заштукатурьте штробы.';
+
+  @override
+  String get asmFinishOpen => 'Закройте крышки кабель-каналов.';
+
+  @override
+  String get asmFinishBody =>
+      'Установите рамки. Проверьте мультиметром, что нет КЗ. Снимите табличку, включите автомат и проверьте каждую розетку и выключатель.';
 }

@@ -553,10 +553,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get resultTitle => 'Wiring plan';
 
   @override
-  String get tabPlan => 'Plan 2D';
+  String get tabPlan => 'Plan';
 
   @override
-  String get tab3d => '3D';
+  String get tab3d => '3D assembly';
 
   @override
   String get tabRoute => 'Cable route';
@@ -1268,4 +1268,155 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get offlineModeOn => 'Offline mode (no account)';
+
+  @override
+  String get homeNewProjectHint =>
+      'Photograph the room — get a plan and a 3D guide';
+
+  @override
+  String get gateDailyNote => 'We ask this once a day.';
+
+  @override
+  String get asmDiagram => 'Diagram';
+
+  @override
+  String get asmLesson => 'Full lesson';
+
+  @override
+  String get asmReplay => 'Replay';
+
+  @override
+  String get asmDone => 'I finished the work';
+
+  @override
+  String get asmProjectDone => 'Project done';
+
+  @override
+  String get asmSign => 'Do not switch on!';
+
+  @override
+  String get asmSafetyTitle => 'Turn off the power';
+
+  @override
+  String get asmSafetyBody =>
+      'In the panel, switch off the breaker for this room and hang a \"Do not switch on\" sign. At the cable entry, check with a tester that there is no voltage.';
+
+  @override
+  String get asmMarkTitle => 'Mark the routes';
+
+  @override
+  String asmMarkBody(int socket, int sw) {
+    return 'With a pencil and a level, draw the routes: only vertical and horizontal lines, horizontal ones 15 cm below the ceiling. Sockets at $socket cm, switches at $sw cm from the floor.';
+  }
+
+  @override
+  String get asmChaseTitle => 'Cut the chases';
+
+  @override
+  String asmChaseBody(String length) {
+    return 'First check the wall with a hidden-wiring detector. Cut grooves about 20 mm deep along the lines ($length m). Wear goggles and a dust mask.';
+  }
+
+  @override
+  String get asmChannelTitle => 'Fix the cable channels';
+
+  @override
+  String asmChannelBody(String length) {
+    return 'Fix the channels along the lines every 40–50 cm ($length m). Cut the corners at 45°.';
+  }
+
+  @override
+  String get asmBoxesTitle => 'Fit the boxes';
+
+  @override
+  String asmBoxesBody(int count) {
+    return 'Drill $count holes with a 68 mm crown and set the boxes in gypsum, flush with the wall.';
+  }
+
+  @override
+  String asmBoxesBodyOpen(int count) {
+    return 'Fix $count surface-mounted boxes on the wall.';
+  }
+
+  @override
+  String get asmBoxesJunction => 'Put the junction box near the ceiling.';
+
+  @override
+  String asmCableTitle(String circuit) {
+    return '$circuit: pull the cable';
+  }
+
+  @override
+  String asmCableBody(String cable, String length, int count) {
+    return '$cable: $length m, $count pieces. Leave 15–20 cm at each box. No joints inside the wall — only in boxes.';
+  }
+
+  @override
+  String get asmJunctionTitle => 'Connect the junction box';
+
+  @override
+  String get asmJunctionBody =>
+      'Strip 10–11 mm and join with lever connectors (WAGO): all blue (N) together; the incoming brown (L) with the brown going to the switch; the wire coming back from the switch with the brown going to the lamp.';
+
+  @override
+  String get asmPeJoin => 'All yellow-green (PE) together.';
+
+  @override
+  String asmSocketTitle(int count) {
+    return 'Connect the sockets ($count)';
+  }
+
+  @override
+  String get asmSocketBody =>
+      'Brown (L) and blue (N) go to the side terminals. Tighten the screws and pull each wire to check it holds.';
+
+  @override
+  String get asmPeSocket =>
+      'Yellow-green (PE) goes to the middle earth terminal.';
+
+  @override
+  String get asmPeEarth => 'Yellow-green (PE) goes to the earth terminal (⏚).';
+
+  @override
+  String get asmSwitchSingleTitle => 'Connect the switch';
+
+  @override
+  String get asmSwitchSingleBody =>
+      'Brown (from L) to terminal L, the second wire to L1 — mark it with brown tape. Insulate the spare wire.';
+
+  @override
+  String get asmSwitchDoubleTitle => 'Connect the double switch';
+
+  @override
+  String get asmSwitchDoubleBody =>
+      'Brown (from L) to the common terminal L. The other two wires go to L1 and L2 — one per lamp group.';
+
+  @override
+  String get asmSwitchPassTitle => 'Connect the pass-through switches';
+
+  @override
+  String get asmSwitchPassBody =>
+      'First switch: L to COM. Join the two switches L1–L1 and L2–L2. COM of the second switch goes to the lamp.';
+
+  @override
+  String asmLampTitle(int count) {
+    return 'Connect the lamps ($count)';
+  }
+
+  @override
+  String get asmLampBody =>
+      'Brown to L, blue to N in the lamp terminal block. Hang the lamp on a hook — never on the wires.';
+
+  @override
+  String get asmFinishTitle => 'Check and switch on';
+
+  @override
+  String get asmFinishHidden => 'Close the chases with plaster.';
+
+  @override
+  String get asmFinishOpen => 'Snap the channel covers on.';
+
+  @override
+  String get asmFinishBody =>
+      'Fit the frames. Check with a multimeter that there is no short circuit. Remove the sign, switch the breaker on and test every socket and switch.';
 }
