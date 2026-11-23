@@ -691,8 +691,8 @@ function wire(points, color, opts = {}) {
   return { group: g, ins, tip };
 }
 
-function sheathEnd(from, dir) {
-  const end = from.clone().addScaledVector(dir, 0.03);
+function sheathEnd(from, dir, len = 0.03) {
+  const end = from.clone().addScaledVector(dir, len);
   const m = tube([from.clone().addScaledVector(dir, -0.05), from, end], 0.0062, mats().sheath);
   return { mesh: m, mouth: end };
 }
@@ -796,12 +796,13 @@ function buildDetail(kind, d, params) {
   } else if (kind === 'junction') {
     const lamps = Math.min(3, Math.max(1, params.lamps || 1));
     // Three cables enter the open box: feed (top left), lamp (top right), switch (bottom).
-    const feed = sheathEnd(new THREE.Vector3(-0.026, 0.044, 0.004), new THREE.Vector3(0.15, -1, 0.12).normalize());
-    const lamp = sheathEnd(new THREE.Vector3(0.026, 0.044, 0.004), new THREE.Vector3(-0.15, -1, 0.12).normalize());
-    const sw = sheathEnd(new THREE.Vector3(0, -0.046, 0.004), new THREE.Vector3(0, 1, 0.12).normalize());
+    // Short cable ends at the rim of the box, so the connectors in the middle stay visible.
+    const feed = sheathEnd(new THREE.Vector3(-0.03, 0.052, 0.004), new THREE.Vector3(0.2, -1, 0.15).normalize(), 0.012);
+    const lamp = sheathEnd(new THREE.Vector3(0.03, 0.052, 0.004), new THREE.Vector3(-0.2, -1, 0.15).normalize(), 0.012);
+    const sw = sheathEnd(new THREE.Vector3(0, -0.054, 0.004), new THREE.Vector3(0, 1, 0.15).normalize(), 0.012);
     [feed, lamp, sw].forEach((s) => holder.add(s.mesh));
-    const wagoY = [0.012, -0.012];
-    const wagoX = [-0.016, 0.016];
+    const wagoY = [0.01, -0.016];
+    const wagoX = [-0.019, 0.019];
     // L (feed brown + switch brown), S (switch black + lamp brown), N (feed blue + lamp blue), PE.
     const groups = [
       { name: 'L', x: wagoX[0], y: wagoY[0], wires: [[feed, CORE.brown], [sw, CORE.brown]], color: '#7a4a26' },
@@ -813,7 +814,7 @@ function buildDetail(kind, d, params) {
       const n = grp.wires.length;
       const w = 0.0062 * n + 0.004;
       const wago = new THREE.Group();
-      wago.position.set(grp.x, grp.y, 0.028);
+      wago.position.set(grp.x, grp.y, 0.034);
       wago.add(new THREE.Mesh(new THREE.BoxGeometry(w, 0.013, 0.012), m.wago));
       for (let i = 0; i < n; i++) {
         const lever = new THREE.Mesh(new THREE.BoxGeometry(0.0045, 0.009, 0.003), m.lever);
@@ -825,8 +826,8 @@ function buildDetail(kind, d, params) {
       wago.add(lab);
       holder.add(wago);
       grp.wires.forEach(([cable, color], i) => {
-        const port = new THREE.Vector3(grp.x - w / 2 + 0.0052 + i * 0.0062, grp.y - 0.0065, 0.028);
-        const pts = [cable.mouth.clone(), cable.mouth.clone().lerp(port, 0.5).add(new THREE.Vector3(0, 0, 0.022)), port.clone().add(new THREE.Vector3(0, -0.008, 0)), port];
+        const port = new THREE.Vector3(grp.x - w / 2 + 0.0052 + i * 0.0062, grp.y - 0.0065, 0.034);
+        const pts = [cable.mouth.clone(), cable.mouth.clone().lerp(port, 0.5).add(new THREE.Vector3(0, 0, 0.018 + i * 0.003)), port.clone().add(new THREE.Vector3(0, -0.008, 0)), port];
         addWire(pts, color, { userData: { screw: lab }, position: port }, { r: 0.0015 });
       });
     }
@@ -865,8 +866,8 @@ function buildDetail(kind, d, params) {
   }
 
   terms.forEach(() => {});
-  // Animation: wires grow in one after another, then the terminal screw turns.
-  const per = 0.9;
+  // Animation: wires grow in one after another (about 4.5 s in total), then the terminal screw turns.
+  const per = Math.min(0.9, 4.5 / Math.max(1, wires.length));
   return {
     group: g,
     play(t) {
