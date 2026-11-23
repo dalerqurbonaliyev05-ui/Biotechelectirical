@@ -1111,13 +1111,13 @@ abstract class AppLocalizations {
   /// No description provided for @tabPlan.
   ///
   /// In en, this message translates to:
-  /// **'Plan 2D'**
+  /// **'Plan'**
   String get tabPlan;
 
   /// No description provided for @tab3d.
   ///
   /// In en, this message translates to:
-  /// **'3D'**
+  /// **'3D assembly'**
   String get tab3d;
 
   /// No description provided for @tabRoute.
@@ -2391,6 +2391,252 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Offline mode (no account)'**
   String get offlineModeOn;
+
+  /// No description provided for @homeNewProjectHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Photograph the room — get a plan and a 3D guide'**
+  String get homeNewProjectHint;
+
+  /// No description provided for @gateDailyNote.
+  ///
+  /// In en, this message translates to:
+  /// **'We ask this once a day.'**
+  String get gateDailyNote;
+
+  /// No description provided for @asmDiagram.
+  ///
+  /// In en, this message translates to:
+  /// **'Diagram'**
+  String get asmDiagram;
+
+  /// No description provided for @asmLesson.
+  ///
+  /// In en, this message translates to:
+  /// **'Full lesson'**
+  String get asmLesson;
+
+  /// No description provided for @asmReplay.
+  ///
+  /// In en, this message translates to:
+  /// **'Replay'**
+  String get asmReplay;
+
+  /// No description provided for @asmDone.
+  ///
+  /// In en, this message translates to:
+  /// **'I finished the work'**
+  String get asmDone;
+
+  /// No description provided for @asmProjectDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Project done'**
+  String get asmProjectDone;
+
+  /// No description provided for @asmSign.
+  ///
+  /// In en, this message translates to:
+  /// **'Do not switch on!'**
+  String get asmSign;
+
+  /// No description provided for @asmSafetyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn off the power'**
+  String get asmSafetyTitle;
+
+  /// No description provided for @asmSafetyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'In the panel, switch off the breaker for this room and hang a \"Do not switch on\" sign. At the cable entry, check with a tester that there is no voltage.'**
+  String get asmSafetyBody;
+
+  /// No description provided for @asmMarkTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark the routes'**
+  String get asmMarkTitle;
+
+  /// No description provided for @asmMarkBody.
+  ///
+  /// In en, this message translates to:
+  /// **'With a pencil and a level, draw the routes: only vertical and horizontal lines, horizontal ones 15 cm below the ceiling. Sockets at {socket} cm, switches at {sw} cm from the floor.'**
+  String asmMarkBody(int socket, int sw);
+
+  /// No description provided for @asmChaseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cut the chases'**
+  String get asmChaseTitle;
+
+  /// No description provided for @asmChaseBody.
+  ///
+  /// In en, this message translates to:
+  /// **'First check the wall with a hidden-wiring detector. Cut grooves about 20 mm deep along the lines ({length} m). Wear goggles and a dust mask.'**
+  String asmChaseBody(String length);
+
+  /// No description provided for @asmChannelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Fix the cable channels'**
+  String get asmChannelTitle;
+
+  /// No description provided for @asmChannelBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Fix the channels along the lines every 40–50 cm ({length} m). Cut the corners at 45°.'**
+  String asmChannelBody(String length);
+
+  /// No description provided for @asmBoxesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Fit the boxes'**
+  String get asmBoxesTitle;
+
+  /// No description provided for @asmBoxesBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Drill {count} holes with a 68 mm crown and set the boxes in gypsum, flush with the wall.'**
+  String asmBoxesBody(int count);
+
+  /// No description provided for @asmBoxesBodyOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Fix {count} surface-mounted boxes on the wall.'**
+  String asmBoxesBodyOpen(int count);
+
+  /// No description provided for @asmBoxesJunction.
+  ///
+  /// In en, this message translates to:
+  /// **'Put the junction box near the ceiling.'**
+  String get asmBoxesJunction;
+
+  /// No description provided for @asmCableTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{circuit}: pull the cable'**
+  String asmCableTitle(String circuit);
+
+  /// No description provided for @asmCableBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{cable}: {length} m, {count} pieces. Leave 15–20 cm at each box. No joints inside the wall — only in boxes.'**
+  String asmCableBody(String cable, String length, int count);
+
+  /// No description provided for @asmJunctionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect the junction box'**
+  String get asmJunctionTitle;
+
+  /// No description provided for @asmJunctionBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Strip 10–11 mm and join with lever connectors (WAGO): all blue (N) together; the incoming brown (L) with the brown going to the switch; the wire coming back from the switch with the brown going to the lamp.'**
+  String get asmJunctionBody;
+
+  /// No description provided for @asmPeJoin.
+  ///
+  /// In en, this message translates to:
+  /// **'All yellow-green (PE) together.'**
+  String get asmPeJoin;
+
+  /// No description provided for @asmSocketTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect the sockets ({count})'**
+  String asmSocketTitle(int count);
+
+  /// No description provided for @asmSocketBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Brown (L) and blue (N) go to the side terminals. Tighten the screws and pull each wire to check it holds.'**
+  String get asmSocketBody;
+
+  /// No description provided for @asmPeSocket.
+  ///
+  /// In en, this message translates to:
+  /// **'Yellow-green (PE) goes to the middle earth terminal.'**
+  String get asmPeSocket;
+
+  /// No description provided for @asmPeEarth.
+  ///
+  /// In en, this message translates to:
+  /// **'Yellow-green (PE) goes to the earth terminal (⏚).'**
+  String get asmPeEarth;
+
+  /// No description provided for @asmSwitchSingleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect the switch'**
+  String get asmSwitchSingleTitle;
+
+  /// No description provided for @asmSwitchSingleBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Brown (from L) to terminal L, the second wire to L1 — mark it with brown tape. Insulate the spare wire.'**
+  String get asmSwitchSingleBody;
+
+  /// No description provided for @asmSwitchDoubleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect the double switch'**
+  String get asmSwitchDoubleTitle;
+
+  /// No description provided for @asmSwitchDoubleBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Brown (from L) to the common terminal L. The other two wires go to L1 and L2 — one per lamp group.'**
+  String get asmSwitchDoubleBody;
+
+  /// No description provided for @asmSwitchPassTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect the pass-through switches'**
+  String get asmSwitchPassTitle;
+
+  /// No description provided for @asmSwitchPassBody.
+  ///
+  /// In en, this message translates to:
+  /// **'First switch: L to COM. Join the two switches L1–L1 and L2–L2. COM of the second switch goes to the lamp.'**
+  String get asmSwitchPassBody;
+
+  /// No description provided for @asmLampTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect the lamps ({count})'**
+  String asmLampTitle(int count);
+
+  /// No description provided for @asmLampBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Brown to L, blue to N in the lamp terminal block. Hang the lamp on a hook — never on the wires.'**
+  String get asmLampBody;
+
+  /// No description provided for @asmFinishTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Check and switch on'**
+  String get asmFinishTitle;
+
+  /// No description provided for @asmFinishHidden.
+  ///
+  /// In en, this message translates to:
+  /// **'Close the chases with plaster.'**
+  String get asmFinishHidden;
+
+  /// No description provided for @asmFinishOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Snap the channel covers on.'**
+  String get asmFinishOpen;
+
+  /// No description provided for @asmFinishBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Fit the frames. Check with a multimeter that there is no short circuit. Remove the sign, switch the breaker on and test every socket and switch.'**
+  String get asmFinishBody;
 }
 
 class _AppLocalizationsDelegate

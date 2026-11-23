@@ -74,9 +74,8 @@
   ],
   "safety_checklist": [
     { "key": "breaker_off", "t": { "uz": "Avtomatni o'chirdim", "ru": "Я выключил(а) автомат", "en": "I turned off the breaker" } },
-    { "key": "no_voltage", "t": { "uz": "Indikator/tester bilan kuchlanish yo'qligini tekshirdim", "ru": "Я проверил(а) отсутствие напряжения индикатором/тестером", "en": "I verified there is no voltage with an indicator/tester" } },
-    { "key": "sign_posted", "t": { "uz": "\"Yoqmang\" belgisini osib qo'ydim", "ru": "Я повесил(а) табличку «Не включать»", "en": "I put a \"Do not switch on\" sign" } },
-    { "key": "insulated_tools", "t": { "uz": "Izolyatsiyalangan asboblardan foydalanaman", "ru": "Я использую изолированный инструмент", "en": "I use insulated tools" } }
+    { "key": "no_voltage", "t": { "uz": "Tester bilan tok yo'qligini tekshirdim", "ru": "Я проверил(а) тестером, что напряжения нет", "en": "I checked with a tester that there is no voltage" } },
+    { "key": "dry_hands_tools", "t": { "uz": "Qo'lim quruq, asboblarim izolyatsiyalangan", "ru": "Руки сухие, инструмент изолированный", "en": "My hands are dry and my tools are insulated" } }
   ],
   "ai_limits": {
     "estimate-room": { "per_hour": 10, "per_day": 30 },

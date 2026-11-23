@@ -7,7 +7,7 @@
 | Content validation and generated files up to date | `node scripts/build-content.mjs --check` | CI (ElektrUy app) |
 | Translations complete in uz / ru / en | `cd app && node l10n_src/build.mjs` (fails on a missing key or placeholder) | CI |
 | Static analysis | `cd app && flutter analyze` | CI |
-| Unit and widget tests (74) | `cd app && flutter test` | CI |
+| Unit and widget tests (83) | `cd app && flutter test` | CI |
 | Debug APK (also compiles the Kotlin ARCore code) | `flutter build apk --debug` | CI → artifact `elektruy-debug-apk` and prerelease |
 | Admin lint, typecheck, build | `cd admin && npm run lint && npm run typecheck && npm run build` | CI (ElektrUy admin) |
 | RLS smoke test (13 checks) | run `supabase/tests/rls_smoke.sql` in the SQL editor | manual; it rolls back |
@@ -22,6 +22,9 @@
   - Scope guard: every blocking rule.
   - Materials: hidden, drywall and open wiring, existing junction box, quantity edits.
   - Diagrams: one per switch and per socket circuit.
+  - 3D assembly steps: order from power-off to switch-on, every cable laid once, open wiring uses channels, one step per switch type.
+- **`test/widget/assembly_tab_test.dart`:** the result has 3 tabs; the 3D guide moves from "power off" to marking and sets the project in progress.
+- **`test/widget/safety_gate_test.dart`:** the safety checklist is asked once per calendar day.
 - **`test/widget/wizard_test.dart`:**
   - The photos step blocks "Next" without a photo.
   - The questions step builds a plan and opens the result.
@@ -55,16 +58,17 @@ Install the debug APK from the latest `elektruy-debug-<sha>` prerelease. Repeat 
     - Add a 4 kW appliance and check that the out-of-scope screen opens.
     - Tick "panel work" and check that the out-of-scope screen opens.
 12. **Result:**
-    - 2D plan: long-press and drag a socket. The route updates and the position is remembered after reopening.
-    - 3D: rotate, zoom, reset, toggle cables. It must work in **airplane mode**.
-    - Route, diagram and materials tabs. Edit a quantity and a price; the total updates.
+    - Three tabs: Plan, 3D assembly, Materials.
+    - Plan: long-press and drag a socket. The route updates and the position is remembered after reopening.
+    - 3D assembly: step through power-off → marking → chases → boxes → cables → junction box → sockets → switches → lamps → check. The camera flies to each place, close-ups show coloured wires going into terminals. "Diagram" and "Full lesson" open; the voice button reads the step and reacts to next/back/repeat. It must work in **airplane mode**.
+    - Leaving step 1 shows the safety checklist (once a day) and sets the project "in progress"; the last step marks it done.
+    - Materials: edit a quantity and a price; the total updates.
     - Export the PDF and open it. Cyrillic and Uzbek letters must be readable.
-    - Steps: the safety gate appears, then the project is "in progress"; then mark it done.
 13. The disclaimer banner is visible on the result screen.
 
 ### Lessons and voice
 
-14. Opening a lesson always shows the safety checklist first. Declining closes the lesson.
+14. The safety checklist (3 items) is shown before the first lesson or project step of the day. Declining closes the lesson. Later the same day it is not asked again.
 15. Steps can be ticked, and progress survives an app restart and syncs to a second phone with the same account.
 16. **Voice guide:**
     - The step is read aloud.

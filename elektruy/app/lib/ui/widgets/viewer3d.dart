@@ -7,26 +7,32 @@ import 'common.dart';
 
 /// Three.js room viewer loaded from bundled assets (works offline). The room/plan
 /// JSON is passed through a JS bridge; taps on devices come back via [onTapDevice].
+/// When the scene carries `steps`, [step] selects the installation step to show.
 class Viewer3D extends StatefulWidget {
-  const Viewer3D({super.key, required this.sceneJson, this.onTapDevice});
+  const Viewer3D({super.key, required this.sceneJson, this.step, this.onTapDevice});
 
-  /// Plan JSON (room, devices, segments) plus `colors`, `dark` and `wall_labels`.
+  /// Plan JSON (room, devices, segments) plus `colors`, `dark`, `labels` and optional `steps`.
   final Map<String, dynamic> sceneJson;
+  final int? step;
   final ValueChanged<String>? onTapDevice;
 
   @override
-  State<Viewer3D> createState() => _Viewer3DState();
+  State<Viewer3D> createState() => Viewer3DState();
 }
 
-class _Viewer3DState extends State<Viewer3D> {
+class Viewer3DState extends State<Viewer3D> {
   late final WebViewController _web;
   bool _ready = false;
   bool _failed = false;
-  bool _cables = true;
+  String? _pushed;
+
+  /// False in widget tests, where no WebView platform is registered.
+  static bool get _available => WebViewPlatform.instance != null;
 
   @override
   void initState() {
     super.initState();
+    if (!_available) return;
     _web = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(Colors.transparent)
@@ -35,6 +41,7 @@ class _Viewer3DState extends State<Viewer3D> {
         switch (msg['type']) {
           case 'ready':
             _ready = true;
+            _pushed = null;
             _push();
           case 'tap':
             final id = msg['device'] as String?;
@@ -54,41 +61,41 @@ class _Viewer3DState extends State<Viewer3D> {
   }
 
   @override
-  void didUpdateWidget(covariant Viewer3D old) {
-    super.didUpdateWidget(old);
-    if (old.sceneJson != widget.sceneJson) _push();
+  void didUpdateWidget(covariant Viewer3D oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final changed = _push();
+    if (!changed && oldWidget.step != widget.step) _showStep();
   }
 
-  void _push() {
-    if (!_ready) return;
-    _web.runJavaScript('window.ElektrUy.load(${jsonEncode(jsonEncode(widget.sceneJson))});');
+  /// Sends the scene if it changed since the last push. Returns whether it did.
+  bool _push() {
+    if (!_ready) return false;
+    final json = jsonEncode(widget.sceneJson);
+    if (json == _pushed) return false;
+    _pushed = json;
+    _web.runJavaScript('window.ElektrUy.load(${jsonEncode(json)});');
+    if ((widget.step ?? 0) > 0) _showStep(instant: true);
+    return true;
+  }
+
+  void _showStep({bool instant = false}) {
+    final s = widget.step;
+    if (!_ready || s == null) return;
+    _web.runJavaScript('window.ElektrUy.step($s${instant ? ', true' : ''})');
+  }
+
+  void replay() {
+    if (_ready) _web.runJavaScript('window.ElektrUy.replay()');
+  }
+
+  void resetView() {
+    if (_ready) _web.runJavaScript('window.ElektrUy.resetView()');
   }
 
   @override
   Widget build(BuildContext context) {
     if (_failed) return EmptyState(icon: Icons.view_in_ar, title: context.l.viewer3dError);
-    return Stack(children: [
-      Positioned.fill(child: WebViewWidget(controller: _web)),
-      Positioned(
-        right: 12,
-        bottom: 12,
-        child: Column(children: [
-          FloatingActionButton.small(
-            heroTag: 'v3d_reset',
-            onPressed: () => _web.runJavaScript('window.ElektrUy.resetView()'),
-            child: const Icon(Icons.center_focus_strong),
-          ),
-          const SizedBox(height: 8),
-          FloatingActionButton.small(
-            heroTag: 'v3d_cables',
-            onPressed: () {
-              setState(() => _cables = !_cables);
-              _web.runJavaScript("window.ElektrUy.setLayer('cables', $_cables)");
-            },
-            child: Icon(_cables ? Icons.cable : Icons.visibility_off),
-          ),
-        ]),
-      ),
-    ]);
+    if (!_available) return ColoredBox(color: Theme.of(context).colorScheme.surfaceContainerHighest, child: const Center(child: Icon(Icons.view_in_ar, size: 64)));
+    return WebViewWidget(controller: _web);
   }
 }

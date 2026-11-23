@@ -28,15 +28,27 @@ class DisclaimerBanner extends ConsumerWidget {
     final lang = ref.watch(langProvider);
     final text = ref.watch(contentProvider).value?.legalText('disclaimer_short', lang) ?? '';
     if (text.isEmpty) return const SizedBox.shrink();
-    return Container(
-      width: double.infinity,
+    // One line so it does not push the content away; tap to read it in full.
+    return Material(
       color: RiskColors.warnBg,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-      child: Row(children: [
-        const Icon(Icons.info_outline, size: 18, color: Color(0xFF8D6E00)),
-        const SizedBox(width: 8),
-        Expanded(child: Text(text, style: const TextStyle(fontSize: 12, color: Color(0xFF5D4600)))),
-      ]),
+      child: InkWell(
+        onTap: () => showDialog<void>(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            icon: const Icon(Icons.info_outline, color: Color(0xFF8D6E00)),
+            content: Text(text),
+            actions: [TextButton(onPressed: () => Navigator.pop(ctx), child: Text(ctx.l.ok))],
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
+          child: Row(children: [
+            const Icon(Icons.info_outline, size: 16, color: Color(0xFF8D6E00)),
+            const SizedBox(width: 8),
+            Expanded(child: Text(text, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 12, color: Color(0xFF5D4600)))),
+          ]),
+        ),
+      ),
     );
   }
 }

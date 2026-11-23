@@ -21,7 +21,7 @@ class HomeScreen extends ConsumerWidget {
     final first = name?.split(' ').first;
 
     final actions = [
-      (Icons.school, l.lessons, '/lessons', const Color(0xFF1565C0)),
+      (Icons.school_rounded, l.lessons, '/lessons', const Color(0xFF1E66F5)),
       (Icons.calculate, l.materialsCalc, '/materials', const Color(0xFF6A1B9A)),
       (Icons.fact_check, l.checkWork, '/check', const Color(0xFF2E7D32)),
       (Icons.engineering, l.electricians, '/electricians', const Color(0xFFEF6C00)),
@@ -30,30 +30,20 @@ class HomeScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(first == null ? l.homeGreetingAnon : l.homeGreeting(first)),
-        actions: [IconButton(onPressed: () => context.push('/settings'), icon: const Icon(Icons.settings), tooltip: l.settings)],
+        actions: [IconButton(onPressed: () => context.push('/settings'), icon: const Icon(Icons.settings_outlined), tooltip: l.settings)],
       ),
       body: Column(children: [
         const OfflineBanner(),
         Expanded(
           child: RefreshIndicator(
             onRefresh: () => ref.read(syncProvider).run(),
-            child: ListView(padding: const EdgeInsets.all(16), children: [
-              SizedBox(
-                height: 64,
-                child: FilledButton.icon(
-                  onPressed: () => context.push('/project/new'),
-                  icon: const Icon(Icons.add_a_photo, size: 28),
-                  label: Text(l.newProject, style: const TextStyle(fontSize: 18)),
-                ),
-              ),
+            child: ListView(padding: const EdgeInsets.fromLTRB(16, 4, 16, 24), children: [
+              _HeroCard(title: l.newProject, hint: l.homeNewProjectHint, onTap: () => context.push('/project/new')),
               const SizedBox(height: 16),
-              GridView.count(
-                crossAxisCount: 2,
+              GridView(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                mainAxisSpacing: 12,
-                crossAxisSpacing: 12,
-                childAspectRatio: 1.3,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 12, crossAxisSpacing: 12, mainAxisExtent: 108),
                 children: [
                   for (final (icon, label, path, color) in actions)
                     Card(
@@ -61,16 +51,22 @@ class HomeScreen extends ConsumerWidget {
                       child: InkWell(
                         onTap: () => context.push(path),
                         child: Padding(
-                          padding: const EdgeInsets.all(14),
+                          padding: const EdgeInsets.all(12),
                           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                            CircleAvatar(backgroundColor: color.withValues(alpha: 0.12), child: Icon(icon, color: color)),
-                            Text(label, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15), maxLines: 2, overflow: TextOverflow.ellipsis),
+                            Container(
+                              width: 44,
+                              height: 44,
+                              decoration: BoxDecoration(color: color.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(14)),
+                              child: Icon(icon, color: color),
+                            ),
+                            Text(label, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15, height: 1.2), maxLines: 2, overflow: TextOverflow.ellipsis),
                           ]),
                         ),
                       ),
                     ),
                 ],
               ),
+              const SizedBox(height: 8),
               SectionTitle(l.myProjects),
               projects.when(
                 loading: () => const Skeleton(lines: 2),
@@ -125,9 +121,12 @@ class _ProjectCard extends ConsumerWidget {
             }
           },
           child: Row(children: [
-            SizedBox(
-              width: 96,
-              height: 96,
+            Container(
+              width: 84,
+              height: 84,
+              margin: const EdgeInsets.all(8),
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
               child: photo != null && File(photo).existsSync()
                   ? Image.file(File(photo), fit: BoxFit.cover, cacheWidth: 300)
                   : Container(
@@ -163,3 +162,47 @@ class _ProjectCard extends ConsumerWidget {
   }
 }
 
+
+class _HeroCard extends StatelessWidget {
+  const _HeroCard({required this.title, required this.hint, required this.onTap});
+
+  final String title;
+  final String hint;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Material(
+      borderRadius: BorderRadius.circular(24),
+      clipBehavior: Clip.antiAlias,
+      child: Ink(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(colors: [Color(0xFF1E66F5), Color(0xFF3D8BFF)], begin: Alignment.topLeft, end: Alignment.bottomRight),
+        ),
+        child: InkWell(
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Row(children: [
+              Expanded(
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text(title, style: const TextStyle(color: Colors.white, fontSize: 21, fontWeight: FontWeight.w800)),
+                  const SizedBox(height: 6),
+                  Text(hint, style: const TextStyle(color: Color(0xFFE3ECFF), fontSize: 14, height: 1.35)),
+                ]),
+              ),
+              const SizedBox(width: 12),
+              Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(color: scheme.secondary, borderRadius: BorderRadius.circular(18)),
+                child: Icon(Icons.add_a_photo_rounded, size: 30, color: scheme.onSecondary),
+              ),
+            ]),
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -553,10 +553,10 @@ class AppLocalizationsUz extends AppLocalizations {
   String get resultTitle => 'Simlar rejasi';
 
   @override
-  String get tabPlan => 'Reja 2D';
+  String get tabPlan => 'Reja';
 
   @override
-  String get tab3d => '3D';
+  String get tab3d => '3D montaj';
 
   @override
   String get tabRoute => 'Trassa';
@@ -1269,4 +1269,155 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get offlineModeOn => 'Oflayn rejim (akkauntsiz)';
+
+  @override
+  String get homeNewProjectHint =>
+      'Xonani suratga oling — reja va 3D yo\'riqnoma oling';
+
+  @override
+  String get gateDailyNote => 'Kuniga bir marta so\'raymiz.';
+
+  @override
+  String get asmDiagram => 'Sxemani ko\'rish';
+
+  @override
+  String get asmLesson => 'Batafsil dars';
+
+  @override
+  String get asmReplay => 'Qayta ko\'rsatish';
+
+  @override
+  String get asmDone => 'Ishni tugatdim';
+
+  @override
+  String get asmProjectDone => 'Loyiha tugallandi';
+
+  @override
+  String get asmSign => 'Yoqmang!';
+
+  @override
+  String get asmSafetyTitle => 'Tokni o\'chiring';
+
+  @override
+  String get asmSafetyBody =>
+      'Shchitda shu xona avtomatini o\'chiring va \"Yoqmang\" yozuvini osib qo\'ying. Kabel kirish joyida tester bilan tok yo\'qligini tekshiring.';
+
+  @override
+  String get asmMarkTitle => 'Trassalarni belgilang';
+
+  @override
+  String asmMarkBody(int socket, int sw) {
+    return 'Qalam va uroven bilan trassalarni chizing: faqat tik va yotiq, yotiqlari shiftdan 15 sm pastda. Rozetkalar poldan $socket sm, kalitlar $sw sm balandlikda.';
+  }
+
+  @override
+  String get asmChaseTitle => 'Shtroba oching';
+
+  @override
+  String asmChaseBody(String length) {
+    return 'Avval devorni yashirin sim detektori bilan tekshiring. Chiziqlar bo\'ylab ~20 mm chuqurlikda shtroba oching ($length m). Ko\'zoynak va respirator taqing.';
+  }
+
+  @override
+  String get asmChannelTitle => 'Kabel kanallarini o\'rnating';
+
+  @override
+  String asmChannelBody(String length) {
+    return 'Kanallarni chiziqlar bo\'ylab har 40–50 sm da mahkamlang ($length m). Burchaklarni 45° da kesing.';
+  }
+
+  @override
+  String get asmBoxesTitle => 'Qutilarni o\'rnating';
+
+  @override
+  String asmBoxesBody(int count) {
+    return '68 mm koronka bilan $count ta teshik oching va qutilarni gips bilan devor tekisligida o\'rnating.';
+  }
+
+  @override
+  String asmBoxesBodyOpen(int count) {
+    return 'Devorga $count ta ustki qutini mahkamlang.';
+  }
+
+  @override
+  String get asmBoxesJunction => 'Tarqatish qutisini shift yaqiniga qo\'ying.';
+
+  @override
+  String asmCableTitle(String circuit) {
+    return '$circuit: kabelni torting';
+  }
+
+  @override
+  String asmCableBody(String cable, String length, int count) {
+    return '$cable: $length m, $count bo\'lak. Har bir qutida 15–20 sm qoldiring. Devor ichida ulash yo\'q — faqat qutilarda.';
+  }
+
+  @override
+  String get asmJunctionTitle => 'Tarqatish qutisida ulang';
+
+  @override
+  String get asmJunctionBody =>
+      '10–11 mm tozalang va WAGO klemmalari bilan ulang: barcha ko\'k (N) birga; kirish jigarrangi (L) — kalitga boruvchi jigarrang bilan; kalitdan qaytgan sim — chiroqqa boruvchi jigarrang bilan.';
+
+  @override
+  String get asmPeJoin => 'Barcha sariq-yashil (PE) birga.';
+
+  @override
+  String asmSocketTitle(int count) {
+    return 'Rozetkalarni ulang ($count ta)';
+  }
+
+  @override
+  String get asmSocketBody =>
+      'Jigarrang (L) va ko\'k (N) — yon klemmalarga. Vintlarni qotiring va har bir simni tortib tekshiring.';
+
+  @override
+  String get asmPeSocket =>
+      'Sariq-yashil (PE) — o\'rtadagi yerga ulash klemmasiga.';
+
+  @override
+  String get asmPeEarth => 'Sariq-yashil (PE) — yerga ulash klemmasiga (⏚).';
+
+  @override
+  String get asmSwitchSingleTitle => 'Kalitni ulang';
+
+  @override
+  String get asmSwitchSingleBody =>
+      'Jigarrang (L dan) — L klemmaga, ikkinchi sim — L1 ga, uni jigarrang izolenta bilan belgilang. Ortiqcha simni izolyatsiya qiling.';
+
+  @override
+  String get asmSwitchDoubleTitle => 'Ikki klavishli kalitni ulang';
+
+  @override
+  String get asmSwitchDoubleBody =>
+      'Jigarrang (L dan) — umumiy L klemmaga. Qolgan ikki sim — L1 va L2 ga, har bir chiroq guruhiga bittadan.';
+
+  @override
+  String get asmSwitchPassTitle => 'O\'tish kalitlarini ulang';
+
+  @override
+  String get asmSwitchPassBody =>
+      'Birinchi kalit: L — COM ga. Kalitlarni L1–L1 va L2–L2 qilib ulang. Ikkinchi kalitning COM i — chiroqqa.';
+
+  @override
+  String asmLampTitle(int count) {
+    return 'Chiroqlarni ulang ($count ta)';
+  }
+
+  @override
+  String get asmLampBody =>
+      'Jigarrang — L ga, ko\'k — N ga (chiroq klemmasi). Chiroqni ilgakka osing, simlarga emas.';
+
+  @override
+  String get asmFinishTitle => 'Tekshiring va yoqing';
+
+  @override
+  String get asmFinishHidden => 'Shtrobalarni suvoq bilan yoping.';
+
+  @override
+  String get asmFinishOpen => 'Kanal qopqoqlarini yoping.';
+
+  @override
+  String get asmFinishBody =>
+      'Ramkalarni o\'rnating. Multimetr bilan qisqa tutashuv yo\'qligini tekshiring. Yozuvni olib, avtomatni yoqing va har bir rozetka hamda kalitni sinab ko\'ring.';
 }
