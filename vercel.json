@@ -235,6 +235,11 @@
       "source": "/laboratoriya",
       "destination": "/laboratoriya/",
       "permanent": true
+    },
+    {
+      "source": "/kutubxona",
+      "destination": "/kutubxona/",
+      "permanent": true
     }
   ],
   "rewrites": [

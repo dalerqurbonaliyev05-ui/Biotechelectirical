@@ -1,0 +1,75 @@
+{
+  "categories": [
+    {
+      "id": "elektr",
+      "name": "Elektr qurilmalari"
+    },
+    {
+      "id": "xavfsizlik",
+      "name": "Xavfsizlik texnikasi"
+    },
+    {
+      "id": "shnq",
+      "name": "Shaharsozlik normalari (ShNQ)"
+    }
+  ],
+  "books": [
+    {
+      "id": "elektr-qurilmalari-qoidalari",
+      "title": "Elektr uskunalarining tuzilish qoidalari",
+      "titleOrig": "Электр ускуналарининг тузилиш қоидалари",
+      "code": "EUTQ",
+      "category": "elektr",
+      "publisher": "O'zenergoinspeksiya, Farg'ona hududiy bo'limi · Guliston, 2020",
+      "description": "Elektr qurilmalarini loyihalash, ekspluatatsiya va montaj qilish bilan shug'ullanuvchi muhandis-texnik xodimlar uchun qoidalar.",
+      "note": "Qoidalar rus tilida tasdiqlangan; o'zbekcha tarjima ma'lumot xarakteriga ega. Noaniqlik bo'lsa, rus tilidagi matnga qarang.",
+      "pages": 338,
+      "sizeMB": 9.5,
+      "file": "books/elektr-qurilmalari-qoidalari.pdf",
+      "cover": "covers/elektr-qurilmalari-qoidalari.jpg",
+      "script": "Kirill"
+    },
+    {
+      "id": "shnq-3-01-02-20",
+      "title": "Qurilishda xavfsizlik texnikasi",
+      "titleOrig": "Қурилишда хавфсизлик техникаси",
+      "code": "ShNQ 3.01.02-20",
+      "category": "xavfsizlik",
+      "publisher": "Shaharsozlik normalari va qoidalari",
+      "description": "Qurilish-montaj ishlarini bajarishda ishchilarning mehnat xavfsizligi bo'yicha texnik va tashkiliy tadbirlar tizimi.",
+      "pages": 100,
+      "sizeMB": 3.0,
+      "file": "books/shnq-3-01-02-20.pdf",
+      "cover": "covers/shnq-3-01-02-20.jpg",
+      "script": "Kirill"
+    },
+    {
+      "id": "shnq-1-01-01-20",
+      "title": "Qurilish sohasidagi normativ hujjatlar tizimi",
+      "titleOrig": "Қурилиш соҳасидаги норматив ҳужжатлар тизими",
+      "code": "ShNQ 1.01.01-20",
+      "category": "shnq",
+      "publisher": "O'zbekiston Respublikasi Qurilish vazirligi · Toshkent, 2020",
+      "description": "Qurilishdagi normativ hujjatlar tizimining tuzilishi, turlari va ularni qo'llash tartibi.",
+      "pages": 43,
+      "sizeMB": 0.9,
+      "file": "books/shnq-1-01-01-20.pdf",
+      "cover": "covers/shnq-1-01-01-20.jpg",
+      "script": "Kirill"
+    },
+    {
+      "id": "shnq-1-03-09-20",
+      "title": "Loyiha bosh muhandisi (bosh arxitektori) haqida Nizom",
+      "titleOrig": "Лойиҳа бош муҳандиси (бош архитектори) ҳақида Низом",
+      "code": "ShNQ 1.03.09-20",
+      "category": "shnq",
+      "publisher": "Shaharsozlik normalari va qoidalari",
+      "description": "Qurilish loyihasi bosh muhandisi (bosh arxitektori)ning vazifalari, huquqlari va majburiyatlari.",
+      "pages": 6,
+      "sizeMB": 0.3,
+      "file": "books/shnq-1-03-09-20.pdf",
+      "cover": "covers/shnq-1-03-09-20.jpg",
+      "script": "Kirill"
+    }
+  ]
+}

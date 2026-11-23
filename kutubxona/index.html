@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a111f">
+<title>Kutubxona | EnergyVibe</title>
+<meta name="description" content="Elektr qurilmalari, montaj va qurilish normalari bo'yicha qo'llanmalar — kitobdek varaqlab o'qing.">
+<link rel="icon" type="image/png" href="/rasmlar1/rasm5/rasm4.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============ JAVON ============ -->
+<section id="shelf-view" class="view">
+  <header class="hero">
+    <div class="hero-in">
+      <p class="eyebrow"><a href="/" class="home-link"><span class="bolt" aria-hidden="true"></span>energyvibe.uz</a></p>
+      <h1>Kutubxona</h1>
+      <p class="lead">Qo'llanmalar, normalar va qoidalar — kitobni ochib, haqiqiy kitobdek varaqlab o'qing.</p>
+      <label class="search" aria-label="Kitob qidirish">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="shelf-q" type="search" placeholder="Kitob nomi yoki raqami (masalan: xavfsizlik, 3.01.02)" autocomplete="off">
+      </label>
+      <div id="chips" class="chips" role="tablist" aria-label="Turkumlar"></div>
+    </div>
+  </header>
+  <main class="shelf-main">
+    <a id="continue" class="continue" href="#" hidden></a>
+    <div id="grid" class="grid"></div>
+    <p id="empty" class="empty" hidden>Hech narsa topilmadi. Boshqacha yozib ko'ring.</p>
+  </main>
+</section>
+
+<!-- ============ O'QUVCHI ============ -->
+<section id="reader-view" class="view" hidden>
+  <header class="r-bar">
+    <button id="r-back" class="btn" type="button" aria-label="Kutubxonaga qaytish">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg><span>Kutubxona</span>
+    </button>
+    <div class="r-title"><small id="r-code"></small><b id="r-title"></b></div>
+    <div class="r-actions">
+      <button id="btn-toc" class="btn" type="button" title="Mundarija" hidden>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>Mundarija</span>
+      </button>
+      <button id="btn-search" class="btn" type="button" title="Kitob ichidan qidirish">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Qidiruv</span>
+      </button>
+      <button id="btn-full" class="btn icon" type="button" title="To'liq ekran" aria-label="To'liq ekran">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+      </button>
+      <a id="btn-pdf" class="btn icon" title="PDF yuklab olish" aria-label="PDF yuklab olish" download>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg>
+      </a>
+    </div>
+  </header>
+
+  <main class="r-stage" id="stage">
+    <button id="nav-prev" class="nav prev" type="button" aria-label="Oldingi sahifa"><svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg></button>
+    <div id="book-wrap"></div>
+    <button id="nav-next" class="nav next" type="button" aria-label="Keyingi sahifa"><svg viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg></button>
+    <div id="r-loading" class="r-loading" role="status">
+      <div class="spin" aria-hidden="true"></div>
+      <p id="r-loading-text">Kitob ochilmoqda…</p>
+    </div>
+    <div id="hint" class="hint" hidden>Sahifa chetidan tortib varaqlang</div>
+  </main>
+
+  <footer class="r-foot">
+    <span id="pg-label" class="pg-label">—</span>
+    <input id="pg-range" type="range" min="1" max="1" value="1" aria-label="Sahifaga o'tish">
+    <label class="jump">Bet <input id="pg-jump" type="number" min="1" inputmode="numeric"></label>
+  </footer>
+
+  <aside id="drawer" class="drawer" aria-hidden="true">
+    <div class="drawer-head">
+      <div class="tabs" role="tablist">
+        <button id="tab-toc" type="button" role="tab">Mundarija</button>
+        <button id="tab-search" type="button" role="tab">Qidiruv</button>
+      </div>
+      <button id="drawer-close" class="btn icon" type="button" aria-label="Yopish">
+        <svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <div id="pane-toc" class="pane"></div>
+    <div id="pane-search" class="pane">
+      <form id="bs-form" class="bs-form">
+        <input id="bs-q" type="search" placeholder="Kitob ichidan so'z yoki band raqami" autocomplete="off">
+      </form>
+      <p id="bs-status" class="bs-status"></p>
+      <ol id="bs-results" class="bs-results"></ol>
+    </div>
+  </aside>
+</section>
+
+<script src="vendor/page-flip.browser.js"></script>
+<script type="module" src="app.js"></script>
+</body>
+</html>
