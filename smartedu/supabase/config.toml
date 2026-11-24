@@ -29,6 +29,7 @@ enabled = true
 file_size_limit = "50MiB"
 
 [auth]
+enable_anonymous_sign_ins = true   # mehmon rejimi (7-bosqich); Supabase panelida ham yoqing: Authentication → Sign In / Providers
 enabled = true
 site_url = "http://localhost:3000"
 additional_redirect_urls = ["http://localhost:3000"]

@@ -24,6 +24,16 @@ export interface SessionState {
   question: LiveQuestionView | null
   /** Ma'ruzaga rejalashtirilgan savollar va ularning so'ralgan/so'ralmaganligi */
   plan: PlanItem[]
+  /** O'qituvchi sozlamalari (maxfiy emas) */
+  settings: {
+    allowGuests: boolean
+    minAttendanceRatio: number
+    topReactors: number
+    showReactorNames: boolean
+    bonusEnabled: boolean
+    confusedEnabled: boolean
+    shareAnnotations: boolean
+  }
 }
 
 export type QuestionPhase = 'open' | 'closed' | null

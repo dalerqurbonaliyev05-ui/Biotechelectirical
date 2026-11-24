@@ -7,6 +7,7 @@ import { ClientApiError, errorText } from '@/lib/api-client'
 import { t } from '@/lib/i18n'
 import type { SessionState } from '@/lib/session-state'
 import { secondsLeft, useCountdown } from '@/lib/use-countdown'
+import { SessionExtras } from './session-extras'
 import { useLiveSession } from '@/lib/use-live-session'
 import { useQuestionStats, useRating } from '@/lib/use-question-stats'
 
@@ -23,7 +24,8 @@ export function SessionControl({
   pdfUrl: string
   siteUrl: string
 }) {
-  const { state, connected, setSlide, end, openQuestion, closeQuestion } = useLiveSession(initial)
+  const { state, connected, setSlide, end, openQuestion, closeQuestion, applyState } =
+    useLiveSession(initial)
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
   const active = state.status === 'active'
@@ -216,6 +218,8 @@ export function SessionControl({
           </ul>
         )}
       </section>
+
+      <SessionExtras state={state} onState={applyState} />
 
       {rating && rating.top.length > 0 && (
         <section className="card space-y-2">

@@ -7,6 +7,7 @@ import { LIVE_TYPES } from '@/lib/lecture-schemas'
 import { buildLiveQuestion, sharedVariant, type LiveQuestionView } from '@/lib/live-question'
 import { buildRating, type RatingRow, type ScoreRow } from '@/lib/live-rating'
 import { ApiError } from '@/lib/server/api'
+import { participantNames } from '@/lib/server/names'
 import { mapDbError } from '@/lib/server/db-errors'
 import type { SessionRow } from '@/lib/server/sessions'
 import { getSettings } from '@/lib/server/settings'
@@ -211,24 +212,22 @@ export async function sessionRating(
 }
 
 async function computeRating(admin: SupabaseClient, sessionId: string): Promise<RatingRow[]> {
-  // Ismlar bir so'rovda (embed): yuzlab talaba id'sini URL'ga qo'yib bo'lmaydi
   const { data } = await admin
     .from('scores')
-    .select('student_id, total_points, correct_count, correct_time_ms, profiles(full_name)')
+    .select('student_id, total_points, correct_count, correct_time_ms')
     .eq('session_id', sessionId)
     .limit(1000)
-  const names = new Map<string, string>()
-  const rows: ScoreRow[] = (data ?? []).map((r) => {
-    names.set(
-      r.student_id as string,
-      (r.profiles as unknown as { full_name: string } | null)?.full_name ?? '',
-    )
-    return {
-      student_id: r.student_id as string,
-      total_points: Number(r.total_points),
-      correct_count: Number(r.correct_count),
-      correct_time_ms: Number(r.correct_time_ms),
-    }
-  })
-  return buildRating(rows, names)
+  const rows: ScoreRow[] = (data ?? []).map((r) => ({
+    student_id: r.student_id as string,
+    total_points: Number(r.total_points),
+    correct_count: Number(r.correct_count),
+    correct_time_ms: Number(r.correct_time_ms),
+  }))
+  // Ismlar: talaba — profil, mehmon — kiritgan ismi
+  const people = await participantNames(
+    admin,
+    sessionId,
+    rows.map((r) => r.student_id),
+  )
+  return buildRating(rows, new Map([...people].map(([id, p]) => [id, p.full_name])))
 }

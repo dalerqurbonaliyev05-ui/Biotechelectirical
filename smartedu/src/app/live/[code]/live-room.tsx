@@ -42,8 +42,18 @@ interface LiveView {
 }
 
 /** Talaba telefoni: qo'shilish, slayd raqami, jonli savollarga javob, natija va reyting. */
-export function LiveRoom({ code, qrToken }: { code: string; qrToken?: string }) {
-  const [phase, setPhase] = useState<'joining' | 'joined' | 'error' | 'replaced'>('joining')
+export function LiveRoom({
+  code,
+  qrToken,
+  kind,
+}: {
+  code: string
+  qrToken?: string
+  kind: 'student' | 'visitor' | 'staff'
+}) {
+  const [phase, setPhase] = useState<'intro' | 'joining' | 'joined' | 'error' | 'replaced'>('intro')
+  const [guestName, setGuestName] = useState('')
+  const [guestGroup, setGuestGroup] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [info, setInfo] = useState<Joined | null>(null)
   const [view, setView] = useState<LiveView | null>(null)
@@ -56,9 +66,24 @@ export function LiveRoom({ code, qrToken }: { code: string; qrToken?: string }) 
     setPhase('joining')
     setError(null)
     try {
+      if (kind === 'visitor') {
+        // Mehmon: Supabase anonim kirishi (faqat shu sessiya uchun cheklangan identifikator)
+        const sb = createClient()
+        const { data: u } = await sb.auth.getUser()
+        if (!u.user) {
+          const { error: aErr } = await sb.auth.signInAnonymously()
+          if (aErr) throw new ClientApiError('internal', 500)
+        }
+      }
       const j = await apiJson<Joined>('/api/live/join', {
         method: 'POST',
-        json: { code, token: qrToken },
+        json: {
+          code,
+          token: qrToken,
+          ...(kind === 'visitor'
+            ? { guest: { name: guestName, group: guestGroup || undefined } }
+            : {}),
+        },
       })
       revRef.current = j.rev
       setInfo(j)
@@ -76,13 +101,12 @@ export function LiveRoom({ code, qrToken }: { code: string; qrToken?: string }) 
     }
   }
 
-  // React StrictMode (dev) effektni ikki marta ishga tushiradi: ikkinchi qo'shilish tokenni almashtirib yuborardi
-  useEffect(() => {
+  // Qo'shilish tugma bosilganda (qoida matni ko'rsatilgach); ikki marta bosish tokenni almashtirib yubormasin
+  function accept() {
     if (started.current) return
     started.current = true
     void join()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }
 
   const refresh = useCallback(async () => {
     if (!info) return
@@ -125,6 +149,61 @@ export function LiveRoom({ code, qrToken }: { code: string; qrToken?: string }) 
       void sb.removeChannel(ch)
     }
   }, [info, refresh])
+
+  if (phase === 'intro') {
+    if (kind === 'staff') return <p className="card text-center text-slate-600">{L.staffNote}</p>
+    return (
+      <div className="mx-auto max-w-md space-y-4">
+        <h1 className="text-xl font-bold">{t.guests.noticeTitle}</h1>
+        <p className="card text-sm text-slate-700">{t.guests.notice}</p>
+        {kind === 'visitor' && (
+          <div className="card space-y-3">
+            <p className="font-medium">{t.guests.guestIntro}</p>
+            <div>
+              <label className="label" htmlFor="g-name">
+                {t.guests.guestName}
+              </label>
+              <input
+                id="g-name"
+                className="input"
+                value={guestName}
+                maxLength={60}
+                onChange={(e) => setGuestName(e.target.value)}
+                autoComplete="name"
+              />
+            </div>
+            <div>
+              <label className="label" htmlFor="g-group">
+                {t.guests.guestGroup}
+              </label>
+              <input
+                id="g-group"
+                className="input"
+                value={guestGroup}
+                maxLength={60}
+                onChange={(e) => setGuestGroup(e.target.value)}
+              />
+            </div>
+            <p className="text-xs text-slate-500">{t.guests.guestNote}</p>
+          </div>
+        )}
+        <div className="flex flex-wrap gap-2">
+          <button
+            className="btn-primary"
+            disabled={kind === 'visitor' && guestName.trim().length < 2}
+            onClick={accept}
+          >
+            {t.guests.accept}
+          </button>
+          {kind === 'visitor' && (
+            <Link href={`/login?next=/live/${code}`} className="btn-secondary">
+              {t.guests.loginInstead}
+            </Link>
+          )}
+        </div>
+      </div>
+    )
+  }
 
   if (phase === 'joining') return <p className="py-10 text-center text-slate-600">{L.joining}</p>
 

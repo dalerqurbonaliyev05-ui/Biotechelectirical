@@ -55,3 +55,65 @@ select pg_temp.as_user('00000000-0000-0000-0000-0000000000b1');
 select pg_temp.expect('o''qituvchi: o''z sessiyasi ishtirokchilari', (select count(*) from public.session_participants), 2);
 select pg_temp.expect('o''qituvchi: davomat', (select count(*) from public.attendance), 2);
 rollback;
+
+-- ── 0009: mehmon rejimi ─────────────────────────────────────────
+begin;
+insert into public.lectures (id, subject_id, created_by, title, pdf_path, page_count) values
+  ('00000000-0000-0000-0000-000000000f01', '00000000-0000-0000-0000-00000000b001', '00000000-0000-0000-0000-0000000000b1', 'L1', 'x/a.pdf', 10);
+insert into public.lecture_sessions (id, lecture_id, created_by, code, group_id) values
+  ('00000000-0000-0000-0000-0000000005c1', '00000000-0000-0000-0000-000000000f01', '00000000-0000-0000-0000-0000000000b1', '777777', '00000000-0000-0000-0000-00000000a001'),
+  ('00000000-0000-0000-0000-0000000005c2', '00000000-0000-0000-0000-000000000f01', '00000000-0000-0000-0000-0000000000b1', '888888', null);
+-- Mehmon = profiles'da yo'q auth foydalanuvchisi
+insert into auth.users (id, email) values ('00000000-0000-0000-0000-0000000009a1', null);
+
+set local role service_role;
+-- Guruhli sessiyaga mehmon (guruhi yo'q) QO'SHILA OLADI (ro'yxatdan o'tmagan talaba)
+select out_mode from public.app_join_session('777777', '00000000-0000-0000-0000-0000000009a1', 'remote', 'g-tok', true, 'Karimov Vali', 'EE-22');
+select pg_temp.expect_error('mehmon ismsiz kira olmaydi', $q$select * from public.app_join_session('777777', '00000000-0000-0000-0000-0000000009a1', 'remote', 't', true, '', null)$q$, 'guest_name_required');
+select pg_temp.expect_error('profili bor foydalanuvchi mehmon sifatida kira olmaydi', $q$select * from public.app_join_session('777777', '00000000-0000-0000-0000-000000000101', 'remote', 't', true, 'Soxta Mehmon', null)$q$, 'forbidden');
+reset role;
+select pg_temp.expect('mehmon yozuvi: is_guest, ism, guruh matni', (select count(*) from public.session_participants where is_guest and guest_name = 'Karimov Vali' and guest_group = 'EE-22'), 1);
+
+-- Mehmonlarni o'chirib qo'yish
+update public.lecture_sessions set allow_guests = false where id = '00000000-0000-0000-0000-0000000005c1';
+set local role service_role;
+select pg_temp.expect_error('allow_guests = false: yangi mehmon kira olmaydi', $q$select * from public.app_join_session('777777', '00000000-0000-0000-0000-000000000102', 'remote', 't', true, 'Yangi Mehmon', null)$q$, 'guests_not_allowed');
+reset role;
+
+-- Bloklash: qayta kira olmaydi (mehmonlarga yana ruxsat berilgan holatda ham)
+update public.lecture_sessions set allow_guests = true where id = '00000000-0000-0000-0000-0000000005c1';
+update public.session_participants set blocked = true where student_id = '00000000-0000-0000-0000-0000000009a1';
+set local role service_role;
+select pg_temp.expect_error('bloklangan qayta kira olmaydi', $q$select * from public.app_join_session('777777', '00000000-0000-0000-0000-0000000009a1', 'remote', 't2', true, 'Karimov Vali', null)$q$, 'blocked');
+
+-- Kodni yangilash
+select public.app_rotate_session_code('00000000-0000-0000-0000-0000000005c1');
+select pg_temp.expect_error('eski kod bekor', $q$select * from public.app_join_session('777777', '00000000-0000-0000-0000-000000000103', 'remote', 't', false, null, null)$q$, 'session_not_found');
+reset role;
+select pg_temp.expect('kod yangilandi', (select count(*) from public.lecture_sessions where id = '00000000-0000-0000-0000-0000000005c1' and code <> '777777' and rev = 1), 1);
+
+-- Bog'lash: faqat dars tugagach; javoblar va ball talabaga o'tadi
+insert into public.questions (id, subject_id, created_by, type, body) values ('00000000-0000-0000-0000-0000000000c1', '00000000-0000-0000-0000-00000000b001', '00000000-0000-0000-0000-0000000000b1', 'mcq', '{"text":"q"}');
+insert into public.session_questions (id, session_id, question_id, slide_no, time_limit_sec, opened_at) values ('00000000-0000-0000-0000-0000000005d1', '00000000-0000-0000-0000-0000000005c1', '00000000-0000-0000-0000-0000000000c1', 1, 30, now());
+set local role service_role;
+select out_status from public.app_record_live_answer('00000000-0000-0000-0000-0000000005d1', '00000000-0000-0000-0000-0000000009a1', '{}', true, 100, 7, 1000);
+select id as gp from public.session_participants where is_guest \gset
+select pg_temp.expect_error('dars davomida bog''lab bo''lmaydi', format($q$select public.app_link_guest(%L, %L, '00000000-0000-0000-0000-000000000104')$q$, '00000000-0000-0000-0000-0000000005c1', :'gp'), 'session_active');
+select public.app_session_end('00000000-0000-0000-0000-0000000005c1');
+select pg_temp.expect_error('mehmonni bog''lash: talaba bo''lmagan', format($q$select public.app_link_guest(%L, %L, '00000000-0000-0000-0000-0000000009a1')$q$, '00000000-0000-0000-0000-0000000005c1', :'gp'), 'forbidden');
+select public.app_link_guest('00000000-0000-0000-0000-0000000005c1', :'gp', '00000000-0000-0000-0000-000000000104');
+reset role;
+select pg_temp.expect('bog''langach ball va davomat talabaga o''tdi',
+  (select count(*) from public.scores where student_id = '00000000-0000-0000-0000-000000000104' and total_points = 107)
+  + (select count(*) from public.attendance where student_id = '00000000-0000-0000-0000-000000000104')
+  + (select count(*) from public.session_participants where student_id = '00000000-0000-0000-0000-000000000104' and linked_student_id is not null), 3);
+select pg_temp.expect('mehmonda ball qolmadi', (select count(*) from public.scores where student_id = '00000000-0000-0000-0000-0000000009a1'), 0);
+
+-- RLS: mehmon (auth foydalanuvchi, profil yo'q) hech narsani ko'rmaydi; o'z davomatidan tashqari
+set local role authenticated;
+select pg_temp.as_user('00000000-0000-0000-0000-0000000009a1');
+select pg_temp.expect('mehmon: profillar, sessiyalar, savollar, javoblar — yopiq',
+  (select count(*) from public.profiles) + (select count(*) from public.lecture_sessions) + (select count(*) from public.session_questions) + (select count(*) from public.session_answers) + (select count(*) from public.scores) + (select count(*) from public.session_participants) + (select count(*) from public.questions) + (select count(*) from public.lectures), 0);
+select pg_temp.expect_error('mehmon: qo''shilish funksiyasini chaqira olmaydi', $q$select * from public.app_join_session('888888', auth.uid(), 'remote', 'x', true, 'X Y', null)$q$, 'permission denied');
+reset role;
+rollback;

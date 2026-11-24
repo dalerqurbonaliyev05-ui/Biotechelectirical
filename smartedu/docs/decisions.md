@@ -257,7 +257,27 @@ Har yozuv: **nima** → **nima uchun** → **qanday o'zgartirish mumkin**.
 4. **Slayd kitoblari (`slide_books`)** hozircha qo'lda (nom, slug, bet); kutubxona API kontrakti 12-bosqichda.
 
 ## v2 — 6-bosqich: doska paneli
+
 1. **Ingichka panel (`BoardStrip`, 56 px) slayd maydonidan TASHQARIDA**, alohida qator — slayd ustini hech qachon yopmaydi. Chapda kitob
    belgisi (12), o'rtada reaksiyalar (9), o'ngda hisoblagichlar uchun joy. Pastki QR/kod paneli ixchamlashtirildi (QR 110 px).
 2. **Doska faqat sessiya egasi (yoki admin) hisobi bilan ochiladi**, shuning uchun o'qituvchi asboblari (slayd boshqaruvi, kodni yangilash)
    boshqa hech kimga ko'rinmaydi. Darsni o'qituvchi bosh sahifasidan (`QuickStart`) yoki ma'ruza sahifasidan (guruh/auditoriya bilan) boshlaydi.
+
+## v2 — 7-bosqich: mehmon rejimi
+
+1. **Mehmon = Supabase anonim foydalanuvchisi** (`signInAnonymously`, profili yo'q). Dars jadvallaridagi `student_id` FK'si `profiles`dan
+   `auth.users`ga ko'chirildi (0009), shunda javob/ball/davomat talaba ham, mehmon ham uchun bir xil ishlaydi. Mehmon faqat `/api/live/*` ga
+   kira oladi (`requireLiveUser`); boshqa API/sahifalar rol talab qiladi → mehmon 403/yo'naltirish. RLS testida mehmon hech narsani ko'rmaydi.
+2. **Semestr reytingi** faqat guruh ro'yxatidagi talabalar (profiles) bo'yicha → bog'lanmagan mehmon reytingga kirmaydi (qo'shimcha kod kerak emas).
+   Dars reytingi/medallarida mehmon kiritgan ismi bilan ishtirok etadi.
+3. **Bog'lash faqat dars TUGAGACH** (`app_link_guest`): javoblar, ballar, davomat talabaga ko'chadi. Talaba shu darsga o'z hisobi bilan
+   ham kirgan bo'lsa — rad (`student_already_joined`), ikki marta hisoblanmasin.
+4. **Bloklash** (`blocked`): qayta kira olmaydi; mehmonlarni o'chirish (`allow_guests=false`) YANGI mehmonni to'xtatadi. Kodni yangilash
+   eski kodni darhol bekor qiladi (mavjud ishtirokchilar sessiya id bilan ishlayveradi).
+5. **Suiiste'molga qarshi:** mehmon qo'shilishiga IP bo'yicha tezlik cheklovi (bizning API'da) + foydalanuvchi bo'yicha. Anonim akkaunt YARATISH
+   Supabase Auth'da (brauzerdan) bo'lgani uchun uning cheklovi Supabase tomonida (anonim kirish uchun IP limiti — panelda ko'ring).
+   **Cloudflare Turnstile** (ixtiyoriy, bepul): `signInAnonymously({ options: { captchaToken } })` + Supabase Auth → Attack Protection → CAPTCHA.
+   Hozir YOQILMAGAN (tashqi xizmat qo'shmaslik talabi); ommaviy hujum kuzatilsa yoqiladi.
+6. **Shaffoflik matni qo'shilishdan OLDIN** ko'rsatiladi (qatnashish qanday kuzatilishi); qo'shilish tugma bilan (QR skanerlansa ham).
+7. **Ismlar:** `session_participants → profiles` embed endi noto'g'ri bo'lardi (FK `linked_student_id`ga qolgan) — shuning uchun ismlar
+   `participantNames()` orqali olinadi (profil yoki `guest_name`).

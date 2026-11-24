@@ -108,3 +108,34 @@ export function idParam(raw: string): string {
   if (!z.guid().safeParse(raw).success) throw new ApiError(404, 'not_found')
   return raw
 }
+
+export interface LiveUser {
+  userId: string
+  /** Ro'yxatdan o'tgan talaba profili; mehmonda null */
+  profile: SessionProfile | null
+  isGuest: boolean
+}
+
+/**
+ * Jonli dars API'lari uchun: ro'yxatdagi talaba YOKI mehmon (Supabase anonim foydalanuvchisi, profili yo'q).
+ * Mehmon faqat shu API'larga kira oladi (boshqa API'lar `requireUser` bilan rol talab qiladi → mehmon 403).
+ */
+export async function requireLiveUser(): Promise<LiveUser> {
+  const supabase = await createClient()
+  const { data } = await supabase.auth.getUser()
+  if (!data.user) throw new ApiError(401, 'unauthenticated')
+  const { data: profile, error } = await supabase
+    .from('profiles')
+    .select('id, role, full_name, student_code, group_id, must_change_password, is_active')
+    .eq('id', data.user.id)
+    .maybeSingle()
+  if (error) throw error
+  if (profile) {
+    const p = profile as SessionProfile
+    if (!p.is_active || p.role !== 'student') throw new ApiError(403, 'forbidden')
+    if (p.must_change_password) throw new ApiError(403, 'password_change_required')
+    return { userId: p.id, profile: p, isGuest: false }
+  }
+  if (data.user.is_anonymous === true) return { userId: data.user.id, profile: null, isGuest: true }
+  throw new ApiError(403, 'forbidden')
+}

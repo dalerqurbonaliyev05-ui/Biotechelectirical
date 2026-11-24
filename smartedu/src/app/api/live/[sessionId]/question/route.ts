@@ -1,5 +1,5 @@
 import { describeCorrect } from '@/lib/assessment/result-view'
-import { handle, idParam, limit, ok, requireUser } from '@/lib/server/api'
+import { handle, idParam, limit, ok, requireLiveUser } from '@/lib/server/api'
 import { currentQuestion, sessionRating } from '@/lib/server/live-questions'
 import { requireParticipant } from '@/lib/server/live'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -11,11 +11,11 @@ import { buildLiveQuestion } from '@/lib/live-question'
  * Token mos kelmasa `token_replaced` (talaba boshqa qurilmadan qo'shilgan).
  */
 export const GET = handle<{ sessionId: string }>(async (req, { params }) => {
-  const { profile } = await requireUser(['student'])
-  limit(`live-question:${profile.id}`, 120, 60_000)
+  const { userId } = await requireLiveUser()
+  limit(`live-question:${userId}`, 120, 60_000)
   const sessionId = idParam((await params).sessionId)
   const admin = createAdminClient()
-  await requireParticipant(admin, profile.id, sessionId, req.headers.get('x-join-token'))
+  await requireParticipant(admin, userId, sessionId, req.headers.get('x-join-token'))
 
   const { data: s } = await admin
     .from('lecture_sessions')
@@ -46,7 +46,7 @@ export const GET = handle<{ sessionId: string }>(async (req, { params }) => {
       .from('session_answers')
       .select('is_correct, points, bonus')
       .eq('session_question_id', cur.sq.id)
-      .eq('student_id', profile.id)
+      .eq('student_id', userId)
       .maybeSingle()
     mine = { answered: Boolean(a) }
     if (a && !isOpen)
@@ -69,7 +69,7 @@ export const GET = handle<{ sessionId: string }>(async (req, { params }) => {
   let me: { points: number; rank: number; of: number; medal: string | null } | null = null
   if (!isOpen) {
     const rating = await sessionRating(admin, sessionId)
-    const mineRow = rating.find((r) => r.studentId === profile.id)
+    const mineRow = rating.find((r) => r.studentId === userId)
     if (mineRow)
       me = { points: mineRow.points, rank: mineRow.rank, of: rating.length, medal: mineRow.medal }
   }

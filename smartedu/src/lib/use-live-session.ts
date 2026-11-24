@@ -97,5 +97,14 @@ export function useLiveSession(initial: SessionState, pollMs = 10_000) {
     broadcast(s)
   }, [apply, broadcast, initial.id])
 
-  return { state, connected, setSlide, end, refresh, openQuestion, closeQuestion }
+  return {
+    state,
+    connected,
+    setSlide,
+    end,
+    refresh,
+    openQuestion,
+    closeQuestion,
+    applyState: apply,
+  }
 }

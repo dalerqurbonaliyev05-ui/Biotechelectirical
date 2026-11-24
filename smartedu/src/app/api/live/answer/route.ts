@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { parseResponse } from '@/lib/assessment/submit'
 import { gradeLiveResponse } from '@/lib/live-question'
 import { scoreLiveAnswer } from '@/lib/live-score'
-import { ApiError, handle, limit, ok, readJson, requireUser } from '@/lib/server/api'
+import { ApiError, handle, limit, ok, readJson, requireLiveUser } from '@/lib/server/api'
 import { mapDbError } from '@/lib/server/db-errors'
 import { requireParticipant } from '@/lib/server/live'
 import type { LiveQ, SqRow } from '@/lib/server/live-questions'
@@ -22,8 +22,8 @@ const schema = z.object({
  */
 export const POST = handle(async (req) => {
   const receivedAt = Date.now() // ← javob serverga yetib kelgan vaqt
-  const { profile } = await requireUser(['student'])
-  limit(`live-answer:${profile.id}`, 60, 60_000)
+  const { userId } = await requireLiveUser()
+  limit(`live-answer:${userId}`, 60, 60_000)
   const body = await readJson(req, schema)
 
   const admin = createAdminClient()
@@ -34,7 +34,7 @@ export const POST = handle(async (req) => {
     .maybeSingle()
   if (!sq) throw new ApiError(404, 'not_found')
   const row = sq as SqRow
-  await requireParticipant(admin, profile.id, row.session_id, body.token)
+  await requireParticipant(admin, userId, row.session_id, body.token)
 
   const { data: session } = await admin
     .from('lecture_sessions')
@@ -67,7 +67,7 @@ export const POST = handle(async (req) => {
     .from('session_answers')
     .select('id')
     .eq('session_question_id', row.id)
-    .eq('student_id', profile.id)
+    .eq('student_id', userId)
     .maybeSingle()
   const settings = await getSettings(admin)
   const result = scoreLiveAnswer({
@@ -85,7 +85,7 @@ export const POST = handle(async (req) => {
 
   const { data, error } = await admin.rpc('app_record_live_answer', {
     p_session_question_id: row.id,
-    p_student_id: profile.id,
+    p_student_id: userId,
     p_response: response,
     p_is_correct: isCorrect,
     p_points: result.points,

@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { ApiError, handle, idParam, limit, ok, readJson, requireUser } from '@/lib/server/api'
 import { closeOpenQuestion, openPlannedQuestion } from '@/lib/server/live-questions'
-import { buildSessionState, getControlledSession } from '@/lib/server/sessions'
+import { SESSION_COLS, buildSessionState, getControlledSession } from '@/lib/server/sessions'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
 
@@ -25,7 +25,7 @@ export const POST = handle<{ id: string }>(async (req, { params }) => {
 
   const { data: fresh } = await admin
     .from('lecture_sessions')
-    .select('id, lecture_id, created_by, group_id, code, status, current_slide, rev')
+    .select(SESSION_COLS)
     .eq('id', id)
     .single()
   return ok(await buildSessionState(admin, fresh as typeof session))

@@ -2,7 +2,12 @@ import { z } from 'zod'
 import { handle, idParam, limit, ok, readJson, requireUser } from '@/lib/server/api'
 import { mapDbError } from '@/lib/server/db-errors'
 import { autoOpenForSlide, closeOpenQuestion } from '@/lib/server/live-questions'
-import { buildSessionState, getControlledSession, type SessionRow } from '@/lib/server/sessions'
+import {
+  SESSION_COLS,
+  buildSessionState,
+  getControlledSession,
+  type SessionRow,
+} from '@/lib/server/sessions'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
 
@@ -27,7 +32,7 @@ export const POST = handle<{ id: string }>(async (req, { params }) => {
   if (slide !== session.current_slide && (await autoOpenForSlide(admin, row, slide))) {
     const { data: fresh } = await admin
       .from('lecture_sessions')
-      .select('id, lecture_id, created_by, group_id, code, status, current_slide, rev')
+      .select(SESSION_COLS)
       .eq('id', id)
       .single()
     row = fresh as SessionRow

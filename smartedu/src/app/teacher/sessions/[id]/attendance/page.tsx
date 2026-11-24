@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation'
 import { t } from '@/lib/i18n'
 import { findControlledSession } from '@/lib/server/sessions'
 import { requireRole } from '@/lib/server/session'
+import { participantNames } from '@/lib/server/names'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
 
 const A = t.attendance
@@ -22,28 +24,39 @@ export default async function AttendancePage({ params }: { params: Promise<{ id:
   const session = await findControlledSession(supabase, me, id)
   if (!session) notFound()
 
-  const { data } = await supabase
+  // Ismlar profil/mehmon ismidan (participantNames); faqat shu dars o'qituvchisi ko'radi (findControlledSession)
+  const admin = createAdminClient()
+  const { data } = await admin
     .from('session_participants')
-    .select('student_id, mode, joined_at, rejoin_count, profiles(full_name, student_code)')
+    .select('student_id, mode, joined_at, rejoin_count, is_guest, linked_student_id')
     .eq('session_id', id)
     .order('joined_at')
-  const rows = (data ?? []) as unknown as {
-    student_id: string
-    mode: 'auditorium' | 'remote'
-    joined_at: string
-    rejoin_count: number
-    profiles: { full_name: string; student_code: string | null } | null
-  }[]
+    .limit(2000)
+  const names = await participantNames(admin, id)
+  const rows = (data ?? []).map((r) => ({
+    student_id: r.student_id as string,
+    mode: r.mode as 'auditorium' | 'remote',
+    joined_at: r.joined_at as string,
+    rejoin_count: Number(r.rejoin_count),
+    is_guest: Boolean(r.is_guest) && !r.linked_student_id,
+    profiles: names.get(r.student_id as string)
+      ? {
+          full_name: names.get(r.student_id as string)!.full_name,
+          student_code: names.get(r.student_id as string)!.student_code,
+        }
+      : null,
+  }))
 
   let absent: { full_name: string; student_code: string | null }[] = []
   if (session.group_id) {
-    const { data: students } = await supabase
+    const { data: students } = await admin
       .from('profiles')
       .select('id, full_name, student_code')
       .eq('role', 'student')
-      .eq('group_id', session.group_id)
       .eq('is_active', true)
+      .eq('group_id', session.group_id)
       .order('student_code')
+      .limit(1000)
     const present = new Set(rows.map((r) => r.student_id))
     absent = (students ?? [])
       .filter((s) => !present.has(s.id as string))
@@ -92,7 +105,10 @@ export default async function AttendancePage({ params }: { params: Promise<{ id:
             {rows.map((r) => (
               <tr key={r.student_id}>
                 <td className="font-mono text-xs">{r.profiles?.student_code}</td>
-                <td>{r.profiles?.full_name}</td>
+                <td>
+                  {r.profiles?.full_name}{' '}
+                  {r.is_guest && <span className="badge ml-1">{t.guests.badge}</span>}
+                </td>
                 <td>
                   <span className="badge">{r.mode === 'auditorium' ? A.auditorium : A.remote}</span>
                 </td>

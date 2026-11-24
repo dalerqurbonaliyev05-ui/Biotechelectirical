@@ -4,8 +4,9 @@ import { updateSession } from '@/lib/supabase/middleware'
 import { ROLE_HOME, type Role } from '@/lib/types'
 
 // Tokensiz (yoki o'z imzosi bilan) ishlaydigan yo'llar
-const PUBLIC_EXACT = new Set(['/', '/login', '/api/auth/login'])
-const PUBLIC_PREFIX = ['/api/lab/submit', '/api/cron/']
+const PUBLIC_EXACT = new Set(['/', '/login', '/api/auth/login', '/live'])
+// /live — mehmon (hisobsiz) ham ochadi; sahifaning o'zi kirish holatini tekshiradi, API'lar esa token/sessiya talab qiladi
+const PUBLIC_PREFIX = ['/api/lab/submit', '/api/cron/', '/live/']
 
 // Qo'pol rol-yo'l mosligi. Haqiqiy tekshiruv — layout'lar va API'larda (DB'dagi rol bo'yicha).
 const ROLE_PREFIX: { prefix: string; roles: Role[] }[] = [

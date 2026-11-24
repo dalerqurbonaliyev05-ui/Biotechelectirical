@@ -14,7 +14,20 @@ export interface SessionRow {
   status: 'active' | 'ended'
   current_slide: number
   rev: number
+  allow_guests: boolean
+  min_attendance_ratio: number
+  top_reactors: number
+  show_reactor_names: boolean
+  bonus_enabled: boolean
+  confused_enabled: boolean
+  share_annotations: boolean
+  started_at: string
+  ended_at: string | null
 }
+
+/** Sessiya ustunlari (bir joyda: ro'yxat o'zgarsa hamma so'rov mos keladi). */
+export const SESSION_COLS =
+  'id, lecture_id, created_by, group_id, code, status, current_slide, rev, allow_guests, min_attendance_ratio, top_reactors, show_reactor_names, bonus_enabled, confused_enabled, share_annotations, started_at, ended_at'
 
 /**
  * Sessiyani boshqarish huquqi: yaratuvchi o'qituvchi yoki admin. `userClient` — RLS ostida,
@@ -27,7 +40,7 @@ export async function findControlledSession(
 ): Promise<SessionRow | null> {
   const { data } = await userClient
     .from('lecture_sessions')
-    .select('id, lecture_id, created_by, group_id, code, status, current_slide, rev')
+    .select(SESSION_COLS)
     .eq('id', id)
     .maybeSingle()
   const row = data as SessionRow | null
@@ -104,5 +117,14 @@ export async function buildSessionState(
     title: String(lec?.title ?? ''),
     question,
     plan,
+    settings: {
+      allowGuests: s.allow_guests,
+      minAttendanceRatio: Number(s.min_attendance_ratio),
+      topReactors: s.top_reactors,
+      showReactorNames: s.show_reactor_names,
+      bonusEnabled: s.bonus_enabled,
+      confusedEnabled: s.confused_enabled,
+      shareAnnotations: s.share_annotations,
+    },
   }
 }

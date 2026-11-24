@@ -8,6 +8,9 @@ export interface Participant {
   student_id: string
   join_token: string
   mode: 'auditorium' | 'remote'
+  blocked: boolean
+  is_guest: boolean
+  guest_name: string | null
 }
 
 /**
@@ -22,11 +25,12 @@ export async function requireParticipant(
 ): Promise<Participant> {
   const { data } = await admin
     .from('session_participants')
-    .select('id, session_id, student_id, join_token, mode')
+    .select('id, session_id, student_id, join_token, mode, blocked, is_guest, guest_name')
     .eq('session_id', sessionId)
     .eq('student_id', studentId)
     .maybeSingle()
   if (!data) throw new ApiError(404, 'not_joined')
+  if (data.blocked) throw new ApiError(403, 'blocked')
   if (!token || data.join_token !== token) throw new ApiError(409, 'token_replaced')
   return data as Participant
 }
