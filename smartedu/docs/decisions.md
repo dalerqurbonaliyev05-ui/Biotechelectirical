@@ -163,3 +163,29 @@ Har yozuv: **nima** → **nima uchun** → **qanday o'zgartirish mumkin**.
    javob yuborilganda (8-bosqich) yoki polling'da aniqlanadi.
 6. **Doska ishtirokchilar sonini 5 s polling bilan oladi** (Realtime xabar tejash uchun har qo'shilishda xabar yuborilmaydi).
 7. **IP/geo saqlanmaydi** (shaxsiy ma'lumotni minimal saqlash). Qo'shimcha signal sifatida keyin ko'rib chiqiladi.
+
+## 8-bosqich: jonli savollar va reyting
+
+1. **Ball hisoblash — toza funksiya** (`lib/live-score.ts`), DB'da emas: 100 (to'g'ri) / 0, tezlik bonusi
+   0..`max_speed_bonus` (standart **10**), savol ochilgandan beri o'tgan server vaqtiga chiziqli, `.5` yuqoriga.
+   `scoreLiveAnswer` 20+ sinovda tekshirilgan: vaqt tugagan, ikki marta javob, kech kelgan, erta yopilgan, soat og'ishi.
+2. **Tarmoq kechikishi imtiyozi (`live_grace_ms`, 1500 ms):** muddatdan keyin shu oraliqda kelgan javob QABUL qilinadi
+   (bonus 0), undan keyin rad. Sekin internet/arzon telefon talabani ortiqcha jazolamasin.
+3. **Vaqt manbai:** savol ochilgan vaqt ham, javob kelgan vaqt ham ilova serveri soati (`Date.now()`); mijoz soati
+   ishlatilmaydi. Instansiyalar orasidagi og'ish (odatda ms) imtiyoz ichida yutiladi. (Test-nazoratda esa DB soati.)
+4. **Ikki marta javob 3 qavatda to'siladi:** ilovada tekshiruv → toza funksiya `duplicate` → DB `unique(savol, talaba)`
+   (poyga holatida ham ikkinchisi ballga tegmaydi: `app_record_live_answer` → `duplicate`).
+5. **Javob to'g'riligi savol yopilguncha ko'rinmaydi** (talabaga ham, javob yuborish natijasida ham): qo'shnidan
+   ko'chirish ma'nosiz. Doskada ochiq paytda faqat variantlar bo'yicha SONLAR ko'rinadi (to'g'ri ajratilmaydi).
+6. **Doska "to'xtaydi":** slaydga yetilganda shu slayddagi hali so'ralmagan birinchi savol avtomatik ochiladi
+   (ochiq savol avval yopiladi); qolganlari qo'lda. Vaqt + 1.8 s tugagach doska (yoki boshqaruv sahifasi) savolni
+   o'zi yopadi va natijani ko'rsatadi. Savol faqat shu slayd ko'ringan paytda doskada turadi.
+7. **Rejalashtirilgan savol dars davomida bir marta** so'raladi (qisman unikal indeks) — qayta so'rab ikki
+   barobar ball olib bo'lmaydi.
+8. **Reyting:** ball ↓, teng ballda to'g'ri javoblarga KAM vaqt ketgani yuqori, hammasi teng bo'lsa — teng o'rin.
+   Medallar 1–3-o'rinlarga (teng o'rinda teng medal). Ismlar qisqartiriladi ("Aliyev A.") — shaxsiy ma'lumot minimal.
+   Talaba telefonida faqat o'z o'rni; reyting savol YOPILGANDAN keyin ko'rinadi.
+9. **Realtime tejamkorligi:** savol ochish/yopish/slayd — har biri bitta ~50 baytlik xabar; talabalar xabar
+   kelganda serverdan so'raydi (soxta xabar zarar qilmaydi). Savol yo'q va slayd oddiy almashsa talabalar so'rov
+   yubormaydi. Doska statistikani 2 s polling bilan oladi (xabar emas). Reyting 2 s xotirada keshlanadi.
+10. **Raqamli jonli savol:** butun auditoriyaga bir xil qiymatlar (doskada ko'rinadi), urug' = sessiya + savol.

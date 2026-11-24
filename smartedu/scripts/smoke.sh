@@ -30,5 +30,7 @@ check "kirmagan: natija sahifasi → login" 307 /student/results/00000000-0000-0
 check "kirmagan: eksport → 401" 401 "/api/assessments/00000000-0000-0000-0000-000000000001/export?format=csv"
 check "kirmagan: /live → login" 307 /live
 check "kirmagan: qo'shilish API → 401" 401 /api/live/join -X POST
+check "kirmagan: jonli javob API → 401" 401 /api/live/answer -X POST
+check "kirmagan: savol boshqaruvi → 401" 401 /api/sessions/00000000-0000-0000-0000-000000000001/question -X POST
 check "login: noto'g'ri JSON → 400" 400 /api/auth/login -X POST -H 'content-type: application/json' -d 'not-json'
 echo "✔ smoke test o'tdi"

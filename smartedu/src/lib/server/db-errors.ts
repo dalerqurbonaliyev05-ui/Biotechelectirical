@@ -15,6 +15,8 @@ const MAP: Record<string, [number, string]> = {
   score_out_of_range: [400, 'score_out_of_range'],
   question_in_use: [409, 'question_in_use'],
   session_ended: [409, 'session_ended'],
+  already_asked: [409, 'already_asked'],
+  no_open_question: [409, 'no_open_question'],
   slide_out_of_range: [400, 'slide_out_of_range'],
   code_exhausted: [503, 'internal'],
 }

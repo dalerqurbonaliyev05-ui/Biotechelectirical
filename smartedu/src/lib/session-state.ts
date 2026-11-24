@@ -1,4 +1,14 @@
-/** Doska/talaba/o'qituvchi o'rtasida almashiladigan holat (maxfiy ma'lumot YO'Q). */
+import type { LiveQuestionView } from '@/lib/live-question'
+
+export interface PlanItem {
+  id: string // lecture_question id
+  slide: number
+  text: string
+  asked: boolean
+  timeLimitSec: number | null
+}
+
+/** Doska/boshqaruv uchun holat (maxfiy ma'lumot YO'Q: to'g'ri javob bu yerda emas). */
 export interface SessionState {
   id: string
   rev: number
@@ -8,13 +18,19 @@ export interface SessionState {
   code: string
   participants: number
   title: string
+  /** Joriy slayddagi savol (ochiq yoki yopilgan), bo'lmasa null */
+  question: LiveQuestionView | null
+  /** Ma'ruzaga rejalashtirilgan savollar va ularning so'ralgan/so'ralmaganligi */
+  plan: PlanItem[]
 }
+
+export type QuestionPhase = 'open' | 'closed' | null
 
 /** Realtime orqali kelgan (ishonchsiz) hodisa: faqat tur va oraliqni tekshiramiz. */
 export function parseStateEvent(
   payload: unknown,
-): Pick<SessionState, 'rev' | 'slide' | 'status'> | null {
-  const p = payload as Partial<SessionState> | null
+): { rev: number; slide: number; status: 'active' | 'ended'; q: QuestionPhase } | null {
+  const p = payload as { rev?: unknown; slide?: unknown; status?: unknown; q?: unknown } | null
   if (!p || typeof p !== 'object') return null
   if (
     !Number.isInteger(p.rev) ||
@@ -24,7 +40,8 @@ export function parseStateEvent(
   )
     return null
   if (p.status !== 'active' && p.status !== 'ended') return null
-  return { rev: p.rev as number, slide: p.slide as number, status: p.status }
+  const q: QuestionPhase = p.q === 'open' || p.q === 'closed' ? p.q : null
+  return { rev: p.rev as number, slide: p.slide as number, status: p.status, q }
 }
 
 export const sessionChannel = (sessionId: string) => `session:${sessionId}`

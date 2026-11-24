@@ -1,16 +1,21 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { BoardPodium, BoardQuestion } from '@/components/board-question'
 import { PdfViewer } from '@/components/pdf-viewer'
-import { apiJson } from '@/lib/api-client'
 import { QrCode } from '@/components/qr-code'
+import { apiJson } from '@/lib/api-client'
 import { t } from '@/lib/i18n'
 import type { SessionState } from '@/lib/session-state'
+import { useCountdown } from '@/lib/use-countdown'
 import { useLiveSession } from '@/lib/use-live-session'
+import { useQuestionStats, useRating } from '@/lib/use-question-stats'
 
 const L = t.live
+/** Muddat tugagach shuncha ms kutib (kechikkan javoblar uchun imtiyoz) savol avtomatik yopiladi. */
+const AUTO_CLOSE_AFTER_MS = 1800
 
-/** Katta ekran uchun: slayd, raqam, QR + kod, ishtirokchilar. Klaviatura bilan boshqariladi. */
+/** Katta ekran uchun: slayd, savol (doska "to'xtaydi"), QR + kod, reyting, medallar. Klaviatura bilan boshqariladi. */
 export function BoardView({
   initial,
   pdfUrl,
@@ -20,13 +25,33 @@ export function BoardView({
   pdfUrl: string
   siteUrl: string
 }) {
-  const { state, connected, setSlide } = useLiveSession(initial, 5000)
+  const { state, connected, setSlide, closeQuestion } = useLiveSession(initial, 5000)
   const root = useRef<HTMLDivElement>(null)
   const [error, setError] = useState(false)
   const [qrUrl, setQrUrl] = useState<string | null>(null)
   const [qrWarn, setQrWarn] = useState(false)
   const stateRef = useRef(state)
   stateRef.current = state
+
+  const question = state.question
+  const left = useCountdown(question)
+  const stats = useQuestionStats(state.id, question, 2000)
+  const showRating = question?.status === 'closed' || state.status === 'ended'
+  const rating = useRating(
+    state.id,
+    showRating ? `${question?.id}:${question?.status}:${state.status}` : 'hidden',
+  )
+
+  // Vaqt tugadi → doska savolni o'zi yopadi (o'qituvchi qo'lda ham yopishi mumkin)
+  const autoClosed = useRef<string | null>(null)
+  useEffect(() => {
+    if (!question || question.status !== 'open' || state.status !== 'active' || left === null)
+      return
+    if (left < -AUTO_CLOSE_AFTER_MS && autoClosed.current !== question.id) {
+      autoClosed.current = question.id
+      closeQuestion().catch(() => undefined) // boshqaruv sahifasi allaqachon yopgan bo'lishi mumkin
+    }
+  }, [left, question, state.status, closeQuestion])
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -86,7 +111,9 @@ export function BoardView({
   return (
     <div ref={root} className="flex h-screen flex-col bg-black text-white">
       <div className="relative min-h-0 flex-1">
-        {pdfUrl ? (
+        {question ? (
+          <BoardQuestion question={question} stats={stats} left={left} top={rating?.top ?? null} />
+        ) : pdfUrl ? (
           <PdfViewer url={pdfUrl} page={state.slide} fit="contain" className="size-full" />
         ) : (
           <p className="p-10 text-2xl">{t.lectures.pdfError}</p>
@@ -100,18 +127,17 @@ export function BoardView({
         >
           {L.fullscreen}
         </button>
-        {state.status === 'ended' && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/80">
-            <p className="text-6xl font-bold">{L.ended}</p>
-          </div>
-        )}
+        {state.status === 'ended' && <BoardPodium top={rating?.top ?? []} />}
         {qrWarn && (
           <p className="absolute bottom-3 left-4 rounded bg-amber-600 px-3 py-1 text-sm">
             {t.attendance.qrWarn}
           </p>
         )}
         {error && (
-          <p role="alert" className="absolute bottom-3 left-4 rounded bg-red-600 px-3 py-1 text-lg">
+          <p
+            role="alert"
+            className="absolute right-4 bottom-3 rounded bg-red-600 px-3 py-1 text-lg"
+          >
             {t.app.error}
           </p>
         )}

@@ -69,11 +69,32 @@ export function useLiveSession(initial: SessionState, pollMs = 10_000) {
     [apply, broadcast, initial.id],
   )
 
+  const openQuestion = useCallback(
+    async (lectureQuestionId: string) => {
+      const s = await apiJson<SessionState>(`/api/sessions/${initial.id}/question`, {
+        method: 'POST',
+        json: { action: 'open', lecture_question_id: lectureQuestionId },
+      })
+      apply(s)
+      broadcast(s)
+    },
+    [apply, broadcast, initial.id],
+  )
+
+  const closeQuestion = useCallback(async () => {
+    const s = await apiJson<SessionState>(`/api/sessions/${initial.id}/question`, {
+      method: 'POST',
+      json: { action: 'close' },
+    })
+    apply(s)
+    broadcast(s)
+  }, [apply, broadcast, initial.id])
+
   const end = useCallback(async () => {
     const s = await apiJson<SessionState>(`/api/sessions/${initial.id}/end`, { method: 'POST' })
     apply(s)
     broadcast(s)
   }, [apply, broadcast, initial.id])
 
-  return { state, connected, setSlide, end, refresh }
+  return { state, connected, setSlide, end, refresh, openQuestion, closeQuestion }
 }
