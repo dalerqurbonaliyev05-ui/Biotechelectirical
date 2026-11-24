@@ -281,3 +281,18 @@ Har yozuv: **nima** → **nima uchun** → **qanday o'zgartirish mumkin**.
 6. **Shaffoflik matni qo'shilishdan OLDIN** ko'rsatiladi (qatnashish qanday kuzatilishi); qo'shilish tugma bilan (QR skanerlansa ham).
 7. **Ismlar:** `session_participants → profiles` embed endi noto'g'ri bo'lardi (FK `linked_student_id`ga qolgan) — shuning uchun ismlar
    `participantNames()` orqali olinadi (profil yoki `guest_name`).
+
+## v2 · 8-bosqich — nazorat nuqtasi doskani to'xtatadi
+
+- **Trigger "slaydga yetganda" emas, "keyingi slaydga o'tmoqchi bo'lganda".** `POST /api/sessions/[id]/next`
+  qaror mantig'i toza funksiyada (`lib/checkpoint-flow.ts`, `decideAdvance`) va Vitest bilan sinalgan:
+  ochiq savol → yopiladi; nuqtada so'ralmagan oddiy savol → keyingisi ochiladi (slayd o'zgarmaydi);
+  hammasi tugagach → keyingi slayd (oxirgisida joyida qoladi). Bonus savol (9-bosqich) shu ketma-ketlikka
+  "oddiy savollardan keyin, slayd almashishidan oldin" bosqichi sifatida ulanadi (`bonusReady` hozircha `false`).
+- **O'tkazib yuborish:** `{skip:true}` — ochiq savol yopiladi va nuqta o'tkaziladi; doskada `S` tugmasi,
+  boshqaruvda "O'tkazib yuborish" tugmasi.
+- **Orqaga/sakrash nuqtani ishga tushirmaydi** (`/slide` faqat ochiq savolni yopadi): o'qituvchi o'tgan
+  slaydga qaytganda savol qayta chiqib ketmasin. Oldingi `autoOpenForSlide` (slaydga yetganda ochish) olib tashlandi.
+- **Cheklov:** `/next` ochiq savolni yopishda va keyingisini ochishda bir nechta so'rov ketma-ket ishlaydi
+  (bitta tranzaksiya emas); ikki marta tez bosish holatida `app_*` funksiyalaridagi tekshiruvlar
+  (bitta ochiq savol) himoya qiladi. Supabase E2E bilan sinalmagan.

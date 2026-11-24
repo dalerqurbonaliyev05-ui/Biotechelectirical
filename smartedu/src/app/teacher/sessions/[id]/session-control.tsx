@@ -24,7 +24,7 @@ export function SessionControl({
   pdfUrl: string
   siteUrl: string
 }) {
-  const { state, connected, setSlide, end, openQuestion, closeQuestion, applyState } =
+  const { state, connected, setSlide, end, openQuestion, closeQuestion, applyState, next } =
     useLiveSession(initial)
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
@@ -56,6 +56,8 @@ export function SessionControl({
     }
   }
   const go = (n: number) => n >= 1 && n <= state.pageCount && run(() => setSlide(n))
+  // Joriy slayddan keyin hali so'ralmagan savol bor → "Keyingi" doskani to'xtatadi
+  const hasCheckpoint = state.plan.some((p) => p.slide === state.slide && !p.asked)
 
   return (
     <div className="space-y-4">
@@ -153,11 +155,23 @@ export function SessionControl({
           </span>
           <button
             className="btn-primary min-w-24 text-lg"
-            disabled={!active || busy || state.slide >= state.pageCount}
-            onClick={() => go(state.slide + 1)}
+            disabled={
+              !active || busy || (state.slide >= state.pageCount && !hasCheckpoint && !question)
+            }
+            onClick={() => run(() => next(false))}
           >
-            {L.next} ›
+            {hasCheckpoint || question ? L.nextWithQuestion : L.next} ›
           </button>
+          {(hasCheckpoint || question) && (
+            <button
+              className="btn-secondary text-sm"
+              disabled={!active || busy}
+              onClick={() => run(() => next(true))}
+              title={L.checkpointHint}
+            >
+              {L.skipCheckpoint}
+            </button>
+          )}
         </div>
         <div className="flex items-center justify-center gap-2 text-sm">
           <label htmlFor="jump">{L.slide}:</label>

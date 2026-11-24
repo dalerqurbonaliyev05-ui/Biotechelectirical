@@ -4,6 +4,7 @@ import { describeCorrect } from '@/lib/assessment/result-view'
 import { rngFor } from '@/lib/assessment/prng'
 import { generateValues, type PoolQuestion, type Variant } from '@/lib/assessment/variant'
 import { LIVE_TYPES } from '@/lib/lecture-schemas'
+import { decideAdvance, type AdvanceAction } from '@/lib/checkpoint-flow'
 import { buildLiveQuestion, sharedVariant, type LiveQuestionView } from '@/lib/live-question'
 import { buildRating, type RatingRow, type ScoreRow } from '@/lib/live-rating'
 import { ApiError } from '@/lib/server/api'
@@ -108,32 +109,69 @@ export async function closeOpenQuestion(
   mapDbError(error)
 }
 
-/** Slaydga yetganda: shu slayddagi hali so'ralmagan birinchi savolni avtomatik ochadi. */
-export async function autoOpenForSlide(
+export interface AdvanceResult {
+  action: AdvanceAction
+}
+
+/**
+ * O'qituvchi "Keyingi" (yoki "o'tkazib yuborish") bosganda: nuqta oqimi (lib/checkpoint-flow.ts) bo'yicha
+ * savolni yopadi/ochadi yoki slaydni almashtiradi. Faqat oldinga o'tishda ishlaydi.
+ */
+export async function advanceSession(
   admin: SupabaseClient,
   session: SessionRow,
-  slide: number,
-): Promise<boolean> {
+  skip: boolean,
+): Promise<AdvanceResult> {
+  const { data: open } = await admin
+    .from('session_questions')
+    .select('id')
+    .eq('session_id', session.id)
+    .is('closed_at', null)
+    .limit(1)
+  const { data: lec } = await admin
+    .from('lectures')
+    .select('page_count')
+    .eq('id', session.lecture_id)
+    .single()
   const { data: planned } = await admin
     .from('lecture_questions')
-    .select('id')
+    .select('id, is_bonus')
     .eq('lecture_id', session.lecture_id)
-    .eq('slide_no', slide)
-    .order('created_at')
-  if (!planned || planned.length === 0) return false
-  const { data: asked } = await admin
-    .from('session_questions')
-    .select('lecture_question_id')
-    .eq('session_id', session.id)
-    .in(
-      'lecture_question_id',
-      planned.map((p) => p.id as string),
-    )
+    .eq('slide_no', session.current_slide)
+    .order('position')
+  const ids = (planned ?? []).map((p) => p.id as string)
+  const { data: asked } = ids.length
+    ? await admin
+        .from('session_questions')
+        .select('lecture_question_id')
+        .eq('session_id', session.id)
+        .in('lecture_question_id', ids)
+    : { data: [] }
   const done = new Set((asked ?? []).map((a) => a.lecture_question_id as string))
-  const next = planned.find((p) => !done.has(p.id as string))
-  if (!next) return false
-  await openPlannedQuestion(admin, { ...session, current_slide: slide }, next.id as string)
-  return true
+  const regular = (planned ?? []).filter((p) => !p.is_bonus && !done.has(p.id as string))
+
+  const action = decideAdvance({
+    hasOpenQuestion: Boolean(open?.length),
+    skip,
+    pendingRegular: regular.length,
+    bonusReady: false, // 9-bosqichda: eng faol talaba + bonus savol aniqlanadi
+    slide: session.current_slide,
+    pageCount: Number(lec?.page_count ?? 1),
+  })
+
+  if (action === 'close' || action === 'close_and_advance')
+    await closeOpenQuestion(admin, session.id)
+  if (action === 'open_next') await openPlannedQuestion(admin, session, regular[0]?.id as string)
+  if (action === 'advance' || action === 'close_and_advance') {
+    if (session.current_slide < Number(lec?.page_count ?? 1)) {
+      const { error } = await admin.rpc('app_session_set_slide', {
+        p_session_id: session.id,
+        p_slide: session.current_slide + 1,
+      })
+      if (error) mapDbError(error)
+    }
+  }
+  return { action }
 }
 
 export interface QuestionStats {

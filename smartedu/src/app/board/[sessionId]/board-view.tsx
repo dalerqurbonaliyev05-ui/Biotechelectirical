@@ -26,7 +26,7 @@ export function BoardView({
   pdfUrl: string
   siteUrl: string
 }) {
-  const { state, connected, setSlide, closeQuestion } = useLiveSession(initial, 5000)
+  const { state, connected, setSlide, closeQuestion, next } = useLiveSession(initial, 5000)
   const root = useRef<HTMLDivElement>(null)
   const [error, setError] = useState(false)
   const [qrUrl, setQrUrl] = useState<string | null>(null)
@@ -60,22 +60,25 @@ export function BoardView({
       if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return
       const s = stateRef.current
       if (s.status !== 'active') return
-      const go = (n: number) => {
-        if (n < 1 || n > s.pageCount) return
-        setError(false)
-        setSlide(n).catch(() => setError(true))
-      }
+      const fail = () => setError(true)
       if (['ArrowRight', 'PageDown', ' '].includes(e.key)) {
         e.preventDefault()
-        go(s.slide + 1)
+        setError(false)
+        next(false).catch(fail) // nuqta bo'lsa doska to'xtab savol chiqaradi
       } else if (['ArrowLeft', 'PageUp'].includes(e.key)) {
         e.preventDefault()
-        go(s.slide - 1)
+        if (s.slide > 1) {
+          setError(false)
+          setSlide(s.slide - 1).catch(fail)
+        }
+      } else if (e.key === 's' || e.key === 'S') {
+        setError(false)
+        next(true).catch(fail) // nuqtani o'tkazib yuborish
       }
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [setSlide])
+  }, [setSlide, next])
 
   // Davomat QR'i vaqt chegarali token bilan har oynada yangilanadi (rasmga olib keyin ishlatib bo'lmasin)
   const sessionId = state.id

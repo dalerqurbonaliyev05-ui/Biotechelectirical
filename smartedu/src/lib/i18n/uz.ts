@@ -621,6 +621,10 @@ export const uz = {
     disconnected: 'Real vaqt: ulanmagan (har 10 s da yangilanadi)',
     prev: 'Oldingi',
     next: 'Keyingi',
+    nextWithQuestion: 'Keyingi (savol bor)',
+    skipCheckpoint: 'O‘tkazib yuborish',
+    checkpointHint:
+      'Shu slayddan keyin nazorat savoli bor: «Keyingi» doskani to‘xtatib savolni chiqaradi.',
     fullscreen: 'To‘liq ekran',
     keys: 'Klaviatura: ← → (yoki bo‘sh joy) — slayd almashtirish',
     started: 'Boshlangan',

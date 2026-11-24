@@ -70,6 +70,19 @@ export function useLiveSession(initial: SessionState, pollMs = 10_000) {
     [apply, broadcast, initial.id],
   )
 
+  /** "Keyingi" (nuqta oqimi) yoki skip=true: nuqtani o'tkazib yuborish */
+  const next = useCallback(
+    async (skip = false) => {
+      const s = await apiJson<SessionState>(`/api/sessions/${initial.id}/next`, {
+        method: 'POST',
+        json: { skip },
+      })
+      apply(s)
+      broadcast(s)
+    },
+    [apply, broadcast, initial.id],
+  )
+
   const openQuestion = useCallback(
     async (lectureQuestionId: string) => {
       const s = await apiJson<SessionState>(`/api/sessions/${initial.id}/question`, {
@@ -106,5 +119,6 @@ export function useLiveSession(initial: SessionState, pollMs = 10_000) {
     openQuestion,
     closeQuestion,
     applyState: apply,
+    next,
   }
 }
