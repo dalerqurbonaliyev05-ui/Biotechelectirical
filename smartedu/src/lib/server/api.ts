@@ -101,3 +101,9 @@ export function handle<P = Record<string, never>>(
 }
 
 export const guid = () => z.guid()
+
+/** URL parametri UUID ko'rinishida bo'lishi shart, aks holda 404 (DB'ga bema'ni so'rov bormasin). */
+export function idParam(raw: string): string {
+  if (!z.guid().safeParse(raw).success) throw new ApiError(404, 'not_found')
+  return raw
+}

@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { t } from '@/lib/i18n'
 import { requireRole } from '@/lib/server/session'
 import { createClient } from '@/lib/supabase/server'
@@ -17,6 +18,13 @@ export default async function TeacherHome() {
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold">{t.teacherHome.title}</h1>
+      <div className="grid gap-3 sm:grid-cols-3">
+        {t.nav.teacher.slice(1).map((n) => (
+          <Link key={n.href} href={n.href} className="card hover:border-brand-500 font-semibold">
+            {n.label}
+          </Link>
+        ))}
+      </div>
       <section className="card">
         <h2 className="mb-2 font-semibold">{t.teacherHome.myAssignments}</h2>
         {rows.length === 0 ? (

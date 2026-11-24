@@ -23,5 +23,8 @@ check "login sahifasi ochiq" 200 /login
 check "kirmagan: /admin → login" 307 /admin
 check "kirmagan: /student → login" 307 /student
 check "kirmagan: API → 401" 401 /api/admin/students/import -X POST
+check "kirmagan: /teacher/questions → login" 307 /teacher/questions
+check "kirmagan: urinish API → 401" 401 /api/attempts/00000000-0000-0000-0000-000000000001
+check "kirmagan: baholash API → 401" 401 /api/answers/00000000-0000-0000-0000-000000000001/grade -X POST
 check "login: noto'g'ri JSON → 400" 400 /api/auth/login -X POST -H 'content-type: application/json' -d 'not-json'
 echo "✔ smoke test o'tdi"

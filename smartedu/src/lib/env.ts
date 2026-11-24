@@ -25,6 +25,10 @@ export function serverEnv() {
     labSharedSecret: process.env.LAB_SHARED_SECRET ?? '',
     attendanceSecret: process.env.ATTENDANCE_SECRET ?? '',
     cronSecret: process.env.CRON_SECRET ?? '',
+    labBaseUrl: (process.env.LAB_BASE_URL ?? 'https://energyvibe.uz/laboratoriya').replace(
+      /\/$/,
+      '',
+    ),
     booksBaseUrl: (process.env.BOOKS_BASE_URL ?? 'https://energyvibe.uz/kutubxona').replace(
       /\/$/,
       '',

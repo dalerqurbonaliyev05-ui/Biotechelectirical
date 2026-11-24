@@ -1,17 +1,5 @@
 -- 0001 RLS testlari. Muvaffaqiyatsizlikda EXCEPTION ko'taradi.
-create function pg_temp.as_user(uid uuid) returns void language plpgsql as $$
-begin
-  perform set_config('request.jwt.claim.sub', uid::text, true);
-  perform set_config('request.jwt.claim.role', 'authenticated', true);
-end $$;
-
-create function pg_temp.expect(label text, got bigint, want bigint) returns void language plpgsql as $$
-begin
-  if got is distinct from want then
-    raise exception 'TEST YIQILDI [%]: kutilgan %, olingan %', label, want, got;
-  end if;
-  raise notice 'ok  - %', label;
-end $$;
+\i supabase/tests/_helpers.sql
 
 -- Seed to'g'ri yuklanganmi
 select pg_temp.expect('seed: 12 profil', (select count(*) from public.profiles), 12);
