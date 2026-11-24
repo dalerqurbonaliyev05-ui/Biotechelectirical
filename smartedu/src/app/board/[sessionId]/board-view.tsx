@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { PdfViewer } from '@/components/pdf-viewer'
+import { apiJson } from '@/lib/api-client'
 import { QrCode } from '@/components/qr-code'
 import { t } from '@/lib/i18n'
 import type { SessionState } from '@/lib/session-state'
@@ -19,9 +20,11 @@ export function BoardView({
   pdfUrl: string
   siteUrl: string
 }) {
-  const { state, connected, setSlide } = useLiveSession(initial)
+  const { state, connected, setSlide } = useLiveSession(initial, 5000)
   const root = useRef<HTMLDivElement>(null)
   const [error, setError] = useState(false)
+  const [qrUrl, setQrUrl] = useState<string | null>(null)
+  const [qrWarn, setQrWarn] = useState(false)
   const stateRef = useRef(state)
   stateRef.current = state
 
@@ -48,7 +51,36 @@ export function BoardView({
     return () => window.removeEventListener('keydown', onKey)
   }, [setSlide])
 
-  const joinUrl = `${siteUrl}/live/${state.code}`
+  // Davomat QR'i vaqt chegarali token bilan har oynada yangilanadi (rasmga olib keyin ishlatib bo'lmasin)
+  const sessionId = state.id
+  const active = state.status === 'active'
+  useEffect(() => {
+    if (!active) return
+    let stop = false
+    let timer: ReturnType<typeof setTimeout>
+    const load = async () => {
+      try {
+        const r = await apiJson<{ url: string; next_in_ms: number }>(
+          `/api/sessions/${sessionId}/qr-token`,
+        )
+        if (stop) return
+        setQrUrl(r.url)
+        setQrWarn(false)
+        timer = setTimeout(load, Math.max(3000, r.next_in_ms - 1500))
+      } catch {
+        if (stop) return
+        setQrWarn(true)
+        timer = setTimeout(load, 15_000)
+      }
+    }
+    void load()
+    return () => {
+      stop = true
+      clearTimeout(timer)
+    }
+  }, [sessionId, active])
+
+  const joinUrl = qrUrl ?? `${siteUrl}/live/${state.code}`
   const host = siteUrl.replace(/^https?:\/\//, '')
 
   return (
@@ -72,6 +104,11 @@ export function BoardView({
           <div className="absolute inset-0 flex items-center justify-center bg-black/80">
             <p className="text-6xl font-bold">{L.ended}</p>
           </div>
+        )}
+        {qrWarn && (
+          <p className="absolute bottom-3 left-4 rounded bg-amber-600 px-3 py-1 text-sm">
+            {t.attendance.qrWarn}
+          </p>
         )}
         {error && (
           <p role="alert" className="absolute bottom-3 left-4 rounded bg-red-600 px-3 py-1 text-lg">

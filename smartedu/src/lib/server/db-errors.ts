@@ -3,6 +3,7 @@ import { ApiError } from '@/lib/server/api'
 
 const MAP: Record<string, [number, string]> = {
   not_found: [404, 'not_found'],
+  session_not_found: [404, 'session_not_found'],
   not_your_group: [403, 'forbidden'],
   not_open: [409, 'not_open'],
   closed: [409, 'closed'],

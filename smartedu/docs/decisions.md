@@ -146,3 +146,20 @@ Har yozuv: **nima** → **nima uchun** → **qanday o'zgartirish mumkin**.
 6. **Qo'shilish kodi:** 6 xonali, faqat FAOL sessiyalar orasida noyob (qisman unikal indeks); band chiqsa DB
    funksiyasi qayta urinadi. Sessiya tugagach kod qayta ishlatilishi mumkin.
 7. **Brauzerda sinalgan:** doska (PDF + QR + kod) haqiqiy Chromium'da chizilgan, QR dekodlanib havola tekshirilgan.
+
+## 7-bosqich: qo'shilish va davomat
+
+1. **Ikki jadval:** `session_participants` (runtime: token, qayta kirishlar) va `attendance` (hisobot uchun
+   doimiy yozuv). Ikkalasi bitta DB funksiyasida (`app_join_session`) atomik yoziladi.
+2. **"Bir martalik, vaqt chegarali token" talqini:** QR tokeni vaqt oynasi bilan cheklangan (har oynada yangilanadi),
+   har talabaga bir marta qo'shilish yozuvi (unique), va har qo'shilishda yangi shaxsiy `join_token` — eski
+   qurilma tokeni bekor bo'ladi. Umumiy QR bitta talabaga emas, butun auditoriyaga mo'ljallangan, shuning uchun
+   "bir martalik" talabaga nisbatan ma'noda.
+3. **Fail-closed:** `ATTENDANCE_SECRET` yo'q yoki 16 belgidan qisqa bo'lsa, hech bir token yaroqli emas →
+   hamma `remote`. Doska ogohlantirish chiqaradi.
+4. **QR muddati o'tgan bo'lsa** talaba rad etilmaydi: `remote` sifatida qo'shiladi va qayta skanerlash
+   tavsiya qilinadi (chegarada skanerlagan talaba zarar ko'rmasin).
+5. **Talaba holati:** Realtime ulangan bo'lsa so'rov yo'q (bepul tarif); uzilsa 10 s polling. `token_replaced` —
+   javob yuborilganda (8-bosqich) yoki polling'da aniqlanadi.
+6. **Doska ishtirokchilar sonini 5 s polling bilan oladi** (Realtime xabar tejash uchun har qo'shilishda xabar yuborilmaydi).
+7. **IP/geo saqlanmaydi** (shaxsiy ma'lumotni minimal saqlash). Qo'shimcha signal sifatida keyin ko'rib chiqiladi.

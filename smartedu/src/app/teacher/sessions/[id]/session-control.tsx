@@ -53,6 +53,9 @@ export function SessionControl({
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
+          <Link href={`/teacher/sessions/${state.id}/attendance`} className="btn-secondary">
+            {t.attendance.open}
+          </Link>
           {active && (
             <Link href={`/board/${state.id}`} target="_blank" className="btn-primary">
               {L.openBoard}

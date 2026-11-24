@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { canSeeScore, type ShowScorePolicy } from '@/lib/assessment/policy'
+import { CodeEntry } from '@/components/code-entry'
 import { t } from '@/lib/i18n'
 import { requireRole } from '@/lib/server/session'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -118,12 +119,15 @@ export default async function StudentHome() {
       </section>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        {[S.sections.live, S.sections.results].map((title) => (
-          <section key={title} className="card">
-            <h2 className="font-semibold">{title}</h2>
-            <p className="mt-2 text-sm text-slate-500">{S.soon}</p>
-          </section>
-        ))}
+        <section className="card space-y-2">
+          <h2 className="font-semibold">{S.sections.live}</h2>
+          <p className="text-sm text-slate-500">{t.liveStudent.lead}</p>
+          <CodeEntry compact />
+        </section>
+        <section className="card">
+          <h2 className="font-semibold">{S.sections.results}</h2>
+          <p className="mt-2 text-sm text-slate-500">{S.soon}</p>
+        </section>
       </div>
     </div>
   )

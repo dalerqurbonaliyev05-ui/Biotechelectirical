@@ -65,11 +65,13 @@ export async function buildSessionState(
   admin: SupabaseClient,
   s: SessionRow,
 ): Promise<SessionState> {
-  const { data: lec } = await admin
-    .from('lectures')
-    .select('title, page_count')
-    .eq('id', s.lecture_id)
-    .single()
+  const [{ data: lec }, { count }] = await Promise.all([
+    admin.from('lectures').select('title, page_count').eq('id', s.lecture_id).single(),
+    admin
+      .from('session_participants')
+      .select('id', { count: 'exact', head: true })
+      .eq('session_id', s.id),
+  ])
   return {
     id: s.id,
     rev: s.rev,
@@ -77,7 +79,7 @@ export async function buildSessionState(
     pageCount: Number(lec?.page_count ?? 1),
     status: s.status,
     code: s.code,
-    participants: 0,
+    participants: count ?? 0,
     title: String(lec?.title ?? ''),
   }
 }

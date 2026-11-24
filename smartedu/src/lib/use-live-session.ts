@@ -11,7 +11,7 @@ import { createClient } from '@/lib/supabase/browser'
  *  - Holat manbai: DB (GET /state). Realtime xabari faqat "yangilanish bor" signali (soxta xabar zarar qilmaydi).
  *  - Bitta kanal (`session:<id>`), xabar hajmi bir necha bayt. Aloqa uzilsa har 10 s da so'rov bilan tiklanadi.
  */
-export function useLiveSession(initial: SessionState) {
+export function useLiveSession(initial: SessionState, pollMs = 10_000) {
   const [state, setState] = useState(initial)
   const [connected, setConnected] = useState(false)
   const revRef = useRef(initial.rev)
@@ -42,12 +42,12 @@ export function useLiveSession(initial: SessionState) {
       })
       .subscribe((status) => setConnected(status === 'SUBSCRIBED'))
     channel.current = ch
-    const poll = setInterval(() => void refresh(), 10_000)
+    const poll = setInterval(() => void refresh(), pollMs)
     return () => {
       clearInterval(poll)
       void sb.removeChannel(ch)
     }
-  }, [initial.id, refresh])
+  }, [initial.id, refresh, pollMs])
 
   const broadcast = useCallback((s: SessionState) => {
     void channel.current?.send({
