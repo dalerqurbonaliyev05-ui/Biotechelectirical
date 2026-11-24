@@ -18,6 +18,8 @@ const MAP: Record<string, [number, string]> = {
   already_asked: [409, 'already_asked'],
   guests_not_allowed: [403, 'guests_not_allowed'],
   blocked: [403, 'blocked'],
+  not_participant: [404, 'not_joined'],
+  validation: [400, 'validation'],
   guest_name_required: [400, 'validation'],
   session_active: [409, 'session_active'],
   student_already_joined: [409, 'student_already_joined'],

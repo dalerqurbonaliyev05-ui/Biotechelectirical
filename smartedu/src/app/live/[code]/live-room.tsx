@@ -1,10 +1,19 @@
 'use client'
 
+import type { RealtimeChannel } from '@supabase/supabase-js'
 import Link from 'next/link'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { ClientApiError, apiJson, errorText } from '@/lib/api-client'
 import { t } from '@/lib/i18n'
 import type { LiveQuestionView } from '@/lib/live-question'
+import {
+  REACTION_FLUSH_MS,
+  addTap,
+  emptyBatch,
+  isEmpty,
+  type ReactionBatch,
+  type ReactionKind,
+} from '@/lib/reactions'
 import { parseStateEvent, sessionChannel } from '@/lib/session-state'
 import { createClient } from '@/lib/supabase/browser'
 import { secondsLeft, useCountdown } from '@/lib/use-countdown'
@@ -29,6 +38,8 @@ interface LiveView {
   status: 'active' | 'ended'
   rev: number
   page_count: number
+  confused_enabled?: boolean
+  isTarget?: boolean
   question: LiveQuestionView | null
   mine: {
     answered: boolean
@@ -61,6 +72,7 @@ export function LiveRoom({
   const started = useRef(false)
   const revRef = useRef(0)
   const hasQuestion = useRef(false)
+  const chRef = useRef<RealtimeChannel | null>(null)
 
   async function join() {
     setPhase('joining')
@@ -140,12 +152,14 @@ export function LiveRoom({
         if (!(ev.q || hasQuestion.current || ev.status === 'ended')) revRef.current = ev.rev
       })
       .subscribe((st) => setConnected(st === 'SUBSCRIBED'))
+    chRef.current = ch
     // Realtime uzilganda zaxira: har 5 s da so'rov (ulangan bo'lsa yubormaymiz)
     const poll = setInterval(() => {
       if (ch.state !== 'joined') void refresh()
     }, 5_000)
     return () => {
       clearInterval(poll)
+      chRef.current = null
       void sb.removeChannel(ch)
     }
   }, [info, refresh])
@@ -288,6 +302,18 @@ export function LiveRoom({
           {view?.me && <RankLine me={view.me} />}
         </div>
       )}
+      {!ended && info && view && (
+        <ReactionBar
+          info={info}
+          slide={view.slide}
+          confusedEnabled={view.confused_enabled !== false}
+          onTap={(kind) =>
+            // Doskaga darhol animatsiya uchun signal (ishonchsiz: hisob serverda, paket bilan yoziladi)
+            void chRef.current?.send({ type: 'broadcast', event: 'reaction', payload: { kind } })
+          }
+          onReplaced={() => setPhase('replaced')}
+        />
+      )}
       <p className={`text-center text-xs ${connected ? 'text-green-700' : 'text-slate-400'}`}>
         {L.connection}: {connected ? L.liveOn : L.liveOff}
       </p>
@@ -352,7 +378,8 @@ function QuestionCard({
   const [note, setNote] = useState<string | null>(null)
   const answered = sent || Boolean(view?.mine?.answered)
   const expired = left !== null && left <= 0
-  const canAnswer = open && !answered && !expired && !busy
+  const notTarget = Boolean(q.targeted) && view?.isTarget === false
+  const canAnswer = open && !answered && !expired && !busy && !notTarget
 
   async function send(response: unknown) {
     if (!canAnswer) return
@@ -390,6 +417,14 @@ function QuestionCard({
           </p>
         )}
       </div>
+      {q.targeted && (
+        <p
+          role="status"
+          className={`rounded-lg p-2 text-sm ${notTarget ? 'bg-slate-100 text-slate-700' : 'bg-amber-50 text-amber-900'}`}
+        >
+          ⭐ {notTarget ? t.reactions.bonusTargetOther : t.reactions.bonusTargetYou}
+        </p>
+      )}
       <p className="text-lg font-medium whitespace-pre-wrap">{q.text}</p>
 
       {q.type === 'mcq' && (
@@ -504,6 +539,120 @@ function QuestionCard({
           {view?.me && <RankLine me={view.me} />}
         </div>
       )}
+    </div>
+  )
+}
+
+/**
+ * "Tushundim" / "Tushunmadim": bosishlar telefonda yig'iladi va ~5 s da bir paket bo'lib serverga yuboriladi.
+ * Doskaga animatsiya uchun har bosishda darhol signal ketadi. Yuborilmasa paket saqlanib, keyingi urinishda qayta yuboriladi.
+ */
+function ReactionBar({
+  info,
+  slide,
+  confusedEnabled,
+  onTap,
+  onReplaced,
+}: {
+  info: Joined
+  slide: number
+  confusedEnabled: boolean
+  onTap: (kind: ReactionKind) => void
+  onReplaced: () => void
+}) {
+  const batch = useRef<ReactionBatch>(emptyBatch())
+  const batchSlide = useRef(slide)
+  const [flash, setFlash] = useState<ReactionKind | null>(null)
+  const [failed, setFailed] = useState(false)
+
+  const flush = useCallback(async () => {
+    const b = batch.current
+    if (isEmpty(b)) return
+    const sendSlide = batchSlide.current
+    batch.current = { ...emptyBatch(), lastTap: b.lastTap }
+    try {
+      await apiJson(`/api/live/${info.session_id}/reaction`, {
+        method: 'POST',
+        json: {
+          token: info.join_token,
+          slide: sendSlide,
+          understood: b.understood,
+          confused: b.confused,
+        },
+      })
+      setFailed(false)
+    } catch (err) {
+      if (err instanceof ClientApiError && err.code === 'token_replaced') return onReplaced()
+      // Vaqtinchalik xato: paketni qaytaramiz (chegara ichida), keyingi oynada qayta uriniladi
+      if (!(
+        err instanceof ClientApiError &&
+        ['blocked', 'session_ended', 'not_joined'].includes(err.code ?? '')
+      )) {
+        const cur = batch.current
+        batch.current = {
+          ...cur,
+          understood: Math.min(5, cur.understood + b.understood),
+          confused: Math.min(5, cur.confused + b.confused),
+        }
+        setFailed(true)
+      }
+    }
+  }, [info.session_id, info.join_token, onReplaced])
+
+  useEffect(() => {
+    const timer = setInterval(() => void flush(), REACTION_FLUSH_MS)
+    const onHide = () => {
+      if (document.visibilityState === 'hidden') void flush()
+    }
+    document.addEventListener('visibilitychange', onHide)
+    return () => {
+      clearInterval(timer)
+      document.removeEventListener('visibilitychange', onHide)
+      void flush()
+    }
+  }, [flush])
+
+  // Slayd almashsa, eski slayddagi reaksiyalar o'sha slaydga yoziladi (avval yuboramiz)
+  useEffect(() => {
+    if (batchSlide.current !== slide) {
+      void flush().finally(() => {
+        batchSlide.current = slide
+      })
+    }
+  }, [slide, flush])
+
+  function tap(kind: ReactionKind) {
+    const r = addTap(batch.current, kind, Date.now())
+    if (!r.accepted) return
+    batch.current = r.batch
+    onTap(kind)
+    setFlash(kind)
+    setTimeout(() => setFlash((f) => (f === kind ? null : f)), 600)
+    if (navigator.vibrate) navigator.vibrate(15)
+  }
+
+  return (
+    <div className="card space-y-2">
+      <p className="text-center text-xs text-slate-500">{t.reactions.title}</p>
+      <div className={`grid gap-2 ${confusedEnabled ? 'grid-cols-2' : 'grid-cols-1'}`}>
+        <button
+          onClick={() => tap('understood')}
+          className={`min-h-14 rounded-xl border-2 p-3 text-lg font-medium transition ${flash === 'understood' ? 'border-green-600 bg-green-100' : 'border-slate-300 bg-white'}`}
+        >
+          👍 {t.reactions.understood}
+        </button>
+        {confusedEnabled && (
+          <button
+            onClick={() => tap('confused')}
+            className={`min-h-14 rounded-xl border-2 p-3 text-lg font-medium transition ${flash === 'confused' ? 'border-amber-600 bg-amber-100' : 'border-slate-300 bg-white'}`}
+          >
+            🤔 {t.reactions.confused}
+          </button>
+        )}
+      </div>
+      <p className="text-center text-xs text-slate-400">
+        {failed ? t.reactions.retry : t.reactions.hint}
+      </p>
     </div>
   )
 }

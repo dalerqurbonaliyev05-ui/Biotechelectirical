@@ -1,16 +1,17 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { BoardPodium, BoardQuestion } from '@/components/board-question'
 import { BoardStrip } from '@/components/board-strip'
 import { PdfViewer } from '@/components/pdf-viewer'
 import { QrCode } from '@/components/qr-code'
 import { apiJson } from '@/lib/api-client'
 import { t } from '@/lib/i18n'
+import { understoodPercent, type ReactionKind } from '@/lib/reactions'
 import type { SessionState } from '@/lib/session-state'
 import { useCountdown } from '@/lib/use-countdown'
 import { useLiveSession } from '@/lib/use-live-session'
-import { useQuestionStats, useRating } from '@/lib/use-question-stats'
+import { useQuestionStats, useRating, useReactions } from '@/lib/use-question-stats'
 
 const L = t.live
 /** Muddat tugagach shuncha ms kutib (kechikkan javoblar uchun imtiyoz) savol avtomatik yopiladi. */
@@ -26,7 +27,24 @@ export function BoardView({
   pdfUrl: string
   siteUrl: string
 }) {
-  const { state, connected, setSlide, closeQuestion, next } = useLiveSession(initial, 5000)
+  const [floaters, setFloaters] = useState<{ id: number; kind: ReactionKind; x: number }[]>([])
+  const floatId = useRef(0)
+  const lastFloat = useRef(0)
+  const onReaction = useCallback((kind: ReactionKind) => {
+    // Ko'rsatish chegarasi: soniyada ko'pi bilan ~8 ta belgi (soxta xabarlar doskani to'ldirmasin)
+    const now = Date.now()
+    if (now - lastFloat.current < 120) return
+    lastFloat.current = now
+    const id = ++floatId.current
+    setFloaters((f) => [...f.slice(-11), { id, kind, x: 10 + Math.random() * 80 }])
+    setTimeout(() => setFloaters((f) => f.filter((x) => x.id !== id)), 2500)
+  }, [])
+  const { state, connected, setSlide, closeQuestion, next } = useLiveSession(
+    initial,
+    5000,
+    onReaction,
+  )
+  const reactions = useReactions(state.id, state.slide, state.status === 'active')
   const root = useRef<HTMLDivElement>(null)
   const [error, setError] = useState(false)
   const [qrUrl, setQrUrl] = useState<string | null>(null)
@@ -116,7 +134,13 @@ export function BoardView({
     <div ref={root} className="flex h-screen flex-col bg-black text-white">
       <div className="relative min-h-0 flex-1">
         {question ? (
-          <BoardQuestion question={question} stats={stats} left={left} top={rating?.top ?? null} />
+          <BoardQuestion
+            question={question}
+            stats={stats}
+            left={left}
+            top={rating?.top ?? null}
+            bonusNames={reactions?.leaders.names}
+          />
         ) : pdfUrl ? (
           <PdfViewer url={pdfUrl} page={state.slide} fit="contain" className="size-full" />
         ) : (
@@ -147,7 +171,46 @@ export function BoardView({
         )}
       </div>
 
-      <BoardStrip />
+      <BoardStrip
+        center={
+          reactions ? (
+            <>
+              <span className="whitespace-nowrap tabular-nums" data-testid="board-reactions">
+                👍 {reactions.understood} {t.reactions.boardUnderstood}
+                {reactions.confusedEnabled && (
+                  <>
+                    {' '}
+                    · 🤔 {reactions.confused} {t.reactions.boardConfused}
+                    {understoodPercent(reactions.understood, reactions.confused) !== null &&
+                      ` (${understoodPercent(reactions.understood, reactions.confused)}%)`}
+                  </>
+                )}
+              </span>
+              <div className="pointer-events-none absolute inset-0" aria-hidden>
+                {floaters.map((f) => (
+                  <span
+                    key={f.id}
+                    className="absolute bottom-0 animate-bounce text-3xl"
+                    style={{ left: `${f.x}%` }}
+                  >
+                    {f.kind === 'understood' ? '👍' : '🤔'}
+                  </span>
+                ))}
+              </div>
+            </>
+          ) : null
+        }
+        right={
+          reactions && reactions.leaders.count > 0 ? (
+            <span className="truncate" data-testid="board-leaders">
+              ⭐ {t.reactions.mostActive}:{' '}
+              {reactions.leaders.names.length > 0
+                ? reactions.leaders.names.join(', ')
+                : reactions.leaders.count}
+            </span>
+          ) : null
+        }
+      />
 
       <div className="flex items-center justify-between gap-8 border-t border-white/20 bg-slate-900 px-8 py-3">
         <div className="flex items-center gap-6">

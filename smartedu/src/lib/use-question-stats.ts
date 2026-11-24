@@ -58,3 +58,36 @@ export function useRating(
   }, [sessionId, trigger])
   return data
 }
+
+export interface ReactionsView {
+  slide: number
+  understood: number
+  confused: number
+  reactors: number
+  leaders: { count: number; names: string[] }
+  confusedEnabled: boolean
+}
+
+/** Joriy slayd reaksiyalari (DB'dan, har 4 s da) — doska va boshqaruv uchun. */
+export function useReactions(
+  sessionId: string,
+  slide: number,
+  active: boolean,
+): ReactionsView | null {
+  const [data, setData] = useState<ReactionsView | null>(null)
+  useEffect(() => {
+    if (!active) return
+    let live = true
+    const load = () =>
+      apiJson<ReactionsView>(`/api/sessions/${sessionId}/reactions`)
+        .then((r) => live && setData(r))
+        .catch(() => undefined)
+    void load()
+    const t = setInterval(load, 4000)
+    return () => {
+      live = false
+      clearInterval(t)
+    }
+  }, [sessionId, slide, active])
+  return data && data.slide === slide ? data : null
+}

@@ -65,6 +65,8 @@ export const uz = {
     session_not_found: 'Bunday faol dars topilmadi. Kodni tekshiring.',
     token_replaced: 'Bu hisob boshqa qurilmadan qo‘shildi.',
     not_joined: 'Avval darsga qo‘shiling.',
+    not_target: 'Bu bonus savol boshqa talabaga berilgan.',
+    not_participant: 'Avval darsga qo‘shiling.',
     not_configured: 'Server sozlanmagan (ATTENDANCE_SECRET).',
     slide_out_of_range: 'Slayd raqami noto‘g‘ri.',
   } as Record<string, string>,
@@ -651,6 +653,19 @@ export const uz = {
     ctlAutoNote:
       'Slaydga yetganda savol avtomatik ochiladi; vaqt tugagach doska uni yopib, natijani ko‘rsatadi.',
     ctlTop: 'Eng yaxshi 5 ta',
+  },
+  reactions: {
+    title: 'Darsga munosabat',
+    understood: 'Tushundim',
+    confused: 'Tushunmadim',
+    hint: 'Bosishlaringiz o‘qituvchiga umumiy ko‘rsatkich sifatida ko‘rinadi.',
+    boardUnderstood: 'tushundi',
+    boardConfused: 'tushunmadi',
+    mostActive: 'Eng faol',
+    bonusFor: 'Bonus savol',
+    bonusTargetYou: 'Bu bonus savol SIZGA — eng faol talaba sifatida!',
+    bonusTargetOther: 'Bu bonus savol eng faol talabaga berildi. Kuzatib turing.',
+    retry: 'Reaksiya yuborilmadi, birozdan keyin qayta uriniladi.',
   },
   liveStudent: {
     title: 'Jonli darsga qo‘shilish',

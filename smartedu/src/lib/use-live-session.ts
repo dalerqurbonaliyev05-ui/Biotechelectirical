@@ -3,6 +3,7 @@
 import type { RealtimeChannel } from '@supabase/supabase-js'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { apiJson } from '@/lib/api-client'
+import { parseReactionEvent, type ReactionKind } from '@/lib/reactions'
 import { parseStateEvent, sessionChannel, type SessionState } from '@/lib/session-state'
 import { createClient } from '@/lib/supabase/browser'
 
@@ -11,11 +12,17 @@ import { createClient } from '@/lib/supabase/browser'
  *  - Holat manbai: DB (GET /state). Realtime xabari faqat "yangilanish bor" signali (soxta xabar zarar qilmaydi).
  *  - Bitta kanal (`session:<id>`), xabar hajmi bir necha bayt. Aloqa uzilsa har 10 s da so'rov bilan tiklanadi.
  */
-export function useLiveSession(initial: SessionState, pollMs = 10_000) {
+export function useLiveSession(
+  initial: SessionState,
+  pollMs = 10_000,
+  onReaction?: (kind: ReactionKind) => void,
+) {
   const [state, setState] = useState(initial)
   const [connected, setConnected] = useState(false)
   const revRef = useRef(initial.rev)
   const channel = useRef<RealtimeChannel | null>(null)
+  const reactionRef = useRef(onReaction)
+  reactionRef.current = onReaction
 
   const apply = useCallback((s: SessionState) => {
     if (s.rev >= revRef.current) {
@@ -39,6 +46,11 @@ export function useLiveSession(initial: SessionState, pollMs = 10_000) {
       .on('broadcast', { event: 'state' }, ({ payload }) => {
         const ev = parseStateEvent(payload)
         if (ev && ev.rev > revRef.current) void refresh() // ishonchsiz hodisa → haqiqiy holatni DB'dan olamiz
+      })
+      .on('broadcast', { event: 'reaction' }, ({ payload }) => {
+        // Ishonchsiz signal: faqat animatsiya; hisob DB'dan olinadi
+        const kind = parseReactionEvent(payload)
+        if (kind) reactionRef.current?.(kind)
       })
       .subscribe((status) => setConnected(status === 'SUBSCRIBED'))
     channel.current = ch

@@ -26,6 +26,8 @@ export interface LiveQuestionView {
   /** Serverning "hozir"i: mijoz taymerni shunga nisbatan yuritadi */
   serverNow: string
   status: 'open' | 'closed'
+  /** Bonus savol: faqat belgilangan talabalar javob beradi (ularning id'si bu yerda YO'Q) */
+  targeted?: boolean
 }
 
 type LiveQ = Pick<PoolQuestion, 'type' | 'body' | 'params'>
@@ -36,6 +38,7 @@ interface SqRow {
   variant: Variant
   opened_at: string
   closed_at: string | null
+  audience?: 'all' | 'targeted'
 }
 
 export function buildLiveQuestion(sq: SqRow, q: LiveQ, now: Date): LiveQuestionView | null {
@@ -49,6 +52,7 @@ export function buildLiveQuestion(sq: SqRow, q: LiveQ, now: Date): LiveQuestionV
     timeLimitSec: sq.time_limit_sec,
     serverNow: now.toISOString(),
     status: sq.closed_at ? 'closed' : 'open',
+    ...(sq.audience === 'targeted' ? { targeted: true } : {}),
   }
   if (q.type === 'mcq') {
     view.options = (q.body.options ?? []).map((o) => ({ id: o.id, text: o.text }))

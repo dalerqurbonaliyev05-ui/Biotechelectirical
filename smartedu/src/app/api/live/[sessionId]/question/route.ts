@@ -19,19 +19,21 @@ export const GET = handle<{ sessionId: string }>(async (req, { params }) => {
 
   const { data: s } = await admin
     .from('lecture_sessions')
-    .select('id, current_slide, status, rev, lectures(page_count)')
+    .select('id, current_slide, status, rev, confused_enabled, lectures(page_count)')
     .eq('id', sessionId)
     .single()
   const base = {
     slide: s?.current_slide as number,
     status: s?.status as string,
     rev: s?.rev as number,
+    confused_enabled: Boolean(s?.confused_enabled),
     page_count: (s?.lectures as unknown as { page_count: number } | null)?.page_count ?? 1,
   }
 
   const cur = await currentQuestion(admin, { id: sessionId, current_slide: base.slide })
   const question = cur ? buildLiveQuestion(cur.sq, cur.q, new Date()) : null
   const isOpen = question?.status === 'open'
+  const isTarget = !cur || cur.sq.audience !== 'targeted' || cur.sq.target_ids.includes(userId)
 
   let mine: {
     answered: boolean
@@ -73,5 +75,5 @@ export const GET = handle<{ sessionId: string }>(async (req, { params }) => {
     if (mineRow)
       me = { points: mineRow.points, rank: mineRow.rank, of: rating.length, medal: mineRow.medal }
   }
-  return ok({ ...base, question, mine, correctText, me })
+  return ok({ ...base, question, isTarget, mine, correctText, me })
 })

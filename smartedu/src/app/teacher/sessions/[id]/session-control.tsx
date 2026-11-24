@@ -9,7 +9,7 @@ import type { SessionState } from '@/lib/session-state'
 import { secondsLeft, useCountdown } from '@/lib/use-countdown'
 import { SessionExtras } from './session-extras'
 import { useLiveSession } from '@/lib/use-live-session'
-import { useQuestionStats, useRating } from '@/lib/use-question-stats'
+import { useQuestionStats, useRating, useReactions } from '@/lib/use-question-stats'
 
 const L = t.live
 const AUTO_CLOSE_AFTER_MS = 1800
@@ -32,6 +32,7 @@ export function SessionControl({
   const question = state.question
   const left = useCountdown(question)
   const stats = useQuestionStats(state.id, question, 3000)
+  const reactions = useReactions(state.id, state.slide, active)
   const rating = useRating(state.id, `${question?.id}:${question?.status}:${state.status}`)
 
   // Doska ochiq bo'lmasa ham vaqt tugagach savol yopiladi
@@ -153,6 +154,12 @@ export function SessionControl({
           <span className="text-xl font-bold tabular-nums">
             {state.slide} / {state.pageCount}
           </span>
+          {reactions && (
+            <span className="text-sm text-slate-600 tabular-nums" data-testid="teacher-reactions">
+              👍 {reactions.understood}
+              {reactions.confusedEnabled && <> · 🤔 {reactions.confused}</>}
+            </span>
+          )}
           <button
             className="btn-primary min-w-24 text-lg"
             disabled={

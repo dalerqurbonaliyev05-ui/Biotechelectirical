@@ -11,6 +11,7 @@ import { ApiError } from '@/lib/server/api'
 import { participantNames } from '@/lib/server/names'
 import { mapDbError } from '@/lib/server/db-errors'
 import type { SessionRow } from '@/lib/server/sessions'
+import { topReactors } from '@/lib/server/reactions'
 import { getSettings } from '@/lib/server/settings'
 
 export interface SqRow {
@@ -23,6 +24,8 @@ export interface SqRow {
   variant: Variant
   opened_at: string
   closed_at: string | null
+  audience: 'all' | 'targeted'
+  target_ids: string[]
 }
 export type LiveQ = Pick<PoolQuestion, 'type' | 'body' | 'params'>
 
@@ -60,6 +63,7 @@ export async function openPlannedQuestion(
   admin: SupabaseClient,
   session: SessionRow,
   lectureQuestionId: string,
+  targets?: string[],
 ): Promise<void> {
   const { data: lq } = await admin
     .from('lecture_questions')
@@ -83,7 +87,7 @@ export async function openPlannedQuestion(
   const variant = sharedVariant(q, (vars) =>
     generateValues(vars, rngFor(`${session.id}:${lq.question_id}`)),
   )
-  const { error } = await admin.rpc('app_open_session_question', {
+  const args = {
     p_session_id: session.id,
     p_lecture_question_id: lq.id,
     p_question_id: lq.question_id,
@@ -91,7 +95,10 @@ export async function openPlannedQuestion(
     p_limit: lq.time_limit_sec ?? settings.live_question_seconds,
     p_variant: variant,
     p_opened_at: new Date().toISOString(),
-  })
+  }
+  const { error } = targets?.length
+    ? await admin.rpc('app_open_targeted_question', { ...args, p_targets: targets })
+    : await admin.rpc('app_open_session_question', args)
   if (error) mapDbError(error)
 }
 
@@ -149,12 +156,18 @@ export async function advanceSession(
     : { data: [] }
   const done = new Set((asked ?? []).map((a) => a.lecture_question_id as string))
   const regular = (planned ?? []).filter((p) => !p.is_bonus && !done.has(p.id as string))
+  const bonus = (planned ?? []).filter((p) => p.is_bonus && !done.has(p.id as string))
+
+  // Bonus savol: yoqilgan, shu nuqtada tayyor, oddiy savollar tugagan va eng faol talaba(lar) bor
+  let targets: string[] = []
+  if (session.bonus_enabled && bonus.length > 0 && regular.length === 0 && !skip)
+    targets = (await topReactors(admin, session.id, session.top_reactors)).map((r) => r.studentId)
 
   const action = decideAdvance({
     hasOpenQuestion: Boolean(open?.length),
     skip,
     pendingRegular: regular.length,
-    bonusReady: false, // 9-bosqichda: eng faol talaba + bonus savol aniqlanadi
+    bonusReady: targets.length > 0,
     slide: session.current_slide,
     pageCount: Number(lec?.page_count ?? 1),
   })
@@ -162,6 +175,8 @@ export async function advanceSession(
   if (action === 'close' || action === 'close_and_advance')
     await closeOpenQuestion(admin, session.id)
   if (action === 'open_next') await openPlannedQuestion(admin, session, regular[0]?.id as string)
+  if (action === 'open_bonus')
+    await openPlannedQuestion(admin, session, bonus[0]?.id as string, targets)
   if (action === 'advance' || action === 'close_and_advance') {
     if (session.current_slide < Number(lec?.page_count ?? 1)) {
       const { error } = await admin.rpc('app_session_set_slide', {

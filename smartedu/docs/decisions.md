@@ -296,3 +296,23 @@ Har yozuv: **nima** → **nima uchun** → **qanday o'zgartirish mumkin**.
 - **Cheklov:** `/next` ochiq savolni yopishda va keyingisini ochishda bir nechta so'rov ketma-ket ishlaydi
   (bitta tranzaksiya emas); ikki marta tez bosish holatida `app_*` funksiyalaridagi tekshiruvlar
   (bitta ochiq savol) himoya qiladi. Supabase E2E bilan sinalmagan.
+
+## v2 · 9-bosqich — reaksiyalar va eng faol talabaga bonus savol
+
+- **Ikki kanal:** har bosishda doskaga darhol Realtime *signali* ketadi (faqat animatsiya, ishonchsiz: doska uni
+  soniyasiga ~8 tagacha qabul qiladi). Haqiqiy hisob esa talaba telefonida yig'ilib, **~5 s da bir paket**
+  bo'lib `POST /api/live/[sessionId]/reaction` orqali DB'ga yoziladi; doska/boshqaruv DB'dan har 4 s da o'qiydi.
+- **Spamga qarshi 3 qatlam:** mijozda bosishlar orasida ≥400 ms va paketda ≤5; serverda daqiqasiga 30 paket;
+  SQL'da (`app_add_reactions`) chaqiruvga ≤5 va talaba/slayd/tur uchun jami ≤20. Bloklangan, ishtirokchi bo'lmagan,
+  tugagan sessiya — rad. `confused_enabled` o'chiq bo'lsa "tushunmadim" yozilmaydi.
+- **Maxfiylik:** `session_reactions` — RLS: faqat shu dars o'qituvchisi/admin va talabaning o'zi o'qiydi; yozish yo'q.
+  Doskaga ismlar faqat "ismlarni ko'rsatish" yoqilganda chiqadi, aks holda faqat son.
+- **Eng faol:** dars boshidan jami reaksiyalar yig'indisi (bloklanganlarsiz), teng bo'lsa talaba id bo'yicha
+  (deterministik). `top_reactors` (1–10) nafar talaba bonus savolga nishonlanadi. Bir talaba bir necha bonusni
+  olishi mumkin (kumulyativ hisob) — keyin o'zgartirish mumkin.
+- **Bonus savol oqimi:** nuqtadagi oddiy savollar tugagach, `bonus_enabled` va nishonlanadigan talaba bo'lsa
+  `app_open_targeted_question` bilan ochiladi (`audience='targeted'`, `target_ids`). Boshqalar savolni ko'radi,
+  lekin javob bera olmaydi (`not_target`, serverda tekshiriladi); nishon id'lari mijozga yuborilmaydi.
+  Reaksiya yo'q bo'lsa bonus savol o'tkazib yuboriladi (slayd almashadi).
+- **Cheklov:** realtime signal ishonchsiz bo'lgani uchun animatsiya hajmi haqiqiy bosishlar sonini aks ettirmasligi
+  mumkin; son DB'dan keladi. Supabase E2E bilan sinalmagan.

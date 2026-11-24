@@ -35,6 +35,9 @@ export const POST = handle(async (req) => {
   if (!sq) throw new ApiError(404, 'not_found')
   const row = sq as SqRow
   await requireParticipant(admin, userId, row.session_id, body.token)
+  // Bonus savol: faqat belgilangan (eng faol) talabalar javob bera oladi
+  if (row.audience === 'targeted' && !row.target_ids.includes(userId))
+    throw new ApiError(403, 'not_target')
 
   const { data: session } = await admin
     .from('lecture_sessions')
