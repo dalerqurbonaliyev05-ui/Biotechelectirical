@@ -92,3 +92,21 @@ Har yozuv: **nima** → **nima uchun** → **qanday o'zgartirish mumkin**.
 14. **Tekshirilmagan narsa:** bu muhitda Supabase (PostgREST/GoTrue) ishga tushirib bo'lmadi (Docker yo'q,
     GitHub yuklab olish yopiq). Shuning uchun SQL (haqiqiy Postgres'da) va toza mantiq sinalgan, API route'lar
     esa tur tekshiruvi + smoke test bilan; Supabase'ga ulangach qo'lda tekshirish ro'yxati README'da.
+
+## 4-bosqich: shaffof natijalar va jurnal
+
+1. **Talaba natijasi RLS orqali o'qiladi** (o'z sessiyasi bilan): `attempts/answers/audit_log` faqat natija e'lon
+   qilingandan keyin qaytadi. Savol matni va kalitlar uchun service role faqat `canRevealAnswers` ruxsat
+   bergandagina ishlatiladi. Ya'ni dastur xatosi bo'lsa ham, e'lon qilinmagan natija DB darajasida yopiq.
+2. **To'g'ri javob "talabaning o'z qiymatlari" bo'yicha** ko'rsatiladi (numeric: formula + o'sha talabaning
+   o'zgaruvchilari, tolerantlik bilan).
+3. **Guruhdagi o'rin** — faqat tasdiqlangan urinishlar orasida, musobaqa reytingi (1, 2, 2, 4). Talabaga
+   boshqalarning ismi/bali ko'rsatilmaydi, faqat "o'rin / jami".
+4. **Kitob havolasi** to'liq to'g'ri bo'lmagan javoblarda chiqadi (to'g'ri javobni oshkor qilmaydi, shuning
+   uchun reveal'dan oldin ham ko'rinadi). Format: `BOOKS_BASE_URL/#/kitob/<id>/<bet>` (kutubxona sayti
+   bilan mos; `lib/books.ts` da o'zgartiriladi). `book_ref.slug` = kutubxonadagi kitob id (fayl nomi).
+5. **Ball o'zgartirish sababi shart** (DB funksiyasi `reason_required`); har o'zgarish `audit_log` ga
+   (kim, qachon, eski/yangi, sabab) va talabaga ko'rinadi. Birinchi baholashda sabab shart emas.
+6. **Eksport:** CSV (BOM + formula-inyeksiyadan himoya) va Excel. Ustunlar savollar bo'yicha (tasodifiy tanlov
+   bo'lsa, talaba olmagan savol bo'sh). O'qituvchi faqat o'z nazoratini oladi (RLS).
+7. **Anonim baholash:** yozma javoblarni baholashda ismlar standart yashirin (#1, #2 ...), xohlasa ko'rsatiladi.

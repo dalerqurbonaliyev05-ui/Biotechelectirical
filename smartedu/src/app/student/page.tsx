@@ -66,7 +66,7 @@ export default async function StudentHome() {
       state =
         now < new Date(a.opens_at) ? 'upcoming' : now >= new Date(a.closes_at) ? 'missed' : 'open'
     }
-    return { a, state, score }
+    return { a, state, score, at: at?.id as string | undefined }
   })
 
   return (
@@ -84,7 +84,7 @@ export default async function StudentHome() {
           <p className="card text-sm text-slate-500">{S.noAssessments}</p>
         ) : (
           <ul className="grid gap-3 sm:grid-cols-2">
-            {cards.map(({ a, state, score }) => (
+            {cards.map(({ a, state, score, at }) => (
               <li key={a.id} className="card space-y-2">
                 <div className="flex items-start justify-between gap-2">
                   <div>
@@ -98,9 +98,12 @@ export default async function StudentHome() {
                 <p className="text-xs text-slate-500">
                   {S.opens}: {fmt(a.opens_at)} · {S.closes}: {fmt(a.closes_at)}
                 </p>
-                {score && (
+                {score && at && (
                   <p className="text-sm font-medium">
-                    {S.score}: {score}
+                    {S.score}: {score} ·{' '}
+                    <Link href={`/student/results/${at}`} className="text-brand-600 underline">
+                      {t.results.view}
+                    </Link>
                   </p>
                 )}
                 {(state === 'open' || state === 'in_progress') && (
