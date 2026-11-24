@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { BoardPodium, BoardQuestion } from '@/components/board-question'
+import { BoardStrip } from '@/components/board-strip'
 import { PdfViewer } from '@/components/pdf-viewer'
 import { QrCode } from '@/components/qr-code'
 import { apiJson } from '@/lib/api-client'
@@ -143,15 +144,17 @@ export function BoardView({
         )}
       </div>
 
-      <div className="flex items-center justify-between gap-8 border-t border-white/20 bg-slate-900 px-8 py-4">
+      <BoardStrip />
+
+      <div className="flex items-center justify-between gap-8 border-t border-white/20 bg-slate-900 px-8 py-3">
         <div className="flex items-center gap-6">
-          <QrCode text={joinUrl} size={150} className="rounded-lg p-1" />
+          <QrCode text={joinUrl} size={110} className="rounded-lg p-1" />
           <div>
             <p className="text-2xl text-slate-300">
               {L.joinAt}: <b className="text-white">{host}/live</b>
             </p>
             <p className="text-lg text-slate-400">{L.joinCode}</p>
-            <p className="font-mono text-7xl leading-none font-bold tracking-[0.2em]">
+            <p className="font-mono text-6xl leading-none font-bold tracking-[0.2em]">
               {state.code}
             </p>
           </div>

@@ -255,3 +255,9 @@ Har yozuv: **nima** → **nima uchun** → **qanday o'zgartirish mumkin**.
 3. **Yangi savol muharrirdan to'g'ridan-to'g'ri** (2–6 variant) yaratiladi va savollar bankiga ham tushadi; bankdan ham tanlash mumkin.
    Muharrirda faqat test (mcq) yoziladi; raqamli savol uchun savollar banki ishlatiladi.
 4. **Slayd kitoblari (`slide_books`)** hozircha qo'lda (nom, slug, bet); kutubxona API kontrakti 12-bosqichda.
+
+## v2 — 6-bosqich: doska paneli
+1. **Ingichka panel (`BoardStrip`, 56 px) slayd maydonidan TASHQARIDA**, alohida qator — slayd ustini hech qachon yopmaydi. Chapda kitob
+   belgisi (12), o'rtada reaksiyalar (9), o'ngda hisoblagichlar uchun joy. Pastki QR/kod paneli ixchamlashtirildi (QR 110 px).
+2. **Doska faqat sessiya egasi (yoki admin) hisobi bilan ochiladi**, shuning uchun o'qituvchi asboblari (slayd boshqaruvi, kodni yangilash)
+   boshqa hech kimga ko'rinmaydi. Darsni o'qituvchi bosh sahifasidan (`QuickStart`) yoki ma'ruza sahifasidan (guruh/auditoriya bilan) boshlaydi.

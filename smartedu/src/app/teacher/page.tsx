@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { t } from '@/lib/i18n'
+import { QuickStart } from './quick-start'
 import { requireRole } from '@/lib/server/session'
 import { createClient } from '@/lib/supabase/server'
 
@@ -10,6 +11,22 @@ export default async function TeacherHome() {
     .from('teacher_subjects')
     .select('subjects(name), groups(name)')
     .eq('teacher_id', me.id)
+  const [{ data: lecs }, { data: act }] = await Promise.all([
+    supabase
+      .from('lectures')
+      .select('id, title')
+      .order('created_at', { ascending: false })
+      .limit(50),
+    supabase
+      .from('lecture_sessions')
+      .select('id, code, lectures(title)')
+      .eq('status', 'active')
+      .order('started_at', { ascending: false }),
+  ])
+  const lectures = (lecs ?? []).map((l) => ({ id: String(l.id), title: String(l.title) }))
+  const active = (
+    (act ?? []) as unknown as { id: string; code: string; lectures: { title: string } | null }[]
+  ).map((a) => ({ id: a.id, code: a.code, title: a.lectures?.title ?? '' }))
   const rows = (data ?? []) as unknown as {
     subjects: { name: string } | null
     groups: { name: string } | null
@@ -25,6 +42,7 @@ export default async function TeacherHome() {
           </Link>
         ))}
       </div>
+      <QuickStart lectures={lectures} active={active} />
       <section className="card">
         <h2 className="mb-2 font-semibold">{t.teacherHome.myAssignments}</h2>
         {rows.length === 0 ? (
