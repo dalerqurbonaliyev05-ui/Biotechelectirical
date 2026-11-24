@@ -121,6 +121,10 @@ export function useLiveSession(
     void channel.current?.send({ type: 'broadcast', event: 'focus', payload: {} })
   }, [])
 
+  const signalAnnot = useCallback((slide: number) => {
+    void channel.current?.send({ type: 'broadcast', event: 'annot', payload: { slide } })
+  }, [])
+
   const focusCall = useCallback(async () => {
     const s = await apiJson<SessionState>(`/api/sessions/${initial.id}/focus`, { method: 'POST' })
     apply(s)
@@ -159,5 +163,6 @@ export function useLiveSession(
     next,
     focusCall,
     setBreak,
+    signalAnnot,
   }
 }

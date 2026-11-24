@@ -5,7 +5,7 @@ import { getSettings } from '@/lib/server/settings'
 import { createAdminClient } from '@/lib/supabase/admin'
 
 /**
- * Saqlash muddati: tugagan darslarning sezgir faollik ma'lumotlari (reaksiyalar, kuzatish vaqti, izohlar)
+ * Saqlash muddati: tugagan darslarning sezgir faollik ma'lumotlari (reaksiyalar, kuzatish vaqti)
  * `activity_retention_days` kundan keyin tozalanadi. Davomat HOLATI (present/nb) saqlanadi. Kuniga bir marta (vercel.json).
  */
 export const GET = handle(async (req) => {

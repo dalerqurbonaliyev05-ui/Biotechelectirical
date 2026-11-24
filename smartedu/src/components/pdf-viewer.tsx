@@ -74,6 +74,7 @@ export function PdfViewer({
   onLoaded,
   className = '',
   fit = 'width',
+  children,
 }: {
   url: string
   page: number
@@ -81,6 +82,8 @@ export function PdfViewer({
   className?: string
   /** 'width' — kenglikka; 'contain' — konteynerga to'liq sig'dirish (elektron doska) */
   fit?: 'width' | 'contain'
+  /** Slayd ustiga qo'yiladigan qatlam (izohlar): canvas bilan bir xil o'lchamli qutida */
+  children?: React.ReactNode
 }) {
   const wrap = useRef<HTMLDivElement>(null)
   const canvas = useRef<HTMLCanvasElement>(null)
@@ -161,7 +164,10 @@ export function PdfViewer({
       {error ? (
         <p className="p-6 text-sm text-red-600">{t.lectures.pdfError}</p>
       ) : (
-        <canvas ref={canvas} aria-label={`${t.lectures.slide} ${page}`} />
+        <div className="relative leading-[0]">
+          <canvas ref={canvas} aria-label={`${t.lectures.slide} ${page}`} />
+          {children}
+        </div>
       )}
     </div>
   )

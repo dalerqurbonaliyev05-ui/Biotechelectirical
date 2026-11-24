@@ -332,3 +332,18 @@ Har yozuv: **nima** → **nima uchun** → **qanday o'zgartirish mumkin**.
 - **Tanaffus:** `session_breaks`; davomiylikdan ayriladi, heartbeat shu vaqtda hisoblamaydi; doska "Tanaffus" ko'rsatadi.
 - **Saqlash muddati:** `activity_retention_days` (7–3650, standart 180). Kunlik cron reaksiya/vaqt hisoblagichlarini o'chiradi,
   davomat holati qoladi.
+
+## v2 · 11-bosqich — slayd izohlari (chizma va KaTeX)
+
+- **Saqlash:** har (dars, slayd) uchun bitta JSON hujjat (`session_annotations.items`, ≤256 KB). Koordinatalar 0..1 — doska va
+  talaba ekranida bir xil joyda chiqadi. Sxema (`lib/annotations.ts`, zod) mijozda ham serverda ham tekshiriladi: rang `#rrggbb`,
+  ≤300 element, ≤1500 nuqta/chiziq, matn ≤300 belgi; noma'lum tur rad etiladi.
+- **KaTeX xavfsizligi:** formulalar `$...$` ichida; `katex.renderToString(..., {trust:false, throwOnError:false})`. Matnning o'zi
+  React orqali (escape qilinadi), faqat KaTeX chiqishi `dangerouslySetInnerHTML` bilan qo'yiladi.
+- **Yozish faqat doskadan (o'qituvchi sessiyasi):** `D` — chizish rejimi, qalam/matn, 6 rang, bekor qilish, tozalash. 500 ms
+  debounce bilan saqlanadi; slayd almashsa kutayotgani darhol yuboriladi.
+- **Talabalarga:** faqat `share_annotations` yoqilgan bo'lsa; Realtime `annot` — faqat "yangilang" signali (soxta xabar zarar qilmaydi),
+  ma'lumot talaba API'sidan (token + ishtirokchi tekshiruvi) olinadi: slayd miniaturasi (imzolangan URL, 10 daq) + izohlar.
+  CSP `img-src` ga Supabase hosti qo'shildi (miniaturalar uchun; oldin bloklanishi mumkin edi).
+- **Cheklov:** izohlar sessiya tugagach o'zgartirilmaydi (RPC rad etadi); saqlash muddati cron'i izohlarni o'chirmaydi (ular sezgir talaba
+  ma'lumoti emas, o'qituvchi materiali). Ko'p qurilmadan bir vaqtda chizish qo'llab-quvvatlanmaydi (oxirgi saqlangan yutadi).

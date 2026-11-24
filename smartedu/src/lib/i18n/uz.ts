@@ -658,6 +658,17 @@ export const uz = {
       'Slaydga yetganda savol avtomatik ochiladi; vaqt tugagach doska uni yopib, natijani ko‘rsatadi.',
     ctlTop: 'Eng yaxshi 5 ta',
   },
+  annot: {
+    toggle: 'Izoh',
+    pen: 'Qalam',
+    text: 'Matn',
+    undo: 'Bekor qilish',
+    clear: 'Tozalash',
+    close: 'Yopish',
+    hint: 'D — chizish rejimi',
+    shared: 'O‘qituvchi izohlari',
+    saveFailed: 'Izoh saqlanmadi',
+  },
   presence: {
     focusTitle: 'Doskaga qarang!',
     focusBtn: 'Doskaga qarang',

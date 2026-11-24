@@ -25,7 +25,7 @@ function contentSecurityPolicy(): string {
     "default-src 'self'",
     "script-src 'self' 'unsafe-inline'",
     "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' data: blob:",
+    `img-src 'self' data: blob: https://${host}`,
     "font-src 'self' data:",
     `connect-src 'self' https://${host} wss://${host}`,
     "worker-src 'self' blob:",

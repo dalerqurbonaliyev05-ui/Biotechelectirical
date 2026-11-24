@@ -3,7 +3,9 @@
 import type { RealtimeChannel } from '@supabase/supabase-js'
 import Link from 'next/link'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { AnnotationLayer } from '@/components/annotation-layer'
 import { ClientApiError, apiJson, errorText } from '@/lib/api-client'
+import type { AnnotationItem } from '@/lib/annotations'
 import { t } from '@/lib/i18n'
 import type { LiveQuestionView } from '@/lib/live-question'
 import {
@@ -41,6 +43,7 @@ interface LiveView {
   confused_enabled?: boolean
   focus_seq?: number
   on_break?: boolean
+  share_annotations?: boolean
   isTarget?: boolean
   question: LiveQuestionView | null
   mine: {
@@ -78,6 +81,7 @@ export function LiveRoom({
   const focusBase = useRef<number | null>(null)
   const [focusOn, setFocusOn] = useState(false)
   const [onBreak, setOnBreak] = useState(false)
+  const [annotTick, setAnnotTick] = useState(0)
 
   // "Doskaga qarang": hisoblagich oshsa — to'liq ekranli chaqiruv (birinchi qiymat faqat boshlang'ich sifatida olinadi)
   const noteFocus = useCallback((seq: number | undefined) => {
@@ -170,6 +174,7 @@ export function LiveRoom({
         if (!(ev.q || hasQuestion.current || ev.status === 'ended')) revRef.current = ev.rev
       })
       .on('broadcast', { event: 'focus' }, () => void refresh()) // signal: haqiqiy holat serverdan olinadi
+      .on('broadcast', { event: 'annot' }, () => setAnnotTick((n) => n + 1)) // signal: izohlar serverdan olinadi
       .subscribe((st) => setConnected(st === 'SUBSCRIBED'))
     chRef.current = ch
     // Realtime uzilganda zaxira: har 5 s da so'rov (ulangan bo'lsa yubormaymiz)
@@ -339,6 +344,9 @@ export function LiveRoom({
           <p className="pt-2 text-slate-600">{L.waiting}</p>
           {view?.me && <RankLine me={view.me} />}
         </div>
+      )}
+      {!ended && !onBreak && info && view?.share_annotations && !q && (
+        <SharedAnnotations info={info} slide={view.slide} tick={annotTick} />
       )}
       {!ended && info && view && (
         <ReactionBar
@@ -793,4 +801,40 @@ function PresenceAgent({
   }, [])
 
   return null
+}
+
+/** O'qituvchi ruxsat bergan bo'lsa: joriy slayd miniaturasi va izohlar (faqat ko'rish). Ma'lumot serverdan olinadi. */
+function SharedAnnotations({ info, slide, tick }: { info: Joined; slide: number; tick: number }) {
+  const [data, setData] = useState<{ thumbUrl: string | null; items: AnnotationItem[] } | null>(
+    null,
+  )
+  useEffect(() => {
+    let live = true
+    apiJson<{ shared: boolean; thumbUrl?: string | null; items?: AnnotationItem[] }>(
+      `/api/live/${info.session_id}/annotations?slide=${slide}`,
+      { headers: { 'x-join-token': info.join_token } },
+    )
+      .then((r) => {
+        if (live) setData(r.shared ? { thumbUrl: r.thumbUrl ?? null, items: r.items ?? [] } : null)
+      })
+      .catch(() => live && setData(null))
+    return () => {
+      live = false
+    }
+  }, [info.session_id, info.join_token, slide, tick])
+  if (!data || (!data.thumbUrl && data.items.length === 0)) return null
+  return (
+    <div className="card space-y-2">
+      <p className="text-xs text-slate-500">{t.annot.shared}</p>
+      <div className="relative overflow-hidden rounded-lg bg-slate-900 leading-[0]">
+        {data.thumbUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={data.thumbUrl} alt="" className="w-full" />
+        ) : (
+          <div className="aspect-video" />
+        )}
+        <AnnotationLayer items={data.items} />
+      </div>
+    </div>
+  )
 }

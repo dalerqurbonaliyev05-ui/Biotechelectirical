@@ -2,10 +2,12 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { BoardPodium, BoardQuestion } from '@/components/board-question'
+import { AnnotationLayer } from '@/components/annotation-layer'
 import { BoardStrip } from '@/components/board-strip'
 import { PdfViewer } from '@/components/pdf-viewer'
 import { QrCode } from '@/components/qr-code'
 import { apiJson } from '@/lib/api-client'
+import { COLORS, type AnnotationItem } from '@/lib/annotations'
 import { t } from '@/lib/i18n'
 import { understoodPercent, type ReactionKind } from '@/lib/reactions'
 import type { SessionState } from '@/lib/session-state'
@@ -39,7 +41,7 @@ export function BoardView({
     setFloaters((f) => [...f.slice(-11), { id, kind, x: 10 + Math.random() * 80 }])
     setTimeout(() => setFloaters((f) => f.filter((x) => x.id !== id)), 2500)
   }, [])
-  const { state, connected, setSlide, closeQuestion, next } = useLiveSession(
+  const { state, connected, setSlide, closeQuestion, next, signalAnnot } = useLiveSession(
     initial,
     5000,
     onReaction,
@@ -55,6 +57,54 @@ export function BoardView({
       return () => clearTimeout(id)
     }
   }, [state.focusSeq])
+  // Slayd izohlari (chizma/KaTeX): D — chizish rejimi. Slayd bo'yicha saqlanadi, talabalarga faqat o'qituvchi ruxsat bersa ko'rinadi.
+  const [drawOn, setDrawOn] = useState(false)
+  const [tool, setTool] = useState<'pen' | 'text'>('pen')
+  const [color, setColor] = useState<string>(COLORS[0])
+  const [annots, setAnnots] = useState<{ slide: number; items: AnnotationItem[] }>({
+    slide: state.slide,
+    items: [],
+  })
+  const [annotErr, setAnnotErr] = useState(false)
+  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const pending = useRef<{ slide: number; items: AnnotationItem[] } | null>(null)
+  const flushAnnots = useCallback(async () => {
+    const p = pending.current
+    if (!p) return
+    pending.current = null
+    if (saveTimer.current) clearTimeout(saveTimer.current)
+    try {
+      await apiJson(`/api/sessions/${state.id}/annotations`, {
+        method: 'PUT',
+        json: { slide: p.slide, items: p.items },
+      })
+      setAnnotErr(false)
+      signalAnnot(p.slide)
+    } catch {
+      setAnnotErr(true)
+    }
+  }, [state.id, signalAnnot])
+  const changeAnnots = (items: AnnotationItem[]) => {
+    setAnnots({ slide: state.slide, items })
+    pending.current = { slide: state.slide, items }
+    if (saveTimer.current) clearTimeout(saveTimer.current)
+    saveTimer.current = setTimeout(() => void flushAnnots(), 500)
+  }
+  useEffect(() => {
+    // Slayd almashganda avval kutayotgan saqlash yuboriladi, so'ng yangi slayd izohlari olinadi
+    void flushAnnots()
+    let live = true
+    setAnnots({ slide: state.slide, items: [] })
+    apiJson<{ items: AnnotationItem[] }>(
+      `/api/sessions/${state.id}/annotations?slide=${state.slide}`,
+    )
+      .then((r) => live && setAnnots({ slide: state.slide, items: r.items }))
+      .catch(() => undefined)
+    return () => {
+      live = false
+    }
+  }, [state.slide, state.id, flushAnnots])
+  const slideItems = annots.slide === state.slide ? annots.items : []
   const reactions = useReactions(state.id, state.slide, state.status === 'active')
   const root = useRef<HTMLDivElement>(null)
   const [error, setError] = useState(false)
@@ -100,6 +150,10 @@ export function BoardView({
           setError(false)
           setSlide(s.slide - 1).catch(fail)
         }
+      } else if (e.key === 'd' || e.key === 'D') {
+        setDrawOn((v) => !v)
+      } else if (e.key === 'Escape') {
+        setDrawOn(false)
       } else if (e.key === 's' || e.key === 'S') {
         setError(false)
         next(true).catch(fail) // nuqtani o'tkazib yuborish
@@ -164,7 +218,15 @@ export function BoardView({
             bonusNames={reactions?.leaders.names}
           />
         ) : pdfUrl ? (
-          <PdfViewer url={pdfUrl} page={state.slide} fit="contain" className="size-full" />
+          <PdfViewer url={pdfUrl} page={state.slide} fit="contain" className="size-full">
+            <AnnotationLayer
+              items={slideItems}
+              editable={drawOn}
+              tool={tool}
+              color={color}
+              onChange={changeAnnots}
+            />
+          </PdfViewer>
         ) : (
           <p className="p-10 text-2xl">{t.lectures.pdfError}</p>
         )}
@@ -194,6 +256,52 @@ export function BoardView({
       </div>
 
       <BoardStrip
+        left={
+          <div className="flex items-center gap-2 text-base">
+            <button
+              className={`rounded px-2 py-1 ${drawOn ? 'bg-brand-600' : 'bg-white/10'}`}
+              onClick={() => setDrawOn((v) => !v)}
+              title={t.annot.hint}
+            >
+              ✏️ {t.annot.toggle}
+            </button>
+            {drawOn && (
+              <>
+                <button
+                  className={`rounded px-2 py-1 ${tool === 'pen' ? 'bg-white/30' : 'bg-white/10'}`}
+                  onClick={() => setTool('pen')}
+                >
+                  {t.annot.pen}
+                </button>
+                <button
+                  className={`rounded px-2 py-1 ${tool === 'text' ? 'bg-white/30' : 'bg-white/10'}`}
+                  onClick={() => setTool('text')}
+                >
+                  {t.annot.text}
+                </button>
+                {COLORS.map((c) => (
+                  <button
+                    key={c}
+                    aria-label={c}
+                    onClick={() => setColor(c)}
+                    className={`size-6 rounded-full border-2 ${color === c ? 'border-white' : 'border-transparent'}`}
+                    style={{ background: c }}
+                  />
+                ))}
+                <button
+                  className="rounded bg-white/10 px-2 py-1"
+                  onClick={() => changeAnnots(slideItems.slice(0, -1))}
+                >
+                  ↩
+                </button>
+                <button className="rounded bg-white/10 px-2 py-1" onClick={() => changeAnnots([])}>
+                  🗑
+                </button>
+              </>
+            )}
+            {annotErr && <span className="text-red-400">{t.annot.saveFailed}</span>}
+          </div>
+        }
         center={
           reactions ? (
             <>

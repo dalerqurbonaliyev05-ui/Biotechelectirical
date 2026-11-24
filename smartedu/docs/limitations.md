@@ -32,7 +32,7 @@ Bu hujjat tizimning **real** cheklovlarini yozadi: nima o'lchanmagan, nima brauz
 
 ## Maxfiylik va saqlash muddati
 
-- Sezgir ma'lumot (reaksiyalar, kuzatish vaqti, NB, izohlar): **faqat shu dars o'qituvchisi (va admin) hamda talabaning o'zi** ko'radi (RLS).
+- Sezgir ma‘lumot (reaksiyalar, kuzatish vaqti, NB): **faqat shu dars o'qituvchisi (va admin) hamda talabaning o'zi** ko'radi (RLS).
   NB ro'yxati doskada hech qachon ko'rsatilmaydi (testlar bilan himoyalangan: `tests/nb-privacy.test.ts`).
 - Talabaga dars boshida kuzatish qoidasi ochiq ko'rsatiladi (`guests.notice`).
 - Saqlash muddati: Admin → Sozlamalar → "Faollik ma'lumotini saqlash muddati" (standart 180 kun). Kunlik cron
