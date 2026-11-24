@@ -2,6 +2,8 @@ import 'server-only'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { ApiError } from '@/lib/server/api'
 import { currentQuestionView } from '@/lib/server/live-questions'
+import { bookUrl } from '@/lib/books'
+import { serverEnv } from '@/lib/env'
 import type { PlanItem, SessionState } from '@/lib/session-state'
 import type { SessionProfile } from '@/lib/types'
 
@@ -81,7 +83,7 @@ export async function buildSessionState(
   admin: SupabaseClient,
   s: SessionRow,
 ): Promise<SessionState> {
-  const [{ data: lec }, { count }, question, { data: planned }, { data: asked }] =
+  const [{ data: lec }, { count }, question, { data: planned }, { data: asked }, { data: bks }] =
     await Promise.all([
       admin.from('lectures').select('title, page_count').eq('id', s.lecture_id).single(),
       admin
@@ -96,7 +98,14 @@ export async function buildSessionState(
         .order('slide_no')
         .order('position'),
       admin.from('session_questions').select('lecture_question_id').eq('session_id', s.id),
+      admin
+        .from('slide_books')
+        .select('id, title, slug, page')
+        .eq('lecture_id', s.lecture_id)
+        .eq('slide_no', s.current_slide)
+        .order('created_at'),
     ])
+  const booksBase = serverEnv().booksBaseUrl
   const done = new Set((asked ?? []).map((a) => a.lecture_question_id as string | null))
   const plan: PlanItem[] = (planned ?? []).map((p) => ({
     id: p.id as string,
@@ -119,6 +128,11 @@ export async function buildSessionState(
     title: String(lec?.title ?? ''),
     question,
     plan,
+    books: (bks ?? []).map((b) => ({
+      id: b.id as string,
+      title: String(b.title),
+      url: bookUrl(booksBase, String(b.slug), (b.page as number | null) ?? null),
+    })),
     focusSeq: s.focus_seq,
     onBreak: s.break_started_at !== null,
     settings: {

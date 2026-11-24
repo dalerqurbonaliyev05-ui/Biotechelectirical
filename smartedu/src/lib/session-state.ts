@@ -1,5 +1,12 @@
 import type { LiveQuestionView } from '@/lib/live-question'
 
+export interface SlideBook {
+  id: string
+  title: string
+  /** To'liq havola (kutubxona chuqur havolasi); faqat http(s) */
+  url: string
+}
+
 export interface PlanItem {
   id: string // lecture_question id
   slide: number
@@ -24,6 +31,8 @@ export interface SessionState {
   question: LiveQuestionView | null
   /** Ma'ruzaga rejalashtirilgan savollar va ularning so'ralgan/so'ralmaganligi */
   plan: PlanItem[]
+  /** Joriy slayddagi kitob havolalari (doskada qatlam sifatida ochiladi) */
+  books: SlideBook[]
   /** "Doskaga qarang" chaqiruvlari soni (oshsa — yangi chaqiruv) */
   focusSeq: number
   /** Tanaffus davom etyapti */

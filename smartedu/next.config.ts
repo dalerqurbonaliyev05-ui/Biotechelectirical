@@ -17,9 +17,17 @@ const securityHeaders = [
 function contentSecurityPolicy(): string {
   let host = '*.supabase.co'
   try {
-    if (process.env.NEXT_PUBLIC_SUPABASE_URL) host = new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).host
+    if (process.env.NEXT_PUBLIC_SUPABASE_URL)
+      host = new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).host
   } catch {
     /* noto'g'ri URL: umumiy supabase.co ga qaytamiz */
+  }
+  // Kitob qatlami (iframe) faqat kutubxona manzilidan; boshqa hech qanday ramka yo'q
+  let booksOrigin = 'https://energyvibe.uz'
+  try {
+    if (process.env.BOOKS_BASE_URL) booksOrigin = new URL(process.env.BOOKS_BASE_URL).origin
+  } catch {
+    /* noto'g'ri URL: standart */
   }
   return [
     "default-src 'self'",
@@ -28,6 +36,7 @@ function contentSecurityPolicy(): string {
     `img-src 'self' data: blob: https://${host}`,
     "font-src 'self' data:",
     `connect-src 'self' https://${host} wss://${host}`,
+    `frame-src ${booksOrigin}`,
     "worker-src 'self' blob:",
     "object-src 'none'",
     "base-uri 'self'",
@@ -46,7 +55,10 @@ const nextConfig: NextConfig = {
     if (process.env.NODE_ENV === 'production') {
       headers.push({ key: 'Content-Security-Policy', value: contentSecurityPolicy() })
       // HTTPS'ga majburlash (Vercel/Cloudflare doim HTTPS beradi)
-      headers.push({ key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains' })
+      headers.push({
+        key: 'Strict-Transport-Security',
+        value: 'max-age=63072000; includeSubDomains',
+      })
     }
     return [{ source: '/:path*', headers }]
   },

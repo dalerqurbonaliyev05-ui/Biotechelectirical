@@ -658,6 +658,13 @@ export const uz = {
       'Slaydga yetganda savol avtomatik ochiladi; vaqt tugagach doska uni yopib, natijani ko‘rsatadi.',
     ctlTop: 'Eng yaxshi 5 ta',
   },
+  books: {
+    open: 'Kitob',
+    openTab: 'Yangi oynada ochish',
+    close: 'Yopish',
+    blocked: 'Havola xavfsiz emas, ochilmadi.',
+    hint: 'B — kitobni ochish/yopish',
+  },
   annot: {
     toggle: 'Izoh',
     pen: 'Qalam',

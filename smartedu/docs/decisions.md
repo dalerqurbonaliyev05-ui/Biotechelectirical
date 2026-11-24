@@ -347,3 +347,10 @@ Har yozuv: **nima** → **nima uchun** → **qanday o'zgartirish mumkin**.
   CSP `img-src` ga Supabase hosti qo'shildi (miniaturalar uchun; oldin bloklanishi mumkin edi).
 - **Cheklov:** izohlar sessiya tugagach o'zgartirilmaydi (RPC rad etadi); saqlash muddati cron'i izohlarni o'chirmaydi (ular sezgir talaba
   ma'lumoti emas, o'qituvchi materiali). Ko'p qurilmadan bir vaqtda chizish qo'llab-quvvatlanmaydi (oxirgi saqlangan yutadi).
+
+## v2 · 12-bosqich — kitob qatlami (iframe)
+
+- Kutubxona kodiga **tegilmadi** (CLAUDE.md: boshqa bo'limlar o'zgartirilmaydi). Faqat mavjud chuqur havola (`#/kitob/<id>/<bet>`) ishlatildi.
+- Joriy slayd kitoblari `SessionState.books` da (havola serverda `BOOKS_BASE_URL` bilan tuziladi; mijozda sirsiz). Doskada 📖 tugma yoki `B`.
+- Iframe sandbox + `no-referrer`; CSP `frame-src` faqat kutubxona origini. Ramka kutubxona tomonidan bloklansa — "Yangi oynada ochish" zaxirasi.
+- Haqiqiy brauzerda ramka tekshirilmagan (kutubxona `vercel.json`'da ramkani bloklovchi sarlavha yo'qligi o'qib tasdiqlangan, xolos).

@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { BoardPodium, BoardQuestion } from '@/components/board-question'
 import { AnnotationLayer } from '@/components/annotation-layer'
+import { BookOverlay } from '@/components/book-overlay'
 import { BoardStrip } from '@/components/board-strip'
 import { PdfViewer } from '@/components/pdf-viewer'
 import { QrCode } from '@/components/qr-code'
@@ -59,6 +60,10 @@ export function BoardView({
   }, [state.focusSeq])
   // Slayd izohlari (chizma/KaTeX): D — chizish rejimi. Slayd bo'yicha saqlanadi, talabalarga faqat o'qituvchi ruxsat bersa ko'rinadi.
   const [drawOn, setDrawOn] = useState(false)
+  // Kitob qatlami: slayd o'zgarsa yopiladi; B tugmasi ochadi/yopadi
+  const [bookOpen, setBookOpen] = useState<string | null>(null)
+  const openBook = state.books.find((b) => b.id === bookOpen) ?? null
+  useEffect(() => setBookOpen(null), [state.slide])
   const [tool, setTool] = useState<'pen' | 'text'>('pen')
   const [color, setColor] = useState<string>(COLORS[0])
   const [annots, setAnnots] = useState<{ slide: number; items: AnnotationItem[] }>({
@@ -150,6 +155,9 @@ export function BoardView({
           setError(false)
           setSlide(s.slide - 1).catch(fail)
         }
+      } else if (e.key === 'b' || e.key === 'B') {
+        const first = s.books[0]
+        if (first) setBookOpen((cur) => (cur ? null : first.id))
       } else if (e.key === 'd' || e.key === 'D') {
         setDrawOn((v) => !v)
       } else if (e.key === 'Escape') {
@@ -198,6 +206,7 @@ export function BoardView({
   return (
     <div ref={root} className="flex h-screen flex-col bg-black text-white">
       <div className="relative min-h-0 flex-1">
+        {openBook && !question && <BookOverlay book={openBook} onClose={() => setBookOpen(null)} />}
         {state.onBreak && (
           <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-4 bg-slate-950/95">
             <span className="text-9xl">☕</span>
@@ -258,6 +267,16 @@ export function BoardView({
       <BoardStrip
         left={
           <div className="flex items-center gap-2 text-base">
+            {state.books.map((b) => (
+              <button
+                key={b.id}
+                className={`max-w-48 truncate rounded px-2 py-1 ${bookOpen === b.id ? 'bg-brand-600' : 'bg-white/10'}`}
+                onClick={() => setBookOpen((cur) => (cur === b.id ? null : b.id))}
+                title={b.title}
+              >
+                📖 {b.title}
+              </button>
+            ))}
             <button
               className={`rounded px-2 py-1 ${drawOn ? 'bg-brand-600' : 'bg-white/10'}`}
               onClick={() => setDrawOn((v) => !v)}
