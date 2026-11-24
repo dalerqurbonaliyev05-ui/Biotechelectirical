@@ -363,3 +363,17 @@ Har yozuv: **nima** → **nima uchun** → **qanday o'zgartirish mumkin**.
 - Talaba bosh sahifasida **faqat o'zining** qatnashish foizi: guruhining tugagan darslari ichida "qatnashdi" ulushi (qatnashmagan dars ham
   jami'ga kiradi). Boshqa talabalarning yozuvi hech qachon qaytmaydi (so'rov `student_id = o'zi`).
 - Cheklov: foiz dars guruhga bog'langan bo'lsa hisoblanadi (guruhsiz "ochiq" darslar kirmaydi); oxirgi 200 dars bilan cheklangan.
+
+## v2 · 15-bosqich (ixtiyoriy) — savol qutisi, tezkor so'rov, dars xulosasi
+
+- **Savol qutisi:** talaba dars paytida savol yozadi (≤300 belgi, bir talabadan ≤5), boshqalar "men ham" deb ovoz beradi (har talaba bitta).
+  **Anonimlik:** muallif identifikatori (`author_id`) faqat bazada; API javoblarida (o'qituvchiga ham!) hech qachon chiqmaydi
+  (`tests/ask-anonymity.test.ts`), RLS faqat muallifning o'ziga o'qishga ruxsat beradi. Ma'lum cheklov: dars egasi ma'lumotlar bazasiga
+  to'g'ridan-to'g'ri kirsa (admin/SQL) muallifni topishi mumkin — "anonim" shu ilova ichida. `anonymous=false` belgisi saqlanadi,
+  lekin hozircha UI ham muallifni ko'rsatmaydi (kelajak uchun).
+- Eng ko'p ovoz olgan savol o'qituvchi panelida tepada (`rankAsks`); doskaga **faqat o'qituvchi tanlasa** chiqadi (bittasi); yashirish mumkin.
+- **Tezkor so'rov:** ha/yo'q yoki 2–6 variant; bir vaqtda bitta ochiq (yangisi oldingisini yopadi); har talaba bitta ovoz; ballsiz. Doskada
+  natija (faqat umumiy sonlar), yopilgach 20 s qoladi. Shaxsiy tanlov hech kimga ko'rsatilmaydi.
+- **Dars xulosasi** (`/student/lessons/[id]`): faqat shu darsda qatnashgan talabaga, dars tugagach: slayd miniaturalari, o'qituvchi izohlari
+  (faqat `share_annotations` yoqilgan bo'lsa), yopilgan dars savollari to'g'ri javob bilan va kitob havolalari.
+- Cheklov: doskadagi yangi tanlangan savol/so'rov natijasi ≤5 s kechikish bilan (state so'rovi) yangilanadi.

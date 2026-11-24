@@ -1,6 +1,7 @@
 import 'server-only'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { ApiError } from '@/lib/server/api'
+import { currentPoll, pinnedAsk } from '@/lib/server/extras'
 import { currentQuestionView } from '@/lib/server/live-questions'
 import { bookUrl } from '@/lib/books'
 import { serverEnv } from '@/lib/env'
@@ -106,6 +107,7 @@ export async function buildSessionState(
         .order('created_at'),
     ])
   const booksBase = serverEnv().booksBaseUrl
+  const [poll, pinned] = await Promise.all([currentPoll(admin, s.id), pinnedAsk(admin, s.id)])
   const done = new Set((asked ?? []).map((a) => a.lecture_question_id as string | null))
   const plan: PlanItem[] = (planned ?? []).map((p) => ({
     id: p.id as string,
@@ -133,6 +135,8 @@ export async function buildSessionState(
       title: String(b.title),
       url: bookUrl(booksBase, String(b.slug), (b.page as number | null) ?? null),
     })),
+    poll,
+    pinnedAsk: pinned,
     focusSeq: s.focus_seq,
     onBreak: s.break_started_at !== null,
     settings: {

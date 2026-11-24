@@ -7,6 +7,7 @@ import { ClientApiError, errorText } from '@/lib/api-client'
 import { t } from '@/lib/i18n'
 import type { SessionState } from '@/lib/session-state'
 import { secondsLeft, useCountdown } from '@/lib/use-countdown'
+import { LiveExtras } from './live-extras'
 import { SessionExtras } from './session-extras'
 import { useLiveSession } from '@/lib/use-live-session'
 import { useQuestionStats, useRating, useReactions } from '@/lib/use-question-stats'
@@ -35,6 +36,8 @@ export function SessionControl({
     next,
     focusCall,
     setBreak,
+    setPoll,
+    signalRefresh,
   } = useLiveSession(initial)
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
@@ -267,6 +270,7 @@ export function SessionControl({
         )}
       </section>
 
+      <LiveExtras state={state} onPoll={setPoll} onSignal={signalRefresh} />
       <SessionExtras state={state} onState={applyState} />
 
       {rating && rating.top.length > 0 && (

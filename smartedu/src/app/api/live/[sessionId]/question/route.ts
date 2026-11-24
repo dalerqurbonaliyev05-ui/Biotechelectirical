@@ -1,5 +1,6 @@
 import { describeCorrect } from '@/lib/assessment/result-view'
 import { handle, idParam, limit, ok, requireLiveUser } from '@/lib/server/api'
+import { currentPoll } from '@/lib/server/extras'
 import { currentQuestion, sessionRating } from '@/lib/server/live-questions'
 import { requireParticipant } from '@/lib/server/live'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -80,5 +81,16 @@ export const GET = handle<{ sessionId: string }>(async (req, { params }) => {
     if (mineRow)
       me = { points: mineRow.points, rank: mineRow.rank, of: rating.length, medal: mineRow.medal }
   }
-  return ok({ ...base, question, isTarget, mine, correctText, me })
+  const poll = await currentPoll(admin, sessionId)
+  let myVote: string | null = null
+  if (poll) {
+    const { data: v } = await admin
+      .from('session_poll_votes')
+      .select('option_id')
+      .eq('poll_id', poll.id)
+      .eq('voter_id', userId)
+      .maybeSingle()
+    myVote = (v?.option_id as string | undefined) ?? null
+  }
+  return ok({ ...base, question, isTarget, mine, correctText, me, poll, myVote })
 })

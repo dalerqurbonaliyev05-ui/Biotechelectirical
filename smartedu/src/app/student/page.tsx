@@ -76,6 +76,23 @@ export default async function StudentHome() {
       }
     }
   }
+  // Dars xulosalari: men qatnashgan tugagan darslar (oxirgi 8 ta)
+  const admin2 = createAdminClient()
+  const { data: myParts } = await admin2
+    .from('session_participants')
+    .select('session_id, lecture_sessions!inner(id, status, started_at, lectures(title))')
+    .eq('student_id', me.id)
+    .eq('lecture_sessions.status', 'ended')
+    .order('joined_at', { ascending: false })
+    .limit(8)
+  const lessons = (myParts ?? []).map((p) => {
+    const ls = p.lecture_sessions as unknown as {
+      id: string
+      started_at: string
+      lectures: { title: string } | null
+    }
+    return { id: ls.id, title: ls.lectures?.title ?? '', at: ls.started_at }
+  })
   const byAssessment = new Map((attempts ?? []).map((a) => [a.assessment_id as string, a]))
   const now = new Date()
 
@@ -156,6 +173,23 @@ export default async function StudentHome() {
           <p className="text-sm text-slate-500">{t.liveStudent.lead}</p>
           <CodeEntry compact />
         </section>
+        {lessons.length > 0 && (
+          <section className="card space-y-2 sm:col-span-2">
+            <h2 className="font-semibold">{t.extras.summaryTitle}</h2>
+            <ul className="space-y-1 text-sm">
+              {lessons.map((l) => (
+                <li key={l.id} className="flex items-center justify-between gap-2">
+                  <span>
+                    {l.title} <span className="text-xs text-slate-500">{fmt(l.at)}</span>
+                  </span>
+                  <Link href={`/student/lessons/${l.id}`} className="text-brand-600 underline">
+                    {t.extras.summaryOpen}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
         {myAttendance && (
           <section className="card space-y-1">
             <h2 className="font-semibold">{t.analytics.myAttendance}</h2>

@@ -125,6 +125,19 @@ export function useLiveSession(
     void channel.current?.send({ type: 'broadcast', event: 'annot', payload: { slide } })
   }, [])
 
+  const setPoll = useCallback(
+    async (json: { action: 'open'; body: string; options?: string[] } | { action: 'close' }) => {
+      const s = await apiJson<SessionState>(`/api/sessions/${initial.id}/poll`, {
+        method: 'POST',
+        json,
+      })
+      apply(s)
+      broadcast(s)
+      signalRefresh()
+    },
+    [apply, broadcast, signalRefresh, initial.id],
+  )
+
   const focusCall = useCallback(async () => {
     const s = await apiJson<SessionState>(`/api/sessions/${initial.id}/focus`, { method: 'POST' })
     apply(s)
@@ -164,5 +177,7 @@ export function useLiveSession(
     focusCall,
     setBreak,
     signalAnnot,
+    setPoll,
+    signalRefresh,
   }
 }

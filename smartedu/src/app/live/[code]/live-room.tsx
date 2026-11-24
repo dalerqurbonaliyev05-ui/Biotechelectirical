@@ -16,7 +16,7 @@ import {
   type ReactionBatch,
   type ReactionKind,
 } from '@/lib/reactions'
-import { parseStateEvent, sessionChannel } from '@/lib/session-state'
+import { parseStateEvent, sessionChannel, type PollState } from '@/lib/session-state'
 import { createClient } from '@/lib/supabase/browser'
 import { secondsLeft, useCountdown } from '@/lib/use-countdown'
 
@@ -44,6 +44,8 @@ interface LiveView {
   focus_seq?: number
   on_break?: boolean
   share_annotations?: boolean
+  poll?: PollState | null
+  myVote?: string | null
   isTarget?: boolean
   question: LiveQuestionView | null
   mine: {
@@ -345,9 +347,13 @@ export function LiveRoom({
           {view?.me && <RankLine me={view.me} />}
         </div>
       )}
+      {!ended && !onBreak && info && view?.poll?.status === 'open' && !q && (
+        <PollCard info={info} poll={view.poll} myVote={view.myVote ?? null} onVoted={refresh} />
+      )}
       {!ended && !onBreak && info && view?.share_annotations && !q && (
         <SharedAnnotations info={info} slide={view.slide} tick={annotTick} />
       )}
+      {!ended && info && view && <AskBox info={info} />}
       {!ended && info && view && (
         <ReactionBar
           info={info}
@@ -835,6 +841,167 @@ function SharedAnnotations({ info, slide, tick }: { info: Joined; slide: number;
         )}
         <AnnotationLayer items={data.items} />
       </div>
+    </div>
+  )
+}
+
+/** Tezkor so'rov: bitta ovoz; ovoz berilgach natija ko'rsatiladi (umumiy sonlar). */
+function PollCard({
+  info,
+  poll,
+  myVote,
+  onVoted,
+}: {
+  info: Joined
+  poll: PollState
+  myVote: string | null
+  onVoted: () => Promise<void>
+}) {
+  const [busy, setBusy] = useState(false)
+  const [note, setNote] = useState<string | null>(null)
+  async function vote(optionId: string) {
+    setBusy(true)
+    setNote(null)
+    try {
+      await apiJson(`/api/live/${info.session_id}/poll`, {
+        method: 'POST',
+        json: { token: info.join_token, poll_id: poll.id, option_id: optionId },
+      })
+      await onVoted()
+    } catch (err) {
+      setNote(errorText(err instanceof ClientApiError ? err.code : undefined))
+    } finally {
+      setBusy(false)
+    }
+  }
+  return (
+    <div className="card space-y-3">
+      <p className="text-xs text-slate-500">📊 {t.extras.pollTitle}</p>
+      <p className="text-lg font-medium">{poll.body}</p>
+      <div className="space-y-2">
+        {poll.options.map((o) => (
+          <button
+            key={o.id}
+            disabled={busy || myVote !== null}
+            onClick={() => void vote(o.id)}
+            className={`flex min-h-12 w-full items-center justify-between rounded-xl border-2 p-3 text-left text-lg ${myVote === o.id ? 'border-brand-600 bg-brand-50' : 'border-slate-300 bg-white'} disabled:opacity-70`}
+          >
+            <span>{o.text}</span>
+            {myVote !== null && <span className="text-sm tabular-nums">{o.pct}%</span>}
+          </button>
+        ))}
+      </div>
+      {myVote !== null && <p className="text-sm text-green-700">✓ {t.extras.pollVoted}</p>}
+      {note && <p className="text-sm text-amber-800">{note}</p>}
+    </div>
+  )
+}
+
+/** Anonim savol qutisi: savol yozish (standart anonim) va boshqalarning savoliga "men ham" ovozi. */
+function AskBox({ info }: { info: Joined }) {
+  const [open, setOpen] = useState(false)
+  const [body, setBody] = useState('')
+  const [anon, setAnon] = useState(true)
+  const [asks, setAsks] = useState<
+    { id: string; body: string; votes: number; mine?: boolean; iVoted?: boolean }[]
+  >([])
+  const [note, setNote] = useState<string | null>(null)
+  const [busy, setBusy] = useState(false)
+
+  const load = useCallback(
+    () =>
+      apiJson<{ asks: typeof asks }>(`/api/live/${info.session_id}/asks`, {
+        headers: { 'x-join-token': info.join_token },
+      })
+        .then((r) => setAsks(r.asks))
+        .catch(() => undefined),
+    [info.session_id, info.join_token],
+  )
+  useEffect(() => {
+    if (!open) return
+    void load()
+    const id = setInterval(load, 15_000)
+    return () => clearInterval(id)
+  }, [open, load])
+
+  async function send() {
+    if (body.trim().length < 3) return
+    setBusy(true)
+    setNote(null)
+    try {
+      await apiJson(`/api/live/${info.session_id}/asks`, {
+        method: 'POST',
+        json: { token: info.join_token, body, anonymous: anon },
+      })
+      setBody('')
+      setNote(t.extras.askSent)
+      await load()
+    } catch (err) {
+      setNote(errorText(err instanceof ClientApiError ? err.code : undefined))
+    } finally {
+      setBusy(false)
+    }
+  }
+  async function vote(id: string) {
+    try {
+      await apiJson(`/api/live/${info.session_id}/asks`, {
+        method: 'PUT',
+        json: { token: info.join_token, ask_id: id },
+      })
+      await load()
+    } catch {
+      /* keyingi yangilanishda */
+    }
+  }
+
+  return (
+    <div className="card space-y-2">
+      <button className="w-full text-left text-sm font-medium" onClick={() => setOpen((v) => !v)}>
+        ❓ {t.extras.askBox} {open ? '▲' : '▼'}
+      </button>
+      {open && (
+        <div className="space-y-2">
+          <textarea
+            className="input min-h-20"
+            maxLength={300}
+            placeholder={t.extras.askPlaceholder}
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
+          />
+          <label className="flex items-center gap-2 text-sm">
+            <input type="checkbox" checked={anon} onChange={(e) => setAnon(e.target.checked)} />
+            {t.extras.askAnon}
+          </label>
+          <button
+            className="btn-primary w-full"
+            disabled={busy || body.trim().length < 3}
+            onClick={() => void send()}
+          >
+            {t.extras.askSend}
+          </button>
+          {note && <p className="text-sm text-amber-800">{note}</p>}
+          <ul className="space-y-2">
+            {asks.map((a) => (
+              <li
+                key={a.id}
+                className="flex items-start justify-between gap-2 rounded-lg border p-2 text-sm"
+              >
+                <span>
+                  {a.body} {a.mine && <span className="badge">{t.extras.askMine}</span>}
+                </span>
+                <button
+                  className="shrink-0 rounded bg-slate-100 px-2 py-1 text-xs disabled:opacity-60"
+                  disabled={a.iVoted}
+                  onClick={() => void vote(a.id)}
+                  title={t.extras.askMe2}
+                >
+                  👍 {a.votes}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   )
 }

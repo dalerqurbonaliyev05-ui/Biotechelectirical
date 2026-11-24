@@ -7,6 +7,14 @@ export interface SlideBook {
   url: string
 }
 
+export interface PollState {
+  id: string
+  body: string
+  status: 'open' | 'closed'
+  total: number
+  options: { id: string; text: string; count: number; pct: number }[]
+}
+
 export interface PlanItem {
   id: string // lecture_question id
   slide: number
@@ -31,6 +39,10 @@ export interface SessionState {
   question: LiveQuestionView | null
   /** Ma'ruzaga rejalashtirilgan savollar va ularning so'ralgan/so'ralmaganligi */
   plan: PlanItem[]
+  /** Tezkor so'rov (ochiq yoki oxirgi yopilgan) va natijasi — faqat umumiy sonlar */
+  poll: PollState | null
+  /** O'qituvchi doskaga chiqargan savol (muallifsiz) */
+  pinnedAsk: { id: string; body: string } | null
   /** Joriy slayddagi kitob havolalari (doskada qatlam sifatida ochiladi) */
   books: SlideBook[]
   /** "Doskaga qarang" chaqiruvlari soni (oshsa — yangi chaqiruv) */

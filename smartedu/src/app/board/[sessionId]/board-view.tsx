@@ -59,6 +59,16 @@ export function BoardView({
     }
   }, [state.focusSeq])
   // Slayd izohlari (chizma/KaTeX): D — chizish rejimi. Slayd bo'yicha saqlanadi, talabalarga faqat o'qituvchi ruxsat bersa ko'rinadi.
+  // Tezkor so'rov natijasi: ochiq paytda ko'rinadi; yopilgach 20 s qoladi
+  const [pollHiddenId, setPollHiddenId] = useState<string | null>(null)
+  const poll = state.poll
+  useEffect(() => {
+    if (poll?.status !== 'closed') return
+    const id = poll.id
+    const timer = setTimeout(() => setPollHiddenId(id), 20_000)
+    return () => clearTimeout(timer)
+  }, [poll?.id, poll?.status])
+  const showPoll = Boolean(poll) && poll!.id !== pollHiddenId
   const [drawOn, setDrawOn] = useState(false)
   // Kitob qatlami: slayd o'zgarsa yopiladi; B tugmasi ochadi/yopadi
   const [bookOpen, setBookOpen] = useState<string | null>(null)
@@ -206,6 +216,32 @@ export function BoardView({
   return (
     <div ref={root} className="flex h-screen flex-col bg-black text-white">
       <div className="relative min-h-0 flex-1">
+        {state.pinnedAsk && (
+          <div className="absolute top-3 left-4 z-20 max-w-[60%] rounded-xl bg-amber-400 px-5 py-3 text-2xl font-semibold text-slate-900 shadow-xl">
+            ❓ {t.extras.pinned}: {state.pinnedAsk.body}
+          </div>
+        )}
+        {showPoll && poll && !question && (
+          <div className="absolute right-6 bottom-6 z-20 w-[34rem] max-w-[90%] space-y-3 rounded-2xl bg-slate-900/95 p-6 shadow-2xl">
+            <p className="text-3xl font-bold">📊 {poll.body}</p>
+            {poll.options.map((o) => (
+              <div key={o.id}>
+                <div className="flex justify-between text-2xl">
+                  <span>{o.text}</span>
+                  <span className="tabular-nums">
+                    {o.count} · {o.pct}%
+                  </span>
+                </div>
+                <div className="h-3 rounded bg-white/10">
+                  <div className="h-3 rounded bg-brand-500" style={{ width: `${o.pct}%` }} />
+                </div>
+              </div>
+            ))}
+            <p className="text-lg text-slate-400">
+              {poll.total} {t.extras.pollTotal}
+            </p>
+          </div>
+        )}
         {openBook && !question && <BookOverlay book={openBook} onClose={() => setBookOpen(null)} />}
         {state.onBreak && (
           <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-4 bg-slate-950/95">
