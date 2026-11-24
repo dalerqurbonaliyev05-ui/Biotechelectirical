@@ -1,0 +1,43 @@
+# SmartEdu CI: lint, tur tekshiruvi, Vitest, build, SQL/RLS testlari (haqiqiy PostgreSQL), smoke test.
+name: smartedu
+on:
+  push:
+    paths: ['smartedu/**', '.github/workflows/smartedu.yml']
+  pull_request:
+    paths: ['smartedu/**', '.github/workflows/smartedu.yml']
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: smartedu
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: smartedu/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - name: Migratsiyalar + RLS testlari (haqiqiy PostgreSQL)
+        run: bash scripts/test-rls.sh
+        env:
+          PGURL: postgresql://postgres:postgres@localhost:5432
+      - name: PostgREST embed noaniqligi tekshiruvi
+        run: python3 scripts/check-embeds.py
+        env:
+          PGPASSWORD: postgres
+      - run: npm run build
+      - name: Smoke test
+        run: bash scripts/smoke.sh

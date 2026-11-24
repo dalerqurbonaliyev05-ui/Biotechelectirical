@@ -1,0 +1,21 @@
+# Bepul Supabase tarifida loyiha to'xtab qolmasligi uchun har 3 kunda SmartEdu keep-alive endpoint'ini chaqiradi.
+# Kerakli "Repository secrets": SMARTEDU_URL (masalan https://smartedu.example.uz), CRON_SECRET (.env dagi bilan bir xil).
+# Vercel Cron (smartedu/vercel.json) ishlayotgan bo'lsa ham zarari yo'q — bu zaxira.
+name: smartedu-keepalive
+on:
+  schedule:
+    - cron: '41 4 */3 * *'
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Keep-alive so'rovi
+        env:
+          URL_BASE: ${{ secrets.SMARTEDU_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          if [ -z "$URL_BASE" ] || [ -z "$CRON_SECRET" ]; then echo "SMARTEDU_URL yoki CRON_SECRET sozlanmagan — o'tkazib yuborildi"; exit 0; fi
+          code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 30 -H "Authorization: Bearer $CRON_SECRET" "$URL_BASE/api/cron/keepalive")
+          echo "javob kodi: $code"
+          [ "$code" = "200" ]

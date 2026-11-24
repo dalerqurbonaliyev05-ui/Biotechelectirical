@@ -1,0 +1,55 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-brand-50: #eef6ff;
+  --color-brand-100: #d9eaff;
+  --color-brand-500: #2563eb;
+  --color-brand-600: #1d4ed8;
+  --color-brand-700: #1e40af;
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  @apply bg-slate-50 text-slate-900 antialiased;
+}
+
+/* Umumiy komponent sinflari — mobilga birinchi (Tailwind v4: @utility) */
+@utility btn {
+  @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-50;
+}
+@utility btn-primary {
+  @apply btn bg-brand-600 text-white hover:bg-brand-700;
+}
+@utility btn-secondary {
+  @apply btn border border-slate-300 bg-white text-slate-800 hover:bg-slate-100;
+}
+@utility btn-danger {
+  @apply btn bg-red-600 text-white hover:bg-red-700;
+}
+@utility input {
+  @apply min-h-11 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-base outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100;
+}
+@utility label {
+  @apply mb-1 block text-sm font-medium text-slate-700;
+}
+@utility card {
+  @apply rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5;
+}
+@utility table-wrap {
+  @apply overflow-x-auto rounded-xl border border-slate-200 bg-white;
+}
+@utility table {
+  @apply w-full text-left text-sm;
+  & th {
+    @apply bg-slate-50 px-3 py-2 font-semibold text-slate-600;
+  }
+  & td {
+    @apply border-t border-slate-100 px-3 py-2 align-top;
+  }
+}
+@utility badge {
+  @apply inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700;
+}

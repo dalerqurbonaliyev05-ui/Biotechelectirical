@@ -1,0 +1,54 @@
+{
+  "name": "smartedu",
+  "version": "0.1.0",
+  "private": true,
+  "description": "SmartEdu — kafedra uchun bepul interaktiv ta'lim tizimi (MVP)",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:rls": "bash scripts/test-rls.sh",
+    "smoke": "bash scripts/smoke.sh",
+    "format": "prettier --write .",
+    "check:embeds": "python3 scripts/check-embeds.py",
+    "verify": "npm run lint && npm run typecheck && npm test && npm run test:rls && npm run check:embeds && npm run build && npm run smoke",
+    "create-admin": "node scripts/create-admin.mjs"
+  },
+  "dependencies": {
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.119.2",
+    "exceljs": "^4.4.0",
+    "katex": "^0.16.11",
+    "next": "~15.5.29",
+    "papaparse": "^5.5.3",
+    "pdfjs-dist": "^5.4.0",
+    "qrcode": "^1.5.4",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "server-only": "^0.0.1",
+    "zod": "^4.1.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
+    "@tailwindcss/postcss": "^4.1.0",
+    "@types/katex": "^0.16.8",
+    "@types/node": "^22.15.0",
+    "@types/papaparse": "^5.3.16",
+    "@types/qrcode": "^1.5.5",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "eslint": "^9.30.0",
+    "eslint-config-next": "~15.5.29",
+    "prettier": "^3.6.0",
+    "tailwindcss": "^4.1.0",
+    "typescript": "^5.9.0",
+    "vitest": "^3.2.0"
+  }
+}
