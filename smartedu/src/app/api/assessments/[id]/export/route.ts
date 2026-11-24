@@ -2,6 +2,7 @@ import ExcelJS from 'exceljs'
 import { toCsv, type Cell } from '@/lib/csv'
 import { ApiError, handle, idParam, limit, requireUser } from '@/lib/server/api'
 import { submitExpiredAttempts } from '@/lib/server/assessments'
+import { fetchAll } from '@/lib/server/paginate'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
 
@@ -37,16 +38,19 @@ export const GET = handle<{ id: string }>(async (req, { params }) => {
   const { data: attempts } = await supabase
     .from('attempts')
     .select(
-      'id, status, total_score, max_score, leave_count, submitted_at, profiles(full_name, student_code)',
+      'id, status, total_score, max_score, leave_count, submitted_at, profiles!attempts_student_id_fkey(full_name, student_code)',
     )
     .eq('assessment_id', id)
-  const { data: answers } = await supabase
-    .from('answers')
-    .select('attempt_id, question_id, score')
-    .in(
-      'attempt_id',
-      (attempts ?? []).map((t) => t.id as string),
-    )
+  // 1000 qatordan ko'p bo'lishi mumkin (talaba × savol) — sahifalab o'qiymiz; uzun `in(...)` o'rniga join filtri
+  const answers = await fetchAll<{ attempt_id: string; question_id: string; score: number | null }>(
+    (from, to) =>
+      supabase
+        .from('answers')
+        .select('id, attempt_id, question_id, score, attempts!inner(assessment_id)')
+        .eq('attempts.assessment_id', id)
+        .order('id')
+        .range(from, to),
+  )
   const score = new Map<string, number | null>(
     (answers ?? []).map((x) => [
       `${x.attempt_id}:${x.question_id}`,

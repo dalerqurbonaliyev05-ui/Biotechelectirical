@@ -33,5 +33,8 @@ check "kirmagan: qo'shilish API → 401" 401 /api/live/join -X POST
 check "kirmagan: jonli javob API → 401" 401 /api/live/answer -X POST
 check "kirmagan: savol boshqaruvi → 401" 401 /api/sessions/00000000-0000-0000-0000-000000000001/question -X POST
 check "laboratoriya: imzosiz → 401" 401 /api/lab/submit -X POST -d '{}'
+check "kirmagan: /rating → login" 307 /rating
+check "kirmagan: /teacher/analytics → login" 307 /teacher/analytics
+check "kirmagan: reyting eksporti → 401" 401 "/api/rating/export?group=00000000-0000-0000-0000-000000000001"
 check "login: noto'g'ri JSON → 400" 400 /api/auth/login -X POST -H 'content-type: application/json' -d 'not-json'
 echo "✔ smoke test o'tdi"

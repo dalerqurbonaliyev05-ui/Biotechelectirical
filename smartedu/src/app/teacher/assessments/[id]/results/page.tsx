@@ -34,7 +34,7 @@ export default async function ResultsPage({ params }: { params: Promise<{ id: st
   const { data } = await supabase
     .from('attempts')
     .select(
-      'id, student_id, status, total_score, max_score, leave_count, profiles(full_name, student_code)',
+      'id, student_id, status, total_score, max_score, leave_count, profiles!attempts_student_id_fkey(full_name, student_code)',
     )
     .eq('assessment_id', id)
   const attempts = ((data ?? []) as unknown as AttemptRow[]).sort(

@@ -209,3 +209,24 @@ Har yozuv: **nima** → **nima uchun** → **qanday o'zgartirish mumkin**.
 6. **Ma'lum cheklov:** `student_code` laboratoriya saytidan keladi (havoladagi `?student=`), ya'ni talaba boshqa
    kod bilan natija yuborishi mumkin. Kuchaytirish — SmartEdu imzolagan "ishga tushirish tokeni" (roadmap).
 7. **Kitob havolalari** 4-bosqichda qilingan (`BOOKS_BASE_URL/#/kitob/<id>/<bet>`); o'qituvchi savollar ro'yxatida ham bosiladigan.
+
+## 10-bosqich: tahlil va semestr reytingi
+
+1. **Semestr jami = jonli ballar yig'indisi + nazorat hissalari.** Nazorat hissasi = (olingan/maksimal) × `assessments.weight`
+   (standart 100; o'qituvchi nazorat formasida o'zgartiradi, masalan oraliq nazorat uchun 500). Faqat TASDIQLANGAN
+   urinishlar. Bu — taxmin: jonli ballar xom (har to'g'ri javob ~100–110), nazorat esa og'irlik bilan shkalalanadi.
+   Boshqacha shkala kerak bo'lsa faqat `lib/semester.ts` o'zgaradi (sinovlar bor).
+2. **Mavzu bo'yicha o'zlashtirish:** jonli savollar + nazoratlarning baholangan javoblari birga; mavzu nomi katta-kichik
+   harf va probelga bog'liq emas. "Yomon" mavzu = kamida 5 ta javob asosida to'g'ri ulushi < 60% (mavzusizlar
+   kirmaydi, kichik namuna belgilanadi). Chegaralar `topicBreakdown` parametrlari.
+3. **Talaba reytingida boshqalarning ismlari qisqartirilgan** ("Aliyev A."), faqat eng yaxshi 5 ta + o'z o'rni; ballari
+   ochiq. Jonli darsda doskada ham shunday. Xohlansa to'liq yashirish oson (`top` ni qaytarmaslik).
+4. **1000 qator tuzog'i (haqiqiy xato topildi):** Supabase API bir so'rovda 1000 qatordan ortig'ini JIMGINA kesadi.
+   Natijalar eksporti (talaba × savol) shundan oshishi mumkin edi. Endi katta o'qishlar `fetchAll` (sahifalash) bilan,
+   uzun `in(...)` ro'yxatlari o'rniga join filtri/embed ishlatiladi (URL uzunligi chegarasi).
+5. **PostgREST embed noaniqligi (haqiqiy xato topildi):** `attempts` ning `profiles` ga IKKITA FK'si bor
+   (`student_id`, `finalized_by`) — `profiles(...)` deb yozish ish vaqtida xato beradi, TypeScript esa ko'rmaydi.
+   3 joyda `profiles!attempts_student_id_fkey(...)` qilindi va `scripts/check-embeds.py` (haqiqiy FK'lar bilan solishtiradi)
+   qo'shildi — CI'da ishlaydi.
+6. **Jonli sinov uchun halollik:** shu ikki xato Supabase'siz yetarli sinalmaganligining oqibati edi. Ulangach
+   README'dagi qo'lda tekshirish ro'yxatini bajaring.

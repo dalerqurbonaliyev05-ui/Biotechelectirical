@@ -194,32 +194,41 @@ export async function questionStats(
   }
 }
 
+// Reyting har talaba telefonidan so'raladi: bir necha yuz so'rov bir xil natijani qayta hisoblamasin (2 s kesh)
+const ratingCache = new Map<string, { at: number; rows: RatingRow[] }>()
+
 /** Sessiya reytingi (barcha ishtirokchilar, tartiblangan, medallar bilan). */
 export async function sessionRating(
   admin: SupabaseClient,
   sessionId: string,
 ): Promise<RatingRow[]> {
+  const hit = ratingCache.get(sessionId)
+  if (hit && Date.now() - hit.at < 2000) return hit.rows
+  const rows = await computeRating(admin, sessionId)
+  ratingCache.set(sessionId, { at: Date.now(), rows })
+  if (ratingCache.size > 50) ratingCache.delete(ratingCache.keys().next().value as string)
+  return rows
+}
+
+async function computeRating(admin: SupabaseClient, sessionId: string): Promise<RatingRow[]> {
+  // Ismlar bir so'rovda (embed): yuzlab talaba id'sini URL'ga qo'yib bo'lmaydi
   const { data } = await admin
     .from('scores')
-    .select('student_id, total_points, correct_count, correct_time_ms')
+    .select('student_id, total_points, correct_count, correct_time_ms, profiles(full_name)')
     .eq('session_id', sessionId)
-  const rows = ((data ?? []) as ScoreRow[]).map((r) => ({
-    ...r,
-    total_points: Number(r.total_points),
-    correct_count: Number(r.correct_count),
-    correct_time_ms: Number(r.correct_time_ms),
-  }))
-  const { data: people } = rows.length
-    ? await admin
-        .from('profiles')
-        .select('id, full_name')
-        .in(
-          'id',
-          rows.map((r) => r.student_id),
-        )
-    : { data: [] }
-  return buildRating(
-    rows,
-    new Map((people ?? []).map((p) => [p.id as string, p.full_name as string])),
-  )
+    .limit(1000)
+  const names = new Map<string, string>()
+  const rows: ScoreRow[] = (data ?? []).map((r) => {
+    names.set(
+      r.student_id as string,
+      (r.profiles as unknown as { full_name: string } | null)?.full_name ?? '',
+    )
+    return {
+      student_id: r.student_id as string,
+      total_points: Number(r.total_points),
+      correct_count: Number(r.correct_count),
+      correct_time_ms: Number(r.correct_time_ms),
+    }
+  })
+  return buildRating(rows, names)
 }

@@ -53,7 +53,8 @@ export function useLiveSession(initial: SessionState, pollMs = 10_000) {
     void channel.current?.send({
       type: 'broadcast',
       event: 'state',
-      payload: { rev: s.rev, slide: s.slide, status: s.status },
+      // q: talabalar telefoni savol ochilgani/yopilganini shu belgidan biladi va savolni serverdan so'raydi
+      payload: { rev: s.rev, slide: s.slide, status: s.status, q: s.question?.status ?? null },
     })
   }, [])
 

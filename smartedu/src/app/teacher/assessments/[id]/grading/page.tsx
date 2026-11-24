@@ -39,7 +39,7 @@ export default async function GradingPage({ params }: { params: Promise<{ id: st
   const { data } = await supabase
     .from('answers')
     .select(
-      'id, question_id, points_max, response, attempts!inner(id, assessment_id, student_id, profiles(full_name)), questions(type, body, params, lab_ref)',
+      'id, question_id, points_max, response, attempts!inner(id, assessment_id, student_id, profiles!attempts_student_id_fkey(full_name)), questions(type, body, params, lab_ref)',
     )
     .eq('needs_review', true)
     .eq('attempts.assessment_id', id)
