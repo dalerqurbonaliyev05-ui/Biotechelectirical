@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { PdfViewer } from '@/components/pdf-viewer'
 import { ClientApiError, apiJson, errorText } from '@/lib/api-client'
 import { t } from '@/lib/i18n'
+import { StartSession } from './start-session'
 
 const L = t.lectures
 
@@ -26,7 +27,11 @@ export function LectureEditor({
   lecture,
   attached,
   bank,
+  groups,
+  rooms,
 }: {
+  groups: { id: string; name: string }[]
+  rooms: { id: string; name: string }[]
   lecture: { id: string; title: string; subject: string; pageCount: number }
   attached: Attached[]
   bank: Bank[]
@@ -97,6 +102,8 @@ export function LectureEditor({
           {lecture.subject} · {lecture.pageCount} {L.pages}
         </p>
       </div>
+
+      <StartSession lectureId={lecture.id} groups={groups} rooms={rooms} />
 
       <div className="card space-y-3">
         <div className="aspect-[4/3] w-full overflow-hidden rounded-lg bg-slate-100 sm:aspect-video">

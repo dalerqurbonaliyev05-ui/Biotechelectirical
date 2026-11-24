@@ -13,6 +13,9 @@ const MAP: Record<string, [number, string]> = {
   reason_required: [400, 'reason_required'],
   score_out_of_range: [400, 'score_out_of_range'],
   question_in_use: [409, 'question_in_use'],
+  session_ended: [409, 'session_ended'],
+  slide_out_of_range: [400, 'slide_out_of_range'],
+  code_exhausted: [503, 'internal'],
 }
 
 /** DB funksiyalarining RAISE EXCEPTION xabarlarini ApiError'ga aylantiradi (boshqasini o'zgartirmaydi). */

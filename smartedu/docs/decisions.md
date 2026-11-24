@@ -126,3 +126,23 @@ Har yozuv: **nima** → **nima uchun** → **qanday o'zgartirish mumkin**.
    rejimda ma'noga ega emas. Raqamli savolda butun auditoriyaga BIR XIL qiymatlar (doskada ko'rinishi uchun).
 5. **Slaydga biriktirish `lecture_questions` da (reja)**; dars paytida `session_questions` ga nusxalanadi (6–8-bosqich).
 6. **Ma'ruza o'chirilsa** Storage'dagi fayl ham o'chadi; dars (sessiya) o'tkazilgan ma'ruza o'chirilmaydi (FK restrict).
+
+## 6-bosqich: elektron doska va sinxronlash
+
+1. **Holat manbai — DB, Realtime faqat "signal".** Teacher slaydni API orqali o'zgartiradi (DB: `current_slide`,
+   `rev + 1`), so'ng kanalga `{rev, slide, status}` yuboradi. Doska xabar kelganda **haqiqiy holatni DB'dan**
+   qayta oladi. Shuning uchun kanalga soxta xabar yuborgan talaba doskani aldab bo'lmaydi. Qo'shimcha: aloqa
+   uzilsa har 10 s da so'rov bilan tiklanadi.
+2. **Nega private kanal/Realtime Authorization emas:** u `realtime.messages` RLS'ni talab qiladi va bu muhitda
+   sinab bo'lmaydi. Hozirgi sxema bunga muhtoj emas (xabarlarda maxfiy ma'lumot yo'q, holat DB'dan tekshiriladi).
+   Keyin kerak bo'lsa: kanalni `private: true` qilib, `realtime.messages` ga "faqat sessiya egasi yuboradi"
+   siyosatini qo'shish mumkin.
+3. **Bepul tarif tejamkorligi:** sessiya uchun BITTA kanal (`session:<id>`), xabar ~40 bayt, slayd almashtirishda
+   bitta xabar. Doska/boshqaruv 10 s polling (bitta mijoz); talabalar uchun polling faqat aloqa uzilganda.
+4. **Doska faqat sessiya egasi (yoki admin) hisobi bilan ochiladi** — auditoriya kompyuterida o'qituvchi kiradi.
+   Doskaga maxsus token berish (kirishsiz) keyinroq mumkin; hozircha PDF havolasi ham shu hisob bilan beriladi.
+5. **Boshqaruv:** doska klaviaturasi (← → bo'sh joy) va telefondan alohida boshqaruv sahifasi — ikkalasi bir xil API.
+   `rev` eskirgan hodisalarni tashlab yuboradi.
+6. **Qo'shilish kodi:** 6 xonali, faqat FAOL sessiyalar orasida noyob (qisman unikal indeks); band chiqsa DB
+   funksiyasi qayta urinadi. Sessiya tugagach kod qayta ishlatilishi mumkin.
+7. **Brauzerda sinalgan:** doska (PDF + QR + kod) haqiqiy Chromium'da chizilgan, QR dekodlanib havola tekshirilgan.

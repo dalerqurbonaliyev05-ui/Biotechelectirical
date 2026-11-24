@@ -14,7 +14,7 @@ export default async function LecturePage({ params }: { params: Promise<{ id: st
     .maybeSingle()
   if (!lec) notFound()
 
-  const [{ data: lq }, { data: qs }] = await Promise.all([
+  const [{ data: lq }, { data: qs }, { data: groups }, { data: rooms }] = await Promise.all([
     supabase
       .from('lecture_questions')
       .select('id, slide_no, time_limit_sec, question_id, questions(type, body)')
@@ -27,6 +27,8 @@ export default async function LecturePage({ params }: { params: Promise<{ id: st
       .in('type', ['mcq', 'numeric'])
       .order('created_at', { ascending: false })
       .limit(500),
+    supabase.from('groups').select('id, name').order('name'),
+    supabase.from('rooms').select('id, name').order('name'),
   ])
   const attached = (lq ?? []).map((r) => {
     const q = r.questions as unknown as { type: string; body: { text?: string } } | null
@@ -56,6 +58,8 @@ export default async function LecturePage({ params }: { params: Promise<{ id: st
       }}
       attached={attached}
       bank={bank}
+      groups={(groups ?? []).map((g) => ({ id: String(g.id), name: String(g.name) }))}
+      rooms={(rooms ?? []).map((r) => ({ id: String(r.id), name: String(r.name) }))}
     />
   )
 }
