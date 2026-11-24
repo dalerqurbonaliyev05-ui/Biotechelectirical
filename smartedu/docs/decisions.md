@@ -377,3 +377,22 @@ Har yozuv: **nima** → **nima uchun** → **qanday o'zgartirish mumkin**.
 - **Dars xulosasi** (`/student/lessons/[id]`): faqat shu darsda qatnashgan talabaga, dars tugagach: slayd miniaturalari, o'qituvchi izohlari
   (faqat `share_annotations` yoqilgan bo'lsa), yopilgan dars savollari to'g'ri javob bilan va kitob havolalari.
 - Cheklov: doskadagi yangi tanlangan savol/so'rov natijasi ≤5 s kechikish bilan (state so'rovi) yangilanadi.
+
+## Haqiqiy Supabase loyihasiga joylash (igweakzmrsigmixzftqv, eu-central-1)
+
+- **Qo'llangan:** 0001–0014 (Supabase MCP `apply_migration` orqali; CLI/baza paroli kerak bo'lmadi). Masofaviy sxema lokal sinalgan sxema bilan
+  mos: 34 jadval, 92 siyosat, 53 funksiya; hamma jadvalda RLS; hech bir `app_*` funksiyasi `anon`/`authenticated` ga ochiq emas.
+- **Migratsiya tarixi:** MCP har migratsiyaga o'z vaqt tamg'asini beradi (fayl nomlari emas), va 0012 0011 dan oldin qo'llangan (ular bir-biriga bog'liq emas).
+  Keyinroq `supabase db push` ishlatilsa, `supabase migration repair` kerak bo'lishi mumkin; yangi migratsiyalarni shu usulda qo'llashda davom eting.
+- **Advisorlar (security):** `function_search_path_mutable` (3) va `anon_security_definer_function_executable` (17) **tuzatildi** (0014).
+  Qolgan 17 ta `authenticated_security_definer_function_executable` **ataylab qoldirildi**: RLS siyosatlari yordamchi funksiyalarni (`is_admin`, `teaches_*`,
+  `session_visible`, ...) chaqiruvchi rolda bajaradi, shuning uchun `authenticated` ga EXECUTE kerak; ular faqat chaqiruvchining o'zi haqida javob beradi.
+  Ularni ochiq sxemadan olib chiqish (alohida sxema) kelajakdagi ish.
+- **Advisorlar (performance), tuzatilmagan:** `auth_rls_initplan` (20: `auth.uid()` → `(select auth.uid())`), FK indekslari (29), ko'p ruxsatli siyosatlar (59).
+  Kichik hajmda ahamiyatsiz; foydalanuvchilar ko'payganda alohida migratsiya bilan.
+- **Topilgan xato (stub yashirgan edi):** `lectures` bucket faqat `application/pdf` ni qabul qilardi, lekin slayd miniaturalari JPEG yuklanadi — haqiqiy Storage
+  rad etardi. 0014 `image/jpeg` ni qo'shdi; lokal testni ham moslashtirdik (eski test xatoni "to'g'ri" deb tekshirgan edi).
+- **Hali sinalmagan (tarmoq bloklangan):** ilovaning haqiqiy Supabase bilan ishlashi (Auth/kirish, `create-admin`, CSV import, PDF/Storage, nazorat,
+  doska, Realtime, mehmon/anonim kirish). Sabab: bulutdagi ishlab chiqish muhiti proksisi `igweakzmrsigmixzftqv.supabase.co` ni o'tkazmadi
+  (ruxsat muhit sozlamasiga qo'shilgan, lekin shu sessiyada kuchga kirmadi). Bu sinovlar o'zingizning kompyuteringizda yoki yangi sessiyada bajarilishi kerak.
+- **Kalit xavfsizligi:** `service_role`/secret kalit suhbatga yozilgani uchun sinovdan keyin uni Supabase panelida **yangilash (rotate)** tavsiya etiladi.
