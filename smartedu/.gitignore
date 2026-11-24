@@ -1,0 +1,19 @@
+# Bog'liqliklar va build
+node_modules
+.next
+out
+coverage
+*.tsbuildinfo
+next-env.d.ts
+
+# Kalitlar — HECH QACHON gitga tushmasin
+.env
+.env.*
+!.env.example
+
+# Supabase CLI lokal holati
+supabase/.branches
+supabase/.temp
+
+.vercel
+.DS_Store

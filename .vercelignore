@@ -14,3 +14,6 @@
 /kelajak-src
 # 2-HGI generatori (Python) — saytga joylanmaydi; tayyor natija /hgi-2/ da
 /hgi-2-src
+
+# SmartEdu (Next.js, Supabase) manba kodi — alohida loyiha, Vercel Root Directory = smartedu
+/smartedu
