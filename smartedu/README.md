@@ -151,7 +151,7 @@ Aniq raqamlarni **joriy shartlardan o'zingiz tekshiring** (ular o'zgaradi). Loyi
 ## 9. Sinovlar
 
 ```bash
-npm test                # Vitest: 180+ sinov (ball, generator, tekshirish, HMAC, QR token, CSV ...)
+npm test                # Vitest: 230+ sinov (ball, generator, tekshirish, HMAC, QR token, CSV ...)
 npm run test:rls        # SQL migratsiya + RLS testlari (haqiqiy PostgreSQL kerak)
 npm run check:embeds    # PostgREST embed noaniqligi tekshiruvi (test:rls dan keyin)
 npm run smoke           # build qilingan serverda asosiy yo'llar (Supabase'siz)
@@ -170,21 +170,33 @@ Bu muhitda Supabase (PostgREST/GoTrue) ishga tushirib bo'lmadi, shuning uchun AP
 4. [ ] Yozma javob baholandi → tasdiqlandi → talabaga natija ko'rindi; ball o'zgartirishda sabab so'raladi va talabaga jurnal ko'rinadi.
 5. [ ] **Talaba brauzer konsolida** `supabase.from('question_keys').select()` → bo'sh `[]` (to'g'ri javob ko'rinmaydi).
 6. [ ] Ma'ruza PDF yuklandi → slaydga savol biriktirildi → dars boshlandi → doska ochildi → telefonda QR skanerlandi → "Auditoriyada" ko'rindi.
-7. [ ] Slaydga yetganda savol avtomatik chiqdi → javob → vaqt tugadi → to'g'ri javob + reyting; dars tugagach medallar.
+7. [ ] Nazorat nuqtasi bor slaydda "Keyingi" bosilganda doska to'xtab savol chiqdi ("O'tkazib yuborish" ham ishlaydi) → javob → vaqt tugadi → to'g'ri javob + reyting; dars tugagach medallar.
 8. [ ] Doskada "Real vaqt: ulangan" ko'rinadi (Realtime ishlayapti).
 9. [ ] `node scripts/lab-sign.mjs ...` bilan laboratoriya natijasi yuborildi → talaba oynasida "qabul qilindi".
 10. [ ] Keep-alive `curl` → 200. Admin → Zaxira → CSV yuklanadi.
 
+**v2 (mehmon, reaksiya, NB, izoh, kitob):**
+
+11. [ ] Supabase'da "Allow anonymous sign-ins" yoqilgan; ro'yxatsiz telefon `/live` → kod + ism bilan **mehmon** sifatida kirdi; o'qituvchi mehmonni bloklay oldi / kodni yangiladi.
+12. [ ] "Tushundim/Tushunmadim" bosildi → doska panelida son ~5 s ichida yangilandi; "Eng faol" talabaga **bonus savol** chiqdi, boshqa telefonda javob berib bo'lmadi.
+13. [ ] "Doskaga qarang" → telefonda xira ekran (+ tebranish bor qurilmada); tanaffus boshlanib/tugadi (doskada "Tanaffus").
+14. [ ] Dars tugagach `/teacher/sessions/<id>/nb` ro'yxati chiqdi, qo'lda tuzatish **sabab bilan** saqlandi (Admin → audit); doskada NB **hech qayerda** yo'q.
+15. [ ] `D` — doskada chizish/KaTeX (`$x^2$`); "Izohlarni ko'rsatish" yoqilsa talaba telefonida ko'rindi.
+16. [ ] Slaydga biriktirilgan kitob 📖 → qatlamda ochildi (ochilmasa — kutubxona ramkaga ruxsat bermayapti, `docs/books-integration.md`).
+17. [ ] `/api/cron/retention` (Bearer CRON_SECRET) → 200.
+
 ## 11. Hujjatlar
 
-| Fayl                                                 | Mazmuni                                                                                 |
-| ---------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| [`docs/launch.md`](docs/launch.md)                   | Ishga tushirish bo'yicha bosqichma-bosqich yo'riqnoma va keyin o'zgartiriladigan joylar |
-| [`docs/decisions.md`](docs/decisions.md)             | Har bosqichdagi qarorlar va taxminlar (nima, nima uchun, qanday o'zgartirish)           |
-| [`docs/security.md`](docs/security.md)               | Xavfsizlik: nima tekshirilgan, nima yo'q                                                |
-| [`docs/lab-integration.md`](docs/lab-integration.md) | Laboratoriya saytini ulash kontrakti (imzo, namunalar)                                  |
-| [`docs/attendance.md`](docs/attendance.md)           | QR/davomat va uning chegaralari                                                         |
-| [`docs/roadmap.md`](docs/roadmap.md)                 | Kelajak: video, AI, HEMIS, ko'p universitet                                             |
+| Fayl                                                     | Mazmuni                                                                                 |
+| -------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| [`docs/launch.md`](docs/launch.md)                       | Ishga tushirish bo'yicha bosqichma-bosqich yo'riqnoma va keyin o'zgartiriladigan joylar |
+| [`docs/decisions.md`](docs/decisions.md)                 | Har bosqichdagi qarorlar va taxminlar (nima, nima uchun, qanday o'zgartirish)           |
+| [`docs/security.md`](docs/security.md)                   | Xavfsizlik: nima tekshirilgan, nima yo'q                                                |
+| [`docs/lab-integration.md`](docs/lab-integration.md)     | Laboratoriya saytini ulash kontrakti (imzo, namunalar)                                  |
+| [`docs/attendance.md`](docs/attendance.md)               | QR/davomat va uning chegaralari                                                         |
+| [`docs/roadmap.md`](docs/roadmap.md)                     | Kelajak: video, AI, HEMIS, ko'p universitet                                             |
+| [`docs/limitations.md`](docs/limitations.md)             | Cheklovlar: sinov holati, brauzer imkoniyatlari, NB va maxfiylik, saqlash muddati       |
+| [`docs/books-integration.md`](docs/books-integration.md) | Kutubxona (kitob) qatlami va API shartnomasi                                            |
 
 ## Papka tuzilmasi
 
@@ -193,7 +205,7 @@ src/app/            sahifalar va API (App Router): /admin /teacher /student /boa
 src/components/     umumiy komponentlar (CRUD, PDF, QR, doska savoli ...)
 src/lib/            mantiq: assessment/ (generator, tekshirish), live-score.ts, semester.ts, lab.ts, i18n/uz.ts (BARCHA matnlar)
 src/lib/server/     faqat server kodi (service role, DB funksiyalari)
-supabase/           migrations/ (0001–0007), seed.sql, tests/ (SQL), config.toml
-scripts/            test-rls.sh, smoke.sh, create-admin.mjs, lab-sign.mjs, check-embeds.py
+supabase/           migrations/ (0001–0013), seed.sql, tests/ (SQL), config.toml
+scripts/            test-rls.sh, smoke.sh, create-admin.mjs, lab-sign.mjs, check-embeds.py, load-realtime.mjs (yozilgan, ishga tushirilmagan)
 tests/              Vitest sinovlari
 ```

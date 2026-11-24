@@ -39,6 +39,13 @@ Bu versiya (MVP) ataylab quyidagilarni o'z ichiga olmaydi. Har biri uchun "qayer
 - **Tezlik cheklovi:** hozir xotirada (instansiya bo'yicha). Qat'iy chegara: Postgres'da hisoblagich jadvali + RPC.
 - **Nonce'siz CSP** hozir `'unsafe-inline'` skriptga ruxsat beradi; nonce'li CSP (middleware'da) keyingi qadam.
 
+## 5b. v2 dan keyingi aniq qadamlar
+
+- **Turnstile** (mehmon kirishi) — `docs/limitations.md`; **Realtime yuklama natijalari** (`scripts/load-realtime.mjs`) — o'lchab, bu hujjatga raqam yozing.
+- **NB aniqligi:** auditoriyadagi talabaning erta ketishini aniqlash (masalan, davriy QR qayta-tasdiq); hozir faqat qo'lda tuzatish.
+- **Kitob qidiruvi:** kutubxona `books.json` ni CORS bilan ochsa, muharrirda kitobni ro'yxatdan tanlash (`docs/books-integration.md` §2).
+- **Jonli video / AI yordamchi:** bu versiyaga kirmaydi; faqat §1–§2 dagi bo'sh joylar.
+
 ## 6. Qulayliklar
 
 - Ko'p tillilik (`src/lib/i18n/uz.ts` → `ru.ts`, `en.ts`; til tanlash cookie/profil).

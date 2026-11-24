@@ -4,7 +4,9 @@
 
 1. **Supabase loyihasi** yarating (bepul tarif). `URL`, `anon`, `service_role` kalitlarini yozib oling. _(README §2A)_
 2. **Auth sozlamalari:** "Enable sign ups" — o'chiq; "Confirm email" — o'chiq; Site URL — kelajakdagi domeningiz.
-3. **Migratsiyalar:** `npx supabase link --project-ref <ref>` → `npx supabase db push` (yoki SQL Editor'da `0001…0007` tartib bilan).
+   **Mehmon rejimi uchun:** Authentication → Sign In / Providers → **"Allow anonymous sign-ins" — yoqing** (aks holda mehmonlar kira olmaydi; lokalda `config.toml`da yoqilgan).
+   Bot himoyasi kerak bo'lsa Cloudflare Turnstile'ni keyin ulang (hozir ulanmagan: `docs/limitations.md`).
+3. **Migratsiyalar:** `npx supabase link --project-ref <ref>` → `npx supabase db push` (yoki SQL Editor'da `0001…0013` tartib bilan).
 4. **Kodni oling va sozlang:**
    ```bash
    cd smartedu && npm install && cp .env.example .env.local
@@ -18,9 +20,11 @@
    Realtime ulanishi (doskada "ulangan"), talaba konsolida `question_keys` bo'sh ekani.
 9. **Birinchi jonli dars sinovi** (5–10 kishi bilan): ma'ruza PDF → savol biriktirish → dars → doska → QR. Realtime ulanishlar limitini
    Supabase panelidan kuzating.
-10. **Keep-alive:** Vercel Cron avtomatik; qo'shimcha sifatida GitHub Actions secrets (`SMARTEDU_URL`, `CRON_SECRET`). _(README §6)_
+10. **Keep-alive va saqlash muddati:** Vercel Cron avtomatik (`/api/cron/keepalive` va `/api/cron/retention`); qo'shimcha sifatida GitHub Actions
+    secrets (`SMARTEDU_URL`, `CRON_SECRET`). Admin → Sozlamalar → "Faollik ma'lumotini saqlash muddati" (standart 180 kun). _(README §6)_
 11. **Laboratoriya ulash:** `docs/lab-integration.md` bo'yicha laboratoriya serveringizda imzolash kodini qo'shing; `LAB_SHARED_SECRET` ikkala tomonda bir xil.
-12. **Zaxira rejasi:** semestr oxirida Admin → Zaxira (CSV) va `supabase db dump`. _(README §7)_
+12. **Realtime yuklama sinovi (ixtiyoriy, tavsiya):** sinov loyihasida `node scripts/load-realtime.mjs --clients 100 --yes` (`docs/limitations.md`).
+13. **Zaxira rejasi:** semestr oxirida Admin → Zaxira (CSV) va `supabase db dump`. _(README §7)_
 
 ## B) Keyin o'zgartiradigan joylar (qayerda)
 
@@ -41,6 +45,11 @@
 | **Talaba kirishi** (kod+parol)                                                                       | `src/lib/auth/identifier.ts`, `app/api/auth/login`                                                                                                                        | Boshqa usul (HEMIS ID/SSO): `docs/roadmap.md`                                                                  |
 | **Tashqi manzillar** (laboratoriya, kutubxona)                                                       | `.env`: `LAB_BASE_URL`, `BOOKS_BASE_URL`; kitob havola formati: `src/lib/books.ts`                                                                                        |                                                                                                                |
 | **Reytingda ismlar ko'rinishi**                                                                      | `src/lib/live-rating.ts → shortName`; talaba reyting sahifasi `loadStudentSemester`                                                                                       | To'liq yashirish ham mumkin                                                                                    |
+| **NB chegarasi** (`MIN_ATTENDANCE_RATIO`, standart 0.8)                                              | Dars boshlangach: boshqaruv sahifasi → sozlamalar; standart: `src/lib/presence.ts → DEFAULT_MIN_ATTENDANCE_RATIO`                                                         | Auditoriya/masofa hisobi qoidasi ham shu faylda                                                                |
+| **Faollik ma'lumoti saqlash muddati**                                                                | Admin → Sozlamalar (`activity_retention_days`)                                                                                                                            | Davomat holati qoladi, reaksiya/vaqt hisoblagichlari o'chadi                                                   |
+| **Reaksiya chegaralari, "eng faol" soni, bonus savol**                                               | `src/lib/reactions.ts` (`BATCH_MAX`, `TAP_MIN_GAP_MS`), SQL `app_add_reactions` (jami 20); dars sozlamalari: `top_reactors`, `bonus_enabled`                              | Mijoz va SQL chegaralari bir xil bo'lsin                                                                       |
+| **Nazorat nuqtasi qoidasi** ("Keyingi" bosilganda to'xtash)                                          | `src/lib/checkpoint-flow.ts → decideAdvance`                                                                                                                              | `tests/checkpoint-flow.test.ts`                                                                                |
+| **Kitob qatlami / kutubxona**                                                                        | `docs/books-integration.md`, `.env: BOOKS_BASE_URL` (o'zgarsa qayta build: CSP `frame-src`)                                                                               |                                                                                                                |
 | **Tezlik cheklovlari**                                                                               | Har API route'ida `limit(kalit, soni, oyna_ms)`                                                                                                                           |                                                                                                                |
 
 ## C) Ma'lum cheklovlar (halol ro'yxat)
@@ -51,3 +60,5 @@
 - Realtime kanali ochiq (xabarlar maxfiy emas, holat DB'dan tekshiriladi).
 - PowerPoint yuklash yo'q (PDF'ga o'tkazish kerak). Jonli video va AI yordamchi — `roadmap.md`.
 - Tezlik cheklovi instansiya bo'yicha xotirada ("yaxshi harakat").
+- **NB — taxminiy signal, hukm emas** (erta ketishni bilmaydi, ko'rinish vaqti brauzerga bog'liq): to'liq ro'yxat `docs/limitations.md`.
+- Mehmon rejimida bot himoyasi kuchsiz (Turnstile ulanmagan); Realtime yuklama o'lchanmagan (skript yozilgan, ishga tushirilmagan).
