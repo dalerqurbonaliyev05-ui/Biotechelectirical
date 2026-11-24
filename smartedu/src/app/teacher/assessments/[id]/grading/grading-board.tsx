@@ -17,6 +17,8 @@ export interface GradingItem {
   answerText: string
   label: string
   name: string
+  /** lab_task: laboratoriyadan kelgan natija (bo'lsa) */
+  lab?: { score: number; max: number } | null
 }
 
 function ItemCard({
@@ -31,7 +33,12 @@ function ItemCard({
   const rubric = item.type === 'short_text' ? item.rubric : null
   const rubricMax = rubric ? rubric.reduce((s, r) => s + r.points, 0) : 0
   const [vals, setVals] = useState<string[]>(() => (rubric ?? []).map(() => ''))
-  const [manual, setManual] = useState('')
+  // Laboratoriya natijasi bo'lsa — mutanosib ball oldindan qo'yiladi (o'qituvchi tasdiqlaydi/o'zgartiradi)
+  const suggested =
+    item.lab && item.lab.max > 0
+      ? Math.round(Math.min(1, item.lab.score / item.lab.max) * item.pointsMax * 100) / 100
+      : null
+  const [manual, setManual] = useState(suggested === null ? '' : String(suggested))
   const [feedback, setFeedback] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
@@ -105,9 +112,14 @@ function ItemCard({
           <span>
             {t.assessments.fields.points}{' '}
             <span className="text-slate-400">(0–{item.pointsMax})</span>
-            {item.type === 'lab_task' && (
-              <span className="block text-xs text-amber-700">{G.labNoResult}</span>
-            )}
+            {item.type === 'lab_task' &&
+              (item.lab ? (
+                <span className="block text-xs text-green-700">
+                  {G.labSuggest}: {item.lab.score} / {item.lab.max}. {G.labSuggestHint}
+                </span>
+              ) : (
+                <span className="block text-xs text-amber-700">{G.labNoResult}</span>
+              ))}
           </span>
           <input
             type="number"

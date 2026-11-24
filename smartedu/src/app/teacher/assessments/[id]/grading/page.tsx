@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { t } from '@/lib/i18n'
 import { submitExpiredAttempts } from '@/lib/server/assessments'
+import { bestLabResults } from '@/lib/server/lab'
 import { requireRole } from '@/lib/server/session'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
@@ -11,11 +12,12 @@ interface Row {
   id: string
   points_max: number
   response: { text?: string } | null
-  attempts: { id: string; profiles: { full_name: string } | null }
+  attempts: { id: string; student_id: string; profiles: { full_name: string } | null }
   questions: {
     type: string
     body: { text?: string }
     params: { rubric?: { criterion: string; points: number }[] }
+    lab_ref: { lab_id: string } | null
   }
   question_id: string
 }
@@ -26,7 +28,7 @@ export default async function GradingPage({ params }: { params: Promise<{ id: st
   const supabase = await createClient()
   const { data: a } = await supabase
     .from('assessments')
-    .select('id, title')
+    .select('id, title, opens_at')
     .eq('id', id)
     .maybeSingle()
   if (!a) notFound()
@@ -37,13 +39,29 @@ export default async function GradingPage({ params }: { params: Promise<{ id: st
   const { data } = await supabase
     .from('answers')
     .select(
-      'id, question_id, points_max, response, attempts!inner(id, assessment_id, profiles(full_name)), questions(type, body, params)',
+      'id, question_id, points_max, response, attempts!inner(id, assessment_id, student_id, profiles(full_name)), questions(type, body, params, lab_ref)',
     )
     .eq('needs_review', true)
     .eq('attempts.assessment_id', id)
     .order('question_id')
     .limit(1000)
   const rows = (data ?? []) as unknown as Row[]
+
+  // lab_task: tashqi laboratoriyadan kelgan (jumladan topshirishdan KEYIN kelgan) natija — ball taklifi
+  const admin = createAdminClient()
+  const labByStudent = new Map<string, Awaited<ReturnType<typeof bestLabResults>>>()
+  for (const r of rows) {
+    if (!r.questions.lab_ref || labByStudent.has(r.attempts.student_id)) continue
+    labByStudent.set(
+      r.attempts.student_id,
+      await bestLabResults(
+        admin,
+        r.attempts.student_id,
+        [r.questions.lab_ref.lab_id],
+        new Date(a.opens_at),
+      ),
+    )
+  }
 
   const items: GradingItem[] = rows.map((r, i) => ({
     answerId: r.id,
@@ -55,6 +73,12 @@ export default async function GradingPage({ params }: { params: Promise<{ id: st
     answerText: r.response?.text ?? '',
     label: `#${i + 1}`,
     name: r.attempts.profiles?.full_name ?? '',
+    lab: r.questions.lab_ref
+      ? (() => {
+          const best = labByStudent.get(r.attempts.student_id)?.get(r.questions.lab_ref.lab_id)
+          return best ? { score: best.score, max: best.max_score } : null
+        })()
+      : null,
   }))
 
   const { data: statuses } = await supabase

@@ -63,11 +63,12 @@ export async function requireUser(
   const supabase = await createClient()
   const { data } = await supabase.auth.getUser()
   if (!data.user) throw new ApiError(401, 'unauthenticated')
-  const { data: profile } = await supabase
+  const { data: profile, error: pErr } = await supabase
     .from('profiles')
     .select('id, role, full_name, student_code, group_id, must_change_password, is_active')
     .eq('id', data.user.id)
     .maybeSingle()
+  if (pErr) throw pErr // DB muammosi "kirmagan" emas (500)
   if (!profile || !profile.is_active) throw new ApiError(401, 'unauthenticated')
   const p = profile as SessionProfile
   if (p.must_change_password && !opts.allowPasswordChange)

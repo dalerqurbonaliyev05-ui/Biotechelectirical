@@ -23,6 +23,7 @@ interface Props {
   }
   initialState: AttemptState | null
   labBaseUrl: string
+  studentCode: string | null
 }
 
 const storageKey = (attemptId: string) => `smartedu:attempt:${attemptId}`
@@ -36,7 +37,7 @@ function isAnswered(q: StudentQuestion, r: unknown): boolean {
   return false
 }
 
-export function AttemptRunner({ assessment, initialState, labBaseUrl }: Props) {
+export function AttemptRunner({ assessment, initialState, labBaseUrl, studentCode }: Props) {
   const [state, setState] = useState<AttemptState | null>(initialState)
   const [phase, setPhase] = useState<'intro' | 'running' | 'done'>(
     initialState ? (initialState.attempt.status === 'in_progress' ? 'running' : 'done') : 'intro',
@@ -111,6 +112,7 @@ export function AttemptRunner({ assessment, initialState, labBaseUrl }: Props) {
     <Running
       state={state}
       labBaseUrl={labBaseUrl}
+      studentCode={studentCode}
       onFinished={(byTimer) => {
         setTimeUp(byTimer)
         setPhase('done')
@@ -122,16 +124,19 @@ export function AttemptRunner({ assessment, initialState, labBaseUrl }: Props) {
 function Running({
   state,
   labBaseUrl,
+  studentCode,
   onFinished,
 }: {
   state: AttemptState
   labBaseUrl: string
+  studentCode: string | null
   onFinished: (byTimer: boolean) => void
 }) {
   const attemptId = state.attempt.id
   const { questions } = state
   const [responses, setResponses] = useState<Record<string, unknown>>(state.responses)
   const [idx, setIdx] = useState(0)
+  const [lab, setLab] = useState(state.labResults)
   const [save, setSave] = useState<SaveState>('saved')
   const [remaining, setRemaining] = useState(() =>
     Math.max(0, Date.parse(state.attempt.deadline_at) - Date.parse(state.attempt.server_now)),
@@ -318,6 +323,26 @@ function Running({
     return () => document.removeEventListener('visibilitychange', vis)
   }, [attemptId])
 
+  // Laboratoriyadan qaytganda (oyna/yorliq fokusga kelganda) natija kelganmi — serverdan so'raymiz
+  const hasLab = questions.some((x) => x.type === 'lab_task')
+  useEffect(() => {
+    if (!hasLab) return
+    const refreshLab = () => {
+      if (document.visibilityState === 'hidden') return
+      apiJson<AttemptState>(`/api/attempts/${attemptId}`)
+        .then((r) => setLab(r.labResults))
+        .catch(() => undefined)
+    }
+    window.addEventListener('focus', refreshLab)
+    document.addEventListener('visibilitychange', refreshLab)
+    const id = setInterval(refreshLab, 20_000)
+    return () => {
+      window.removeEventListener('focus', refreshLab)
+      document.removeEventListener('visibilitychange', refreshLab)
+      clearInterval(id)
+    }
+  }, [hasLab, attemptId])
+
   // Taymer
   useEffect(() => {
     const tick = () => {
@@ -394,6 +419,8 @@ function Running({
           value={responses[q.id]}
           onChange={(v) => setResponse(q.id, v)}
           labBaseUrl={labBaseUrl}
+          studentCode={studentCode}
+          lab={q.labId ? lab[q.labId] : undefined}
         />
       </section>
 
@@ -433,11 +460,15 @@ function QuestionInput({
   value,
   onChange,
   labBaseUrl,
+  studentCode,
+  lab,
 }: {
   q: StudentQuestion
   value: unknown
   onChange: (v: unknown) => void
   labBaseUrl: string
+  studentCode: string | null
+  lab?: { score: number; max: number }
 }) {
   const v = (value ?? {}) as Resp
   if (q.type === 'mcq') {
@@ -526,12 +557,22 @@ function QuestionInput({
       {q.labId && (
         <a
           className="btn-secondary"
-          href={`${labBaseUrl}/${encodeURIComponent(q.labId)}`}
+          href={`${labBaseUrl}/${encodeURIComponent(q.labId)}?student=${encodeURIComponent(studentCode ?? '')}&from=smartedu`}
           target="_blank"
           rel="noopener noreferrer"
         >
           {A.labOpen}
         </a>
+      )}
+      {lab ? (
+        <p className="rounded-lg bg-green-50 p-3 text-green-800">
+          ✓ {A.labReceived}:{' '}
+          <b>
+            {lab.score} / {lab.max}
+          </b>
+        </p>
+      ) : (
+        <p className="text-slate-500">{A.labWaiting}</p>
       )}
     </div>
   )

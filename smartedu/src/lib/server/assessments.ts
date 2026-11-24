@@ -5,6 +5,7 @@ import { acceptsAnswers } from '@/lib/assessment/policy'
 import { buildSubmitResults, type SubmitAnswer } from '@/lib/assessment/submit'
 import { planAttempt, type PoolQuestion, type Variant } from '@/lib/assessment/variant'
 import { mapDbError } from '@/lib/server/db-errors'
+import { bestLabResults } from '@/lib/server/lab'
 
 export interface AttemptRow {
   id: string
@@ -21,6 +22,8 @@ export interface AttemptState {
   assessment: { id: string; title: string; duration_minutes: number }
   questions: StudentQuestion[]
   responses: Record<string, unknown>
+  /** lab_id → laboratoriyadan kelgan eng yaxshi natija (faqat lab_task savollari uchun) */
+  labResults: Record<string, { score: number; max: number }>
 }
 
 /** Nazoratni boshlash (yoki davom ettirish). Reja serverda tuziladi; DB funksiyasi shartlarni qayta tekshiradi. */
@@ -101,7 +104,7 @@ export async function loadAttemptState(
   }
   const { data: assessment } = await admin
     .from('assessments')
-    .select('id, title, duration_minutes')
+    .select('id, title, duration_minutes, opens_at')
     .eq('id', attempt.assessment_id)
     .single()
   const { data: rows } = await admin
@@ -129,6 +132,17 @@ export async function loadAttemptState(
   for (const a of answers)
     if (a.response !== null && a.response !== undefined) responses[a.question_id] = a.response
 
+  // Laboratoriya topshiriqlari: tashqi saytdan kelgan natija holati (talaba "qabul qilindi"ni ko'rsin)
+  const labIds = [...new Set(questions.flatMap((q) => (q.labId ? [q.labId] : [])))]
+  const best = await bestLabResults(
+    admin,
+    studentId,
+    labIds,
+    new Date(assessment?.opens_at ?? attempt.started_at),
+  )
+  const labResults: AttemptState['labResults'] = {}
+  for (const [id, r] of best) labResults[id] = { score: r.score, max: r.max_score }
+
   return {
     attempt: {
       id: attempt.id,
@@ -136,9 +150,14 @@ export async function loadAttemptState(
       deadline_at: attempt.deadline_at,
       server_now: new Date().toISOString(),
     },
-    assessment: assessment as AttemptState['assessment'],
+    assessment: {
+      id: assessment?.id,
+      title: assessment?.title,
+      duration_minutes: assessment?.duration_minutes,
+    } as AttemptState['assessment'],
     questions,
     responses,
+    labResults,
   }
 }
 
@@ -153,7 +172,7 @@ export async function submitAttempt(admin: SupabaseClient, attemptId: string): P
 
   const { data: rows } = await admin
     .from('answers')
-    .select('id, question_id, points_max, variant, response, questions(type, params)')
+    .select('id, question_id, points_max, variant, response, questions(type, params, lab_ref)')
     .eq('attempt_id', attemptId)
   const list = (rows ?? []) as unknown as {
     id: string
@@ -161,7 +180,11 @@ export async function submitAttempt(admin: SupabaseClient, attemptId: string): P
     points_max: number
     variant: SubmitAnswer['variant']
     response: unknown
-    questions: { type: SubmitAnswer['type']; params: SubmitAnswer['params'] }
+    questions: {
+      type: SubmitAnswer['type']
+      params: SubmitAnswer['params']
+      lab_ref: { lab_id: string } | null
+    }
   }[]
 
   const { data: keys } = await admin
@@ -175,6 +198,19 @@ export async function submitAttempt(admin: SupabaseClient, attemptId: string): P
     (keys ?? []).map((k) => [k.question_id as string, { correct: k.correct as unknown }]),
   )
 
+  // lab_task: tashqi laboratoriyadan kelgan eng yaxshi natija (nazorat ochilganidan beri)
+  const { data: assessment } = await admin
+    .from('assessments')
+    .select('opens_at')
+    .eq('id', attempt.assessment_id)
+    .single()
+  const labs = await bestLabResults(
+    admin,
+    attempt.student_id as string,
+    list.flatMap((r) => (r.questions.lab_ref ? [r.questions.lab_ref.lab_id] : [])),
+    new Date(assessment?.opens_at ?? 0),
+  )
+
   const results = buildSubmitResults(
     list.map((r) => ({
       id: r.id,
@@ -184,6 +220,7 @@ export async function submitAttempt(admin: SupabaseClient, attemptId: string): P
       variant: r.variant,
       params: r.questions.params,
       key: keyBy.get(r.question_id) ?? null,
+      lab: r.questions.lab_ref ? (labs.get(r.questions.lab_ref.lab_id) ?? null) : null,
     })),
   )
   const { data, error } = await admin.rpc('app_submit_attempt', {

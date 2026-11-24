@@ -1,4 +1,6 @@
 import Link from 'next/link'
+import { bookUrl } from '@/lib/books'
+import { serverEnv } from '@/lib/env'
 import { t } from '@/lib/i18n'
 import { requireRole } from '@/lib/server/session'
 import { listMySubjects } from '@/lib/server/teacher-data'
@@ -121,9 +123,19 @@ export default async function QuestionsPage({
                   <td>{r.topic ?? '—'}</td>
                   <td>{r.difficulty ?? '—'}</td>
                   <td className="text-xs">
-                    {r.book_ref
-                      ? `${r.book_ref.slug}${r.book_ref.page ? `, ${r.book_ref.page}-${Q.pageShort}` : ''}`
-                      : '—'}
+                    {r.book_ref ? (
+                      <a
+                        href={bookUrl(serverEnv().booksBaseUrl, r.book_ref.slug, r.book_ref.page)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-brand-600 underline"
+                      >
+                        {r.book_ref.slug}
+                        {r.book_ref.page ? `, ${r.book_ref.page}-${Q.pageShort}` : ''}
+                      </a>
+                    ) : (
+                      '—'
+                    )}
                   </td>
                   <td>
                     <QuestionRowActions id={r.id} />

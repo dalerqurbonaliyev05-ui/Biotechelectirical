@@ -28,5 +28,12 @@ export default async function AttemptPage({ params }: { params: Promise<{ id: st
     .maybeSingle()
   const state = attempt ? await loadAttemptState(admin, me.id, attempt.id as string) : null
 
-  return <AttemptRunner assessment={a} initialState={state} labBaseUrl={serverEnv().labBaseUrl} />
+  return (
+    <AttemptRunner
+      assessment={a}
+      initialState={state}
+      labBaseUrl={serverEnv().labBaseUrl}
+      studentCode={me.student_code}
+    />
+  )
 }

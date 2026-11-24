@@ -9,11 +9,13 @@ export const getSessionProfile = cache(async (): Promise<SessionProfile | null> 
   const supabase = await createClient()
   const { data } = await supabase.auth.getUser()
   if (!data.user) return null
-  const { data: profile } = await supabase
+  const { data: profile, error } = await supabase
     .from('profiles')
     .select('id, role, full_name, student_code, group_id, must_change_password, is_active')
     .eq('id', data.user.id)
     .maybeSingle()
+  // DB xatosida null qaytarsak /login ↔ bosh sahifa o'rtasida cheksiz yo'naltirish tsikli bo'lardi
+  if (error) throw error
   if (!profile || !profile.is_active) return null
   return profile as SessionProfile
 })

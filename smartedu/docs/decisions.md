@@ -189,3 +189,23 @@ Har yozuv: **nima** → **nima uchun** → **qanday o'zgartirish mumkin**.
    kelganda serverdan so'raydi (soxta xabar zarar qilmaydi). Savol yo'q va slayd oddiy almashsa talabalar so'rov
    yubormaydi. Doska statistikani 2 s polling bilan oladi (xabar emas). Reyting 2 s xotirada keshlanadi.
 10. **Raqamli jonli savol:** butun auditoriyaga bir xil qiymatlar (doskada ko'rinadi), urug' = sessiya + savol.
+
+## 9-bosqich: laboratoriya va kitob integratsiyasi
+
+1. **HMAC-SHA256 (JWT emas):** imzo tananing aynan baytlariga qo'yiladi (`X-Signature: sha256=<hex>`), shuning uchun
+   server tanani xom matn sifatida o'qiydi; imzo JSON tahlilidan OLDIN, vaqt-doimiy taqqoslash bilan tekshiriladi.
+   JWT'ga nisbatan: kutubxona kerak emas, laboratoriya tomonida 3 qator kod. Kontrakt, namunalar (curl/Node/Python)
+   va test skripti: `docs/lab-integration.md`, `scripts/lab-sign.mjs`.
+2. **Replay himoyasi:** `time` ±5 daqiqa + `nonce` DB'da unikal. Qayta yuborilgan so'rov xato emas, idempotent
+   `{duplicate:true}` (tarmoq qayta urinishi xavfsiz).
+3. **Fail-closed:** `LAB_SHARED_SECRET` yo'q yoki < 16 belgi → 503; tana > 8 KB → 413 (imzodan oldin).
+4. **DB xatosi ≠ "topilmadi":** qidiruv xatosi 5xx (laboratoriya serveri qayta urinadi), 404 faqat talaba haqiqatan
+   yo'q bo'lganda. Shu naqsh `requireUser`, `getSessionProfile`, kirishda ham tuzatildi (aks holda DB uzilishida
+   foydalanuvchi "kirmagan" ko'rinar va /login tsikli bo'lardi). Buni haqiqiy serverda soxta DB manzili bilan topdik.
+5. **Ball oynasi:** natija nazorat OCHILGANIDAN keyin kelgan bo'lsa hisobga olinadi (eski natijani qayta
+   ishlatib bo'lmasin; uy topshirig'i kabi uzoq oynalarga ham mos). Bir `lab_id` bo'yicha eng yaxshi natija.
+   Ball = `max_points × score/max_score`. Natija kelmasa — o'qituvchi qo'lda; kech kelgan natija baholash
+   sahifasida ball sifatida TAKLIF qilinadi (o'qituvchi tasdiqlaydi, audit'ga tushadi).
+6. **Ma'lum cheklov:** `student_code` laboratoriya saytidan keladi (havoladagi `?student=`), ya'ni talaba boshqa
+   kod bilan natija yuborishi mumkin. Kuchaytirish — SmartEdu imzolagan "ishga tushirish tokeni" (roadmap).
+7. **Kitob havolalari** 4-bosqichda qilingan (`BOOKS_BASE_URL/#/kitob/<id>/<bet>`); o'qituvchi savollar ro'yxatida ham bosiladigan.

@@ -380,6 +380,8 @@ export const uz = {
     answer: 'Javob',
     noAnswer: '(javob yo‘q)',
     labNoResult: 'Laboratoriya natijasi kelmagan — qo‘lda ball qo‘ying.',
+    labSuggest: 'Laboratoriya natijasi',
+    labSuggestHint: 'Taklif qilingan ball qo‘yildi — tasdiqlash uchun “Saqlash” ni bosing.',
     total: 'Jami',
     feedback: 'Izoh (talabaga ko‘rinadi)',
     saveNext: 'Saqlash',
@@ -418,6 +420,8 @@ export const uz = {
     multipleHint: 'Bir nechta to‘g‘ri javob bo‘lishi mumkin',
     labOpen: 'Laboratoriyani ochish',
     labHint: 'Topshiriqni laboratoriyada bajaring. Natija avtomatik shu yerga keladi.',
+    labReceived: 'Laboratoriya natijasi qabul qilindi',
+    labWaiting: 'Natija hali kelmadi. Laboratoriyada topshiriqni tugatgach shu oynaga qayting.',
     doneTitle: 'Topshirildi',
     doneAwaiting:
       'Javoblaringiz qabul qilindi. Natija e’lon qilinishi bilan “Natijalarim”da ko‘rinadi.',

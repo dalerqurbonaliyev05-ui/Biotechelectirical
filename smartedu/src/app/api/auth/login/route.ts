@@ -26,11 +26,12 @@ export const POST = handle(async (req) => {
   const { data, error } = await supabase.auth.signInWithPassword({ email, password: body.password })
   if (error || !data.user) throw new ApiError(401, 'invalid_credentials')
 
-  const { data: profile } = await supabase
+  const { data: profile, error: pErr } = await supabase
     .from('profiles')
     .select('role, must_change_password, is_active')
     .eq('id', data.user.id)
     .maybeSingle()
+  if (pErr) throw pErr // DB xatosi "parol noto'g'ri" emas
   if (!profile || !profile.is_active) {
     await supabase.auth.signOut()
     throw new ApiError(401, 'invalid_credentials')

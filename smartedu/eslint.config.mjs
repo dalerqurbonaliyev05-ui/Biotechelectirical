@@ -17,6 +17,8 @@ const config = [
       'no-console': ['error', { allow: ['warn', 'error'] }],
     },
   },
+  // Buyruq qatori skriptlari natijani konsolga chop etadi (talabalar ma'lumoti emas)
+  { files: ['scripts/**'], rules: { 'no-console': 'off' } },
 ]
 
 export default config
