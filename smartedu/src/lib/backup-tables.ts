@@ -29,6 +29,9 @@ export const BACKUP_TABLES: BackupTable[] = [
   { table: 'audit_log', order: ['id'] },
   { table: 'lectures', order: ['id'] },
   { table: 'lecture_questions', order: ['id'] },
+  { table: 'lecture_slides', order: ['lecture_id', 'slide_no'] },
+  { table: 'lecture_checkpoints', order: ['id'] },
+  { table: 'slide_books', order: ['id'] },
   { table: 'lecture_sessions', order: ['id'] },
   // join_token — faol qurilma sirli tokeni: zaxiraga CHIQMAYDI
   { table: 'session_participants', order: ['id'], omit: ['join_token'] },

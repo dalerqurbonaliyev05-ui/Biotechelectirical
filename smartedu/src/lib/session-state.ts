@@ -6,6 +6,8 @@ export interface PlanItem {
   text: string
   asked: boolean
   timeLimitSec: number | null
+  /** Bonus savol: faqat eng faol talabaga (9-bosqich) */
+  isBonus: boolean
 }
 
 /** Doska/boshqaruv uchun holat (maxfiy ma'lumot YO'Q: to'g'ri javob bu yerda emas). */

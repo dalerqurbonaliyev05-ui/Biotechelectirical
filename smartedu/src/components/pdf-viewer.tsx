@@ -29,6 +29,42 @@ export async function readPdfPageCount(data: ArrayBuffer): Promise<number> {
 }
 
 /**
+ * Barcha betlarning kichik JPEG miniatyuralari (yuklashda, brauzerda bir marta). Ketma-ket chiziladi (xotira tejamkor).
+ * Muvaffaqiyatsiz bet uchun null.
+ */
+export async function renderThumbnails(
+  data: ArrayBuffer,
+  opts: {
+    width?: number
+    maxPages?: number
+    onProgress?: (done: number, total: number) => void
+  } = {},
+): Promise<(Blob | null)[]> {
+  const pdfjs = await loadPdfjs()
+  const doc = await pdfjs.getDocument({ data: new Uint8Array(data) }).promise
+  const total = Math.min(doc.numPages, opts.maxPages ?? 2000)
+  const out: (Blob | null)[] = []
+  const cv = document.createElement('canvas')
+  for (let n = 1; n <= total; n++) {
+    try {
+      const pg = await doc.getPage(n)
+      const base = pg.getViewport({ scale: 1 })
+      const vp = pg.getViewport({ scale: (opts.width ?? 240) / base.width })
+      cv.width = Math.floor(vp.width)
+      cv.height = Math.floor(vp.height)
+      await pg.render({ canvas: cv, viewport: vp }).promise
+      out.push(await new Promise<Blob | null>((res) => cv.toBlob(res, 'image/jpeg', 0.6)))
+      pg.cleanup()
+    } catch {
+      out.push(null)
+    }
+    opts.onProgress?.(n, total)
+  }
+  await doc.destroy()
+  return out
+}
+
+/**
  * Bitta PDF betini canvas'ga chizadi (konteyner kengligiga moslab, HiDPI uchun aniq).
  * `url` o'zgarmaguncha hujjat qayta yuklanmaydi; `page` o'zgarsa faqat bet qayta chiziladi.
  */

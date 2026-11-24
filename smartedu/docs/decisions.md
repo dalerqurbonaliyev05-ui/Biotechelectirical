@@ -244,3 +244,14 @@ Har yozuv: **nima** → **nima uchun** → **qanday o'zgartirish mumkin**.
 5. **Admin bootstrap skripti** (`create-admin.mjs`): productionda `seed.sql` ishlatilmaydi, birinchi adminni yaratish uchun.
 6. **CI:** lint → tur → Vitest → SQL/RLS (haqiqiy Postgres xizmati) → embed tekshiruvi → build → smoke.
 7. **Cloudflare:** faqat yo'riqnoma (OpenNext/Workers); SINALMAGAN deb belgilangan.
+
+# v2 (kengaytirilgan talablar) — 5-bosqich: slayd muharriri
+
+1. **Nazorat nuqtasi (`lecture_checkpoints`) = "shu slayddan KEYIN"** so'raladigan savol(lar). Bir slaydda bitta nuqta, ichida tartiblangan
+   bir necha savol (`lecture_questions.position`); `is_bonus` — bonus savol belgisi (9-bosqich); oxirgi slayddan keyingi nuqta `final`.
+   Eski `lecture_questions.slide_no` endi "after_slide" ma'nosida (denormalizatsiya, kod har ikkisini bir xil yozadi).
+2. **Miniatyuralar brauzerda yuklashda bir marta chiziladi** (pdf.js → JPEG ~240 px) va Storage'ga `<uid>/<papka>/<n>.jpg` sifatida yoziladi.
+   Server PDF'ni qayta ishlamaydi (bepul tarif). Miniatyura chiqmasa ma'ruza baribir yaratiladi (raqamli plitkalar).
+3. **Yangi savol muharrirdan to'g'ridan-to'g'ri** (2–6 variant) yaratiladi va savollar bankiga ham tushadi; bankdan ham tanlash mumkin.
+   Muharrirda faqat test (mcq) yoziladi; raqamli savol uchun savollar banki ishlatiladi.
+4. **Slayd kitoblari (`slide_books`)** hozircha qo'lda (nom, slug, bet); kutubxona API kontrakti 12-bosqichda.

@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { readPdfPageCount } from '@/components/pdf-viewer'
+import { readPdfPageCount, renderThumbnails } from '@/components/pdf-viewer'
 import { ClientApiError, apiJson, errorText } from '@/lib/api-client'
 import { t } from '@/lib/i18n'
 import { createClient } from '@/lib/supabase/browser'
@@ -23,6 +23,7 @@ export function LectureUpload({
   const [file, setFile] = useState<File | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
+  const [progress, setProgress] = useState('')
 
   async function submit(e: React.FormEvent) {
     e.preventDefault()
@@ -34,21 +35,45 @@ export function LectureUpload({
     try {
       // 1) Haqiqiy PDF ekanini va betlar sonini tekshirish (PPTX/boshqa fayl shu yerda to'xtaydi)
       let pages: number
+      let buf: ArrayBuffer
       try {
-        pages = await readPdfPageCount(await file.arrayBuffer())
+        buf = await file.arrayBuffer()
+        pages = await readPdfPageCount(buf.slice(0))
       } catch {
         throw new Error('not_pdf')
       }
       // 2) Storage'ga yuklash (RLS: faqat o'z papkasiga)
-      path = `${userId}/${crypto.randomUUID()}.pdf`
+      const base = crypto.randomUUID()
+      path = `${userId}/${base}.pdf`
       const { error: upErr } = await createClient()
         .storage.from('lectures')
         .upload(path, file, { contentType: 'application/pdf', upsert: false })
       if (upErr) throw new Error('upload')
-      // 3) Ma'ruza yozuvi
+      // 3) Slayd miniatyuralari (xato bo'lsa ma'ruza baribir yaratiladi — raqamli plitkalar bilan)
+      const thumbs: (string | null)[] = []
+      try {
+        const blobs = await renderThumbnails(buf, {
+          onProgress: (d, t) => setProgress(`${d}/${t}`),
+        })
+        const sb = createClient()
+        for (const [i, blob] of blobs.entries()) {
+          const tp = `${userId}/${base}/${i + 1}.jpg`
+          const ok = blob
+            ? !(
+                await sb.storage
+                  .from('lectures')
+                  .upload(tp, blob, { contentType: 'image/jpeg', upsert: false })
+              ).error
+            : false
+          thumbs.push(ok ? tp : null)
+        }
+      } catch {
+        /* miniatyurasiz davom etamiz */
+      }
+      // 4) Ma'ruza yozuvi
       const { id } = await apiJson<{ id: string }>('/api/lectures', {
         method: 'POST',
-        json: { title, subject_id: subject, pdf_path: path, page_count: pages },
+        json: { title, subject_id: subject, pdf_path: path, page_count: pages, thumbs },
       })
       router.push(`/teacher/lectures/${id}`)
     } catch (err) {
@@ -120,7 +145,7 @@ export function LectureUpload({
         </p>
       )}
       <button className="btn-primary" disabled={busy || !file}>
-        {busy ? L.uploading : t.app.save}
+        {busy ? `${L.uploading} ${progress}` : t.app.save}
       </button>
     </form>
   )

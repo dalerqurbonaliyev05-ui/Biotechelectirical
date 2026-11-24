@@ -51,3 +51,28 @@ select pg_temp.expect('T2: boshqa o''qituvchi ma''ruzasini ko''rmaydi',
 select pg_temp.as_user('00000000-0000-0000-0000-0000000000a1');
 select pg_temp.expect('admin: hammasini ko''radi', (select count(*) from public.lectures), 2);
 rollback;
+
+-- ── 0008: nuqtalar, miniatyuralar, kitoblar ─────────────────────
+begin;
+insert into public.lectures (id, subject_id, created_by, title, pdf_path, page_count) values
+  ('00000000-0000-0000-0000-000000000f31', '00000000-0000-0000-0000-00000000b001', '00000000-0000-0000-0000-0000000000b1', 'L8', 'x/b.pdf', 6);
+insert into public.lecture_slides values ('00000000-0000-0000-0000-000000000f31', 1, 'x/b/1.jpg');
+insert into public.lecture_checkpoints (id, lecture_id, after_slide) values ('00000000-0000-0000-0000-0000000000e1', '00000000-0000-0000-0000-000000000f31', 3);
+insert into public.slide_books (lecture_id, slide_no, title, slug, page) values ('00000000-0000-0000-0000-000000000f31', 2, 'Ohm qonuni', 'ohm-qonuni', 12);
+
+select pg_temp.expect_error('bitta slayddan keyin bitta nuqta',
+  $q$insert into public.lecture_checkpoints (lecture_id, after_slide) values ('00000000-0000-0000-0000-000000000f31', 3)$q$, 'lecture_checkpoints_lecture_id_after_slide_key');
+select pg_temp.expect_error('kitob slug formati', $q$insert into public.slide_books (lecture_id, slide_no, title, slug) values ('00000000-0000-0000-0000-000000000f31', 1, 'x', '../x')$q$, 'check');
+
+set local role authenticated;
+select pg_temp.as_user('00000000-0000-0000-0000-000000000101');
+select pg_temp.expect('talaba: nuqta/miniatyura/kitob yopiq', (select count(*) from public.lecture_checkpoints) + (select count(*) from public.lecture_slides) + (select count(*) from public.slide_books), 0);
+select pg_temp.as_user('00000000-0000-0000-0000-0000000000b1');
+select pg_temp.expect('o''qituvchi: o''z nuqtalarini ko''radi va yozadi', (select count(*) from public.lecture_checkpoints), 1);
+insert into public.slide_books (lecture_id, slide_no, title, slug) values ('00000000-0000-0000-0000-000000000f31', 4, 'Yana', 'yana-kitob');
+select pg_temp.expect('o''qituvchi: o''z ma''ruzasiga kitob qo''sha oladi', (select count(*) from public.slide_books), 2);
+select pg_temp.as_user('00000000-0000-0000-0000-0000000000b2');
+select pg_temp.expect('boshqa o''qituvchi: ko''rmaydi', (select count(*) from public.lecture_checkpoints) + (select count(*) from public.slide_books), 0);
+select pg_temp.expect_error('boshqa o''qituvchi: yoza olmaydi', $q$insert into public.slide_books (lecture_id, slide_no, title, slug) values ('00000000-0000-0000-0000-000000000f31', 1, 'h', 'hack')$q$, 'row-level security');
+reset role;
+rollback;

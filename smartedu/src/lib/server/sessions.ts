@@ -76,10 +76,10 @@ export async function buildSessionState(
       currentQuestionView(admin, s),
       admin
         .from('lecture_questions')
-        .select('id, slide_no, time_limit_sec, questions(body)')
+        .select('id, slide_no, position, is_bonus, time_limit_sec, questions(body)')
         .eq('lecture_id', s.lecture_id)
         .order('slide_no')
-        .order('created_at'),
+        .order('position'),
       admin.from('session_questions').select('lecture_question_id').eq('session_id', s.id),
     ])
   const done = new Set((asked ?? []).map((a) => a.lecture_question_id as string | null))
@@ -91,6 +91,7 @@ export async function buildSessionState(
     ).slice(0, 120),
     asked: done.has(p.id as string),
     timeLimitSec: (p.time_limit_sec as number | null) ?? null,
+    isBonus: Boolean(p.is_bonus),
   }))
   return {
     id: s.id,
