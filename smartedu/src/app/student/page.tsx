@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { attendanceSummary } from '@/lib/analytics'
 import { canSeeScore, type ShowScorePolicy } from '@/lib/assessment/policy'
 import { CodeEntry } from '@/components/code-entry'
 import { t } from '@/lib/i18n'
@@ -44,6 +45,37 @@ export default async function StudentHome() {
     .from('attempts')
     .select('id, assessment_id, status, deadline_at, total_score, max_score')
     .eq('student_id', me.id)
+  // Mening qatnashishim: guruhimning tugagan darslari bo'yicha (faqat o'zimning yozuvlarim; boshqalarniki ko'rinmaydi)
+  let myAttendance: { present: number; total: number; pct: number | null } | null = null
+  if (me.group_id) {
+    const { data: sess } = await createAdminClient()
+      .from('lecture_sessions')
+      .select('id')
+      .eq('group_id', me.group_id)
+      .eq('status', 'ended')
+      .limit(500)
+    const ids = (sess ?? []).map((s) => s.id as string)
+    if (ids.length) {
+      const { data: att } = await createAdminClient()
+        .from('attendance')
+        .select('status, override_status')
+        .eq('student_id', me.id)
+        .in('session_id', ids.slice(0, 200))
+      const sum = attendanceSummary(
+        (att ?? []).map((a) => ({
+          status: a.status as 'present' | 'nb',
+          override: a.override_status as 'present' | 'nb' | null,
+        })),
+      )
+      // Jami = tugagan darslar soni (ishtirok etmagan dars ham hisobga kiradi)
+      const total = Math.max(ids.slice(0, 200).length, sum.total)
+      myAttendance = {
+        present: sum.present,
+        total,
+        pct: total > 0 ? Math.round((sum.present / total) * 1000) / 10 : null,
+      }
+    }
+  }
   const byAssessment = new Map((attempts ?? []).map((a) => [a.assessment_id as string, a]))
   const now = new Date()
 
@@ -124,6 +156,18 @@ export default async function StudentHome() {
           <p className="text-sm text-slate-500">{t.liveStudent.lead}</p>
           <CodeEntry compact />
         </section>
+        {myAttendance && (
+          <section className="card space-y-1">
+            <h2 className="font-semibold">{t.analytics.myAttendance}</h2>
+            <p className="text-3xl font-bold tabular-nums">
+              {myAttendance.pct ?? '—'}%{' '}
+              <span className="text-sm font-normal text-slate-500">
+                ({myAttendance.present} / {myAttendance.total})
+              </span>
+            </p>
+            <p className="text-xs text-slate-500">{t.analytics.myAttendanceNote}</p>
+          </section>
+        )}
         <section className="card">
           <h2 className="font-semibold">{S.sections.results}</h2>
           <p className="mt-2 text-sm text-slate-500">{S.soon}</p>

@@ -1,6 +1,15 @@
 import 'server-only'
 import type { SupabaseClient } from '@supabase/supabase-js'
-import { liveQuestionShare, topicBreakdown, type TopicFact, type TopicStat } from '@/lib/analytics'
+import {
+  attendanceSummary,
+  liveQuestionShare,
+  reactionMap,
+  topicBreakdown,
+  type AttendanceSummary,
+  type SlideReaction,
+  type TopicFact,
+  type TopicStat,
+} from '@/lib/analytics'
 import { shortName } from '@/lib/live-rating'
 import { fetchAll } from '@/lib/server/paginate'
 import {
@@ -149,8 +158,15 @@ export interface SessionAnalytics {
   participants: number
   auditorium: number
   remote: number
+  guests: number
   questions: QuestionAnalytics[]
   topics: TopicStat[]
+  /** NB/qatnashdi jamlamasi (faqat dars tugagach hisoblanadi; mehmonlarsiz) */
+  attendance: AttendanceSummary & { avgRatioPct: number | null }
+  /** Slaydlar bo'yicha "tushundim/tushunmadim" xaritasi */
+  reactions: SlideReaction[]
+  breaks: number
+  totalReactions: number
 }
 
 export async function loadSessionAnalytics(
@@ -163,29 +179,62 @@ export async function loadSessionAnalytics(
     .eq('id', sessionId)
     .maybeSingle()
   if (!s) return null
-  const [participants, questions, answers] = await Promise.all([
-    fetchAll<{ mode: string }>((a, b) =>
+  const [participants, questions, answers, attRows, reactRows, { count: breakCount }] =
+    await Promise.all([
+      fetchAll<{ mode: string; is_guest: boolean }>((a, b) =>
+        db
+          .from('session_participants')
+          .select('id, mode, is_guest')
+          .eq('session_id', sessionId)
+          .order('id')
+          .range(a, b),
+      ),
       db
-        .from('session_participants')
-        .select('id, mode')
+        .from('session_questions')
+        .select('id, slide_no, questions(body, topic)')
         .eq('session_id', sessionId)
-        .order('id')
-        .range(a, b),
-    ),
-    db
-      .from('session_questions')
-      .select('id, slide_no, questions(body, topic)')
-      .eq('session_id', sessionId)
-      .order('opened_at'),
-    fetchAll<{ session_question_id: string; is_correct: boolean }>((a, b) =>
+        .order('opened_at'),
+      fetchAll<{ session_question_id: string; is_correct: boolean }>((a, b) =>
+        db
+          .from('session_answers')
+          .select('id, session_question_id, is_correct')
+          .eq('session_id', sessionId)
+          .order('id')
+          .range(a, b),
+      ),
+      fetchAll<{
+        student_id: string
+        status: 'present' | 'nb'
+        override_status: 'present' | 'nb' | null
+        attendance_ratio: number | null
+      }>((a, b) =>
+        db
+          .from('attendance')
+          .select('student_id, status, override_status, attendance_ratio')
+          .eq('session_id', sessionId)
+          .order('student_id')
+          .range(a, b),
+      ),
+      fetchAll<{
+        student_id: string
+        slide_no: number
+        kind: 'understood' | 'confused'
+        cnt: number
+      }>((a, b) =>
+        db
+          .from('session_reactions')
+          .select('student_id, slide_no, kind, cnt')
+          .eq('session_id', sessionId)
+          .order('student_id')
+          .order('slide_no')
+          .order('kind')
+          .range(a, b),
+      ),
       db
-        .from('session_answers')
-        .select('id, session_question_id, is_correct')
-        .eq('session_id', sessionId)
-        .order('id')
-        .range(a, b),
-    ),
-  ])
+        .from('session_breaks')
+        .select('id', { count: 'exact', head: true })
+        .eq('session_id', sessionId),
+    ])
   const qs = (
     (questions.data ?? []) as unknown as {
       id: string
@@ -221,8 +270,25 @@ export async function loadSessionAnalytics(
     participants: participants.length,
     auditorium: participants.filter((p) => p.mode === 'auditorium').length,
     remote: participants.filter((p) => p.mode !== 'auditorium').length,
+    guests: participants.filter((p) => p.is_guest).length,
     questions: qs,
     topics: topicBreakdown(facts, { minSample: 3 }).stats,
+    attendance: {
+      ...attendanceSummary(attRows.map((r) => ({ status: r.status, override: r.override_status }))),
+      avgRatioPct: (() => {
+        const rs = attRows.filter((r) => r.attendance_ratio !== null)
+        return rs.length
+          ? Math.round(
+              (rs.reduce((n, r) => n + Number(r.attendance_ratio), 0) / rs.length) * 1000,
+            ) / 10
+          : null
+      })(),
+    },
+    reactions: reactionMap(
+      reactRows.map((r) => ({ slide: r.slide_no, kind: r.kind, cnt: Number(r.cnt) })),
+    ),
+    breaks: breakCount ?? 0,
+    totalReactions: reactRows.reduce((n, r) => n + Number(r.cnt), 0),
   }
 }
 

@@ -50,6 +50,73 @@ export default async function SessionAnalyticsPage({
       </div>
 
       <section className="space-y-2">
+        <h2 className="text-lg font-semibold">{A.attendanceTitle}</h2>
+        {d.attendance.total === 0 ? (
+          <p className="card text-sm text-slate-500">{A.attendancePending}</p>
+        ) : (
+          <div className="grid grid-cols-2 gap-3 text-center sm:grid-cols-4">
+            <div className="card">
+              <p className="text-2xl font-bold text-green-700">{d.attendance.present}</p>
+              <p className="text-xs text-slate-500">{A.attendancePresent}</p>
+            </div>
+            <div className="card">
+              <p className="text-2xl font-bold text-red-600">{d.attendance.nb}</p>
+              <p className="text-xs text-slate-500">{A.attendanceNb}</p>
+            </div>
+            <div className="card">
+              <p className="text-2xl font-bold">{d.attendance.avgRatioPct ?? '—'}%</p>
+              <p className="text-xs text-slate-500">{A.attendanceAvg}</p>
+            </div>
+            <div className="card">
+              <p className="text-2xl font-bold">{d.guests}</p>
+              <p className="text-xs text-slate-500">
+                {A.guests} · {A.breaksCount}: {d.breaks}
+              </p>
+            </div>
+          </div>
+        )}
+        <Link
+          href={`/teacher/sessions/${id}/nb`}
+          className="text-sm text-brand-600 hover:underline"
+        >
+          {A.nbLink}
+        </Link>
+      </section>
+
+      <section className="space-y-2">
+        <h2 className="text-lg font-semibold">{A.reactionsTitle}</h2>
+        <p className="text-xs text-slate-500">{A.reactionsLead}</p>
+        {d.reactions.length === 0 ? (
+          <p className="card text-sm text-slate-500">{A.noReactions}</p>
+        ) : (
+          <div className="table-wrap">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>{A.slide}</th>
+                  <th>👍 {A.understood}</th>
+                  <th>🤔 {A.confused}</th>
+                  <th>{A.share}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {d.reactions.map((r) => (
+                  <tr key={r.slide} className={r.hard ? 'bg-red-50' : ''}>
+                    <td>
+                      {r.slide} {r.hard && <span className="badge">{A.hardSlide}</span>}
+                    </td>
+                    <td>{r.understood}</td>
+                    <td>{r.confused}</td>
+                    <td>{r.pctUnderstood === null ? '—' : `${r.pctUnderstood}%`}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
+
+      <section className="space-y-2">
         <h2 className="text-lg font-semibold">{A.byQuestion}</h2>
         {d.questions.length === 0 ? (
           <p className="card text-slate-500">{A.noQuestions}</p>

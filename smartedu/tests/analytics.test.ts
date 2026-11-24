@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { liveQuestionShare, topicBreakdown } from '@/lib/analytics'
+import { attendanceSummary, liveQuestionShare, reactionMap, topicBreakdown } from '@/lib/analytics'
 import { assessmentContribution, computeSemester, semesterRanks } from '@/lib/semester'
 
 const f = (topic: string | null, ok: boolean, n = 1) =>
@@ -92,5 +92,38 @@ describe('semestr reytingi', () => {
   it('o‘rinlar (teng ball — teng o‘rin)', () => {
     const r = semesterRanks(computeSemester(ids, live, attempts))
     expect([r.get('b'), r.get('c'), r.get('a'), r.get('d')]).toEqual([1, 1, 3, 4])
+  })
+})
+
+describe('reactionMap', () => {
+  it('slaydlar bo‘yicha jamlaydi va "qiyin" slaydni belgilaydi', () => {
+    const m = reactionMap([
+      { slide: 3, kind: 'understood', cnt: 2 },
+      { slide: 3, kind: 'confused', cnt: 6 },
+      { slide: 1, kind: 'understood', cnt: 5 },
+      { slide: 3, kind: 'confused', cnt: 1 },
+    ])
+    expect(m.map((x) => x.slide)).toEqual([1, 3])
+    expect(m[0]).toMatchObject({ understood: 5, confused: 0, pctUnderstood: 100, hard: false })
+    expect(m[1]).toMatchObject({ understood: 2, confused: 7, pctUnderstood: 22, hard: true })
+  })
+  it('kam tushunmadim "qiyin" emas; bo‘sh kirish — bo‘sh natija', () => {
+    expect(reactionMap([{ slide: 2, kind: 'confused', cnt: 2 }])[0]!.hard).toBe(false)
+    expect(reactionMap([])).toEqual([])
+  })
+})
+
+describe('attendanceSummary', () => {
+  it('tuzatish ustun; foiz 1 xona', () => {
+    const s = attendanceSummary([
+      { status: 'present' },
+      { status: 'nb' },
+      { status: 'nb', override: 'present' },
+      { status: 'present', override: 'nb' },
+    ])
+    expect(s).toEqual({ present: 2, nb: 2, total: 4, pct: 50 })
+  })
+  it('bo‘sh — foiz yo‘q', () => {
+    expect(attendanceSummary([]).pct).toBeNull()
   })
 })

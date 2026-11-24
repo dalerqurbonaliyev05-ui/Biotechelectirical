@@ -354,3 +354,12 @@ Har yozuv: **nima** → **nima uchun** → **qanday o'zgartirish mumkin**.
 - Joriy slayd kitoblari `SessionState.books` da (havola serverda `BOOKS_BASE_URL` bilan tuziladi; mijozda sirsiz). Doskada 📖 tugma yoki `B`.
 - Iframe sandbox + `no-referrer`; CSP `frame-src` faqat kutubxona origini. Ramka kutubxona tomonidan bloklansa — "Yangi oynada ochish" zaxirasi.
 - Haqiqiy brauzerda ramka tekshirilmagan (kutubxona `vercel.json`'da ramkani bloklovchi sarlavha yo'qligi o'qib tasdiqlangan, xolos).
+
+## v2 · 13-bosqich — kengaytirilgan tahlil
+
+- Dars tahlili sahifasiga: NB/qatnashdi soni, o'rtacha qatnashish nisbati, mehmonlar va tanaffuslar soni, slaydlar bo'yicha
+  "tushundim/tushunmadim" xaritasi (toza `reactionMap`, `attendanceSummary`; Vitest bilan sinalgan). "Qiyin slayd" = tushunmadim ≥ 3 va tushundimdan ko'p.
+- Hamma ma'lumot foydalanuvchi sessiyasi (RLS) orqali o'qiladi: faqat shu dars o'qituvchisi/admin ko'radi.
+- Talaba bosh sahifasida **faqat o'zining** qatnashish foizi: guruhining tugagan darslari ichida "qatnashdi" ulushi (qatnashmagan dars ham
+  jami'ga kiradi). Boshqa talabalarning yozuvi hech qachon qaytmaydi (so'rov `student_id = o'zi`).
+- Cheklov: foiz dars guruhga bog'langan bo'lsa hisoblanadi (guruhsiz "ochiq" darslar kirmaydi); oxirgi 200 dars bilan cheklangan.
