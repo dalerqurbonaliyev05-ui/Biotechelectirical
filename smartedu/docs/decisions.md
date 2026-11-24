@@ -39,3 +39,19 @@ Har yozuv: **nima** → **nima uchun** → **qanday o'zgartirish mumkin**.
    bu "yaxshi harakat" himoyasi. Kirish uchun Supabase Auth'ning o'z cheklovlari ham ishlaydi.
    Qat'iy kerak bo'lsa: Postgres'da hisoblagich jadvali (RPC) — pullik xizmatsiz.
 8. **zod 4: `z.guid()`** ishlatiladi (`z.uuid()` qat'iy RFC versiya tekshiradi; seed UUID'lari oddiy).
+
+## 2-bosqich: uch panel
+
+1. **Oddiy ma'lumotnomalar (fakultet, kafedra, guruh, fan, auditoriya) brauzerdan, RLS ostida.**
+   Bitta `CrudManager` + `lib/admin/resources.ts` konfiguratsiyasi — yangi jadval qo'shish 10 qator.
+   Himoya UI'da emas, RLS'da: faqat admin yoza oladi (SQL testda tekshirilgan).
+2. **Akkauntlar (o'qituvchi/talaba) faqat server API orqali** (auth foydalanuvchisi yaratish service role
+   talab qiladi). Faolsizlantirish `profiles.is_active=false` + Auth `ban_duration` — kirish ham, mavjud
+   sessiya yangilanishi ham to'xtaydi.
+3. **Talaba kodini keyin o'zgartirib bo'lmaydi** (sintetik email unga bog'liq). Xato bo'lsa: talabani
+   o'chirib qayta yarating (yoki faolsizlantiring). Kerak bo'lsa keyin qo'shiladi.
+4. **Foydalanuvchini o'chirish natijalarini ham o'chiradi** (cascade) — UI ogohlantiradi, odatda
+   "Faolsizlantirish" tavsiya etiladi.
+5. **`profiles.email`** faqat o'qituvchi/admin uchun saqlanadi (admin ko'rsin deb); talabada bo'sh.
+6. **Sozlamalar (`app_settings`)**: admin UI'da tahrirlanadi, serverda `clampSettings` bilan xavfsiz
+   oraliqqa keltiriladi (noto'g'ri qiymat tizimni buzmasin). `MAX_SPEED_BONUS` boshlang'ich qiymati 10.

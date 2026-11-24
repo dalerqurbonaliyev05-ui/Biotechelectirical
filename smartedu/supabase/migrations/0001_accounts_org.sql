@@ -62,6 +62,7 @@ create table public.profiles (
   role public.user_role not null,
   full_name text not null check (length(btrim(full_name)) > 0),
   student_code text,
+  email text, -- o'qituvchi/admin kirish emaili (talabada bo'sh: sintetik email ko'rsatilmaydi)
   group_id uuid references public.groups (id) on delete set null,
   department_id uuid references public.departments (id) on delete set null,
   must_change_password boolean not null default false,

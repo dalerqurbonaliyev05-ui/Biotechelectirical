@@ -43,6 +43,7 @@ export async function createAccount(
     role: input.role,
     full_name: input.fullName,
     student_code: input.studentCode ?? null,
+    email: input.role === 'student' ? null : input.email,
     group_id: input.groupId ?? null,
     department_id: input.departmentId ?? null,
     must_change_password: input.mustChangePassword ?? true,
@@ -152,4 +153,20 @@ export async function importStudents(
   }
   await Promise.all([worker(), worker(), worker(), worker()])
   return results
+}
+
+/** O'qituvchining (fan, guruh) biriktirishlarini to'liq almashtiradi. */
+export async function replaceAssignments(
+  admin: SupabaseClient,
+  teacherId: string,
+  assignments: { subject_id: string; group_id: string }[],
+): Promise<void> {
+  const { error: dErr } = await admin.from('teacher_subjects').delete().eq('teacher_id', teacherId)
+  if (dErr) throw dErr
+  if (assignments.length === 0) return
+  const unique = new Map(assignments.map((a) => [`${a.subject_id}:${a.group_id}`, a]))
+  const { error } = await admin
+    .from('teacher_subjects')
+    .insert([...unique.values()].map((a) => ({ teacher_id: teacherId, ...a })))
+  if (error) throw error
 }

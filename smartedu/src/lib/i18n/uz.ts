@@ -81,7 +81,14 @@ export const uz = {
   nav: {
     admin: [
       { href: '/admin', label: 'Bosh sahifa' },
+      { href: '/admin/faculties', label: 'Fakultetlar' },
+      { href: '/admin/departments', label: 'Kafedralar' },
+      { href: '/admin/groups', label: 'Guruhlar' },
+      { href: '/admin/subjects', label: 'Fanlar' },
+      { href: '/admin/rooms', label: 'Auditoriyalar' },
+      { href: '/admin/teachers', label: 'O‘qituvchilar' },
       { href: '/admin/students', label: 'Talabalar' },
+      { href: '/admin/settings', label: 'Sozlamalar' },
     ],
     teacher: [{ href: '/teacher', label: 'Bosh sahifa' }],
     student: [{ href: '/student', label: 'Bosh sahifa' }],
@@ -124,6 +131,113 @@ export const uz = {
   adminHome: {
     title: 'Administrator paneli',
     lead: 'Fakultet, kafedra, guruh, fan, o‘qituvchi va talabalarni boshqaring.',
+  },
+  admin: {
+    resources: {
+      faculties: { title: 'Fakultetlar', singular: 'Fakultet', fields: { name: 'Nomi' } },
+      departments: {
+        title: 'Kafedralar',
+        singular: 'Kafedra',
+        fields: { name: 'Nomi', faculty_id: 'Fakultet' },
+      },
+      groups: {
+        title: 'Guruhlar',
+        singular: 'Guruh',
+        fields: { name: 'Guruh nomi', department_id: 'Kafedra', course_year: 'Kurs' },
+      },
+      subjects: {
+        title: 'Fanlar',
+        singular: 'Fan',
+        fields: { name: 'Fan nomi', code: 'Kod', department_id: 'Kafedra' },
+      },
+      rooms: {
+        title: 'Auditoriyalar',
+        singular: 'Auditoriya',
+        fields: { name: 'Nomi', building: 'Bino', capacity: 'Sig‘im (o‘rin)' },
+      },
+    } as Record<string, { title: string; singular: string; fields: Record<string, string> }>,
+    crud: {
+      choose: '— tanlang —',
+      deleteBlocked: 'Bu yozuv boshqa ma‘lumotlarga bog‘liq, o‘chirib bo‘lmaydi.',
+      duplicate: 'Bunday yozuv allaqachon mavjud.',
+      required: 'To‘ldirilishi shart:',
+    },
+    users: {
+      teachersTitle: 'O‘qituvchilar',
+      studentsTitle: 'Talabalar',
+      addTeacher: 'O‘qituvchi qo‘shish',
+      addStudent: 'Talaba qo‘shish',
+      fullName: 'F.I.Sh.',
+      email: 'Email (kirish uchun)',
+      code: 'Talaba kodi',
+      group: 'Guruh',
+      department: 'Kafedra',
+      assignments: 'Fanlar va guruhlar',
+      addAssignment: '+ Fan/guruh qo‘shish',
+      subject: 'Fan',
+      status: 'Holat',
+      active: 'faol',
+      inactive: 'faolsiz',
+      resetPassword: 'Parolni tiklash',
+      deactivate: 'Faolsizlantirish',
+      activate: 'Faollashtirish',
+      confirmReset:
+        'Yangi vaqtinchalik parol beriladi, eski parol ishlamay qoladi. Davom etasizmi?',
+      confirmDelete:
+        'Foydalanuvchi VA uning barcha natijalari o‘chadi. Odatda “Faolsizlantirish” yetarli. Haqiqatan o‘chirasizmi?',
+      tempPassword: 'Vaqtinchalik parol (faqat hozir ko‘rinadi):',
+      filterAll: 'Barcha guruhlar',
+      searchPlaceholder: 'Ism yoki kod',
+      limitNote: 'Eng ko‘pi 300 ta ko‘rsatiladi. Qidiruv yoki guruh filtridan foydalaning.',
+      errors: { duplicate: 'Bunday email yoki talaba kodi allaqachon mavjud.' } as Record<
+        string,
+        string
+      >,
+    },
+    settings: {
+      title: 'Sozlamalar',
+      lead: 'Ball qoidalari va vaqtlar. O‘zgarish keyingi savollardan boshlab kuchga kiradi.',
+      saved: 'Saqlandi',
+      items: {
+        max_speed_bonus: {
+          label: 'Tezlik bonusi (maksimum, ball)',
+          hint: 'Faqat to‘g‘ri javobga. 0 = bonus yo‘q. Boshlang‘ich: 10.',
+        },
+        correct_points: {
+          label: 'To‘g‘ri javob uchun ball',
+          hint: 'Jonli ma‘ruza. Boshlang‘ich: 100.',
+        },
+        live_question_seconds: {
+          label: 'Jonli savol vaqti (soniya)',
+          hint: 'Bonus shu vaqt ichida kamayadi. Boshlang‘ich: 30.',
+        },
+        live_grace_ms: {
+          label: 'Tarmoq kechikishi uchun qo‘shimcha vaqt (ms)',
+          hint: 'Sekin internetdagi talaba jazolanmasin. Boshlang‘ich: 1500.',
+        },
+        qr_window_sec: {
+          label: 'QR token yashash vaqti (soniya)',
+          hint: 'Davomat QR-kodi shuncha vaqtda yangilanadi. Boshlang‘ich: 45.',
+        },
+      } as Record<string, { label: string; hint: string }>,
+    },
+  },
+  teacherHome: {
+    title: 'O‘qituvchi paneli',
+    myAssignments: 'Mening fanlarim va guruhlarim',
+    noAssignments: 'Sizga hali fan/guruh biriktirilmagan. Administratorga murojaat qiling.',
+    soon: 'Bu bo‘lim keyingi bosqichlarda qo‘shiladi.',
+  },
+  studentHome: {
+    title: 'Talaba paneli',
+    group: 'Guruh',
+    noGroup: 'Guruhga biriktirilmagan',
+    sections: {
+      assessments: 'Nazoratlar',
+      live: 'Jonli ma‘ruza',
+      results: 'Natijalarim',
+    },
+    soon: 'Hozircha hech narsa yo‘q.',
   },
 } as const
 
