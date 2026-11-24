@@ -21,13 +21,15 @@ export interface SessionRow {
   bonus_enabled: boolean
   confused_enabled: boolean
   share_annotations: boolean
+  focus_seq: number
+  break_started_at: string | null
   started_at: string
   ended_at: string | null
 }
 
 /** Sessiya ustunlari (bir joyda: ro'yxat o'zgarsa hamma so'rov mos keladi). */
 export const SESSION_COLS =
-  'id, lecture_id, created_by, group_id, code, status, current_slide, rev, allow_guests, min_attendance_ratio, top_reactors, show_reactor_names, bonus_enabled, confused_enabled, share_annotations, started_at, ended_at'
+  'id, lecture_id, created_by, group_id, code, status, current_slide, rev, allow_guests, min_attendance_ratio, top_reactors, show_reactor_names, bonus_enabled, confused_enabled, share_annotations, focus_seq, break_started_at, started_at, ended_at'
 
 /**
  * Sessiyani boshqarish huquqi: yaratuvchi o'qituvchi yoki admin. `userClient` — RLS ostida,
@@ -117,6 +119,8 @@ export async function buildSessionState(
     title: String(lec?.title ?? ''),
     question,
     plan,
+    focusSeq: s.focus_seq,
+    onBreak: s.break_started_at !== null,
     settings: {
       allowGuests: s.allow_guests,
       minAttendanceRatio: Number(s.min_attendance_ratio),

@@ -116,6 +116,31 @@ export function useLiveSession(
     broadcast(s)
   }, [apply, broadcast, initial.id])
 
+  /** Talabalarga "hozir yangilang" signali (Realtime ishonchsiz; haqiqiy holat DB'dan olinadi) */
+  const signalRefresh = useCallback(() => {
+    void channel.current?.send({ type: 'broadcast', event: 'focus', payload: {} })
+  }, [])
+
+  const focusCall = useCallback(async () => {
+    const s = await apiJson<SessionState>(`/api/sessions/${initial.id}/focus`, { method: 'POST' })
+    apply(s)
+    broadcast(s)
+    signalRefresh()
+  }, [apply, broadcast, signalRefresh, initial.id])
+
+  const setBreak = useCallback(
+    async (action: 'start' | 'end') => {
+      const s = await apiJson<SessionState>(`/api/sessions/${initial.id}/break`, {
+        method: 'POST',
+        json: { action },
+      })
+      apply(s)
+      broadcast(s)
+      signalRefresh()
+    },
+    [apply, broadcast, signalRefresh, initial.id],
+  )
+
   const end = useCallback(async () => {
     const s = await apiJson<SessionState>(`/api/sessions/${initial.id}/end`, { method: 'POST' })
     apply(s)
@@ -132,5 +157,7 @@ export function useLiveSession(
     closeQuestion,
     applyState: apply,
     next,
+    focusCall,
+    setBreak,
   }
 }

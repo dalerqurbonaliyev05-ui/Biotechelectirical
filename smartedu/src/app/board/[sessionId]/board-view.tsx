@@ -44,6 +44,17 @@ export function BoardView({
     5000,
     onReaction,
   )
+  // "Doskaga qarang" chaqiruvi va tanaffus doskada ham ko'rinadi (talabalar davomati bu yerda hech qachon ko‘rsatilmaydi)
+  const [focusBanner, setFocusBanner] = useState(false)
+  const seenFocus = useRef(state.focusSeq)
+  useEffect(() => {
+    if (state.focusSeq > seenFocus.current) {
+      seenFocus.current = state.focusSeq
+      setFocusBanner(true)
+      const id = setTimeout(() => setFocusBanner(false), 5000)
+      return () => clearTimeout(id)
+    }
+  }, [state.focusSeq])
   const reactions = useReactions(state.id, state.slide, state.status === 'active')
   const root = useRef<HTMLDivElement>(null)
   const [error, setError] = useState(false)
@@ -133,6 +144,17 @@ export function BoardView({
   return (
     <div ref={root} className="flex h-screen flex-col bg-black text-white">
       <div className="relative min-h-0 flex-1">
+        {state.onBreak && (
+          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-4 bg-slate-950/95">
+            <span className="text-9xl">☕</span>
+            <span className="text-6xl font-bold">{t.presence.breakTitle}</span>
+          </div>
+        )}
+        {focusBanner && (
+          <div className="absolute inset-0 z-30 flex items-center justify-center bg-black/80">
+            <span className="text-8xl font-extrabold">👀 {t.presence.focusTitle}</span>
+          </div>
+        )}
         {question ? (
           <BoardQuestion
             question={question}

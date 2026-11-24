@@ -5,6 +5,8 @@ export const SETTING_BOUNDS: Record<string, { min: number; max: number; def: num
   live_question_seconds: { min: 5, max: 600, def: 30 },
   live_grace_ms: { min: 0, max: 10000, def: 1500 },
   qr_window_sec: { min: 15, max: 300, def: 45 },
+  /** Sezgir faollik ma'lumotlari (reaksiya, kuzatish vaqti) shuncha kundan keyin tozalanadi */
+  activity_retention_days: { min: 7, max: 3650, def: 180 },
 }
 
 export interface AppSettings {
@@ -13,6 +15,7 @@ export interface AppSettings {
   live_question_seconds: number
   live_grace_ms: number
   qr_window_sec: number
+  activity_retention_days: number
 }
 
 /** DB'dan kelgan xom qiymatlarni (noto'g'ri bo'lsa ham) xavfsiz oraliqqa keltiradi. */

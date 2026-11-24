@@ -37,6 +37,7 @@ export const BACKUP_TABLES: BackupTable[] = [
   { table: 'session_participants', order: ['id'], omit: ['join_token'] },
   { table: 'attendance', order: ['session_id', 'student_id'] },
   { table: 'session_reactions', order: ['session_id', 'student_id', 'slide_no', 'kind'] },
+  { table: 'session_breaks', order: ['id'] },
   { table: 'session_questions', order: ['id'] },
   { table: 'session_answers', order: ['id'] },
   { table: 'scores', order: ['session_id', 'student_id'] },

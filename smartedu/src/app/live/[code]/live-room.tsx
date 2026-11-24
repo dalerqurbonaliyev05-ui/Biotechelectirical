@@ -39,6 +39,8 @@ interface LiveView {
   rev: number
   page_count: number
   confused_enabled?: boolean
+  focus_seq?: number
+  on_break?: boolean
   isTarget?: boolean
   question: LiveQuestionView | null
   mine: {
@@ -73,6 +75,20 @@ export function LiveRoom({
   const revRef = useRef(0)
   const hasQuestion = useRef(false)
   const chRef = useRef<RealtimeChannel | null>(null)
+  const focusBase = useRef<number | null>(null)
+  const [focusOn, setFocusOn] = useState(false)
+  const [onBreak, setOnBreak] = useState(false)
+
+  // "Doskaga qarang": hisoblagich oshsa — to'liq ekranli chaqiruv (birinchi qiymat faqat boshlang'ich sifatida olinadi)
+  const noteFocus = useCallback((seq: number | undefined) => {
+    if (seq === undefined) return
+    if (focusBase.current === null) focusBase.current = seq
+    else if (seq > focusBase.current) {
+      focusBase.current = seq
+      setFocusOn(true)
+      if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate([200, 100, 200])
+    }
+  }, [])
 
   async function join() {
     setPhase('joining')
@@ -130,11 +146,13 @@ export function LiveRoom({
         revRef.current = v.rev
         hasQuestion.current = Boolean(v.question)
         setView(v)
+        setOnBreak(Boolean(v.on_break))
+        noteFocus(v.focus_seq)
       }
     } catch (err) {
       if (err instanceof ClientApiError && err.code === 'token_replaced') setPhase('replaced')
     }
-  }, [info])
+  }, [info, noteFocus])
 
   useEffect(() => {
     if (!info) return
@@ -151,6 +169,7 @@ export function LiveRoom({
         else setView((v) => (v ? { ...v, slide: ev.slide, rev: ev.rev } : v))
         if (!(ev.q || hasQuestion.current || ev.status === 'ended')) revRef.current = ev.rev
       })
+      .on('broadcast', { event: 'focus' }, () => void refresh()) // signal: haqiqiy holat serverdan olinadi
       .subscribe((st) => setConnected(st === 'SUBSCRIBED'))
     chRef.current = ch
     // Realtime uzilganda zaxira: har 5 s da so'rov (ulangan bo'lsa yubormaymiz)
@@ -277,8 +296,27 @@ export function LiveRoom({
         {info && info.rejoin > 0 && <p className="text-xs text-slate-500">{L.rejoined}</p>}
       </div>
 
+      {focusOn && <FocusOverlay onClose={() => setFocusOn(false)} />}
+      {info && !ended && (
+        <PresenceAgent
+          info={info}
+          onState={(r) => {
+            noteFocus(r.focusSeq)
+            setOnBreak(r.onBreak)
+            if (r.ended) void refresh()
+          }}
+          onReplaced={() => setPhase('replaced')}
+        />
+      )}
+
       {ended ? (
         <FinalCard view={view} />
+      ) : onBreak ? (
+        <div className="card space-y-1 text-center">
+          <p className="text-5xl">☕</p>
+          <p className="text-xl font-semibold">{t.presence.breakTitle}</p>
+          <p className="text-sm text-slate-600">{t.presence.breakNote}</p>
+        </div>
       ) : q && info ? (
         <QuestionCard
           key={q.id}
@@ -655,4 +693,104 @@ function ReactionBar({
       </p>
     </div>
   )
+}
+
+/** "Doskaga qarang!": xira to'liq ekranli chaqiruv (bosib yopiladi, 8 s dan keyin o'zi yopiladi). */
+function FocusOverlay({ onClose }: { onClose: () => void }) {
+  useEffect(() => {
+    const id = setTimeout(onClose, 8000)
+    return () => clearTimeout(id)
+  }, [onClose])
+  return (
+    <button
+      type="button"
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-4 bg-black/85 p-6 text-center text-white"
+      aria-live="assertive"
+    >
+      <span className="text-7xl">👀</span>
+      <span className="text-3xl font-bold">{t.presence.focusTitle}</span>
+      <span className="text-sm text-slate-300">{t.presence.focusDismiss}</span>
+    </button>
+  )
+}
+
+/**
+ * Heartbeat (~20 s) va ekran o'chib qolmasligi (Wake Lock). Brauzer imkoniyatlari bo'lmasa jim o'tadi:
+ * Wake Lock yo'q bo'lsa ham dars ishlaydi (faqat ekran o'zi o'chishi mumkin); vibratsiya ham ixtiyoriy.
+ */
+function PresenceAgent({
+  info,
+  onState,
+  onReplaced,
+}: {
+  info: Joined
+  onState: (r: { focusSeq: number; onBreak: boolean; ended: boolean }) => void
+  onReplaced: () => void
+}) {
+  const onStateRef = useRef(onState)
+  onStateRef.current = onState
+  const onReplacedRef = useRef(onReplaced)
+  onReplacedRef.current = onReplaced
+
+  useEffect(() => {
+    let stop = false
+    const ping = async () => {
+      try {
+        const r = await apiJson<{ focusSeq: number; onBreak: boolean; ended: boolean }>(
+          `/api/live/${info.session_id}/presence`,
+          {
+            method: 'POST',
+            json: { token: info.join_token, visible: document.visibilityState === 'visible' },
+          },
+        )
+        if (!stop) onStateRef.current(r)
+      } catch (err) {
+        if (err instanceof ClientApiError && err.code === 'token_replaced') onReplacedRef.current()
+        // boshqa xatolar: keyingi urinishda (heartbeat bo'lmasa vaqt shunchaki hisoblanmaydi)
+      }
+    }
+    void ping()
+    const timer = setInterval(() => void ping(), 20_000)
+    const onVis = () => void ping() // ko'rinish o'zgarishi darhol qayd qilinadi
+    document.addEventListener('visibilitychange', onVis)
+    return () => {
+      stop = true
+      clearInterval(timer)
+      document.removeEventListener('visibilitychange', onVis)
+    }
+  }, [info.session_id, info.join_token])
+
+  // Wake Lock: qo'llab-quvvatlanmasa yoki rad etilsa — e'tiborsiz
+  useEffect(() => {
+    let lock: { release: () => Promise<void> } | null = null
+    let stop = false
+    const acquire = async () => {
+      try {
+        const wl = (
+          navigator as unknown as {
+            wakeLock?: { request: (t: 'screen') => Promise<{ release: () => Promise<void> }> }
+          }
+        ).wakeLock
+        if (!wl || document.visibilityState !== 'visible') return
+        const l = await wl.request('screen')
+        if (stop) void l.release()
+        else lock = l
+      } catch {
+        /* qo'llab-quvvatlanmaydi / batareya tejash rejimi */
+      }
+    }
+    void acquire()
+    const onVis = () => {
+      if (document.visibilityState === 'visible') void acquire()
+    }
+    document.addEventListener('visibilitychange', onVis)
+    return () => {
+      stop = true
+      document.removeEventListener('visibilitychange', onVis)
+      void lock?.release().catch(() => undefined)
+    }
+  }, [])
+
+  return null
 }

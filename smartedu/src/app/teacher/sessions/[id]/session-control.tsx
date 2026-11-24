@@ -24,8 +24,18 @@ export function SessionControl({
   pdfUrl: string
   siteUrl: string
 }) {
-  const { state, connected, setSlide, end, openQuestion, closeQuestion, applyState, next } =
-    useLiveSession(initial)
+  const {
+    state,
+    connected,
+    setSlide,
+    end,
+    openQuestion,
+    closeQuestion,
+    applyState,
+    next,
+    focusCall,
+    setBreak,
+  } = useLiveSession(initial)
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
   const active = state.status === 'active'
@@ -78,6 +88,23 @@ export function SessionControl({
           <Link href={`/teacher/sessions/${state.id}/attendance`} className="btn-secondary">
             {t.attendance.open}
           </Link>
+          <Link href={`/teacher/sessions/${state.id}/nb`} className="btn-secondary">
+            {t.presence.nbOpen}
+          </Link>
+          {active && (
+            <button className="btn-secondary" disabled={busy} onClick={() => run(focusCall)}>
+              👀 {t.presence.focusBtn}
+            </button>
+          )}
+          {active && (
+            <button
+              className="btn-secondary"
+              disabled={busy}
+              onClick={() => run(() => setBreak(state.onBreak ? 'end' : 'start'))}
+            >
+              ☕ {state.onBreak ? t.presence.breakEnd : t.presence.breakStart}
+            </button>
+          )}
           {active && (
             <Link href={`/board/${state.id}`} target="_blank" className="btn-primary">
               {L.openBoard}

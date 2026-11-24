@@ -299,7 +299,7 @@ Har yozuv: **nima** → **nima uchun** → **qanday o'zgartirish mumkin**.
 
 ## v2 · 9-bosqich — reaksiyalar va eng faol talabaga bonus savol
 
-- **Ikki kanal:** har bosishda doskaga darhol Realtime *signali* ketadi (faqat animatsiya, ishonchsiz: doska uni
+- **Ikki kanal:** har bosishda doskaga darhol Realtime _signali_ ketadi (faqat animatsiya, ishonchsiz: doska uni
   soniyasiga ~8 tagacha qabul qiladi). Haqiqiy hisob esa talaba telefonida yig'ilib, **~5 s da bir paket**
   bo'lib `POST /api/live/[sessionId]/reaction` orqali DB'ga yoziladi; doska/boshqaruv DB'dan har 4 s da o'qiydi.
 - **Spamga qarshi 3 qatlam:** mijozda bosishlar orasida ≥400 ms va paketda ≤5; serverda daqiqasiga 30 paket;
@@ -316,3 +316,19 @@ Har yozuv: **nima** → **nima uchun** → **qanday o'zgartirish mumkin**.
   Reaksiya yo'q bo'lsa bonus savol o'tkazib yuboriladi (slayd almashadi).
 - **Cheklov:** realtime signal ishonchsiz bo'lgani uchun animatsiya hajmi haqiqiy bosishlar sonini aks ettirmasligi
   mumkin; son DB'dan keladi. Supabase E2E bilan sinalmagan.
+
+## v2 · 10-bosqich — "Doskaga qarang", faollik, tanaffus, NB
+
+- **Hisob serverda, vaqt serverniki.** Heartbeat (~20 s) `app_presence_ping` ga boradi; oraliq 120 s dan oshsa (qurilma uxlagan)
+  hisoblanmaydi, tanaffus bilan kesishgan qism ayriladi. Dars tugaganda `finalizeAttendance` (toza `lib/presence.ts`, Vitest bilan
+  sinalgan) har bir ishtirokchi uchun nisbat va holatni (`present`/`nb`) `attendance` ga yozadi; qo'shilmagan guruh a'zolari ham NB.
+- **Auditoriya vs masofa:** auditoriyadagi talabaning telefoni uxlab qolsa "yo'q" bo'lib qolmasin deb, u QR bilan kelgan paytdan
+  dars oxirigacha hisoblanadi (cheklov: erta ketish ko'rinmaydi — `docs/limitations.md`). Masofaviy talaba — faqat ko'rinib turgan vaqt.
+- **NB faqat o'qituvchida:** alohida sahifa `/teacher/sessions/[id]/nb` (RLS ostidagi `findControlledSession`), doska holati va
+  doska API'lari davomat ma'lumotini umuman o'qimaydi (`tests/nb-privacy.test.ts` shuni tekshiradi). Qo'lda tuzatish sabab bilan
+  (majburiy) va `audit_log` ga yoziladi; avtomatik holat saqlanadi, tuzatish alohida ustunda.
+- **"Doskaga qarang":** `focus_seq` hisoblagichi (+ Realtime "yangilang" signali, + heartbeat javobida zaxira). Telefonda xira
+  to'liq ekran, tebranish (bor joyda), Wake Lock. Doskada ham 5 s banner.
+- **Tanaffus:** `session_breaks`; davomiylikdan ayriladi, heartbeat shu vaqtda hisoblamaydi; doska "Tanaffus" ko'rsatadi.
+- **Saqlash muddati:** `activity_retention_days` (7–3650, standart 180). Kunlik cron reaksiya/vaqt hisoblagichlarini o'chiradi,
+  davomat holati qoladi.

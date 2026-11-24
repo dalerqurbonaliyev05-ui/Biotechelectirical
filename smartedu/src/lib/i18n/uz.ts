@@ -249,6 +249,10 @@ export const uz = {
           label: 'Tarmoq kechikishi uchun qo‘shimcha vaqt (ms)',
           hint: 'Sekin internetdagi talaba jazolanmasin. Boshlang‘ich: 1500.',
         },
+        activity_retention_days: {
+          label: 'Faollik ma‘lumotini saqlash muddati (kun)',
+          hint: 'Reaksiyalar va kuzatish vaqti shuncha kundan keyin o‘chadi; davomat holati (qatnashdi/NB) qoladi. Boshlang‘ich: 180.',
+        },
         qr_window_sec: {
           label: 'QR token yashash vaqti (soniya)',
           hint: 'Davomat QR-kodi shuncha vaqtda yangilanadi. Boshlang‘ich: 45.',
@@ -654,6 +658,33 @@ export const uz = {
       'Slaydga yetganda savol avtomatik ochiladi; vaqt tugagach doska uni yopib, natijani ko‘rsatadi.',
     ctlTop: 'Eng yaxshi 5 ta',
   },
+  presence: {
+    focusTitle: 'Doskaga qarang!',
+    focusBtn: 'Doskaga qarang',
+    focusDismiss: 'Yopish',
+    breakTitle: 'Tanaffus',
+    breakNote: 'Tanaffus vaqti qatnashish hisobiga kirmaydi.',
+    breakStart: 'Tanaffus boshlash',
+    breakEnd: 'Tanaffusni tugatish',
+    nbTitle: 'NB ro‘yxati',
+    nbLead:
+      'Faqat siz ko‘rasiz: bu ro‘yxat doskada va talabalarda (boshqalarniki) hech qachon ko‘rsatilmaydi.',
+    nbEmpty: 'NB belgilangan talaba yo‘q.',
+    nbOpen: 'NB ro‘yxati',
+    ratio: 'Qatnashish',
+    minutes: 'daq.',
+    auto: 'avtomatik',
+    manual: 'qo‘lda',
+    status: { present: 'qatnashdi', nb: 'NB' } as Record<string, string>,
+    makePresent: 'Qatnashdi deb belgilash',
+    makeNb: 'NB deb belgilash',
+    reasonPlaceholder: 'Sabab (majburiy, auditga yoziladi)',
+    saved: 'Saqlandi',
+    legend:
+      'NB — dars vaqtining belgilangan ulushidan (standart 80%) kamida qatnashmagan. Auditoriyadagi talaba QR bilan kelgan paytdan hisoblanadi; masofadagi talaba esa faqat sahifa ko‘rinib turgan vaqt uchun.',
+    student: 'Talaba',
+    group: 'Guruh',
+  },
   reactions: {
     title: 'Darsga munosabat',
     understood: 'Tushundim',
@@ -821,7 +852,7 @@ export const uz = {
       'Mehmon faqat shu darsga kiradi. Natijalaringiz o‘qituvchi sizni ro‘yxatdagi talabaga bog‘lagandan keyin hisobingizga o‘tadi.',
     loginInstead: 'Hisobim bor — kirish',
     notice:
-      'Dars davomida sahifada bo‘lgan vaqtingiz hisoblanadi: sahifa ochiq turishi, boshqa oynaga o‘tib ketish va qaytish qayd qilinadi, “Tushundim” bosishlaringiz sanaladi. Bu ma‘lumotni faqat shu dars o‘qituvchisi va (o‘z qismingizni) siz ko‘rasiz. Yetarli qatnashmagan bo‘lsangiz “NB” bo‘lishingiz mumkin; yakuniy qaror o‘qituvchida.',
+      'Dars davomida sahifada bo‘lgan vaqtingiz hisoblanadi: sahifa ochiq va ko‘rinib turgan vaqt (har ~20 soniyada tekshiriladi), boshqa oynaga o‘tib ketish va qaytish qayd qilinadi, “Tushundim/Tushunmadim” bosishlaringiz sanaladi. Tanaffus vaqti hisobga olinmaydi. Dars vaqtining kamida 80 foizida qatnashmasangiz “NB” belgilanishi mumkin; yakuniy qaror o‘qituvchida va uni qo‘lda o‘zgartira oladi. Bu ma‘lumotni faqat shu dars o‘qituvchisi va (o‘z qismingizni) siz ko‘rasiz, doskada hech qachon ko‘rsatilmaydi va belgilangan muddatdan keyin (standart 180 kun) o‘chiriladi.',
     noticeTitle: 'Qatnashish qanday kuzatiladi',
     accept: 'Tushundim, qo‘shilish',
   },

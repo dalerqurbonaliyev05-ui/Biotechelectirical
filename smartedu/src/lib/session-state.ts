@@ -24,6 +24,10 @@ export interface SessionState {
   question: LiveQuestionView | null
   /** Ma'ruzaga rejalashtirilgan savollar va ularning so'ralgan/so'ralmaganligi */
   plan: PlanItem[]
+  /** "Doskaga qarang" chaqiruvlari soni (oshsa — yangi chaqiruv) */
+  focusSeq: number
+  /** Tanaffus davom etyapti */
+  onBreak: boolean
   /** O'qituvchi sozlamalari (maxfiy emas) */
   settings: {
     allowGuests: boolean

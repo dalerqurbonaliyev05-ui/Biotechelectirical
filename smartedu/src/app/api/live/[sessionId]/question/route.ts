@@ -19,7 +19,9 @@ export const GET = handle<{ sessionId: string }>(async (req, { params }) => {
 
   const { data: s } = await admin
     .from('lecture_sessions')
-    .select('id, current_slide, status, rev, confused_enabled, lectures(page_count)')
+    .select(
+      'id, current_slide, status, rev, confused_enabled, focus_seq, break_started_at, lectures(page_count)',
+    )
     .eq('id', sessionId)
     .single()
   const base = {
@@ -27,6 +29,8 @@ export const GET = handle<{ sessionId: string }>(async (req, { params }) => {
     status: s?.status as string,
     rev: s?.rev as number,
     confused_enabled: Boolean(s?.confused_enabled),
+    focus_seq: Number(s?.focus_seq ?? 0),
+    on_break: Boolean(s?.break_started_at),
     page_count: (s?.lectures as unknown as { page_count: number } | null)?.page_count ?? 1,
   }
 
