@@ -120,3 +120,21 @@ select pg_temp.expect('talaba2/boshqa talaba lab natijasini ko''ra olmaydi',
   (select count(*) from public.lab_results where student_id = '00000000-0000-0000-0000-000000000101'), 0);
 reset role;
 rollback;
+
+-- 5) RLS yordamchi funksiyalari: anon chaqira olmaydi, authenticated chaqira oladi (siyosatlar ularga tayanadi)
+do $$
+declare r record; n integer := 0;
+begin
+  for r in select p.oid, p.proname from pg_proc p join pg_namespace ns on ns.oid = p.pronamespace
+           where ns.nspname = 'public' and p.prosecdef and (p.proname not like 'app\_%' or p.proname = 'app_role') loop
+    n := n + 1;
+    if has_function_privilege('anon', r.oid, 'execute') then
+      raise exception 'TEST YIQILDI: yordamchi funksiya % anonimga ochiq', r.proname;
+    end if;
+    if not has_function_privilege('authenticated', r.oid, 'execute') then
+      raise exception 'TEST YIQILDI: yordamchi funksiya % authenticated uchun yopiq (RLS buziladi)', r.proname;
+    end if;
+  end loop;
+  if n < 17 then raise exception 'TEST YIQILDI: yordamchi funksiyalar kam topildi (%)', n; end if;
+  raise notice 'ok  - RLS yordamchi funksiyalari: anon yopiq, authenticated ochiq (% ta)', n;
+end $$;

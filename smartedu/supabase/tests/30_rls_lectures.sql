@@ -19,8 +19,8 @@ insert into storage.objects (bucket_id, name) values
   ('lectures', '00000000-0000-0000-0000-0000000000b1/a.pdf'),
   ('lectures', '00000000-0000-0000-0000-0000000000b2/b.pdf');
 
-select pg_temp.expect('bucket: shaxsiy va faqat PDF',
-  (select count(*) from storage.buckets where id = 'lectures' and not public and allowed_mime_types = array['application/pdf']), 1);
+select pg_temp.expect('bucket: shaxsiy; faqat PDF va JPEG (miniatura)',
+  (select count(*) from storage.buckets where id = 'lectures' and not public and allowed_mime_types = array['application/pdf', 'image/jpeg']), 1);
 
 set local role authenticated;
 select pg_temp.as_user('00000000-0000-0000-0000-000000000101');
