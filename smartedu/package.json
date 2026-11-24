@@ -10,11 +10,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:rls": "bash scripts/test-rls.sh",
+    "smoke": "bash scripts/smoke.sh",
     "format": "prettier --write ."
   },
   "dependencies": {

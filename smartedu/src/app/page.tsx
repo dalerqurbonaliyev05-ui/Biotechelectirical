@@ -1,7 +1,16 @@
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
+import { isSupabaseConfigured } from '@/lib/env'
 import { t } from '@/lib/i18n'
+import { getSessionProfile } from '@/lib/server/session'
+import { ROLE_HOME } from '@/lib/types'
 
-export default function HomePage() {
+export default async function HomePage() {
+  if (isSupabaseConfigured()) {
+    const profile = await getSessionProfile()
+    if (profile)
+      redirect(profile.must_change_password ? '/change-password' : ROLE_HOME[profile.role])
+  }
   return (
     <main className="mx-auto flex min-h-screen max-w-3xl flex-col justify-center gap-8 px-4 py-12">
       <div>
