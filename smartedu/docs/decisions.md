@@ -110,3 +110,19 @@ Har yozuv: **nima** → **nima uchun** → **qanday o'zgartirish mumkin**.
 6. **Eksport:** CSV (BOM + formula-inyeksiyadan himoya) va Excel. Ustunlar savollar bo'yicha (tasodifiy tanlov
    bo'lsa, talaba olmagan savol bo'sh). O'qituvchi faqat o'z nazoratini oladi (RLS).
 7. **Anonim baholash:** yozma javoblarni baholashda ismlar standart yashirin (#1, #2 ...), xohlasa ko'rsatiladi.
+
+## 5-bosqich: ma'ruza va PDF
+
+1. **PDF brauzerda yuklanadi (Storage'ga to'g'ridan-to'g'ri)**, shaxsiy bucket (`lectures`, 50 MB, faqat
+   `application/pdf`). Storage RLS: o'qituvchi faqat `<o'z_id>/` papkasiga yozadi/o'qiydi. Server (Vercel)
+   fayl oqimini ko'tarmaydi — bepul tarifda funksiya hajm/vaqt chegarasi bor.
+2. **Haqiqiy PDF tekshiruvi:** yuklashdan oldin pdf.js bilan ochiladi (betlar soni ham shundan olinadi);
+   PowerPoint/boshqa fayl rad etiladi va "PDF ga o'tkazing" xabari chiqadi. Server esa yo'l formati
+   (`<uid>/<fayl>.pdf`) va fayl Storage'da borligini tekshiradi.
+3. **PDF'ni ko'rsatish:** server qisqa muddatli (1 soat) imzolangan havola beradi, faqat ma'ruza egasi/
+   o'qituvchi/admin ga. Talabalar PDF ni olmaydi (doskada ko'rinadi). pdf.js "legacy" build — eski brauzerlar uchun.
+   Haqiqiy Chromium'da sinalgan (matn va grafika to'g'ri chizildi, konsol xatosi yo'q).
+4. **Jonli savol turlari:** faqat `mcq` va `numeric` (avtomatik tekshiriladi). `short_text`/`lab_task` jonli
+   rejimda ma'noga ega emas. Raqamli savolda butun auditoriyaga BIR XIL qiymatlar (doskada ko'rinishi uchun).
+5. **Slaydga biriktirish `lecture_questions` da (reja)**; dars paytida `session_questions` ga nusxalanadi (6–8-bosqich).
+6. **Ma'ruza o'chirilsa** Storage'dagi fayl ham o'chadi; dars (sessiya) o'tkazilgan ma'ruza o'chirilmaydi (FK restrict).
