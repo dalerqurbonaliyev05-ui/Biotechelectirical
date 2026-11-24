@@ -4,7 +4,7 @@
   "yonalish": "avtomatika",
   "daraja": 4,
   "vaqt_min": 25,
-  "rejimlar": ["2d"],
+  "rejimlar": ["2d", "3d"],
   "nomi": {
     "uz": "Avtomatika 1: solenoid klapan — taymer va qo‘lda boshqarish",
     "ru": "Автоматика 1: электромагнитный клапан — таймер и ручное управление",
@@ -106,18 +106,18 @@
   "maslahatlar": {
     "uz": [
       "Saqlagich chiqishidagi faza: avariya tugmasining NC kontakti (11) va vaqt kalitining L klemmasi.",
-      "SB0.12 dan: selektorning ikkala bloki (13 va 23) va rele kontaktining umumiy 11-klemmasi.",
-      "SA1.14 → SB1 (23–24) → K1.A1; SA1.24 → KT1 kontakti (1–2) → K1.A1. K1.14 → klapan va signal lampa."
+      "SB0.12 dan: selektorning ikkala bloki (I (13) va II (23)) va rele kontaktining umumiy COM1 (11) klemmasi.",
+      "SA1.I(14) → SB1 (NO 23–24) → K1.A1; SA1.II(24) → KT1 kontakti (1–2) → K1.A1. K1.NO1(14) → klapan va signal lampa."
     ],
     "ru": [
       "Фаза с предохранителя: НЗ контакт аварийной кнопки (11) и клемма L таймера.",
-      "С SB0.12: оба блока селектора (13 и 23) и общий контакт реле 11.",
-      "SA1.14 → SB1 (23–24) → K1.A1; SA1.24 → контакт таймера (1–2) → K1.A1. K1.14 → клапан и сигнальная лампа."
+      "С SB0.12: оба блока селектора (I (13) и II (23)) и общий контакт реле 11.",
+      "SA1.I(14) → SB1 (NO 23–24) → K1.A1; SA1.II(24) → контакт таймера (1–2) → K1.A1. K1.NO1(14) → клапан и сигнальная лампа."
     ],
     "en": [
       "Phase from the fuse: E-stop NC contact (11) and the time-switch terminal L.",
-      "From SB0.12: both selector blocks (13 and 23) and relay common 11.",
-      "SA1.14 → SB1 (23–24) → K1.A1; SA1.24 → time-switch contact (1–2) → K1.A1. K1.14 → valve and pilot light."
+      "From SB0.12: both selector blocks (I (13) and II (23)) and relay common 11.",
+      "SA1.I(14) → SB1 (NO 23–24) → K1.A1; SA1.II(24) → time-switch contact (1–2) → K1.A1. K1.NO1(14) → valve and pilot light."
     ]
   }
 }

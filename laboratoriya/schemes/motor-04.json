@@ -1,7 +1,7 @@
 {
   "versiya": 1,
   "rang_rejimi": "3f",
-  "rejimlar": ["2d"],
+  "rejimlar": ["2d", "3d"],
   "id": "motor-04",
   "yonalish": "motorlar",
   "daraja": 4,
@@ -17,8 +17,8 @@
     "en": "Two contactors swap the phase order; NC contacts stop them closing together."
   },
   "topshiriq": {
-    "uz": "KM1 — oldinga, KM2 — orqaga. KM2 chiqishida L1 va L3 fazalari almashtiriladi. Elektr blokirovka: KM1 g‘altagi KM2 ning 21–22 (NC) kontakti orqali, KM2 g‘altagi KM1 ning 21–22 kontakti orqali. Himoya: issiqlik relesi KK1.",
-    "ru": "KM1 — вперёд, KM2 — назад. На выходе KM2 фазы L1 и L3 меняются местами. Электрическая блокировка: катушка KM1 через НЗ 21–22 KM2, катушка KM2 через НЗ 21–22 KM1. Защита — тепловое реле KK1.",
+    "uz": "KM1 — oldinga, KM2 — orqaga. KM2 chiqishida L1 va L3 fazalari almashtiriladi. Elektr blokirovka: KM1 g‘altagi KM2 ning NC 21–22 kontakti orqali, KM2 g‘altagi KM1 ning NC 21–22 kontakti orqali. Himoya: issiqlik relesi KK1.",
+    "ru": "KM1 — вперёд, KM2 — назад. На выходе KM2 фазы L1 и L3 меняются местами. Электрическая блокировка: катушка KM1 через НЗ NC 21–22 KM2, катушка KM2 через НЗ NC 21–22 KM1. Защита — тепловое реле KK1.",
     "en": "KM1 is forward, KM2 reverse. At the KM2 output phases L1 and L3 are swapped. Electrical interlock: KM1 coil through KM2 NC 21–22, KM2 coil through KM1 NC 21–22. Protection: overload relay KK1."
   },
   "elementlar": [
@@ -102,18 +102,18 @@
   "maslahatlar": {
     "uz": [
       "QF1 chiqishlari ikkala kontaktorning L1, L2, L3 klemmalariga parallel boradi.",
-      "Fazalarni almashtirish: KM1.T1 + KM2.T3 → KK1.1; KM1.T2 + KM2.T2 → KK1.3; KM1.T3 + KM2.T1 → KK1.5.",
-      "Blokirovka: SB2.24 → KM2.21, KM2.22 → KM1.A1; SB3.24 → KM1.21, KM1.22 → KM2.A1."
+      "Fazalarni almashtirish: KM1.T1 + KM2.T3 → KK1.L1; KM1.T2 + KM2.T2 → KK1.L2; KM1.T3 + KM2.T1 → KK1.L3.",
+      "Blokirovka: SB2.24 → KM2.NC(21), KM2.NC(22) → KM1.A1; SB3.24 → KM1.NC(21), KM1.NC(22) → KM2.A1."
     ],
     "ru": [
       "Выходы QF1 параллельно на L1, L2, L3 обоих контакторов.",
-      "Смена фаз: KM1.T1 + KM2.T3 → KK1.1; KM1.T2 + KM2.T2 → KK1.3; KM1.T3 + KM2.T1 → KK1.5.",
-      "Блокировка: SB2.24 → KM2.21, KM2.22 → KM1.A1; SB3.24 → KM1.21, KM1.22 → KM2.A1."
+      "Смена фаз: KM1.T1 + KM2.T3 → KK1.L1; KM1.T2 + KM2.T2 → KK1.L2; KM1.T3 + KM2.T1 → KK1.L3.",
+      "Блокировка: SB2.24 → KM2.NC(21), KM2.NC(22) → KM1.A1; SB3.24 → KM1.NC(21), KM1.NC(22) → KM2.A1."
     ],
     "en": [
       "QF1 outputs go in parallel to L1, L2, L3 of both contactors.",
-      "Phase swap: KM1.T1 + KM2.T3 → KK1.1; KM1.T2 + KM2.T2 → KK1.3; KM1.T3 + KM2.T1 → KK1.5.",
-      "Interlock: SB2.24 → KM2.21, KM2.22 → KM1.A1; SB3.24 → KM1.21, KM1.22 → KM2.A1."
+      "Phase swap: KM1.T1 + KM2.T3 → KK1.L1; KM1.T2 + KM2.T2 → KK1.L2; KM1.T3 + KM2.T1 → KK1.L3.",
+      "Interlock: SB2.24 → KM2.NC(21), KM2.NC(22) → KM1.A1; SB3.24 → KM1.NC(21), KM1.NC(22) → KM2.A1."
     ]
   }
 }

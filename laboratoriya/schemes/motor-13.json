@@ -1,7 +1,7 @@
 {
   "versiya": 1,
   "rang_rejimi": "3f",
-  "rejimlar": ["2d"],
+  "rejimlar": ["2d", "3d"],
   "id": "motor-13",
   "yonalish": "motorlar",
   "daraja": 4,
@@ -79,19 +79,19 @@
   "xato_qoidalari": [{"tur": "pe_ulangan", "klemmalar": ["M1.PE", "UZ1.PE"]}, {"tur": "sim_rangi"}],
   "maslahatlar": {
     "uz": [
-      "VVOD.L1 dan QF1.1 va QF2.1 ga; VVOD.N → QF2.3. QF1 chiqishlari → UZ1 ning R, S, T klemmalari.",
+      "VVOD.L1 dan QF1.L1(1) va QF2.L(1) ga; VVOD.N → QF2.N(3). QF1 chiqishlari → UZ1 ning R, S, T klemmalari.",
       "UZ1 ning U, V, W chiqishlari → motorning U, V, W klemmalari. PE: VVOD → UZ1 → motor.",
-      "Pult: QF2.2 → A1.L, QF2.4 → A1.N; A1.COM → UZ1.COM, A1.K1 → UZ1.DI1, A1.K2 → UZ1.DI2."
+      "Pult: QF2.L(2) → A1.L, QF2.N(4) → A1.N; A1.COM → UZ1.COM, A1.K1 → UZ1.DI1, A1.K2 → UZ1.DI2."
     ],
     "ru": [
-      "С VVOD.L1 — на QF1.1 и QF2.1; VVOD.N → QF2.3. Выходы QF1 → клеммы R, S, T UZ1.",
+      "С VVOD.L1 — на QF1.L1(1) и QF2.L(1); VVOD.N → QF2.N(3). Выходы QF1 → клеммы R, S, T UZ1.",
       "Выходы U, V, W UZ1 → клеммы U, V, W двигателя. PE: VVOD → UZ1 → двигатель.",
-      "Пульт: QF2.2 → A1.L, QF2.4 → A1.N; A1.COM → UZ1.COM, A1.K1 → UZ1.DI1, A1.K2 → UZ1.DI2."
+      "Пульт: QF2.L(2) → A1.L, QF2.N(4) → A1.N; A1.COM → UZ1.COM, A1.K1 → UZ1.DI1, A1.K2 → UZ1.DI2."
     ],
     "en": [
-      "From VVOD.L1 to QF1.1 and QF2.1; VVOD.N → QF2.3. QF1 outputs → UZ1 R, S, T.",
+      "From VVOD.L1 to QF1.L1(1) and QF2.L(1); VVOD.N → QF2.N(3). QF1 outputs → UZ1 R, S, T.",
       "UZ1 outputs U, V, W → motor U, V, W. PE: VVOD → UZ1 → motor.",
-      "Remote: QF2.2 → A1.L, QF2.4 → A1.N; A1.COM → UZ1.COM, A1.K1 → UZ1.DI1, A1.K2 → UZ1.DI2."
+      "Remote: QF2.L(2) → A1.L, QF2.N(4) → A1.N; A1.COM → UZ1.COM, A1.K1 → UZ1.DI1, A1.K2 → UZ1.DI2."
     ]
   }
 }

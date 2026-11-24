@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Simulyator — Laboratoriya | EnergyVibe</title>
+<meta name="description" content="Elektr sxemalarini 2D va 3D ko‘rinishda yig‘ish, tekshirish va o‘rganish uchun trenajor.">
+<meta name="theme-color" content="#eceef2">
+<link rel="icon" type="image/png" href="/rasmlar1/rasm5/rasm4.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/laboratoriya/lab.css">
+</head>
+<body class="oq">
+<a class="skip-link" href="#main">↓</a>
+<header class="site-head">
+  <div class="sh-bar">
+    <a class="logo" href="/" aria-label="EnergyVibe">
+      <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#09090b"/><path d="M13.2 4.5 7.6 13h4l-1 6.5L16.4 11h-4l.8-6.5Z" fill="#fff"/></svg>
+      <span>ENERGYVIBE <i>/ LAB</i></span>
+    </a>
+    <nav class="nav-menu" id="nav-menu" aria-label="Menyu">
+      <a href="/" data-i18n="nav.home">Bosh sahifa</a>
+      <a href="/#tools" data-i18n="nav.tools">Vositalar</a>
+      <a href="/#apps" data-i18n="nav.apps">Ilovalar</a>
+      <a href="/laboratoriya/" data-i18n="nav.lab">Laboratoriya</a>
+      <a href="/laboratoriya/simulyator/" aria-current="page" data-i18n="nav.sim">Simulyator</a>
+    </nav>
+    <div class="nav-right">
+      <div class="lang-switch" role="group" aria-label="Til / Language / Язык">
+        <button type="button" class="lang-btn" data-lang="uz" aria-pressed="true">UZ</button>
+        <button type="button" class="lang-btn" data-lang="ru" aria-pressed="false">RU</button>
+        <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <a class="btn qora" href="/laboratoriya/" data-i18n="s.orqaga">← Laboratoriya</a>
+      <button type="button" class="hamburger" id="hamburger" data-i18n-aria="nav.menu" aria-label="Menyu" aria-expanded="false" aria-controls="nav-menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="sec wrap sim-sahifa" id="sxemalar">
+    <div class="sec-head">
+      <span class="eyebrow acc" data-i18n="k.sim_sec">// Simulyator</span>
+      <h1 data-i18n="s.h1">Simulyator</h1>
+      <p data-i18n="s.lead">Sxemani tanlang.</p>
+    </div>
+    <div class="filtrlar" aria-label="Filtr">
+      <div class="filtr"><span class="filtr-nom" data-i18n="filtr.yonalish">Yo‘nalish</span><div class="chips" id="f-yonalish"></div></div>
+      <div class="filtr"><span class="filtr-nom" data-i18n="filtr.daraja">Daraja</span><div class="chips" id="f-daraja"></div></div>
+      <div class="filtr"><span class="filtr-nom" data-i18n="filtr.rejim">Rejim</span><div class="chips" id="f-rejim"></div></div>
+    </div>
+    <div class="karta-grid" id="kartalar" aria-live="polite">
+      <p class="bosh-holat" data-i18n="katalog.yuklanmoqda">Sxemalar yuklanmoqda…</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-foot wrap">
+  <span>© 2026 <span data-i18n="k.foot">EnergyVibe Laboratoriya</span></span>
+  <span><a href="/" data-i18n="nav.home">Bosh sahifa</a> · <a href="/laboratoriya/" data-i18n="nav.lab">Laboratoriya</a></span>
+</footer>
+<script type="module" src="/laboratoriya/katalog.js"></script>
+</body>
+</html>

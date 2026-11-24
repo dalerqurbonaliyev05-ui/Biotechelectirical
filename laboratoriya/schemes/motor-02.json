@@ -1,7 +1,7 @@
 {
   "versiya": 1,
   "rang_rejimi": "3f",
-  "rejimlar": ["2d"],
+  "rejimlar": ["2d", "3d"],
   "id": "motor-02",
   "yonalish": "motorlar",
   "daraja": 3,
@@ -17,9 +17,9 @@
     "en": "Power and control breakers, overload relay and three lamps: supply, run, trip."
   },
   "topshiriq": {
-    "uz": "Motor KM1 va issiqlik relesi KK1 orqali ulanadi. Boshqaruv QF2 dan: KK1 (95–96) → Stop → Start (+ KM1 13–14) → KM1 g‘altagi. HL1 (sariq) — boshqaruvda kuchlanish bor; HL2 (yashil) — KM1 33–34 orqali, motor ishlaydi; HL3 (qizil) — KK1 97–98 orqali, ortiqcha yuk.",
-    "ru": "Двигатель подключён через KM1 и тепловое реле KK1. Управление от QF2: KK1 (95–96) → Стоп → Пуск (+ KM1 13–14) → катушка KM1. HL1 (жёлтая) — напряжение в цепи управления; HL2 (зелёная) — через KM1 33–34, двигатель работает; HL3 (красная) — через KK1 97–98, перегрузка.",
-    "en": "The motor is fed through KM1 and overload relay KK1. Control from QF2: KK1 (95–96) → Stop → Start (+ KM1 13–14) → KM1 coil. HL1 (yellow) — control voltage present; HL2 (green) — via KM1 33–34, motor running; HL3 (red) — via KK1 97–98, overload."
+    "uz": "Motor KM1 va issiqlik relesi KK1 orqali ulanadi. Boshqaruv QF2 dan: KK1 (NC 95–96) → Stop → Start (+ KM1 NO 13–14) → KM1 g‘altagi. HL1 (sariq) — boshqaruvda kuchlanish bor; HL2 (yashil) — KM1 NO 33–34 orqali, motor ishlaydi; HL3 (qizil) — KK1 NO 97–98 orqali, ortiqcha yuk.",
+    "ru": "Двигатель подключён через KM1 и тепловое реле KK1. Управление от QF2: KK1 (NC 95–96) → Стоп → Пуск (+ KM1 NO 13–14) → катушка KM1. HL1 (жёлтая) — напряжение в цепи управления; HL2 (зелёная) — через KM1 NO 33–34, двигатель работает; HL3 (красная) — через KK1 NO 97–98, перегрузка.",
+    "en": "The motor is fed through KM1 and overload relay KK1. Control from QF2: KK1 (NC 95–96) → Stop → Start (+ KM1 NO 13–14) → KM1 coil. HL1 (yellow) — control voltage present; HL2 (green) — via KM1 NO 33–34, motor running; HL3 (red) — via KK1 NO 97–98, overload."
   },
   "elementlar": [
     {"id": "VVOD", "tur": "manba_3f", "pozitsiya2d": [300, 60]},
@@ -97,19 +97,19 @@
   "xato_qoidalari": [{"tur": "pe_ulangan", "klemmalar": ["M1.PE"]}, {"tur": "sim_rangi"}],
   "maslahatlar": {
     "uz": [
-      "Kuch: QF1 → KM1 (L) → KM1 (T) → KK1 (1-3-5) → KK1 (2-4-6) → motor.",
-      "QF2 chiqishidagi faza: KK1.95, KK1.97, KM1.33 va HL1.X1 — bitta nuqta. Nol (QF2.4): KM1.A2 va barcha lampalarning X2 klemmasi.",
-      "KK1.96 → SB1.11; SB1.12 → SB2.23 va KM1.13; SB2.24 → KM1.14 va KM1.A1. KM1.34 → HL2; KK1.98 → HL3."
+      "Kuch: QF1 → KM1 (L) → KM1 (T) → KK1 (L1-L2-L3) → KK1 (T1-T2-T3) → motor.",
+      "QF2 chiqishidagi faza: KK1.NC(95), KK1.NO(97), KM1.NO(33) va HL1.X1 — bitta nuqta. Nol (QF2.N(4)): KM1.A2 va barcha lampalarning X2 klemmasi.",
+      "KK1.NC(96) → SB1.11; SB1.12 → SB2.23 va KM1.NO(13); SB2.24 → KM1.NO(14) va KM1.A1. KM1.NO(34) → HL2; KK1.NO(98) → HL3."
     ],
     "ru": [
-      "Сила: QF1 → KM1 (L) → KM1 (T) → KK1 (1-3-5) → KK1 (2-4-6) → двигатель.",
-      "Фаза с QF2: KK1.95, KK1.97, KM1.33 и HL1.X1 — одна точка. Ноль (QF2.4): KM1.A2 и X2 всех ламп.",
-      "KK1.96 → SB1.11; SB1.12 → SB2.23 и KM1.13; SB2.24 → KM1.14 и KM1.A1. KM1.34 → HL2; KK1.98 → HL3."
+      "Сила: QF1 → KM1 (L) → KM1 (T) → KK1 (L1-L2-L3) → KK1 (T1-T2-T3) → двигатель.",
+      "Фаза с QF2: KK1.NC(95), KK1.NO(97), KM1.NO(33) и HL1.X1 — одна точка. Ноль (QF2.N(4)): KM1.A2 и X2 всех ламп.",
+      "KK1.NC(96) → SB1.11; SB1.12 → SB2.23 и KM1.NO(13); SB2.24 → KM1.NO(14) и KM1.A1. KM1.NO(34) → HL2; KK1.NO(98) → HL3."
     ],
     "en": [
-      "Power: QF1 → KM1 (L) → KM1 (T) → KK1 (1-3-5) → KK1 (2-4-6) → motor.",
-      "Phase from QF2: KK1.95, KK1.97, KM1.33 and HL1.X1 are one point. Neutral (QF2.4): KM1.A2 and X2 of all lamps.",
-      "KK1.96 → SB1.11; SB1.12 → SB2.23 and KM1.13; SB2.24 → KM1.14 and KM1.A1. KM1.34 → HL2; KK1.98 → HL3."
+      "Power: QF1 → KM1 (L) → KM1 (T) → KK1 (L1-L2-L3) → KK1 (T1-T2-T3) → motor.",
+      "Phase from QF2: KK1.NC(95), KK1.NO(97), KM1.NO(33) and HL1.X1 are one point. Neutral (QF2.N(4)): KM1.A2 and X2 of all lamps.",
+      "KK1.NC(96) → SB1.11; SB1.12 → SB2.23 and KM1.NO(13); SB2.24 → KM1.NO(14) and KM1.A1. KM1.NO(34) → HL2; KK1.NO(98) → HL3."
     ]
   }
 }

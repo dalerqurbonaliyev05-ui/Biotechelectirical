@@ -1,7 +1,7 @@
 {
   "versiya": 1,
   "rang_rejimi": "3f",
-  "rejimlar": ["2d"],
+  "rejimlar": ["2d", "3d"],
   "id": "motor-10",
   "yonalish": "motorlar",
   "daraja": 4,
@@ -17,9 +17,9 @@
     "en": "Start — run in star, the \"Δ\" button — change to delta."
   },
   "topshiriq": {
-    "uz": "SB2 (Start) KM1 va KM2 (yulduz) ni yoqadi. SB3 (Δ) bosilganda uning NC kontakti KM2 ni o‘chiradi, NO kontakti KM3 (uchburchak) ni yoqadi; KM3 13–14 orqali o‘zini ushlab qoladi. KM2 va KM3 NC (41–42) kontaktlari bilan bloklangan.",
-    "ru": "SB2 (Пуск) включает KM1 и KM2 (звезда). При нажатии SB3 (Δ) её НЗ отключает KM2, НО включает KM3 (треугольник); KM3 становится на самоподхват 13–14. KM2 и KM3 заблокированы НЗ 41–42.",
-    "en": "SB2 (Start) closes KM1 and KM2 (star). Pressing SB3 (Δ) its NC drops KM2 and its NO closes KM3 (delta); KM3 holds through 13–14. KM2 and KM3 are interlocked by NC 41–42."
+    "uz": "SB2 (Start) KM1 va KM2 (yulduz) ni yoqadi. SB3 (Δ) bosilganda uning NC kontakti KM2 ni o‘chiradi, NO kontakti KM3 (uchburchak) ni yoqadi; KM3 NO 13–14 orqali o‘zini ushlab qoladi. KM2 va KM3 NC (41–42) kontaktlari bilan bloklangan.",
+    "ru": "SB2 (Пуск) включает KM1 и KM2 (звезда). При нажатии SB3 (Δ) её НЗ отключает KM2, НО включает KM3 (треугольник); KM3 становится на самоподхват NO 13–14. KM2 и KM3 заблокированы НЗ NC 41–42.",
+    "en": "SB2 (Start) closes KM1 and KM2 (star). Pressing SB3 (Δ) its NC drops KM2 and its NO closes KM3 (delta); KM3 holds through NO 13–14. KM2 and KM3 are interlocked by NC 41–42."
   },
   "elementlar": [
     {"id": "VVOD", "tur": "manba_3f", "pozitsiya2d": [320, 60]},
@@ -89,18 +89,18 @@
   "maslahatlar": {
     "uz": [
       "Kuch zanjiri 9-sxemadagidek: KM3 chiqishlari T1 → W2, T2 → U2, T3 → V2; KM2 T klemmalari birlashtiriladi.",
-      "SB2.24 nuqtasi: KM1.14, KM1.A1, SB3.11, SB3.23, KM3.13.",
-      "SB3.12 → KM3.41 → KM3.42 → KM2.A1; SB3.24 + KM3.14 → KM2.41 → KM2.42 → KM3.A1."
+      "SB2.24 nuqtasi: KM1.NO(14), KM1.A1, SB3.11, SB3.23, KM3.NO(13).",
+      "SB3.12 → KM3.NC(41) → KM3.NC(42) → KM2.A1; SB3.24 + KM3.NO(14) → KM2.NC(41) → KM2.NC(42) → KM3.A1."
     ],
     "ru": [
       "Силовая цепь как в схеме 9: выходы KM3 T1 → W2, T2 → U2, T3 → V2; T KM2 объединяются.",
-      "Точка SB2.24: KM1.14, KM1.A1, SB3.11, SB3.23, KM3.13.",
-      "SB3.12 → KM3.41 → KM3.42 → KM2.A1; SB3.24 + KM3.14 → KM2.41 → KM2.42 → KM3.A1."
+      "Точка SB2.24: KM1.NO(14), KM1.A1, SB3.11, SB3.23, KM3.NO(13).",
+      "SB3.12 → KM3.NC(41) → KM3.NC(42) → KM2.A1; SB3.24 + KM3.NO(14) → KM2.NC(41) → KM2.NC(42) → KM3.A1."
     ],
     "en": [
       "Power as in circuit 9: KM3 outputs T1 → W2, T2 → U2, T3 → V2; KM2 T terminals are joined.",
-      "Node SB2.24: KM1.14, KM1.A1, SB3.11, SB3.23, KM3.13.",
-      "SB3.12 → KM3.41 → KM3.42 → KM2.A1; SB3.24 + KM3.14 → KM2.41 → KM2.42 → KM3.A1."
+      "Node SB2.24: KM1.NO(14), KM1.A1, SB3.11, SB3.23, KM3.NO(13).",
+      "SB3.12 → KM3.NC(41) → KM3.NC(42) → KM2.A1; SB3.24 + KM3.NO(14) → KM2.NC(41) → KM2.NC(42) → KM3.A1."
     ]
   }
 }

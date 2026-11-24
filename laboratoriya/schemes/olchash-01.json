@@ -4,7 +4,7 @@
   "yonalish": "olchash",
   "daraja": 3,
   "vaqt_min": 18,
-  "rejimlar": ["2d"],
+  "rejimlar": ["2d", "3d"],
   "rang_rejimi": "3f",
   "nomi": {
     "uz": "O‘lchash 1: motor zanjirida voltmetr va ampermetr",
@@ -73,19 +73,19 @@
   "xato_qoidalari": [{"tur": "pe_ulangan", "klemmalar": ["M1.PE"]}, {"tur": "sim_rangi"}],
   "maslahatlar": {
     "uz": [
-      "Voltmetr parallel ulanadi: PV1.1 → QF1.2 (L1), PV1.2 → QF1.4 (L2).",
+      "Voltmetr parallel ulanadi: PV1.1 → QF1.T1(2) (L1), PV1.2 → QF1.T2(4) (L2).",
       "Ampermetr ketma-ket ulanadi: KM1.T1 → PA1.1, PA1.2 → M1.U.",
-      "Boshqaruv: QF1.2 → SB1 (11–12) → SB2.23 va KM1.13; SB2.24 → KM1.14 va KM1.A1; KM1.A2 → N."
+      "Boshqaruv: QF1.T1(2) → SB1 (NC 11–12) → SB2.23 va KM1.NO(13); SB2.24 → KM1.NO(14) va KM1.A1; KM1.A2 → N."
     ],
     "ru": [
-      "Вольтметр включается параллельно: PV1.1 → QF1.2 (L1), PV1.2 → QF1.4 (L2).",
+      "Вольтметр включается параллельно: PV1.1 → QF1.T1(2) (L1), PV1.2 → QF1.T2(4) (L2).",
       "Амперметр — последовательно: KM1.T1 → PA1.1, PA1.2 → M1.U.",
-      "Управление: QF1.2 → SB1 (11–12) → SB2.23 и KM1.13; SB2.24 → KM1.14 и KM1.A1; KM1.A2 → N."
+      "Управление: QF1.T1(2) → SB1 (NC 11–12) → SB2.23 и KM1.NO(13); SB2.24 → KM1.NO(14) и KM1.A1; KM1.A2 → N."
     ],
     "en": [
-      "The voltmeter is in parallel: PV1.1 → QF1.2 (L1), PV1.2 → QF1.4 (L2).",
+      "The voltmeter is in parallel: PV1.1 → QF1.T1(2) (L1), PV1.2 → QF1.T2(4) (L2).",
       "The ammeter is in series: KM1.T1 → PA1.1, PA1.2 → M1.U.",
-      "Control: QF1.2 → SB1 (11–12) → SB2.23 and KM1.13; SB2.24 → KM1.14 and KM1.A1; KM1.A2 → N."
+      "Control: QF1.T1(2) → SB1 (NC 11–12) → SB2.23 and KM1.NO(13); SB2.24 → KM1.NO(14) and KM1.A1; KM1.A2 → N."
     ]
   }
 }

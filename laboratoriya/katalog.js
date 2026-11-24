@@ -64,12 +64,15 @@ function chip(guruh, qiymat, matn) {
 }
 
 function filtrlarniChiz() {
-  document.getElementById('f-yonalish').innerHTML = chip('yonalish', null, t('filtr.hammasi')) + YONALISHLAR.map((y) => chip('yonalish', y, t(`yon.${y}`))).join('');
+  if (!document.getElementById('f-yonalish')) return;
+  const yonlar = sxemalar ? YONALISHLAR.filter((y) => sxemalar.some((x) => x.yonalish === y)) : [];
+  document.getElementById('f-yonalish').innerHTML = chip('yonalish', null, t('filtr.hammasi')) + yonlar.map((y) => chip('yonalish', y, t(`yon.${y}`))).join('');
   document.getElementById('f-daraja').innerHTML = chip('daraja', null, t('filtr.hammasi')) + DARAJALAR.map((d) => chip('daraja', d, String(d))).join('');
   document.getElementById('f-rejim').innerHTML = chip('rejim', null, t('filtr.hammasi')) + REJIMLAR.map((r) => chip('rejim', r, r.toUpperCase())).join('');
 }
 
 function lentaniChiz() {
+  if (!document.getElementById('ticker')) return;
   const items = ['k.t1', 'k.t2', 'k.t3', 'k.t4', 'k.t5'].map((k, i) => `<span><small>0${i + 1}</small>${esc(t(k))}</span>`).join('');
   document.getElementById('ticker').innerHTML = items.repeat(4);
 }
@@ -77,7 +80,9 @@ function lentaniChiz() {
 const darajaBelgi = (n) => `<span class="daraja" title="${esc(t('karta.daraja', { n }))}" aria-label="${esc(t('karta.daraja', { n }))}">${[1, 2, 3, 4, 5].map((i) => `<i class="${i <= n ? 'on' : ''}"></i>`).join('')}</span>`;
 
 function kartalarniChiz() {
+  plitkalarniChiz();
   const root = document.getElementById('kartalar');
+  if (!root) return;
   if (xato) { root.innerHTML = `<p class="bosh-holat">${esc(t('katalog.xato'))}</p>`; return; }
   if (!sxemalar) { root.innerHTML = `<p class="bosh-holat">${esc(t('katalog.yuklanmoqda'))}</p>`; return; }
   const natijalar = natijalarniOl();
@@ -107,7 +112,42 @@ function kartalarniChiz() {
   }).join('');
 }
 
-document.querySelector('.filtrlar').addEventListener('click', (e) => {
+// Bosh sahifa: yo‘nalish plitkalari (har biri simulyatorni shu yo‘nalish filtri bilan ochadi)
+function plitkalarniChiz() {
+  const root = document.getElementById('yon-plitka');
+  if (!root) return;
+  if (!sxemalar) return;
+  const soni = document.getElementById('sim-soni');
+  if (soni) soni.textContent = t('k.sim_n', { n: sxemalar.length });
+  const rasm = document.getElementById('sim-rasm');
+  if (rasm && !rasm.innerHTML) rasm.innerHTML = RASM.motorlar;
+  const bor = YONALISHLAR.filter((y) => sxemalar.some((x) => x.yonalish === y));
+  root.innerHTML = bor.map((y) => {
+    const n = sxemalar.filter((x) => x.yonalish === y).length;
+    return `<a class="yon-plitka" href="/laboratoriya/simulyator/#yonalish=${y}">
+      <div class="karta-rasm">${RASM[y] || ''}</div>
+      <div class="yon-tana"><h3>${esc(t(`yon.${y}`))}</h3><span class="tag">${esc(t('k.sim_n', { n }))}</span><span class="karta-go">${esc(t('k.sim_ochish'))}</span></div>
+    </a>`;
+  }).join('');
+}
+
+// Simulyator sahifasi: #yonalish=motorlar kabi havola filtrni oldindan tanlaydi
+function hashFiltr() {
+  const m = /yonalish=([a-z_]+)/.exec(location.hash);
+  filtr.yonalish = m && YONALISHLAR.includes(m[1]) ? m[1] : null;
+}
+hashFiltr();
+window.addEventListener('hashchange', () => { hashFiltr(); filtrlarniChiz(); kartalarniChiz(); });
+
+// Bosh sahifa: pastga surilganda doim ko‘rinadigan «Simulyatorga kirish» tugmasi
+const suzuvchi = document.getElementById('sim-float');
+if (suzuvchi) {
+  const yangila = () => { suzuvchi.hidden = window.scrollY < 420; };
+  window.addEventListener('scroll', yangila, { passive: true });
+  yangila();
+}
+
+document.querySelector('.filtrlar')?.addEventListener('click', (e) => {
   const b = e.target.closest('[data-g]');
   if (!b) return;
   const g = b.dataset.g;
@@ -127,6 +167,7 @@ sahifaBoshlash();
     const { sxemalar: idlar } = await r.json();
     const hammasi = await Promise.all(idlar.map((id) => fetch(`/laboratoriya/schemes/${encodeURIComponent(id)}.json`).then((x) => (x.ok ? x.json() : null)).catch(() => null)));
     sxemalar = hammasi.filter(Boolean);
+    filtrlarniChiz();
     if (sxemalar[0]) document.querySelectorAll('[data-birinchi]').forEach((a) => { a.href = `/laboratoriya/${encodeURIComponent(sxemalar[0].id)}`; });
   } catch (e) {
     xato = true;

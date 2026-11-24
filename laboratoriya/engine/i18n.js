@@ -342,6 +342,35 @@ const ST = {
     poz_I: 'position I', poz_0: 'position 0', poz_II: 'position II', poz_L1: 'position L1', poz_L2: 'position L2' },
 };
 for (const til of ['uz', 'ru', 'en']) for (const [k, v] of Object.entries(ST[til])) L[til][`st.${k}`] = v;
+
+// Laboratoriya bosh sahifasi va alohida «Simulyator» bo‘limi
+Object.assign(L.uz, {
+  'nav.sim': 'Simulyator', 'k.nav_cta': 'Simulyator', 'mashq.orqaga': '← Simulyator',
+  'k.cta1': 'Simulyatorga kirish →', 'k.cta2': 'Birinchi mashq',
+  'k.sim_sec': '// Simulyator', 'k.sim_h': 'Barcha sxemalar — bitta simulyatorda.',
+  'k.sim_p': 'Yoritish, uy shiti, motorlar, avtomatika va o‘lchash sxemalari. Har birini 2D sxemada yoki 3D xonada yig‘ing, tok bering va tekshiring.',
+  'k.sim_n': '{n} ta sxema', 'k.sim_cta': 'Simulyatorga kirish →', 'k.sim_yon': 'Yo‘nalishlar', 'k.sim_ochish': 'Ochish →',
+  'k.sim_float': 'Simulyatorga kirish', 'k.mid_h': 'Nazariyadan amaliyotga.', 'k.mid_p': 'Sxemani o‘qing, simlarni ulang va tok bering — xato bo‘lsa, simulyator ko‘rsatadi.',
+  's.title': 'Simulyator', 's.h1': 'Simulyator', 's.lead': 'Sxemani tanlang. Yo‘nalish, daraja va rejim bo‘yicha saralang.', 's.orqaga': '← Laboratoriya',
+});
+Object.assign(L.ru, {
+  'nav.sim': 'Симулятор', 'k.nav_cta': 'Симулятор', 'mashq.orqaga': '← Симулятор',
+  'k.cta1': 'Войти в симулятор →', 'k.cta2': 'Первое упражнение',
+  'k.sim_sec': '// Симулятор', 'k.sim_h': 'Все схемы — в одном симуляторе.',
+  'k.sim_p': 'Освещение, квартирный щит, двигатели, автоматика и измерения. Собирайте каждую схему в 2D или в 3D-комнате, подавайте ток и проверяйте.',
+  'k.sim_n': '{n} схем', 'k.sim_cta': 'Войти в симулятор →', 'k.sim_yon': 'Направления', 'k.sim_ochish': 'Открыть →',
+  'k.sim_float': 'Войти в симулятор', 'k.mid_h': 'От теории к практике.', 'k.mid_p': 'Прочитайте схему, соедините провода и подайте ток — симулятор покажет ошибки.',
+  's.title': 'Симулятор', 's.h1': 'Симулятор', 's.lead': 'Выберите схему. Фильтруйте по направлению, уровню и режиму.', 's.orqaga': '← Лаборатория',
+});
+Object.assign(L.en, {
+  'nav.sim': 'Simulator', 'k.nav_cta': 'Simulator', 'mashq.orqaga': '← Simulator',
+  'k.cta1': 'Open the simulator →', 'k.cta2': 'First exercise',
+  'k.sim_sec': '// Simulator', 'k.sim_h': 'Every circuit in one simulator.',
+  'k.sim_p': 'Lighting, home panels, motors, automation and measurement. Build each circuit in 2D or in a 3D room, power it up and check it.',
+  'k.sim_n': '{n} circuits', 'k.sim_cta': 'Open the simulator →', 'k.sim_yon': 'Categories', 'k.sim_ochish': 'Open →',
+  'k.sim_float': 'Open the simulator', 'k.mid_h': 'From theory to practice.', 'k.mid_p': 'Read the diagram, connect the wires and power it up — the simulator shows every mistake.',
+  's.title': 'Simulator', 's.h1': 'Simulator', 's.lead': 'Pick a circuit. Filter by category, level and mode.', 's.orqaga': '← Laboratory',
+});
 Object.assign(L.uz, {
   'yon.avtomatika': 'Avtomatika',
   'chk.qisqa_LL': 'Qisqa tutashuv: ikki faza to‘g‘ridan-to‘g‘ri ulangan. Avtomat o‘chib ketdi.',

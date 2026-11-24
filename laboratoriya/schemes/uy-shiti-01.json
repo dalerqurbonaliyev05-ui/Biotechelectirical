@@ -4,7 +4,7 @@
   "yonalish": "uy_shiti",
   "daraja": 3,
   "vaqt_min": 20,
-  "rejimlar": ["2d"],
+  "rejimlar": ["2d", "3d"],
   "nomi": {
     "uz": "Uy shiti 1: hisoblagich, difavtomat, rozetka, yoritish va ventilyator",
     "ru": "Домашний щит 1: счётчик, дифавтомат, розетка, освещение и вентилятор",

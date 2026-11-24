@@ -4,7 +4,7 @@
   "yonalish": "yoritish",
   "daraja": 1,
   "vaqt_min": 8,
-  "rejimlar": ["2d"],
+  "rejimlar": ["2d", "3d"],
   "nomi": {
     "uz": "Yoritish 2: kuch avtomati (MCCB) va kalit orqali lampa",
     "ru": "Освещение 2: лампа через силовой автомат (MCCB) и выключатель",

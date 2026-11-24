@@ -6,6 +6,8 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { RANGLAR } from './ranglar.js';
 import { t } from './i18n.js';
 
+import { avtoJoylash, avtoModel, joyTuri, yol2d } from './view3d-avto.js';
+
 export function webglBormi() {
   try {
     const c = document.createElement('canvas');
@@ -20,17 +22,21 @@ export class View3D {
   constructor(root, lab) {
     this.root = root;
     this.lab = lab;
-    const s3 = lab.sxema.sahna3d || {};
+    // Sxemada qo‘lda yozilgan sahna bo‘lmasa — avtomatik joylash (shit, devor, shift, pol)
+    this.avto = lab.sxema.sahna3d ? null : avtoJoylash(lab);
+    const s3 = lab.sxema.sahna3d || this.avto.s3;
     this.s3 = s3;
     this.xona = { kenglik: 4.6, balandlik: 2.7, chuqurlik: 4.2, ...(s3.xona || {}) };
-    const fokus = lab.els.filter((e) => FOKUS_NOMI[e.tur]);
+    const fokus = this.avto ? [] : lab.els.filter((e) => FOKUS_NOMI[e.tur]);
+    const avtoFokus = this.avto ? [`<button type="button" class="chip" data-fokus="__shit"><span data-i18n="3d.shit">${t('3d.shit')}</span></button>`,
+      ...lab.els.filter((e) => joyTuri(e.tur) !== 'shit').map((e) => `<button type="button" class="chip" data-fokus="${e.id}">${e.id}</button>`)].join('') : '';
     root.innerHTML = `
       <div class="v3d">
         <canvas class="v3d-c" tabindex="0"></canvas>
         <div class="v3d-tip" hidden></div>
         <div class="v3d-fokus" role="group">
           <button type="button" class="chip" data-fokus="" data-i18n="3d.umumiy">${t('3d.umumiy')}</button>
-          ${fokus.map((e) => `<button type="button" class="chip" data-fokus="${e.id}"><span data-i18n="${FOKUS_NOMI[e.tur]}">${t(FOKUS_NOMI[e.tur])}</span> · ${e.id}</button>`).join('')}
+          ${fokus.map((e) => `<button type="button" class="chip" data-fokus="${e.id}"><span data-i18n="${FOKUS_NOMI[e.tur]}">${t(FOKUS_NOMI[e.tur])}</span> · ${e.id}</button>`).join('')}${avtoFokus}
         </div>
         <div class="v3d-flash"></div>
       </div>
@@ -599,21 +605,22 @@ export class View3D {
   elementlarQur() {
     const kurinadigan = new THREE.SphereGeometry(1, 16, 12);
     for (const el of this.lab.els) {
-      const m = el.def.model3d(this.ctx(el));
-      m.obj.position.set(...el.pozitsiya3d);
-      m.obj.scale.setScalar(el.masshtab3d || this.s3.masshtab || 1);
+      const j = this.avto?.joy.get(el.id);
+      const m = j ? avtoModel(this, el, j) : el.def.model3d(this.ctx(el));
+      m.obj.position.set(...(j ? j.pos : el.pozitsiya3d));
+      m.obj.scale.setScalar(j ? j.masshtab || 1 : el.masshtab3d || this.s3.masshtab || 1);
       if (el.burilish3d) m.obj.rotation.y = el.burilish3d;
       this.scene.add(m.obj);
       this.modellar.set(el.id, m);
       for (const mesh of m.bosish || []) {
-        mesh.userData = { tur: 'bos', el: el.id };
+        mesh.userData = { tur: 'bos', el: el.id, model: m };
         this.bosiladigan.push(mesh);
       }
       for (const k of el.klemmalar) {
         const full = `${el.id}.${k.id}`;
         const info = m.klemmalar[k.id];
         if (!info) continue;
-        const r = k.r3d || 0.013;
+        const r = info.r || k.r3d || 0.013;
         const hit = new THREE.Mesh(kurinadigan, new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false }));
         hit.scale.setScalar(r);
         hit.position.set(...info.pos);
@@ -660,6 +667,7 @@ export class View3D {
   // Simning yo‘li: qisqa simlar — yumshoq yoy; uzunlari — devor bo‘ylab (kabel kanalidek) to‘g‘ri burchakli,
   // burchaklari yumaloqlangan. Shit ichidan chiqishda avval pastga, shiftdagi lampadan — shift bo‘ylab devorga.
   egri(s, idx) {
+    if (this.avto) return this.egriAvto(s, idx);
     const A = this.kNuqta(s.a), B = this.kNuqta(s.b);
     const V = (x, y, z) => new THREE.Vector3(x, y, z);
     const len = A.p.distanceTo(B.p);
@@ -715,6 +723,47 @@ export class View3D {
     return new THREE.CatmullRomCurve3(this.yumaloq([...za, ...orta, ...zb]), false, 'centripetal');
   }
 
+  // Avto sahna: shit ichida — 2D dagidek yo‘l (qurilmalar old yuzasi ustida); tashqariga — shitning pastidan
+  // devor bo‘ylab; shiftdagi qurilmaga — shift bo‘ylab; poldagi motorga — pol bo‘ylab.
+  egriAvto(s, idx) {
+    const V = (x, y, z) => new THREE.Vector3(x, y, z);
+    const A = this.kNuqta(s.a), B = this.kNuqta(s.b);
+    const ea = this.lab.elMap.get(s.a.split('.')[0]), eb = this.lab.elMap.get(s.b.split('.')[0]);
+    const ja = this.avto.joy.get(ea.id), jb = this.avto.joy.get(eb.id);
+    const H = this.xona.balandlik;
+    const sh = this.avto.shit;
+    const zIn = 0.064 + (idx % 6) * 0.0022;
+    if (ja.tur === 'shit' && jb.tur === 'shit') {
+      const ka = ea.kmap.get(s.a.split('.').slice(1).join('.')), kb = eb.kmap.get(s.b.split('.').slice(1).join('.'));
+      const pa = [ea.pozitsiya2d[0] + ka.xy[0], ea.pozitsiya2d[1] + ka.xy[1]], pb = [eb.pozitsiya2d[0] + kb.xy[0], eb.pozitsiya2d[1] + kb.xy[1]];
+      const yo = (k, p, q) => k.dir2d || (Math.abs(q[0] - p[0]) > Math.abs(q[1] - p[1]) ? [Math.sign(q[0] - p[0]) || 1, 0] : [0, Math.sign(q[1] - p[1]) || 1]);
+      const pts2 = yol2d(pa, pb, yo(ka, pa, pb), yo(kb, pb, pa), idx);
+      const ichki = pts2.slice(1, -1).map(([x, y]) => { const [X, Y] = this.avto.map2d(x, y); return V(X, Y, zIn); });
+      return new THREE.CatmullRomCurve3(this.yumaloq([A.p, V(A.p.x, A.p.y, zIn), ...ichki, V(B.p.x, B.p.y, zIn), B.p]), false, 'centripetal');
+    }
+    const zr = 0.018 + (idx % 6) * 0.004;
+    const pastShit = sh.pozitsiya[1] - sh.olcham[1] / 2;
+    const k5 = (idx % 7) * 0.007;
+    const chiqish = (k, j) => {
+      const ao = k.p.clone().addScaledVector(k.d, 0.025);
+      if (j.tur === 'shit') { const y = pastShit - 0.03 - k5; return { pts: [k.p, V(k.p.x, k.p.y, zIn), V(k.p.x, y, zIn), V(k.p.x, y, zr)], daraja: 'shit' }; }
+      if (j.tur === 'shift') { const y = H - 0.014 - (idx % 5) * 0.006; return { pts: [k.p, ao, V(ao.x, y, ao.z), V(ao.x, y, zr)], daraja: 'shift' }; }
+      if (j.tur === 'pol') { const y = 0.016 + (idx % 5) * 0.006; return { pts: [k.p, ao, V(ao.x, ao.y, ao.z), V(ao.x, y, ao.z), V(ao.x, y, zr)], daraja: 'pol' }; }
+      return { pts: [k.p, ao, V(ao.x, ao.y, zr)], daraja: 'devor' };
+    };
+    const ca = chiqish(A, ja), cb = chiqish(B, jb);
+    const LA = ca.pts[ca.pts.length - 1], FB = cb.pts[cb.pts.length - 1];
+    const dx = ((idx % 7) - 3) * 0.006;
+    let orta = [];
+    if (Math.abs(LA.x - FB.x) > 0.01 && Math.abs(LA.y - FB.y) > 0.01) {
+      // Shit tomonidagi uch — gorizontal qism shit ostidan; aks holda — balandroq sathda
+      const shitA = ca.daraja === 'shit', shitB = cb.daraja === 'shit';
+      const gorizA = shitA || (!shitB && LA.y >= FB.y);
+      orta = gorizA ? [V(FB.x + dx, LA.y, zr), V(FB.x + dx, FB.y, zr)] : [V(LA.x + dx, LA.y, zr), V(LA.x + dx, FB.y, zr)];
+    }
+    return new THREE.CatmullRomCurve3(this.yumaloq([...ca.pts, ...orta, ...cb.pts.reverse()]), false, 'centripetal');
+  }
+
   // Siniq chiziq burchaklarini yumaloqlab, zich nuqtalar ro‘yxatini qaytaradi.
   yumaloq(pts) {
     const p = pts.filter((v, i) => i === 0 || v.distanceTo(pts[i - 1]) > 0.002);
@@ -757,8 +806,8 @@ export class View3D {
         mat = new THREE.MeshStandardMaterial({ color: r.hex, roughness: 0.45 });
       }
       const seg = Math.max(24, Math.round(len * 60));
-      const mesh = new THREE.Mesh(new THREE.TubeGeometry(curve, seg, 0.0034, 8, false), mat);
-      const hit = new THREE.Mesh(new THREE.TubeGeometry(curve, Math.max(12, seg >> 1), 0.011, 6, false), hitMat);
+      const mesh = new THREE.Mesh(new THREE.TubeGeometry(curve, seg, this.avto ? 0.0021 : 0.0034, 8, false), mat);
+      const hit = new THREE.Mesh(new THREE.TubeGeometry(curve, Math.max(12, seg >> 1), this.avto ? 0.006 : 0.011, 6, false), hitMat);
       hit.userData = { tur: 'sim', id: s.id };
       mesh.castShadow = true;
       mesh.receiveShadow = true;
@@ -774,9 +823,10 @@ export class View3D {
     let yorug = false;
     for (const el of lab.els) {
       const m = this.modellar.get(el.id);
-      const yonadi = !!sim.yuklamalar[el.id]?.yonadi;
-      if (yonadi) yorug = true;
-      m.yangila?.(lab.holat[el.id] || {}, { yonadi });
+      const natija = sim.natija[el.id] || {};
+      const yonadi = !!sim.yuklamalar[el.id]?.yonadi || (natija.holatlar || []).includes('yonadi');
+      if (yonadi && (m.yorugl || el.def.yuklama)) yorug = true;
+      m.yangila?.(lab.holat[el.id] || {}, { yonadi, natija });
     }
     this.hemi.intensity = yorug ? 1.0 : 0.8;
     this.hemi.color.set(yorug ? 0xfff1dc : 0xeaf2ff);
@@ -789,6 +839,8 @@ export class View3D {
       if (lab.tanlangan === full) rang = RANG_MARKER.tanlangan;
       if (this.hover === full && lab.tanlangan !== full) rang = RANG_MARKER.hover;
       k.marker.material.color.set(rang);
+      // Avto sahnada klemma halqalari qurilma rasmida bor — bo‘sh klemmada shar ko‘rinmaydi
+      if (this.avto) k.marker.visible = rang !== RANG_MARKER.bosh;
       k.tanlangan = lab.tanlangan === full;
       if (!k.tanlangan) k.marker.scale.setScalar(Math.min(0.0055, k.r * 0.55) * (this.hover === full ? 1.5 : 1));
       void r;
@@ -802,7 +854,7 @@ export class View3D {
     // Tok oqimi nuqtalari
     for (const d of this.oqim) { this.scene.remove(d.mesh); }
     this.oqim = [];
-    const geo = this._oqGeo || (this._oqGeo = new THREE.SphereGeometry(0.0062, 10, 8));
+    const geo = this._oqGeo || (this._oqGeo = new THREE.SphereGeometry(this.avto ? 0.0034 : 0.0062, 10, 8));
     const mat = this._oqMat || (this._oqMat = new THREE.MeshBasicMaterial({ color: 0xffd23f }));
     for (const o of sim.oqim) {
       const so = this.simObj.get(o.sim);
@@ -830,11 +882,40 @@ export class View3D {
       // Klemma yaqin bo‘lsa — klemma ustun (sim uchlari klemma ustida tugaydi)
       const kl = hits.find((h) => h.object.userData.tur === 'kl');
       if (kl && kl.distance - hits[0].distance < 0.03) return kl.object.userData;
-      return hits[0].object.userData;
+      // Sim qurilma ustidan o‘tsa ham, ostidagi tugma/dastak ustun turadi (2D dagidek)
+      const amalli = hits.find((h) => h.object.userData.tur === 'bos' && h.uv && h.object.userData.model?.amalTop?.(h.uv));
+      if (amalli) return { ...amalli.object.userData, uv: amalli.uv };
+      return { ...hits[0].object.userData, uv: hits[0].uv };
+    };
+    // Avto sahna: qurilma rasmidagi tugma/dastakni aniqlash (2D dagidek)
+    const amalTop = (u) => {
+      if (u?.tur !== 'bos' || !u.model?.amalTop || !u.uv) return null;
+      const amal = u.model.amalTop(u.uv);
+      if (!amal) return null;
+      const el = this.lab.elMap.get(u.el);
+      return { amal, rejim: el.def.tugmaRejimi?.(amal, el.param) || el.def.tugmalar?.[amal] || 'almash' };
+    };
+    const qoyibYubor = () => {
+      if (!this.lahzali) return;
+      this.lab.elementBosish(this.lahzali.el, this.lahzali.amal, 'qoyib_yubor');
+      this.lahzali = null;
+      this.controls.enabled = true;
     };
     let bosh = null;
-    this.canvas.addEventListener('pointerdown', (e) => { bosh = { x: e.clientX, y: e.clientY, t: performance.now() }; });
+    this.canvas.addEventListener('pointerdown', (e) => {
+      bosh = { x: e.clientX, y: e.clientY, t: performance.now() };
+      if (!this.avto) return;
+      const u = tanla(e);
+      const a = amalTop(u);
+      if (a?.rejim === 'lahzali') {
+        this.lahzali = { el: u.el, amal: a.amal };
+        this.controls.enabled = false;
+        this.lab.elementBosish(u.el, a.amal, 'bos');
+      }
+    });
+    this.canvas.addEventListener('pointercancel', qoyibYubor);
     this.canvas.addEventListener('pointerup', (e) => {
+      if (this.lahzali) { qoyibYubor(); bosh = null; return; }
       if (!bosh) return;
       const siljish = Math.hypot(e.clientX - bosh.x, e.clientY - bosh.y);
       const vaqt = performance.now() - bosh.t;
@@ -844,7 +925,14 @@ export class View3D {
       if (!u) { this.lab.bosh(); return; }
       if (u.tur === 'kl') this.lab.klemmaBosish(u.full);
       else if (u.tur === 'sim') this.lab.simBosish(u.id);
-      else if (u.tur === 'bos') this.lab.elementBosish(u.el);
+      else if (u.tur === 'bos') {
+        if (this.avto) {
+          const a = amalTop(u);
+          if (a) { if (a.rejim !== 'lahzali') this.lab.elementBosish(u.el, a.amal, 'almash'); return; }
+          if (!this.lab.elMap.get(u.el).def.bosiladi) { this.lab.bosh(); return; }
+        }
+        this.lab.elementBosish(u.el);
+      }
     });
     this.canvas.addEventListener('pointermove', (e) => {
       if (e.pointerType === 'touch' || e.buttons) return;
@@ -862,13 +950,20 @@ export class View3D {
         this.tip.style.transform = `translate(${e.clientX - r.left + 14}px, ${e.clientY - r.top + 12}px)`;
       } else this.tip.hidden = true;
     });
-    this.canvas.addEventListener('pointerleave', () => { this.tip.hidden = true; });
+    this.canvas.addEventListener('pointerleave', () => { this.tip.hidden = true; qoyibYubor(); });
     this.root.querySelectorAll('[data-fokus]').forEach((b) => b.addEventListener('click', () => this.fokus(b.dataset.fokus)));
   }
 
   fokus(elId) {
     let pos, nishon;
     if (!elId) { pos = this.umumiy.pos.clone(); nishon = this.umumiy.nishon.clone(); }
+    else if (elId === '__shit') {
+      const sh = this.avto.shit;
+      nishon = new THREE.Vector3(sh.pozitsiya[0], sh.pozitsiya[1], 0.05);
+      const fov = (this.camera.fov * Math.PI) / 180;
+      const d = Math.max(sh.olcham[1] / 2 / Math.tan(fov / 2), sh.olcham[0] / 2 / Math.tan(fov / 2) / this.camera.aspect) * 1.18 + 0.06;
+      pos = nishon.clone().add(new THREE.Vector3(0.04, 0.02, d));
+    }
     else {
       const m = this.modellar.get(elId);
       const el = this.lab.elMap.get(elId);
@@ -876,6 +971,8 @@ export class View3D {
       m.obj.getWorldPosition(nishon);
       if (el.tur === 'lampa_patron') { nishon.y -= 0.08; pos = nishon.clone().add(new THREE.Vector3(0.22, -0.42, 0.42)); }
       else if (el.tur === 'avtomat_1p') { nishon.x -= 0.07; nishon.z += 0.05; pos = nishon.clone().add(new THREE.Vector3(0.08, 0.04, 0.55)); }
+      else if (this.avto?.joy.get(elId)?.tur === 'pol') { nishon.y += 0.16; pos = nishon.clone().add(new THREE.Vector3(0.28, 0.32, 0.72)); }
+      else if (this.avto?.joy.get(elId)?.tur === 'shift') { nishon.y -= 0.1; pos = nishon.clone().add(new THREE.Vector3(0.25, -0.6, 0.75)); }
       else { nishon.z += 0.04; pos = nishon.clone().add(new THREE.Vector3(0.1, 0.03, 0.48)); }
     }
     this.tween = { t0: performance.now(), d: 650, p0: this.camera.position.clone(), n0: this.controls.target.clone(), p1: pos, n1: nishon };
@@ -935,6 +1032,7 @@ export class View3D {
       if (u >= 1) this.tween = null;
     }
     this.controls.update();
+    for (const m of this.modellar.values()) m.kadr?.(dt);
     // Tanlangan klemma pulsatsiyasi, xato simlar miltillashi
     const puls = 1 + 0.45 * Math.sin(now / 160);
     for (const k of this.kl.values()) if (k.tanlangan) k.marker.scale.setScalar(Math.min(0.0055, k.r * 0.55) * 1.7 * puls);

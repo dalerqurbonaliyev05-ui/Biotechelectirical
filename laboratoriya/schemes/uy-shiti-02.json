@@ -4,7 +4,7 @@
   "yonalish": "uy_shiti",
   "daraja": 3,
   "vaqt_min": 18,
-  "rejimlar": ["2d"],
+  "rejimlar": ["2d", "3d"],
   "nomi": {
     "uz": "Uy shiti 2: mehmonxona xonasi — karta kaliti",
     "ru": "Домашний щит 2: гостиничный номер — карточный выключатель",

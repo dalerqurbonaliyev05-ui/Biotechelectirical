@@ -1,7 +1,7 @@
 {
   "versiya": 1,
   "rang_rejimi": "3f",
-  "rejimlar": ["2d"],
+  "rejimlar": ["2d", "3d"],
   "id": "motor-06",
   "yonalish": "motorlar",
   "daraja": 4,
@@ -17,9 +17,9 @@
     "en": "Start runs M1; after 5 s the timer starts M2."
   },
   "topshiriq": {
-    "uz": "Start (SB2) bosilganda KM1 yoqilib o‘zini ushlab qolsin va vaqt relesi KT1 hisoblashni boshlasin. 5 soniyadan so‘ng KT1 ning 15–18 kontakti KM2 ni yoqsin. Stop (SB1) ikkala motorni to‘xtatadi.",
-    "ru": "По кнопке Пуск (SB2) KM1 включается с самоподхватом и запускает реле времени KT1. Через 5 с контакт KT1 15–18 включает KM2. Стоп (SB1) останавливает оба двигателя.",
-    "en": "Pressing Start (SB2) closes KM1 with a holding contact and starts timer KT1. After 5 s KT1 contact 15–18 closes KM2. Stop (SB1) stops both motors."
+    "uz": "Start (SB2) bosilganda KM1 yoqilib o‘zini ushlab qolsin va vaqt relesi KT1 hisoblashni boshlasin. 5 soniyadan so‘ng KT1 ning NO 15–18 kontakti KM2 ni yoqsin. Stop (SB1) ikkala motorni to‘xtatadi.",
+    "ru": "По кнопке Пуск (SB2) KM1 включается с самоподхватом и запускает реле времени KT1. Через 5 с контакт KT1 NO 15–18 включает KM2. Стоп (SB1) останавливает оба двигателя.",
+    "en": "Pressing Start (SB2) closes KM1 with a holding contact and starts timer KT1. After 5 s KT1 contact NO 15–18 closes KM2. Stop (SB1) stops both motors."
   },
   "elementlar": [
     {"id": "VVOD", "tur": "manba_3f", "pozitsiya2d": [340, 60]},
@@ -74,18 +74,18 @@
   "maslahatlar": {
     "uz": [
       "Ikkala kontaktorning L1–L3 klemmalari QF1 chiqishlariga parallel ulanadi.",
-      "SB2.24 nuqtasi: KM1.14, KM1.A1, KT1.A1 va KT1.15 (vaqt relesining umumiy kontakti).",
-      "KT1.18 (kechikib yopiladigan) → KM2.A1. Barcha A2 klemmalari → N."
+      "SB2.24 nuqtasi: KM1.NO(14), KM1.A1, KT1.A1 va KT1.COM(15) (vaqt relesining umumiy kontakti).",
+      "KT1.NO(18) (kechikib yopiladigan) → KM2.A1. Barcha A2 klemmalari → N."
     ],
     "ru": [
       "L1–L3 обоих контакторов параллельно на выходы QF1.",
-      "Точка SB2.24: KM1.14, KM1.A1, KT1.A1 и KT1.15 (общий контакт реле).",
-      "KT1.18 (замыкается с задержкой) → KM2.A1. Все A2 → N."
+      "Точка SB2.24: KM1.NO(14), KM1.A1, KT1.A1 и KT1.COM(15) (общий контакт реле).",
+      "KT1.NO(18) (замыкается с задержкой) → KM2.A1. Все A2 → N."
     ],
     "en": [
       "L1–L3 of both contactors go in parallel to the QF1 outputs.",
-      "Node SB2.24: KM1.14, KM1.A1, KT1.A1 and KT1.15 (timer common).",
-      "KT1.18 (delayed close) → KM2.A1. All A2 terminals → N."
+      "Node SB2.24: KM1.NO(14), KM1.A1, KT1.A1 and KT1.COM(15) (timer common).",
+      "KT1.NO(18) (delayed close) → KM2.A1. All A2 terminals → N."
     ]
   }
 }

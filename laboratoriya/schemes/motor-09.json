@@ -1,7 +1,7 @@
 {
   "versiya": 1,
   "rang_rejimi": "3f",
-  "rejimlar": ["2d"],
+  "rejimlar": ["2d", "3d"],
   "id": "motor-09",
   "yonalish": "motorlar",
   "daraja": 5,
@@ -17,9 +17,9 @@
     "en": "Start in star; after 5 s the timer switches to delta."
   },
   "topshiriq": {
-    "uz": "KM1 — asosiy, KM2 — yulduz (U2, V2, W2 ni birlashtiradi), KM3 — uchburchak (U1–W2, V1–U2, W1–V2). Start bosilganda KM1 va KT1 yoqiladi, KT1 ning 15–16 orqali KM2 (yulduz). 5 soniyadan so‘ng KT1 KM2 ni o‘chirib, 15–18 orqali KM3 ni yoqadi. KM2 va KM3 bir-birini NC (41–42) kontaktlari bilan bloklaydi.",
-    "ru": "KM1 — линейный, KM2 — звезда (объединяет U2, V2, W2), KM3 — треугольник (U1–W2, V1–U2, W1–V2). По Пуску включаются KM1 и KT1, через KT1 15–16 — KM2 (звезда). Через 5 с KT1 отключает KM2 и через 15–18 включает KM3. KM2 и KM3 блокируют друг друга НЗ 41–42.",
-    "en": "KM1 is the main contactor, KM2 star (joins U2, V2, W2), KM3 delta (U1–W2, V1–U2, W1–V2). Start energises KM1 and KT1 and, through KT1 15–16, KM2 (star). After 5 s KT1 drops KM2 and through 15–18 closes KM3. KM2 and KM3 interlock through NC 41–42."
+    "uz": "KM1 — asosiy, KM2 — yulduz (U2, V2, W2 ni birlashtiradi), KM3 — uchburchak (U1–W2, V1–U2, W1–V2). Start bosilganda KM1 va KT1 yoqiladi, KT1 ning NC 15–16 orqali KM2 (yulduz). 5 soniyadan so‘ng KT1 KM2 ni o‘chirib, NO 15–18 orqali KM3 ni yoqadi. KM2 va KM3 bir-birini NC (41–42) kontaktlari bilan bloklaydi.",
+    "ru": "KM1 — линейный, KM2 — звезда (объединяет U2, V2, W2), KM3 — треугольник (U1–W2, V1–U2, W1–V2). По Пуску включаются KM1 и KT1, через KT1 NC 15–16 — KM2 (звезда). Через 5 с KT1 отключает KM2 и через NO 15–18 включает KM3. KM2 и KM3 блокируют друг друга НЗ NC 41–42.",
+    "en": "KM1 is the main contactor, KM2 star (joins U2, V2, W2), KM3 delta (U1–W2, V1–U2, W1–V2). Start energises KM1 and KT1 and, through KT1 NC 15–16, KM2 (star). After 5 s KT1 drops KM2 and through NO 15–18 closes KM3. KM2 and KM3 interlock through NC 41–42."
   },
   "elementlar": [
     {"id": "VVOD", "tur": "manba_3f", "pozitsiya2d": [320, 60]},
@@ -90,17 +90,17 @@
     "uz": [
       "KK1 chiqishlari: U1, V1, W1 va KM3 ning L1, L2, L3 klemmalari. KM3 chiqishlari: T1 → W2, T2 → U2, T3 → V2.",
       "Yulduz: KM2 ning L1, L2, L3 klemmalari U2, V2, W2 ga; KM2 ning T1, T2, T3 klemmalari bir-biri bilan ulanadi.",
-      "Boshqaruv: SB2.24 → KM1.A1, KT1.A1, KT1.15; KT1.16 → KM3.41 → KM3.42 → KM2.A1; KT1.18 → KM2.41 → KM2.42 → KM3.A1."
+      "Boshqaruv: SB2.24 → KM1.A1, KT1.A1, KT1.COM(15); KT1.NC(16) → KM3.NC(41) → KM3.NC(42) → KM2.A1; KT1.NO(18) → KM2.NC(41) → KM2.NC(42) → KM3.A1."
     ],
     "ru": [
       "Выходы KK1: U1, V1, W1 и L1, L2, L3 KM3. Выходы KM3: T1 → W2, T2 → U2, T3 → V2.",
       "Звезда: L1, L2, L3 KM2 — на U2, V2, W2; T1, T2, T3 KM2 соединяются вместе.",
-      "Управление: SB2.24 → KM1.A1, KT1.A1, KT1.15; KT1.16 → KM3.41 → KM3.42 → KM2.A1; KT1.18 → KM2.41 → KM2.42 → KM3.A1."
+      "Управление: SB2.24 → KM1.A1, KT1.A1, KT1.COM(15); KT1.NC(16) → KM3.NC(41) → KM3.NC(42) → KM2.A1; KT1.NO(18) → KM2.NC(41) → KM2.NC(42) → KM3.A1."
     ],
     "en": [
       "KK1 outputs: U1, V1, W1 and KM3 L1, L2, L3. KM3 outputs: T1 → W2, T2 → U2, T3 → V2.",
       "Star: KM2 L1, L2, L3 to U2, V2, W2; KM2 T1, T2, T3 are joined together.",
-      "Control: SB2.24 → KM1.A1, KT1.A1, KT1.15; KT1.16 → KM3.41 → KM3.42 → KM2.A1; KT1.18 → KM2.41 → KM2.42 → KM3.A1."
+      "Control: SB2.24 → KM1.A1, KT1.A1, KT1.COM(15); KT1.NC(16) → KM3.NC(41) → KM3.NC(42) → KM2.A1; KT1.NO(18) → KM2.NC(41) → KM2.NC(42) → KM3.A1."
     ]
   }
 }
