@@ -95,6 +95,7 @@ export const uz = {
       { href: '/admin/teachers', label: 'O‘qituvchilar' },
       { href: '/admin/students', label: 'Talabalar' },
       { href: '/admin/settings', label: 'Sozlamalar' },
+      { href: '/admin/backup', label: 'Zaxira' },
     ],
     teacher: [
       { href: '/teacher', label: 'Bosh sahifa' },
@@ -210,6 +211,16 @@ export const uz = {
         string,
         string
       >,
+    },
+    backup: {
+      title: 'Zaxira va eksport',
+      lead: 'Asosiy jadvallarni CSV ko‘rinishida yuklab oling. Fayllarni xavfsiz joyda saqlang: ularda talabalar ma‘lumoti bor.',
+      omitted: 'chiqarilmaydi',
+      notes: [
+        'Bepul Supabase tarifida avtomatik yuklab olinadigan zaxira yo‘q — muhim paytlarda (semestr oxiri, nazoratdan keyin) CSV oling.',
+        'To‘liq nusxa (sxema + ma‘lumot) uchun: pg_dump yoki Supabase CLI (README → “Zaxira”).',
+        'Tiklash tartibi: README’dagi “Zaxiradan tiklash” bo‘limiga qarang.',
+      ],
     },
     settings: {
       title: 'Sozlamalar',

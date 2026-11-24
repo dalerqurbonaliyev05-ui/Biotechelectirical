@@ -16,7 +16,10 @@
     "test:watch": "vitest",
     "test:rls": "bash scripts/test-rls.sh",
     "smoke": "bash scripts/smoke.sh",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "check:embeds": "python3 scripts/check-embeds.py",
+    "verify": "npm run lint && npm run typecheck && npm test && npm run test:rls && npm run check:embeds && npm run build && npm run smoke",
+    "create-admin": "node scripts/create-admin.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",

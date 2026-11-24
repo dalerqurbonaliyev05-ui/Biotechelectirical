@@ -230,3 +230,17 @@ Har yozuv: **nima** → **nima uchun** → **qanday o'zgartirish mumkin**.
    qo'shildi — CI'da ishlaydi.
 6. **Jonli sinov uchun halollik:** shu ikki xato Supabase'siz yetarli sinalmaganligining oqibati edi. Ulangach
    README'dagi qo'lda tekshirish ro'yxatini bajaring.
+
+## 11-bosqich: mustahkamlash va ishga tushirish
+
+1. **Xavfsizlik matritsasi testi** (`80_security_matrix.sql`): barcha jadvalda RLS, `app_*` funksiyalar yopiqligi, anon, va
+   ikki talaba izolyatsiyasi. Birinchi urinishda test o'zi xatoni ko'rsatdi: `app_role()` RLS yordamchisi `app_%` nomiga mos
+   keladi, lekin foydalanuvchi uchun ochiq BO'LISHI shart (siyosatlar chaqiradi) — aniq istisno sifatida yozildi.
+2. **CSP (production) + HSTS** qo'shildi; PDF (worker), QR (`data:` rasm) haqiqiy Chromium'da sinalgan: qoidabuzarlik 0.
+   `'unsafe-inline'` skript — Next.js gidratatsiyasi uchun (nonce'siz); keyinroq nonce'li CSP (roadmap).
+3. **Keep-alive:** `CRON_SECRET` (fail-closed) + Vercel Cron + GitHub Actions zaxirasi. Endpoint bazaga oddiy `head` so'rov yuboradi.
+4. **Zaxira:** admin CSV eksport (whitelist). Meta-test migratsiyalarni o'qib, har bir jadval eksportda yoki sababi bilan
+   istisnoda ekanini tekshiradi — yangi jadval unutilmaydi. `join_token` chiqmaydi.
+5. **Admin bootstrap skripti** (`create-admin.mjs`): productionda `seed.sql` ishlatilmaydi, birinchi adminni yaratish uchun.
+6. **CI:** lint → tur → Vitest → SQL/RLS (haqiqiy Postgres xizmati) → embed tekshiruvi → build → smoke.
+7. **Cloudflare:** faqat yo'riqnoma (OpenNext/Workers); SINALMAGAN deb belgilangan.
