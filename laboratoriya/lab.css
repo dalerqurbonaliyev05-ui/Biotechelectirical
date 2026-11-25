@@ -412,3 +412,8 @@ body.oq {
 .oq .daraja i.on { background: var(--accent); }
 .oq .site-foot a:hover { color: var(--ink); }
 .oq .hamburger span { background: #09090b; }
+
+/* iyuu.uz darsiga joylashtirilganda (?embed=iyuu): sayt sarlavhasi va "orqaga" havolasi kerak emas */
+body.embed .app-head { display: none; }
+body.embed .skip-link { display: none; }
+body.embed #dlg-natija a[href="/laboratoriya/simulyator/"] { display: none; }

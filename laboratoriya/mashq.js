@@ -9,6 +9,22 @@ const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const REJIM_KEY = 'energyvibe-lab-rejim';
 
+// iyuu.uz darsiga joylashtirish rejimi (?embed=iyuu): sayt sarlavhasi yashiriladi, mashq har doim noldan boshlanadi,
+// natija ota oynaga postMessage bilan yuboriladi. Batafsil: laboratoriya/docs/iyuu-embed.md
+const EMBED = new URLSearchParams(location.search).has('embed');
+const EMBED_ORIGINLAR = ['https://iyuu.uz', 'https://www.iyuu.uz', 'https://smartedu-dalerqurbonaliyev05-uis-projects.vercel.app', 'http://localhost:3000', 'http://localhost:3123'];
+function otaOrigin() {
+  try {
+    const o = document.referrer ? new URL(document.referrer).origin : '';
+    return EMBED_ORIGINLAR.includes(o) ? o : null;
+  } catch (e) { return null; }
+}
+function otaga(tur, data) {
+  if (!EMBED || window.parent === window) return;
+  const o = otaOrigin();
+  if (o) window.parent.postMessage({ manba: 'energyvibe-lab', tur, sxema: lab?.sxema?.id, ...data }, o);
+}
+
 function sxemaId() {
   const q = new URLSearchParams(location.search).get('id');
   if (q) return q;
@@ -172,6 +188,10 @@ async function boshlash() {
   }
 
   lab = new Lab(sxema);
+  if (EMBED) {
+    document.body.classList.add('embed');
+    lab.yangidan(); // darsdagi topshiriq — eski qoralamasiz, noldan
+  }
   window.__lab = lab; // sinovlar va o‘qituvchi uchun konsoldan ko‘rish
   v2d = new View2D($('stage-2d'), lab);
   if (!(sxema.rejimlar || []).includes('3d')) document.querySelector('#rejim [data-rejim="3d"]').hidden = true;
@@ -179,8 +199,8 @@ async function boshlash() {
   lab.on((tur, d) => {
     if (tur === 'xabar') holatXabari(d.matn, d.daraja);
     if (tur === 'ozgardi') panelniYangila();
-    if (tur === 'tekshiruv') { oxirgiTekshiruv = d; natijalarniChiz(); if (!d.togri) panelniOch(true); }
-    if (tur === 'tugadi') natijaniKorsat(d);
+    if (tur === 'tekshiruv') { oxirgiTekshiruv = d; natijalarniChiz(); if (!d.togri) panelniOch(true); otaga('tekshiruv', { togri: !!d.togri }); }
+    if (tur === 'tugadi') { natijaniKorsat(d); otaga('tugadi', { ball: d.ball, vaqt: d.vaqt, xatolar: d.xatolar, maslahat: d.maslahat, javob: !!d.javob }); }
   });
 
   // Asboblar paneli
@@ -238,7 +258,8 @@ async function boshlash() {
   let saqlangan = null;
   try { saqlangan = localStorage.getItem(REJIM_KEY); } catch (e) { /* e’tiborsiz */ }
   const q = new URLSearchParams(location.search).get('rejim');
-  await rejimniOrnat(q || saqlangan || (sxema.rejimlar || ['2d'])[0]);
+  await rejimniOrnat(q || (EMBED ? '2d' : null) || saqlangan || (sxema.rejimlar || ['2d'])[0]);
+  otaga('tayyor', { nomi: tx(sxema.nomi) });
 }
 
 boshlash();

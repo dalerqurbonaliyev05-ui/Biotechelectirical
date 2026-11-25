@@ -414,7 +414,8 @@ function setupReader() {
 function route() {
   const m = location.hash.match(/^#\/kitob\/([\w-]+)(?:\/(\d+))?/);
   if (m) {
-    if (R && R.book.id === m[1]) return;      // o'sha kitob: sahifa almashganda qayta ochmaymiz
+    // o'sha kitob: qayta ochmaymiz; tashqaridan (masalan iyuu.uz darsi) yangi bet berilsa — o'sha betga o'tamiz
+    if (R && R.book.id === m[1]) { if (m[2] && R.pf) goTo(+m[2]); return; }
     openBook(m[1], m[2] ? +m[2] : 0);
   } else {
     closeReader().then(() => { showView('shelf'); renderChips(); renderShelf(); });
@@ -422,6 +423,8 @@ function route() {
 }
 
 (async function init() {
+  // iyuu.uz darsiga joylashtirilganda (?embed=1): "Kutubxonaga qaytish" tugmasi yashiriladi
+  if (new URLSearchParams(location.search).has('embed')) document.body.classList.add('embed');
   setupShelf(); setupReader();
   try { await loadCatalog(); }
   catch (e) { $('#grid').innerHTML = '<p class="empty">Katalog yuklanmadi (books.json).</p>'; console.error(e); }
