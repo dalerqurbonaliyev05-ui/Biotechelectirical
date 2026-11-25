@@ -415,5 +415,7 @@ body.oq {
 
 /* iyuu.uz darsiga joylashtirilganda (?embed=iyuu): sayt sarlavhasi va "orqaga" havolasi kerak emas */
 body.embed .app-head { display: none; }
+/* sarlavha yo'q: panjara 3 qatorli (asboblar / ish maydoni / pastki panel) */
+body.app.embed { grid-template-rows: auto 1fr auto; }
 body.embed .skip-link { display: none; }
 body.embed #dlg-natija a[href="/laboratoriya/simulyator/"] { display: none; }
