@@ -152,7 +152,7 @@ button { font: inherit; color: inherit; }
 /* =========================================================================
    Ish maydoni (mashq sahifasi): to‘liq ekranli ilova
    ========================================================================= */
-body.app { height: 100dvh; overflow: hidden; display: grid; grid-template-rows: auto auto 1fr auto; }
+body.app { height: 100vh; height: 100dvh; height: var(--app-h, 100dvh); overflow: hidden; display: grid; grid-template-rows: auto auto 1fr auto; }
 .app-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 52px; margin: 10px 12px 0; padding: 0 8px 0 10px; background: #fff; color: #09090b; border-radius: 2px; }
 .app-head .btn { color: #09090b; border-color: #09090b; height: 32px; }
 .app-head .btn:hover { background: #0000000d; }
@@ -338,6 +338,47 @@ dialog::backdrop { background: #000a; backdrop-filter: blur(3px); }
   .side { width: 100%; }
   .toast { bottom: 8px; left: 8px; }
 }
+/* ---------- To‘liq ekran (immersive): haqiqiy Fullscreen API yoki zaxira rejim (iPhone, iframe) ---------- */
+#tb-full .ic-chiq { display: none; }
+body.fs #tb-full .ic-kir { display: none; }
+body.fs #tb-full .ic-chiq { display: block; }
+body.fs #tb-full { color: var(--ink); border-color: var(--line-2); }
+body.fs { grid-template-rows: auto 1fr auto; }
+body.fs .app-head, body.fs #el-chips { display: none; }
+body.fs .toolbar { flex-wrap: nowrap; overflow-x: auto; row-gap: 0; margin-top: 6px; }
+body.fs .toolbar > :last-child { order: -2; }  /* Topshiriq / Tekshirish / Tok berish / chiqish — birinchi */
+body.fs .toolbar > :nth-child(5) { order: -1; } /* Ball / vaqt / xatolar */
+body.fs .bottombar { margin-bottom: 6px; padding: 6px 8px; }
+body.fs .ws { margin-top: 6px; }
+/* Landshaft telefon: pastki panel (sim rangi) maydon ustida suzadi — 3D uchun maksimal balandlik */
+@media (orientation: landscape) and (max-height: 520px) {
+  body.fs { grid-template-rows: auto 1fr; }
+  body.fs .bottombar { position: fixed; left: 8px; right: 8px; bottom: 6px; margin: 0; z-index: 20; }
+  body.fs .ws { margin-bottom: 6px; }
+  body.fs .toast { bottom: 64px; }
+}
+/* ---------- VR rejimi (engine/vr.js) ---------- */
+.vr-kirish[hidden], .vr-qatlam[hidden] { display: none; }
+.vr-kirish { position: absolute; inset: 0; z-index: 7; display: grid; place-items: center; padding: 14px; background: #0b0b0dcc; overflow: auto; }
+.vr-karta { max-width: 480px; background: #fff; color: #09090b; padding: 16px 18px; border-radius: 2px; display: grid; gap: 8px; }
+.vr-karta h3 { font-weight: 800; font-size: 1.05rem; line-height: 1.25; }
+.vr-karta p, .vr-karta li { font-size: 13px; line-height: 1.45; color: #3f3f46; }
+.vr-karta ul { padding-left: 18px; display: grid; gap: 3px; }
+.vr-ipd { display: grid; gap: 4px; font: 600 11px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: #52525b; }
+.vr-ipd input { width: 100%; }
+.vr-karta .vr-kir { width: 100%; height: 44px; }
+.vr-qatlam { position: absolute; inset: 0; z-index: 8; touch-action: none; user-select: none; -webkit-user-select: none; }
+.vr-orta { position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; margin-left: -1px; background: #000; }
+.vr-nishon { position: absolute; top: 50%; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 2px #000a; pointer-events: none; transition: transform .1s; }
+.vr-nishon.chap { left: 25%; } .vr-nishon.ong { left: 75%; }
+.vr-nishon.faol { background: #ffb020; transform: scale(1.5); }
+.vr-xabar { position: absolute; bottom: 22%; width: 36%; text-align: center; font: 600 12px/1.35 var(--mono); color: #fff; text-shadow: 0 1px 3px #000, 0 0 2px #000; pointer-events: none; }
+.vr-xabar.chap { left: 7%; } .vr-xabar.ong { left: 57%; }
+.vr-chiq { position: absolute; top: 6px; left: 50%; transform: translateX(-50%); width: 34px; height: 34px; border-radius: 50%; border: 1px solid #fff8; background: #000a; color: #fff; font: 700 18px/1 var(--mono); cursor: pointer; z-index: 2; }
+body.vr-faol .app-head, body.vr-faol .toolbar, body.vr-faol .bottombar, body.vr-faol .toast, body.vr-faol .side,
+body.vr-faol .help-pop, body.vr-faol .v3d-fokus, body.vr-faol .v3d-tip, body.vr-faol .stage-help { display: none !important; }
+body.vr-faol .ws { position: fixed; inset: 0; margin: 0; border: 0; z-index: 100; }
+body.vr-faol .ws .stage { right: 0 !important; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }

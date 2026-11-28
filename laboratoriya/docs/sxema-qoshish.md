@@ -46,7 +46,7 @@ laboratoriya/
 | `yonalish` | `yoritish`, `uy_shiti`, `motorlar`, `rele`, `podstansiya`, `olchash`, `yerga_ulash` |
 | `daraja` | 1–5 |
 | `vaqt_min` | Taxminiy vaqt (daqiqa) |
-| `rejimlar` | `["2d", "3d"]` yoki faqat `["2d"]` |
+| `rejimlar` | `["2d", "3d"]` yoki faqat `["2d"]`; VR (telefon + ko‘zoynak) uchun `"vr"` qo‘shiladi — faqat egasi ruxsat bergan sxemalarda |
 | `korinish2d` | SVG viewBox: `[x, y, kenglik, balandlik]` |
 | `nomi`, `qisqacha`, `topshiriq` | `{uz, ru, en}` matnlar (qisqacha — kartochka uchun) |
 | `elementlar` | `[{id, tur, parametr?, pozitsiya2d: [x,y], pozitsiya3d: [x,y,z], burilish3d?, masshtab3d?}]` |

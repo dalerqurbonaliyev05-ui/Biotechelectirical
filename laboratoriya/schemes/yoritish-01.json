@@ -4,7 +4,7 @@
   "yonalish": "yoritish",
   "daraja": 1,
   "vaqt_min": 10,
-  "rejimlar": ["2d", "3d"],
+  "rejimlar": ["2d", "3d", "vr"],
   "korinish2d": [20, 40, 1060, 690],
   "nomi": {
     "uz": "Yoritish 1: bir klavishali kalit orqali lampani boshqarish",

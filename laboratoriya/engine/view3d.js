@@ -5,6 +5,8 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { RANGLAR } from './ranglar.js';
 import { t } from './i18n.js';
+import { sifatAniqla } from './sifat.js';
+import { statikBirlashtir } from './birlash.js';
 
 import { avtoJoylash, avtoModel, joyTuri, yol2d } from './view3d-avto.js';
 
@@ -49,15 +51,18 @@ export class View3D {
     this.modellar = new Map(); // elId → model
     this.simObj = new Map(); // simId → {mesh, hit, curve, mat}
     this.bosiladigan = [];
+    this._mL = new THREE.Matrix4(); this._mM = new THREE.Matrix4(); this._mq = new THREE.Quaternion(); this._mv = new THREE.Vector3(); this._mrang = new THREE.Color();
     this.oqim = [];
     this.uchqunlar = [];
     this.faol = true;
+    this.soyaKerak = true; // statik soya xaritasini qayta chizish kerakmi (sifat: orta)
+    this.sifat = sifatAniqla(); // unumdorlik darajasi (engine/sifat.js)
 
-    this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true });
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: this.sifat.aa });
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, this.sifat.pr));
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1.2;
-    this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.enabled = this.sifat.soya;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0xdfe3e8);
@@ -77,6 +82,7 @@ export class View3D {
     this.xonaQur();
     this.bezaklarQur();
     this.elementlarQur();
+    if (this.sifat.glow) this.glowQur();
     // Muhit yoritilishi: metall va plastik yuzalarda real aks
     const pmrem = new THREE.PMREMGenerator(this.renderer);
     this.scene.environment = pmrem.fromScene(new RoomEnvironment(this.renderer), 0.04).texture;
@@ -91,6 +97,9 @@ export class View3D {
       this.modellar.get(el.id).obj.traverse((o) => { if (o.isMesh && !o.userData.tur && !o.material.isMeshBasicMaterial) bx.expandByObject(o); });
       this.qutiChegara.set(el.id, bx);
     }
+    if (this.sifat.birlash) this.statikniBirlashtir();
+    // Statik soya: harakatlanuvchi model (motor) bo‘lmasa, soya xaritasi faqat sahna o‘zgarganda qayta chiziladi
+    if (this.sifat.soya && this.sifat.soyaStatik && ![...this.modellar.values()].some((m) => m.kadr)) this.renderer.shadowMap.autoUpdate = false;
     this.simlarQur();
     this.holatYangila();
 
@@ -106,6 +115,7 @@ export class View3D {
     this.ro = new ResizeObserver(() => this.olcham());
     this.ro.observe(this.canvas.parentElement);
     this.olcham();
+    this.debugQur();
     this.soat = new THREE.Clock();
     const loop = () => { this.raf = requestAnimationFrame(loop); if (this.faol) this.kadr(); };
     loop();
@@ -496,8 +506,8 @@ export class View3D {
     this.quyosh = new THREE.DirectionalLight(0xfff0d8, 3.2);
     this.quyosh.position.set(-W / 2 - 2.6, 3.1, oyna.z + 0.6);
     this.quyosh.target.position.set(0.2, 0.2, 1.6);
-    this.quyosh.castShadow = true;
-    const xarita = window.innerWidth < 700 ? 1024 : 2048; // telefonlarda yengilroq
+    this.quyosh.castShadow = this.sifat.soya;
+    const xarita = this.sifat.soyaXarita || (window.innerWidth < 700 ? 1024 : 2048); // yuqori: avvalgidek; orta: 1024
     this.quyosh.shadow.mapSize.set(xarita, xarita);
     const sc = this.quyosh.shadow.camera;
     sc.left = -3; sc.right = 3; sc.top = 3; sc.bottom = -3; sc.near = 0.5; sc.far = 9;
@@ -507,7 +517,7 @@ export class View3D {
     this.oldNur = new THREE.DirectionalLight(0xfffaf2, 0.75); // xona ichidagi yoyilgan yorug‘lik (devorga yumshoq soya)
     this.oldNur.position.set(1.4, 2.9, 3.6);
     this.oldNur.target.position.set(-0.3, 1.4, 0);
-    this.oldNur.castShadow = true;
+    this.oldNur.castShadow = this.sifat.soya;
     this.oldNur.shadow.mapSize.set(xarita, xarita);
     const oc = this.oldNur.shadow.camera;
     oc.left = -1.8; oc.right = 1.8; oc.top = 1.6; oc.bottom = -1.6; oc.near = 1; oc.far = 8;
@@ -621,18 +631,33 @@ export class View3D {
         const info = m.klemmalar[k.id];
         if (!info) continue;
         const r = info.r || k.r3d || 0.013;
+        // «hit» faqat nur (raycast) uchun: 1-qatlamda, kamera ko‘rmaydi va chizilmaydi (Raycaster.layers.enable(1))
         const hit = new THREE.Mesh(kurinadigan, new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false }));
         hit.scale.setScalar(r);
         hit.position.set(...info.pos);
         hit.userData = { tur: 'kl', full };
-        const marker = new THREE.Mesh(kurinadigan, new THREE.MeshBasicMaterial({ color: RANG_MARKER.bosh, transparent: true, opacity: 0.85, depthTest: true }));
-        marker.scale.setScalar(Math.min(0.0055, r * 0.55));
-        marker.position.set(...info.pos);
-        marker.renderOrder = 1;
-        m.obj.add(hit, marker);
-        this.kl.set(full, { hit, marker, obj: m.obj, dir: new THREE.Vector3(...info.dir).normalize(), r });
+        hit.layers.set(1);
+        m.obj.add(hit);
+        // Marker: bitta InstancedMesh ichidagi nusxa (model fazosidagi joyi va o‘lchami saqlanadi)
+        this.kl.set(full, { hit, i: this.kl.size, mpos: new THREE.Vector3(...info.pos), mscale: Math.min(0.0055, r * 0.55), obj: m.obj, dir: new THREE.Vector3(...info.dir).normalize(), r });
       }
     }
+    const n = Math.max(1, this.kl.size);
+    const markerGeo = this.sifat.nom === 'yuqori' ? kurinadigan : new THREE.SphereGeometry(1, 8, 6); // kichik shar: past/orta da yengilroq
+    this.markerlar = new THREE.InstancedMesh(markerGeo, new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.85, depthTest: true }), n);
+    this.markerlar.count = this.kl.size;
+    this.markerlar.renderOrder = 1;
+    this.markerlar.frustumCulled = false;
+    for (let i = 0; i < n; i++) this.markerlar.setColorAt(i, this._mrang.set(RANG_MARKER.bosh));
+    this.scene.add(this.markerlar);
+  }
+
+  /** Marker nusxasini yozadi: model (obj) jahon matritsasi × lokal joy/o‘lcham. olcham 0 — ko‘rinmaydi. */
+  markerYoz(k, olcham, rang) {
+    this._mL.compose(k.mpos, this._mq, this._mv.setScalar(olcham));
+    this._mM.multiplyMatrices(k.obj.matrixWorld, this._mL);
+    this.markerlar.setMatrixAt(k.i, this._mM);
+    if (rang != null) this.markerlar.setColorAt(k.i, this._mrang.set(rang));
   }
 
   soyalarniSozla() {
@@ -809,7 +834,8 @@ export class View3D {
       const mesh = new THREE.Mesh(new THREE.TubeGeometry(curve, seg, this.avto ? 0.0021 : 0.0034, 8, false), mat);
       const hit = new THREE.Mesh(new THREE.TubeGeometry(curve, Math.max(12, seg >> 1), this.avto ? 0.006 : 0.011, 6, false), hitMat);
       hit.userData = { tur: 'sim', id: s.id };
-      mesh.castShadow = true;
+      hit.layers.set(1); // faqat nur uchun, chizilmaydi
+      mesh.castShadow = this.sifat.soya;
       mesh.receiveShadow = true;
       this.scene.add(mesh, hit);
       this.simObj.set(s.id, { mesh, hit, curve, mat, len });
@@ -827,10 +853,12 @@ export class View3D {
       const yonadi = !!sim.yuklamalar[el.id]?.yonadi || (natija.holatlar || []).includes('yonadi');
       if (yonadi && (m.yorugl || el.def.yuklama)) yorug = true;
       m.yangila?.(lab.holat[el.id] || {}, { yonadi, natija });
+      if (m.glow) m.glow.visible = yonadi;
     }
+    this.soyaKerak = true;
     this.hemi.intensity = yorug ? 1.0 : 0.8;
     this.hemi.color.set(yorug ? 0xfff1dc : 0xeaf2ff);
-    for (const m of this.modellar.values()) if (m.yorugl) m.yorugl.castShadow = m.yorugl.intensity > 0;
+    for (const m of this.modellar.values()) if (m.yorugl) m.yorugl.castShadow = this.sifat.lampaSoya && m.yorugl.intensity > 0;
     for (const [full, k] of this.kl) {
       const r = lab.klemma(full);
       const n = lab.simlarSoni(full);
@@ -838,54 +866,222 @@ export class View3D {
       if (lab.belgilangan.klemmalar.has(full)) rang = RANG_MARKER.belgi;
       if (lab.tanlangan === full) rang = RANG_MARKER.tanlangan;
       if (this.hover === full && lab.tanlangan !== full) rang = RANG_MARKER.hover;
-      k.marker.material.color.set(rang);
-      // Avto sahnada klemma halqalari qurilma rasmida bor — bo‘sh klemmada shar ko‘rinmaydi
-      if (this.avto) k.marker.visible = rang !== RANG_MARKER.bosh;
+      // Avto sahnada klemma halqalari qurilma rasmida bor — bo‘sh klemmada shar ko‘rinmaydi (olcham 0)
+      const korinadi = !this.avto || rang !== RANG_MARKER.bosh;
       k.tanlangan = lab.tanlangan === full;
-      if (!k.tanlangan) k.marker.scale.setScalar(Math.min(0.0055, k.r * 0.55) * (this.hover === full ? 1.5 : 1));
+      this.markerYoz(k, korinadi ? k.mscale * (!k.tanlangan && this.hover === full ? 1.5 : 1) : 0, rang);
       void r;
     }
+    this.markerlar.instanceMatrix.needsUpdate = true;
+    if (this.markerlar.instanceColor) this.markerlar.instanceColor.needsUpdate = true;
     for (const [id, o] of this.simObj) {
       const tan = lab.tanlanganSim === id, bel = lab.belgilangan.simlar.has(id);
       o.mat.emissive?.set(tan ? 0x6d4aff : bel ? 0xe5484d : 0x000000);
       o.mat.emissiveIntensity = tan || bel ? 0.6 : 0;
       o.belgi = bel;
     }
-    // Tok oqimi nuqtalari
-    for (const d of this.oqim) { this.scene.remove(d.mesh); }
+    // Tok oqimi nuqtalari: bitta InstancedMesh (joylari kadr() da yangilanadi)
     this.oqim = [];
-    const geo = this._oqGeo || (this._oqGeo = new THREE.SphereGeometry(this.avto ? 0.0034 : 0.0062, 10, 8));
-    const mat = this._oqMat || (this._oqMat = new THREE.MeshBasicMaterial({ color: 0xffd23f }));
     for (const o of sim.oqim) {
       const so = this.simObj.get(o.sim);
       if (!so) continue;
       const n = Math.max(2, Math.round(so.len / 0.12));
-      for (let i = 0; i < n; i++) {
-        const mesh = new THREE.Mesh(geo, mat);
-        this.scene.add(mesh);
-        this.oqim.push({ mesh, curve: so.curve, len: so.len, faza: i / n, yonalish: o.yonalish });
-      }
+      for (let i = 0; i < n; i++) this.oqim.push({ curve: so.curve, len: so.len, faza: i / n, yonalish: o.yonalish });
+    }
+    this.oqimMeshniTayyorla();
+  }
+
+  oqimMeshniTayyorla() {
+    const kerak = this.oqim.length;
+    if (!this.oqimMesh || this.oqimMesh.instanceMatrix.count < kerak) {
+      if (this.oqimMesh) { this.scene.remove(this.oqimMesh); this.oqimMesh.dispose(); }
+      const geo = this._oqGeo || (this._oqGeo = new THREE.SphereGeometry(this.avto ? 0.0034 : 0.0062, ...(this.sifat.nom === 'yuqori' ? [10, 8] : [6, 4])));
+      const mat = this._oqMat || (this._oqMat = new THREE.MeshBasicMaterial({ color: 0xffd23f }));
+      this.oqimMesh = new THREE.InstancedMesh(geo, mat, Math.max(64, kerak * 2));
+      this.oqimMesh.frustumCulled = false; // nuqtalar sahna bo‘ylab yuradi, chegara sferasi kerak emas
+      this.scene.add(this.oqimMesh);
+    }
+    this.oqimMesh.count = kerak;
+    this.oqimMesh.visible = kerak > 0;
+  }
+
+  // ---------- unumdorlik: birlashtirish, glow, debug ----------
+  /** Statik mesh'larni (xona, shit korpusi va harakatlanmaydigan qurilma qismlari) material bo‘yicha birlashtiradi. */
+  statikniBirlashtir() {
+    this.scene.updateMatrixWorld(true);
+    const istisno = new Set();
+    // Holati o‘zgarganda ko‘chadigan/ko‘rinishi almashadigan mesh'lar (klavisha, dasta...) va aylanuvchi modellar birlashtirilmaydi
+    for (const el of this.lab.els) {
+      const m = this.modellar.get(el.id);
+      const meshlar = [];
+      m.obj.traverse((o) => { if (o.isMesh) meshlar.push(o); });
+      if (m.kadr) { meshlar.forEach((o) => istisno.add(o)); continue; } // aylanuvchi/animatsiyali model
+      if (!m.yangila || m.amalTop) continue; // rasm-asosli (naqsh) modelda yuz tekstura bilan almashadi — yangila()ni bu yerda chaqirmaymiz
+      const h0 = el.def.boshlangich(el.param) || {};
+      // Faqat mantiqiy (true/false) holatni sinab ko‘ramiz; boshqa turdagi holat (satr, son) bo‘lsa — ishonch uchun butun model chetlanadi
+      if (Object.values(h0).some((vv) => typeof vv !== 'boolean')) { meshlar.forEach((o) => istisno.add(o)); continue; }
+      const surat = () => { m.obj.updateWorldMatrix(true, true); return meshlar.map((o) => `${o.matrixWorld.elements.join(',')}|${o.visible}|${o.material.id}|${o.geometry.id}`); };
+      const holatlar = [h0];
+      for (const [kk, vv] of Object.entries(h0)) holatlar.push({ ...h0, [kk]: !vv });
+      holatlar.push(Object.fromEntries(Object.keys(h0).map((kk) => [kk, true])));
+      const natijalar = [{}, { holatlar: ['yonadi', 'ishlaydi', 'tortilgan', 'yoqilgan', 'ochiq', 'teskari', 'yulduz'] }];
+      let bazaS = null;
+      try {
+        for (const yon of [false, true]) for (const nat of natijalar) for (const h of holatlar) {
+          m.yangila(h, { yonadi: yon, natija: nat });
+          const sr = surat();
+          if (!bazaS) bazaS = sr;
+          sr.forEach((x, i) => { if (x !== bazaS[i]) istisno.add(meshlar[i]); });
+        }
+      } catch (e) { meshlar.forEach((o) => istisno.add(o)); }
+    }
+    const barchasi = [];
+    this.scene.traverse((o) => { if (o.isMesh) barchasi.push(o); });
+    this.birlashStat = statikBirlashtir(THREE, barchasi, this.scene, istisno);
+  }
+
+  /** Yongan lampa uchun yorug‘lik dog‘i (soyasiz sifat darajalarida kub soyasi o‘rniga). */
+  glowQur() {
+    const c = document.createElement('canvas');
+    c.width = c.height = 64;
+    const x = c.getContext('2d');
+    const g = x.createRadialGradient(32, 32, 0, 32, 32, 32);
+    g.addColorStop(0, 'rgba(255,226,170,0.85)'); g.addColorStop(0.35, 'rgba(255,205,130,0.35)'); g.addColorStop(1, 'rgba(255,190,100,0)');
+    x.fillStyle = g; x.fillRect(0, 0, 64, 64);
+    const tex = new THREE.CanvasTexture(c);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    const mat = new THREE.SpriteMaterial({ map: tex, blending: THREE.AdditiveBlending, depthWrite: false, transparent: true });
+    for (const m of this.modellar.values()) {
+      if (!m.yorugl) continue;
+      const sp = new THREE.Sprite(mat);
+      sp.scale.set(0.5, 0.5, 1);
+      sp.position.copy(m.yorugl.position);
+      sp.visible = false;
+      m.obj.add(sp);
+      m.glow = sp;
     }
   }
 
+  /** ?debug=1: FPS, draw call, uchburchak, sifat darajasi. */
+  debugQur() {
+    if (!this.sifat.debug) return;
+    // Yuqori o‘ng burchakdagi konteyner: sahifaning pastki bildirishnomasi (toast) bosishga xalaqit bermasligi uchun
+    this.dbgBox = document.createElement('div');
+    this.dbgBox.style.cssText = 'position:absolute;right:8px;top:8px;z-index:6;display:flex;flex-direction:column;align-items:flex-end;gap:6px;max-width:64%;pointer-events:none';
+    this.dbg = document.createElement('div');
+    this.dbg.style.cssText = 'background:#000c;color:#9f9;font:11px/1.35 ui-monospace,monospace;padding:5px 8px;white-space:pre';
+    this.dbgBox.appendChild(this.dbg);
+    this.root.querySelector('.v3d').appendChild(this.dbgBox);
+    this.dbgT = performance.now(); this.dbgN = 0;
+    this.renderer.info.autoReset = false; // aks holda soya o‘tishlari hisobga kirmaydi; kadr() har kadr boshida o‘zi nolga tushiradi
+    this.dbgJs = 0;
+    if (this.sifat.debugDaraja >= 2) {
+      const toast = document.getElementById('m-bar'); // pastdagi bildirishnoma tugmalarni to‘sib qo‘ymasin
+      if (toast) toast.style.display = 'none';
+      this.debugTugmalar();
+    }
+  }
+
+  /** ?debug=2: har bir tugma bitta xususiyatni jonli o‘chiradi — FPS o‘zgarishidan qaysi qism qimmat ekani bilinadi. */
+  debugTugmalar() {
+    const sah = this.scene, rn = this.renderer;
+    const bar = document.createElement('div');
+    bar.style.cssText = 'display:flex;flex-wrap:wrap;justify-content:flex-end;gap:4px;pointer-events:auto';
+    this.dbgBox.appendChild(bar);
+    const dpr = window.devicePixelRatio || 1;
+    const tugma = (nom, fn, guruh) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.textContent = nom;
+      b.style.cssText = 'font:600 11px ui-monospace,monospace;padding:5px 7px;border:1px solid #fff6;background:#000b;color:#fff;border-radius:6px';
+      b.dataset.on = '0';
+      b.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const on = guruh ? true : b.dataset.on !== '1';
+        if (guruh) bar.querySelectorAll(`[data-g="${guruh}"]`).forEach((x) => { x.dataset.on = '0'; x.style.background = '#000b'; });
+        b.dataset.on = on ? '1' : '0';
+        b.style.background = on ? '#c2410c' : '#000b';
+        fn(on);
+      });
+      if (guruh) b.dataset.g = guruh;
+      bar.appendChild(b);
+      return b;
+    };
+    const kolleksiya = (f) => { const r = []; sah.traverse((o) => { if (f(o)) r.push(o); }); return r; };
+    const ko = (royxat, on) => royxat.forEach((o) => { if (on) { o._oldVis = o.visible; o.visible = false; } else o.visible = o._oldVis ?? true; });
+    for (const v of [0.5, 0.75, 1, 1.5, 2]) tugma(`pr ${v}`, () => rn.setPixelRatio(Math.min(dpr, v)), 'pr');
+    tugma('render OFF', (on) => { this.dbgRenderOff = on; });
+    const shaffof = kolleksiya((o) => o.isSprite || (o.isMesh && o.material && o.material.transparent && o.layers.mask === 1));
+    tugma('shaffof OFF', (on) => ko(shaffof, on));
+    tugma('env OFF', (on) => { this._env = this._env || sah.environment; sah.environment = on ? null : this._env; });
+    tugma('tonemap OFF', (on) => { rn.toneMapping = on ? THREE.NoToneMapping : THREE.ACESFilmicToneMapping; });
+    const dir = kolleksiya((o) => o.isDirectionalLight);
+    tugma('dir nur OFF', (on) => ko(dir, on));
+    const nuqta = kolleksiya((o) => o.isPointLight);
+    tugma('lampa nuri OFF', (on) => ko(nuqta, on));
+    const sim = () => [...this.simObj.values()].map((o) => o.mesh);
+    tugma('simlar OFF', (on) => ko(sim(), on));
+    tugma('tok nuqta OFF', (on) => { if (this.oqimMesh) this.oqimMesh.visible = !on && this.oqim.length > 0; });
+  }
+
+  debugYangila() {
+    this.dbgN++;
+    const now = performance.now();
+    if (now - this.dbgT < 500) return;
+    const i = this.renderer.info.render;
+    this.fps = Math.round((this.dbgN * 1000) / (now - this.dbgT));
+    const js = (this.dbgJs / this.dbgN).toFixed(1); this.dbgJs = 0;
+    this.dbg.textContent = `FPS ${this.fps}  calls ${i.calls}  tri ${(i.triangles / 1000).toFixed(1)}k\n${this.sifat.nom} pr ${this.renderer.getPixelRatio()}${this.sifat.birlash ? ' merge' : ''} ${this.canvas.width}×${this.canvas.height}\njs ${js}ms/kadr, kadr ${(1000 / Math.max(1, this.fps)).toFixed(0)}ms\ndpr ${window.devicePixelRatio} ${window.innerWidth}×${window.innerHeight}\n${this.sifat.sabab}`;
+    this.dbgT = now; this.dbgN = 0;
+  }
+
   // ---------- hodisalar ----------
+  /**
+   * Nur bo‘yicha tanlash: kamera va ekran nuqtasi (NDC, −1…1; VR nishoni — 0,0). Sichqoncha koordinatasiga bog‘liq emas.
+   * Qaytaradi: hit userData ({tur:'kl', full} | {tur:'sim', id} | {tur:'bos', el, model, uv}) yoki null.
+   */
+  tanlaNdc(x, y, kamera = this.camera) {
+    const ray = this._ray || (this._ray = new THREE.Raycaster());
+    ray.layers.enable(1); // 1-qatlam: ko‘rinmas «hit» obyektlar (chizilmaydi, lekin nur tegadi)
+    ray.setFromCamera(this._ndc ? this._ndc.set(x, y) : (this._ndc = new THREE.Vector2(x, y)), kamera);
+    const obj = [...[...this.kl.values()].map((k) => k.hit), ...[...this.simObj.values()].map((o) => o.hit), ...this.bosiladigan];
+    const hits = ray.intersectObjects(obj, false);
+    if (!hits.length) return null;
+    // Klemma yaqin bo‘lsa — klemma ustun (sim uchlari klemma ustida tugaydi)
+    const kl = hits.find((h) => h.object.userData.tur === 'kl');
+    if (kl && kl.distance - hits[0].distance < 0.03) return kl.object.userData;
+    // Sim qurilma ustidan o‘tsa ham, ostidagi tugma/dastak ustun turadi (2D dagidek)
+    const amalli = hits.find((h) => h.object.userData.tur === 'bos' && h.uv && h.object.userData.model?.amalTop?.(h.uv));
+    if (amalli) return { ...amalli.object.userData, uv: amalli.uv };
+    return { ...hits[0].object.userData, uv: hits[0].uv };
+  }
+
+  /** VR: nishon (kamera markazi) ostidagi narsaga «bosish» — sichqoncha bilan bosishning o‘zi. */
+  markazniBos() {
+    const u = this.tanlaNdc(0, 0);
+    if (!u) { this.lab.bosh(); return null; }
+    if (u.tur === 'kl') this.lab.klemmaBosish(u.full);
+    else if (u.tur === 'sim') this.lab.simBosish(u.id);
+    else if (u.tur === 'bos') {
+      const el = this.lab.elMap.get(u.el);
+      if (this.avto) {
+        const amal = u.model?.amalTop && u.uv ? u.model.amalTop(u.uv) : null;
+        if (amal) {
+          const rejim = el.def.tugmaRejimi?.(amal, el.param) || el.def.tugmalar?.[amal] || 'almash';
+          if (rejim === 'lahzali') { this.lab.elementBosish(u.el, amal, 'bos'); setTimeout(() => this.lab.elementBosish(u.el, amal, 'qoyib_yubor'), 400); }
+          else this.lab.elementBosish(u.el, amal, 'almash');
+          return u;
+        }
+        if (!el.def.bosiladi) { this.lab.bosh(); return u; }
+      }
+      this.lab.elementBosish(u.el);
+    }
+    return u;
+  }
+
   hodisalar() {
-    const ray = new THREE.Raycaster();
-    const nuqta = new THREE.Vector2();
     const tanla = (e) => {
       const r = this.canvas.getBoundingClientRect();
-      nuqta.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
-      ray.setFromCamera(nuqta, this.camera);
-      const obj = [...[...this.kl.values()].map((k) => k.hit), ...[...this.simObj.values()].map((o) => o.hit), ...this.bosiladigan];
-      const hits = ray.intersectObjects(obj, false);
-      if (!hits.length) return null;
-      // Klemma yaqin bo‘lsa — klemma ustun (sim uchlari klemma ustida tugaydi)
-      const kl = hits.find((h) => h.object.userData.tur === 'kl');
-      if (kl && kl.distance - hits[0].distance < 0.03) return kl.object.userData;
-      // Sim qurilma ustidan o‘tsa ham, ostidagi tugma/dastak ustun turadi (2D dagidek)
-      const amalli = hits.find((h) => h.object.userData.tur === 'bos' && h.uv && h.object.userData.model?.amalTop?.(h.uv));
-      if (amalli) return { ...amalli.object.userData, uv: amalli.uv };
-      return { ...hits[0].object.userData, uv: hits[0].uv };
+      return this.tanlaNdc(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
     };
     // Avto sahna: qurilma rasmidagi tugma/dastakni aniqlash (2D dagidek)
     const amalTop = (u) => {
@@ -1016,13 +1212,14 @@ export class View3D {
     const w = this.canvas.clientWidth, h = this.canvas.clientHeight;
     if (!w || !h) return;
     this.renderer.setSize(w, h, false);
-    this.camera.aspect = w / h;
+    this.camera.aspect = (this.vr?.faol ? w / 2 : w) / h; // VR: har bir ko‘z — ekranning yarmi
     this.camera.updateProjectionMatrix();
   }
 
   kadr() {
     const dt = Math.min(0.05, this.soat.getDelta());
     const now = performance.now();
+    const t0 = now;
     if (this.tween) {
       const tw = this.tween;
       const u = Math.min(1, (now - tw.t0) / tw.d);
@@ -1031,16 +1228,24 @@ export class View3D {
       this.controls.target.lerpVectors(tw.n0, tw.n1, e);
       if (u >= 1) this.tween = null;
     }
-    this.controls.update();
+    if (this.vr?.faol) this.vr.yangila(dt); // VR: kamerani giroskop/pult boshqaradi
+    else this.controls.update();
     for (const m of this.modellar.values()) m.kadr?.(dt);
     // Tanlangan klemma pulsatsiyasi, xato simlar miltillashi
     const puls = 1 + 0.45 * Math.sin(now / 160);
-    for (const k of this.kl.values()) if (k.tanlangan) k.marker.scale.setScalar(Math.min(0.0055, k.r * 0.55) * 1.7 * puls);
+    let tanlanganBor = false;
+    for (const k of this.kl.values()) if (k.tanlangan) { this.markerYoz(k, k.mscale * 1.7 * puls, null); tanlanganBor = true; }
+    if (tanlanganBor) this.markerlar.instanceMatrix.needsUpdate = true;
     for (const o of this.simObj.values()) if (o.belgi) o.mat.emissiveIntensity = 0.35 + 0.35 * Math.sin(now / 200);
-    for (const d of this.oqim) {
-      let u = (d.faza + (now / 1000) * (0.2 / Math.max(0.2, d.len))) % 1;
-      if (d.yonalish < 0) u = 1 - u;
-      d.mesh.position.copy(d.curve.getPointAt(u));
+    if (this.oqim.length) {
+      const mt = this._mM;
+      this.oqim.forEach((d, i) => {
+        let u = (d.faza + (now / 1000) * (0.2 / Math.max(0.2, d.len))) % 1;
+        if (d.yonalish < 0) u = 1 - u;
+        mt.makeTranslation(d.curve.getPointAt(u, this._mv));
+        this.oqimMesh.setMatrixAt(i, mt);
+      });
+      this.oqimMesh.instanceMatrix.needsUpdate = true;
     }
     for (let i = this.uchqunlar.length - 1; i >= 0; i--) {
       const u = this.uchqunlar[i];
@@ -1059,14 +1264,21 @@ export class View3D {
         this.uchqunlar.splice(i, 1);
       }
     }
-    this.renderer.render(this.scene, this.camera);
+    if (this.soyaKerak && this.renderer.shadowMap.enabled && !this.renderer.shadowMap.autoUpdate) { this.renderer.shadowMap.needsUpdate = true; this.soyaKerak = false; }
+    if (this.dbg) this.renderer.info.reset();
+    if (this.dbgRenderOff) { /* debug: faqat JS */ } else if (this.vr?.faol) this.vr.chiz(); else this.renderer.render(this.scene, this.camera);
+    if (this.dbg) { this.dbgJs += performance.now() - t0; this.debugYangila(); }
   }
 
   yoqot() {
+    this.vr?.yoqot();
     this.ochir();
     cancelAnimationFrame(this.raf);
     this.ro.disconnect();
     this.controls.dispose();
+    this.markerlar?.dispose();
+    this.oqimMesh?.dispose();
+    this.dbgBox?.remove();
     this.renderer.dispose();
   }
 }
