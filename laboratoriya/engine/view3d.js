@@ -978,7 +978,7 @@ export class View3D {
     if (now - this.dbgT < 500) return;
     const i = this.renderer.info.render;
     this.fps = Math.round((this.dbgN * 1000) / (now - this.dbgT));
-    this.dbg.textContent = `FPS ${this.fps}\ncalls ${i.calls}\ntri ${(i.triangles / 1000).toFixed(1)}k\nsifat ${this.sifat.nom} pr ${this.renderer.getPixelRatio()}${this.sifat.birlash ? ' merge' : ''}\n${this.canvas.width}×${this.canvas.height}`;
+    this.dbg.textContent = `FPS ${this.fps}\ncalls ${i.calls}\ntri ${(i.triangles / 1000).toFixed(1)}k\nsifat ${this.sifat.nom} pr ${this.renderer.getPixelRatio()}${this.sifat.birlash ? ' merge' : ''}\n${this.canvas.width}×${this.canvas.height}\n${this.sifat.sabab}`;
     this.dbgT = now; this.dbgN = 0;
   }
 
