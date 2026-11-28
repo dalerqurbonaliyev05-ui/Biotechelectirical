@@ -21,6 +21,7 @@ O‘z tashabbusi bilan, "namuna uchun" yoki boshqa vazifa bilan birga sxema qo�
 Hozir katalogdagi sxemalar (egasi «qo‘sh» deb buyurgan): `yoritish-01..04`, `uy-shiti-01..02`, `motor-01..13`,
 `avtomatika-01`, `olchash-01` — jami 21 ta. Hammasi 2D va 3D: `yoritish-01` — qo‘lda sozlangan 3D xona (`sahna3d`),
 qolganlari — avtomatik 3D (`engine/view3d-avto.js`). Ro‘yxat: `laboratoriya/schemes/royxat.json`.
+`yoritish-01` da VR rejimi ham bor (`rejimlar` da `"vr"`; `engine/vr.js`, `?rejim=vr`) — telefon + VR ko‘zoynak, reja: `docs/vr-reja.md`.
 
 ### Boshqa qoidalar
 

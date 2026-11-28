@@ -33,6 +33,7 @@ export function sifatAniqla(qs = (typeof location !== 'undefined' ? location.sea
   let nom = (p.get('quality') || '').toLowerCase();
   nom = ALIAS[nom] || nom;
   let sabab = 'qo‘lda (?quality)';
+  if (!SIFAT[nom] && p.get('rejim') === 'vr') { nom = 'past'; sabab = 'VR rejimi'; } // VR — har doim yengil daraja
   if (!SIFAT[nom]) {
     const q = qurilmaniAniqla();
     nom = q.tel ? 'past' : 'yuqori';

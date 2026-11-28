@@ -5,7 +5,7 @@ import { natijalarniOl } from './engine/state.js';
 
 const YONALISHLAR = ['yoritish', 'uy_shiti', 'motorlar', 'avtomatika', 'rele', 'podstansiya', 'olchash', 'yerga_ulash'];
 const DARAJALAR = [1, 2, 3, 4, 5];
-const REJIMLAR = ['2d', '3d'];
+const REJIMLAR = ['2d', '3d', 'vr'];
 const filtr = { yonalish: null, daraja: null, rejim: null };
 let sxemalar = null;
 let xato = false;

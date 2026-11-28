@@ -1035,24 +1035,53 @@ export class View3D {
   }
 
   // ---------- hodisalar ----------
-  hodisalar() {
-    const ray = new THREE.Raycaster();
+  /**
+   * Nur bo‘yicha tanlash: kamera va ekran nuqtasi (NDC, −1…1; VR nishoni — 0,0). Sichqoncha koordinatasiga bog‘liq emas.
+   * Qaytaradi: hit userData ({tur:'kl', full} | {tur:'sim', id} | {tur:'bos', el, model, uv}) yoki null.
+   */
+  tanlaNdc(x, y, kamera = this.camera) {
+    const ray = this._ray || (this._ray = new THREE.Raycaster());
     ray.layers.enable(1); // 1-qatlam: ko‘rinmas «hit» obyektlar (chizilmaydi, lekin nur tegadi)
-    const nuqta = new THREE.Vector2();
+    ray.setFromCamera(this._ndc ? this._ndc.set(x, y) : (this._ndc = new THREE.Vector2(x, y)), kamera);
+    const obj = [...[...this.kl.values()].map((k) => k.hit), ...[...this.simObj.values()].map((o) => o.hit), ...this.bosiladigan];
+    const hits = ray.intersectObjects(obj, false);
+    if (!hits.length) return null;
+    // Klemma yaqin bo‘lsa — klemma ustun (sim uchlari klemma ustida tugaydi)
+    const kl = hits.find((h) => h.object.userData.tur === 'kl');
+    if (kl && kl.distance - hits[0].distance < 0.03) return kl.object.userData;
+    // Sim qurilma ustidan o‘tsa ham, ostidagi tugma/dastak ustun turadi (2D dagidek)
+    const amalli = hits.find((h) => h.object.userData.tur === 'bos' && h.uv && h.object.userData.model?.amalTop?.(h.uv));
+    if (amalli) return { ...amalli.object.userData, uv: amalli.uv };
+    return { ...hits[0].object.userData, uv: hits[0].uv };
+  }
+
+  /** VR: nishon (kamera markazi) ostidagi narsaga «bosish» — sichqoncha bilan bosishning o‘zi. */
+  markazniBos() {
+    const u = this.tanlaNdc(0, 0);
+    if (!u) { this.lab.bosh(); return null; }
+    if (u.tur === 'kl') this.lab.klemmaBosish(u.full);
+    else if (u.tur === 'sim') this.lab.simBosish(u.id);
+    else if (u.tur === 'bos') {
+      const el = this.lab.elMap.get(u.el);
+      if (this.avto) {
+        const amal = u.model?.amalTop && u.uv ? u.model.amalTop(u.uv) : null;
+        if (amal) {
+          const rejim = el.def.tugmaRejimi?.(amal, el.param) || el.def.tugmalar?.[amal] || 'almash';
+          if (rejim === 'lahzali') { this.lab.elementBosish(u.el, amal, 'bos'); setTimeout(() => this.lab.elementBosish(u.el, amal, 'qoyib_yubor'), 400); }
+          else this.lab.elementBosish(u.el, amal, 'almash');
+          return u;
+        }
+        if (!el.def.bosiladi) { this.lab.bosh(); return u; }
+      }
+      this.lab.elementBosish(u.el);
+    }
+    return u;
+  }
+
+  hodisalar() {
     const tanla = (e) => {
       const r = this.canvas.getBoundingClientRect();
-      nuqta.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
-      ray.setFromCamera(nuqta, this.camera);
-      const obj = [...[...this.kl.values()].map((k) => k.hit), ...[...this.simObj.values()].map((o) => o.hit), ...this.bosiladigan];
-      const hits = ray.intersectObjects(obj, false);
-      if (!hits.length) return null;
-      // Klemma yaqin bo‘lsa — klemma ustun (sim uchlari klemma ustida tugaydi)
-      const kl = hits.find((h) => h.object.userData.tur === 'kl');
-      if (kl && kl.distance - hits[0].distance < 0.03) return kl.object.userData;
-      // Sim qurilma ustidan o‘tsa ham, ostidagi tugma/dastak ustun turadi (2D dagidek)
-      const amalli = hits.find((h) => h.object.userData.tur === 'bos' && h.uv && h.object.userData.model?.amalTop?.(h.uv));
-      if (amalli) return { ...amalli.object.userData, uv: amalli.uv };
-      return { ...hits[0].object.userData, uv: hits[0].uv };
+      return this.tanlaNdc(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
     };
     // Avto sahna: qurilma rasmidagi tugma/dastakni aniqlash (2D dagidek)
     const amalTop = (u) => {
@@ -1183,7 +1212,7 @@ export class View3D {
     const w = this.canvas.clientWidth, h = this.canvas.clientHeight;
     if (!w || !h) return;
     this.renderer.setSize(w, h, false);
-    this.camera.aspect = w / h;
+    this.camera.aspect = (this.vr?.faol ? w / 2 : w) / h; // VR: har bir ko‘z — ekranning yarmi
     this.camera.updateProjectionMatrix();
   }
 
@@ -1199,7 +1228,8 @@ export class View3D {
       this.controls.target.lerpVectors(tw.n0, tw.n1, e);
       if (u >= 1) this.tween = null;
     }
-    this.controls.update();
+    if (this.vr?.faol) this.vr.yangila(dt); // VR: kamerani giroskop/pult boshqaradi
+    else this.controls.update();
     for (const m of this.modellar.values()) m.kadr?.(dt);
     // Tanlangan klemma pulsatsiyasi, xato simlar miltillashi
     const puls = 1 + 0.45 * Math.sin(now / 160);
@@ -1236,11 +1266,12 @@ export class View3D {
     }
     if (this.soyaKerak && this.renderer.shadowMap.enabled && !this.renderer.shadowMap.autoUpdate) { this.renderer.shadowMap.needsUpdate = true; this.soyaKerak = false; }
     if (this.dbg) this.renderer.info.reset();
-    if (!this.dbgRenderOff) this.renderer.render(this.scene, this.camera);
+    if (this.dbgRenderOff) { /* debug: faqat JS */ } else if (this.vr?.faol) this.vr.chiz(); else this.renderer.render(this.scene, this.camera);
     if (this.dbg) { this.dbgJs += performance.now() - t0; this.debugYangila(); }
   }
 
   yoqot() {
+    this.vr?.yoqot();
     this.ochir();
     cancelAnimationFrame(this.raf);
     this.ro.disconnect();
