@@ -4,7 +4,7 @@ Maqsad: `/laboratoriya/yoritish-01` mashqini telefon + VR ko‘zoynak (split-scr
 o‘ynaladigan qilish uchun mavjud kodni o‘rganish. **Bu bosqichda kod o‘zgartirilmagan**, faqat shu hujjat yozilgan.
 Tekshirilgan holat: branch `claude/inspiring-lovelace-pgp203`, commit `917715f`. `node --test tests/laboratoriya/*.test.mjs` — 87 ta sinov, hammasi o‘tadi.
 
-**Tegishli hujjatlar:** [`vr-pult-spec.md`](./vr-pult-spec.md) — ikki qo‘lli pult spetsifikatsiyasi (sayt ↔ firmware kelishuvi, tugma jadvali); [`vr-unumdorlik-byudjeti.md`](./vr-unumdorlik-byudjeti.md) — 6-bo‘lim asosidagi unumdorlik byudjeti. Qaror o‘zgarsa, tegishli hujjatlar birga yangilanadi.
+**Tegishli hujjatlar:** [`vr-reja.md`](./vr-reja.md) — to‘liq reja (bosqichlar, sinov tartibi); [`vr-pult-spec.md`](./vr-pult-spec.md) — ikki qo‘lli pult spetsifikatsiyasi (sayt ↔ firmware kelishuvi, tugma jadvali); [`vr-unumdorlik-byudjeti.md`](./vr-unumdorlik-byudjeti.md) — 6-bo‘lim asosidagi unumdorlik byudjeti. Qaror o‘zgarsa, tegishli hujjatlar birga yangilanadi.
 
 ## 0. Xulosa
 

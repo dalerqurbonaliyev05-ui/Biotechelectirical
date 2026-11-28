@@ -1,6 +1,6 @@
 # VR unumdorlik byudjeti (A vazifasi)
 
-Asos: [`vr-audit.md`](./vr-audit.md), 6-bo‘lim. Bu hujjat **kod emas** — o‘lchov natijalari, byudjet va tuzatishlar tartibi.
+Asos: [`vr-audit.md`](./vr-audit.md), 6-bo‘lim; reja: [`vr-reja.md`](./vr-reja.md), 1A. Bu hujjat **kod emas** — o‘lchov natijalari, byudjet va tuzatishlar tartibi.
 Qaror o‘zgarsa, audit bilan birga yangilanadi. Sahna kodiga tegilmagan.
 
 ## 1. O‘lchov usuli va ishonchlilik

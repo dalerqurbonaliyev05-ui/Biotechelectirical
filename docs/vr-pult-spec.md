@@ -3,7 +3,7 @@
 **Versiya:** 3 (qoralama). Matn hozircha 2-versiya asosida, 3-versiya qarorlari qo‘llangan; keyin loyiha hujjatidan to‘ldiriladi.
 **Hujjat egalari:** bu fayl — sayt va firmware o‘rtasidagi **kelishuv manbai** (tugma jadvali shu yerda turadi).
 Firmware (ESP32) alohida repoda: **`vr-pult-firmware`**. Sayt repo'si faqat statik sayt va Vercel uchun.
-Qaror o‘zgarsa, bu fayl va [`vr-audit.md`](./vr-audit.md) **birga yangilanadi**.
+Qaror o‘zgarsa, bu fayl, [`vr-audit.md`](./vr-audit.md) va [`vr-reja.md`](./vr-reja.md) **birga yangilanadi**.
 
 Maqsad: ikkita bir xil pult, har biri VR dagi bitta «slot» (chap/o‘ng). Talaba ko‘zoynak ichida pultni ko‘rmaydi, shuning uchun hammasi tuyg‘u bilan ishlashi kerak. Android va iPhone'da ishlashi shart.
 
