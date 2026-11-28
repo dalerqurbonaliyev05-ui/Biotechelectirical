@@ -965,11 +965,62 @@ export class View3D {
   /** ?debug=1: FPS, draw call, uchburchak, sifat darajasi. */
   debugQur() {
     if (!this.sifat.debug) return;
+    // Yuqori o‘ng burchakdagi konteyner: sahifaning pastki bildirishnomasi (toast) bosishga xalaqit bermasligi uchun
+    this.dbgBox = document.createElement('div');
+    this.dbgBox.style.cssText = 'position:absolute;right:8px;top:8px;z-index:6;display:flex;flex-direction:column;align-items:flex-end;gap:6px;max-width:64%;pointer-events:none';
     this.dbg = document.createElement('div');
-    this.dbg.style.cssText = 'position:absolute;left:8px;bottom:8px;z-index:5;background:#000c;color:#9f9;font:11px/1.35 ui-monospace,monospace;padding:5px 8px;pointer-events:none;white-space:pre';
-    this.root.querySelector('.v3d').appendChild(this.dbg);
+    this.dbg.style.cssText = 'background:#000c;color:#9f9;font:11px/1.35 ui-monospace,monospace;padding:5px 8px;white-space:pre';
+    this.dbgBox.appendChild(this.dbg);
+    this.root.querySelector('.v3d').appendChild(this.dbgBox);
     this.dbgT = performance.now(); this.dbgN = 0;
     this.renderer.info.autoReset = false; // aks holda soya o‘tishlari hisobga kirmaydi; kadr() har kadr boshida o‘zi nolga tushiradi
+    this.dbgJs = 0;
+    if (this.sifat.debugDaraja >= 2) {
+      const toast = document.getElementById('m-bar'); // pastdagi bildirishnoma tugmalarni to‘sib qo‘ymasin
+      if (toast) toast.style.display = 'none';
+      this.debugTugmalar();
+    }
+  }
+
+  /** ?debug=2: har bir tugma bitta xususiyatni jonli o‘chiradi — FPS o‘zgarishidan qaysi qism qimmat ekani bilinadi. */
+  debugTugmalar() {
+    const sah = this.scene, rn = this.renderer;
+    const bar = document.createElement('div');
+    bar.style.cssText = 'display:flex;flex-wrap:wrap;justify-content:flex-end;gap:4px;pointer-events:auto';
+    this.dbgBox.appendChild(bar);
+    const dpr = window.devicePixelRatio || 1;
+    const tugma = (nom, fn, guruh) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.textContent = nom;
+      b.style.cssText = 'font:600 11px ui-monospace,monospace;padding:5px 7px;border:1px solid #fff6;background:#000b;color:#fff;border-radius:6px';
+      b.dataset.on = '0';
+      b.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const on = guruh ? true : b.dataset.on !== '1';
+        if (guruh) bar.querySelectorAll(`[data-g="${guruh}"]`).forEach((x) => { x.dataset.on = '0'; x.style.background = '#000b'; });
+        b.dataset.on = on ? '1' : '0';
+        b.style.background = on ? '#c2410c' : '#000b';
+        fn(on);
+      });
+      if (guruh) b.dataset.g = guruh;
+      bar.appendChild(b);
+      return b;
+    };
+    const kolleksiya = (f) => { const r = []; sah.traverse((o) => { if (f(o)) r.push(o); }); return r; };
+    const ko = (royxat, on) => royxat.forEach((o) => { if (on) { o._oldVis = o.visible; o.visible = false; } else o.visible = o._oldVis ?? true; });
+    for (const v of [0.5, 0.75, 1, 1.5, 2]) tugma(`pr ${v}`, () => rn.setPixelRatio(Math.min(dpr, v)), 'pr');
+    tugma('render OFF', (on) => { this.dbgRenderOff = on; });
+    const shaffof = kolleksiya((o) => o.isSprite || (o.isMesh && o.material && o.material.transparent && o.layers.mask === 1));
+    tugma('shaffof OFF', (on) => ko(shaffof, on));
+    tugma('env OFF', (on) => { this._env = this._env || sah.environment; sah.environment = on ? null : this._env; });
+    tugma('tonemap OFF', (on) => { rn.toneMapping = on ? THREE.NoToneMapping : THREE.ACESFilmicToneMapping; });
+    const dir = kolleksiya((o) => o.isDirectionalLight);
+    tugma('dir nur OFF', (on) => ko(dir, on));
+    const nuqta = kolleksiya((o) => o.isPointLight);
+    tugma('lampa nuri OFF', (on) => ko(nuqta, on));
+    const sim = () => [...this.simObj.values()].map((o) => o.mesh);
+    tugma('simlar OFF', (on) => ko(sim(), on));
+    tugma('tok nuqta OFF', (on) => { if (this.oqimMesh) this.oqimMesh.visible = !on && this.oqim.length > 0; });
   }
 
   debugYangila() {
@@ -978,7 +1029,8 @@ export class View3D {
     if (now - this.dbgT < 500) return;
     const i = this.renderer.info.render;
     this.fps = Math.round((this.dbgN * 1000) / (now - this.dbgT));
-    this.dbg.textContent = `FPS ${this.fps}\ncalls ${i.calls}\ntri ${(i.triangles / 1000).toFixed(1)}k\nsifat ${this.sifat.nom} pr ${this.renderer.getPixelRatio()}${this.sifat.birlash ? ' merge' : ''}\n${this.canvas.width}×${this.canvas.height}\n${this.sifat.sabab}`;
+    const js = (this.dbgJs / this.dbgN).toFixed(1); this.dbgJs = 0;
+    this.dbg.textContent = `FPS ${this.fps}  calls ${i.calls}  tri ${(i.triangles / 1000).toFixed(1)}k\n${this.sifat.nom} pr ${this.renderer.getPixelRatio()}${this.sifat.birlash ? ' merge' : ''} ${this.canvas.width}×${this.canvas.height}\njs ${js}ms/kadr, kadr ${(1000 / Math.max(1, this.fps)).toFixed(0)}ms\ndpr ${window.devicePixelRatio} ${window.innerWidth}×${window.innerHeight}\n${this.sifat.sabab}`;
     this.dbgT = now; this.dbgN = 0;
   }
 
@@ -1138,6 +1190,7 @@ export class View3D {
   kadr() {
     const dt = Math.min(0.05, this.soat.getDelta());
     const now = performance.now();
+    const t0 = now;
     if (this.tween) {
       const tw = this.tween;
       const u = Math.min(1, (now - tw.t0) / tw.d);
@@ -1183,8 +1236,8 @@ export class View3D {
     }
     if (this.soyaKerak && this.renderer.shadowMap.enabled && !this.renderer.shadowMap.autoUpdate) { this.renderer.shadowMap.needsUpdate = true; this.soyaKerak = false; }
     if (this.dbg) this.renderer.info.reset();
-    this.renderer.render(this.scene, this.camera);
-    if (this.dbg) this.debugYangila();
+    if (!this.dbgRenderOff) this.renderer.render(this.scene, this.camera);
+    if (this.dbg) { this.dbgJs += performance.now() - t0; this.debugYangila(); }
   }
 
   yoqot() {
@@ -1194,7 +1247,7 @@ export class View3D {
     this.controls.dispose();
     this.markerlar?.dispose();
     this.oqimMesh?.dispose();
-    this.dbg?.remove();
+    this.dbgBox?.remove();
     this.renderer.dispose();
   }
 }

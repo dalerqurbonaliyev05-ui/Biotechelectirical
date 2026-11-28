@@ -1,5 +1,5 @@
 // 3D sifat darajalari (unumdorlik). Sahifa manzili: ?quality=past|orta|yuqori, ?pr=1|1.5|2 (piksel zichligi),
-// ?aa=0 (antialias o‘chirilsin), ?merge=0|1 (statik mesh birlashtirish), ?debug=1 (FPS/draw call paneli).
+// ?aa=0 (antialias o‘chirilsin), ?merge=0|1 (statik mesh birlashtirish), ?debug=1 (FPS/draw call paneli), ?debug=2 (+ jonli o‘chirib ko‘rish tugmalari).
 // Standart daraja qurilma turiga qarab tanlanadi (teginish ko‘rsatkichi, hover yo‘qligi, mobil brauzer belgisi), ekran kengligiga emas.
 //
 // yuqori — kompyuter 3D, avvalgidek: 2 ta yo‘nalishli soya, yongan lampaning kub soyasi, har kadrda yangilanadi.
@@ -43,6 +43,7 @@ export function sifatAniqla(qs = (typeof location !== 'undefined' ? location.sea
   if (pr >= 0.5 && pr <= 3) s.pr = pr;
   s.aa = p.get('aa') !== '0';
   if (p.has('merge')) s.birlash = p.get('merge') !== '0';
-  s.debug = p.get('debug') === '1';
+  s.debugDaraja = parseInt(p.get('debug'), 10) || 0; // 1 — ko‘rsatkichlar, 2 — jonli o‘chirib ko‘rish tugmalari ham
+  s.debug = s.debugDaraja > 0;
   return s;
 }
