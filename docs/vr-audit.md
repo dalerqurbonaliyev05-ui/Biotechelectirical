@@ -4,6 +4,8 @@ Maqsad: `/laboratoriya/yoritish-01` mashqini telefon + VR ko‘zoynak (split-scr
 o‘ynaladigan qilish uchun mavjud kodni o‘rganish. **Bu bosqichda kod o‘zgartirilmagan**, faqat shu hujjat yozilgan.
 Tekshirilgan holat: branch `claude/inspiring-lovelace-pgp203`, commit `917715f`. `node --test tests/laboratoriya/*.test.mjs` — 87 ta sinov, hammasi o‘tadi.
 
+**Tegishli hujjatlar:** [`vr-pult-spec.md`](./vr-pult-spec.md) — ikki qo‘lli pult spetsifikatsiyasi (sayt ↔ firmware kelishuvi, tugma jadvali); [`vr-unumdorlik-byudjeti.md`](./vr-unumdorlik-byudjeti.md) — 6-bo‘lim asosidagi unumdorlik byudjeti. Qaror o‘zgarsa, tegishli hujjatlar birga yangilanadi.
+
 ## 0. Xulosa
 
 1. **Engine allaqachon ajratilgan.** Sxema = JSON; tekshirish (`checker.js`) va simulyatsiya (`simulator.js`) — DOM'siz sof funksiyalar, Node'da sinovdan o‘tadi.
@@ -101,7 +103,7 @@ Reja bo‘yicha 1-bosqich kutilganidan yengil: JSON, sof checker/simulator va 87
 | 5 | **Nur bo‘yicha tanlash:** `View3D.pick(ray)` → `{tur:'kl'|'sim'|'bos', …}` va `View3D.activate(hit)`; `tanla(e)` shularning ustiga o‘tadi. VR: nur = kamera markazi | `view3d.js:872` | 2–3 | o‘rta |
 | 6 | **Kamera rig:** `OrbitControls`, `chegarala()` (qutiga siqish), `fokus()` tween → `OrbitRig`; keyin `WalkRig` (3-b.), `VrRig` (4-b.) bir xil interfeys bilan | `view3d.js:62–75, 957–988` | 3 | o‘rta |
 | 7 | `kadr()` ni ikkiga: `yangila(dt)` (animatsiya) va `chiz(kamera, viewport)` — stereo'da animatsiya bir marta, chizish ikki marta | `view3d.js:1023` | 4 | kichik |
-| 8 | `InputManager` (harakat, qarash, tanlash, olish, qo‘yish, tasdiq, bekor); mavjud klaviatura (`mashq.js:240`) va pointer shunga ulanadi | yangi `engine/input.js` | 2 | o‘rta |
+| 8 | `InputManager` (harakat, qarash, tanlash, olish, qo‘yish, tasdiq, bekor); mavjud klaviatura (`mashq.js:240`) va pointer shunga ulanadi. Pult tugmalari, chap/o‘ng slot, ushlab turish/birga bosish qoidalari — [`vr-pult-spec.md`](./vr-pult-spec.md) | yangi `engine/input.js` | 2 | o‘rta |
 | 9 | `rejimlar`ga `"vr"` qo‘shish, `?rejim=vr`; `katalog.js` filtri `REJIMLAR` ro‘yxatini kengaytiradi. Faqat `yoritish-01`da yoqiladi | `mashq.js:140`, `katalog.js`, JSON | 4 | kichik |
 | 10 | Ixtiyoriy `vr` bloki (boshlang‘ich nuqta, ko‘z balandligi, yo‘l to‘siqlari). Avto-sahnalar uchun `avtoJoylash().s3.kamera`dan olinadi | JSON, `view3d-avto.js` | 3 | kichik |
 
