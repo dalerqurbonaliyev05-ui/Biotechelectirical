@@ -94,3 +94,56 @@ Eslatma: 1–2-punktlar mavjud 3D (kompyuter) rejimning ko‘rinishini o‘zgart
 
 - Brauzerda: sahifa ichida `renderer.info.render.calls/triangles` (hozir `window.__v3d` mavjud) — har bosqich oxirida qayd etiladi.
 - Avtomatik: Playwright'da `?rejim=3d` ochib, 0-7 holatlaridagi sonlarni byudjet jadvali bilan solishtiruvchi skript (haqiqiy FPS emas, faqat sonlar). Hozircha repoga qo‘shilmagan; 3-bosqichda qo‘shish taklif qilinadi.
+
+## 8. 1A natijasi (kod yozildi; telefonda FPS hali o‘lchanmagan)
+
+Commit `d9ec934`. Sahifa parametrlari (`laboratoriya/engine/sifat.js`):
+
+| Parametr | Ma’nosi |
+|---|---|
+| `?quality=past\|orta\|yuqori` | sifat darajasi. Berilmasa: asosiy ko‘rsatkich barmoq (`pointer: coarse`) bo‘lsa — `past`, bo‘lmasa `yuqori`. Ekran kengligi hisobga olinmaydi |
+| `?pr=1\|1.5\|2` | piksel zichligi (qurilma DPR dan oshmaydi). Standart: yuqori 2, orta 1.5, past 1.5 |
+| `?aa=0` | antialias o‘chirilsin |
+| `?merge=0\|1` | statik mesh birlashtirishni majburan o‘chirish/yoqish |
+| `?debug=1` | ekran burchagida FPS, draw call (soya o‘tishlari bilan), uchburchak, daraja, piksel zichligi |
+
+Darajalar:
+
+| | yuqori (kompyuter) | orta | past (telefon, kelajakda VR/yurish) |
+|---|---|---|---|
+| Yo‘nalishli soyalar | 2 ta, har kadr, avvalgidek | 2 ta, 1024², faqat sahna o‘zgarganda | yo‘q |
+| Yongan lampa kub soyasi | bor | yo‘q | yo‘q |
+| Lampa glow | yo‘q | bor | bor |
+| Statik mesh birlashtirish | yo‘q | bor | bor |
+| Kichik shar (tok nuqtasi/marker) | avvalgi | 8×6 / 6×4 segment | 8×6 / 6×4 segment |
+| Hamma darajada | «hit» meshlar chizilmaydi (1-qatlam), tok nuqtalari va markerlar `InstancedMesh` | | |
+
+O‘lchov (`yoritish-01`, lampa yonib turibdi, draw call / uchburchak bir ko‘z uchun, soya o‘tishlari bilan; dasturiy renderer):
+
+| Holat | Draw call | Uchburchak |
+|---|---|---|
+| Baseline (1A dan oldin) | 1266 | 243.5 ming |
+| yuqori (1A dan keyin, ko‘rinish bir xil) | 1126 | 231.0 ming |
+| orta, barqaror kadr | 119 | 53.3 ming |
+| orta, sahna o‘zgargan kadr (soya qayta chiziladi) | 263 | 126.8 ming |
+| past | **119** | **53.3 ming** |
+
+Shader dasturlari 26 → 16, geometriyalar 296 → 101. Stereo (ikki ko‘z) bo‘lganda `past` ≈ 240 draw call/kadr (hozirgi ≈ 2530).
+**MVP chegarasi (≤ 300 draw call/ko‘z) bajarildi; «maqsad» (≤ 150) ham bu sahnada bajarilgan.** Uchburchak ≤ 100 ming ham bajarilgan.
+
+Tekshiruvlar:
+- `yuqori` daraja baseline bilan **piksel-piksel bir xil** (0 ta farq): `yoritish-01` (5 holat + 5 elementning yaqin ko‘rinishi × 2 holat), `motor-04`, `motor-09`, `uy-shiti-01`, `avtomatika-01`, `olchash-01`, `yoritish-03`.
+- Statik birlashtirishning o‘zi (boshqa hammasi teng): ≤ 0.12 % piksel farq, farq ≤ 4/255 (bitta nuqtada 15–37); `motor-09` lampa holatida 0.033 %.
+- Nur bilan tanlash («hit» 1-qatlamga o‘tgach): klemma tanlash, sim ulash, simni tanlash baseline bilan bir xil ishlaydi.
+- 97 sinov o‘tadi (87 ta eski + 10 ta yangi: sifat darajasi va birlashtirish).
+- Telefon emulyatsiyasi → `past`, kompyuter (tor oyna ham) → `yuqori`.
+
+Ma’lum cheklovlar va keyingi qadamlar:
+- **Telefonda haqiqiy FPS o‘lchanmagan.** `?debug=1&quality=past` bilan foydalanuvchi o‘lchaydi.
+- `past` da soyalar yo‘q: devor biroz tekisroq ko‘rinadi (skrinshot solishtirish: ~54 % piksel farq, farq ≤ 83/255). Pishirilgan yorug‘lik 7-bosqichga qoldirilgan.
+- Standart telefon darajasi `past`, piksel zichligi 1.5 (rejadagi «1» emas): oddiy 3D rejimda 1 juda xira bo‘ladi. VR (4-bosqich) o‘zi 1 / 1.5 ni tanlaydi.
+- Simlar (har biri alohida `Mesh`) hali birlashtirilmagan: ko‘p simli sxemalarda (`motor-09`, 33+ sim) `orta/past` ≈ 210–330 draw call. Keyingi qadam — simlarni rang bo‘yicha birlashtirish.
+- Yorliq sprite'lari (≈ 20 ta, har biri alohida draw call) va shaffof meshlar (16 ta) birlashtirilmagan: bitta atlas — keyinroq.
+- `orta` darajada harakatlanuvchi model (motor parragi) bo‘lsa, soya xaritasi har kadr yangilanadi (statik rejim o‘chadi).
+- Birlashtirish faqat `orta/past` da. Aylanuvchi, holati bo‘yicha harakatlanuvchi (klavisha, dasta), shaffof, bosiladigan meshlar va satr/son holatli modellar birlashtirilmaydi.
+

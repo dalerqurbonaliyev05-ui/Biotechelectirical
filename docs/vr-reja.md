@@ -8,7 +8,7 @@ Konsepsiya: talaba telefonini VR quti (Shinecon turi) ichiga qo‘yadi, ikkita o
 ## Hozirgi holat
 
 - Tayyor: 0-bosqich auditi (`docs/vr-audit.md`); pult spetsifikatsiyasi (`docs/vr-pult-spec.md`, 3-versiya); unumdorlik o‘lchovi (`docs/vr-unumdorlik-byudjeti.md`).
-- Bajarilmagan: unumdorlik tuzatishlari kodga o‘tkazilmagan (faqat o‘lchov va hujjat).
+- 1A (unumdorlik tuzatishlari): kod yozilgan va avtomatik sinovdan o‘tgan (commit `d9ec934`; natija — `vr-unumdorlik-byudjeti.md`, 8-bo‘lim). **Telefonda FPS hali o‘lchanmagan** (`?debug=1&quality=past`).
 - Audit natijasi: engine allaqachon ajratilgan (87 sinov o‘tadi). Eng katta xavf: unumdorlik, kiritish ko‘rinishga yopishgan, klemma radiusi 9–13 mm.
 - O‘lchov (yoritish-01, lampa yongan lahza, bir ko‘z): hozir 1266 draw call va 243 528 uchburchak. Barcha soyalar o‘chirilsa 433 / 77 708. Soyalar, tok nuqtalari, ko‘rinmas "hit" meshlar va klemma markerlari tozalansa 291 / 44 948. Stereo (ikki ko‘z) bo‘lganda hozir ≈2530, tozalangandan keyin ≈580 draw call. Draw call va uchburchak sonlari ishonchli, FPS ishonchsiz: haqiqiy tezlik faqat telefonda ma’lum bo‘ladi.
 
