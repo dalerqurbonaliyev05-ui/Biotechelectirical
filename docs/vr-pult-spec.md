@@ -123,6 +123,7 @@ Sensor holati pult-testi sahifasida ko‘rinadi: dars oldidan o‘qituvchi har b
 
 - To‘liq ekran: Fullscreen API ishonchsiz (qisman qo‘llab-quvvatlanadi). Sayt to‘liq ekran yo‘q holatda ham ishlashi kerak (manzil satri minimal, landshaft); «Bosh ekranga qo‘shish» (PWA) varianti prototipda tekshiriladi.
 - Giroskop ruxsati: faqat tugma bosilganda so‘raladi.
+- Saytdagi «To‘liq ekran» tugmasi (`mashq.js`) avval Fullscreen API'ni sinaydi; iPhone/iframe'da rad etilsa — zaxira rejim (`body.fs`): sahifa panellari yashirilib, 3D maydon kengaytiriladi, brauzer satri qoladi (foydalanuvchiga «Bosh ekranga qo‘shing» maslahati ko‘rsatiladi). Haqiqiy iPhone'da tekshirilmagan.
 
 ## 9. Xavfsizlik
 

@@ -168,6 +168,52 @@ function uchOlchamYukla() {
   return v3dYuklanmoqda;
 }
 
+// ---------- To‘liq ekran ----------
+// Haqiqiy Fullscreen API (Android Chrome, kompyuter, iPad). Qo‘llab-quvvatlanmasa yoki rad etilsa (iPhone, iframe) —
+// zaxira rejim: faqat sahifadagi panellar yashiriladi (body.fs), brauzer satri qoladi.
+let haqiqiyFs = false;
+const fsElement = () => document.fullscreenElement || document.webkitFullscreenElement || null;
+
+function fsHolat(on) {
+  document.body.classList.toggle('fs', on);
+  $('tb-full').setAttribute('aria-pressed', String(on));
+  ilovaBalandligi();
+}
+
+function fsOzgardi() {
+  if (haqiqiyFs && !fsElement()) { haqiqiyFs = false; fsHolat(false); } // foydalanuvchi brauzer orqali chiqdi
+  else ilovaBalandligi();
+}
+
+async function tolaEkranAlmashtir() {
+  if (document.body.classList.contains('fs')) {
+    if (fsElement()) { try { await (document.exitFullscreen || document.webkitExitFullscreen).call(document); } catch (e) { /* e’tiborsiz */ } }
+    haqiqiyFs = false;
+    fsHolat(false);
+    return;
+  }
+  const el = document.documentElement;
+  const req = el.requestFullscreen || el.webkitRequestFullscreen;
+  if (req) {
+    try {
+      await req.call(el);
+      await new Promise((r) => setTimeout(r, 200)); // eski WebKit rad etishda xato bermasligi mumkin — haqiqatan yoqilganini tekshiramiz
+      if (fsElement()) { haqiqiyFs = true; fsHolat(true); return; }
+    } catch (e) { /* zaxira rejimga o‘tamiz */ }
+  }
+  haqiqiyFs = false;
+  fsHolat(true);
+  holatXabari(t('h.fs_zaxira'), 'info');
+}
+
+// Ilova balandligi: ba’zi mobil brauzerlarda 100dvh noto‘g‘ri bo‘lib, sahifa pastida bo‘sh joy qoladi — haqiqiy ko‘rinadigan balandlikni olamiz
+function ilovaBalandligi() {
+  document.documentElement.style.setProperty('--app-h', `${Math.round(window.innerHeight)}px`);
+}
+window.addEventListener('resize', ilovaBalandligi);
+window.addEventListener('orientationchange', () => setTimeout(ilovaBalandligi, 120));
+ilovaBalandligi();
+
 function yozuvMaydonimi(e) { return /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName) || e.target.isContentEditable; }
 
 async function boshlash() {
@@ -211,10 +257,8 @@ async function boshlash() {
   $('tb-undo').addEventListener('click', () => lab.qaytar());
   $('tb-redo').addEventListener('click', () => lab.takrorla());
   $('tb-joy').addEventListener('click', () => { lab.joylarniTikla(); v2d.sigdir(); });
-  $('tb-full').addEventListener('click', () => {
-    if (document.fullscreenElement) document.exitFullscreen?.();
-    else document.documentElement.requestFullscreen?.().catch(() => {});
-  });
+  $('tb-full').addEventListener('click', tolaEkranAlmashtir);
+  for (const ev of ['fullscreenchange', 'webkitfullscreenchange']) document.addEventListener(ev, fsOzgardi);
   $('tb-yordam').addEventListener('click', () => { $('help').hidden = !$('help').hidden; });
   $('b-topshiriq').addEventListener('click', () => panelniOch(!$('side').classList.contains('open')));
   $('b-quvvat').addEventListener('click', () => lab.quvvatAlmashtir());
@@ -240,7 +284,7 @@ async function boshlash() {
   document.addEventListener('keydown', (e) => {
     if (yozuvMaydonimi(e) || document.querySelector('dialog[open]')) return;
     const ctrl = e.ctrlKey || e.metaKey;
-    if (e.key === 'Escape') { lab.bosh(); $('help').hidden = true; }
+    if (e.key === 'Escape') { lab.bosh(); $('help').hidden = true; if (document.body.classList.contains('fs') && !fsElement()) tolaEkranAlmashtir(); }
     else if ((e.key === 'Delete' || e.key === 'Backspace') && lab.tanlanganSim) { e.preventDefault(); lab.simOchir(lab.tanlanganSim); }
     else if (ctrl && e.key.toLowerCase() === 'z' && !e.shiftKey) { e.preventDefault(); lab.qaytar(); }
     else if (ctrl && (e.key.toLowerCase() === 'y' || (e.key.toLowerCase() === 'z' && e.shiftKey))) { e.preventDefault(); lab.takrorla(); }
